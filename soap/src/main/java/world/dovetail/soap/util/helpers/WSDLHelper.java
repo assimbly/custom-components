@@ -31,11 +31,13 @@ import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 public final class WSDLHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(WSDLHelper.class);
     private static final String CACHE_EXPIRATION_PROPERTY = "soap.cacheExpirationInHours";
+    private static final Properties prop = loadProperties("world.dovetail.soap.cfg");
 
     public static Definition retrieve(String params, String wsdl, List<SoapHttpHeader> httpHeaders) throws WSDLException, IOException, URISyntaxException {
         WSDLFactory factory = WSDLFactory.newInstance();
@@ -49,8 +51,7 @@ public final class WSDLHelper {
             file = WSDLCache.INSTANCE.getPath(url);
 
             if (file.exists()) {
-                LocalDateTime threshold = LocalDateTime.now().minusHours(
-                    Integer.valueOf(ConfigHelper.getProperty(CACHE_EXPIRATION_PROPERTY)));
+                LocalDateTime threshold = LocalDateTime.now().minusHours(Long.parseLong(prop.getProperty(CACHE_EXPIRATION_PROPERTY, "24")));
 
                 LocalDateTime lastModified = LocalDateTime.ofInstant(
                         Instant.ofEpochMilli(file.lastModified()), ZoneId.systemDefault());
@@ -148,6 +149,18 @@ public final class WSDLHelper {
         result.put("ResponseMessage", soapResponse);
 
         return result;
+    }
+
+    private static Properties loadProperties(String filename){
+        Properties properties = new Properties();
+        try {
+            InputStream inputStream = WSDLHelper.class.getClassLoader().getResourceAsStream(filename);
+            properties.load(inputStream);
+        } catch (Exception e) {
+            LOG.error("Error to load properties file", e);
+        } finally {
+            return properties;
+        }
     }
 
     public static class URLTimeoutHandler extends URLStreamHandler {
