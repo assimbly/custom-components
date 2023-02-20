@@ -1,1 +1,1 @@
-class=world.dovetail.oauth2token.OAuth2TokenComponent
+class=org.assimbly.oauth2token.OAuth2TokenComponent

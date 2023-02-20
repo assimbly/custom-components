@@ -21,7 +21,7 @@ for this component:
 [source,xml]
 ------------------------------------------------------------
 <dependency>
-    <groupId>world.dovetail</groupId>
+    <groupId>org.assimbly</groupId>
     <artifactId>amazon</artifactId>
 	<version>x.x.x</version>
     <!-- use the same version as your Assimbly version -->

@@ -1,28 +1,28 @@
-<wsdl:definitions xmlns:tns="http://www.dovetail.world"
+<wsdl:definitions xmlns:tns="http://www.assimbly.world"
                   xmlns:xs="http://www.w3.org/2001/XMLSchema"
                   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
                   xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
                   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-                  xmlns:sch="http://www.dovetail.world/wsdl/schema/"
-                  xmlns:ext="http://www.dovetail.world/wsdl/external/"
-                  xmlns:unq="http://www.dovetail.world/wsdl/unqualified/"
-                  xmlns:imp="http://www.dovetail.world/wsdl/schema/import"
-                  xmlns:types="http://www.dovetail.world/wsdl/types/"
-                  xmlns:mock1="http://www.dovetail.world/wsdl/import/mock-1"
-                  targetNamespace="http://www.dovetail.world">
+                  xmlns:sch="http://www.assimbly.world/wsdl/schema/"
+                  xmlns:ext="http://www.assimbly.world/wsdl/external/"
+                  xmlns:unq="http://www.assimbly.world/wsdl/unqualified/"
+                  xmlns:imp="http://www.assimbly.world/wsdl/schema/import"
+                  xmlns:types="http://www.assimbly.world/wsdl/types/"
+                  xmlns:mock1="http://www.assimbly.world/wsdl/import/mock-1"
+                  targetNamespace="http://www.assimbly.world">
 
-    <wsdl:import namespace="http://www.dovetail.world/wsdl/import/mock-1" location="mock-1.wsdl"/>
+    <wsdl:import namespace="http://www.assimbly.world/wsdl/import/mock-1" location="mock-1.wsdl"/>
 
     <wsdl:types>
-        <xs:schema targetNamespace="http://www.dovetail.world/Imports">
-            <xs:import schemaLocation="schemas/schema.xsd" namespace="http://www.dovetail.world/wsdl/schema/import" />
+        <xs:schema targetNamespace="http://www.assimbly.world/Imports">
+            <xs:import schemaLocation="schemas/schema.xsd" namespace="http://www.assimbly.world/wsdl/schema/import" />
         </xs:schema>
-        <xs:schema elementFormDefault="qualified" targetNamespace="http://www.dovetail.world">
-            <xs:import namespace="http://www.dovetail.world/wsdl/local/import" />
+        <xs:schema elementFormDefault="qualified" targetNamespace="http://www.assimbly.world">
+            <xs:import namespace="http://www.assimbly.world/wsdl/local/import" />
             <xs:element name="withImportRequest">
                 <xs:complexType>
                     <xs:all>
-                        <xs:element xmlns:lc="http://www.dovetail.world/wsdl/local/import" name="imp-element" type="lc:imp-element"/>
+                        <xs:element xmlns:lc="http://www.assimbly.world/wsdl/local/import" name="imp-element" type="lc:imp-element"/>
                     </xs:all>
                 </xs:complexType>
             </xs:element>
@@ -153,7 +153,7 @@
                 </xs:all>
             </xs:complexType>
         </xs:schema>
-        <xs:schema elementFormDefault="qualified" targetNamespace="http://www.dovetail.world/wsdl/schema/" xmlns:schema="http://www.dovetail.world/wsdl/schema/">
+        <xs:schema elementFormDefault="qualified" targetNamespace="http://www.assimbly.world/wsdl/schema/" xmlns:schema="http://www.assimbly.world/wsdl/schema/">
             <xs:element name="withSchemaReferenceRequest">
                 <xs:complexType>
                     <xs:all>
@@ -169,7 +169,7 @@
                 </xs:complexType>
             </xs:element>
         </xs:schema>
-        <xs:schema elementFormDefault="qualified" targetNamespace="http://www.dovetail.world/wsdl/external/">
+        <xs:schema elementFormDefault="qualified" targetNamespace="http://www.assimbly.world/wsdl/external/">
             <xs:element name="ext-element">
                 <xs:complexType>
                     <xs:sequence>
@@ -188,21 +188,21 @@
                 </xs:sequence>
             </xs:complexType>
         </xs:schema>
-        <xs:schema elementFormDefault="unqualified" targetNamespace="http://www.dovetail.world/wsdl/unqualified/">
+        <xs:schema elementFormDefault="unqualified" targetNamespace="http://www.assimbly.world/wsdl/unqualified/">
             <xs:complexType name="element">
                 <xs:all>
                     <xs:element form="qualified" minOccurs="0" name="item" type="xs:string"/>
                 </xs:all>
             </xs:complexType>
         </xs:schema>
-        <xs:schema elementFormDefault="qualified" targetNamespace="http://www.dovetail.world/wsdl/types/">
+        <xs:schema elementFormDefault="qualified" targetNamespace="http://www.assimbly.world/wsdl/types/">
             <xs:simpleType name="guid">
                 <xs:restriction base="xs:string">
                     <xs:pattern value="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}" />
                 </xs:restriction>
             </xs:simpleType>
         </xs:schema>
-        <xs:schema elementFormDefault="qualified" xmlns:tns="http://www.dovetail.world/wsdl/local/import" targetNamespace="http://www.dovetail.world/wsdl/local/import">
+        <xs:schema elementFormDefault="qualified" xmlns:tns="http://www.assimbly.world/wsdl/local/import" targetNamespace="http://www.assimbly.world/wsdl/local/import">
             <xs:complexType name="imp-element">
                 <xs:all>
                     <xs:element minOccurs="0" name="item" type="xs:string"/>
@@ -216,7 +216,7 @@
         <wsdl:part name="item" type="xs:string"/>
     </wsdl:message>
     <wsdl:message name="OperationWithTypePart">
-        <wsdl:part name="imp-element" xmlns:lc="http://www.dovetail.world/wsdl/local/import"  element="lc:imp-element"/>
+        <wsdl:part name="imp-element" xmlns:lc="http://www.assimbly.world/wsdl/local/import"  element="lc:imp-element"/>
         <wsdl:part name="element" type="tns:element"/>
         <wsdl:part name="item" type="xs:string"/>
     </wsdl:message>
@@ -350,25 +350,25 @@
     <wsdl:binding name="TestSoap12" type="tns:TestSoap">
         <soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
         <wsdl:operation name="OperationWithStandardType">
-            <soap12:operation soapAction="http://www.dovetail.world/WithStandardPart" style="document"/>
+            <soap12:operation soapAction="http://www.assimbly.world/WithStandardPart" style="document"/>
             <wsdl:input>
-                <soap12:body use="literal" namespace="http://www.dovetail.world/wsdl/types/"/>
+                <soap12:body use="literal" namespace="http://www.assimbly.world/wsdl/types/"/>
             </wsdl:input>
             <wsdl:output>
                 <soap12:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="OperationWithTypePart">
-            <soap12:operation soapAction="http://www.dovetail.world/WithPartType" style="document"/>
+            <soap12:operation soapAction="http://www.assimbly.world/WithPartType" style="document"/>
             <wsdl:input>
-                <soap12:body use="literal" namespace="http://www.dovetail.world/wsdl/types/"/>
+                <soap12:body use="literal" namespace="http://www.assimbly.world/wsdl/types/"/>
             </wsdl:input>
             <wsdl:output>
                 <soap12:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="OperationWithReference">
-            <soap12:operation soapAction="http://www.dovetail.world/WithReference" style="document"/>
+            <soap12:operation soapAction="http://www.assimbly.world/WithReference" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -377,7 +377,7 @@
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="OperationWithImport">
-            <soap12:operation soapAction="http://www.dovetail.world/WithImport" style="document"/>
+            <soap12:operation soapAction="http://www.assimbly.world/WithImport" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -386,7 +386,7 @@
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="OperationWithSchemaReference">
-            <soap12:operation soapAction="http://www.dovetail.world/WithSchemaReference" style="document"/>
+            <soap12:operation soapAction="http://www.assimbly.world/WithSchemaReference" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -395,7 +395,7 @@
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="OperationWithType">
-            <soap12:operation soapAction="http://www.dovetail.world/WithType" style="document"/>
+            <soap12:operation soapAction="http://www.assimbly.world/WithType" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -404,7 +404,7 @@
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="OperationWithLocalType">
-            <soap12:operation soapAction="http://www.dovetail.world/WithLocalType" style="document"/>
+            <soap12:operation soapAction="http://www.assimbly.world/WithLocalType" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -413,7 +413,7 @@
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="OperationWithExtension">
-            <soap12:operation soapAction="http://www.dovetail.world/WithExtension" style="document"/>
+            <soap12:operation soapAction="http://www.assimbly.world/WithExtension" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -422,7 +422,7 @@
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="OperationWithSequence">
-            <soap12:operation soapAction="http://www.dovetail.world/WithSequence" style="document"/>
+            <soap12:operation soapAction="http://www.assimbly.world/WithSequence" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -431,7 +431,7 @@
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="OperationWithUnqualified">
-            <soap12:operation soapAction="http://www.dovetail.world/WithUnqualified" style="document"/>
+            <soap12:operation soapAction="http://www.assimbly.world/WithUnqualified" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -440,7 +440,7 @@
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="OperationWithHeader">
-            <soap12:operation soapAction="http://www.dovetail.world/WithHeader" style="document"/>
+            <soap12:operation soapAction="http://www.assimbly.world/WithHeader" style="document"/>
             <wsdl:input>
                 <soap:header message="tns:AuthenticationHeader" part="AuthHeader" use="literal"/>
                 <soap12:body use="literal"/>
@@ -450,7 +450,7 @@
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="OperationWithHeaders">
-            <soap12:operation soapAction="http://www.dovetail.world/WithHeaders" style="document"/>
+            <soap12:operation soapAction="http://www.assimbly.world/WithHeaders" style="document"/>
             <wsdl:input>
                 <soap12:header message="tns:AuthenticationHeader" part="AuthHeader" use="literal"/>
                 <soap12:header message="tns:DatabaseHeader" part="DatabaseHeader" use="literal"/>
@@ -465,7 +465,7 @@
     <wsdl:binding name="TestSoapExt" type="mock1:ExtTestSoap12">
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
         <wsdl:operation name="OperationFromExternalWsdl">
-            <soap:operation soapAction="http://www.dovetail.world/FromExternalWsdl" style="document"/>
+            <soap:operation soapAction="http://www.assimbly.world/FromExternalWsdl" style="document"/>
             <wsdl:input name="OperationFromExternalWsdlIn">
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -474,7 +474,7 @@
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="OperationFromExternalWsdlWithHeader">
-            <soap:operation soapAction="http://www.dovetail.world/FromExternalWsdlWithHeader" style="document"/>
+            <soap:operation soapAction="http://www.assimbly.world/FromExternalWsdlWithHeader" style="document"/>
             <wsdl:input name="OperationFromExternalWsdlWithHeaderIn">
                 <soap:header message="mock1:AuthenticationHeader" part="AuthHeader" use="literal"/>
                 <soap:body use="literal"/>
@@ -487,13 +487,13 @@
 
     <wsdl:service name="TestSoapService">
         <wsdl:port name="TestSoap12" binding="tns:TestSoap12">
-            <soap12:address location="http://www.dovetail.world/testsoap.asmx"/>
+            <soap12:address location="http://www.assimbly.world/testsoap.asmx"/>
         </wsdl:port>
     </wsdl:service>
 
     <wsdl:service name="TestSoapExtService">
         <wsdl:port name="TestSoapExt" binding="tns:TestSoapExt">
-            <soap:address location="http://www.dovetail.world/testsoapext.asmx"/>
+            <soap:address location="http://www.assimbly.world/testsoapext.asmx"/>
         </wsdl:port>
     </wsdl:service>
 </wsdl:definitions>

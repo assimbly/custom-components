@@ -18,5 +18,5 @@
 #
 # http://www.gnu.org/licenses/lgpl-3.0-standalone.html
 
-class=world.dovetail.smb.SmbComponent
-strategy.factory.class=world.dovetail.smb.strategy.SmbProcessStrategyFactory
+class=org.assimbly.smb.SmbComponent
+strategy.factory.class=org.assimbly.smb.strategy.SmbProcessStrategyFactory

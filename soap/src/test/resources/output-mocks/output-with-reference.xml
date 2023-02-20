@@ -1,8 +1,8 @@
-<ns:withReferenceRequest xmlns:ns="http://www.dovetail.world">
+<ns:withReferenceRequest xmlns:ns="http://www.assimbly.world">
     <ns:element>
         <ns:item>value</ns:item>
     </ns:element>
-    <ns:ext-element xmlns:ns="http://www.dovetail.world/wsdl/external/">
+    <ns:ext-element xmlns:ns="http://www.assimbly.world/wsdl/external/">
         <ns:item>value</ns:item>
     </ns:ext-element>
 </ns:withReferenceRequest>

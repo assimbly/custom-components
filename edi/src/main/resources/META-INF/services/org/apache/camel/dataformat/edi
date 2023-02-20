@@ -1,1 +1,1 @@
-class=world.dovetail.edi.EdiDataFormat
+class=org.assimbly.edi.EdiDataFormat

@@ -1,1 +1,1 @@
-class=world.dovetail.xmltoexcel.XmlToExcelComponent
+class=org.assimbly.xmltoexcel.XmlToExcelComponent

@@ -1,6 +1,6 @@
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
   <SOAP-ENV:Header>
-    <ns:authHeader xmlns:ns="http://www.dovetail.world">
+    <ns:authHeader xmlns:ns="http://www.assimbly.world">
       <ns:username>admin</ns:username>
       <ns:password>admin</ns:password>
     </ns:authHeader>

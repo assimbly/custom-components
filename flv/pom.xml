@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>custom-components</artifactId>
-    <groupId>world.dovetail</groupId>
+    <groupId>org.assimbly</groupId>
     <version>4.0.0</version>
   </parent>
 
@@ -16,7 +16,7 @@
 
   <dependencies>
 	  <dependency>
-		  <groupId>world.dovetail</groupId>
+		  <groupId>org.assimbly</groupId>
 		  <artifactId>smooksnoxml</artifactId>
 		  <version>${project.parent.version}</version>
 	  </dependency>

@@ -1,1 +1,1 @@
-class=world.dovetail.googledrive.GoogleDriveComponent
+class=org.assimbly.googledrive.GoogleDriveComponent

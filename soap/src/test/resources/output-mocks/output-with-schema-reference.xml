@@ -1,4 +1,4 @@
-<ns:withSchemaReferenceRequest xmlns:ns="http://www.dovetail.world/wsdl/schema/">
+<ns:withSchemaReferenceRequest xmlns:ns="http://www.assimbly.world/wsdl/schema/">
     <ns:schema-element>
         <ns:item>value</ns:item>
     </ns:schema-element>
