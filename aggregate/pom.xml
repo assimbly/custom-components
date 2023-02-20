@@ -4,7 +4,7 @@
   <parent>
     <artifactId>custom-components</artifactId>
     <groupId>world.dovetail</groupId>
-    <version>3.9.0</version>
+    <version>4.0.0</version>
   </parent>
 
   <artifactId>aggregate</artifactId>
