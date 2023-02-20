@@ -1,0 +1,499 @@
+<wsdl:definitions xmlns:tns="http://www.dovetail.world"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:sch="http://www.dovetail.world/wsdl/schema/"
+                  xmlns:ext="http://www.dovetail.world/wsdl/external/"
+                  xmlns:unq="http://www.dovetail.world/wsdl/unqualified/"
+                  xmlns:imp="http://www.dovetail.world/wsdl/schema/import"
+                  xmlns:types="http://www.dovetail.world/wsdl/types/"
+                  xmlns:mock1="http://www.dovetail.world/wsdl/import/mock-1"
+                  targetNamespace="http://www.dovetail.world">
+
+    <wsdl:import namespace="http://www.dovetail.world/wsdl/import/mock-1" location="mock-1.wsdl"/>
+
+    <wsdl:types>
+        <xs:schema targetNamespace="http://www.dovetail.world/Imports">
+            <xs:import schemaLocation="schemas/schema.xsd" namespace="http://www.dovetail.world/wsdl/schema/import" />
+        </xs:schema>
+        <xs:schema elementFormDefault="qualified" targetNamespace="http://www.dovetail.world">
+            <xs:import namespace="http://www.dovetail.world/wsdl/local/import" />
+            <xs:element name="withImportRequest">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element xmlns:lc="http://www.dovetail.world/wsdl/local/import" name="imp-element" type="lc:imp-element"/>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="withReferenceRequest">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element ref="tns:element"/>
+                        <xs:element ref="ext:ext-element"/>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="withTypeRequest">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="guid" type="types:guid"/>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="withExtensionRequest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="1" maxOccurs="1" name="extension" type="tns:extension" />
+                        <xs:element minOccurs="1" maxOccurs="1" name="ext-extension" type="tns:ext-extension" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="withSequenceRequest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="elements" type="tns:elements"/>
+                        <xs:element minOccurs="0" maxOccurs="unbounded" name="element" type="tns:element"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="withUnqualifiedRequest">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="element" type="tns:unq-element"/>
+                        <xs:element name="ext-element" type="unq:element"/>
+                        <xs:element form="unqualified" name="unq-element">
+                            <xs:complexType>
+                                <xs:all>
+                                    <xs:element form="qualified" minOccurs="0" name="item" type="xs:string"/>
+                                </xs:all>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="withHeaderRequest">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="element" type="tns:element"/>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="withHeadersRequest">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="element" type="tns:element"/>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="authHeader" type="tns:authHeader"/>
+            <xs:element name="databaseHeader" type="tns:databaseHeader"/>
+            <xs:element name="element">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element minOccurs="0" name="item" type="xs:string"/>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="response">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" maxOccurs="1" name="Response" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="string" nillable="true" type="xs:string"/>
+            <xs:complexType name="element">
+                <xs:all>
+                    <xs:element minOccurs="0" name="item" type="xs:string"/>
+                </xs:all>
+            </xs:complexType>
+            <xs:complexType name="extension">
+                <xs:complexContent mixed="false">
+                    <xs:extension base="tns:base">
+                        <xs:sequence>
+                            <xs:element minOccurs="1" maxOccurs="1" name="item" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:complexType name="ext-extension">
+                <xs:complexContent mixed="false">
+                    <xs:extension base="ext:base">
+                        <xs:sequence>
+                            <xs:element minOccurs="1" maxOccurs="1" name="item" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:complexType name="base">
+                <xs:sequence>
+                    <xs:element minOccurs="0" maxOccurs="1" name="base-item" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="elements">
+                <xs:sequence>
+                    <xs:element minOccurs="0" maxOccurs="unbounded" name="element" type="ext:element"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="unq-element">
+                <xs:all>
+                    <xs:element minOccurs="0" form="unqualified" name="item" type="xs:string"/>
+                </xs:all>
+            </xs:complexType>
+            <xs:complexType name="authHeader">
+                <xs:all>
+                    <xs:element name="username" type="xs:string"/>
+                    <xs:element name="password" type="xs:string"/>
+                </xs:all>
+            </xs:complexType>
+            <xs:complexType name="databaseHeader">
+                <xs:all>
+                    <xs:element name="database" type="xs:string"/>
+                </xs:all>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema elementFormDefault="qualified" targetNamespace="http://www.dovetail.world/wsdl/schema/" xmlns:schema="http://www.dovetail.world/wsdl/schema/">
+            <xs:element name="withSchemaReferenceRequest">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element ref="schema:schema-element"/>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="schema-element">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element minOccurs="0" name="item" type="xs:string"/>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema elementFormDefault="qualified" targetNamespace="http://www.dovetail.world/wsdl/external/">
+            <xs:element name="ext-element">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" maxOccurs="1" name="item" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:complexType name="element">
+                <xs:all>
+                    <xs:element minOccurs="0" name="item" type="xs:string"/>
+                </xs:all>
+            </xs:complexType>
+            <xs:complexType name="base">
+                <xs:sequence>
+                    <xs:element minOccurs="0" maxOccurs="1" name="base-item" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema elementFormDefault="unqualified" targetNamespace="http://www.dovetail.world/wsdl/unqualified/">
+            <xs:complexType name="element">
+                <xs:all>
+                    <xs:element form="qualified" minOccurs="0" name="item" type="xs:string"/>
+                </xs:all>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema elementFormDefault="qualified" targetNamespace="http://www.dovetail.world/wsdl/types/">
+            <xs:simpleType name="guid">
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:schema>
+        <xs:schema elementFormDefault="qualified" xmlns:tns="http://www.dovetail.world/wsdl/local/import" targetNamespace="http://www.dovetail.world/wsdl/local/import">
+            <xs:complexType name="imp-element">
+                <xs:all>
+                    <xs:element minOccurs="0" name="item" type="xs:string"/>
+                </xs:all>
+            </xs:complexType>
+            <xs:element name="imp-element" nillable="true" type="tns:imp-element"/>
+        </xs:schema>
+    </wsdl:types>
+
+    <wsdl:message name="OperationWithStandardType">
+        <wsdl:part name="item" type="xs:string"/>
+    </wsdl:message>
+    <wsdl:message name="OperationWithTypePart">
+        <wsdl:part name="imp-element" xmlns:lc="http://www.dovetail.world/wsdl/local/import"  element="lc:imp-element"/>
+        <wsdl:part name="element" type="tns:element"/>
+        <wsdl:part name="item" type="xs:string"/>
+    </wsdl:message>
+    <wsdl:message name="OperationWithReferenceIn">
+        <wsdl:part name="parameters" element="tns:withReferenceRequest"/>
+    </wsdl:message>
+    <wsdl:message name="OperationWithImportIn">
+        <wsdl:part name="parameters" element="tns:withImportRequest"/>
+    </wsdl:message>
+    <wsdl:message name="OperationWithSchemaReferenceIn">
+        <wsdl:part name="parameters" element="sch:withSchemaReferenceRequest"/>
+    </wsdl:message>
+    <wsdl:message name="OperationWithTypeIn">
+        <wsdl:part name="parameters" element="tns:withTypeRequest"/>
+    </wsdl:message>
+    <wsdl:message name="OperationWithLocalTypeIn">
+        <wsdl:part name="parameters" element="imp:withLocalTypeRequest"/>
+    </wsdl:message>
+    <wsdl:message name="OperationWithExtensionIn">
+        <wsdl:part name="parameters" element="tns:withExtensionRequest"/>
+    </wsdl:message>
+    <wsdl:message name="OperationWithSequenceIn">
+        <wsdl:part name="parameters" element="tns:withSequenceRequest"/>
+    </wsdl:message>
+    <wsdl:message name="OperationWithUnqualifiedIn">
+        <wsdl:part name="parameters" element="tns:withUnqualifiedRequest"/>
+    </wsdl:message>
+    <wsdl:message name="OperationWithHeaderIn">
+        <wsdl:part name="parameters" element="tns:withHeaderRequest"/>
+    </wsdl:message>
+    <wsdl:message name="OperationWithHeadersIn">
+        <wsdl:part name="parameters" element="tns:withHeadersRequest"/>
+    </wsdl:message>
+    <wsdl:message name="AuthenticationHeader">
+        <wsdl:part name="AuthHeader" element="tns:authHeader"/>
+    </wsdl:message>
+    <wsdl:message name="DatabaseHeader">
+        <wsdl:part name="DatabaseHeader" element="tns:databaseHeader"/>
+    </wsdl:message>
+    <wsdl:message name="OperationOut">
+        <wsdl:part name="parameters" element="tns:response"/>
+    </wsdl:message>
+
+    <wsdl:portType name="TestSoap">
+        <wsdl:operation name="OperationWithStandardType">
+            <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                Test Operation with standard type in Part
+            </wsdl:documentation>
+            <wsdl:input message="tns:OperationWithStandardType"/>
+            <wsdl:output message="tns:OperationOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="OperationWithTypePart">
+            <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                Test Operation with type in Part
+            </wsdl:documentation>
+            <wsdl:input message="tns:OperationWithTypePart"/>
+            <wsdl:output message="tns:OperationOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="OperationWithReference">
+            <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                Test Operation with Reference
+            </wsdl:documentation>
+            <wsdl:input message="tns:OperationWithReferenceIn"/>
+            <wsdl:output message="tns:OperationOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="OperationWithImport">
+            <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                Test Operation with Schema Import
+            </wsdl:documentation>
+            <wsdl:input message="tns:OperationWithImportIn"/>
+            <wsdl:output message="tns:OperationOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="OperationWithSchemaReference">
+            <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                Test Operation with Reference
+            </wsdl:documentation>
+            <wsdl:input message="tns:OperationWithSchemaReferenceIn"/>
+            <wsdl:output message="tns:OperationOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="OperationWithType">
+            <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                Test Operation with Reference
+            </wsdl:documentation>
+            <wsdl:input message="tns:OperationWithTypeIn"/>
+            <wsdl:output message="tns:OperationOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="OperationWithLocalType">
+            <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                Test Operation with Reference
+            </wsdl:documentation>
+            <wsdl:input message="tns:OperationWithLocalTypeIn"/>
+            <wsdl:output message="tns:OperationOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="OperationWithExtension">
+            <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                Test Operation with Reference
+            </wsdl:documentation>
+            <wsdl:input message="tns:OperationWithExtensionIn"/>
+            <wsdl:output message="tns:OperationOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="OperationWithSequence">
+            <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                Test Operation with Reference
+            </wsdl:documentation>
+            <wsdl:input message="tns:OperationWithSequenceIn"/>
+            <wsdl:output message="tns:OperationOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="OperationWithUnqualified">
+            <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                Test Operation with Reference
+            </wsdl:documentation>
+            <wsdl:input message="tns:OperationWithUnqualifiedIn"/>
+            <wsdl:output message="tns:OperationOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="OperationWithHeader">
+            <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                Test Operation with Reference
+            </wsdl:documentation>
+            <wsdl:input message="tns:OperationWithHeaderIn"/>
+            <wsdl:output message="tns:OperationOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="OperationWithHeaders">
+            <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                Test Operation with Reference
+            </wsdl:documentation>
+            <wsdl:input message="tns:OperationWithHeadersIn"/>
+            <wsdl:output message="tns:OperationOut"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="TestSoap12" type="tns:TestSoap">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="OperationWithStandardType">
+            <soap12:operation soapAction="http://www.dovetail.world/WithStandardPart" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal" namespace="http://www.dovetail.world/wsdl/types/"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="OperationWithTypePart">
+            <soap12:operation soapAction="http://www.dovetail.world/WithPartType" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal" namespace="http://www.dovetail.world/wsdl/types/"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="OperationWithReference">
+            <soap12:operation soapAction="http://www.dovetail.world/WithReference" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="OperationWithImport">
+            <soap12:operation soapAction="http://www.dovetail.world/WithImport" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="OperationWithSchemaReference">
+            <soap12:operation soapAction="http://www.dovetail.world/WithSchemaReference" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="OperationWithType">
+            <soap12:operation soapAction="http://www.dovetail.world/WithType" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="OperationWithLocalType">
+            <soap12:operation soapAction="http://www.dovetail.world/WithLocalType" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="OperationWithExtension">
+            <soap12:operation soapAction="http://www.dovetail.world/WithExtension" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="OperationWithSequence">
+            <soap12:operation soapAction="http://www.dovetail.world/WithSequence" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="OperationWithUnqualified">
+            <soap12:operation soapAction="http://www.dovetail.world/WithUnqualified" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="OperationWithHeader">
+            <soap12:operation soapAction="http://www.dovetail.world/WithHeader" style="document"/>
+            <wsdl:input>
+                <soap:header message="tns:AuthenticationHeader" part="AuthHeader" use="literal"/>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="OperationWithHeaders">
+            <soap12:operation soapAction="http://www.dovetail.world/WithHeaders" style="document"/>
+            <wsdl:input>
+                <soap12:header message="tns:AuthenticationHeader" part="AuthHeader" use="literal"/>
+                <soap12:header message="tns:DatabaseHeader" part="DatabaseHeader" use="literal"/>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:binding name="TestSoapExt" type="mock1:ExtTestSoap12">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="OperationFromExternalWsdl">
+            <soap:operation soapAction="http://www.dovetail.world/FromExternalWsdl" style="document"/>
+            <wsdl:input name="OperationFromExternalWsdlIn">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="OperationOut">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="OperationFromExternalWsdlWithHeader">
+            <soap:operation soapAction="http://www.dovetail.world/FromExternalWsdlWithHeader" style="document"/>
+            <wsdl:input name="OperationFromExternalWsdlWithHeaderIn">
+                <soap:header message="mock1:AuthenticationHeader" part="AuthHeader" use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="OperationOut">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="TestSoapService">
+        <wsdl:port name="TestSoap12" binding="tns:TestSoap12">
+            <soap12:address location="http://www.dovetail.world/testsoap.asmx"/>
+        </wsdl:port>
+    </wsdl:service>
+
+    <wsdl:service name="TestSoapExtService">
+        <wsdl:port name="TestSoapExt" binding="tns:TestSoapExt">
+            <soap:address location="http://www.dovetail.world/testsoapext.asmx"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

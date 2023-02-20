@@ -1,0 +1,87 @@
+= FMUTA Component
+:doctitle: FMUTA
+:shortname: fmuta
+:artifactid: fmuta
+:description: enriches messages containing financial mutations in CSV format as exported by Abacus.
+:since: 2.20.1
+:supportlevel: Stable
+:component-header: Producer is supported
+//Manually maintained attributes
+
+*Since Camel {since}*
+
+*{component-header}*
+
+The FMUTA component enriches messages containing financial mutations in CSV format as exported
+by Abacus.
+This component produces messages in a format that can be imported by accounting software.
+It adds a header line for each group of lines present in the input.
+
+Maven users will need to add the following dependency to their `pom.xml`
+for this component:
+
+[source,xml]
+------------------------------------------------------------
+<dependency>
+    <groupId>world.dovetail</groupId>
+    <artifactId>fmuta</artifactId>
+	<version>x.x.x</version>
+    <!-- use the same version as your Assimbly version -->
+</dependency>
+------------------------------------------------------------
+
+== URI format
+
+--------------------------------------------
+fmuta:enrich?decimalSeparator=,
+--------------------------------------------
+
+== Example route
+
+[source,xml]
+--------------------------------------------
+  <route id="95fa2731-d090-11ec-83f5-3747809ef661">
+    <from uri="activemq:ID_627a64e338c74a03740004de_test_4ea92390-d063-11ec-83f5-3747809ef661"/>
+    <unmarshal>
+      <univocity-csv headerExtractionEnabled="true" asMap="true" delimiter=";"/>
+    </unmarshal>
+    <to uri="fmuta:enrich?decimalSeparator=,"/>
+    <marshal>
+      <univocity-csv delimiter=";" lineSeparator="&#13;&#10;" quoteAllFields="false">
+        <univocity-header>Regelnr</univocity-header>
+        <univocity-header>DagboekType</univocity-header>
+        <univocity-header>Dagboeknr</univocity-header>
+        <univocity-header>Periode</univocity-header>
+        <univocity-header>BoekJaar</univocity-header>
+        <univocity-header>BoekstukNr</univocity-header>
+        <univocity-header>Omschrijving</univocity-header>
+        <univocity-header>Datum</univocity-header>
+        <univocity-header>Tegenrekening</univocity-header>
+        <univocity-header>Debnr</univocity-header>
+        <univocity-header>Crednr</univocity-header>
+        <univocity-header>Factuurnr</univocity-header>
+        <univocity-header>Bedrag</univocity-header>
+        <univocity-header>Journaliseren</univocity-header>
+        <univocity-header>Valutacode</univocity-header>
+        <univocity-header>Koers</univocity-header>
+        <univocity-header>Krediet_bep</univocity-header>
+        <univocity-header>Bedrag_Krediet_bep</univocity-header>
+        <univocity-header>Vervaldatum_Factuur</univocity-header>
+        <univocity-header>Vervaldatum_Bedrag_Krediet_bep</univocity-header>
+        <univocity-header>BTWCode</univocity-header>
+        <univocity-header>BTWBedrag</univocity-header>
+        <univocity-header>Weeknr</univocity-header>
+        <univocity-header>Referentie</univocity-header>
+        <univocity-header>Betalingswijze</univocity-header>
+        <univocity-header>BedragRekening</univocity-header>
+        <univocity-header>Kostenplaats</univocity-header>
+        <univocity-header>Kostendrager</univocity-header>
+        <univocity-header>AantalKostendrager</univocity-header>
+        <univocity-header>Verschilcode</univocity-header>
+        <univocity-header>kolom30</univocity-header>
+        <univocity-header>Stornoboeking</univocity-header>
+      </univocity-csv>
+    </marshal>
+    <to uri="activemq:ID_627a64e338c74a03740004de_test_95fa2731-d090-11ec-83f5-3747809ef661?timeToLive=86400000"/>
+  </route>
+--------------------------------------------

@@ -1,0 +1,11 @@
+<withUnqualifiedRequest>
+    <element>
+        <item>value</item>
+    </element>
+    <ext-element>
+        <item>value</item>
+    </ext-element>
+    <unq-element>
+        <item>value</item>
+    </unq-element>
+</withUnqualifiedRequest>

@@ -1,0 +1,58 @@
+= Enrich Component
+:doctitle: Enrich
+:shortname: enrich
+:artifactid: enrich
+:description: take a sample of an ongoing message in the flow, in order to take some action with it while it goes through the flow
+:since: 2.20.1
+:supportlevel: Stable
+:component-header: Producer is supported
+//Manually maintained attributes
+
+*Since Camel {since}*
+
+*{component-header}*
+
+The Enrich component lets you take a sample of an ongoing message in your flow,
+in order to take some action with it while it goes through the flow.
+The tapped message is copied and any resulting routing runs in its own separate thread
+and thus will not affect the main flow.
+The separate running thread MUST end in an endpoint to be able to return a message
+and enrich it to the original one.
+
+Maven users will need to add the following dependency to their `pom.xml`
+for this component:
+
+[source,xml]
+------------------------------------------------------------
+<dependency>
+    <groupId>world.dovetail</groupId>
+    <artifactId>enrich</artifactId>
+	<version>x.x.x</version>
+    <!-- use the same version as your Assimbly version -->
+</dependency>
+------------------------------------------------------------
+
+== URI format
+
+--------------------------------------------
+none
+--------------------------------------------
+
+== Example route
+
+[source,xml]
+--------------------------------------------
+<route id="18d54e00-d0f5-11ec-83f5-3747809ef661">
+    <from uri="activemq:ID_627a67ff38c74a06a000023c_test_4f415a00-d065-11ec-83f5-3747809ef661"/>
+    <setProperty propertyName="Enrich-Type">
+        <simple>application/override</simple>
+    </setProperty>
+    <setProperty propertyName="Error-Route">
+        <simple>true</simple>
+    </setProperty>
+    <enrich strategyRef="CurrentEnrichStrategy">
+        <simple>activemq:ID_627a67ff38c74a06a000023c_test_18d54e00-d0f5-11ec-83f5-3747809ef661_BottomCenter</simple>
+    </enrich>
+    <to uri="activemq:ID_627a67ff38c74a06a000023c_test_18d54e00-d0f5-11ec-83f5-3747809ef661?timeToLive=86400000"/>
+</route>
+--------------------------------------------

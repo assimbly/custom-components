@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ns:withLocalTypeRequest xmlns:ns="http://www.dovetail.world/wsdl/schema/import">
+    <ns:item xmlns:ns="http://www.dovetail.world/wsdl/schema/import/2">Hello World</ns:item>
+</ns:withLocalTypeRequest>

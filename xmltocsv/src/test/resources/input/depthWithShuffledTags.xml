@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<breakfast_menu>
+    <food>
+        <name>food1</name>
+        <price>$1</price>
+        <description>
+            <title>title1</title>
+            <body>body1</body>
+        </description>
+    </food>
+    <food>
+        <price>$2</price>
+        <name>food2</name>
+        <calories></calories>
+    </food>
+    <food>
+        <description>
+            <title>title3</title>
+            <body>body3</body>
+        </description>
+        <calories>300</calories>
+        <price>$3</price>
+        <name>food3</name>
+    </food>
+    <food>
+        <price>$4</price>
+        <name>food4</name>
+        <calories>400</calories>
+    </food>
+    <food>
+        <name>food5</name>
+        <calories>-500</calories>
+        <price>$5</price>
+    </food>
+</breakfast_menu>

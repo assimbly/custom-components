@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<certificates>
+    <certificate>
+        <number>123</number>
+        <issue-date>2016-02-01</issue-date>
+        <issued-by>
+            <name>issuer</name>
+            <code>123</code>
+            <order-number>456</order-number>
+        </issued-by>
+        <issued-to>
+            <name>customer</name>
+            <code>789</code>
+            <order-number>012</order-number>
+        </issued-to>
+        <stock-units>
+            <stock-unit>
+                <id>stockUnitId</id>
+                <ingot-case>ingotCase</ingot-case>
+                <mechanical-properties>
+                    <property>
+                        <code>code</code>
+                        <description>description</description>
+                        <value>value</value>
+                        <unit>unit</unit>
+                    </property>
+                </mechanical-properties>
+                <chemical-composition>
+                    <unit>%</unit>
+                    <base-metal>
+                        <symbol>Al</symbol>
+                        <description>Aluminium</description>
+                        <value>1</value>
+                    </base-metal>
+                    <components>
+                        <component>
+                            <symbol>Fe</symbol>
+                            <description>Iron</description>
+                            <value>0.01</value>
+                        </component>
+                    </components>
+                </chemical-composition>
+            </stock-unit>
+        </stock-units>
+    </certificate>
+</certificates>

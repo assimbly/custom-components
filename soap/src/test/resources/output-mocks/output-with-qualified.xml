@@ -1,0 +1,8 @@
+<withQualifiedRequest>
+    <element>
+        <item>value</item>
+    </element>
+    <ns:qua-element xmlns:ns="http://www.dovetail.world">
+        <item>value</item>
+    </ns:qua-element>
+</withQualifiedRequest>

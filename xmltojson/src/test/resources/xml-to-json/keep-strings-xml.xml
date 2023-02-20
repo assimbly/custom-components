@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<persons>
+    <person>
+        <name>John Jansen</name>
+        <age>22</age>
+        <height>180</height>
+    </person>
+    <person>
+        <name>John Foo</name>
+        <age>30</age>
+        <height>175</height>
+    </person>
+    <person>
+        <name>John Johnson</name>
+        <age>18</age>
+        <height>165</height>
+    </person>
+</persons>

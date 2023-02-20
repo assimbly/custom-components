@@ -1,0 +1,41 @@
+<camelContext id="ID_627a611838c74a03740003bf" xmlns="http://camel.apache.org/schema/blueprint" useMDCLogging="true" streamCache="true">
+  <jmxAgent id="agent" loadStatisticsEnabled="true"/>
+  <streamCaching id="streamCacheConfig" spoolThreshold="0" spoolDirectory="tmp/camelcontext-#camelId#" spoolUsedHeapMemoryThreshold="70"/>
+  <threadPoolProfile id="wiretapProfile" defaultProfile="false" poolSize="0" maxPoolSize="5" maxQueueSize="2000" rejectedPolicy="DiscardOldest" keepAliveTime="10"/>
+  <threadPoolProfile id="defaultProfile" defaultProfile="true" poolSize="8" maxPoolSize="16" maxQueueSize="1000" rejectedPolicy="CallerRuns" keepAliveTime="30"/>
+  <onException>      <exception>java.lang.Exception</exception>
+      <redeliveryPolicy maximumRedeliveries="0" redeliveryDelay="5000"/>
+      <setExchangePattern pattern="InOut"/>
+</onException>
+  <route id="00f2ccc0-d061-11ec-83f5-3747809ef661">
+    <from uri="jetty:https://0.0.0.0:9001/1/sandbox?httpBinding=#customHttpBinding&amp;matchOnUriPrefix=false&amp;sslContextParameters=sslContext"/>
+    <removeHeaders pattern="CamelHttp*"/>
+    <setBody>
+      <constant>
+        <![CDATA[<persons>
+			  <person>
+				<name>John Doe</name>
+			  </person>
+			  <person>
+				<name>Jane Doe</name>
+			  </person>
+			</persons>]]>
+      </constant>
+    </setBody>
+    <to uri="activemq:ID_627a611838c74a03740003bf_test_00f2ccc0-d061-11ec-83f5-3747809ef661?timeToLive=86400000&amp;exchangePattern=InOut"/>
+  </route>
+  <route id="16016131-d06b-11ec-83f5-3747809ef661">
+    <from uri="activemq:ID_627a611838c74a03740003bf_test_00f2ccc0-d061-11ec-83f5-3747809ef661"/>
+    <to uri="sandbox://groovy?script=RAW(Ly8gU2V0dGluZyB0aGUgYm9keSBvZiB0aGUgbWVzc2FnZQpyZXN1bHQgPSAiTXkgbmV3IGJvZHkiCgo=)"/>
+    <to uri="activemq:ID_627a611838c74a03740003bf_test_16016131-d06b-11ec-83f5-3747809ef661?timeToLive=86400000"/>
+  </route>
+  <route id="00f2f3d0-d061-11ec-83f5-3747809ef661">
+    <from uri="activemq:ID_627a611838c74a03740003bf_test_16016131-d06b-11ec-83f5-3747809ef661"/>
+    <setHeader headerName="CamelVelocityTemplate">
+      <simple>Message Body:
+
+${bodyAs(String)}</simple>
+    </setHeader>
+    <to uri="velocity:generate"/>
+  </route>
+</camelContext>

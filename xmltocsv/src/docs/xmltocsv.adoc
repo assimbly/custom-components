@@ -1,0 +1,35 @@
+= XMLToJSON Component
+:doctitle: XMLT0CSV
+:shortname: xmltocsv
+:artifactid: xmltocsv
+:description: Converts XML to CSV
+:since: 2.23.0
+:supportlevel: Stable
+:component-header: Producer is supported
+//Manually maintained attributes
+
+*Since Camel {since}*
+
+*{component-header}*
+
+The components converts a XML into CSV (Comman-Separated Values)
+
+Maven users will need to add the following dependency to their `pom.xml`
+for this component:
+
+[source,xml]
+------------------------------------------------------------
+<dependency>
+    <groupId>world.dovetail</groupId>
+    <artifactId>xmltocsv</artifactId>
+	<version>x.x.x</version>
+    <!-- use the same version as your Assimbly version -->
+</dependency>
+------------------------------------------------------------
+
+== URI format
+
+--------------------------------------------
+xmltocsv://
+--------------------------------------------
+

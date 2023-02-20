@@ -1,0 +1,35 @@
+= Form2Xml Component
+:doctitle: FORM2XML
+:shortname: form2xml
+:artifactid: form2xml
+:description: conversion from the Form url encoded format to XML format
+:since: 2.20.1
+:supportlevel: Stable
+:component-header: Producer is supported
+//Manually maintained attributes
+
+*Since Camel {since}*
+
+*{component-header}*
+
+The Form to XML component provides a direct conversion from the Form url encoded format to XML format.
+This component could, for example, be used when you submit an HTML form to a Dovetail endpoint.
+
+Maven users will need to add the following dependency to their `pom.xml`
+for this component:
+
+[source,xml]
+------------------------------------------------------------
+<dependency>
+    <groupId>world.dovetail</groupId>
+    <artifactId>form2xml</artifactId>
+	<version>x.x.x</version>
+    <!-- use the same version as your Assimbly version -->
+</dependency>
+------------------------------------------------------------
+
+== URI format
+
+--------------------------------------------
+form2xml://?encoding=utf-8
+--------------------------------------------

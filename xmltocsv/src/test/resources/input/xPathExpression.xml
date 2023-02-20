@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<breakfast_menu>
+  <food>
+    <name>food1</name>
+    <price>$1</price>
+    <description>desc1</description>
+  </food>
+  <food>
+    <name>food2</name>
+    <price>$2</price>
+    <description>desc2</description>
+    <calories></calories>
+  </food>
+  <food>
+    <name>food3</name>
+    <price>$3</price>
+    <description>desc3</description>
+    <calories>300</calories>
+  </food>
+  <drink>
+    <name>drink1</name>
+    <price>$1</price>
+    <description>desc1</description>
+  </drink>
+  <drink>
+    <name>drink2</name>
+    <price>$2</price>
+    <description>desc2</description>
+  </drink>
+</breakfast_menu>

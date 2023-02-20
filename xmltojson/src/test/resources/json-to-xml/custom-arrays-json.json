@@ -1,0 +1,60 @@
+{
+  "CreateOr!@#derAW": {
+    "orderT!@#@!ypeCode": "WEB",
+    "debtor#@#@Code": "12345",
+    "custo!@#merCode": "12345",
+    "li!@#nes": [
+      {
+        "ele!@#ment": {
+          "xmlproductIdentifier": {
+            "productCode": "2300039786011"
+          },
+          "deliv#$eryAddress": {
+            "id": "4"
+          },
+          "qtyOrdered": 1,
+          "unitCode": "C62",
+          "deliveryOrganisation": "12345",
+          "array": [
+            { "ke#$y": "value" },
+            [
+              { "ke#$y": "value" }
+            ]
+          ]
+        }
+      },
+      {
+        "elemen)(t": {
+          "prod&*uctIdentifier": {
+            "pro<>ductCode": "12345"
+          },
+          "del<>iveryAddress": {
+            "city<": "Houten",
+            ">id": "4"
+          },
+          "qty,Ordered": 1,
+          "unitC//ode": "C62",
+          "deliveryOrganisation": "12345",
+          "arra||y": [
+            { "k+ey": "value" }
+          ]
+        }
+      },
+      {
+        "elem%!@%ent": "4"
+      },
+      [
+        { "key01": "value" },
+        { "key02": "value" },
+        [
+          { "key03": "value" }
+        ]
+      ]
+    ],
+    "invoic~eAdd~ressInfo": {
+      "cit~y": "Houten",
+      "i<>d": "4"
+    },
+    "orde&*(rDate": "2018-09-17"
+  }
+}

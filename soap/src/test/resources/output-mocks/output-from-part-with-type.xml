@@ -1,0 +1,9 @@
+<ns:OperationWithTypePart xmlns:ns="http://www.dovetail.world/wsdl/types/">
+    <element xmlns:xsd="http://www.dovetail.world" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:element">
+        <item>value</item>
+    </element>
+    <item xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">value</item>
+    <ns:imp-element xmlns:ns="http://www.dovetail.world/wsdl/local/import">
+        <ns:item>value</ns:item>
+    </ns:imp-element>
+</ns:OperationWithTypePart>

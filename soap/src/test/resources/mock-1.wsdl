@@ -1,0 +1,94 @@
+<wsdl:definitions xmlns:tns="http://www.dovetail.world/wsdl/import/mock-1"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  targetNamespace="http://www.dovetail.world/wsdl/import/mock-1">
+
+    <wsdl:types>
+        <xs:schema elementFormDefault="qualified" targetNamespace="http://www.dovetail.world/wsdl/import/mock-1">
+            <xs:element name="fromExternalWsdlRequest">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="element" type="xs:string"/>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="fromExternalBindingRequest">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="element" type="xs:string"/>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="fromExternalWsdlWithHeaderRequest">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="element" type="xs:string"/>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="authHeader" type="tns:authHeader"/>
+            <xs:complexType name="authHeader">
+                <xs:all>
+                    <xs:element name="username" type="xs:string"/>
+                    <xs:element name="password" type="xs:string"/>
+                </xs:all>
+            </xs:complexType>
+            <xs:element name="response">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Response" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+
+    <wsdl:message name="OperationFromExternalWsdlIn">
+        <wsdl:part name="parameters" element="tns:fromExternalWsdlRequest"/>
+    </wsdl:message>
+    <wsdl:message name="OperationFromExternalWsdlWithHeaderIn">
+        <wsdl:part name="parameters" element="tns:fromExternalWsdlWithHeaderRequest"/>
+    </wsdl:message>
+    <wsdl:message name="AuthenticationHeader">
+        <wsdl:part name="AuthHeader" element="tns:authHeader"/>
+    </wsdl:message>
+    <wsdl:message name="OperationFromExternalBindingIn">
+        <wsdl:part name="parameters" element="tns:fromExternalBindingRequest"/>
+    </wsdl:message>
+    <wsdl:message name="OperationOut">
+        <wsdl:part name="parameters" element="tns:response"/>
+    </wsdl:message>
+
+    <wsdl:portType name="ExtTestSoap12">
+        <wsdl:operation name="OperationFromExternalWsdl">
+            <wsdl:input name="OperationFromExternalWsdlIn" message="tns:OperationFromExternalWsdlIn"/>
+            <wsdl:output name="OperationOut" message="tns:OperationOut"/>
+        </wsdl:operation>
+        <wsdl:operation name="OperationFromExternalWsdlWithHeader">
+            <wsdl:input name="OperationFromExternalWsdlWithHeader" message="tns:OperationFromExternalWsdlWithHeaderIn"/>
+            <wsdl:output name="OperationOut" message="tns:OperationOut"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:portType name="TestSoap">
+        <wsdl:operation name="OperationFromExternalBinding">
+            <wsdl:input name="OperationFromExternalBindingIn" message="tns:OperationFromExternalBindingIn"/>
+            <wsdl:output name="OperationOut" message="tns:OperationOut"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="TestSoapMock1" type="tns:TestSoap">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="OperationFromExternalBinding">
+            <soap:operation soapAction="http://www.dovetail.world/FromExternalBinding" style="document"/>
+            <wsdl:input name="OperationFromExternalBindingIn">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="OperationOut">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+</wsdl:definitions>

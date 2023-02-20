@@ -1,0 +1,5 @@
+<root>
+    <eanCode type="number">123</eanCode>
+    <eanCode type="number">456</eanCode>
+    <type type="string">123</type>
+</root>

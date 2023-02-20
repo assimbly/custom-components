@@ -1,0 +1,46 @@
+[
+  [
+    {
+      "Warehouse": "d98b4096-8472-4e72-aad8-df50e671da44",
+      "PurchaseOrderLines": [
+        [
+          {
+            "Item": "32399742-e5aa-4448-94d3-d22f38a67b87",
+            "QuantityInPurchaseUnits": 4
+          },
+          {
+            "Item": "f9a62999-d581-42a2-bd6a-20e2bd7499ba",
+            "QuantityInPurchaseUnits": 4
+          }
+        ]
+      ],
+      "Supplier": "37e964ff-1bfc-4d35-9222-925378b8edd2",
+      "ReceiptDate": "",
+      "OrderDate": {
+        "@isMorning": false,
+        "jsonContent": "2020-02-04T14:08:27Z"
+      }
+    },
+    {
+      "Warehouse": "d98b4096-8472-4e72-aad8-df50e671da44",
+      "PurchaseOrderLines": [
+        [
+          {
+            "Item": "32399742-e5aa-4448-94d3-d22f38a67b87",
+            "QuantityInPurchaseUnits": 4
+          },
+          {
+            "Item": "f9a62999-d581-42a2-bd6a-20e2bd7499ba",
+            "QuantityInPurchaseUnits": 4
+          }
+        ]
+      ],
+      "Supplier": "37e964ff-1bfc-4d35-9222-925378b8edd2",
+      "ReceiptDate": "",
+      "OrderDate": {
+        "@isMorning": false,
+        "jsonContent": "2020-02-04T14:08:27Z"
+      }
+    }
+  ]
+]

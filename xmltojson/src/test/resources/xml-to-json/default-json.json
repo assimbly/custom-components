@@ -1,0 +1,37 @@
+{
+  "root": {
+    "@rootAttribute": "rootValue",
+    "element": [
+      {
+        "@attribute01": "value01",
+        "element": {
+          "@attribute02": "value02",
+          "element": {
+            "element": {
+              "@attribute04": "value04",
+              "jsonContent": 4
+            },
+            "@attribute03": "value03"
+          }
+        }
+      },
+      {
+        "@attribute05": "value05",
+        "element": {
+          "@attribute06": "value06",
+          "element": {
+            "@attribute07": "value07",
+            "city": {
+              "@attribute08": "value08",
+              "jsonContent": "Houten"
+            },
+            "id": {
+              "@attribute09": "value09",
+              "jsonContent": 4
+            }
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "CreateOrderAW": {
+    "orderTypeCode": "WEB",
+    "debtorCode": 12345,
+    "name": "",
+    "customerCode": "12345",
+    "lines": [
+      {
+        "element": {
+          "productIdentifier": { "productCode": "2300039786011" },
+          "deliveryAddress": { "id": "4" },
+          "qtyOrdered": 1,
+          "unitCode": "C62",
+          "deliveryOrganisation": "12345"
+        }
+      },
+      {
+        "element": {
+          "productIdentifier": { "productCode": "12345" },
+          "deliveryAddress": {
+            "city": "Houten",
+            "id": {
+              "@attr": "testAttrWithType",
+              "jsonContent": "4"
+            }
+          },
+          "qtyOrdered": 1,
+          "unitCode": "C62",
+          "deliveryOrganisation": "12345",
+          "type": "TEST"
+        }
+      },
+      { "element": "4" },
+      { "element": true }
+    ],
+    "type": "TEST",
+    "invoiceAddressInfo": {
+      "city": "Houten",
+      "id": {
+        "@attr": "testAttrWithType",
+        "jsonContent": "4"
+      }
+    },
+    "orderDate": "2018-09-17"
+  }
+}

@@ -1,0 +1,37 @@
+= PDF Component
+:doctitle: PDF
+:shortname: PDF
+:artifactid: pdf
+:description: Create PDF from a PDF Template
+:since: 2.23.0
+:supportlevel: Stable
+:component-header: Producer is supported
+//Manually maintained attributes
+
+*Since Camel {since}*
+
+*{component-header}*
+
+The PDF component is able to apply transformations on exchanges. It supports replacing Adobe Acrobat Form Elements by matching header names.
+
+It takes a PDF Template file with Adobe Acrobat Form Elements, which is used to transform the headers into the PDF Template.
+
+Maven users will need to add the following dependency to their `pom.xml`
+for this component:
+
+[source,xml]
+------------------------------------------------------------
+<dependency>
+    <groupId>world.dovetail</groupId>
+    <artifactId>pdf</artifactId>
+	<version>x.x.x</version>
+    <!-- use the same version as your Assimbly version -->
+</dependency>
+------------------------------------------------------------
+
+== URI format
+
+--------------------------------------------
+pdf-transform://
+--------------------------------------------
+

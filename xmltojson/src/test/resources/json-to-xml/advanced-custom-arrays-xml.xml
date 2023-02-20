@@ -1,0 +1,15 @@
+<root>
+    <customElement>
+        <_links>
+            <customElement>
+                <href>https://www.dovetail.nl/wp-json/wc/v2/orders/26715</href>
+            </customElement>
+            <customElement>
+                <href>https://www.dovetail.nl/wp-json/wc/v2/orders</href>
+            </customElement>
+            <customElement>
+                <href>https://www.dovetail.nl/wp-json/wc/v2/customers/1</href>
+            </customElement>
+        </_links>
+    </customElement>
+</root>

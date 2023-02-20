@@ -1,0 +1,47 @@
+{
+    "xmlCreateOrderAW": {
+      "1order&TypeCode": "WEB",
+      "debtor<Code": "12345",
+      "custome<>rCode": "12345",
+      "lin</>es": [
+        {
+          "elem%ent": {
+            "produc@<>tIdentifier": {
+              "pro</>ductCode": "2300039786011"
+            },
+            "delive$ryAddress": {
+              "$<>?id": "4"
+            },
+            "qtyOr<!@#$%/>dered": 1,
+            "unit)(&%Code": "C62",
+            "deliveryO#$&*rganisation": "12345"
+          }
+        },
+        {
+          "ele</!ment": {
+            "</>productIdentifier": {
+              "<productCode/>": "12345"
+            },
+            "del#>iveryAddress": {
+              "ci()ty": "Houten",
+              "()id": "4"
+            },
+            "*qtyOrdered*": 1,
+            "/unitCode/": "C62",
+            ";deliveryOrganisation;": "12345"
+          }
+        },
+        {
+          "ele+=+=ment": "4"
+        }
+      ],
+      "|invoiceA||ddressInfo|": {
+        "ci,,ty": "Houten",
+        ",id,": "4"
+      },
+      "?ord??erDate?": "2018-09-17",
+      "123": "test1",
+      "456": "test2",
+      "<>789": "test3"
+    }
+  }

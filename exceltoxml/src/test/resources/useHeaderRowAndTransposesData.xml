@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Excel>
+  <Transposed>
+    <excelCol>
+      <Name>Month</Name>
+      <January>1</January>
+      <February>2</February>
+    </excelCol>
+  </Transposed>
+</Excel>

@@ -1,0 +1,82 @@
+<wsdl:definitions xmlns:tns="http://www.dovetail.world"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:qua="http://www.dovetail.world/wsdl/qualified/"
+                  targetNamespace="http://www.dovetail.world">
+
+    <wsdl:types>
+        <xs:schema targetNamespace="http://www.dovetail.world">
+
+            <xs:element name="withQualifiedRequest">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="element" type="qua:element"/>
+                        <xs:element form="qualified" name="qua-element">
+                            <xs:complexType>
+                                <xs:all>
+                                    <xs:element  minOccurs="0" name="item" type="xs:string"/>
+                                </xs:all>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:complexType name="qua-element">
+                <xs:all>
+                    <xs:element minOccurs="0" name="item" type="xs:string"/>
+                </xs:all>
+            </xs:complexType>
+        </xs:schema>
+
+        <xs:schema targetNamespace="http://www.dovetail.world/wsdl/qualified/">
+            <xs:complexType name="element">
+                <xs:all>
+                    <xs:element  minOccurs="0" name="item" type="xs:string"/>
+                </xs:all>
+            </xs:complexType>
+        </xs:schema>
+    </wsdl:types>
+
+
+    <wsdl:message name="OperationWithQualifiedIn">
+        <wsdl:part name="parameters" element="tns:withQualifiedRequest"/>
+    </wsdl:message>
+
+    <wsdl:portType name="TestSoap">
+
+        <wsdl:operation name="OperationWithQualified">
+            <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                Test Operation with Reference
+            </wsdl:documentation>
+            <wsdl:input message="tns:OperationWithQualifiedIn"/>
+            <wsdl:output message="tns:OperationOut"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="TestSoap12" type="tns:TestSoap">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="OperationWithQualified">
+            <soap12:operation soapAction="http://www.dovetail.world/WithQualified" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="TestSoapService">
+        <wsdl:port name="TestSoap12" binding="tns:TestSoap12">
+            <soap12:address location="http://www.dovetail.world/testsoap.asmx"/>
+        </wsdl:port>
+    </wsdl:service>
+
+    <wsdl:service name="TestSoapExtService">
+        <wsdl:port name="TestSoapExt" binding="tns:TestSoapExt">
+            <soap:address location="http://www.dovetail.world/testsoapext.asmx"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

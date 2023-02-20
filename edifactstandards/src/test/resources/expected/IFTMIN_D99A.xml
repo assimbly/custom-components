@@ -1,0 +1,1856 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blujaysolutions.com/2020/IFTMIN file:///F:/users/Projecten/1.%20Projectdocumentatie/EDIFACTS/IFTMIN%20D99A/IFTMIN_D99A.xsd" xmlns="http://www.blujaysolutions.com/2020/IFTMIN">
+
+    <Interchange>
+
+        <UNB>
+
+            <F0020>76772335828272</F0020>
+
+            <S001>
+
+                <F0001>UNOC</F0001>
+
+                <F0002>3</F0002>
+
+            </S001>
+
+            <S002>
+
+                <F0004>878542765</F0004>
+
+                <F0007>01</F0007>
+
+                <F0008>315000554</F0008>
+
+            </S002>
+
+            <S003>
+
+                <F0010>0000026335</F0010>
+
+                <F0014>315904425</F0014>
+
+            </S003>
+
+            <S004>
+
+                <F0017>201007</F0017>
+
+                <F0019>838</F0019>
+
+            </S004>
+
+        </UNB>
+
+        <UNZ>
+
+            <F0036>1</F0036>
+
+            <F0020>76772335828272</F0020>
+
+        </UNZ>
+
+        <Group>
+
+            <Message_IFTMIN>
+
+                <UNH>
+
+                    <F0062>233582827200</F0062>
+
+                    <F0068>BL00</F0068>
+
+                    <S009>
+
+                        <F0065>IFTMIN</F0065>
+
+                        <F0052>D</F0052>
+
+                        <F0054>99A</F0054>
+
+                        <F0051>UN</F0051>
+
+                    </S009>
+
+                    <S010>
+
+                        <F0070>2</F0070>
+
+                    </S010>
+
+                </UNH>
+
+                <BGM>
+
+                    <F1225>9</F1225>
+
+                    <C002>
+
+                        <F1001>705</F1001>
+
+                        <F1000>ERSTINFO</F1000>
+
+                    </C002>
+
+                    <C106>
+
+                        <F1004>2010309685</F1004>
+
+                    </C106>
+
+                </BGM>
+
+                <CTA>
+
+                    <F3139>MS</F3139>
+
+                    <C056>
+
+                        <F3413>G-FSO/GEP</F3413>
+
+                        <F3412>Mr Janzen(BOX)</F3412>
+
+                    </C056>
+
+                </CTA>
+
+                <COM>
+
+                    <C076>
+
+                        <F3148>+49 621 60-72637</F3148>
+
+                        <F3155>TE</F3155>
+
+                    </C076>
+
+                </COM>
+
+                <COM>
+
+                    <C076>
+
+                        <F3148>JOHANNES.JANZEN@BASF.COM</F3148>
+
+                        <F3155>EM</F3155>
+
+                    </C076>
+
+                </COM>
+
+                <DTM>
+
+                    <C507>
+
+                        <F2005>137</F2005>
+
+                        <F2380>202010070837</F2380>
+
+                        <F2379>203</F2379>
+
+                    </C507>
+
+                </DTM>
+
+                <FTX>
+
+                    <F4451>ABR</F4451>
+
+                    <C108>
+
+                        <F4440>ECB has to be presented to addresses at latest 3 working days after de</F4440>
+
+                        <F4440>parture of vessel. In case of any difficulties, new vessel booking or </F4440>
+
+                        <F4440>delays, please inform the responsible Transport Manager.</F4440>
+
+                    </C108>
+
+                </FTX>
+
+                <FTX>
+
+                    <F4451>DCL</F4451>
+
+                    <F3453>DE</F3453>
+
+                    <C108>
+
+                        <F4440>Der Auftraggeber verpflichtet sich, die �� 7b und 7c G�KG einzuhalten.</F4440>
+
+                        <F4440>Die in � 7b angesprochenen Dokumente hat der Fahrer auf Verlangen vor </F4440>
+
+                        <F4440>der Beladung dem Auftraggeber vorzulegen.</F4440>
+
+                    </C108>
+
+                </FTX>
+
+                <FTX>
+
+                    <F4451>DCL</F4451>
+
+                    <F3453>DE</F3453>
+
+                    <C108>
+
+                        <F4440>Im Sinne der Bef�rderungsvorschriften ( z.B. GGVSE, ADR ) ist BASF SE </F4440>
+
+                        <F4440>nicht Absender</F4440>
+
+                    </C108>
+
+                </FTX>
+
+                <FTX>
+
+                    <F4451>DCL</F4451>
+
+                    <F3453>EN</F3453>
+
+                    <C108>
+
+                        <F4440>As per the transportation regulations (e.g. GGVSE/B, ADR) is the BASF </F4440>
+
+                        <F4440>SE in DE not the sender. BASF SE in DE declarates himself as waiver cu</F4440>
+
+                        <F4440>stomer As per the ADSp. Location of company: 67056 Ludwigshafen</F4440>
+
+                    </C108>
+
+                </FTX>
+
+                <FTX>
+
+                    <F4451>DCL</F4451>
+
+                    <F3453>DE</F3453>
+
+                    <C108>
+
+                        <F4440>BASF SE erkl�rt sich als Verzichtskunde der Schadenversicherung im Sin</F4440>
+
+                        <F4440>ne der ADSp. Sitz der Gesellschaft: 67056 Ludwigshafen</F4440>
+
+                    </C108>
+
+                </FTX>
+
+                <FTX>
+
+                    <F4451>ABO</F4451>
+
+                    <F3453>DE</F3453>
+
+                    <C108>
+
+                        <F4440>ERSTINFO</F4440>
+
+                        <F4440>YE22</F4440>
+
+                    </C108>
+
+                </FTX>
+
+                <FTX>
+
+                    <F4451>AAS</F4451>
+
+                    <C108>
+
+                        <F4440>Date Shipped On Board</F4440>
+
+                    </C108>
+
+                </FTX>
+
+                <FTX>
+
+                    <F4451>AAS</F4451>
+
+                    <C108>
+
+                        <F4440>Depending on order: "freight prepaid" or "freight collect"</F4440>
+
+                    </C108>
+
+                </FTX>
+
+                <FTX>
+
+                    <F4451>AAS</F4451>
+
+                    <C108>
+
+                        <F4440>Please show Container No. &amp; Seal No</F4440>
+
+                    </C108>
+
+                </FTX>
+
+                <FTX>
+
+                    <F4451>AAS</F4451>
+
+                    <C108>
+
+                        <F4440>Name, address and phone number of the carrier's agent at port of desti</F4440>
+
+                        <F4440>nation</F4440>
+
+                    </C108>
+
+                </FTX>
+
+                <FTX>
+
+                    <F4451>DOC</F4451>
+
+                    <C108>
+
+                        <F4440>The followings must be shown on B/L: IMDG-class and UN number in case </F4440>
+
+                        <F4440>of dangerous goods cargo.</F4440>
+
+                    </C108>
+
+                </FTX>
+
+                <FTX>
+
+                    <F4451>DOC</F4451>
+
+                    <C108>
+
+                        <F4440>EUR1 has to be sent by ships-bag to 2nd notify only necessary for deli</F4440>
+
+                        <F4440>veries ex plants other than LU)</F4440>
+
+                    </C108>
+
+                </FTX>
+
+                <FTX>
+
+                    <F4451>SIC</F4451>
+
+                    <C108>
+
+                        <F4440>Hauptlauf: ABRECHNUNG HAT O H N E   ANGABE UNSERER UST-ID ZU  ERFOLGEN</F4440>
+
+                        <F4440>BEI ABRECHNUNG DARF  K E I N E  MWST BERECHNET WERDEN.</F4440>
+
+                    </C108>
+
+                </FTX>
+
+                <CNT>
+
+                    <C270>
+
+                        <F6069>16</F6069>
+
+                        <F6066>1</F6066>
+
+                        <F6411>C62</F6411>
+
+                    </C270>
+
+                </CNT>
+
+                <UNT>
+
+                    <F0074>93</F0074>
+
+                    <F0062>233582827200</F0062>
+
+                </UNT>
+
+                <SG7>
+
+                    <TCC>
+
+                        <C200>
+
+                            <F8023>101021</F8023>
+
+                        </C200>
+
+                    </TCC>
+
+                    <QTY>
+
+                        <C186>
+
+                            <F6063>100</F6063>
+
+                            <F6060>22881.2</F6060>
+
+                            <F6411>KGM</F6411>
+
+                        </C186>
+
+                    </QTY>
+
+                    <QTY>
+
+                        <C186>
+
+                            <F6063>109</F6063>
+
+                            <F6060>43.04</F6060>
+
+                            <F6411>MTQ</F6411>
+
+                        </C186>
+
+                    </QTY>
+
+                </SG7>
+
+                <SG8>
+
+                    <TDT>
+
+                        <F8051>10</F8051>
+
+                    </TDT>
+
+                    <SG9>
+
+                        <LOC>
+
+                            <F3227>88</F3227>
+
+                            <C517>
+
+                                <F3225>DEHAM</F3225>
+
+                                <F3224>Hamburg</F3224>
+
+                            </C517>
+
+                            <C519>
+
+                                <F3222>20457 Hamburg</F3222>
+
+                            </C519>
+
+                        </LOC>
+
+                    </SG9>
+
+                </SG8>
+
+                <SG8>
+
+                    <TDT>
+
+                        <F8051>20</F8051>
+
+                        <F8028>Ocean Vessel</F8028>
+
+                        <C220>
+
+                            <F8067>10</F8067>
+
+                        </C220>
+
+                        <C228>
+
+                            <F8179>13</F8179>
+
+                        </C228>
+
+                        <C222>
+
+                            <F8213>9467445</F8213>
+
+                            <F1131>146</F1131>
+
+                            <F3055>11</F3055>
+
+                            <F8212>MSC KATRINA</F8212>
+
+                        </C222>
+
+                    </TDT>
+
+                    <DTM>
+
+                        <C507>
+
+                            <F2005>133</F2005>
+
+                            <F2380>20201015</F2380>
+
+                            <F2379>102</F2379>
+
+                        </C507>
+
+                    </DTM>
+
+                    <TSR>
+
+                        <C536>
+
+                            <F4065>30</F4065>
+
+                        </C536>
+
+                    </TSR>
+
+                    <SG9>
+
+                        <LOC>
+
+                            <F3227>5</F3227>
+
+                            <C517>
+
+                                <F3225>DEHAM</F3225>
+
+                                <F3224>Hamburg</F3224>
+
+                            </C517>
+
+                        </LOC>
+
+                    </SG9>
+
+                    <SG9>
+
+                        <LOC>
+
+                            <F3227>12</F3227>
+
+                            <C517>
+
+                                <F3225>MTMAR</F3225>
+
+                                <F3224>MARSAXLOKK</F3224>
+
+                            </C517>
+
+                        </LOC>
+
+                    </SG9>
+
+                    <SG10>
+
+                        <RFF>
+
+                            <C506>
+
+                                <F1153>AHI</F1153>
+
+                                <F1154>2010309685</F1154>
+
+                            </C506>
+
+                        </RFF>
+
+                    </SG10>
+
+                </SG8>
+
+                <SG8>
+
+                    <TDT>
+
+                        <F8051>30</F8051>
+
+                    </TDT>
+
+                </SG8>
+
+                <SG11>
+
+                    <NAD>
+
+                        <F3035>CZ</F3035>
+
+                        <F3164>Ludwigshafen Friesenheim/Nord</F3164>
+
+                        <F3229>07</F3229>
+
+                        <F3251>67063</F3251>
+
+                        <F3207>DE</F3207>
+
+                        <C082>
+
+                            <F3039>1000</F3039>
+
+                        </C082>
+
+                        <C080>
+
+                            <F3036>BASF SE</F3036>
+
+                        </C080>
+
+                        <C059>
+
+                            <F3042>Carl-Bosch-Str. 38</F3042>
+
+                        </C059>
+
+                    </NAD>
+
+                </SG11>
+
+                <SG11>
+
+                    <NAD>
+
+                        <F3035>CA</F3035>
+
+                        <F3164>Geneve</F3164>
+
+                        <F3229>GE</F3229>
+
+                        <F3251>1208</F3251>
+
+                        <F3207>CH</F3207>
+
+                        <C082>
+
+                            <F3039>300627</F3039>
+
+                        </C082>
+
+                        <C080>
+
+                            <F3036>MSC Mediterranean Shipping</F3036>
+
+                            <F3036>Company SA</F3036>
+
+                        </C080>
+
+                        <C059>
+
+                            <F3042>Chemin Rieu 12-14</F3042>
+
+                        </C059>
+
+                    </NAD>
+
+                </SG11>
+
+                <SG11>
+
+                    <NAD>
+
+                        <F3035>FW</F3035>
+
+                        <F3164>Neuss</F3164>
+
+                        <F3229>05</F3229>
+
+                        <F3251>41468</F3251>
+
+                        <F3207>DE</F3207>
+
+                        <C082>
+
+                            <F3039>463053</F3039>
+
+                        </C082>
+
+                        <C080>
+
+                            <F3036>Internationale Container Transport</F3036>
+
+                            <F3036>ICT</F3036>
+
+                        </C080>
+
+                        <C059>
+
+                            <F3042>Sperberweg 6a</F3042>
+
+                        </C059>
+
+                    </NAD>
+
+                    <SG12>
+
+                        <CTA>
+
+                            <F3139>TR</F3139>
+
+                        </CTA>
+
+                        <COM>
+
+                            <C076>
+
+                                <F3148>0213192490</F3148>
+
+                                <F3155>TE</F3155>
+
+                            </C076>
+
+                        </COM>
+
+                        <COM>
+
+                            <C076>
+
+                                <F3148>021319249520</F3148>
+
+                                <F3155>FX</F3155>
+
+                            </C076>
+
+                        </COM>
+
+                        <COM>
+
+                            <C076>
+
+                                <F3148>basf_bookings@ict-germany.de</F3148>
+
+                                <F3155>EM</F3155>
+
+                            </C076>
+
+                        </COM>
+
+                    </SG12>
+
+                </SG11>
+
+                <SG11>
+
+                    <NAD>
+
+                        <F3035>ZZZ</F3035>
+
+                        <F3164>Ludwigshafen</F3164>
+
+                        <F3251>67056</F3251>
+
+                        <F3207>DE</F3207>
+
+                        <C082>
+
+                            <F3039>DE1X</F3039>
+
+                            <F1131>160</F1131>
+
+                        </C082>
+
+                        <C080>
+
+                            <F3036>BASF SE in DE</F3036>
+
+                        </C080>
+
+                    </NAD>
+
+                </SG11>
+
+                <SG11>
+
+                    <NAD>
+
+                        <F3035>FP</F3035>
+
+                        <F3164>Ludwigshafen Friesenheim/Nord</F3164>
+
+                        <F3229>07</F3229>
+
+                        <F3251>67063</F3251>
+
+                        <F3207>DE</F3207>
+
+                        <C082>
+
+                            <F3039>1000</F3039>
+
+                        </C082>
+
+                        <C080>
+
+                            <F3036>BASF SE</F3036>
+
+                        </C080>
+
+                        <C059>
+
+                            <F3042>Carl-Bosch-Str. 38</F3042>
+
+                        </C059>
+
+                    </NAD>
+
+                </SG11>
+
+                <SG11>
+
+                    <NAD>
+
+                        <F3035>OS</F3035>
+
+                        <F3164>67056 Ludwigshafen</F3164>
+
+                        <F3207>DE</F3207>
+
+                        <C080>
+
+                            <F3036>BASF SE</F3036>
+
+                            <F3036>Carl-Bosch-Strasse 38</F3036>
+
+                        </C080>
+
+                    </NAD>
+
+                </SG11>
+
+                <SG11>
+
+                    <NAD>
+
+                        <F3035>BL</F3035>
+
+                        <F3164>Sliema</F3164>
+
+                        <F3207>MT</F3207>
+
+                        <C082>
+
+                            <F3039>1</F3039>
+
+                        </C082>
+
+                        <C080>
+
+                            <F3036>De Mattos + Sullivan Ltd.</F3036>
+
+                        </C080>
+
+                        <C059>
+
+                            <F3042>47//1 Tigne Seafront</F3042>
+
+                        </C059>
+
+                    </NAD>
+
+                    <SG12>
+
+                        <CTA>
+
+                            <F3139>MR</F3139>
+
+                        </CTA>
+
+                        <COM>
+
+                            <C076>
+
+                                <F3148>logistics@rapcogroup.com</F3148>
+
+                                <F3155>EM</F3155>
+
+                            </C076>
+
+                        </COM>
+
+                    </SG12>
+
+                    <SG13>
+
+                        <DOC>
+
+                            <F3153>EM</F3153>
+
+                            <F1220>1</F1220>
+
+                            <F1218>0</F1218>
+
+                            <C002>
+
+                                <F1001>710</F1001>
+
+                            </C002>
+
+                            <C503>
+
+                                <F3453>EN</F3453>
+
+                            </C503>
+
+                        </DOC>
+
+                    </SG13>
+
+                </SG11>
+
+                <SG11>
+
+                    <NAD>
+
+                        <F3035>BL</F3035>
+
+                        <F3207>DE</F3207>
+
+                        <C082>
+
+                            <F3039>2</F3039>
+
+                        </C082>
+
+                        <C080>
+
+                            <F3036>BASF SE</F3036>
+
+                        </C080>
+
+                    </NAD>
+
+                    <SG12>
+
+                        <CTA>
+
+                            <F3139>MR</F3139>
+
+                        </CTA>
+
+                        <COM>
+
+                            <C076>
+
+                                <F3148>Order Manager</F3148>
+
+                                <F3155>EM</F3155>
+
+                            </C076>
+
+                        </COM>
+
+                    </SG12>
+
+                    <SG13>
+
+                        <DOC>
+
+                            <F3153>EM</F3153>
+
+                            <F1220>1</F1220>
+
+                            <F1218>0</F1218>
+
+                            <C002>
+
+                                <F1001>710</F1001>
+
+                            </C002>
+
+                            <C503>
+
+                                <F3453>EN</F3453>
+
+                            </C503>
+
+                        </DOC>
+
+                    </SG13>
+
+                </SG11>
+
+                <SG18>
+
+                    <GID>
+
+                        <F1496>1</F1496>
+
+                        <C213>
+
+                            <F7224>20</F7224>
+
+                            <F7065>CP8</F7065>
+
+                            <F1131>67</F1131>
+
+                            <F3055>91</F3055>
+
+                            <F7064>Pallet,Wood,CP 8,1140x1140mm,bf,HT</F7064>
+
+                        </C213>
+
+                        <C213>
+
+                            <F7224>20</F7224>
+
+                            <F7065>11G</F7065>
+
+                            <F7064>Fibreboard IBC</F7064>
+
+                        </C213>
+
+                    </GID>
+
+                    <LOC>
+
+                        <F3227>1</F3227>
+
+                        <C517>
+
+                            <F3225>CIF</F3225>
+
+                            <F3224>Marsaxlokk</F3224>
+
+                        </C517>
+
+                    </LOC>
+
+                    <PIA>
+
+                        <F4347>5</F4347>
+
+                        <C212>
+
+                            <F7140>50615754</F7140>
+
+                            <F7143>SA</F7143>
+
+                        </C212>
+
+                    </PIA>
+
+                    <FTX>
+
+                        <F4451>DEL</F4451>
+
+                        <C108>
+
+                            <F4440>Express-Bol + T2L to Rapco via courier</F4440>
+
+                        </C108>
+
+                    </FTX>
+
+                    <FTX>
+
+                        <F4451>AAW</F4451>
+
+                        <C108>
+
+                            <F4440>3701</F4440>
+
+                        </C108>
+
+                    </FTX>
+
+                    <FTX>
+
+                        <F4451>AAA</F4451>
+
+                        <C108>
+
+                            <F4440>ULTRAMID� B3WGM35 R03 UNCOLORED</F4440>
+
+                            <F4440>POLYAMIDE</F4440>
+
+                            <F4440>1100KG Fibreboard IBC</F4440>
+
+                        </C108>
+
+                    </FTX>
+
+                    <FTX>
+
+                        <F4451>COI</F4451>
+
+                        <C107>
+
+                            <F4441>VE</F4441>
+
+                        </C107>
+
+                        <C108>
+
+                            <F4440>LAURA.ROENSCH@BASF.COM</F4440>
+
+                        </C108>
+
+                    </FTX>
+
+                    <FTX>
+
+                        <F4451>COI</F4451>
+
+                        <C107>
+
+                            <F4441>AM</F4441>
+
+                        </C107>
+
+                        <C108>
+
+                            <F4440>ANIKA.RIEGER@BASF.COM</F4440>
+
+                        </C108>
+
+                    </FTX>
+
+                    <SG19>
+
+                        <NAD>
+
+                            <F3035>CN</F3035>
+
+                            <F3164>Birkirkara</F3164>
+
+                            <F3251>BKR 1751</F3251>
+
+                            <F3207>MT</F3207>
+
+                            <C082>
+
+                                <F3039>387036</F3039>
+
+                                <F1131>160</F1131>
+
+                            </C082>
+
+                            <C080>
+
+                                <F3036>RAPCO Limited</F3036>
+
+                            </C080>
+
+                            <C059>
+
+                                <F3042>Cinzia Buildings/2 Guze Orlando Str</F3042>
+
+                                <F3042>eet</F3042>
+
+                            </C059>
+
+                        </NAD>
+
+                        <LOC>
+
+                            <F3227>ZZZ</F3227>
+
+                            <C517>
+
+                                <F3225>TEL</F3225>
+
+                                <F3224>21243123</F3224>
+
+                            </C517>
+
+                            <C519>
+
+                                <F3223>FAX</F3223>
+
+                                <F3222>21243138</F3222>
+
+                            </C519>
+
+                            <C553>
+
+                                <F3233>EMAIL</F3233>
+
+                                <F3232>info@rapcogroup.com</F3232>
+
+                            </C553>
+
+                        </LOC>
+
+                    </SG19>
+
+                    <SG19>
+
+                        <NAD>
+
+                            <F3035>DM</F3035>
+
+                            <F3164>Ludwigshafen</F3164>
+
+                            <F3207>DE</F3207>
+
+                            <C080>
+
+                                <F3036>Ms Rieger</F3036>
+
+                            </C080>
+
+                        </NAD>
+
+                        <LOC>
+
+                            <F3227>ZZZ</F3227>
+
+                            <C517>
+
+                                <F3225>TEL</F3225>
+
+                                <F3224>+49 621 6093893</F3224>
+
+                            </C517>
+
+                            <C553>
+
+                                <F3233>EMAIL</F3233>
+
+                                <F3232>ANIKA.RIEGER@BASF.COM</F3232>
+
+                            </C553>
+
+                        </LOC>
+
+                    </SG19>
+
+                    <SG19>
+
+                        <NAD>
+
+                            <F3035>N1</F3035>
+
+                            <F3164>Birkirkara</F3164>
+
+                            <F3251>BKR 1751</F3251>
+
+                            <F3207>MT</F3207>
+
+                            <C082>
+
+                                <F3039>387036</F3039>
+
+                                <F1131>160</F1131>
+
+                            </C082>
+
+                            <C080>
+
+                                <F3036>RAPCO Limited</F3036>
+
+                            </C080>
+
+                            <C059>
+
+                                <F3042>Cinzia Buildings/2 Guze Orlando Str</F3042>
+
+                                <F3042>eet</F3042>
+
+                            </C059>
+
+                        </NAD>
+
+                        <LOC>
+
+                            <F3227>ZZZ</F3227>
+
+                            <C517>
+
+                                <F3225>TEL</F3225>
+
+                                <F3224>21243123</F3224>
+
+                            </C517>
+
+                            <C519>
+
+                                <F3223>FAX</F3223>
+
+                                <F3222>21243138</F3222>
+
+                            </C519>
+
+                            <C553>
+
+                                <F3233>EMAIL</F3233>
+
+                                <F3232>info@rapcogroup.com</F3232>
+
+                            </C553>
+
+                        </LOC>
+
+                    </SG19>
+
+                    <SG19>
+
+                        <NAD>
+
+                            <F3035>DO</F3035>
+
+                            <F3164>Birkirkara BKR 1751</F3164>
+
+                            <F3207>MT</F3207>
+
+                            <C082>
+
+                                <F3039>893330</F3039>
+
+                                <F1131>160</F1131>
+
+                            </C082>
+
+                            <C080>
+
+                                <F3036>RAPCO Ltd.</F3036>
+
+                                <F3036>Cinzia Buildings / 2</F3036>
+
+                            </C080>
+
+                            <C059>
+
+                                <F3042>Guze Orlando Street/Cinzia Building</F3042>
+
+                                <F3042>s</F3042>
+
+                            </C059>
+
+                        </NAD>
+
+                        <LOC>
+
+                            <F3227>ZZZ</F3227>
+
+                            <C517>
+
+                                <F3225>TEL</F3225>
+
+                                <F3224>021243123</F3224>
+
+                            </C517>
+
+                            <C519>
+
+                                <F3223>FAX</F3223>
+
+                                <F3222>021243138</F3222>
+
+                            </C519>
+
+                            <C553>
+
+                                <F3233>EMAIL</F3233>
+
+                                <F3232>mnm@rapcogroup.com</F3232>
+
+                            </C553>
+
+                        </LOC>
+
+                    </SG19>
+
+                    <SG20>
+
+                        <MEA>
+
+                            <F6311>WT</F6311>
+
+                            <C502>
+
+                                <F6313>AAE</F6313>
+
+                            </C502>
+
+                            <C174>
+
+                                <F6411>KGM</F6411>
+
+                                <F6314>22321.200</F6314>
+
+                            </C174>
+
+                        </MEA>
+
+                    </SG20>
+
+                    <SG20>
+
+                        <MEA>
+
+                            <F6311>WT</F6311>
+
+                            <C502>
+
+                                <F6313>AAC</F6313>
+
+                            </C502>
+
+                            <C174>
+
+                                <F6411>KGM</F6411>
+
+                                <F6314>22000.000</F6314>
+
+                            </C174>
+
+                        </MEA>
+
+                    </SG20>
+
+                    <SG20>
+
+                        <MEA>
+
+                            <F6311>WT</F6311>
+
+                            <C502>
+
+                                <F6313>WT</F6313>
+
+                            </C502>
+
+                            <C174>
+
+                                <F6411>KGM</F6411>
+
+                                <F6314>560.000</F6314>
+
+                            </C174>
+
+                        </MEA>
+
+                    </SG20>
+
+                    <SG20>
+
+                        <MEA>
+
+                            <F6311>VOL</F6311>
+
+                            <C502>
+
+                                <F6313>ABJ</F6313>
+
+                            </C502>
+
+                            <C174>
+
+                                <F6411>MTQ</F6411>
+
+                                <F6314>43.040</F6314>
+
+                            </C174>
+
+                        </MEA>
+
+                    </SG20>
+
+                    <SG20>
+
+                        <MEA>
+
+                            <F6311>DEN</F6311>
+
+                            <C502>
+
+                                <F6313>TC</F6313>
+
+                                <F6154>Stoffdichte (20�C)</F6154>
+
+                            </C502>
+
+                            <C174>
+
+                                <F6411>23</F6411>
+
+                                <F6314>1.10</F6314>
+
+                            </C174>
+
+                        </MEA>
+
+                    </SG20>
+
+                    <SG20>
+
+                        <MEA>
+
+                            <F6311>TE</F6311>
+
+                            <C502>
+
+                                <F6313>TC</F6313>
+
+                                <F6154>Schmelzpunkt</F6154>
+
+                            </C502>
+
+                            <C174>
+
+                                <F6411>CEL</F6411>
+
+                                <F6314>220.00</F6314>
+
+                            </C174>
+
+                        </MEA>
+
+                    </SG20>
+
+                    <SG22>
+
+                        <RFF>
+
+                            <C506>
+
+                                <F1153>LI</F1153>
+
+                                <F1154>3193677291</F1154>
+
+                                <F1156>000010</F1156>
+
+                            </C506>
+
+                        </RFF>
+
+                    </SG22>
+
+                    <SG22>
+
+                        <RFF>
+
+                            <C506>
+
+                                <F1153>VN</F1153>
+
+                                <F1154>3016830725</F1154>
+
+                                <F1156>000010</F1156>
+
+                            </C506>
+
+                        </RFF>
+
+                    </SG22>
+
+                    <SG22>
+
+                        <RFF>
+
+                            <C506>
+
+                                <F1153>CO</F1153>
+
+                                <F1154>PO2020207-AMM</F1154>
+
+                            </C506>
+
+                        </RFF>
+
+                    </SG22>
+
+                    <SG22>
+
+                        <RFF>
+
+                            <C506>
+
+                                <F1153>AQV</F1153>
+
+                                <F1154>39081000</F1154>
+
+                            </C506>
+
+                        </RFF>
+
+                    </SG22>
+
+                    <SG23>
+
+                        <PCI>
+
+                            <C210>
+
+                                <F7102>BASF</F7102>
+
+                                <F7102>3016830725 / 000010</F7102>
+
+                            </C210>
+
+                        </PCI>
+
+                    </SG23>
+
+                    <SG29>
+
+                        <SGP>
+
+                            <C237>
+
+                                <F8260>991009833</F8260>
+
+                            </C237>
+
+                        </SGP>
+
+                    </SG29>
+
+                    <SG32>
+
+                        <DGS>
+
+                            <F8273>ZZZ</F8273>
+
+                        </DGS>
+
+                        <FTX>
+
+                            <F4451>ACB</F4451>
+
+                            <C108>
+
+                                <F4440>Geruch: geruchlos</F4440>
+
+                            </C108>
+
+                        </FTX>
+
+                        <FTX>
+
+                            <F4451>AAN</F4451>
+
+                            <C108>
+
+                                <F4440>Geeignete Umschlie�ungswerkstoffe: Polyethylen niedriger Dichte (LDPE)</F4440>
+
+                                <F4440>, Polyethylen hoher Dichte (HDPE), Aluminium, Kohlenstoffstahl (Eisen)</F4440>
+
+                            </C108>
+
+                        </FTX>
+
+                        <SG33>
+
+                            <CTA>
+
+                                <F3139>HE</F3139>
+
+                            </CTA>
+
+                            <COM>
+
+                                <C076>
+
+                                    <F3148>+49 180 2273 112</F3148>
+
+                                    <F3155>TE</F3155>
+
+                                </C076>
+
+                            </COM>
+
+                        </SG33>
+
+                    </SG32>
+
+                </SG18>
+
+                <SG37>
+
+                    <EQD>
+
+                        <F8053>CN</F8053>
+
+                        <C237>
+
+                            <F8260>991009833</F8260>
+
+                        </C237>
+
+                        <C224>
+
+                            <F8155>42GP</F8155>
+
+                            <F8154>40� Mehrzw.Cont. 8�6"</F8154>
+
+                        </C224>
+
+                    </EQD>
+
+                    <EQN>
+
+                        <C523>
+
+                            <F6350>1</F6350>
+
+                        </C523>
+
+                    </EQN>
+
+                    <TMD>
+
+                        <F8341>2</F8341>
+
+                        <C219>
+
+                            <F8335>3</F8335>
+
+                            <F8334>Merchant Haulage E</F8334>
+
+                        </C219>
+
+                    </TMD>
+
+                    <MEA>
+
+                        <F6311>WT</F6311>
+
+                        <C502>
+
+                            <F6313>T</F6313>
+
+                        </C502>
+
+                        <C174>
+
+                            <F6411>KGM</F6411>
+
+                            <F6314>3750.000</F6314>
+
+                        </C174>
+
+                    </MEA>
+
+                    <MEA>
+
+                        <F6311>WT</F6311>
+
+                        <C502>
+
+                            <F6313>AAB</F6313>
+
+                        </C502>
+
+                        <C174>
+
+                            <F6411>KGM</F6411>
+
+                            <F6314>26631.200</F6314>
+
+                        </C174>
+
+                    </MEA>
+
+                    <MEA>
+
+                        <F6311>WT</F6311>
+
+                        <C502>
+
+                            <F6313>AAA</F6313>
+
+                        </C502>
+
+                        <C174>
+
+                            <F6411>KGM</F6411>
+
+                            <F6314>22881.200</F6314>
+
+                        </C174>
+
+                    </MEA>
+
+                    <FTX>
+
+                        <F4451>AAF</F4451>
+
+                        <C108>
+
+                            <F4440>Leercontainer frei Terminal Seehafen</F4440>
+
+                        </C108>
+
+                    </FTX>
+
+                    <SG39>
+
+                        <NAD>
+
+                            <F3035>DCP</F3035>
+
+                            <F3164>Neuss</F3164>
+
+                            <F3229>05</F3229>
+
+                            <F3251>41468</F3251>
+
+                            <F3207>DE</F3207>
+
+                            <C082>
+
+                                <F3039>463053</F3039>
+
+                            </C082>
+
+                            <C080>
+
+                                <F3036>Internationale Container Transport</F3036>
+
+                                <F3036>ICT</F3036>
+
+                            </C080>
+
+                            <C059>
+
+                                <F3042>Sperberweg 6a</F3042>
+
+                            </C059>
+
+                        </NAD>
+
+                    </SG39>
+
+                    <SG39>
+
+                        <NAD>
+
+                            <F3035>EP</F3035>
+
+                            <F3164>Neuss</F3164>
+
+                            <F3229>05</F3229>
+
+                            <F3251>41468</F3251>
+
+                            <F3207>DE</F3207>
+
+                            <C082>
+
+                                <F3039>463053</F3039>
+
+                            </C082>
+
+                            <C080>
+
+                                <F3036>Internationale Container Transport</F3036>
+
+                                <F3036>ICT</F3036>
+
+                            </C080>
+
+                            <C059>
+
+                                <F3042>Sperberweg 6a</F3042>
+
+                            </C059>
+
+                        </NAD>
+
+                    </SG39>
+
+                </SG37>
+
+            </Message_IFTMIN>
+
+        </Group>
+
+    </Interchange>
+
+</Envelope>

@@ -1,0 +1,35 @@
+= REPLACE Component
+:doctitle: REPLACE
+:shortname: replace
+:artifactid: replace
+:description: Find and replace text in a message body.
+:since: 2.23.0
+:supportlevel: Stable
+:component-header: Producer is supported
+//Manually maintained attributes
+
+*Since Camel {since}*
+
+*{component-header}*
+
+Find and replace text in a message body.
+
+Maven users will need to add the following dependency to their `pom.xml`
+for this component:
+
+[source,xml]
+------------------------------------------------------------
+<dependency>
+    <groupId>world.dovetail</groupId>
+    <artifactId>replace</artifactId>
+	<version>x.x.x</version>
+    <!-- use the same version as your Assimbly version -->
+</dependency>
+------------------------------------------------------------
+
+== URI format
+
+--------------------------------------------
+replace://
+--------------------------------------------
+

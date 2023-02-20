@@ -1,0 +1,6 @@
+"name","price","description_title","description_body","calories"
+"food1","$1","title1","body1",""
+"food2","$2","","",""
+"food3","$3","title3","body3","300"
+"food4","$4","","","400"
+"food5","$5","","","-500"

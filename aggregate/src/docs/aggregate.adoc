@@ -1,0 +1,44 @@
+= Aggregate Component
+:doctitle: AGGREGATE
+:shortname: aggregate
+:artifactid: aggregate
+:description: Aggregates multiple incoming messages to one single message
+:since: 2.20.1
+:supportlevel: Stable
+:component-header: Producer is supported
+//Manually maintained attributes
+
+*Since Camel {since}*
+
+*{component-header}*
+
+The component aggregates multiple incoming messages to one single message.
+
+Maven users will need to add the following dependency to their `pom.xml`
+for this component:
+
+[source,xml]
+------------------------------------------------------------
+<dependency>
+    <groupId>world.dovetail</groupId>
+    <artifactId>aggregate</artifactId>
+	<version>x.x.x</version>
+    <!-- use the same version as your Assimbly version -->
+</dependency>
+------------------------------------------------------------
+
+== URI format
+
+--------------------------------------------
+none
+--------------------------------------------
+
+[source,xml]
+--------------------------------------------
+<aggregate strategyRef="CurrentAggregateStrategy" completionSize="2">
+    <correlationExpression>
+        <constant>true</constant>
+    </correlationExpression>
+    <to uri=""/>
+</aggregate>
+--------------------------------------------

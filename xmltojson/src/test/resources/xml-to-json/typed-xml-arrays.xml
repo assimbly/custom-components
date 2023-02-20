@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <range>objects!A2</range>
+    <majorDimension>ROWS</majorDimension>
+    <values>
+        <row type="array">
+            <title type="array">Bibliotheek</title>
+            <id type="string">5391495</id>
+            <type type="string">123</type>
+        </row>
+        <row type="array">
+            <title type="array">Kartbaan Dovetail</title>
+            <id type="string">7834</id>
+            <type type="string">123</type>
+        </row>
+        <row type="array">
+            <title type="array">Loket Dovetail</title>
+            <id type="string">7827</id>
+        </row>
+        <row type="array">
+            <title type="array">Stadhuis</title>
+            <id type="string">7825</id>
+            <type type="string">123</type>
+        </row>
+        <row type="array">
+            <title type="array">Stadskantoor</title>
+            <id type="string">7826</id>
+            <type type="string">123</type>
+        </row>
+    </values>
+</root>

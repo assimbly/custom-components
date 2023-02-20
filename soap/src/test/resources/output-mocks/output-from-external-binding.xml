@@ -1,0 +1,3 @@
+<ns:fromExternalBindingRequest xmlns:ns="http://www.dovetail.world/wsdl/import/mock-1">
+    <ns:element>value</ns:element>
+</ns:fromExternalBindingRequest>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CreateOrderAW>
+    <customerCode type="string">12345</customerCode>
+    <debtorCode type="number">12345</debtorCode>
+    <invoiceAddressInfo>
+        <id type="string" attr="testAttrWithType">4</id>
+        <city>Houten</city>
+    </invoiceAddressInfo>
+    <lines>
+        <element>
+            <deliveryAddress>
+                <id type="string">4</id>
+            </deliveryAddress>
+            <deliveryOrganisation type="integer">12345</deliveryOrganisation>
+            <productIdentifier>
+                <productCode type="string">2300039786011</productCode>
+            </productIdentifier>
+            <qtyOrdered>1</qtyOrdered>
+            <unitCode>C62</unitCode>
+        </element>
+    </lines>
+    <lines>
+        <element>
+            <deliveryAddress>
+                <id type="string" attr="testAttrWithType">4</id>
+                <city>Houten</city>
+            </deliveryAddress>
+            <deliveryOrganisation type="string">12345</deliveryOrganisation>
+            <productIdentifier>
+                <productCode type="string">12345</productCode>
+            </productIdentifier>
+            <qtyOrdered>1</qtyOrdered>
+            <unitCode>C62</unitCode>
+            <type type="string">TEST</type>
+        </element>
+    </lines>
+    <lines>
+        <element type="string">4</element>
+    </lines>
+    <lines>
+        <element type="boolean">true</element>
+    </lines>
+    <orderDate type="string">2018-09-17</orderDate>
+    <orderTypeCode type="string">WEB</orderTypeCode>
+    <name type="string"></name>
+    <type type="string">TEST</type>
+</CreateOrderAW>

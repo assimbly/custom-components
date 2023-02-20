@@ -1,0 +1,22 @@
+<withSequenceRequest>
+    <elements>
+        <element>
+            <item>value</item>
+        </element>
+        <element>
+            <item>value</item>
+        </element>
+        <element>
+            <item>value</item>
+        </element>
+    </elements>
+    <element>
+        <item>value</item>
+    </element>
+    <element>
+        <item>value</item>
+    </element>
+    <element>
+        <item>value</item>
+    </element>
+</withSequenceRequest>

@@ -1,0 +1,5 @@
+<ns:withImportRequest xmlns:ns="http://www.dovetail.world">
+    <ns:imp-element>
+        <ns:item xmlns:ns="http://www.dovetail.world/wsdl/local/import">value</ns:item>
+    </ns:imp-element>
+</ns:withImportRequest>

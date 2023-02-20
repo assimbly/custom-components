@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Excel>
+  <Transposed>
+    <excelCol>
+      <cell colIndex="A" rowIndex="0">Name</cell>
+      <cell colIndex="A" rowIndex="1">January</cell>
+      <cell colIndex="A" rowIndex="2">February</cell>
+    </excelCol>
+    <excelCol>
+      <cell colIndex="B" rowIndex="0">Month</cell>
+      <cell colIndex="B" rowIndex="1">1</cell>
+      <cell colIndex="B" rowIndex="2">2</cell>
+    </excelCol>
+  </Transposed>
+</Excel>

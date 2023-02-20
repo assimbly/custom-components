@@ -1,0 +1,10 @@
+<ns:withExtensionRequest xmlns:ns="http://www.dovetail.world">
+    <ns:extension>
+        <ns:base-item>value</ns:base-item>
+        <ns:item>value</ns:item>
+    </ns:extension>
+    <ns:ext-extension>
+        <ns:base-item xmlns:ns="http://www.dovetail.world/wsdl/external/">value</ns:base-item>
+        <ns:item>value</ns:item>
+    </ns:ext-extension>
+</ns:withExtensionRequest>

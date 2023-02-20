@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<root xmlns="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xsi:noNamespaceSchemaLocation="file:///C:/Users/Documents/xml/getIssues/export.xsd" xmlns:t="http://www.dovetail.world/test" xmlns:a="http://www.dovetail.world/testA">
+    <h:table xmlns="" xmlns:h="http://www.dovetail.world/TR/html4/" xmlns:a="http://www.dovetail.world/testA">
+        <h:tr>
+            <h:td>Apples</h:td>
+            <h:td>Bananas</h:td>
+        </h:tr>
+    </h:table>
+    <f:table xmlns="" xmlns:f="https://www.dovetail.world/furniture" xmlns:a="http://www.dovetail.world/testA">
+        <f:name>African Coffee Table</f:name>
+        <f:width>80</f:width>
+        <f:length>120</f:length>
+    </f:table>
+</root>

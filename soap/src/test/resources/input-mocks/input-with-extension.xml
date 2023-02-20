@@ -1,0 +1,10 @@
+<withExtensionRequest>
+    <extension>
+        <base-item>value</base-item>
+        <item>value</item>
+    </extension>
+    <ext-extension>
+        <base-item>value</base-item>
+        <item>value</item>
+    </ext-extension>
+</withExtensionRequest>

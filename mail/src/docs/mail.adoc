@@ -1,0 +1,40 @@
+= FLV Component
+:doctitle: FLV
+:shortname: flv
+:artifactid: flv
+:description: parse a file containing fixed-length values into XML
+:since: 2.20.1
+:supportlevel: Stable
+:component-header: Producer is supported
+//Manually maintained attributes
+
+*Since Camel {since}*
+
+*{component-header}*
+
+The FLV component is able to parse a file containing fixed-length values (FLV's) into XML.
+
+Maven users will need to add the following dependency to their `pom.xml`
+for this component:
+
+[source,xml]
+------------------------------------------------------------
+<dependency>
+    <groupId>world.dovetail</groupId>
+    <artifactId>flv</artifactId>
+	<version>x.x.x</version>
+    <!-- use the same version as your Assimbly version -->
+</dependency>
+------------------------------------------------------------
+
+== URI format
+
+--------------------------------------------
+flv:ROUTE_ID?properties
+--------------------------------------------
+
+== URI example
+
+--------------------------------------------
+flv:2b611b10-d0f2-11ec-83f5-3747809ef661?YAY=header[3]body[5]
+--------------------------------------------

@@ -1,0 +1,35 @@
+= SANDBOX Component
+:doctitle: SANDBOX
+:shortname: sandbox
+:artifactid: sandbox
+:description: Run scripts in a sandbox environment
+:since: 2.23.0
+:supportlevel: Stable
+:component-header: Producer is supported
+//Manually maintained attributes
+
+*Since Camel {since}*
+
+*{component-header}*
+
+Run scripts in a sandbox environment
+
+Maven users will need to add the following dependency to their `pom.xml`
+for this component:
+
+[source,xml]
+------------------------------------------------------------
+<dependency>
+    <groupId>world.dovetail</groupId>
+    <artifactId>sandbox</artifactId>
+	<version>x.x.x</version>
+    <!-- use the same version as your Assimbly version -->
+</dependency>
+------------------------------------------------------------
+
+== URI format
+
+--------------------------------------------
+sandbox://
+--------------------------------------------
+

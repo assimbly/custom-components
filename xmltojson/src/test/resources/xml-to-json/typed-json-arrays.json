@@ -1,0 +1,44 @@
+{
+  "root": {
+    "majorDimension": "ROWS",
+    "values": {
+      "row": [
+        [
+          "123",
+          "5391495",
+          [
+            "Bibliotheek"
+          ]
+        ],
+        [
+          "123",
+          "7834",
+          [
+            "Kartbaan Dovetail"
+          ]
+        ],
+        [
+          "7827",
+          [
+            "Loket Dovetail"
+          ]
+        ],
+        [
+          "123",
+          "7825",
+          [
+            "Stadhuis"
+          ]
+        ],
+        [
+          "123",
+          "7826",
+          [
+            "Stadskantoor"
+          ]
+        ]
+      ]
+    },
+    "range": "objects!A2"
+  }
+}

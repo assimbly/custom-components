@@ -1,0 +1,34 @@
+<root type="array">
+    <order>
+        <OrderDate type="string" isMorning="false">2020-02-04T14:08:27Z</OrderDate>
+        <ReceiptDate></ReceiptDate>
+        <Supplier>37e964ff-1bfc-4d35-9222-925378b8edd2</Supplier>
+        <Warehouse>d98b4096-8472-4e72-aad8-df50e671da44</Warehouse>
+        <PurchaseOrderLines type="array">
+            <element>
+                <Item type="string">32399742-e5aa-4448-94d3-d22f38a67b87</Item>
+                <QuantityInPurchaseUnits>4</QuantityInPurchaseUnits>
+            </element>
+            <element>
+                <Item type="string">f9a62999-d581-42a2-bd6a-20e2bd7499ba</Item>
+                <QuantityInPurchaseUnits>4</QuantityInPurchaseUnits>
+            </element>
+        </PurchaseOrderLines>
+    </order>
+    <order>
+        <OrderDate type="string" isMorning="false">2020-02-04T14:08:27Z</OrderDate>
+        <ReceiptDate></ReceiptDate>
+        <Supplier>37e964ff-1bfc-4d35-9222-925378b8edd2</Supplier>
+        <Warehouse>d98b4096-8472-4e72-aad8-df50e671da44</Warehouse>
+        <PurchaseOrderLines type="array">
+            <element>
+                <Item type="string">32399742-e5aa-4448-94d3-d22f38a67b87</Item>
+                <QuantityInPurchaseUnits>4</QuantityInPurchaseUnits>
+            </element>
+            <element>
+                <Item type="string">f9a62999-d581-42a2-bd6a-20e2bd7499ba</Item>
+                <QuantityInPurchaseUnits>4</QuantityInPurchaseUnits>
+            </element>
+        </PurchaseOrderLines>
+    </order>
+</root>

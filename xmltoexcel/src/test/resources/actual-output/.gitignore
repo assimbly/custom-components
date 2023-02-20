@@ -1,0 +1,3 @@
+# Files in this folder are auto-(re)generated at runtime, only the folder needs to exist
+.gitignore
+!.gitignore

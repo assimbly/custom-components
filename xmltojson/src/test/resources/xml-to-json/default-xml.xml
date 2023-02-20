@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<root rootAttribute="rootValue">
+    <element attribute01="value01">
+        <element attribute02="value02">
+            <element attribute03="value03">
+                <element attribute04="value04">4</element>
+            </element>
+        </element>
+    </element>
+    <element attribute05="value05">
+        <element attribute06="value06">
+            <element attribute07="value07">
+                <city attribute08="value08">Houten</city>
+                <id attribute09="value09">4</id>
+            </element>
+        </element>
+    </element>
+</root>

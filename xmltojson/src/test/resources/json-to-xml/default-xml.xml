@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CreateOrderAW>
+    <orderTypeCode>WEB</orderTypeCode>
+    <debtorCode>12345</debtorCode>
+    <customerCode>12345</customerCode>
+    <lines>
+        <element>
+            <productIdentifier>
+                <productCode>2300039786011</productCode>
+            </productIdentifier>
+            <deliveryAddress>
+                <id>4</id>
+            </deliveryAddress>
+            <qtyOrdered>1</qtyOrdered>
+            <unitCode>C62</unitCode>
+            <deliveryOrganisation>12345</deliveryOrganisation>
+        </element>
+    </lines>
+    <lines>
+        <element>
+            <productIdentifier>
+                <productCode>12345</productCode>
+            </productIdentifier>
+            <deliveryAddress>
+                <city>Houten</city>
+                <id>4</id>
+            </deliveryAddress>
+            <qtyOrdered>1</qtyOrdered>
+            <unitCode>C62</unitCode>
+            <deliveryOrganisation>12345</deliveryOrganisation>
+        </element>
+    </lines>
+    <lines>
+        <element>4</element>
+    </lines>
+    <invoiceAddressInfo>
+        <city>Houten</city>
+        <id>4</id>
+    </invoiceAddressInfo>
+    <orderDate>2018-09-17</orderDate>
+</CreateOrderAW>

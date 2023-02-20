@@ -1,0 +1,8 @@
+{
+  "root": {
+    "table": [
+      { "tr": { "td": ["Apples", "Bananas"] } },
+      { "name": "African Coffee Table", "width": 80, "length": 120 }
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+<camelContext id="ID_627a680e38c74a000e000862" xmlns="http://camel.apache.org/schema/blueprint" useMDCLogging="true" streamCache="true">
+  <jmxAgent id="agent" loadStatisticsEnabled="true"/>
+  <streamCaching id="streamCacheConfig" spoolThreshold="0" spoolDirectory="tmp/camelcontext-#camelId#" spoolUsedHeapMemoryThreshold="70"/>
+  <threadPoolProfile id="wiretapProfile" defaultProfile="false" poolSize="0" maxPoolSize="5" maxQueueSize="2000" rejectedPolicy="DiscardOldest" keepAliveTime="10"/>
+  <threadPoolProfile id="defaultProfile" defaultProfile="true" poolSize="8" maxPoolSize="16" maxQueueSize="1000" rejectedPolicy="CallerRuns" keepAliveTime="30"/>
+  <onException>      <exception>java.lang.Exception</exception>
+    <redeliveryPolicy maximumRedeliveries="0" redeliveryDelay="5000"/>
+    <setExchangePattern pattern="InOut"/>
+  </onException>
+  <route id="57346a90-d065-11ec-83f5-3747809ef661">
+    <from uri="jetty:https://0.0.0.0:9001/1/Encoder?httpBinding=#customHttpBinding&amp;matchOnUriPrefix=false&amp;sslContextParameters=sslContext"/>
+    <removeHeaders pattern="CamelHttp*"/>
+    <setBody>
+      <constant>Joyeux Noël</constant>
+    </setBody>
+    <to uri="activemq:ID_627a680e38c74a000e000862_test_27975431-544c-11ed-bc33-3b0a13123346?timeToLive=86400000"/>
+  </route>
+  <route id="79786120-d0f5-11ec-83f5-3747809ef661">
+    <from uri="activemq:ID_627a680e38c74a000e000862_test_27975431-544c-11ed-bc33-3b0a13123346"/>
+    <to uri="encoder://UTF-8?targetCharset=ASCII"/>
+    <to uri="activemq:ID_627a680e38c74a000e000862_test_79786120-d0f5-11ec-83f5-3747809ef661?timeToLive=86400000"/>
+  </route>
+  <route id="573491a0-d065-11ec-83f5-3747809ef661">
+    <from uri="activemq:ID_627a680e38c74a000e000862_test_79786120-d0f5-11ec-83f5-3747809ef661"/>
+    <setHeader headerName="CamelVelocityTemplate">
+      <simple>Message Body: ${bodyAs(String)}</simple>
+    </setHeader>
+    <to uri="velocity:generate"/>
+  </route>
+</camelContext>

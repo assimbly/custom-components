@@ -1,0 +1,46 @@
+<dil>
+    <integrations>
+        <integration>
+            <flows>
+                <flow>
+                    <id>flv_test1</id>
+                    <name>flv_test1</name>
+                    <type>esb</type>
+                    <steps>
+                        <step>
+                            <id>1</id>
+                            <type>source</type>
+                            <uri>https://0.0.0.0:9001/1/Flv</uri>
+                        </step>
+                        <step>
+                            <id>2</id>
+                            <type>action</type>
+                            <uri>setbody:message:flv</uri>
+                        </step>
+                        <step>
+                            <id>3</id>
+                            <type>action</type>
+                            <uri>flv:2b611b10-d0f2-11ec-83f5-3747809ef661</uri>
+                            <options>
+                                <YAY>header[3]body[5]</YAY>
+                            </options>
+                        </step>
+                        <step>
+                            <id>4</id>
+                            <type>sink</type>
+                            <uri>velocity:Message Body: ${bodyAs(String)}</uri>
+                        </step>
+                    </steps>
+                </flow>
+            </flows>
+        </integration>
+    </integrations>
+	<core>
+        <messages>
+            <message>
+                <id>flv</id>
+                <body>YAYthing</body>
+            </message>
+        </messages>
+    </core>	
+</dil>

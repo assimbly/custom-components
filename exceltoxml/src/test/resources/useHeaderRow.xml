@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Excel>
+  <Smaller>
+    <excelRow>
+      <Name>January</Name>
+      <Month>1</Month>
+    </excelRow>
+    <excelRow>
+      <Name>February</Name>
+      <Month>2</Month>
+    </excelRow>
+  </Smaller>
+</Excel>

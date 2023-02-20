@@ -1,0 +1,21 @@
+{
+  "persons": {
+    "person": [
+      {
+        "name": "John Jansen",
+        "age": "22",
+        "height": "180"
+      },
+      {
+        "name": "John Foo",
+        "age": "30",
+        "height": "175"
+      },
+      {
+        "name": "John Johnson",
+        "age": "18",
+        "height": "165"
+      }
+    ]
+  }
+}
