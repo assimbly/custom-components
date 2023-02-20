@@ -9,7 +9,7 @@
     <setExchangePattern pattern="InOut"/>
   </onException>
   <interceptFrom>
-    <to uri="bean:dovetailTracer?method=traceEvent"/>
+    <to uri="bean:assimblyTracer?method=traceEvent"/>
   </interceptFrom>
 
   <route id="f4157010-d066-11ec-83f5-3747809ef661">

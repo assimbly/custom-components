@@ -2,7 +2,7 @@
     <element>
         <item>value</item>
     </element>
-    <ns:qua-element xmlns:ns="http://www.dovetail.world">
+    <ns:qua-element xmlns:ns="http://www.assimbly.world">
         <item>value</item>
     </ns:qua-element>
 </withQualifiedRequest>

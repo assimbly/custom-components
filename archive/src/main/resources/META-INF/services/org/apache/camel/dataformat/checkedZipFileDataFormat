@@ -1,1 +1,1 @@
-class=world.dovetail.archive.CheckedZipFileDataFormat
+class=org.assimbly.archive.CheckedZipFileDataFormat

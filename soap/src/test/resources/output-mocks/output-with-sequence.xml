@@ -1,13 +1,13 @@
-<ns:withSequenceRequest xmlns:ns="http://www.dovetail.world">
+<ns:withSequenceRequest xmlns:ns="http://www.assimbly.world">
     <ns:elements>
         <ns:element>
-            <ns:item xmlns:ns="http://www.dovetail.world/wsdl/external/">value</ns:item>
+            <ns:item xmlns:ns="http://www.assimbly.world/wsdl/external/">value</ns:item>
         </ns:element>
         <ns:element>
-            <ns:item xmlns:ns="http://www.dovetail.world/wsdl/external/">value</ns:item>
+            <ns:item xmlns:ns="http://www.assimbly.world/wsdl/external/">value</ns:item>
         </ns:element>
         <ns:element>
-            <ns:item xmlns:ns="http://www.dovetail.world/wsdl/external/">value</ns:item>
+            <ns:item xmlns:ns="http://www.assimbly.world/wsdl/external/">value</ns:item>
         </ns:element>
     </ns:elements>
     <ns:element>

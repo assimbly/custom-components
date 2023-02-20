@@ -1,4 +1,4 @@
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.dovetail.world/wsdl/schema/import/2" elementFormDefault="qualified" targetNamespace="http://www.dovetail.world/wsdl/schema/import/2">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.assimbly.world/wsdl/schema/import/2" elementFormDefault="qualified" targetNamespace="http://www.assimbly.world/wsdl/schema/import/2">
     <xs:element name="element" type="tns:element"/>
     <xs:complexType name="element">
         <xs:all>

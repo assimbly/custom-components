@@ -20,7 +20,7 @@ for this component:
 [source,xml]
 ------------------------------------------------------------
 <dependency>
-    <groupId>world.dovetail</groupId>
+    <groupId>org.assimbly</groupId>
     <artifactId>throttling</artifactId>
 	<version>x.x.x</version>
     <!-- use the same version as your Assimbly version -->
@@ -39,18 +39,18 @@ none
 --------------------------------------------
 <route id="throttling">
   <from uri="quartz2://1e7dff01-d069-11ec-83f5-3747809ef661_timer?trigger.repeatCount=-1&amp;trigger.repeatInterval=5000&amp;trigger.timeZone=Europe/Amsterdam"/>
-  <setProperty propertyName="DovetailQueueName">
+  <setProperty propertyName="AssimblyQueueName">
     <constant>ID_627a594538c74a000e000634_test_1e7dff01-d069-11ec-83f5-3747809ef661_throttling</constant>
   </setProperty>
   <process ref="QueueMessageChecker"/>
   <filter>
-    <simple>${exchangeProperty.DovetailQueueHasMessages} == true</simple>
+    <simple>${exchangeProperty.AssimblyQueueHasMessages} == true</simple>
     <loop copy="true">
       <constant>1</constant>
       <setProperty propertyName="Enrich-Type">
         <simple>application/override</simple>
       </setProperty>
-      <setProperty propertyName="DovetailAggregateNoExceptionOnNull">
+      <setProperty propertyName="AssimblyAggregateNoExceptionOnNull">
         <simple resultType="java.lang.Boolean">true</simple>
       </setProperty>
       <pollEnrich strategyRef="CurrentEnrichStrategy" timeout="5000">

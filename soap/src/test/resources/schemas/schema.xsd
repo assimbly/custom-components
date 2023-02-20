@@ -1,9 +1,9 @@
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:tns="http://www.dovetail.world/wsdl/schema/import" targetNamespace="http://www.dovetail.world/wsdl/schema/import">
-    <xs:import schemaLocation="schema-2.xsd" namespace="http://www.dovetail.world/wsdl/schema/import/2"/>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:tns="http://www.assimbly.world/wsdl/schema/import" targetNamespace="http://www.assimbly.world/wsdl/schema/import">
+    <xs:import schemaLocation="schema-2.xsd" namespace="http://www.assimbly.world/wsdl/schema/import/2"/>
     <xs:element name="withLocalTypeRequest">
         <xs:complexType>
             <xs:sequence>
-                <xs:element xmlns:i3="http://www.dovetail.world/wsdl/schema/import/2" minOccurs="0" ref="i3:element" />
+                <xs:element xmlns:i3="http://www.assimbly.world/wsdl/schema/import/2" minOccurs="0" ref="i3:element" />
             </xs:sequence>
         </xs:complexType>
     </xs:element>

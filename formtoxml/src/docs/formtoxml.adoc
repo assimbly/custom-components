@@ -13,7 +13,7 @@
 *{component-header}*
 
 The Form to XML component provides a direct conversion from the Form url encoded format to XML format.
-This component could, for example, be used when you submit an HTML form to a Dovetail endpoint.
+This component could, for example, be used when you submit an HTML form to a Assimbly endpoint.
 
 Maven users will need to add the following dependency to their `pom.xml`
 for this component:
@@ -21,7 +21,7 @@ for this component:
 [source,xml]
 ------------------------------------------------------------
 <dependency>
-    <groupId>world.dovetail</groupId>
+    <groupId>org.assimbly</groupId>
     <artifactId>form2xml</artifactId>
 	<version>x.x.x</version>
     <!-- use the same version as your Assimbly version -->

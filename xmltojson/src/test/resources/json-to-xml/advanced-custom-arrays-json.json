@@ -3,17 +3,17 @@
     "_links": {
       "self": [
         {
-          "href": "https://www.dovetail.nl/wp-json/wc/v2/orders/26715"
+          "href": "https://www.assimbly.nl/wp-json/wc/v2/orders/26715"
         }
       ],
       "collection": [
         {
-          "href": "https://www.dovetail.nl/wp-json/wc/v2/orders"
+          "href": "https://www.assimbly.nl/wp-json/wc/v2/orders"
         }
       ],
       "customer": [
         {
-          "href": "https://www.dovetail.nl/wp-json/wc/v2/customers/1"
+          "href": "https://www.assimbly.nl/wp-json/wc/v2/customers/1"
         }
       ]
     }

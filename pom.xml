@@ -4,13 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>world.dovetail</groupId>
+    <groupId>org.assimbly</groupId>
     <artifactId>custom-components</artifactId>
     <packaging>pom</packaging>
     <name>custom-components</name>
-    <url>https://www.dovetail.world</url>
+    <url>https://www.org.assimbly</url>
 
-    <version>3.9.0</version>
+    <version>4.0.0</version>
 
     <modules>
         <module>aggregate</module>
@@ -60,7 +60,7 @@
         <main.basedir>${project.basedir}</main.basedir>
 
         <axiom.version>1.2.20</axiom.version>
-        <assimbly.version>3.8.2</assimbly.version>
+        <assimbly.version>4.0.0</assimbly.version>
         <bouncycastle.version>1.70</bouncycastle.version>
         <config-admin.version>1.9.26</config-admin.version>
         <cxf.version>3.5.4</cxf.version>

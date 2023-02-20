@@ -1,1 +1,1 @@
-class=world.dovetail.csvtoxml.CsvToXmlComponent
+class=org.assimbly.csvtoxml.CsvToXmlComponent
