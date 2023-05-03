@@ -1,0 +1,145 @@
+name: Publish Snapshots
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  push:
+    branches:
+      - 'workflows/adding-github-actions'
+
+jobs:
+  delete_older_snapshots:
+
+    runs-on: ubuntu-latest
+    permissions:
+        contents: read
+        packages: write
+
+    steps:
+
+      - name: Delete older snapshots
+        uses: smartsquaregmbh/delete-old-packages@v0.7.0
+        with:
+          organization: assimbly
+          type: maven
+          keep: 0
+          version-pattern: "^\\S+\\-SNAPSHOT$"
+          names: |
+            org.assimbly.custom-components
+            org.assimbly.aggregate
+            org.assimbly.aleris
+            org.assimbly.amazon
+            org.assimbly.archive
+            org.assimbly.auth
+            org.assimbly.cookies
+            org.assimbly.csvtoxml
+            org.assimbly.docconverter
+            org.assimbly.smooksnoxml
+            org.assimbly.edi
+            org.assimbly.edifact
+            org.assimbly.edifactcommon
+            org.assimbly.edifactdotweb
+            org.assimbly.edifactstandards
+            org.assimbly.encoder
+            org.assimbly.enrich
+            org.assimbly.exceltoxml
+            org.assimbly.flv
+            org.assimbly.fmuta
+      
+      - name: Delete older snapshots
+        uses: smartsquaregmbh/delete-old-packages@v0.7.0
+        with:
+          organization: assimbly
+          type: maven
+          keep: 0
+          version-pattern: "^\\S+\\-SNAPSHOT$"
+          names: |
+            org.assimbly.globalvariables
+            org.assimbly.formtoxml
+            org.assimbly.googledrive
+            org.assimbly.hl7
+            org.assimbly.mail
+            org.assimbly.multipart
+            org.assimbly.oauth2token
+            org.assimbly.pdf
+            org.assimbly.pdftotext
+            org.assimbly.replace
+            org.assimbly.sandbox
+            org.assimbly.simplereplace
+            org.assimbly.smb
+            org.assimbly.sql
+            org.assimbly.soap
+            org.assimbly.throttling
+            org.assimbly.xmltocsv
+            org.assimbly.xmltoexcel
+            org.assimbly.xmltojson
+
+  publish_base_snapshot:
+    needs: [delete_older_snapshots]
+
+    runs-on: ubuntu-latest
+    permissions:
+        contents: read
+        packages: write
+
+    steps:
+
+      - name: Checkout the code
+        uses: actions/checkout@v3
+        with:
+          ref: "develop"
+      
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+
+      - name: Setup Maven settings.xml
+        uses: whelk-io/maven-settings-xml-action@v20
+
+        with:
+          
+          repositories: >
+              [
+                  {
+                    "id": "maven",
+                    "name": "Maven Central",
+                    "url": "https://repo1.maven.org/maven2"
+                  },
+                  {
+                    "id": "github",
+                    "name": "Assimbly Base Repository",
+                    "url": "https://maven.pkg.github.com/assimbly/base",
+                    "snapshots": {
+                      "enabled": "true"
+                    }
+                  },
+                  {
+                      "id": "aurea",
+                      "name": "Aurea Sonic Repository",
+                      "url": "https://int-factory.aurea.com/nexus/content/repositories/sonic-releases/"
+                  }
+              ]
+
+          servers: >
+              [
+                  {
+                      "id": "github",
+                      "username": "assimbly",
+                      "password": "${{ secrets.GITHUB_TOKEN }}"
+                  }
+              ]
+
+      - name: Update POM Version
+        env:
+          VERSION: 4.0.0-SNAPSHOT
+        run: |
+            echo "Updating to version: ${VERSION}"
+            mvn versions:set -DgenerateBackupPoms=false -DnewVersion=${VERSION}
+            mvn versions:set-property -Dproperty=assimbly.version -DnewVersion=${VERSION}
+
+      - name: Publish package
+        run: mvn --batch-mode deploy -DskipTests
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
