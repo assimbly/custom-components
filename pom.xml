@@ -10,7 +10,7 @@
     <name>custom-components</name>
     <url>https://www.org.assimbly</url>
 
-    <version>null</version>
+    <version>4.0.0-SNAPSHOT</version>
 
     <modules>
         <module>aggregate</module>
@@ -68,7 +68,7 @@
         <main.basedir>${project.basedir}</main.basedir>
 
         <axiom.version>1.2.20</axiom.version>
-        <assimbly.version>null</assimbly.version>
+        <assimbly.version>4.0.0-SNAPSHOT</assimbly.version>
         <bouncycastle.version>1.70</bouncycastle.version>
         <config-admin.version>1.9.26</config-admin.version>
         <cxf.version>3.5.5</cxf.version>
