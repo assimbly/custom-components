@@ -34,7 +34,7 @@ public class GlobalVariablesProcessor implements Processor {
     private EncryptionUtil encryptionUtil = new EncryptionUtil(ASSIMBLY_ENCRYPTION_SECRET, "PBEWithHMACSHA512AndAES_256");
 
     private final String TENANT_DEFAULT = "default";
-    private static final String ASSIMBLY_ENVIRONMENT = "ASSIMBLY_ENV";
+    private static final String ASSIMBLY_ENV = "ASSIMBLY_ENV";
     private final String BODY_VARIABLE_REGEX = "\\$\\{body(?:As\\(.*\\))?}";
 
     private GlobalVariablesEndpoint endpoint;
@@ -77,7 +77,7 @@ public class GlobalVariablesProcessor implements Processor {
 
         String name = endpoint.getConfiguration().getName();
         String tenant = (endpoint.getConfiguration().getTenant()!=null ? endpoint.getConfiguration().getTenant() : TENANT_DEFAULT);
-        String environment = (endpoint.getConfiguration().getEnvironment()!=null ? endpoint.getConfiguration().getEnvironment() : System.getenv(ASSIMBLY_ENVIRONMENT));
+        String environment = (endpoint.getConfiguration().getEnvironment()!=null ? endpoint.getConfiguration().getEnvironment() : getEnvironment());
 
         name = interpolateVar(name, exchange, false);
 
@@ -106,7 +106,7 @@ public class GlobalVariablesProcessor implements Processor {
         String name = endpoint.getConfiguration().getName();
         String modifier = endpoint.getConfiguration().getModifier();
         String tenant = (endpoint.getConfiguration().getTenant()!=null ? endpoint.getConfiguration().getTenant() : TENANT_DEFAULT);
-        String environment = (endpoint.getConfiguration().getEnvironment()!=null ? endpoint.getConfiguration().getEnvironment() : System.getenv(ASSIMBLY_ENVIRONMENT));
+        String environment = (endpoint.getConfiguration().getEnvironment()!=null ? endpoint.getConfiguration().getEnvironment() : getEnvironment());
         long modifyDate = System.currentTimeMillis();
 
         name = interpolateVar(name, exchange, false);
@@ -236,6 +236,6 @@ public class GlobalVariablesProcessor implements Processor {
     }
 
     public static String getEnvironment() {
-        return System.getProperty(ASSIMBLY_ENVIRONMENT);
+        return System.getenv(ASSIMBLY_ENV);
     }
 }
