@@ -4,6 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -11,7 +15,9 @@ public enum WSDLCache {
     INSTANCE;
 
     private static final Logger LOG = LoggerFactory.getLogger(WSDLCache.class);
-    private static final String KARAF_BASE = System.getProperty("karaf.base");
+    private static final String BASE_PATH = System.getProperty("user.home");
+    private static final String ASSIMBLY_PATH = "/.assimbly";
+    private static final String CACHE_SOAP_PATH = "/cache/soap-component/";
 
     // Key: URL, Value: UUID FileName
     private static final HashMap<String, UUID> locations = new HashMap<>();
@@ -26,8 +32,7 @@ public enum WSDLCache {
         UUID uuid = UUID.randomUUID();
 
         locations.put(url, uuid);
-
-        return new File(KARAF_BASE + "/cache/soap-component/" + uuid + ".wsdl");
+        return new File(BASE_PATH + ASSIMBLY_PATH + CACHE_SOAP_PATH + uuid + ".wsdl");
     }
 
     public void remove(String url) {
@@ -50,6 +55,6 @@ public enum WSDLCache {
     public File getPath(String url) {
         UUID uuid = locations.get(url);
 
-        return new File(KARAF_BASE + "/cache/soap-component/" + uuid + ".wsdl");
+        return new File(BASE_PATH + ASSIMBLY_PATH + CACHE_SOAP_PATH + uuid + ".wsdl");
     }
 }
