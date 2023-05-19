@@ -1,7 +1,5 @@
 package org.assimbly.globalvariables;
 
-import org.apache.camel.reifier.IdempotentConsumerReifier;
-import org.assimbly.util.EncryptionUtil;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
