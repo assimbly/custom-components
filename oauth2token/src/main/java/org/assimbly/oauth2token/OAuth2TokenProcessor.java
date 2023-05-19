@@ -41,6 +41,7 @@ public class OAuth2TokenProcessor implements Processor {
         String expireDate = MongoDao.getGlobalEnvironmentValue(expireDateVarName, tenant, environment);
         String accessToken = MongoDao.getGlobalEnvironmentValue(accessTokenVarName, tenant, environment);
         String refreshFlag = MongoDao.getGlobalEnvironmentValue(refreshFlagVarName, tenant, environment);
+        String tokenGlobVarValue = MongoDao.getGlobalEnvironmentValue(tokenName, tenant, environment);
 
         Calendar expireCal = Calendar.getInstance();
         Calendar expireDelayCal = Calendar.getInstance();
@@ -62,16 +63,14 @@ public class OAuth2TokenProcessor implements Processor {
             logger.error("ERROR to calculate/set expire date vars", e);
         }
 
-        // validate expire date
-        if(nowCal.after(expireCal) || (
+        if(tokenGlobVarValue == null ||
+                nowCal.after(expireCal) || (
                 nowCal.before(expireCal) && nowCal.after(expireDelayCal) && refreshFlag.equals("0"))
         ) {
-            String accessTokenOld = accessToken;
-
             // get new access token from service
+            String accessTokenOld = accessToken;
             accessToken = TokenService.refreshTokenInfo(id, environment, tenant);
-
-            if(accessToken!=null && !accessToken.equals(accessTokenOld)) {
+            if(accessToken!=null && (!accessToken.equals(accessTokenOld) || tokenGlobVarValue==null)) {
                 // add token to global-variables
                 MongoDao.saveGlobalEnvironmentVariable(tokenName, accessToken, tenant, environment);
             }
