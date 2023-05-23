@@ -79,6 +79,7 @@
         <hapi.version>2.3</hapi.version>
         <httpclient.version>4.5.14</httpclient.version>
         <httpcomponents.version>4.5.14</httpcomponents.version>
+        <java-assist.version>3.29.2-GA</java-assist.version>
         <jaxen.version>1.2.0</jaxen.version>
         <javax.version>1.6.2</javax.version>
         <jcifs.version>2.1.34</jcifs.version>
