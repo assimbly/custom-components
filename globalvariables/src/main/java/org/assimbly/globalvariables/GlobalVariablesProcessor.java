@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.assimbly.globalvariables.domain.EnvironmentValue;
 import org.assimbly.globalvariables.domain.GlobalEnvironmentVariable;
 import org.assimbly.globalvariables.mongo.MongoDao;
-import org.assimbly.globalvariables.mongo.MongoDaoImpl;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -73,15 +72,13 @@ public class GlobalVariablesProcessor implements Processor {
     }
 
     private void getGlobalVariable(Exchange exchange) {
-        MongoDao mongoDao = new MongoDaoImpl();
-
         String name = endpoint.getConfiguration().getName();
         String tenant = (endpoint.getConfiguration().getTenant()!=null ? endpoint.getConfiguration().getTenant() : TENANT_DEFAULT);
         String environment = (endpoint.getConfiguration().getEnvironment()!=null ? endpoint.getConfiguration().getEnvironment() : getEnvironment());
 
         name = interpolateVar(name, exchange, false);
 
-        GlobalEnvironmentVariable gVariable = mongoDao.findVariableByName(name, tenant);
+        GlobalEnvironmentVariable gVariable = MongoDao.findVariableByName(name, tenant);
 
         if(gVariable == null)
             throw new GlobalVariableNotFoundException("The Global Variable \"" + name + "\" was not found in the database.");
@@ -99,8 +96,6 @@ public class GlobalVariablesProcessor implements Processor {
     }
 
     private void setGlobalVariable(Exchange exchange) {
-        MongoDao mongoDao = new MongoDaoImpl();
-
         String expressionType = endpoint.getConfiguration().getExpressionType();
         String value = endpoint.getConfiguration().getValue();
         String name = endpoint.getConfiguration().getName();
@@ -113,7 +108,7 @@ public class GlobalVariablesProcessor implements Processor {
 
         value = interpolateVar(Base64Helper.unmarshal(value, UTF_8), exchange, expressionType);
 
-        GlobalEnvironmentVariable gVariable = mongoDao.findVariableByName(name, tenant);
+        GlobalEnvironmentVariable gVariable = MongoDao.findVariableByName(name, tenant);
 
         if(Objects.isNull(gVariable)) {
             gVariable = new GlobalEnvironmentVariable(name);
@@ -144,24 +139,22 @@ public class GlobalVariablesProcessor implements Processor {
         variable.setUpdatedAt(modifyDate);
         variable.setUpdatedBy(modifier);
 
-        mongoDao.updateVariable(gVariable, tenant);
+        MongoDao.updateVariable(gVariable, tenant);
     }
 
     private void deleteGlobalVariable(Exchange exchange) {
-        MongoDao mongoDao = new MongoDaoImpl();
-
         String name = endpoint.getConfiguration().getName();
         String tenant = (endpoint.getConfiguration().getTenant()!=null ? endpoint.getConfiguration().getTenant() : TENANT_DEFAULT);
 
         if(ExchangeHelper.hasVariables(name))
             name = ExchangeHelper.interpolate(name, exchange);
 
-        GlobalEnvironmentVariable variable = mongoDao.findVariableByName(name, tenant);
+        GlobalEnvironmentVariable variable = MongoDao.findVariableByName(name, tenant);
 
         if(variable == null)
             throw new GlobalVariableNotFoundException("The Global Variable \"" + name + "\" was not found in the database.");
 
-        mongoDao.deleteVariable(variable, tenant);
+        MongoDao.deleteVariable(variable, tenant);
     }
 
     private String interpolateVar(String varValue, Exchange exchange, boolean bodyFlag) {
