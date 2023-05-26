@@ -11,7 +11,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven-versions-rules>file:///${project.parent.basedir}/rules.xml</maven-versions-rules>
+		<maven.versions.rules>file:///${project.basedir}/../rules.xml</maven.versions.rules>
 	</properties>
 	
   <distributionManagement> 

@@ -66,6 +66,7 @@
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <main.basedir>${project.basedir}</main.basedir>
+        <maven.versions.rules>file:///${project.basedir}/rules.xml</maven.versions.rules>
 
         <axiom.version>1.2.20</axiom.version>
         <assimbly.version>4.0.0</assimbly.version>
@@ -145,7 +146,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
-                <version>2.8.1</version>
+                <version>2.15.0</version>
                 <reportSets>
                     <reportSet>
                         <reports>
@@ -170,11 +171,11 @@
                 <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
                 <plugin>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.3.0</version>
+                    <version>3.3.1</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.10.1</version>
+                    <version>3.11.0</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-toolchains-plugin</artifactId>
@@ -196,7 +197,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.22.2</version>
+                    <version>3.1.0</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
@@ -208,7 +209,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-deploy-plugin</artifactId>
-                    <version>3.0.0</version>
+                    <version>3.1.1</version>
                 </plugin>
                 <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
                 <plugin>
@@ -217,7 +218,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
-                    <version>3.4.1</version>
+                    <version>3.4.3</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -230,14 +231,14 @@
                     <target>11</target>
                 </configuration>
             </plugin>
-            <!--<plugin>
+            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
-                <version>2.8.1</version>
+                <version>2.15.0</version>
                 <configuration>
-                    <rulesUri>${maven-versions-rules}</rulesUri>
+                    <rulesUri>${maven.versions.rules}</rulesUri>
                 </configuration>
-            </plugin>-->
+            </plugin>
         </plugins>
     </build>
 
