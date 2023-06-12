@@ -14,7 +14,6 @@ import org.junit.jupiter.api.*;
 import org.assimbly.globalvariables.domain.EnvironmentValue;
 import org.assimbly.globalvariables.domain.GlobalEnvironmentVariable;
 import org.assimbly.globalvariables.mongo.MongoDao;
-import org.assimbly.globalvariables.mongo.MongoDaoImpl;
 
 import java.util.Base64;
 import java.util.List;
@@ -93,23 +92,19 @@ public class GlobalVariablesTest extends CamelTestSupport {
 
     @AfterEach
     public void after(){
-        MongoDao mongoDao = new MongoDaoImpl();
-
-        List<GlobalEnvironmentVariable> variables = mongoDao.findAll(TENANT);
+        List<GlobalEnvironmentVariable> variables = MongoDao.findAll(TENANT);
 
         for(GlobalEnvironmentVariable g : variables){
-            mongoDao.deleteVariable(g, TENANT);
+            MongoDao.deleteVariable(g, TENANT);
         }
     }
 
     @AfterAll
     public static void afterAll(){
-        MongoDao mongoDao = new MongoDaoImpl();
-
-        List<GlobalEnvironmentVariable> variables = mongoDao.findAll(TENANT);
+        List<GlobalEnvironmentVariable> variables = MongoDao.findAll(TENANT);
 
         for(GlobalEnvironmentVariable g : variables){
-            mongoDao.deleteVariable(g, TENANT);
+            MongoDao.deleteVariable(g, TENANT);
         }
     }
 
@@ -126,10 +121,8 @@ public class GlobalVariablesTest extends CamelTestSupport {
 
         template = context.createProducerTemplate();
 
-        MongoDao mongoDao = new MongoDaoImpl();
-
-        mongoDao.updateVariable(createVariable(), TENANT);
-        mongoDao.updateVariable(createEncryptedVariable(), TENANT);
+        MongoDao.updateVariable(createVariable(), TENANT);
+        MongoDao.updateVariable(createEncryptedVariable(), TENANT);
 
         context.setNameStrategy(new ExplicitCamelContextNameStrategy("ID_12345"));
     }
@@ -242,12 +235,10 @@ public class GlobalVariablesTest extends CamelTestSupport {
 
     @Test
     public void testGetVariableWithHeader() throws Exception {
-        MongoDao mongoDao = new MongoDaoImpl();
-
-        GlobalEnvironmentVariable variable = mongoDao.findVariableByName(VARIABLE_NAME, TENANT);
+        GlobalEnvironmentVariable variable = MongoDao.findVariableByName(VARIABLE_NAME, TENANT);
         variable.put(new EnvironmentValue("test"));
 
-        mongoDao.updateVariable(variable, TENANT);
+        MongoDao.updateVariable(variable, TENANT);
 
         template.sendBody("direct:getWithHeader", "");
 
@@ -275,9 +266,7 @@ public class GlobalVariablesTest extends CamelTestSupport {
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        MongoDao mongoDao = new MongoDaoImpl();
-
-        GlobalEnvironmentVariable variable = mongoDao.findVariableByName(VARIABLE_NAME, TENANT);
+        GlobalEnvironmentVariable variable = MongoDao.findVariableByName(VARIABLE_NAME, TENANT);
         Optional<EnvironmentValue> variableValue = variable.find("test");
 
         assertTrue(variableValue.isPresent());
@@ -291,9 +280,7 @@ public class GlobalVariablesTest extends CamelTestSupport {
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        MongoDao mongoDao = new MongoDaoImpl();
-
-        GlobalEnvironmentVariable variable = mongoDao.findVariableByName(VARIABLE_NAME, TENANT);
+        GlobalEnvironmentVariable variable = MongoDao.findVariableByName(VARIABLE_NAME, TENANT);
         Optional<EnvironmentValue> variableValue = variable.find("test");
 
         assertTrue(variableValue.isPresent());
@@ -307,9 +294,7 @@ public class GlobalVariablesTest extends CamelTestSupport {
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        MongoDao mongoDao = new MongoDaoImpl();
-
-        GlobalEnvironmentVariable variable = mongoDao.findVariableByName(VARIABLE_NAME, TENANT);
+        GlobalEnvironmentVariable variable = MongoDao.findVariableByName(VARIABLE_NAME, TENANT);
         Optional<EnvironmentValue> variableValue = variable.find("test");
 
         assertTrue(variableValue.isPresent());
@@ -323,9 +308,7 @@ public class GlobalVariablesTest extends CamelTestSupport {
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        MongoDao mongoDao = new MongoDaoImpl();
-
-        GlobalEnvironmentVariable variable = mongoDao.findVariableByName(VARIABLE_NAME, TENANT);
+        GlobalEnvironmentVariable variable = MongoDao.findVariableByName(VARIABLE_NAME, TENANT);
         Optional<EnvironmentValue> variableValue = variable.find("test");
 
         assertTrue(variableValue.isPresent());
@@ -339,9 +322,7 @@ public class GlobalVariablesTest extends CamelTestSupport {
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        MongoDao mongoDao = new MongoDaoImpl();
-
-        GlobalEnvironmentVariable variable = mongoDao.findVariableByName(VARIABLE_NAME, TENANT);
+        GlobalEnvironmentVariable variable = MongoDao.findVariableByName(VARIABLE_NAME, TENANT);
         Optional<EnvironmentValue> variableValue = variable.find("test");
 
         assertTrue(variableValue.isPresent());
@@ -355,9 +336,7 @@ public class GlobalVariablesTest extends CamelTestSupport {
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        MongoDao mongoDao = new MongoDaoImpl();
-
-        GlobalEnvironmentVariable variable = mongoDao.findVariableByName(VARIABLE_NAME, TENANT);
+        GlobalEnvironmentVariable variable = MongoDao.findVariableByName(VARIABLE_NAME, TENANT);
         Optional<EnvironmentValue> variableValue = variable.find("test");
 
         assertTrue(variableValue.isPresent());
@@ -371,9 +350,7 @@ public class GlobalVariablesTest extends CamelTestSupport {
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        MongoDao mongoDao = new MongoDaoImpl();
-
-        GlobalEnvironmentVariable variable = mongoDao.findVariableByName(VARIABLE_NAME, TENANT);
+        GlobalEnvironmentVariable variable = MongoDao.findVariableByName(VARIABLE_NAME, TENANT);
         Optional<EnvironmentValue> variableValue = variable.find("test");
 
         assertTrue(variableValue.isPresent());
@@ -387,9 +364,7 @@ public class GlobalVariablesTest extends CamelTestSupport {
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        MongoDao mongoDao = new MongoDaoImpl();
-
-        GlobalEnvironmentVariable variable = mongoDao.findVariableByName(VARIABLE_NAME, TENANT);
+        GlobalEnvironmentVariable variable = MongoDao.findVariableByName(VARIABLE_NAME, TENANT);
         Optional<EnvironmentValue> variableValue = variable.find("test");
 
         assertTrue(variableValue.isPresent());
@@ -403,9 +378,7 @@ public class GlobalVariablesTest extends CamelTestSupport {
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        MongoDao mongoDao = new MongoDaoImpl();
-
-        GlobalEnvironmentVariable variable = mongoDao.findVariableByName(VARIABLE_NAME, TENANT);
+        GlobalEnvironmentVariable variable = MongoDao.findVariableByName(VARIABLE_NAME, TENANT);
         Optional<EnvironmentValue> variableValue = variable.find("test");
 
         assertTrue(variableValue.isPresent());
@@ -419,9 +392,7 @@ public class GlobalVariablesTest extends CamelTestSupport {
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        MongoDao mongoDao = new MongoDaoImpl();
-
-        GlobalEnvironmentVariable variable = mongoDao.findVariableByName(VARIABLE_NAME, TENANT);
+        GlobalEnvironmentVariable variable = MongoDao.findVariableByName(VARIABLE_NAME, TENANT);
         Optional<EnvironmentValue> variableValue = variable.find("test");
 
         assertTrue(variableValue.isPresent());
@@ -435,9 +406,7 @@ public class GlobalVariablesTest extends CamelTestSupport {
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        MongoDao mongoDao = new MongoDaoImpl();
-
-        GlobalEnvironmentVariable variable = mongoDao.findVariableByName(VARIABLE_NAME, TENANT);
+        GlobalEnvironmentVariable variable = MongoDao.findVariableByName(VARIABLE_NAME, TENANT);
         Optional<EnvironmentValue> variableValue = variable.find("test");
 
         assertTrue(variableValue.isPresent());
@@ -451,9 +420,7 @@ public class GlobalVariablesTest extends CamelTestSupport {
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        MongoDao mongoDao = new MongoDaoImpl();
-
-        GlobalEnvironmentVariable variable = mongoDao.findVariableByName(VARIABLE_NAME, TENANT);
+        GlobalEnvironmentVariable variable = MongoDao.findVariableByName(VARIABLE_NAME, TENANT);
         Optional<EnvironmentValue> variableValue = variable.find("test");
 
         assertTrue(variableValue.isPresent());
@@ -467,9 +434,7 @@ public class GlobalVariablesTest extends CamelTestSupport {
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        MongoDao mongoDao = new MongoDaoImpl();
-
-        GlobalEnvironmentVariable variable = mongoDao.findVariableByName(VARIABLE_NAME, TENANT);
+        GlobalEnvironmentVariable variable = MongoDao.findVariableByName(VARIABLE_NAME, TENANT);
         Optional<EnvironmentValue> variableValue = variable.find("test");
 
         assertTrue(variableValue.isPresent());
@@ -482,9 +447,7 @@ public class GlobalVariablesTest extends CamelTestSupport {
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        MongoDao mongoDao = new MongoDaoImpl();
-
-        GlobalEnvironmentVariable variable = mongoDao.findVariableByName(VARIABLE_NAME, TENANT);
+        GlobalEnvironmentVariable variable = MongoDao.findVariableByName(VARIABLE_NAME, TENANT);
 
         assertEquals(null, variable);
     }
