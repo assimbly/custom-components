@@ -23,13 +23,13 @@ public class QueueMessageChecker implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
         String environment = System.getenv("ASSIMBLY_ENV");
-        String amqJmxPort = System.getenv("AMQ_JMX_PORT");
+        String amqJmxPort = System.getenv("ASSIMBLY_BROKER_JMX_PORT");
         String queueName = exchange.getProperty("AssimblyQueueName", "", String.class).replace("=", "");
 
         String jmxUrl = "service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi";
 
         if(environment!=null && amqJmxPort!=null) {
-            jmxUrl = "service:jmx:rmi:///jndi/rmi://flux-activemq"
+            jmxUrl = "service:jmx:rmi:///jndi/rmi://assimbly-broker"
                     + (environment.equals("local") ? ":1616" : "-"
                     + environment
                     + ":" + amqJmxPort) + "/jmxrmi";
