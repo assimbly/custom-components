@@ -10,7 +10,7 @@
     <name>custom-components</name>
     <url>https://www.org.assimbly</url>
 
-    <version>4.0.0</version>
+    <version>4.0.1-SNAPSHOT</version>
 
     <modules>
         <module>aggregate</module>
