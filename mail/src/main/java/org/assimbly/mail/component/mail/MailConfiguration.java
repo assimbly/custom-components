@@ -37,7 +37,7 @@ import org.apache.camel.spi.UriPath;
 import org.apache.camel.support.jsse.SSLContextParameters;
 import org.apache.camel.util.ObjectHelper;
 import org.assimbly.globalvariables.domain.GlobalEnvironmentVariable;
-import org.assimbly.globalvariables.mongo.MongoDaoImpl;
+import org.assimbly.globalvariables.mongo.MongoDao;
 
 import static org.assimbly.mail.component.mail.MailConstants.MAIL_GENERATE_MISSING_ATTACHMENT_NAMES_NEVER;
 import static org.assimbly.mail.component.mail.MailConstants.MAIL_HANDLE_DUPLICATE_ATTACHMENT_NAMES_NEVER;
@@ -465,7 +465,6 @@ public class MailConfiguration implements Cloneable {
     public String getAccessToken() {
 
         StringBuffer accessTokenBuf = new StringBuffer();
-        MongoDaoImpl mongoDao = new MongoDaoImpl();
 
         Pattern pattern = Pattern.compile(GLOBAL_VARIABLE_EXP);
         Matcher matcher = pattern.matcher(accessToken);
@@ -473,7 +472,7 @@ public class MailConfiguration implements Cloneable {
         while(matcher.find()){
             String accessTokenVarName = matcher.group(1);
 
-            GlobalEnvironmentVariable accessTokenGlobVar = mongoDao.findVariableByName(accessTokenVarName, getTenant());
+            GlobalEnvironmentVariable accessTokenGlobVar = MongoDao.findVariableByName(accessTokenVarName, getTenant());
             String accessTokenValue = accessTokenGlobVar.find(getEnvironment()).get().getValue();
 
             matcher.appendReplacement(accessTokenBuf, Matcher.quoteReplacement(accessTokenValue));

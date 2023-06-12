@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>custom-components</artifactId>
 		<groupId>org.assimbly</groupId>
-		<version>4.0.0</version>
+		<version>null</version>
 	</parent>
 
   <artifactId>mail</artifactId>
@@ -23,6 +23,12 @@
   </distributionManagement>
 
   <dependencies>
+
+	  <dependency>
+		  <groupId>org.apache.camel</groupId>
+		  <artifactId>camel-velocity</artifactId>
+		  <version>${camel.version}</version>
+	  </dependency>
 
 	  <dependency>
 		  <groupId>com.sun.mail</groupId>
@@ -59,12 +65,6 @@
 	  </dependency>
 
 	  <!-- Test Specific -->
-	  <dependency>
-		  <groupId>org.apache.camel</groupId>
-		  <artifactId>camel-test-blueprint</artifactId>
-		  <version>2.23.4</version>
-		  <scope>test</scope>
-	  </dependency>
 	  <dependency>
 		  <groupId>org.skyscreamer</groupId>
 		  <artifactId>jsonassert</artifactId>
