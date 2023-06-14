@@ -5,6 +5,9 @@ import org.apache.camel.Processor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
 public class EncoderProcessor implements Processor {
 
     private static final Logger LOG = LoggerFactory.getLogger(EncoderProcessor.class);
@@ -17,14 +20,16 @@ public class EncoderProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
+
         EncoderConfiguration config = endpoint.getConfiguration();
 
         byte[] bytes = exchange.getIn().getBody(byte[].class);
-        String original = new String(bytes, config.getOriginCharset());
 
-        String result = new String(original.getBytes(), config.getTargetCharset());
+        String original = new String(bytes, StandardCharsets.UTF_8);
+        String result = new String(original.getBytes(config.getOriginCharset()), config.getTargetCharset());
 
         exchange.getIn().setBody(result);
 
     }
+
 }

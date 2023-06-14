@@ -23,6 +23,7 @@ public class CheckedZipFileDataFormat extends ZipFileDataFormat implements DataF
 
     @Override
     public Object unmarshal(Exchange exchange, InputStream stream) throws Exception {
+
         long uncompressedSize = 0;
         long maxFileSize = Long.parseLong(PropertiesHelper.getProperty("max_uncompressed_file_size")); // In Bytes
 
