@@ -73,8 +73,6 @@ jobs:
             org.assimbly.mail
             org.assimbly.soap
             org.assimbly.globalvariables
-            org.assimbly.docconverter
-            org.assimbly.csvtoxml
 
       - name: Delete packages
         uses: smartsquaregmbh/delete-old-packages@v0.7.0
@@ -84,6 +82,8 @@ jobs:
           keep: 0
           version-pattern: "^${{ steps.check_version.outputs.VERSION_TO_DELETE }}$"
           names: |
+            org.assimbly.docconverter
+            org.assimbly.csvtoxml
             org.assimbly.amazon
             org.assimbly.edifactcommon
             org.assimbly.auth
