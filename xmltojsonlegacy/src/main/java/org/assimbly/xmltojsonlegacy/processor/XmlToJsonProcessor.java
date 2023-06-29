@@ -12,7 +12,7 @@ public class XmlToJsonProcessor {
 
     static final Logger logger = Logger.getLogger(XmlToJsonProcessor.class);
 
-    private static CustomXmlJsonDataFormat xmlJsonDataFormat = null;
+    private final CustomXmlJsonDataFormat xmlJsonDataFormat;
 
     private static final String JSON_XML_ATTR_PREFIX = "@";
     private static final String JSON_XML_TEXT_FIELD = "#text";
@@ -29,7 +29,7 @@ public class XmlToJsonProcessor {
         this.xmlJsonDataFormat = xmlJsonDataFormat;
     }
 
-    public static JsonNode convertXmlToJson(
+    public JsonNode convertXmlToJson(
             Element element, int level, String parentClass, int parentSiblings, boolean isFirstChild
     ) {
         ObjectNode rootObjectNode = JsonNodeFactory.instance.objectNode();
@@ -206,18 +206,18 @@ public class XmlToJsonProcessor {
         return isRootArray ? rootArrayNode : rootObjectNode;
     }
 
-    private static boolean isFirstSiblingByNumCounts(int numCounts) {
+    private boolean isFirstSiblingByNumCounts(int numCounts) {
         return numCounts == 1;
     }
 
-    private static void extractChildAsOtherInArrayNode(
+    private void extractChildAsOtherInArrayNode(
             int level, ArrayNode rootArrayNode, int numSiblings, String classAttr, Element childNode,
             Element childElement, boolean isFirstSibling
     ) {
         rootArrayNode.add(convertXmlToJson(childElement, level +1, classAttr, numSiblings, isFirstSibling));
     }
 
-    private static void extractChildAsOtherInObjectNode(
+    private void extractChildAsOtherInObjectNode(
             int level, ObjectNode rootObjectNode, int numSiblings, String classAttr, Element childNode,
             Element childElement, boolean isFirstSibling
     ) {
@@ -227,7 +227,7 @@ public class XmlToJsonProcessor {
         );
     }
 
-    private static void extractChildAsArray(
+    private void extractChildAsArray(
             int level, ArrayNode rootArrayNode, int numSiblings, String classAttr, Element childElement,
             boolean isFirstSibling
     ) {
@@ -243,7 +243,7 @@ public class XmlToJsonProcessor {
         }
     }
 
-    private static void extractChildAsObject(
+    private void extractChildAsObject(
             int level, ObjectNode rootObjectNode, int numSiblings, String classAttr, Element childElement,
             boolean isFirstSibling
     ) {
@@ -263,7 +263,7 @@ public class XmlToJsonProcessor {
         }
     }
 
-    private static void setValueUsingAttributeType(
+    private void setValueUsingAttributeType(
             ObjectNode rootObjectNode, JsonNode subElement, String label, String childTypeAttr
     ) {
         switch (childTypeAttr) {
@@ -278,7 +278,7 @@ public class XmlToJsonProcessor {
         }
     }
 
-    private static JsonNode addNodeWithAttributeInfo(Element element, String value) {
+    private JsonNode addNodeWithAttributeInfo(Element element, String value) {
         ObjectNode attrInfoObjectNode =  JsonNodeFactory.instance.objectNode();
 
         if(element.hasAttributes()){
@@ -293,7 +293,7 @@ public class XmlToJsonProcessor {
         return attrInfoObjectNode;
     }
 
-    private static void printElementDetails(
+    private void printElementDetails(
             Element element, int level, String parentClass, int parentSiblings, boolean isRootArray, boolean isOneValue,
             boolean isObject, boolean isFirstChild, int numberOfSiblings, int numberOfChildren, String classAttr,
             String typeAttr
@@ -311,7 +311,7 @@ public class XmlToJsonProcessor {
         printData("    isFirstChild: " + isFirstChild, level);
     }
 
-    private static void printData(String data, int level) {
+    private void printData(String data, int level) {
         String suffix = "---";
         for(int i=0; i<level; i++) {
             data = suffix + data;
@@ -319,7 +319,7 @@ public class XmlToJsonProcessor {
         System.out.println(data);
     }
 
-    private static int calculateNumberOfSiblings(Element element) {
+    private int calculateNumberOfSiblings(Element element) {
         int count = 0;
 
         // Get the parent of the element
@@ -339,7 +339,7 @@ public class XmlToJsonProcessor {
         return count;
     }
 
-    private static int calculateNumberOfChildren(Element element) {
+    private int calculateNumberOfChildren(Element element) {
         int count = 0;
 
         // Get the direct child nodes of the parent element
