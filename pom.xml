@@ -51,6 +51,7 @@
         <module>xmltocsv</module>
         <module>xmltoexcel</module>
         <module>xmltojson</module>
+        <module>xmltojsonlegacy</module>
     </modules>
 
     <distributionManagement> 
