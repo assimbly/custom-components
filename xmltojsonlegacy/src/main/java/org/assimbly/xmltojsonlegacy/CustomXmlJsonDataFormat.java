@@ -27,7 +27,7 @@ public class CustomXmlJsonDataFormat implements DataFormat {
     // XML to JSON
     @Override
     public void marshal(Exchange exchange, Object graph, OutputStream stream) throws Exception {
-        String xml = (String)exchange.getIn().getBody();
+        String xml = exchange.getIn().getBody(String.class);
         Document document = convertStringToXMLDocument(xml);
         ObjectMapper objectMapper = new ObjectMapper();
 
