@@ -326,17 +326,19 @@ public class XmlToJsonProcessor {
             boolean isObject, boolean isFirstChild, int numberOfSiblings, int numberOfChildren, String classAttr,
             String typeAttr
     ) {
-        printData(" >> Element: " + element.getTagName(), level);
-        printData("    typeAttr: " + typeAttr, level);
-        printData("    classAttr: " + classAttr, level);
-        printData("    parentClass: " + parentClass, level);
-        printData("    numberOfChildren: " + numberOfChildren, level);
-        printData("    numberOfSiblings: " + numberOfSiblings, level);
-        printData("    parentSiblings: " + parentSiblings, level);
-        printData("    isRootArray: " + isRootArray, level);
-        printData("    isOneValue: " + isOneValue, level);
-        printData("    isObject: " + isObject, level);
-        printData("    isFirstChild: " + isFirstChild, level);
+        if(logger.isDebugEnabled()) {
+            printData(" >> Element: " + element.getTagName(), level);
+            printData("    typeAttr: " + typeAttr, level);
+            printData("    classAttr: " + classAttr, level);
+            printData("    parentClass: " + parentClass, level);
+            printData("    numberOfChildren: " + numberOfChildren, level);
+            printData("    numberOfSiblings: " + numberOfSiblings, level);
+            printData("    parentSiblings: " + parentSiblings, level);
+            printData("    isRootArray: " + isRootArray, level);
+            printData("    isOneValue: " + isOneValue, level);
+            printData("    isObject: " + isObject, level);
+            printData("    isFirstChild: " + isFirstChild, level);
+        }
     }
 
     private void printData(String data, int level) {
@@ -344,7 +346,7 @@ public class XmlToJsonProcessor {
         for(int i=0; i<level; i++) {
             data = suffix + data;
         }
-        System.out.println(data);
+        logger.debug(data);
     }
 
     private int calculateNumberOfSiblings(Element element) {
