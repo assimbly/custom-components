@@ -35,72 +35,18 @@ public class XmlToJsonProcessor {
         ObjectNode rootObjectNode = JsonNodeFactory.instance.objectNode();
         ArrayNode rootArrayNode = JsonNodeFactory.instance.arrayNode();
 
-        boolean isRootArray = false;
-        boolean isRootNode = (level == 0);
-        boolean isOneValue = false;
-        boolean isObject = false;
-        boolean isAttributeObject = false;
-        boolean isSingleChildren = false;
-
         int numberOfSiblings = calculateNumberOfSiblings(element);
         int numberOfChildren = calculateNumberOfChildren(element);
 
         String classAttr = element.getAttribute(JSON_XML_ATTR_CLASS);
         String typeAttr = element.getAttribute(JSON_XML_ATTR_TYPE);
 
-        if(xmlJsonDataFormat.isTypeHints()) {
-            if(level == 0 && numberOfChildren == 1) {
-                isRootArray = true;
-            }
-            if(level == 1) { // && numSiblings == 1) {
-                isRootArray = true;
-            }
-            if(level == 2 && parentClass!=null && parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_ARRAY)) {
-                isRootArray = true;
-            }
-            if(level == 2 && classAttr!=null && classAttr.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT)) {
-                isObject = true;
-                if(parentSiblings > 1) {
-                    isRootArray = true;
-                } else {
-                    isRootArray = false;
-                }
-            }
-            if(level == 3 && numberOfSiblings == 1 &&
-                    (parentClass==null || !parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT))
-            ) {
-                isRootArray = true;
-                isOneValue = true;
-            }
-        } else {
-            if(level == 0 && numberOfChildren == 1) {
-                isRootArray = true;
-            }
-            if(level == 2 && parentClass!=null && parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_ARRAY)) {
-                isRootArray = true;
-            }
-            if(level == 2 && classAttr!=null && classAttr.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT)) {
-                isObject = true;
-                if(parentSiblings > 1) {
-                    isRootArray = true;
-                } else {
-                    isRootArray = false;
-                }
-            }
-            if(level == 2 && numberOfChildren == 1
-                    && (classAttr==null || !classAttr.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT))
-            ) {
-                isSingleChildren = true;
-            }
-            if(level == 3 && numberOfSiblings == 1
-                    && (parentClass==null || !parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT))
-            ) {
-                isOneValue = true;
-            }
-            if(level == 3 && parentClass!=null && parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT)) {
-                isAttributeObject = true;
-            }
-        }
+        boolean isRootNode = (level == 0);
+        boolean isRootArray = isRootArray(level, numberOfChildren, numberOfSiblings, parentSiblings, classAttr, parentClass);
+        boolean isObject = isObject(level, classAttr);
+        boolean isOneValue = isOneValue(level, numberOfSiblings, parentClass);
+        boolean isSingleChildren = isSingleChildren(level, numberOfChildren, classAttr);
+        boolean isAttributeObject = isAttributeObject(level, parentClass);
 
         printElementDetails(
                 element, level, parentClass, parentSiblings, isRootArray, isOneValue, isObject, isFirstChild,
@@ -204,6 +150,88 @@ public class XmlToJsonProcessor {
         }
 
         return isRootArray ? rootArrayNode : rootObjectNode;
+    }
+
+    private boolean isRootArray(int level, int numberOfChildren, int numberOfSiblings, int parentSiblings, String classAttr, String parentClass) {
+        boolean isRootArray = false;
+        if(xmlJsonDataFormat.isTypeHints()) {
+            if (level == 0 && numberOfChildren == 1) {
+                isRootArray = true;
+            }
+            if (level == 1) {
+                isRootArray = true;
+            }
+            if (level == 2 && parentClass != null && parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_ARRAY)) {
+                isRootArray = true;
+            }
+            if (level == 2 && classAttr != null && classAttr.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT)) {
+                if (parentSiblings > 1) {
+                    isRootArray = true;
+                } else {
+                    isRootArray = false;
+                }
+            }
+            if (level == 3 && numberOfSiblings == 1 &&
+                    (parentClass == null || !parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT))
+            ) {
+                isRootArray = true;
+            }
+        } else {
+            if(level == 0 && numberOfChildren == 1) {
+                isRootArray = true;
+            }
+            if(level == 2 && parentClass!=null && parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_ARRAY)) {
+                isRootArray = true;
+            }
+            if(level == 2 && classAttr!=null && classAttr.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT)) {
+                if(parentSiblings > 1) {
+                    isRootArray = true;
+                } else {
+                    isRootArray = false;
+                }
+            }
+        }
+        return isRootArray;
+    }
+
+    private boolean isObject(int level, String classAttr) {
+        boolean isObject = false;
+        if(level == 2 && classAttr!=null && classAttr.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT)) {
+            isObject = true;
+        }
+        return isObject;
+    }
+
+    private boolean isOneValue(int level, int numberOfSiblings, String parentClass) {
+        boolean isOneValue = false;
+        if(level == 3 && numberOfSiblings == 1 &&
+                (parentClass==null || !parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT))
+        ) {
+            isOneValue = true;
+        }
+        return isOneValue;
+    }
+
+    private boolean isSingleChildren(int level, int numberOfChildren, String classAttr) {
+        boolean isSingleChildren = false;
+        if(!xmlJsonDataFormat.isTypeHints()) {
+            if(level == 2 && numberOfChildren == 1
+                    && (classAttr==null || !classAttr.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT))
+            ) {
+                isSingleChildren = true;
+            }
+        }
+        return isSingleChildren;
+    }
+
+    private boolean isAttributeObject(int level, String parentClass) {
+        boolean isAttributeObject = false;
+        if(!xmlJsonDataFormat.isTypeHints()) {
+            if(level == 3 && parentClass!=null && parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT)) {
+                isAttributeObject = true;
+            }
+        }
+        return isAttributeObject;
     }
 
     private boolean isFirstSiblingByNumCounts(int numCounts) {
