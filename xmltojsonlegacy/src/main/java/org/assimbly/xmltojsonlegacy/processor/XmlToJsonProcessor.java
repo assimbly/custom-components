@@ -29,6 +29,7 @@ public class XmlToJsonProcessor {
         this.xmlJsonDataFormat = xmlJsonDataFormat;
     }
 
+    // convert xml to json
     public JsonNode convertXmlToJson(
             Element element, int level, String parentClass, int parentSiblings, boolean isFirstChild
     ) {
@@ -53,6 +54,7 @@ public class XmlToJsonProcessor {
                 numberOfSiblings, numberOfChildren, classAttr, typeAttr
         );
 
+        // add attributes in the object node
         addAttributesInObjectNode(element, rootObjectNode, isAttributeObject);
 
         // Check if the current element has child nodes
@@ -63,8 +65,8 @@ public class XmlToJsonProcessor {
             for (int index = 0; index < nodeListSize; index++) {
                 Node childNode = nodeList.item(index);
 
-                // Process only element nodes (ignore text nodes, comments, etc.)
                 if (childNode.getNodeType() == Node.ELEMENT_NODE) {
+                    // process element as node
                     nodeCount++;
                     JsonNode processNodeResp = processElementNode(
                             childNode, rootArrayNode, rootObjectNode, nodeCount, level, numberOfChildren,
@@ -74,7 +76,7 @@ public class XmlToJsonProcessor {
                         return processNodeResp;
 
                 } else if(childNode.getNodeType() == Node.TEXT_NODE){
-
+                    // process element as text
                     if(isObject && isRootArray) {
                         printData(" 2. OBJECT && ARRAY", level);
                         if(rootObjectNode.size()>0)
@@ -94,6 +96,7 @@ public class XmlToJsonProcessor {
         return isRootArray ? rootArrayNode : rootObjectNode;
     }
 
+    // process an element node of type Node
     private JsonNode processElementNode(
             Node childNode, ArrayNode rootArrayNode, ObjectNode rootObjectNode, int nodeCount, int level,
             int numberOfChildren, int numberOfSiblings, String classAttr, boolean isRootArray, boolean isObject,
@@ -105,18 +108,22 @@ public class XmlToJsonProcessor {
 
         if(isObject) {
             printData(" 1. IS OBJECT", level);
+            // extract child as an object
             extractChildAsObject(level, rootObjectNode, numberOfSiblings, classAttr, childElement, isFirstSibling);
         } else {
             if(isRootArray) {
                 printData(" 1. IS ROOT ARRAY", level);
                 if(isSingleChildren && isFirstChild) {
+                    // recursive call with child element
                     return convertXmlToJson(childElement, level +1, classAttr, numberOfSiblings, isFirstSibling);
                 } else {
+                    // extract child as an array
                     extractChildAsArray(level, rootArrayNode, numberOfSiblings, classAttr, childElement, isFirstSibling);
                 }
             } else {
                 printData(" 1. IS OTHER", level);
                 if(!xmlJsonDataFormat.isTypeHints()) {
+                    // extract child as other type and add into the array node
                     if(level == 0 && numberOfChildren > 1) {
                         extractChildAsOtherInObjectNode(
                                 level, rootObjectNode, numberOfSiblings, classAttr, (Element) childNode, childElement,
@@ -130,6 +137,7 @@ public class XmlToJsonProcessor {
                         rootObjectNode.set(((Element) childNode).getTagName(), rootArrayNode);
                     }
                 } else {
+                    // extract child as other type and add into the object node
                     extractChildAsOtherInObjectNode(
                             level, rootObjectNode, numberOfSiblings, classAttr, (Element) childNode, childElement,
                             isFirstSibling
@@ -141,6 +149,7 @@ public class XmlToJsonProcessor {
         return null;
     }
 
+    // process an element node of type Text
     private JsonNode processTextNode(
             Node childNode, Element element, ArrayNode rootArrayNode, ObjectNode rootObjectNode, int level, int index,
             int nodeListSize, boolean isRootArray, boolean isRootNode, boolean isObject, boolean isOneValue
@@ -148,6 +157,7 @@ public class XmlToJsonProcessor {
         Text textNode = (Text) childNode;
 
         if(isRootNode) {
+            //process text node identified as a root node
             printData(" 2. ROOT", level);
             if(index+1 >= nodeListSize && xmlJsonDataFormat.isForceTopLevelObject()) {
                 ObjectNode parentNode =  JsonNodeFactory.instance.objectNode();
@@ -157,6 +167,7 @@ public class XmlToJsonProcessor {
         } else if(isObject) {
             printData(" 2. OBJECT", level);
         } else if(isOneValue) {
+            //process text node identified as one value
             printData(" 2. ONE VALUE", level);
             if(xmlJsonDataFormat.isTypeHints()) {
                 rootArrayNode.add(textNode.getTextContent());
@@ -164,6 +175,7 @@ public class XmlToJsonProcessor {
                 rootObjectNode.put(JSON_XML_TEXT_FIELD, childNode.getTextContent());
             }
         } else {
+            //process text node identified as other
             printData(" 2. OTHER", level);
             if(xmlJsonDataFormat.isTypeHints()){
                 rootObjectNode.put(element.getTagName(), textNode.getTextContent());
@@ -173,6 +185,7 @@ public class XmlToJsonProcessor {
         return null;
     }
 
+    // add attributes in the object node
     private void addAttributesInObjectNode(Element element, ObjectNode rootObjectNode, boolean isAttributeObject) {
         if(!xmlJsonDataFormat.isTypeHints() && !isAttributeObject && element.hasAttributes()){
             NamedNodeMap attrMap = element.getAttributes();
@@ -183,7 +196,10 @@ public class XmlToJsonProcessor {
         }
     }
 
-    private boolean isRootArray(int level, int numberOfChildren, int numberOfSiblings, int parentSiblings, String classAttr, String parentClass) {
+    // check if it's a root array
+    private boolean isRootArray(
+            int level, int numberOfChildren, int numberOfSiblings, int parentSiblings, String classAttr, String parentClass
+    ) {
         boolean isRootArray = false;
         if(xmlJsonDataFormat.isTypeHints()) {
             if (level == 0 && numberOfChildren == 1) {
@@ -225,6 +241,7 @@ public class XmlToJsonProcessor {
         return isRootArray;
     }
 
+    // check if it's an object
     private boolean isObject(int level, String classAttr) {
         boolean isObject = false;
         if(level == 2 && classAttr!=null && classAttr.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT)) {
@@ -233,6 +250,7 @@ public class XmlToJsonProcessor {
         return isObject;
     }
 
+    // check if it's one value
     private boolean isOneValue(int level, int numberOfSiblings, String parentClass) {
         boolean isOneValue = false;
         if(level == 3 && numberOfSiblings == 1 &&
@@ -243,6 +261,7 @@ public class XmlToJsonProcessor {
         return isOneValue;
     }
 
+    // check if it's a single children
     private boolean isSingleChildren(int level, int numberOfChildren, String classAttr) {
         boolean isSingleChildren = false;
         if(!xmlJsonDataFormat.isTypeHints()) {
@@ -255,6 +274,7 @@ public class XmlToJsonProcessor {
         return isSingleChildren;
     }
 
+    // check if it's an attribute object
     private boolean isAttributeObject(int level, String parentClass) {
         boolean isAttributeObject = false;
         if(!xmlJsonDataFormat.isTypeHints()) {
@@ -265,10 +285,12 @@ public class XmlToJsonProcessor {
         return isAttributeObject;
     }
 
+    // check if it's the first sibling regarding the numCounts
     private boolean isFirstSiblingByNumCounts(int numCounts) {
         return numCounts == 1;
     }
 
+    // extract child as other type and add into the array node
     private void extractChildAsOtherInArrayNode(
             int level, ArrayNode rootArrayNode, int numSiblings, String classAttr, Element childNode,
             Element childElement, boolean isFirstSibling
@@ -276,6 +298,7 @@ public class XmlToJsonProcessor {
         rootArrayNode.add(convertXmlToJson(childElement, level +1, classAttr, numSiblings, isFirstSibling));
     }
 
+    // extract child as other type and add into the object node
     private void extractChildAsOtherInObjectNode(
             int level, ObjectNode rootObjectNode, int numSiblings, String classAttr, Element childNode,
             Element childElement, boolean isFirstSibling
@@ -286,6 +309,7 @@ public class XmlToJsonProcessor {
         );
     }
 
+    // extract child as array type
     private void extractChildAsArray(
             int level, ArrayNode rootArrayNode, int numSiblings, String classAttr, Element childElement,
             boolean isFirstSibling
@@ -302,6 +326,7 @@ public class XmlToJsonProcessor {
         }
     }
 
+    // extract child as object type
     private void extractChildAsObject(
             int level, ObjectNode rootObjectNode, int numSiblings, String classAttr, Element childElement,
             boolean isFirstSibling
@@ -322,6 +347,7 @@ public class XmlToJsonProcessor {
         }
     }
 
+    // set value as specified in the attribute type
     private void setValueUsingAttributeType(
             ObjectNode rootObjectNode, JsonNode subElement, String label, String childTypeAttr
     ) {
@@ -337,6 +363,7 @@ public class XmlToJsonProcessor {
         }
     }
 
+    // add node with attribute information
     private JsonNode addNodeWithAttributeInfo(Element element, String value) {
         ObjectNode attrInfoObjectNode =  JsonNodeFactory.instance.objectNode();
 
@@ -352,6 +379,7 @@ public class XmlToJsonProcessor {
         return attrInfoObjectNode;
     }
 
+    // print some information about a specific tree level
     private void printElementDetails(
             Element element, int level, String parentClass, int parentSiblings, boolean isRootArray, boolean isOneValue,
             boolean isObject, boolean isFirstChild, int numberOfSiblings, int numberOfChildren, String classAttr,
@@ -372,6 +400,7 @@ public class XmlToJsonProcessor {
         }
     }
 
+    // print data string with the tree level indentation
     private void printData(String data, int level) {
         String suffix = "---";
         for(int i=0; i<level; i++) {
@@ -380,6 +409,7 @@ public class XmlToJsonProcessor {
         logger.debug(data);
     }
 
+    // calculate number of siblings of an element
     private int calculateNumberOfSiblings(Element element) {
         int count = 0;
 
@@ -400,6 +430,7 @@ public class XmlToJsonProcessor {
         return count;
     }
 
+    // calculate number of children under an element
     private int calculateNumberOfChildren(Element element) {
         int count = 0;
 
