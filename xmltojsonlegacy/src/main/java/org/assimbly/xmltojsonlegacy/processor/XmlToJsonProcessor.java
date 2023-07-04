@@ -53,13 +53,7 @@ public class XmlToJsonProcessor {
                 numberOfSiblings, numberOfChildren, classAttr, typeAttr
         );
 
-        if(!xmlJsonDataFormat.isTypeHints() && !isAttributeObject && element.hasAttributes()){
-            NamedNodeMap attrMap = element.getAttributes();
-            for (int j = 0; j < attrMap.getLength(); j++) {
-                Node node = attrMap.item(j);
-                rootObjectNode.put(JSON_XML_ATTR_PREFIX+node.getNodeName(), node.getNodeValue());
-            }
-        }
+        addAttributesInObjectNode(element, rootObjectNode, isAttributeObject);
 
         // Check if the current element has child nodes
         if (element.hasChildNodes()) {
@@ -150,6 +144,16 @@ public class XmlToJsonProcessor {
         }
 
         return isRootArray ? rootArrayNode : rootObjectNode;
+    }
+
+    private void addAttributesInObjectNode(Element element, ObjectNode rootObjectNode, boolean isAttributeObject) {
+        if(!xmlJsonDataFormat.isTypeHints() && !isAttributeObject && element.hasAttributes()){
+            NamedNodeMap attrMap = element.getAttributes();
+            for (int j = 0; j < attrMap.getLength(); j++) {
+                Node node = attrMap.item(j);
+                rootObjectNode.put(JSON_XML_ATTR_PREFIX+node.getNodeName(), node.getNodeValue());
+            }
+        }
     }
 
     private boolean isRootArray(int level, int numberOfChildren, int numberOfSiblings, int parentSiblings, String classAttr, String parentClass) {
