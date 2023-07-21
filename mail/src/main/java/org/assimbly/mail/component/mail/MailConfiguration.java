@@ -36,8 +36,8 @@ import org.apache.camel.spi.UriParams;
 import org.apache.camel.spi.UriPath;
 import org.apache.camel.support.jsse.SSLContextParameters;
 import org.apache.camel.util.ObjectHelper;
-import org.assimbly.globalvariables.domain.GlobalEnvironmentVariable;
-import org.assimbly.globalvariables.mongo.MongoDao;
+import org.assimbly.tenantvariables.domain.TenantVariable;
+import org.assimbly.tenantvariables.mongo.MongoDao;
 
 import static org.assimbly.mail.component.mail.MailConstants.MAIL_GENERATE_MISSING_ATTACHMENT_NAMES_NEVER;
 import static org.assimbly.mail.component.mail.MailConstants.MAIL_HANDLE_DUPLICATE_ATTACHMENT_NAMES_NEVER;
@@ -51,7 +51,7 @@ public class MailConfiguration implements Cloneable {
     private transient ClassLoader applicationClassLoader;
     private transient Map recipients = new HashMap<>();
 
-    private String GLOBAL_VARIABLE_EXP = "\\@\\{(.*?)\\}";
+    private String TENANT_VARIABLE_EXP = "\\@\\{(.*?)\\}";
 
     // protocol is implied by component name so it should not be in UriPath
     private transient String protocol;
@@ -466,13 +466,13 @@ public class MailConfiguration implements Cloneable {
 
         StringBuffer accessTokenBuf = new StringBuffer();
 
-        Pattern pattern = Pattern.compile(GLOBAL_VARIABLE_EXP);
+        Pattern pattern = Pattern.compile(TENANT_VARIABLE_EXP);
         Matcher matcher = pattern.matcher(accessToken);
 
         while(matcher.find()){
             String accessTokenVarName = matcher.group(1);
 
-            GlobalEnvironmentVariable accessTokenGlobVar = MongoDao.findVariableByName(accessTokenVarName, getTenant());
+            TenantVariable accessTokenGlobVar = MongoDao.findTenantVariableByName(accessTokenVarName, getTenant());
             String accessTokenValue = accessTokenGlobVar.find(getEnvironment()).get().getValue();
 
             matcher.appendReplacement(accessTokenBuf, Matcher.quoteReplacement(accessTokenValue));

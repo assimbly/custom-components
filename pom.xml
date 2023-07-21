@@ -32,7 +32,7 @@
         <module>flv</module>
         <module>fmuta</module>
         <module>formtoxml</module>
-        <module>globalvariables</module>
+        <module>tenantvariables</module>
         <module>googledrive</module>
         <module>hl7</module>
         <module>mail</module>
