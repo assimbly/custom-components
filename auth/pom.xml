@@ -49,13 +49,6 @@
 		  <version>${morphia.version}</version>
 	  </dependency>
 
-	  <!-- need old javax.xml.bind dependency -->
-	  <dependency>
-		  <groupId>javax.xml.bind</groupId>
-		  <artifactId>jaxb-api</artifactId>
-		  <version>${javax-jaxb-api.version}</version>
-	  </dependency>
-
   </dependencies>
 
 	<build>

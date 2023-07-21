@@ -464,12 +464,6 @@
 		  <artifactId>d99b-binding</artifactId>
 		  <version>${smooks-fragments.version}</version>
 	  </dependency>
-
-	  <dependency>
-		  <groupId>javax.xml.bind</groupId>
-		  <artifactId>jaxb-api</artifactId>
-		  <version>${javax-jaxb-api.version}</version>
-	  </dependency>
   </dependencies>
 
 	<build>
