@@ -31,7 +31,7 @@
 	  <dependency>
 		  <groupId>javax.xml.bind</groupId>
 		  <artifactId>jaxb-api</artifactId>
-		  <version>2.3.1</version>
+		  <version>${javax-xml-bind.version}</version>
 	  </dependency>
 	  <dependency>
 		  <groupId>com.sun.xml.bind</groupId>

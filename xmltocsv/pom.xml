@@ -24,6 +24,11 @@
   </distributionManagement>
 
   <dependencies>
+	  <dependency>
+		  <groupId>javax.xml.bind</groupId>
+		  <artifactId>jaxb-api</artifactId>
+		  <version>${javax-xml-bind.version}</version>
+	  </dependency>
   </dependencies>
 
 	<build>
