@@ -12,6 +12,7 @@ import org.assimbly.xmltoexcel.domain.OrderHeaders;
 import org.assimbly.xmltoexcel.domain.CustomWorksheet;
 import org.assimbly.xmltoexcel.exception.XmlToExcelException;
 
+import javax.print.Doc;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
@@ -21,6 +22,7 @@ import javax.xml.xpath.XPathFactory;
 import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
 import java.util.*;
+
 
 public class XmlToExcelProcessor implements Processor {
     private final XmlToExcelConfiguration config;
@@ -33,23 +35,40 @@ public class XmlToExcelProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        this.excelWriter = new ExcelWriter(config.getExcelFormat());
+        excelWriter = new ExcelWriter(config.getExcelFormat());
         String input = exchange.getIn().getBody(String.class);
         Document document = parseXmlToDocument(input);
         byte[] output = convertXmlToExcel(document);
         exchange.getIn().setBody(output);
+        exchange.getIn().setHeader(Exchange.FILE_NAME, getDocumentName(document));
+        exchange.getIn().setHeader("Content-Disposition", "attachment; filename=" + getDocumentName(document));
+    }
+
+    private String getDocumentName(Document document){
+
+        String rootName = document.getDocumentElement().getNodeName();
+        String fileExtension = config.getExcelFormat().toString().toLowerCase();
+
+        if(rootName!=null || !rootName.isEmpty()){
+            return rootName + "." + fileExtension ;
+        }else{
+            return "Workbook1." + fileExtension;
+        }
+
     }
 
     private byte[] convertXmlToExcel(Document document) throws Exception {
         Node root = document.getDocumentElement();
         List<CustomWorksheet> worksheets = config.getWorksheets();
 
-        if (worksheets != null && !worksheets.isEmpty())
+        if (worksheets != null && !worksheets.isEmpty()) {
             runCustomSheetProcessing(root, worksheets);
-        else
+        }else {
             runStandardProcessing(root);
+        }
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
         try {
             excelWriter.write(outputStream);
         } finally {
@@ -96,6 +115,7 @@ public class XmlToExcelProcessor implements Processor {
     }
 
     private void createSheet(String sheetName, NodeList nodes) {
+
         excelWriter.addSheet(sheetName);
 
         Set<String> headers = scanHeaders(nodes);
@@ -105,6 +125,7 @@ public class XmlToExcelProcessor implements Processor {
     }
 
     private void writeElementsToSheet(Set<String> headers, NodeList nodes) {
+
         if (config.hasHeader()) {
             addHeaderLine(headers);
         }
@@ -119,6 +140,7 @@ public class XmlToExcelProcessor implements Processor {
 
             writeElementsToRow(headers, element);
         }
+
     }
 
     private void writeElementsToRow(Set<String> headers, Element element) {
