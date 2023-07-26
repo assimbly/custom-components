@@ -1,11 +1,11 @@
 package org.assimbly.oauth2token.service;
 
 import org.apache.log4j.Logger;
-import org.assimbly.globalvariables.mongo.MongoDao;
+import org.assimbly.tenantvariables.mongo.MongoDao;
 import org.assimbly.util.exception.OAuth2TokenException;
 import org.json.JSONObject;
 import org.assimbly.auth.endpoint.annotation.Secured;
-import org.assimbly.globalvariables.GlobalVariablesProcessor;
+import org.assimbly.tenantvariables.TenantVariablesProcessor;
 
 import javax.ws.rs.*;
 import java.io.*;
@@ -49,9 +49,9 @@ public class TokenService {
         Map<String, String> tokenInfoMap = new HashMap<>();
 
         tenant = tenant.toLowerCase();
-        String environment = GlobalVariablesProcessor.getEnvironment();
+        String environment = TenantVariablesProcessor.getEnvironment();
 
-        // specific global environment variables names
+        // specific tenant variables names
         String uriTokenVarName = OAUTH2_PREFIX + id + OAUTH2_URI_TOKEN_SUFFIX;
         String scopeVarName = OAUTH2_PREFIX + id + OAUTH2_SCOPE_SUFFIX;
         String clientIdVarName = OAUTH2_PREFIX + id + OAUTH2_CLIENT_ID_SUFFIX;
@@ -62,12 +62,12 @@ public class TokenService {
         String refreshFlagVarName = OAUTH2_PREFIX + id + OAUTH2_REFRESH_FLAG_SUFFIX;
         String redirectUriVarName = OAUTH2_PREFIX + id + OAUTH2_REDIRECT_URI_SUFFIX;
 
-        // check if there's a global variable inside globalVar, and return real value
-        String scope = MongoDao.getGlobalEnvironmentValue(scopeVarName, tenant, environment);
-        String clientId = MongoDao.getGlobalEnvironmentValue(clientIdVarName, tenant, environment);
-        String clientSecret = MongoDao.getGlobalEnvironmentValue(clientSecretVarName, tenant, environment);
-        String redirectUri = MongoDao.getGlobalEnvironmentValue(redirectUriVarName, tenant, environment);
-        String uriToken = MongoDao.getGlobalEnvironmentValue(uriTokenVarName, tenant, environment);
+        // check if there's a tenant variable inside tenantVar, and return real value
+        String scope = MongoDao.getTenantVariableValue(scopeVarName, tenant, environment);
+        String clientId = MongoDao.getTenantVariableValue(clientIdVarName, tenant, environment);
+        String clientSecret = MongoDao.getTenantVariableValue(clientSecretVarName, tenant, environment);
+        String redirectUri = MongoDao.getTenantVariableValue(redirectUriVarName, tenant, environment);
+        String uriToken = MongoDao.getTenantVariableValue(uriTokenVarName, tenant, environment);
 
         // prepare data to send
         String urlParameters  = "client_id="+clientId+
@@ -80,22 +80,22 @@ public class TokenService {
         // call service
         callService(tokenInfoMap, uriToken, urlParameters);
 
-        // save token info into global vars
+        // save token info into tenant vars
         String expiresIn = tokenInfoMap.get(SERVICE_PARAM_EXPIRES_IN);
         if(expiresIn!=null && !expiresIn.isEmpty()) {
-            MongoDao.saveGlobalEnvironmentVariable(expireDateVarName, expiresIn, tenant, environment);
+            MongoDao.saveTenantVariable(expireDateVarName, expiresIn, tenant, environment);
         }
         String accessToken = tokenInfoMap.get(SERVICE_PARAM_ACCESS_TOKEN);
         if(accessToken!=null && !accessToken.isEmpty()) {
-            MongoDao.saveGlobalEnvironmentVariable(accessTokenVarName, accessToken, tenant, environment);
+            MongoDao.saveTenantVariable(accessTokenVarName, accessToken, tenant, environment);
         }
         String refreshToken = tokenInfoMap.get(SERVICE_PARAM_REFRESH_TOKEN);
         if(refreshToken!=null && !refreshToken.isEmpty()) {
-            MongoDao.saveGlobalEnvironmentVariable(refreshTokenVarName, refreshToken, tenant, environment);
+            MongoDao.saveTenantVariable(refreshTokenVarName, refreshToken, tenant, environment);
         }
 
         // set refresh flag to inactive
-        MongoDao.saveGlobalEnvironmentVariable(refreshFlagVarName, "0", tenant, environment);
+        MongoDao.saveTenantVariable(refreshFlagVarName, "0", tenant, environment);
 
         // return token info hashmap
         return tokenInfoMap;
@@ -106,7 +106,7 @@ public class TokenService {
         Map<String, String> tokenInfoMap = new HashMap<>();
         String accessToken = null;
 
-        // specific global environment variables names
+        // specific tenant variables names
         String uriTokenVarName = OAUTH2_PREFIX + id + OAUTH2_URI_TOKEN_SUFFIX;
         String scopeVarName = OAUTH2_PREFIX + id + OAUTH2_SCOPE_SUFFIX;
         String clientIdVarName = OAUTH2_PREFIX + id + OAUTH2_CLIENT_ID_SUFFIX;
@@ -119,15 +119,15 @@ public class TokenService {
 
         try {
             // set refresh flag to active
-            MongoDao.saveGlobalEnvironmentVariable(refreshFlagVarName, "1", tenant, environment);
+            MongoDao.saveTenantVariable(refreshFlagVarName, "1", tenant, environment);
 
-            // check if there's a global variable inside globalVar, and return real value
-            String scope = MongoDao.getGlobalEnvironmentValue(scopeVarName, tenant, environment);
-            String clientId = MongoDao.getGlobalEnvironmentValue(clientIdVarName, tenant, environment);
-            String clientSecret = MongoDao.getGlobalEnvironmentValue(clientSecretVarName, tenant, environment);
-            String redirectUri = MongoDao.getGlobalEnvironmentValue(redirectUriVarName, tenant, environment);
-            String refreshToken = MongoDao.getGlobalEnvironmentValue(refreshTokenVarName, tenant, environment);
-            String uriToken = MongoDao.getGlobalEnvironmentValue(uriTokenVarName, tenant, environment);
+            // check if there's a tenant variable inside tenantVar, and return real value
+            String scope = MongoDao.getTenantVariableValue(scopeVarName, tenant, environment);
+            String clientId = MongoDao.getTenantVariableValue(clientIdVarName, tenant, environment);
+            String clientSecret = MongoDao.getTenantVariableValue(clientSecretVarName, tenant, environment);
+            String redirectUri = MongoDao.getTenantVariableValue(redirectUriVarName, tenant, environment);
+            String refreshToken = MongoDao.getTenantVariableValue(refreshTokenVarName, tenant, environment);
+            String uriToken = MongoDao.getTenantVariableValue(uriTokenVarName, tenant, environment);
 
             // prepare data to send
             String urlParameters  = "client_id="+clientId+
@@ -140,26 +140,26 @@ public class TokenService {
             // call service
             callService(tokenInfoMap, uriToken, urlParameters);
 
-            // save token info into global vars
+            // save token info into tenant vars
             String expiresInResp = tokenInfoMap.get(SERVICE_PARAM_EXPIRES_IN);
             if(expiresInResp!=null && !expiresInResp.isEmpty()) {
-                MongoDao.saveGlobalEnvironmentVariable(expireDateVarName, expiresInResp, tenant, environment);
+                MongoDao.saveTenantVariable(expireDateVarName, expiresInResp, tenant, environment);
             }
             String accessTokenResp = tokenInfoMap.get(SERVICE_PARAM_ACCESS_TOKEN);
             if(accessTokenResp!=null && !accessTokenResp.isEmpty()) {
-                MongoDao.saveGlobalEnvironmentVariable(accessTokenVarName, accessTokenResp, tenant, environment);
+                MongoDao.saveTenantVariable(accessTokenVarName, accessTokenResp, tenant, environment);
                 accessToken = accessTokenResp;
             }
             String refreshTokenResp = tokenInfoMap.get(SERVICE_PARAM_REFRESH_TOKEN);
             if(refreshTokenResp!=null && !refreshTokenResp.isEmpty()) {
-                MongoDao.saveGlobalEnvironmentVariable(refreshTokenVarName, refreshTokenResp, tenant, environment);
+                MongoDao.saveTenantVariable(refreshTokenVarName, refreshTokenResp, tenant, environment);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             // set refresh flag to inactive
-            MongoDao.saveGlobalEnvironmentVariable(refreshFlagVarName, "0", tenant, environment);
+            MongoDao.saveTenantVariable(refreshFlagVarName, "0", tenant, environment);
         }
 
         // return new access token

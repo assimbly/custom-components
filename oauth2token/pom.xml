@@ -28,7 +28,7 @@
 	  <!-- provided by container -->
 	  <dependency>
 		  <groupId>${project.groupId}</groupId>
-		  <artifactId>globalvariables</artifactId>
+		  <artifactId>tenantvariables</artifactId>
 		  <version>${project.version}</version>
 	  </dependency>
 	  <dependency>
