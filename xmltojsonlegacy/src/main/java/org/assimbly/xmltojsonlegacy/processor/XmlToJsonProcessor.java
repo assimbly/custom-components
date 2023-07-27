@@ -42,9 +42,10 @@ public class XmlToJsonProcessor {
         String classAttr = element.getAttribute(JSON_XML_ATTR_CLASS);
         String typeAttr = element.getAttribute(JSON_XML_ATTR_TYPE);
 
+        boolean hasAttributes = element.hasAttributes();
         boolean isRootNode = (level == 0);
-        boolean isRootArray = isRootArray(level, numberOfChildren, numberOfSiblings, parentSiblings, classAttr, parentClass);
-        boolean isObject = isObject(level, classAttr);
+        boolean isRootArray = isRootArray(level, numberOfChildren, numberOfSiblings, parentSiblings, classAttr, parentClass, hasAttributes);
+        boolean isObject = isObject(level, numberOfChildren, classAttr);
         boolean isOneValue = isOneValue(level, numberOfSiblings, parentClass);
         boolean isSingleChildren = isSingleChildren(level, numberOfChildren, classAttr);
         boolean isAttributeObject = isAttributeObject(level, parentClass);
@@ -130,11 +131,18 @@ public class XmlToJsonProcessor {
                                 isFirstSibling
                         );
                     } else {
-                        extractChildAsOtherInArrayNode(
-                                level, rootArrayNode, numberOfSiblings, classAttr, (Element) childNode, childElement,
-                                isFirstSibling
-                        );
-                        rootObjectNode.set(((Element) childNode).getTagName(), rootArrayNode);
+                        if(numberOfChildren == 1) {
+                            extractChildAsOtherInObjectNode(
+                                    level, rootObjectNode, numberOfSiblings, classAttr, (Element) childNode, childElement,
+                                    isFirstSibling
+                            );
+                        } else {
+                            extractChildAsOtherInArrayNode(
+                                    level, rootArrayNode, numberOfSiblings, classAttr, (Element) childNode, childElement,
+                                    isFirstSibling
+                            );
+                            rootObjectNode.set(((Element) childNode).getTagName(), rootArrayNode);
+                        }
                     }
                 } else {
                     // extract child as other type and add into the object node
@@ -172,7 +180,11 @@ public class XmlToJsonProcessor {
             if(xmlJsonDataFormat.isTypeHints()) {
                 rootArrayNode.add(textNode.getTextContent());
             } else {
-                rootObjectNode.put(JSON_XML_TEXT_FIELD, childNode.getTextContent());
+                if(element.hasAttributes()) {
+                    rootObjectNode.put(JSON_XML_TEXT_FIELD, childNode.getTextContent());
+                } else {
+                    rootArrayNode.add(textNode.getTextContent());
+                }
             }
         } else {
             //process text node identified as other
@@ -198,7 +210,8 @@ public class XmlToJsonProcessor {
 
     // check if it's a root array
     private boolean isRootArray(
-            int level, int numberOfChildren, int numberOfSiblings, int parentSiblings, String classAttr, String parentClass
+            int level, int numberOfChildren, int numberOfSiblings, int parentSiblings, String classAttr,
+            String parentClass, boolean hasAttributes
     ) {
         boolean isRootArray = false;
         if(xmlJsonDataFormat.isTypeHints()) {
@@ -208,10 +221,14 @@ public class XmlToJsonProcessor {
             if (level == 1) {
                 isRootArray = true;
             }
-            if (level == 2 && parentClass != null && parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_ARRAY)) {
+            if (level == 2 && parentClass != null &&
+                    (parentClass.equals("") || parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_ARRAY))
+            ) {
                 isRootArray = true;
             }
-            if (level == 2 && classAttr != null && classAttr.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT)) {
+            if (level == 2 && classAttr != null &&
+                    ((classAttr.equals("") && numberOfChildren > 1) || classAttr.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT))
+            ) {
                 if (parentSiblings > 1) {
                     isRootArray = true;
                 } else {
@@ -227,7 +244,12 @@ public class XmlToJsonProcessor {
             if(level == 0 && numberOfChildren == 1) {
                 isRootArray = true;
             }
-            if(level == 2 && parentClass!=null && parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_ARRAY)) {
+            if (level == 1 && classAttr!=null && classAttr.equals("")) {
+                isRootArray = true;
+            }
+            if(level == 2 && parentClass!=null &&
+                    (parentClass.equals("") || parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_ARRAY))
+            ) {
                 isRootArray = true;
             }
             if(level == 2 && classAttr!=null && classAttr.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT)) {
@@ -237,14 +259,19 @@ public class XmlToJsonProcessor {
                     isRootArray = false;
                 }
             }
+            if (level == 3 && numberOfSiblings == 1 && !hasAttributes) {
+                isRootArray = true;
+            }
         }
         return isRootArray;
     }
 
     // check if it's an object
-    private boolean isObject(int level, String classAttr) {
+    private boolean isObject(int level, int numberOfChildren, String classAttr) {
         boolean isObject = false;
-        if(level == 2 && classAttr!=null && classAttr.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT)) {
+        if(level == 2 && classAttr!=null &&
+                ((classAttr.equals("") && numberOfChildren > 1) || classAttr.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT))
+        ) {
             isObject = true;
         }
         return isObject;
@@ -341,9 +368,13 @@ public class XmlToJsonProcessor {
                 });
             }
         } else {
-            rootObjectNode.set(
-                    childElement.getTagName(), addNodeWithAttributeInfo(childElement, childElement.getTextContent())
-            );
+            if(classAttr!=null && !classAttr.equals("")) {
+                rootObjectNode.set(
+                        childElement.getTagName(), addNodeWithAttributeInfo(childElement, childElement.getTextContent())
+                );
+            } else {
+                rootObjectNode.put(childElement.getTagName(), childElement.getTextContent());
+            }
         }
     }
 

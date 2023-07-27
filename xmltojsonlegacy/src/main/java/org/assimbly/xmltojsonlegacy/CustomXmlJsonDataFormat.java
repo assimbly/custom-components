@@ -21,7 +21,7 @@ public class CustomXmlJsonDataFormat implements DataFormat {
     static final Logger logger = Logger.getLogger(CustomXmlJsonDataFormat.class);
 
     // XML to JSON options
-    private static boolean forceTopLevelObject, skipWhitespace, trimSpaces, skipNamespaces, removeNamespacePrefixes,
+    private boolean forceTopLevelObject, skipWhitespace, trimSpaces, skipNamespaces, removeNamespacePrefixes,
             typeHints;
 
     // XML to JSON
@@ -76,7 +76,7 @@ public class CustomXmlJsonDataFormat implements DataFormat {
         }
     }
 
-    public static boolean isForceTopLevelObject() {
+    public boolean isForceTopLevelObject() {
         return forceTopLevelObject;
     }
 
@@ -84,7 +84,7 @@ public class CustomXmlJsonDataFormat implements DataFormat {
         this.forceTopLevelObject = forceTopLevelObject;
     }
 
-    public static boolean isSkipWhitespace() {
+    public boolean isSkipWhitespace() {
         return skipWhitespace;
     }
 
@@ -92,7 +92,7 @@ public class CustomXmlJsonDataFormat implements DataFormat {
         this.skipWhitespace = skipWhitespace;
     }
 
-    public static boolean isTrimSpaces() {
+    public boolean isTrimSpaces() {
         return trimSpaces;
     }
 
@@ -100,7 +100,7 @@ public class CustomXmlJsonDataFormat implements DataFormat {
         this.trimSpaces = trimSpaces;
     }
 
-    public static boolean isSkipNamespaces() {
+    public boolean isSkipNamespaces() {
         return skipNamespaces;
     }
 
@@ -108,7 +108,7 @@ public class CustomXmlJsonDataFormat implements DataFormat {
         this.skipNamespaces = skipNamespaces;
     }
 
-    public static boolean isRemoveNamespacePrefixes() {
+    public boolean isRemoveNamespacePrefixes() {
         return removeNamespacePrefixes;
     }
 
@@ -116,7 +116,7 @@ public class CustomXmlJsonDataFormat implements DataFormat {
         this.removeNamespacePrefixes = removeNamespacePrefixes;
     }
 
-    public static boolean isTypeHints() {
+    public boolean isTypeHints() {
         return typeHints;
     }
 
