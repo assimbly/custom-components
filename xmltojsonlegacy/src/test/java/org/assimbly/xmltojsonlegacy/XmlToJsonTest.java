@@ -261,6 +261,166 @@ public class XmlToJsonTest extends CamelTestSupport {
         );
     }
 
+    /*****************************************
+     ** Example 7
+     *****************************************/
+
+    @Test
+    public void testXmlJson_7_FFFFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalNone",
+                "xml-to-json/example_7.xml",
+                "xml-to-json/example_7_FFFFFF.json"
+        );
+    }
+
+    @Test
+    public void testXmlJson_7_FFFFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalTypeHints",
+                "xml-to-json/example_7.xml",
+                "xml-to-json/example_7_FFFFFT.json"
+        );
+    }
+
+    @Test
+    public void testXmlJson_7_TFFFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalForceTop",
+                "xml-to-json/example_7.xml",
+                "xml-to-json/example_7_TFFFFF.json"
+        );
+    }
+
+    @Test
+    public void testXmlJson_7_TFFFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalTypeHintsForceTop",
+                "xml-to-json/example_7.xml",
+                "xml-to-json/example_7_TFFFFT.json"
+        );
+    }
+
+    /*****************************************
+     ** Example 8
+     *****************************************/
+
+    @Test
+    public void testXmlJson_8_FFFFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalNone",
+                "xml-to-json/example_8.xml",
+                "xml-to-json/example_8_FFFFFF.json"
+        );
+    }
+
+    @Test
+    public void testXmlJson_8_FFFFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalTypeHints",
+                "xml-to-json/example_8.xml",
+                "xml-to-json/example_8_FFFFFT.json"
+        );
+    }
+
+    @Test
+    public void testXmlJson_8_TFFFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalForceTop",
+                "xml-to-json/example_8.xml",
+                "xml-to-json/example_8_TFFFFF.json"
+        );
+    }
+
+    @Test
+    public void testXmlJson_8_TFFFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalTypeHintsForceTop",
+                "xml-to-json/example_8.xml",
+                "xml-to-json/example_8_TFFFFT.json"
+        );
+    }
+
+    /*****************************************
+     ** Example 9
+     *****************************************/
+
+    @Test
+    public void testXmlJson_9_FFFFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalNone",
+                "xml-to-json/example_9.xml",
+                "xml-to-json/example_9_FFFFFF.json"
+        );
+    }
+
+    @Test
+    public void testXmlJson_9_FFFFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalTypeHints",
+                "xml-to-json/example_9.xml",
+                "xml-to-json/example_9_FFFFFT.json"
+        );
+    }
+
+    @Test
+    public void testXmlJson_9_TFFFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalForceTop",
+                "xml-to-json/example_9.xml",
+                "xml-to-json/example_9_TFFFFF.json"
+        );
+    }
+
+    @Test
+    public void testXmlJson_9_TFFFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalTypeHintsForceTop",
+                "xml-to-json/example_9.xml",
+                "xml-to-json/example_9_TFFFFT.json"
+        );
+    }
+
+    /*****************************************
+     ** Example 10
+     *****************************************/
+
+    @Test
+    public void testXmlJson_10_FFFFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalNone",
+                "xml-to-json/example_10.xml",
+                "xml-to-json/example_10_FFFFFF.json"
+        );
+    }
+
+    @Test
+    public void testXmlJson_10_FFFFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalTypeHints",
+                "xml-to-json/example_10.xml",
+                "xml-to-json/example_10_FFFFFT.json"
+        );
+    }
+
+    @Test
+    public void testXmlJson_10_TFFFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalForceTop",
+                "xml-to-json/example_10.xml",
+                "xml-to-json/example_10_TFFFFF.json"
+        );
+    }
+
+    @Test
+    public void testXmlJson_10_TFFFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalTypeHintsForceTop",
+                "xml-to-json/example_10.xml",
+                "xml-to-json/example_10_TFFFFT.json"
+        );
+    }
+
     private void compareInputXmlFileWithOutputJsonFile(String routeName, String inputXmlFile, String outputJsonFile)
             throws IOException, InterruptedException {
         String defaultXml = IOUtils.toString(classLoader.getResourceAsStream(inputXmlFile), StandardCharsets.UTF_8);
