@@ -125,24 +125,19 @@ public class XmlToJsonProcessor {
                 printData(" 1. IS OTHER", level);
                 if(!xmlJsonDataFormat.isTypeHints()) {
                     // extract child as other type and add into the array node
-                    if(level == 0 && numberOfChildren > 1) {
+                    if((level == 0 && numberOfChildren > 1) ||
+                            (numberOfChildren == 1 && calculateNumberOfChildren(childElement) > 1)
+                    ) {
                         extractChildAsOtherInObjectNode(
                                 level, rootObjectNode, numberOfSiblings, classAttr, (Element) childNode, childElement,
                                 isFirstSibling
                         );
                     } else {
-                        if(numberOfChildren == 1) {
-                            extractChildAsOtherInObjectNode(
-                                    level, rootObjectNode, numberOfSiblings, classAttr, (Element) childNode, childElement,
-                                    isFirstSibling
-                            );
-                        } else {
-                            extractChildAsOtherInArrayNode(
-                                    level, rootArrayNode, numberOfSiblings, classAttr, (Element) childNode, childElement,
-                                    isFirstSibling
-                            );
-                            rootObjectNode.set(((Element) childNode).getTagName(), rootArrayNode);
-                        }
+                        extractChildAsOtherInArrayNode(
+                                level, rootArrayNode, numberOfSiblings, classAttr, (Element) childNode, childElement,
+                                isFirstSibling
+                        );
+                        rootObjectNode.set(((Element) childNode).getTagName(), rootArrayNode);
                     }
                 } else {
                     // extract child as other type and add into the object node
