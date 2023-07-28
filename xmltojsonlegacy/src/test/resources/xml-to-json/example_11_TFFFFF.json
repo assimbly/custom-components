@@ -1,0 +1,13 @@
+{
+    "root": [
+        {
+            "@class": "array",
+            "product": [
+                {
+                    "@type": "string",
+                    "#text": "1"
+                }
+            ]
+        }
+    ]
+}
