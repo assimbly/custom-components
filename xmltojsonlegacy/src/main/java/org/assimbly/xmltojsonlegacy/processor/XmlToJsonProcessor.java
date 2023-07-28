@@ -38,18 +38,18 @@ public class XmlToJsonProcessor {
 
         int numberOfSiblings = calculateNumberOfSiblings(element);
         int numberOfChildren = calculateNumberOfChildren(element);
+        int elementDeepestDepth = calculateElementDeepestDepth(element);
 
         String classAttr = element.getAttribute(JSON_XML_ATTR_CLASS);
         String typeAttr = element.getAttribute(JSON_XML_ATTR_TYPE);
 
         boolean hasAttributes = element.hasAttributes();
-        boolean isLastElement = isLastElement(element);
         boolean isRootNode = (level == 0);
-        boolean isRootArray = isRootArray(level, numberOfChildren, numberOfSiblings, parentSiblings, classAttr, parentClass, hasAttributes, isLastElement);
-        boolean isObject = isObject(level, numberOfChildren, classAttr);
-        boolean isOneValue = isOneValue(level, numberOfSiblings, parentClass, isLastElement);
-        boolean isSingleChildren = isSingleChildren(level, numberOfChildren, classAttr);
-        boolean isAttributeObject = isAttributeObject(level, parentClass, isLastElement);
+        boolean isRootArray = isRootArray(level, numberOfChildren, numberOfSiblings, parentSiblings, classAttr, parentClass, hasAttributes, elementDeepestDepth);
+        boolean isObject = isObject(elementDeepestDepth, numberOfChildren, classAttr);
+        boolean isOneValue = isOneValue(level, numberOfSiblings, parentClass, elementDeepestDepth);
+        boolean isSingleChildren = isSingleChildren(elementDeepestDepth, numberOfChildren, classAttr);
+        boolean isAttributeObject = isAttributeObject(level, parentClass, elementDeepestDepth);
 
         printElementDetails(
                 element, level, parentClass, parentSiblings, isRootArray, isOneValue, isObject, isFirstChild,
@@ -207,22 +207,22 @@ public class XmlToJsonProcessor {
     // check if it's a root array
     private boolean isRootArray(
             int level, int numberOfChildren, int numberOfSiblings, int parentSiblings, String classAttr,
-            String parentClass, boolean hasAttributes, boolean isLastElement
+            String parentClass, boolean hasAttributes, int elementDeepestDepth
     ) {
         boolean isRootArray = false;
         if(xmlJsonDataFormat.isTypeHints()) {
             if (level == 0 && numberOfChildren == 1) {
                 isRootArray = true;
             }
-            if (level == 1) {
+            if (elementDeepestDepth == 2) {
                 isRootArray = true;
             }
-            if (level == 2 && parentClass != null &&
+            if (elementDeepestDepth == 1 && parentClass != null &&
                     (parentClass.equals("") || parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_ARRAY))
             ) {
                 isRootArray = true;
             }
-            if (level == 2 && classAttr != null &&
+            if (elementDeepestDepth == 1 && classAttr != null &&
                     ((classAttr.equals("") && numberOfChildren > 1) || classAttr.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT))
             ) {
                 if (parentSiblings > 1) {
@@ -231,7 +231,7 @@ public class XmlToJsonProcessor {
                     isRootArray = false;
                 }
             }
-            if (isLastElement && numberOfSiblings == 1 &&
+            if (elementDeepestDepth == 0 && numberOfSiblings == 1 &&
                     (parentClass == null || !parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT))
             ) {
                 isRootArray = true;
@@ -240,22 +240,22 @@ public class XmlToJsonProcessor {
             if(level == 0 && numberOfChildren == 1) {
                 isRootArray = true;
             }
-            if (level == 1 && classAttr!=null && classAttr.equals("")) {
+            if (elementDeepestDepth == 2 && classAttr!=null && classAttr.equals("")) {
                 isRootArray = true;
             }
-            if(level == 2 && parentClass!=null &&
+            if(elementDeepestDepth == 1 && parentClass!=null &&
                     (parentClass.equals("") || parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_ARRAY))
             ) {
                 isRootArray = true;
             }
-            if(level == 2 && classAttr!=null && classAttr.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT)) {
+            if(elementDeepestDepth == 1 && classAttr!=null && classAttr.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT)) {
                 if(parentSiblings > 1) {
                     isRootArray = true;
                 } else {
                     isRootArray = false;
                 }
             }
-            if (isLastElement && numberOfSiblings == 1 && !hasAttributes) {
+            if (elementDeepestDepth == 0 && numberOfSiblings == 1 && !hasAttributes) {
                 isRootArray = true;
             }
         }
@@ -263,9 +263,9 @@ public class XmlToJsonProcessor {
     }
 
     // check if it's an object
-    private boolean isObject(int level, int numberOfChildren, String classAttr) {
+    private boolean isObject(int elementDeepestDepth, int numberOfChildren, String classAttr) {
         boolean isObject = false;
-        if(level == 2 && classAttr!=null &&
+        if(elementDeepestDepth == 1 && classAttr!=null &&
                 ((classAttr.equals("") && numberOfChildren > 1) || classAttr.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT))
         ) {
             isObject = true;
@@ -274,9 +274,9 @@ public class XmlToJsonProcessor {
     }
 
     // check if it's one value
-    private boolean isOneValue(int level, int numberOfSiblings, String parentClass, boolean isLastElement) {
+    private boolean isOneValue(int level, int numberOfSiblings, String parentClass, int elementDeepestDepth) {
         boolean isOneValue = false;
-        if(isLastElement && numberOfSiblings == 1 &&
+        if(elementDeepestDepth == 0 && numberOfSiblings == 1 &&
                 (parentClass==null || !parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT))
         ) {
             isOneValue = true;
@@ -285,10 +285,10 @@ public class XmlToJsonProcessor {
     }
 
     // check if it's a single children
-    private boolean isSingleChildren(int level, int numberOfChildren, String classAttr) {
+    private boolean isSingleChildren(int elementDeepestDepth, int numberOfChildren, String classAttr) {
         boolean isSingleChildren = false;
         if(!xmlJsonDataFormat.isTypeHints()) {
-            if(level == 2 && numberOfChildren == 1
+            if(elementDeepestDepth == 1 && numberOfChildren == 1
                     && (classAttr==null || !classAttr.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT))
             ) {
                 isSingleChildren = true;
@@ -298,10 +298,10 @@ public class XmlToJsonProcessor {
     }
 
     // check if it's an attribute object
-    private boolean isAttributeObject(int level, String parentClass, boolean isLastElement) {
+    private boolean isAttributeObject(int level, String parentClass, int elementDeepestDepth) {
         boolean isAttributeObject = false;
         if(!xmlJsonDataFormat.isTypeHints()) {
-            if(isLastElement && parentClass!=null && parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT)) {
+            if(elementDeepestDepth == 0 && parentClass!=null && parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT)) {
                 isAttributeObject = true;
             }
         }
@@ -477,6 +477,22 @@ public class XmlToJsonProcessor {
         }
 
         return count;
+    }
+
+    // calculate element depth
+    private int calculateElementDeepestDepth(Element element) {
+        int depth = 0;
+        NodeList children = element.getChildNodes();
+
+        for (int i = 0; i < children.getLength(); i++) {
+            Node node = children.item(i);
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                int childDepth = calculateElementDeepestDepth((Element) node);
+                depth = Math.max(depth, childDepth + 1);
+            }
+        }
+
+        return depth;
     }
 
 }
