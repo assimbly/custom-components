@@ -43,12 +43,13 @@ public class XmlToJsonProcessor {
         String typeAttr = element.getAttribute(JSON_XML_ATTR_TYPE);
 
         boolean hasAttributes = element.hasAttributes();
+        boolean isLastElement = isLastElement(element);
         boolean isRootNode = (level == 0);
-        boolean isRootArray = isRootArray(level, numberOfChildren, numberOfSiblings, parentSiblings, classAttr, parentClass, hasAttributes);
+        boolean isRootArray = isRootArray(level, numberOfChildren, numberOfSiblings, parentSiblings, classAttr, parentClass, hasAttributes, isLastElement);
         boolean isObject = isObject(level, numberOfChildren, classAttr);
-        boolean isOneValue = isOneValue(level, numberOfSiblings, parentClass);
+        boolean isOneValue = isOneValue(level, numberOfSiblings, parentClass, isLastElement);
         boolean isSingleChildren = isSingleChildren(level, numberOfChildren, classAttr);
-        boolean isAttributeObject = isAttributeObject(level, parentClass);
+        boolean isAttributeObject = isAttributeObject(level, parentClass, isLastElement);
 
         printElementDetails(
                 element, level, parentClass, parentSiblings, isRootArray, isOneValue, isObject, isFirstChild,
@@ -206,7 +207,7 @@ public class XmlToJsonProcessor {
     // check if it's a root array
     private boolean isRootArray(
             int level, int numberOfChildren, int numberOfSiblings, int parentSiblings, String classAttr,
-            String parentClass, boolean hasAttributes
+            String parentClass, boolean hasAttributes, boolean isLastElement
     ) {
         boolean isRootArray = false;
         if(xmlJsonDataFormat.isTypeHints()) {
@@ -230,7 +231,7 @@ public class XmlToJsonProcessor {
                     isRootArray = false;
                 }
             }
-            if (level == 3 && numberOfSiblings == 1 &&
+            if (isLastElement && numberOfSiblings == 1 &&
                     (parentClass == null || !parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT))
             ) {
                 isRootArray = true;
@@ -254,7 +255,7 @@ public class XmlToJsonProcessor {
                     isRootArray = false;
                 }
             }
-            if (level == 3 && numberOfSiblings == 1 && !hasAttributes) {
+            if (isLastElement && numberOfSiblings == 1 && !hasAttributes) {
                 isRootArray = true;
             }
         }
@@ -273,9 +274,9 @@ public class XmlToJsonProcessor {
     }
 
     // check if it's one value
-    private boolean isOneValue(int level, int numberOfSiblings, String parentClass) {
+    private boolean isOneValue(int level, int numberOfSiblings, String parentClass, boolean isLastElement) {
         boolean isOneValue = false;
-        if(level == 3 && numberOfSiblings == 1 &&
+        if(isLastElement && numberOfSiblings == 1 &&
                 (parentClass==null || !parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT))
         ) {
             isOneValue = true;
@@ -297,14 +298,19 @@ public class XmlToJsonProcessor {
     }
 
     // check if it's an attribute object
-    private boolean isAttributeObject(int level, String parentClass) {
+    private boolean isAttributeObject(int level, String parentClass, boolean isLastElement) {
         boolean isAttributeObject = false;
         if(!xmlJsonDataFormat.isTypeHints()) {
-            if(level == 3 && parentClass!=null && parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT)) {
+            if(isLastElement && parentClass!=null && parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT)) {
                 isAttributeObject = true;
             }
         }
         return isAttributeObject;
+    }
+
+    // check if it's the last element
+    private boolean isLastElement(Element nodeElement) {
+        return calculateNumberOfChildren(nodeElement) == 0;
     }
 
     // check if it's the first sibling regarding the numCounts
@@ -336,10 +342,9 @@ public class XmlToJsonProcessor {
             int level, ArrayNode rootArrayNode, int numSiblings, String classAttr, Element childElement,
             boolean isFirstSibling
     ) {
-        int subLevel = level +1;
-        JsonNode subNode = convertXmlToJson(childElement, subLevel, classAttr, numSiblings, isFirstSibling);
+        JsonNode subNode = convertXmlToJson(childElement, level +1, classAttr, numSiblings, isFirstSibling);
 
-        if(subNode.isArray() && subLevel == 3) {
+        if(subNode.isArray() && isLastElement(childElement)) {
             for (JsonNode subElement : subNode) {
                 rootArrayNode.add(subElement.asText());
             }
