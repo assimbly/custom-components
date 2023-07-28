@@ -421,6 +421,46 @@ public class XmlToJsonTest extends CamelTestSupport {
         );
     }
 
+    /*****************************************
+     ** Example 11
+     *****************************************/
+
+    @Test
+    public void testXmlJson_11_FFFFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalNone",
+                "xml-to-json/example_11.xml",
+                "xml-to-json/example_11_FFFFFF.json"
+        );
+    }
+
+    @Test
+    public void testXmlJson_11_FFFFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalTypeHints",
+                "xml-to-json/example_11.xml",
+                "xml-to-json/example_11_FFFFFT.json"
+        );
+    }
+
+    @Test
+    public void testXmlJson_11_TFFFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalForceTop",
+                "xml-to-json/example_11.xml",
+                "xml-to-json/example_11_TFFFFF.json"
+        );
+    }
+
+    @Test
+    public void testXmlJson_11_TFFFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalTypeHintsForceTop",
+                "xml-to-json/example_11.xml",
+                "xml-to-json/example_11_TFFFFT.json"
+        );
+    }
+
     private void compareInputXmlFileWithOutputJsonFile(String routeName, String inputXmlFile, String outputJsonFile)
             throws IOException, InterruptedException {
         String defaultXml = IOUtils.toString(classLoader.getResourceAsStream(inputXmlFile), StandardCharsets.UTF_8);
