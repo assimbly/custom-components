@@ -461,6 +461,46 @@ public class XmlToJsonTest extends CamelTestSupport {
         );
     }
 
+    /*****************************************
+     ** Example 12
+     *****************************************/
+
+    @Test
+    public void testXmlJson_12_FFFFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalNone",
+                "xml-to-json/example_12.xml",
+                "xml-to-json/example_12_FFFFFF.json"
+        );
+    }
+
+    @Test
+    public void testXmlJson_12_FFFFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalTypeHints",
+                "xml-to-json/example_12.xml",
+                "xml-to-json/example_12_FFFFFT.json"
+        );
+    }
+
+    @Test
+    public void testXmlJson_12_TFFFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalForceTop",
+                "xml-to-json/example_12.xml",
+                "xml-to-json/example_12_TFFFFF.json"
+        );
+    }
+
+    @Test
+    public void testXmlJson_12_TFFFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalTypeHintsForceTop",
+                "xml-to-json/example_12.xml",
+                "xml-to-json/example_12_TFFFFT.json"
+        );
+    }
+
     private void compareInputXmlFileWithOutputJsonFile(String routeName, String inputXmlFile, String outputJsonFile)
             throws IOException, InterruptedException {
         String defaultXml = IOUtils.toString(classLoader.getResourceAsStream(inputXmlFile), StandardCharsets.UTF_8);
@@ -490,28 +530,35 @@ public class XmlToJsonTest extends CamelTestSupport {
                 new RouteBuilder() {
                     public void configure() {
                         from("direct:marshalNone")
-                                .to("dataformat:custom-xmljsonlegacy:marshal?typeHints=false&forceTopLevelObject=false")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?typeHints=false&removeNamespacePrefixes=false&forceTopLevelObject=false")
                                 .to("mock:result");
                     }
                 },
                 new RouteBuilder() {
                     public void configure() {
                         from("direct:marshalTypeHints")
-                                .to("dataformat:custom-xmljsonlegacy:marshal?typeHints=true&forceTopLevelObject=false")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?typeHints=true&removeNamespacePrefixes=false&forceTopLevelObject=false")
                                 .to("mock:result");
                     }
                 },
                 new RouteBuilder() {
                     public void configure() {
                         from("direct:marshalForceTop")
-                                .to("dataformat:custom-xmljsonlegacy:marshal?typeHints=false&forceTopLevelObject=true")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?typeHints=false&removeNamespacePrefixes=false&forceTopLevelObject=true")
                                 .to("mock:result");
                     }
                 },
                 new RouteBuilder() {
                     public void configure() {
                         from("direct:marshalTypeHintsForceTop")
-                                .to("dataformat:custom-xmljsonlegacy:marshal?typeHints=true&forceTopLevelObject=true")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?typeHints=true&removeNamespacePrefixes=false&forceTopLevelObject=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        from("direct:marshalRemoveNamespacePrefixes")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?typeHints=false&removeNamespacePrefixes=true&forceTopLevelObject=false")
                                 .to("mock:result");
                     }
                 },
