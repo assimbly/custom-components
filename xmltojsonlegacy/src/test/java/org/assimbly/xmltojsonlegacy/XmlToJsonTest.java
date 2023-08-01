@@ -501,6 +501,77 @@ public class XmlToJsonTest extends CamelTestSupport {
         );
     }
 
+    /*****************************************
+     ** Example 13
+     *****************************************/
+
+    @Test
+    public void testXmlJson_13_FFFFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalNone",
+                "xml-to-json/example_13.xml",
+                "xml-to-json/example_13_FFFFFF.json"
+        );
+    }
+
+    @Test
+    public void testXmlJson_13_FFFFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalTypeHints",
+                "xml-to-json/example_13.xml",
+                "xml-to-json/example_13_FFFFFT.json"
+        );
+    }
+
+    @Test
+    public void testXmlJson_13_TFFFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalForceTop",
+                "xml-to-json/example_13.xml",
+                "xml-to-json/example_13_TFFFFF.json"
+        );
+    }
+
+    @Test
+    public void testXmlJson_13_TFFFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalTypeHintsForceTop",
+                "xml-to-json/example_13.xml",
+                "xml-to-json/example_13_TFFFFT.json"
+        );
+    }
+
+    @Test
+    public void testXmlJson_13_FFFFTF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalRemoveNamespacePrefixes",
+                "xml-to-json/example_13.xml",
+                "xml-to-json/example_13_FFFFTF.json"
+        );
+    }
+
+    @Test
+    public void testXmlJson_13_FFFFTT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalTypeHintsRemoveNamespacePrefixes",
+                "xml-to-json/example_13.xml",
+                "xml-to-json/example_13_FFFFTT.json"
+        );
+    }
+
+    /*****************************************
+     ** Example 14
+     *****************************************/
+
+    @Test
+    public void testXmlJson_14_FFFFTT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalTypeHintsRemoveNamespacePrefixes",
+                "xml-to-json/example_14.xml",
+                "xml-to-json/example_14_FFFFTT.json"
+        );
+    }
+
     private void compareInputXmlFileWithOutputJsonFile(String routeName, String inputXmlFile, String outputJsonFile)
             throws IOException, InterruptedException {
         String defaultXml = IOUtils.toString(classLoader.getResourceAsStream(inputXmlFile), StandardCharsets.UTF_8);
@@ -559,6 +630,13 @@ public class XmlToJsonTest extends CamelTestSupport {
                     public void configure() {
                         from("direct:marshalRemoveNamespacePrefixes")
                                 .to("dataformat:custom-xmljsonlegacy:marshal?typeHints=false&removeNamespacePrefixes=true&forceTopLevelObject=false")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        from("direct:marshalTypeHintsRemoveNamespacePrefixes")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?typeHints=true&removeNamespacePrefixes=true&forceTopLevelObject=false")
                                 .to("mock:result");
                     }
                 },
