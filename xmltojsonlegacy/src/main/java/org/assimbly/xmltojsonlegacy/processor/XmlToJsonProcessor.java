@@ -6,10 +6,9 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.log4j.Logger;
 import org.assimbly.xmltojsonlegacy.CustomXmlJsonDataFormat;
+import org.assimbly.xmltojsonlegacy.logs.Print;
 import org.assimbly.xmltojsonlegacy.utils.ElementUtils;
 import org.w3c.dom.*;
-
-import javax.xml.XMLConstants;
 
 public class XmlToJsonProcessor {
 
@@ -55,9 +54,10 @@ public class XmlToJsonProcessor {
         boolean isSingleChildren = isSingleChildren(elementDeepestDepth, numberOfChildren, classAttr);
         boolean isAttributeObject = isAttributeObject(level, parentClass, elementDeepestDepth);
 
-        printElementDetails(
+        Print.elementDetails(
                 element, level, parentClass, parentSiblings, isRootArray, isOneValue, isObject, isFirstChild,
-                numberOfSiblings, numberOfChildren, classAttr, typeAttr, namespace
+                numberOfSiblings, numberOfChildren, classAttr, typeAttr, namespace,
+                xmlJsonDataFormat.isRemoveNamespacePrefixes(), xmlJsonDataFormat.isSkipNamespaces()
         );
 
         // add attributes in the object node
@@ -84,7 +84,7 @@ public class XmlToJsonProcessor {
                 } else if(childNode.getNodeType() == Node.TEXT_NODE){
                     // process element as text
                     if(isObject && isRootArray) {
-                        printData(" 2. OBJECT && ARRAY", level);
+                        Print.data(" 2. OBJECT && ARRAY", level);
                         if(rootObjectNode.size()>0)
                             isRootArray = false;
                     } else {
@@ -113,12 +113,12 @@ public class XmlToJsonProcessor {
         Element childElement = (Element) childNode;
 
         if(isObject) {
-            printData(" 1. IS OBJECT", level);
+            Print.data(" 1. IS OBJECT", level);
             // extract child as an object
             extractChildAsObject(level, rootObjectNode, numberOfSiblings, classAttr, childElement, isFirstSibling, namespace);
         } else {
             if(isRootArray) {
-                printData(" 1. IS ROOT ARRAY", level);
+                Print.data(" 1. IS ROOT ARRAY", level);
                 if(isSingleChildren && isFirstChild) {
                     // recursive call with child element
                     return convertXmlToJson(childElement, level +1, classAttr, numberOfSiblings, isFirstSibling, namespace);
@@ -127,7 +127,7 @@ public class XmlToJsonProcessor {
                     extractChildAsArray(level, rootArrayNode, numberOfSiblings, classAttr, childElement, isFirstSibling, namespace);
                 }
             } else {
-                printData(" 1. IS OTHER", level);
+                Print.data(" 1. IS OTHER", level);
                 if(namespace!=null) {
                     extractChildAsOtherInArrayNode(
                             level, rootArrayNode, numberOfSiblings, classAttr, (Element) childNode, childElement,
@@ -180,7 +180,7 @@ public class XmlToJsonProcessor {
     ) {
         if(isRootNode) {
             //process text node identified as a root node
-            printData(" 2. ROOT", level);
+            Print.data(" 2. ROOT", level);
             if(index+1 >= nodeListSize) {
                 if(namespace!=null && !xmlJsonDataFormat.isSkipNamespaces()) {
                     Node namespaceNode = ElementUtils.getNamespaceNode(element);
@@ -197,10 +197,10 @@ public class XmlToJsonProcessor {
                 }
             }
         } else if(isObject) {
-            printData(" 2. OBJECT", level);
+            Print.data(" 2. OBJECT", level);
         } else if(isOneValue) {
             //process text node identified as one value
-            printData(" 2. ONE VALUE", level);
+            Print.data(" 2. ONE VALUE", level);
             if(xmlJsonDataFormat.isTypeHints()) {
                 rootArrayNode.add(ElementUtils.getNodeValue(childNode, xmlJsonDataFormat.isTrimSpaces()));
             } else {
@@ -212,7 +212,7 @@ public class XmlToJsonProcessor {
             }
         } else {
             //process text node identified as other
-            printData(" 2. OTHER", level);
+            Print.data(" 2. OTHER", level);
             if(xmlJsonDataFormat.isTypeHints()){
                 rootObjectNode.put(
                         ElementUtils.getElementName(element, namespace, xmlJsonDataFormat.isRemoveNamespacePrefixes(),
@@ -455,36 +455,6 @@ public class XmlToJsonProcessor {
         attrInfoObjectNode.put(JSON_XML_TEXT_FIELD, value);
 
         return attrInfoObjectNode;
-    }
-
-    // print some information about a specific tree level
-    private void printElementDetails(
-            Element element, int level, String parentClass, int parentSiblings, boolean isRootArray, boolean isOneValue,
-            boolean isObject, boolean isFirstChild, int numberOfSiblings, int numberOfChildren, String classAttr,
-            String typeAttr, String namespace
-    ) {
-        if(logger.isDebugEnabled()) {
-            printData(" >> Element: " + ElementUtils.getElementName(element, namespace, xmlJsonDataFormat.isRemoveNamespacePrefixes(), xmlJsonDataFormat.isSkipNamespaces()), level);
-            printData("    typeAttr: " + typeAttr, level);
-            printData("    classAttr: " + classAttr, level);
-            printData("    parentClass: " + parentClass, level);
-            printData("    numberOfChildren: " + numberOfChildren, level);
-            printData("    numberOfSiblings: " + numberOfSiblings, level);
-            printData("    parentSiblings: " + parentSiblings, level);
-            printData("    isRootArray: " + isRootArray, level);
-            printData("    isOneValue: " + isOneValue, level);
-            printData("    isObject: " + isObject, level);
-            printData("    isFirstChild: " + isFirstChild, level);
-        }
-    }
-
-    // print data string with the tree level indentation
-    private void printData(String data, int level) {
-        String suffix = "---";
-        for(int i=0; i<level; i++) {
-            data = suffix + data;
-        }
-        logger.debug(data);
     }
 
 }
