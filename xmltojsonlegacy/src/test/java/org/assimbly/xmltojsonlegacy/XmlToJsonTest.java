@@ -590,6 +590,32 @@ public class XmlToJsonTest extends CamelTestSupport {
         );
     }
 
+    /*****************************************
+     ** Example 15
+     *****************************************/
+
+    @Test
+    public void testXmlJson_15_FFTFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalTrimSpaces",
+                "xml-to-json/example_15.xml",
+                "xml-to-json/example_15_FFTFFF.json"
+        );
+    }
+
+    /*****************************************
+     ** Example 16
+     *****************************************/
+
+    @Test
+    public void testXmlJson_16_FFTFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshalTypeHintsTrimSpaces",
+                "xml-to-json/example_16.xml",
+                "xml-to-json/example_16_FFTFFT.json"
+        );
+    }
+
     private void compareInputXmlFileWithOutputJsonFile(String routeName, String inputXmlFile, String outputJsonFile)
             throws IOException, InterruptedException {
         String defaultXml = IOUtils.toString(classLoader.getResourceAsStream(inputXmlFile), StandardCharsets.UTF_8);
@@ -662,6 +688,20 @@ public class XmlToJsonTest extends CamelTestSupport {
                     public void configure() {
                         from("direct:marshalTypeHintsSkipNamespaces")
                                 .to("dataformat:custom-xmljsonlegacy:marshal?typeHints=true&removeNamespacePrefixes=false&forceTopLevelObject=false&skipNamespaces=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        from("direct:marshalTrimSpaces")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?typeHints=false&removeNamespacePrefixes=false&forceTopLevelObject=false&skipNamespaces=false&trimSpaces=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        from("direct:marshalTypeHintsTrimSpaces")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?typeHints=true&removeNamespacePrefixes=false&forceTopLevelObject=false&skipNamespaces=false&trimSpaces=true")
                                 .to("mock:result");
                     }
                 },

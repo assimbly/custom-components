@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <products>
+        <product>
+            <id>  1</id>
+        </product>
+        <product>
+            <id>  2</id>
+        </product>
+    </products>
+</root>
