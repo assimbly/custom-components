@@ -169,8 +169,6 @@ public class XmlToJsonProcessor {
             Node childNode, Element element, ArrayNode rootArrayNode, ObjectNode rootObjectNode, int level, int index,
             int nodeListSize, boolean isRootArray, boolean isRootNode, boolean isObject, boolean isOneValue, String namespace
     ) {
-        Text textNode = (Text) childNode;
-
         if(isRootNode) {
             //process text node identified as a root node
             printData(" 2. ROOT", level);
@@ -191,22 +189,22 @@ public class XmlToJsonProcessor {
             //process text node identified as one value
             printData(" 2. ONE VALUE", level);
             if(xmlJsonDataFormat.isTypeHints()) {
-                rootArrayNode.add(textNode.getTextContent());
+                rootArrayNode.add(getNodeValue(childNode));
             } else {
                 if(element.hasAttributes()) {
-                    rootObjectNode.put(JSON_XML_TEXT_FIELD, childNode.getTextContent());
+                    rootObjectNode.put(JSON_XML_TEXT_FIELD, getNodeValue(childNode));
                 } else {
-                    rootArrayNode.add(textNode.getTextContent());
+                    rootArrayNode.add(getNodeValue(childNode));
                 }
             }
         } else {
             //process text node identified as other
             printData(" 2. OTHER", level);
             if(xmlJsonDataFormat.isTypeHints()){
-                rootObjectNode.put(getElementName(element, namespace), textNode.getTextContent());
+                rootObjectNode.put(getElementName(element, namespace), getNodeValue(childNode));
             } else {
                 if(isLastElement(element)) {
-                    rootObjectNode.put(getElementName(element, namespace), textNode.getTextContent());
+                    rootObjectNode.put(getElementName(element, namespace), getNodeValue(childNode));
                 }
             }
         }
@@ -374,6 +372,15 @@ public class XmlToJsonProcessor {
         }
     }
 
+    // get element value
+    private String getNodeValue(Node node) {
+        if(xmlJsonDataFormat.isTrimSpaces()){
+            return node.getTextContent().trim();
+        } else {
+            return node.getTextContent();
+        }
+    }
+
     // extract child as other type and add into the array node
     private void extractChildAsOtherInArrayNode(
             int level, ArrayNode rootArrayNode, int numSiblings, String classAttr, Element childNode,
@@ -426,10 +433,10 @@ public class XmlToJsonProcessor {
         } else {
             if(classAttr!=null && !classAttr.equals("")) {
                 rootObjectNode.set(
-                        getElementName(childElement, namespace), addNodeWithAttributeInfo(childElement, childElement.getTextContent())
+                        getElementName(childElement, namespace), addNodeWithAttributeInfo(childElement, getNodeValue(childElement))
                 );
             } else {
-                rootObjectNode.put(getElementName(childElement, namespace), childElement.getTextContent());
+                rootObjectNode.put(getElementName(childElement, namespace), getNodeValue(childElement));
             }
         }
     }
@@ -446,7 +453,11 @@ public class XmlToJsonProcessor {
                 rootObjectNode.put(label, subElement.asBoolean());
                 break;
             default:
-                rootObjectNode.put(label, subElement.asText());
+                if(xmlJsonDataFormat.isTrimSpaces()){
+                    rootObjectNode.put(label, subElement.asText().trim());
+                } else {
+                    rootObjectNode.put(label, subElement.asText());
+                }
         }
     }
 
