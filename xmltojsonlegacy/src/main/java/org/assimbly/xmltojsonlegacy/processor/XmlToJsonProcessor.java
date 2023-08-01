@@ -48,7 +48,7 @@ public class XmlToJsonProcessor {
 
         boolean hasAttributes = element.hasAttributes();
         boolean isRootNode = (level == 0);
-        namespace = (isRootNode ? getNamespace(element) : namespace);
+        namespace = (isRootNode ? ElementUtils.getNamespace(element) : namespace);
         boolean isRootArray = isRootArray(level, numberOfChildren, numberOfSiblings, parentSiblings, classAttr, parentClass, hasAttributes, elementDeepestDepth, namespace);
         boolean isObject = isObject(elementDeepestDepth, numberOfChildren, classAttr);
         boolean isOneValue = isOneValue(level, numberOfSiblings, parentClass, elementDeepestDepth);
@@ -133,7 +133,11 @@ public class XmlToJsonProcessor {
                             level, rootArrayNode, numberOfSiblings, classAttr, (Element) childNode, childElement,
                             isFirstSibling, namespace
                     );
-                    rootObjectNode.set(getElementName((Element) childNode, namespace), rootArrayNode);
+                    rootObjectNode.set(
+                            ElementUtils.getElementName((Element) childNode, namespace,
+                                    xmlJsonDataFormat.isRemoveNamespacePrefixes(), xmlJsonDataFormat.isSkipNamespaces()),
+                            rootArrayNode
+                    );
                 } else {
                     if(!xmlJsonDataFormat.isTypeHints()) {
                         // extract child as other type and add into the array node
@@ -149,7 +153,11 @@ public class XmlToJsonProcessor {
                                     level, rootArrayNode, numberOfSiblings, classAttr, (Element) childNode, childElement,
                                     isFirstSibling, namespace
                             );
-                            rootObjectNode.set(getElementName((Element) childNode, namespace), rootArrayNode);
+                            rootObjectNode.set(
+                                    ElementUtils.getElementName((Element) childNode, namespace,
+                                            xmlJsonDataFormat.isRemoveNamespacePrefixes(), xmlJsonDataFormat.isSkipNamespaces()),
+                                    rootArrayNode
+                            );
                         }
                     } else {
                         // extract child as other type and add into the object node
@@ -175,12 +183,16 @@ public class XmlToJsonProcessor {
             printData(" 2. ROOT", level);
             if(index+1 >= nodeListSize) {
                 if(namespace!=null && !xmlJsonDataFormat.isSkipNamespaces()) {
-                    Node namespaceNode = getNamespaceNode(element);
+                    Node namespaceNode = ElementUtils.getNamespaceNode(element);
                     rootObjectNode.put(JSON_XML_ATTR_PREFIX+namespaceNode.getNodeName(), namespaceNode.getNodeValue());
                 }
                 if(xmlJsonDataFormat.isForceTopLevelObject()) {
                     ObjectNode parentNode =  JsonNodeFactory.instance.objectNode();
-                    parentNode.set(getElementName(element, namespace), isRootArray ? rootArrayNode : rootObjectNode);
+                    parentNode.set(
+                            ElementUtils.getElementName(element, namespace,
+                                    xmlJsonDataFormat.isRemoveNamespacePrefixes(), xmlJsonDataFormat.isSkipNamespaces()),
+                            isRootArray ? rootArrayNode : rootObjectNode
+                    );
                     return parentNode;
                 }
             }
@@ -190,22 +202,28 @@ public class XmlToJsonProcessor {
             //process text node identified as one value
             printData(" 2. ONE VALUE", level);
             if(xmlJsonDataFormat.isTypeHints()) {
-                rootArrayNode.add(getNodeValue(childNode));
+                rootArrayNode.add(ElementUtils.getNodeValue(childNode, xmlJsonDataFormat.isTrimSpaces()));
             } else {
                 if(element.hasAttributes()) {
-                    rootObjectNode.put(JSON_XML_TEXT_FIELD, getNodeValue(childNode));
+                    rootObjectNode.put(JSON_XML_TEXT_FIELD, ElementUtils.getNodeValue(childNode, xmlJsonDataFormat.isTrimSpaces()));
                 } else {
-                    rootArrayNode.add(getNodeValue(childNode));
+                    rootArrayNode.add(ElementUtils.getNodeValue(childNode, xmlJsonDataFormat.isTrimSpaces()));
                 }
             }
         } else {
             //process text node identified as other
             printData(" 2. OTHER", level);
             if(xmlJsonDataFormat.isTypeHints()){
-                rootObjectNode.put(getElementName(element, namespace), getNodeValue(childNode));
+                rootObjectNode.put(
+                        ElementUtils.getElementName(element, namespace, xmlJsonDataFormat.isRemoveNamespacePrefixes(),
+                                xmlJsonDataFormat.isSkipNamespaces()),
+                        ElementUtils.getNodeValue(childNode, xmlJsonDataFormat.isTrimSpaces()));
             } else {
                 if(isLastElement(element)) {
-                    rootObjectNode.put(getElementName(element, namespace), getNodeValue(childNode));
+                    rootObjectNode.put(
+                            ElementUtils.getElementName(element, namespace, xmlJsonDataFormat.isRemoveNamespacePrefixes(),
+                                    xmlJsonDataFormat.isSkipNamespaces()),
+                            ElementUtils.getNodeValue(childNode, xmlJsonDataFormat.isTrimSpaces()));
                 }
             }
         }
@@ -338,50 +356,6 @@ public class XmlToJsonProcessor {
         return numCounts == 1;
     }
 
-    // get namespace node, if it's defined
-    private Node getNamespaceNode(Element nodeElement) {
-        if(nodeElement.hasAttributes()){
-            NamedNodeMap attrMap = nodeElement.getAttributes();
-            for (int j = 0; j < attrMap.getLength(); j++) {
-                Node node = attrMap.item(j);
-                String attributeName = node.getNodeName();
-                if(attributeName.startsWith(XMLConstants.XMLNS_ATTRIBUTE) && !attributeName.equals(XMLConstants.XMLNS_ATTRIBUTE)){
-                    return node;
-                }
-            }
-        }
-        return null;
-    }
-
-    // get namespace
-    private String getNamespace(Element nodeElement) {
-        Node namespaceNode = getNamespaceNode(nodeElement);
-        if(namespaceNode!=null) {
-            return namespaceNode.getNodeName().replaceFirst(XMLConstants.XMLNS_ATTRIBUTE+":", "");
-        }
-        return null;
-    }
-
-    // get element name
-    // removes namespace from element name when isRemoveNamespacePrefixes flag is enabled
-    private String getElementName(Element nodeElement, String namespace) {
-        if(!xmlJsonDataFormat.isSkipNamespaces() && xmlJsonDataFormat.isRemoveNamespacePrefixes() && namespace!=null){
-            String tagName = nodeElement.getTagName();
-            return tagName.replaceFirst(namespace+":", "");
-        } else {
-            return nodeElement.getTagName();
-        }
-    }
-
-    // get element value
-    private String getNodeValue(Node node) {
-        if(xmlJsonDataFormat.isTrimSpaces()){
-            return node.getTextContent().trim();
-        } else {
-            return node.getTextContent();
-        }
-    }
-
     // extract child as other type and add into the array node
     private void extractChildAsOtherInArrayNode(
             int level, ArrayNode rootArrayNode, int numSiblings, String classAttr, Element childNode,
@@ -396,7 +370,8 @@ public class XmlToJsonProcessor {
             Element childElement, boolean isFirstSibling, String namespace
     ) {
         rootObjectNode.set(
-                getElementName(childNode, namespace),
+                ElementUtils.getElementName(childNode, namespace, xmlJsonDataFormat.isRemoveNamespacePrefixes(),
+                        xmlJsonDataFormat.isSkipNamespaces()),
                 convertXmlToJson(childElement, level +1, classAttr, numSiblings, isFirstSibling, namespace)
         );
     }
@@ -434,10 +409,14 @@ public class XmlToJsonProcessor {
         } else {
             if(classAttr!=null && !classAttr.equals("")) {
                 rootObjectNode.set(
-                        getElementName(childElement, namespace), addNodeWithAttributeInfo(childElement, getNodeValue(childElement))
+                        ElementUtils.getElementName(childElement, namespace, xmlJsonDataFormat.isRemoveNamespacePrefixes(),
+                                xmlJsonDataFormat.isSkipNamespaces()),
+                        addNodeWithAttributeInfo(childElement, ElementUtils.getNodeValue(childElement, xmlJsonDataFormat.isTrimSpaces()))
                 );
             } else {
-                rootObjectNode.put(getElementName(childElement, namespace), getNodeValue(childElement));
+                rootObjectNode.put(ElementUtils.getElementName(childElement, namespace, xmlJsonDataFormat.isRemoveNamespacePrefixes(),
+                        xmlJsonDataFormat.isSkipNamespaces()),
+                        ElementUtils.getNodeValue(childElement, xmlJsonDataFormat.isTrimSpaces()));
             }
         }
     }
@@ -485,7 +464,7 @@ public class XmlToJsonProcessor {
             String typeAttr, String namespace
     ) {
         if(logger.isDebugEnabled()) {
-            printData(" >> Element: " + getElementName(element, namespace), level);
+            printData(" >> Element: " + ElementUtils.getElementName(element, namespace, xmlJsonDataFormat.isRemoveNamespacePrefixes(), xmlJsonDataFormat.isSkipNamespaces()), level);
             printData("    typeAttr: " + typeAttr, level);
             printData("    classAttr: " + classAttr, level);
             printData("    parentClass: " + parentClass, level);
