@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.log4j.Logger;
 import org.assimbly.xmltojsonlegacy.CustomXmlJsonDataFormat;
+import org.assimbly.xmltojsonlegacy.utils.ElementUtils;
 import org.w3c.dom.*;
 
 import javax.xml.XMLConstants;
@@ -38,9 +39,9 @@ public class XmlToJsonProcessor {
         ObjectNode rootObjectNode = JsonNodeFactory.instance.objectNode();
         ArrayNode rootArrayNode = JsonNodeFactory.instance.arrayNode();
 
-        int numberOfSiblings = calculateNumberOfSiblings(element);
-        int numberOfChildren = calculateNumberOfChildren(element);
-        int elementDeepestDepth = calculateElementDeepestDepth(element);
+        int numberOfSiblings = ElementUtils.calculateNumberOfSiblings(element);
+        int numberOfChildren = ElementUtils.calculateNumberOfChildren(element);
+        int elementDeepestDepth = ElementUtils.calculateElementDeepestDepth(element);
 
         String classAttr = element.getAttribute(JSON_XML_ATTR_CLASS);
         String typeAttr = element.getAttribute(JSON_XML_ATTR_TYPE);
@@ -137,7 +138,7 @@ public class XmlToJsonProcessor {
                     if(!xmlJsonDataFormat.isTypeHints()) {
                         // extract child as other type and add into the array node
                         if((level == 0 && numberOfChildren > 1) ||
-                                (numberOfChildren == 1 && calculateNumberOfChildren(childElement) > 1)
+                                (numberOfChildren == 1 && ElementUtils.calculateNumberOfChildren(childElement) > 1)
                         ) {
                             extractChildAsOtherInObjectNode(
                                     level, rootObjectNode, numberOfSiblings, classAttr, (Element) childNode, childElement,
@@ -329,7 +330,7 @@ public class XmlToJsonProcessor {
 
     // check if it's the last element
     private boolean isLastElement(Element nodeElement) {
-        return calculateNumberOfChildren(nodeElement) == 0;
+        return ElementUtils.calculateNumberOfChildren(nodeElement) == 0;
     }
 
     // check if it's the first sibling regarding the numCounts
@@ -505,61 +506,6 @@ public class XmlToJsonProcessor {
             data = suffix + data;
         }
         logger.debug(data);
-    }
-
-    // calculate number of siblings of an element
-    private int calculateNumberOfSiblings(Element element) {
-        int count = 0;
-
-        // Get the parent of the element
-        Node parent = element.getParentNode();
-
-        if (parent != null) {
-            NodeList siblings = parent.getChildNodes();
-
-            for (int i = 0; i < siblings.getLength(); i++) {
-                Node sibling = siblings.item(i);
-                if (sibling.getNodeType() == Node.ELEMENT_NODE) {
-                    count++;
-                }
-            }
-        }
-
-        return count;
-    }
-
-    // calculate number of children under an element
-    private int calculateNumberOfChildren(Element element) {
-        int count = 0;
-
-        // Get the direct child nodes of the parent element
-        NodeList childNodes = element.getChildNodes();
-
-        // Count the number of direct children elements
-        for (int i = 0; i < childNodes.getLength(); i++) {
-            Node childNode = childNodes.item(i);
-            if (childNode.getNodeType() == Node.ELEMENT_NODE) {
-                count++;
-            }
-        }
-
-        return count;
-    }
-
-    // calculate element depth
-    private int calculateElementDeepestDepth(Element element) {
-        int depth = 0;
-        NodeList children = element.getChildNodes();
-
-        for (int i = 0; i < children.getLength(); i++) {
-            Node node = children.item(i);
-            if (node.getNodeType() == Node.ELEMENT_NODE) {
-                int childDepth = calculateElementDeepestDepth((Element) node);
-                depth = Math.max(depth, childDepth + 1);
-            }
-        }
-
-        return depth;
     }
 
 }
