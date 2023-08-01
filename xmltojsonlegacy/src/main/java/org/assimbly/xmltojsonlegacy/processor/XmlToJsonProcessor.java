@@ -8,6 +8,8 @@ import org.apache.log4j.Logger;
 import org.assimbly.xmltojsonlegacy.CustomXmlJsonDataFormat;
 import org.w3c.dom.*;
 
+import javax.xml.XMLConstants;
+
 public class XmlToJsonProcessor {
 
     static final Logger logger = Logger.getLogger(XmlToJsonProcessor.class);
@@ -31,7 +33,7 @@ public class XmlToJsonProcessor {
 
     // convert xml to json
     public JsonNode convertXmlToJson(
-            Element element, int level, String parentClass, int parentSiblings, boolean isFirstChild
+            Element element, int level, String parentClass, int parentSiblings, boolean isFirstChild, String namespace
     ) {
         ObjectNode rootObjectNode = JsonNodeFactory.instance.objectNode();
         ArrayNode rootArrayNode = JsonNodeFactory.instance.arrayNode();
@@ -45,7 +47,8 @@ public class XmlToJsonProcessor {
 
         boolean hasAttributes = element.hasAttributes();
         boolean isRootNode = (level == 0);
-        boolean isRootArray = isRootArray(level, numberOfChildren, numberOfSiblings, parentSiblings, classAttr, parentClass, hasAttributes, elementDeepestDepth);
+        namespace = (isRootNode ? getNamespace(element) : namespace);
+        boolean isRootArray = isRootArray(level, numberOfChildren, numberOfSiblings, parentSiblings, classAttr, parentClass, hasAttributes, elementDeepestDepth, namespace);
         boolean isObject = isObject(elementDeepestDepth, numberOfChildren, classAttr);
         boolean isOneValue = isOneValue(level, numberOfSiblings, parentClass, elementDeepestDepth);
         boolean isSingleChildren = isSingleChildren(elementDeepestDepth, numberOfChildren, classAttr);
@@ -53,7 +56,7 @@ public class XmlToJsonProcessor {
 
         printElementDetails(
                 element, level, parentClass, parentSiblings, isRootArray, isOneValue, isObject, isFirstChild,
-                numberOfSiblings, numberOfChildren, classAttr, typeAttr
+                numberOfSiblings, numberOfChildren, classAttr, typeAttr, namespace
         );
 
         // add attributes in the object node
@@ -71,8 +74,8 @@ public class XmlToJsonProcessor {
                     // process element as node
                     nodeCount++;
                     JsonNode processNodeResp = processElementNode(
-                            childNode, rootArrayNode, rootObjectNode, nodeCount, level, numberOfChildren,
-                            numberOfSiblings, classAttr, isRootArray, isObject, isSingleChildren, isFirstChild
+                            childNode, rootArrayNode, rootObjectNode, nodeCount, level, numberOfChildren, numberOfSiblings,
+                            classAttr, isRootArray, isObject, isSingleChildren, isFirstChild, namespace
                     );
                     if(processNodeResp!=null)
                         return processNodeResp;
@@ -86,7 +89,7 @@ public class XmlToJsonProcessor {
                     } else {
                         JsonNode processTextResp = processTextNode(
                                 childNode, element, rootArrayNode, rootObjectNode, level, index, nodeListSize,
-                                isRootArray, isRootNode, isObject, isOneValue
+                                isRootArray, isRootNode, isObject, isOneValue, namespace
                         );
                         if(processTextResp!=null)
                             return processTextResp;
@@ -102,7 +105,7 @@ public class XmlToJsonProcessor {
     private JsonNode processElementNode(
             Node childNode, ArrayNode rootArrayNode, ObjectNode rootObjectNode, int nodeCount, int level,
             int numberOfChildren, int numberOfSiblings, String classAttr, boolean isRootArray, boolean isObject,
-            boolean isSingleChildren, boolean isFirstChild
+            boolean isSingleChildren, boolean isFirstChild, String namespace
     ) {
 
         boolean isFirstSibling = isFirstSiblingByNumCounts(nodeCount);
@@ -111,41 +114,49 @@ public class XmlToJsonProcessor {
         if(isObject) {
             printData(" 1. IS OBJECT", level);
             // extract child as an object
-            extractChildAsObject(level, rootObjectNode, numberOfSiblings, classAttr, childElement, isFirstSibling);
+            extractChildAsObject(level, rootObjectNode, numberOfSiblings, classAttr, childElement, isFirstSibling, namespace);
         } else {
             if(isRootArray) {
                 printData(" 1. IS ROOT ARRAY", level);
                 if(isSingleChildren && isFirstChild) {
                     // recursive call with child element
-                    return convertXmlToJson(childElement, level +1, classAttr, numberOfSiblings, isFirstSibling);
+                    return convertXmlToJson(childElement, level +1, classAttr, numberOfSiblings, isFirstSibling, namespace);
                 } else {
                     // extract child as an array
-                    extractChildAsArray(level, rootArrayNode, numberOfSiblings, classAttr, childElement, isFirstSibling);
+                    extractChildAsArray(level, rootArrayNode, numberOfSiblings, classAttr, childElement, isFirstSibling, namespace);
                 }
             } else {
                 printData(" 1. IS OTHER", level);
-                if(!xmlJsonDataFormat.isTypeHints()) {
-                    // extract child as other type and add into the array node
-                    if((level == 0 && numberOfChildren > 1) ||
-                            (numberOfChildren == 1 && calculateNumberOfChildren(childElement) > 1)
-                    ) {
+                if(namespace!=null) {
+                    extractChildAsOtherInArrayNode(
+                            level, rootArrayNode, numberOfSiblings, classAttr, (Element) childNode, childElement,
+                            isFirstSibling, namespace
+                    );
+                    rootObjectNode.set(getElementName((Element) childNode, namespace), rootArrayNode);
+                } else {
+                    if(!xmlJsonDataFormat.isTypeHints()) {
+                        // extract child as other type and add into the array node
+                        if((level == 0 && numberOfChildren > 1) ||
+                                (numberOfChildren == 1 && calculateNumberOfChildren(childElement) > 1)
+                        ) {
+                            extractChildAsOtherInObjectNode(
+                                    level, rootObjectNode, numberOfSiblings, classAttr, (Element) childNode, childElement,
+                                    isFirstSibling, namespace
+                            );
+                        } else {
+                            extractChildAsOtherInArrayNode(
+                                    level, rootArrayNode, numberOfSiblings, classAttr, (Element) childNode, childElement,
+                                    isFirstSibling, namespace
+                            );
+                            rootObjectNode.set(getElementName((Element) childNode, namespace), rootArrayNode);
+                        }
+                    } else {
+                        // extract child as other type and add into the object node
                         extractChildAsOtherInObjectNode(
                                 level, rootObjectNode, numberOfSiblings, classAttr, (Element) childNode, childElement,
-                                isFirstSibling
+                                isFirstSibling, namespace
                         );
-                    } else {
-                        extractChildAsOtherInArrayNode(
-                                level, rootArrayNode, numberOfSiblings, classAttr, (Element) childNode, childElement,
-                                isFirstSibling
-                        );
-                        rootObjectNode.set(((Element) childNode).getTagName(), rootArrayNode);
                     }
-                } else {
-                    // extract child as other type and add into the object node
-                    extractChildAsOtherInObjectNode(
-                            level, rootObjectNode, numberOfSiblings, classAttr, (Element) childNode, childElement,
-                            isFirstSibling
-                    );
                 }
             }
         }
@@ -156,17 +167,23 @@ public class XmlToJsonProcessor {
     // process an element node of type Text
     private JsonNode processTextNode(
             Node childNode, Element element, ArrayNode rootArrayNode, ObjectNode rootObjectNode, int level, int index,
-            int nodeListSize, boolean isRootArray, boolean isRootNode, boolean isObject, boolean isOneValue
+            int nodeListSize, boolean isRootArray, boolean isRootNode, boolean isObject, boolean isOneValue, String namespace
     ) {
         Text textNode = (Text) childNode;
 
         if(isRootNode) {
             //process text node identified as a root node
             printData(" 2. ROOT", level);
-            if(index+1 >= nodeListSize && xmlJsonDataFormat.isForceTopLevelObject()) {
-                ObjectNode parentNode =  JsonNodeFactory.instance.objectNode();
-                parentNode.set(element.getTagName(), isRootArray ? rootArrayNode : rootObjectNode);
-                return parentNode;
+            if(index+1 >= nodeListSize) {
+                if(namespace!=null) {
+                    Node namespaceNode = getNamespaceNode(element);
+                    rootObjectNode.put(JSON_XML_ATTR_PREFIX+namespaceNode.getNodeName(), namespaceNode.getNodeValue());
+                }
+                if(xmlJsonDataFormat.isForceTopLevelObject()) {
+                    ObjectNode parentNode =  JsonNodeFactory.instance.objectNode();
+                    parentNode.set(getElementName(element, namespace), isRootArray ? rootArrayNode : rootObjectNode);
+                    return parentNode;
+                }
             }
         } else if(isObject) {
             printData(" 2. OBJECT", level);
@@ -186,7 +203,11 @@ public class XmlToJsonProcessor {
             //process text node identified as other
             printData(" 2. OTHER", level);
             if(xmlJsonDataFormat.isTypeHints()){
-                rootObjectNode.put(element.getTagName(), textNode.getTextContent());
+                rootObjectNode.put(getElementName(element, namespace), textNode.getTextContent());
+            } else {
+                if(isLastElement(element)) {
+                    rootObjectNode.put(getElementName(element, namespace), textNode.getTextContent());
+                }
             }
         }
 
@@ -207,14 +228,14 @@ public class XmlToJsonProcessor {
     // check if it's a root array
     private boolean isRootArray(
             int level, int numberOfChildren, int numberOfSiblings, int parentSiblings, String classAttr,
-            String parentClass, boolean hasAttributes, int elementDeepestDepth
+            String parentClass, boolean hasAttributes, int elementDeepestDepth, String namespace
     ) {
         boolean isRootArray = false;
         if(xmlJsonDataFormat.isTypeHints()) {
-            if (level == 0 && numberOfChildren == 1) {
+            if (level == 0 && numberOfChildren == 1 && namespace==null) {
                 isRootArray = true;
             }
-            if (elementDeepestDepth == 2) {
+            if (elementDeepestDepth == 2 && namespace==null) {
                 isRootArray = true;
             }
             if (elementDeepestDepth == 1 && parentClass != null &&
@@ -237,10 +258,10 @@ public class XmlToJsonProcessor {
                 isRootArray = true;
             }
         } else {
-            if(level == 0 && numberOfChildren == 1) {
+            if(level == 0 && numberOfChildren == 1 && namespace==null) {
                 isRootArray = true;
             }
-            if (elementDeepestDepth == 2 && classAttr!=null && classAttr.equals("")) {
+            if (elementDeepestDepth == 2 && classAttr!=null && classAttr.equals("") && namespace==null) {
                 isRootArray = true;
             }
             if(elementDeepestDepth == 1 && parentClass!=null &&
@@ -318,31 +339,71 @@ public class XmlToJsonProcessor {
         return numCounts == 1;
     }
 
+    // check if namespace is defined
+    private boolean isNamespaceDefined(Element nodeElement) {
+        return getNamespaceNode(nodeElement) != null;
+    }
+
+    // get namespace node, if it's defined
+    private Node getNamespaceNode(Element nodeElement) {
+        if(nodeElement.hasAttributes()){
+            NamedNodeMap attrMap = nodeElement.getAttributes();
+            for (int j = 0; j < attrMap.getLength(); j++) {
+                Node node = attrMap.item(j);
+                String attributeName = node.getNodeName();
+                if(attributeName.startsWith(XMLConstants.XMLNS_ATTRIBUTE) && !attributeName.equals(XMLConstants.XMLNS_ATTRIBUTE)){
+                    return node;
+                }
+            }
+        }
+        return null;
+    }
+
+    // get namespace
+    private String getNamespace(Element nodeElement) {
+        Node namespaceNode = getNamespaceNode(nodeElement);
+        if(namespaceNode!=null) {
+            return namespaceNode.getNodeName().replaceFirst(XMLConstants.XMLNS_ATTRIBUTE+":", "");
+        }
+        return null;
+    }
+
+    // get element name
+    // removes namespace from element name when isRemoveNamespacePrefixes flag is enabled
+    private String getElementName(Element nodeElement, String namespace) {
+        if(xmlJsonDataFormat.isRemoveNamespacePrefixes() && namespace!=null){
+            String tagName = nodeElement.getTagName();
+            return tagName.replaceFirst(namespace+":", "");
+        } else {
+            return nodeElement.getTagName();
+        }
+    }
+
     // extract child as other type and add into the array node
     private void extractChildAsOtherInArrayNode(
             int level, ArrayNode rootArrayNode, int numSiblings, String classAttr, Element childNode,
-            Element childElement, boolean isFirstSibling
+            Element childElement, boolean isFirstSibling, String namespace
     ) {
-        rootArrayNode.add(convertXmlToJson(childElement, level +1, classAttr, numSiblings, isFirstSibling));
+        rootArrayNode.add(convertXmlToJson(childElement, level +1, classAttr, numSiblings, isFirstSibling, namespace));
     }
 
     // extract child as other type and add into the object node
     private void extractChildAsOtherInObjectNode(
             int level, ObjectNode rootObjectNode, int numSiblings, String classAttr, Element childNode,
-            Element childElement, boolean isFirstSibling
+            Element childElement, boolean isFirstSibling, String namespace
     ) {
         rootObjectNode.set(
-                childNode.getTagName(),
-                convertXmlToJson(childElement, level +1, classAttr, numSiblings, isFirstSibling)
+                getElementName(childNode, namespace),
+                convertXmlToJson(childElement, level +1, classAttr, numSiblings, isFirstSibling, namespace)
         );
     }
 
     // extract child as array type
     private void extractChildAsArray(
             int level, ArrayNode rootArrayNode, int numSiblings, String classAttr, Element childElement,
-            boolean isFirstSibling
+            boolean isFirstSibling, String namespace
     ) {
-        JsonNode subNode = convertXmlToJson(childElement, level +1, classAttr, numSiblings, isFirstSibling);
+        JsonNode subNode = convertXmlToJson(childElement, level +1, classAttr, numSiblings, isFirstSibling, namespace);
 
         if(subNode.isArray() && isLastElement(childElement)) {
             for (JsonNode subElement : subNode) {
@@ -356,10 +417,10 @@ public class XmlToJsonProcessor {
     // extract child as object type
     private void extractChildAsObject(
             int level, ObjectNode rootObjectNode, int numSiblings, String classAttr, Element childElement,
-            boolean isFirstSibling
+            boolean isFirstSibling, String namespace
     ) {
         if(xmlJsonDataFormat.isTypeHints()) {
-            JsonNode subNode = convertXmlToJson(childElement, level +1, classAttr, numSiblings, isFirstSibling);
+            JsonNode subNode = convertXmlToJson(childElement, level +1, classAttr, numSiblings, isFirstSibling, namespace);
             for (JsonNode subElement : subNode) {
                 subNode.fields().forEachRemaining(entry -> {
                     String label = entry.getKey();
@@ -370,10 +431,10 @@ public class XmlToJsonProcessor {
         } else {
             if(classAttr!=null && !classAttr.equals("")) {
                 rootObjectNode.set(
-                        childElement.getTagName(), addNodeWithAttributeInfo(childElement, childElement.getTextContent())
+                        getElementName(childElement, namespace), addNodeWithAttributeInfo(childElement, childElement.getTextContent())
                 );
             } else {
-                rootObjectNode.put(childElement.getTagName(), childElement.getTextContent());
+                rootObjectNode.put(getElementName(childElement, namespace), childElement.getTextContent());
             }
         }
     }
@@ -414,10 +475,10 @@ public class XmlToJsonProcessor {
     private void printElementDetails(
             Element element, int level, String parentClass, int parentSiblings, boolean isRootArray, boolean isOneValue,
             boolean isObject, boolean isFirstChild, int numberOfSiblings, int numberOfChildren, String classAttr,
-            String typeAttr
+            String typeAttr, String namespace
     ) {
         if(logger.isDebugEnabled()) {
-            printData(" >> Element: " + element.getTagName(), level);
+            printData(" >> Element: " + getElementName(element, namespace), level);
             printData("    typeAttr: " + typeAttr, level);
             printData("    classAttr: " + classAttr, level);
             printData("    parentClass: " + parentClass, level);
