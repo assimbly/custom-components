@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.assimbly.xmltojsonlegacy.CustomXmlJsonDataFormat;
 import org.assimbly.xmltojsonlegacy.logs.Print;
 import org.assimbly.xmltojsonlegacy.utils.ElementUtils;
+import org.assimbly.xmltojsonlegacy.utils.ElementChecker;
 import org.w3c.dom.*;
 
 public class XmlToJsonProcessor {
@@ -20,8 +21,6 @@ public class XmlToJsonProcessor {
     private static final String JSON_XML_TEXT_FIELD = "#text";
 
     private static final String JSON_XML_ATTR_CLASS = "class";
-    private static final String JSON_XML_ATTR_CLASS_ARRAY = "array";
-    private static final String JSON_XML_ATTR_CLASS_OBJECT = "object";
 
     private static final String JSON_XML_ATTR_TYPE = "type";
     private static final String JSON_XML_ATTR_TYPE_NUMBER = "number";
@@ -48,11 +47,18 @@ public class XmlToJsonProcessor {
         boolean hasAttributes = element.hasAttributes();
         boolean isRootNode = (level == 0);
         namespace = (isRootNode ? ElementUtils.getNamespace(element) : namespace);
-        boolean isRootArray = isRootArray(level, numberOfChildren, numberOfSiblings, parentSiblings, classAttr, parentClass, hasAttributes, elementDeepestDepth, namespace);
-        boolean isObject = isObject(elementDeepestDepth, numberOfChildren, classAttr);
-        boolean isOneValue = isOneValue(level, numberOfSiblings, parentClass, elementDeepestDepth);
-        boolean isSingleChildren = isSingleChildren(elementDeepestDepth, numberOfChildren, classAttr);
-        boolean isAttributeObject = isAttributeObject(level, parentClass, elementDeepestDepth);
+        boolean isRootArray = ElementChecker.isRootArray(
+                level, numberOfChildren, numberOfSiblings, parentSiblings, classAttr, parentClass, hasAttributes,
+                elementDeepestDepth, namespace, xmlJsonDataFormat.isTypeHints()
+        );
+        boolean isObject = ElementChecker.isObject(elementDeepestDepth, numberOfChildren, classAttr);
+        boolean isOneValue = ElementChecker.isOneValue(level, numberOfSiblings, parentClass, elementDeepestDepth);
+        boolean isSingleChildren = ElementChecker.isSingleChildren(
+                elementDeepestDepth, numberOfChildren, classAttr, xmlJsonDataFormat.isTypeHints()
+        );
+        boolean isAttributeObject = ElementChecker.isAttributeObject(
+                level, parentClass, elementDeepestDepth, xmlJsonDataFormat.isTypeHints()
+        );
 
         Print.elementDetails(
                 element, level, parentClass, parentSiblings, isRootArray, isOneValue, isObject, isFirstChild,
@@ -109,7 +115,7 @@ public class XmlToJsonProcessor {
             boolean isSingleChildren, boolean isFirstChild, String namespace
     ) {
 
-        boolean isFirstSibling = isFirstSiblingByNumCounts(nodeCount);
+        boolean isFirstSibling = ElementChecker.isFirstSiblingByNumCounts(nodeCount);
         Element childElement = (Element) childNode;
 
         if(isObject) {
@@ -219,7 +225,7 @@ public class XmlToJsonProcessor {
                                 xmlJsonDataFormat.isSkipNamespaces()),
                         ElementUtils.getNodeValue(childNode, xmlJsonDataFormat.isTrimSpaces()));
             } else {
-                if(isLastElement(element)) {
+                if(ElementChecker.isLastElement(element)) {
                     rootObjectNode.put(
                             ElementUtils.getElementName(element, namespace, xmlJsonDataFormat.isRemoveNamespacePrefixes(),
                                     xmlJsonDataFormat.isSkipNamespaces()),
@@ -240,120 +246,6 @@ public class XmlToJsonProcessor {
                 rootObjectNode.put(JSON_XML_ATTR_PREFIX+node.getNodeName(), node.getNodeValue());
             }
         }
-    }
-
-    // check if it's a root array
-    private boolean isRootArray(
-            int level, int numberOfChildren, int numberOfSiblings, int parentSiblings, String classAttr,
-            String parentClass, boolean hasAttributes, int elementDeepestDepth, String namespace
-    ) {
-        boolean isRootArray = false;
-        if(xmlJsonDataFormat.isTypeHints()) {
-            if (level == 0 && numberOfChildren == 1 && namespace==null) {
-                isRootArray = true;
-            }
-            if (elementDeepestDepth == 2 && namespace==null) {
-                isRootArray = true;
-            }
-            if (elementDeepestDepth == 1 && parentClass != null &&
-                    (parentClass.equals("") || parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_ARRAY))
-            ) {
-                isRootArray = true;
-            }
-            if (elementDeepestDepth == 1 && classAttr != null &&
-                    ((classAttr.equals("") && numberOfChildren > 1) || classAttr.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT))
-            ) {
-                if (parentSiblings > 1) {
-                    isRootArray = true;
-                } else {
-                    isRootArray = false;
-                }
-            }
-            if (elementDeepestDepth == 0 && numberOfSiblings == 1 &&
-                    (parentClass == null || !parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT))
-            ) {
-                isRootArray = true;
-            }
-        } else {
-            if(level == 0 && numberOfChildren == 1 && namespace==null) {
-                isRootArray = true;
-            }
-            if (elementDeepestDepth == 2 && classAttr!=null && classAttr.equals("") && namespace==null) {
-                isRootArray = true;
-            }
-            if(elementDeepestDepth == 1 && parentClass!=null &&
-                    (parentClass.equals("") || parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_ARRAY))
-            ) {
-                isRootArray = true;
-            }
-            if(elementDeepestDepth == 1 && classAttr!=null && classAttr.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT)) {
-                if(parentSiblings > 1) {
-                    isRootArray = true;
-                } else {
-                    isRootArray = false;
-                }
-            }
-            if (elementDeepestDepth == 0 && numberOfSiblings == 1 && !hasAttributes) {
-                isRootArray = true;
-            }
-        }
-        return isRootArray;
-    }
-
-    // check if it's an object
-    private boolean isObject(int elementDeepestDepth, int numberOfChildren, String classAttr) {
-        boolean isObject = false;
-        if(elementDeepestDepth == 1 && classAttr!=null &&
-                ((classAttr.equals("") && numberOfChildren > 1) || classAttr.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT))
-        ) {
-            isObject = true;
-        }
-        return isObject;
-    }
-
-    // check if it's one value
-    private boolean isOneValue(int level, int numberOfSiblings, String parentClass, int elementDeepestDepth) {
-        boolean isOneValue = false;
-        if(elementDeepestDepth == 0 && numberOfSiblings == 1 &&
-                (parentClass==null || !parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT))
-        ) {
-            isOneValue = true;
-        }
-        return isOneValue;
-    }
-
-    // check if it's a single children
-    private boolean isSingleChildren(int elementDeepestDepth, int numberOfChildren, String classAttr) {
-        boolean isSingleChildren = false;
-        if(!xmlJsonDataFormat.isTypeHints()) {
-            if(elementDeepestDepth == 1 && numberOfChildren == 1
-                    && (classAttr==null || !classAttr.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT))
-            ) {
-                isSingleChildren = true;
-            }
-        }
-        return isSingleChildren;
-    }
-
-    // check if it's an attribute object
-    private boolean isAttributeObject(int level, String parentClass, int elementDeepestDepth) {
-        boolean isAttributeObject = false;
-        if(!xmlJsonDataFormat.isTypeHints()) {
-            if(elementDeepestDepth == 0 && parentClass!=null && parentClass.equalsIgnoreCase(JSON_XML_ATTR_CLASS_OBJECT)) {
-                isAttributeObject = true;
-            }
-        }
-        return isAttributeObject;
-    }
-
-    // check if it's the last element
-    private boolean isLastElement(Element nodeElement) {
-        return ElementUtils.calculateNumberOfChildren(nodeElement) == 0;
-    }
-
-    // check if it's the first sibling regarding the numCounts
-    private boolean isFirstSiblingByNumCounts(int numCounts) {
-        return numCounts == 1;
     }
 
     // extract child as other type and add into the array node
@@ -383,7 +275,7 @@ public class XmlToJsonProcessor {
     ) {
         JsonNode subNode = convertXmlToJson(childElement, level +1, classAttr, numSiblings, isFirstSibling, namespace);
 
-        if(subNode.isArray() && isLastElement(childElement)) {
+        if(subNode.isArray() && ElementChecker.isLastElement(childElement)) {
             for (JsonNode subElement : subNode) {
                 rootArrayNode.add(subElement.asText());
             }
