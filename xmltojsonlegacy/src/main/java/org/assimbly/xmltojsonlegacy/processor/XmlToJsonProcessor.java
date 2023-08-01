@@ -175,7 +175,7 @@ public class XmlToJsonProcessor {
             //process text node identified as a root node
             printData(" 2. ROOT", level);
             if(index+1 >= nodeListSize) {
-                if(namespace!=null) {
+                if(namespace!=null && !xmlJsonDataFormat.isSkipNamespaces()) {
                     Node namespaceNode = getNamespaceNode(element);
                     rootObjectNode.put(JSON_XML_ATTR_PREFIX+namespaceNode.getNodeName(), namespaceNode.getNodeValue());
                 }
@@ -339,11 +339,6 @@ public class XmlToJsonProcessor {
         return numCounts == 1;
     }
 
-    // check if namespace is defined
-    private boolean isNamespaceDefined(Element nodeElement) {
-        return getNamespaceNode(nodeElement) != null;
-    }
-
     // get namespace node, if it's defined
     private Node getNamespaceNode(Element nodeElement) {
         if(nodeElement.hasAttributes()){
@@ -371,7 +366,7 @@ public class XmlToJsonProcessor {
     // get element name
     // removes namespace from element name when isRemoveNamespacePrefixes flag is enabled
     private String getElementName(Element nodeElement, String namespace) {
-        if(xmlJsonDataFormat.isRemoveNamespacePrefixes() && namespace!=null){
+        if(!xmlJsonDataFormat.isSkipNamespaces() && xmlJsonDataFormat.isRemoveNamespacePrefixes() && namespace!=null){
             String tagName = nodeElement.getTagName();
             return tagName.replaceFirst(namespace+":", "");
         } else {
