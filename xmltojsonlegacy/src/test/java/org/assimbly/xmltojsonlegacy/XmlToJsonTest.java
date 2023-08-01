@@ -28,7 +28,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_1_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalNone",
+                "marshal",
                 "xml-to-json/example_1.xml",
                 "xml-to-json/example_1_FFFFFF.json"
         );
@@ -37,7 +37,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_1_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHints",
+                "marshal_TypeHints",
                 "xml-to-json/example_1.xml",
                 "xml-to-json/example_1_FFFFFT.json"
         );
@@ -46,7 +46,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_1_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalForceTop",
+                "marshal_ForceTop",
                 "xml-to-json/example_1.xml",
                 "xml-to-json/example_1_TFFFFF.json"
         );
@@ -55,7 +55,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_1_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHintsForceTop",
+                "marshal_ForceTop_TypeHints",
                 "xml-to-json/example_1.xml",
                 "xml-to-json/example_1_TFFFFT.json"
         );
@@ -68,7 +68,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_2_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalNone",
+                "marshal",
                 "xml-to-json/example_2.xml",
                 "xml-to-json/example_2_FFFFFF.json"
         );
@@ -77,7 +77,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_2_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHints",
+                "marshal_TypeHints",
                 "xml-to-json/example_2.xml",
                 "xml-to-json/example_2_FFFFFT.json"
         );
@@ -86,7 +86,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_2_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalForceTop",
+                "marshal_ForceTop",
                 "xml-to-json/example_2.xml",
                 "xml-to-json/example_2_TFFFFF.json"
         );
@@ -95,7 +95,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_2_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHintsForceTop",
+                "marshal_ForceTop_TypeHints",
                 "xml-to-json/example_2.xml",
                 "xml-to-json/example_2_TFFFFT.json"
         );
@@ -108,7 +108,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_3_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalNone",
+                "marshal",
                 "xml-to-json/example_3.xml",
                 "xml-to-json/example_3_FFFFFF.json"
         );
@@ -117,7 +117,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_3_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHints",
+                "marshal_TypeHints",
                 "xml-to-json/example_3.xml",
                 "xml-to-json/example_3_FFFFFT.json"
         );
@@ -126,7 +126,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_3_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalForceTop",
+                "marshal_ForceTop",
                 "xml-to-json/example_3.xml",
                 "xml-to-json/example_3_TFFFFF.json"
         );
@@ -135,7 +135,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_3_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHintsForceTop",
+                "marshal_ForceTop_TypeHints",
                 "xml-to-json/example_3.xml",
                 "xml-to-json/example_3_TFFFFT.json"
         );
@@ -148,7 +148,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_4_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalNone",
+                "marshal",
                 "xml-to-json/example_4.xml",
                 "xml-to-json/example_4_FFFFFF.json"
         );
@@ -157,7 +157,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_4_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHints",
+                "marshal_TypeHints",
                 "xml-to-json/example_4.xml",
                 "xml-to-json/example_4_FFFFFT.json"
         );
@@ -166,7 +166,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_4_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalForceTop",
+                "marshal_ForceTop",
                 "xml-to-json/example_4.xml",
                 "xml-to-json/example_4_TFFFFF.json"
         );
@@ -175,7 +175,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_4_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHintsForceTop",
+                "marshal_ForceTop_TypeHints",
                 "xml-to-json/example_4.xml",
                 "xml-to-json/example_4_TFFFFT.json"
         );
@@ -188,7 +188,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_5_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalNone",
+                "marshal",
                 "xml-to-json/example_5.xml",
                 "xml-to-json/example_5_FFFFFF.json"
         );
@@ -197,7 +197,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_5_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHints",
+                "marshal_TypeHints",
                 "xml-to-json/example_5.xml",
                 "xml-to-json/example_5_FFFFFT.json"
         );
@@ -206,7 +206,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_5_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalForceTop",
+                "marshal_ForceTop",
                 "xml-to-json/example_5.xml",
                 "xml-to-json/example_5_TFFFFF.json"
         );
@@ -215,7 +215,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_5_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHintsForceTop",
+                "marshal_ForceTop_TypeHints",
                 "xml-to-json/example_5.xml",
                 "xml-to-json/example_5_TFFFFT.json"
         );
@@ -228,7 +228,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_6_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalNone",
+                "marshal",
                 "xml-to-json/example_6.xml",
                 "xml-to-json/example_6_FFFFFF.json"
         );
@@ -237,7 +237,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_6_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHints",
+                "marshal_TypeHints",
                 "xml-to-json/example_6.xml",
                 "xml-to-json/example_6_FFFFFT.json"
         );
@@ -246,7 +246,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_6_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalForceTop",
+                "marshal_ForceTop",
                 "xml-to-json/example_6.xml",
                 "xml-to-json/example_6_TFFFFF.json"
         );
@@ -255,7 +255,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_6_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHintsForceTop",
+                "marshal_ForceTop_TypeHints",
                 "xml-to-json/example_6.xml",
                 "xml-to-json/example_6_TFFFFT.json"
         );
@@ -268,7 +268,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_7_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalNone",
+                "marshal",
                 "xml-to-json/example_7.xml",
                 "xml-to-json/example_7_FFFFFF.json"
         );
@@ -277,7 +277,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_7_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHints",
+                "marshal_TypeHints",
                 "xml-to-json/example_7.xml",
                 "xml-to-json/example_7_FFFFFT.json"
         );
@@ -286,7 +286,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_7_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalForceTop",
+                "marshal_ForceTop",
                 "xml-to-json/example_7.xml",
                 "xml-to-json/example_7_TFFFFF.json"
         );
@@ -295,7 +295,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_7_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHintsForceTop",
+                "marshal_ForceTop_TypeHints",
                 "xml-to-json/example_7.xml",
                 "xml-to-json/example_7_TFFFFT.json"
         );
@@ -308,7 +308,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_8_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalNone",
+                "marshal",
                 "xml-to-json/example_8.xml",
                 "xml-to-json/example_8_FFFFFF.json"
         );
@@ -317,7 +317,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_8_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHints",
+                "marshal_TypeHints",
                 "xml-to-json/example_8.xml",
                 "xml-to-json/example_8_FFFFFT.json"
         );
@@ -326,7 +326,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_8_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalForceTop",
+                "marshal_ForceTop",
                 "xml-to-json/example_8.xml",
                 "xml-to-json/example_8_TFFFFF.json"
         );
@@ -335,7 +335,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_8_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHintsForceTop",
+                "marshal_ForceTop_TypeHints",
                 "xml-to-json/example_8.xml",
                 "xml-to-json/example_8_TFFFFT.json"
         );
@@ -348,7 +348,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_9_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalNone",
+                "marshal",
                 "xml-to-json/example_9.xml",
                 "xml-to-json/example_9_FFFFFF.json"
         );
@@ -357,7 +357,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_9_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHints",
+                "marshal_TypeHints",
                 "xml-to-json/example_9.xml",
                 "xml-to-json/example_9_FFFFFT.json"
         );
@@ -366,7 +366,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_9_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalForceTop",
+                "marshal_ForceTop",
                 "xml-to-json/example_9.xml",
                 "xml-to-json/example_9_TFFFFF.json"
         );
@@ -375,7 +375,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_9_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHintsForceTop",
+                "marshal_ForceTop_TypeHints",
                 "xml-to-json/example_9.xml",
                 "xml-to-json/example_9_TFFFFT.json"
         );
@@ -388,7 +388,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_10_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalNone",
+                "marshal",
                 "xml-to-json/example_10.xml",
                 "xml-to-json/example_10_FFFFFF.json"
         );
@@ -397,7 +397,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_10_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHints",
+                "marshal_TypeHints",
                 "xml-to-json/example_10.xml",
                 "xml-to-json/example_10_FFFFFT.json"
         );
@@ -406,7 +406,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_10_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalForceTop",
+                "marshal_ForceTop",
                 "xml-to-json/example_10.xml",
                 "xml-to-json/example_10_TFFFFF.json"
         );
@@ -415,7 +415,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_10_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHintsForceTop",
+                "marshal_ForceTop_TypeHints",
                 "xml-to-json/example_10.xml",
                 "xml-to-json/example_10_TFFFFT.json"
         );
@@ -428,7 +428,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_11_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalNone",
+                "marshal",
                 "xml-to-json/example_11.xml",
                 "xml-to-json/example_11_FFFFFF.json"
         );
@@ -437,7 +437,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_11_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHints",
+                "marshal_TypeHints",
                 "xml-to-json/example_11.xml",
                 "xml-to-json/example_11_FFFFFT.json"
         );
@@ -446,7 +446,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_11_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalForceTop",
+                "marshal_ForceTop",
                 "xml-to-json/example_11.xml",
                 "xml-to-json/example_11_TFFFFF.json"
         );
@@ -455,7 +455,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_11_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHintsForceTop",
+                "marshal_ForceTop_TypeHints",
                 "xml-to-json/example_11.xml",
                 "xml-to-json/example_11_TFFFFT.json"
         );
@@ -468,7 +468,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_12_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalNone",
+                "marshal",
                 "xml-to-json/example_12.xml",
                 "xml-to-json/example_12_FFFFFF.json"
         );
@@ -477,7 +477,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_12_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHints",
+                "marshal_TypeHints",
                 "xml-to-json/example_12.xml",
                 "xml-to-json/example_12_FFFFFT.json"
         );
@@ -486,7 +486,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_12_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalForceTop",
+                "marshal_ForceTop",
                 "xml-to-json/example_12.xml",
                 "xml-to-json/example_12_TFFFFF.json"
         );
@@ -495,7 +495,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_12_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHintsForceTop",
+                "marshal_ForceTop_TypeHints",
                 "xml-to-json/example_12.xml",
                 "xml-to-json/example_12_TFFFFT.json"
         );
@@ -508,7 +508,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_13_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalNone",
+                "marshal",
                 "xml-to-json/example_13.xml",
                 "xml-to-json/example_13_FFFFFF.json"
         );
@@ -517,7 +517,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_13_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHints",
+                "marshal_TypeHints",
                 "xml-to-json/example_13.xml",
                 "xml-to-json/example_13_FFFFFT.json"
         );
@@ -526,7 +526,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_13_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalForceTop",
+                "marshal_ForceTop",
                 "xml-to-json/example_13.xml",
                 "xml-to-json/example_13_TFFFFF.json"
         );
@@ -535,7 +535,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_13_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHintsForceTop",
+                "marshal_ForceTop_TypeHints",
                 "xml-to-json/example_13.xml",
                 "xml-to-json/example_13_TFFFFT.json"
         );
@@ -544,7 +544,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_13_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalRemoveNamespacePrefixes",
+                "marshal_RemoveNamespacePrefixes",
                 "xml-to-json/example_13.xml",
                 "xml-to-json/example_13_FFFFTF.json"
         );
@@ -553,7 +553,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_13_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHintsRemoveNamespacePrefixes",
+                "marshal_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_13.xml",
                 "xml-to-json/example_13_FFFFTT.json"
         );
@@ -562,7 +562,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_13_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHintsSkipNamespaces",
+                "marshal_SkipNamespaces_TypeHints",
                 "xml-to-json/example_13.xml",
                 "xml-to-json/example_13_FFFTFT.json"
         );
@@ -575,7 +575,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_14_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHintsRemoveNamespacePrefixes",
+                "marshal_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_14.xml",
                 "xml-to-json/example_14_FFFFTT.json"
         );
@@ -584,7 +584,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_14_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHintsSkipNamespaces",
+                "marshal_SkipNamespaces_TypeHints",
                 "xml-to-json/example_14.xml",
                 "xml-to-json/example_14_FFFTFT.json"
         );
@@ -597,7 +597,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_15_FFTFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTrimSpaces",
+                "marshal_TrimSpaces",
                 "xml-to-json/example_15.xml",
                 "xml-to-json/example_15_FFTFFF.json"
         );
@@ -610,7 +610,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_16_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshalTypeHintsTrimSpaces",
+                "marshal_TrimSpaces_TypeHints",
                 "xml-to-json/example_16.xml",
                 "xml-to-json/example_16_FFTFFT.json"
         );
@@ -644,64 +644,71 @@ public class XmlToJsonTest extends CamelTestSupport {
         return new RouteBuilder[] {
                 new RouteBuilder() {
                     public void configure() {
-                        from("direct:marshalNone")
-                                .to("dataformat:custom-xmljsonlegacy:marshal?typeHints=false&removeNamespacePrefixes=false&forceTopLevelObject=false&skipNamespaces=false")
+                        from("direct:marshal")
+                                .to("dataformat:custom-xmljsonlegacy:marshal")
                                 .to("mock:result");
                     }
                 },
                 new RouteBuilder() {
                     public void configure() {
-                        from("direct:marshalTypeHints")
-                                .to("dataformat:custom-xmljsonlegacy:marshal?typeHints=true&removeNamespacePrefixes=false&forceTopLevelObject=false&skipNamespaces=false")
+                        from("direct:marshal_ForceTop")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true")
                                 .to("mock:result");
                     }
                 },
                 new RouteBuilder() {
                     public void configure() {
-                        from("direct:marshalForceTop")
-                                .to("dataformat:custom-xmljsonlegacy:marshal?typeHints=false&removeNamespacePrefixes=false&forceTopLevelObject=true&skipNamespaces=false")
+                        from("direct:marshal_TrimSpaces")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?trimSpaces=true")
                                 .to("mock:result");
                     }
                 },
                 new RouteBuilder() {
                     public void configure() {
-                        from("direct:marshalTypeHintsForceTop")
-                                .to("dataformat:custom-xmljsonlegacy:marshal?typeHints=true&removeNamespacePrefixes=false&forceTopLevelObject=true&skipNamespaces=false")
+                        from("direct:marshal_SkipNamespaces")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?skipNamespaces=true")
                                 .to("mock:result");
                     }
                 },
                 new RouteBuilder() {
                     public void configure() {
-                        from("direct:marshalRemoveNamespacePrefixes")
-                                .to("dataformat:custom-xmljsonlegacy:marshal?typeHints=false&removeNamespacePrefixes=true&forceTopLevelObject=false&skipNamespaces=false")
+                        from("direct:marshal_RemoveNamespacePrefixes")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?removeNamespacePrefixes=true")
                                 .to("mock:result");
                     }
                 },
                 new RouteBuilder() {
                     public void configure() {
-                        from("direct:marshalTypeHintsRemoveNamespacePrefixes")
-                                .to("dataformat:custom-xmljsonlegacy:marshal?typeHints=true&removeNamespacePrefixes=true&forceTopLevelObject=false&skipNamespaces=false")
+                        from("direct:marshal_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?typeHints=true")
                                 .to("mock:result");
                     }
                 },
                 new RouteBuilder() {
                     public void configure() {
-                        from("direct:marshalTypeHintsSkipNamespaces")
-                                .to("dataformat:custom-xmljsonlegacy:marshal?typeHints=true&removeNamespacePrefixes=false&forceTopLevelObject=false&skipNamespaces=true")
+                        from("direct:marshal_ForceTop_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&typeHints=true")
                                 .to("mock:result");
                     }
                 },
                 new RouteBuilder() {
                     public void configure() {
-                        from("direct:marshalTrimSpaces")
-                                .to("dataformat:custom-xmljsonlegacy:marshal?typeHints=false&removeNamespacePrefixes=false&forceTopLevelObject=false&skipNamespaces=false&trimSpaces=true")
+                        from("direct:marshal_TrimSpaces_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?trimSpaces=true&typeHints=true")
                                 .to("mock:result");
                     }
                 },
                 new RouteBuilder() {
                     public void configure() {
-                        from("direct:marshalTypeHintsTrimSpaces")
-                                .to("dataformat:custom-xmljsonlegacy:marshal?typeHints=true&removeNamespacePrefixes=false&forceTopLevelObject=false&skipNamespaces=false&trimSpaces=true")
+                        from("direct:marshal_SkipNamespaces_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?skipNamespaces=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        from("direct:marshal_RemoveNamespacePrefixes_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?removeNamespacePrefixes=true&typeHints=true")
                                 .to("mock:result");
                     }
                 },
