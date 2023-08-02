@@ -33,7 +33,7 @@ public class CustomXmlJsonDataFormat implements DataFormat {
 
         XmlToJsonProcessor xmlToJsonJsonProcessor = new XmlToJsonProcessor(this);
         JsonNode jsonNodeResp = xmlToJsonJsonProcessor.convertXmlToJson(
-                document.getDocumentElement(), 0, null, 0, true
+                document.getDocumentElement(), 0, null, 0, true, null
         );
 
         setContentTypeHeader(exchange, MediaType.APPLICATION_JSON_VALUE);
