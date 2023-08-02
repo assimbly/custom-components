@@ -119,7 +119,9 @@ public class XmlToJsonProcessor {
         boolean isFirstSibling = ElementChecker.isFirstSiblingByNumCounts(nodeCount);
         Element childElement = (Element) childNode;
 
-        ElementNodeTransaction transactionProcessor = ElementNodeTransactionFactory.getProcessorFor(isObject, isRootArray, namespace);
+        ElementNodeTransaction transactionProcessor = ElementNodeTransactionFactory.getProcessorFor(
+                isObject, isRootArray, namespace, xmlJsonDataFormat.isTypeHints()
+        );
         return transactionProcessor.process(
                 childNode, rootArrayNode, rootObjectNode, nodeCount, level, numberOfChildren, numberOfSiblings,
                 classAttr, isRootArray, isObject, isSingleChildren, isFirstChild, isFirstSibling, childElement,
