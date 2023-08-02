@@ -14,7 +14,6 @@ import org.assimbly.xmltojsonlegacy.processor.textnode.TextNodeTransaction;
 import org.assimbly.xmltojsonlegacy.processor.textnode.TextNodeTransactionFactory;
 import org.assimbly.xmltojsonlegacy.utils.ElementUtils;
 import org.assimbly.xmltojsonlegacy.utils.ElementChecker;
-import org.assimbly.xmltojsonlegacy.utils.ExtractUtils;
 import org.w3c.dom.*;
 
 public class XmlToJsonProcessor {
