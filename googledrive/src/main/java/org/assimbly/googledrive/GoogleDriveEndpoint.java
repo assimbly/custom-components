@@ -71,10 +71,10 @@ public class GoogleDriveEndpoint extends ProcessorEndpoint {
         return false;
     }
 
-    Drive getClient() {
+    Drive getClient(boolean forceFlag) {
         if (client == null) {
             client = getClientFactory().makeClient(CLIENT_ID, CLIENT_SECRET, APPLICATION_NAME,
-                    configuration.getRefreshToken(), configuration.getAccessToken());
+                    configuration.getAccessToken());
         }
 
         return client;

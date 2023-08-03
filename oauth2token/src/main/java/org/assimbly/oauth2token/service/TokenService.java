@@ -1,5 +1,6 @@
 package org.assimbly.oauth2token.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.assimbly.tenantvariables.mongo.MongoDao;
 import org.assimbly.util.exception.OAuth2TokenException;
@@ -12,6 +13,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Path("/")
 @Secured
@@ -29,12 +31,18 @@ public class TokenService {
     public static String OAUTH2_REFRESH_TOKEN_SUFFIX = "_refresh_token";
     public static String OAUTH2_REFRESH_FLAG_SUFFIX = "_refresh_flag";
     public static String OAUTH2_REDIRECT_URI_SUFFIX = "_redirect_uri";
+    public static String OAUTH2_CREDENTIALS_TYPE_URI_SUFFIX = "_credentials_type";
+    public static String OAUTH2_TOKEN_TENANT_VAR_SUFFIX = "_token_global_var";
 
     private static String SERVICE_PARAM_EXPIRES_IN = "expires_in";
     private static String SERVICE_PARAM_ACCESS_TOKEN = "access_token";
     private static String SERVICE_PARAM_REFRESH_TOKEN = "refresh_token";
     private static String SERVICE_PARAM_ERROR = "error";
     private static String SERVICE_PARAM_ERROR_DESCRIPTION = "error_description";
+
+    private static final String GOOGLE_CLIENT_ID = System.getenv("GOOGLE_CLIENT_ID");
+    private static final String GOOGLE_CLIENT_SECRET = System.getenv("GOOGLE_CLIENT_SECRET");
+    private static final String CREDENTIALS_TYPE_CUSTOM = "custom";
 
     // call service to get token information
     @GET
@@ -61,6 +69,8 @@ public class TokenService {
         String refreshTokenVarName = OAUTH2_PREFIX + id + OAUTH2_REFRESH_TOKEN_SUFFIX;
         String refreshFlagVarName = OAUTH2_PREFIX + id + OAUTH2_REFRESH_FLAG_SUFFIX;
         String redirectUriVarName = OAUTH2_PREFIX + id + OAUTH2_REDIRECT_URI_SUFFIX;
+        String credentialsTypeVarName = OAUTH2_PREFIX + id + OAUTH2_CREDENTIALS_TYPE_URI_SUFFIX;
+        String tokenTenantVarName = OAUTH2_PREFIX + id + OAUTH2_TOKEN_TENANT_VAR_SUFFIX;
 
         // check if there's a tenant variable inside tenantVar, and return real value
         String scope = MongoDao.getTenantVariableValue(scopeVarName, tenant, environment);
@@ -68,13 +78,18 @@ public class TokenService {
         String clientSecret = MongoDao.getTenantVariableValue(clientSecretVarName, tenant, environment);
         String redirectUri = MongoDao.getTenantVariableValue(redirectUriVarName, tenant, environment);
         String uriToken = MongoDao.getTenantVariableValue(uriTokenVarName, tenant, environment);
+        String credentialsType = MongoDao.getTenantVariableValue(credentialsTypeVarName, tenant, environment);
+        String tokenTenantVar = MongoDao.getTenantVariableValue(tokenTenantVarName, tenant, environment);
+
+        boolean customCredentialsType = StringUtils.isEmpty(credentialsType) ||
+                credentialsType.equals(CREDENTIALS_TYPE_CUSTOM);
 
         // prepare data to send
-        String urlParameters  = "client_id="+clientId+
+        String urlParameters  = "client_id="+(customCredentialsType ? clientId : GOOGLE_CLIENT_ID)+
                 (scope!=null && !scope.trim().equals("") ? "&scope="+scope : "")+
                 "&redirect_uri="+redirectUri+
                 "&grant_type=authorization_code"+
-                "&client_secret="+clientSecret+
+                "&client_secret="+(customCredentialsType ? clientSecret : GOOGLE_CLIENT_SECRET)+
                 "&code="+code;
 
         // call service
@@ -88,6 +103,7 @@ public class TokenService {
         String accessToken = tokenInfoMap.get(SERVICE_PARAM_ACCESS_TOKEN);
         if(accessToken!=null && !accessToken.isEmpty()) {
             MongoDao.saveTenantVariable(accessTokenVarName, accessToken, tenant, environment);
+            MongoDao.saveTenantVariable(tokenTenantVar, accessToken, tenant, environment);
         }
         String refreshToken = tokenInfoMap.get(SERVICE_PARAM_REFRESH_TOKEN);
         if(refreshToken!=null && !refreshToken.isEmpty()) {
@@ -116,6 +132,7 @@ public class TokenService {
         String refreshTokenVarName = OAUTH2_PREFIX + id + OAUTH2_REFRESH_TOKEN_SUFFIX;
         String refreshFlagVarName = OAUTH2_PREFIX + id + OAUTH2_REFRESH_FLAG_SUFFIX;
         String redirectUriVarName = OAUTH2_PREFIX + id + OAUTH2_REDIRECT_URI_SUFFIX;
+        String credentialsTypeVarName = OAUTH2_PREFIX + id + OAUTH2_CREDENTIALS_TYPE_URI_SUFFIX;
 
         try {
             // set refresh flag to active
@@ -128,13 +145,17 @@ public class TokenService {
             String redirectUri = MongoDao.getTenantVariableValue(redirectUriVarName, tenant, environment);
             String refreshToken = MongoDao.getTenantVariableValue(refreshTokenVarName, tenant, environment);
             String uriToken = MongoDao.getTenantVariableValue(uriTokenVarName, tenant, environment);
+            String credentialsType = MongoDao.getTenantVariableValue(credentialsTypeVarName, tenant, environment);
+
+            boolean customCredentialsType = StringUtils.isEmpty(credentialsType) ||
+                    credentialsType.equals(CREDENTIALS_TYPE_CUSTOM);
 
             // prepare data to send
-            String urlParameters  = "client_id="+clientId+
+            String urlParameters  = "client_id="+(customCredentialsType ? clientId : GOOGLE_CLIENT_ID)+
                     (scope!=null && !scope.trim().equals("") ? "&scope="+scope : "")+
                     "&redirect_uri="+redirectUri+
                     "&grant_type=refresh_token"+
-                    "&client_secret="+clientSecret+
+                    "&client_secret="+(customCredentialsType ? clientSecret : GOOGLE_CLIENT_SECRET)+
                     "&refresh_token="+refreshToken;
 
             // call service
@@ -201,8 +222,8 @@ public class TokenService {
                 stream = con.getErrorStream();
             }
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"), 8);
-            tokenInfoResp = reader.readLine();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
+            tokenInfoResp = reader.lines().collect(Collectors.joining(System.lineSeparator()));
 
             if (tokenInfoResp != null) {
                 JSONObject tokenInfoJson = new JSONObject(tokenInfoResp);
@@ -224,7 +245,7 @@ public class TokenService {
                     // access_token
                     String accessToken = tokenInfoJson.getString(SERVICE_PARAM_ACCESS_TOKEN);
                     // refresh_token
-                    String refreshToken = tokenInfoJson.getString(SERVICE_PARAM_REFRESH_TOKEN);
+                    String refreshToken = tokenInfoJson.optString(SERVICE_PARAM_REFRESH_TOKEN);
                     // add token info into hashmap
                     tokenInfoMap.put(SERVICE_PARAM_EXPIRES_IN, String.valueOf(nowCal.getTimeInMillis()));
                     tokenInfoMap.put(SERVICE_PARAM_ACCESS_TOKEN, accessToken);

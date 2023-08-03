@@ -2,6 +2,7 @@ package org.assimbly.googledrive;
 
 import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.UriParam;
+import org.assimbly.tenantvariables.mongo.MongoDao;
 
 public class GoogleDriveConfiguration {
 
@@ -15,7 +16,8 @@ public class GoogleDriveConfiguration {
     protected String accessToken;
 
     @UriParam
-    protected String refreshToken;
+    @Metadata(required = true)
+    protected String tenant;
 
     @UriParam
     protected String directoryId;
@@ -70,6 +72,10 @@ public class GoogleDriveConfiguration {
     }
 
     public String getAccessToken() {
+        return MongoDao.interpolatePossibleTenantVariable(accessToken, getTenant());
+    }
+
+    public String getAccessTokenNoInterporlation() {
         return accessToken;
     }
 
@@ -77,12 +83,12 @@ public class GoogleDriveConfiguration {
         this.accessToken = accessToken;
     }
 
-    public String getRefreshToken() {
-        return refreshToken;
+    public String getTenant() {
+        return tenant;
     }
 
-    public void setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
+    public void setTenant(String tenant) {
+        this.tenant = tenant;
     }
 
     public String getFilterFiles() {

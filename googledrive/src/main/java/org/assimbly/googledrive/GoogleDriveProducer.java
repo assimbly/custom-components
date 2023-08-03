@@ -5,6 +5,7 @@ import com.google.api.services.drive.Drive;
 import org.apache.camel.Exchange;
 import org.apache.camel.component.file.GenericFile;
 import org.apache.camel.support.DefaultProducer;
+import org.assimbly.tenantvariables.mongo.MongoDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +46,8 @@ public class GoogleDriveProducer extends DefaultProducer {
     }
 
     private void prepareGoogleDriveClient() {
-        this.service = ((GoogleDriveEndpoint) getEndpoint()).getClient();
+        boolean forceClient = MongoDao.isTenantVar(configuration.getAccessTokenNoInterporlation());
+        this.service = ((GoogleDriveEndpoint) getEndpoint()).getClient(forceClient);
     }
 
     private GenericFile<File> prepareCamelFile(Exchange exchange) throws IOException {
