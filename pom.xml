@@ -85,6 +85,7 @@
         <java-assist.version>3.29.2-GA</java-assist.version>
         <jaxen.version>1.2.0</jaxen.version>
         <javax.version>1.6.2</javax.version>
+        <javax-jaxb-api.version>2.3.1</javax-jaxb-api.version>
         <jcifs.version>2.1.35</jcifs.version>
         <kalium.version>0.8.0</kalium.version>
         <mime4j.version>0.8.9</mime4j.version>
@@ -139,6 +140,12 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient-osgi</artifactId>
             <version>${httpcomponents.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>${javax-jaxb-api.version}</version>
         </dependency>
 
     </dependencies>
