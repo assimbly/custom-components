@@ -1,5 +1,6 @@
 package org.assimbly.googledrive;
 
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
@@ -43,7 +44,7 @@ public class GoogleDriveConsumer extends ScheduledPollConsumer implements Consum
     @Override
     protected void doStart() throws Exception {
         super.doStart();
-        service = this.endpoint.getClient();
+        service = this.endpoint.getClient(false);
 
         if (configuration.getFilterFiles() != null)
             filterPattern = Pattern.compile(configuration.getFilterFiles());
@@ -51,45 +52,51 @@ public class GoogleDriveConsumer extends ScheduledPollConsumer implements Consum
 
     @Override
     protected int poll() throws Exception {
-        if(configuration.getDirectoryId() == null)
-            configuration.setDirectoryId("root");
 
-        findOrCreateMoveToDirectory();
+        try {
+            if(configuration.getDirectoryId() == null)
+                configuration.setDirectoryId("root");
 
-        List<File> filesToProcess = new ArrayList<>();
-        String pageToken = null;
+            findOrCreateMoveToDirectory();
 
-        do {
-            FileList result = service.files().list()
-                    .setQ( "'" + configuration.getDirectoryId() + "' in parents" +
-                            " and mimeType != 'application/vnd.google-apps.folder'" +
-                            " and trashed = false")
-                    .setSpaces("drive")
-                    .setFields("nextPageToken, files(id, name, mimeType)")
-                    .setPageToken(pageToken)
-                    .execute();
+            List<File> filesToProcess = new ArrayList<>();
+            String pageToken = null;
 
-            for (File file : result.getFiles()) {
-                if (isGSuiteFile(file) && configuration.getGSuiteFiles().equals("Ignore"))
-                    continue;
+            do {
+                FileList result = service.files().list()
+                        .setQ( "'" + configuration.getDirectoryId() + "' in parents" +
+                                " and mimeType != 'application/vnd.google-apps.folder'" +
+                                " and trashed = false")
+                        .setSpaces("drive")
+                        .setFields("nextPageToken, files(id, name, mimeType)")
+                        .setPageToken(pageToken)
+                        .execute();
 
-                if (filterPattern == null || filterPattern.matcher(file.getName()).matches())
-                    filesToProcess.add(file);
+                for (File file : result.getFiles()) {
+                    if (isGSuiteFile(file) && configuration.getGSuiteFiles().equals("Ignore"))
+                        continue;
+
+                    if (filterPattern == null || filterPattern.matcher(file.getName()).matches())
+                        filesToProcess.add(file);
+                }
+
+                pageToken = result.getNextPageToken();
+
+            } while (pageToken != null);
+
+            for(File fileModel : filesToProcess) {
+
+                java.io.File file = downloadFile(fileModel);
+
+                Exchange exchange = endpoint.createExchange(file, fileModel);
+
+                this.getProcessor().process(exchange);
+
+                postProcess(fileModel, file);
             }
-
-            pageToken = result.getNextPageToken();
-
-        } while (pageToken != null);
-
-        for(File fileModel : filesToProcess) {
-
-            java.io.File file = downloadFile(fileModel);
-
-            Exchange exchange = endpoint.createExchange(file, fileModel);
-
-            this.getProcessor().process(exchange);
-
-            postProcess(fileModel, file);
+        } catch (GoogleJsonResponseException e) {
+            LOG.error("Google Drive Consume error:", e);
+            service = this.endpoint.getClient(true);
         }
 
         return 0;

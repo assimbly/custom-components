@@ -463,24 +463,7 @@ public class MailConfiguration implements Cloneable {
      * The accessToken for login
      */
     public String getAccessToken() {
-
-        StringBuffer accessTokenBuf = new StringBuffer();
-
-        Pattern pattern = Pattern.compile(TENANT_VARIABLE_EXP);
-        Matcher matcher = pattern.matcher(accessToken);
-
-        while(matcher.find()){
-            String accessTokenVarName = matcher.group(1);
-
-            TenantVariable accessTokenGlobVar = MongoDao.findTenantVariableByName(accessTokenVarName, getTenant());
-            String accessTokenValue = accessTokenGlobVar.find(getEnvironment()).get().getValue();
-
-            matcher.appendReplacement(accessTokenBuf, Matcher.quoteReplacement(accessTokenValue));
-        }
-        matcher.appendTail(accessTokenBuf);
-
-        return accessTokenBuf.toString();
-
+        return MongoDao.interpolatePossibleTenantVariable(accessToken, getTenant());
     }
 
     public void setAccessToken(String accessToken) {

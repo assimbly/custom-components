@@ -71,6 +71,10 @@ public class TenantVariablesProcessor implements Processor {
         return encryptedValue;
     }
 
+    public String getValueByEnvironmentValue(EnvironmentValue environmentVar) {
+        return (environmentVar.isEncrypted() ? decrypt(environmentVar.getValue()) : environmentVar.getValue());
+    }
+
     private void getTenantVariable(Exchange exchange) {
         String name = endpoint.getConfiguration().getName();
         String tenant = (endpoint.getConfiguration().getTenant()!=null ? endpoint.getConfiguration().getTenant() : TENANT_DEFAULT);
