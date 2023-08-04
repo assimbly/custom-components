@@ -86,7 +86,7 @@
         <jaxen.version>1.2.0</jaxen.version>
         <javax.version>1.6.2</javax.version>
         <javax-jaxb-api.version>2.3.1</javax-jaxb-api.version>
-        <jcifs.version>2.1.35</jcifs.version>
+        <jcifs.version>2.1.36</jcifs.version>
         <kalium.version>0.8.0</kalium.version>
         <mime4j.version>0.8.9</mime4j.version>
         <mongo.version>3.12.14</mongo.version>
