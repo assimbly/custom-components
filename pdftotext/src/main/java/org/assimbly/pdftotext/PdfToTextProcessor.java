@@ -4,6 +4,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.springframework.http.MediaType;
 
 import java.io.InputStream;
 
@@ -25,6 +26,7 @@ public class PdfToTextProcessor implements Processor {
         String output = stripper.getText(document);
         document.close();
 
+        exchange.getIn().setHeader(Exchange.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE);
         exchange.getIn().setBody(output);
     }
 }
