@@ -13,12 +13,12 @@ jobs:
 
     runs-on: ubuntu-latest
     permissions:
-        contents: read
-        packages: write
+      contents: read
+      packages: write
 
     steps:
 
-      - name: Delete older snapshots 1
+      - name: Delete older snapshots
         uses: smartsquaregmbh/delete-old-packages@v0.7.0
         with:
           organization: assimbly
@@ -47,15 +47,6 @@ jobs:
             org.assimbly.flv
             org.assimbly.fmuta
             org.assimbly.formtoxml
-
-      - name: Delete older snapshots 2
-        uses: smartsquaregmbh/delete-old-packages@v0.7.0
-        with:
-          organization: assimbly
-          type: maven
-          keep: 0
-          version-pattern: "^\\S+\\-SNAPSHOT$"
-          names: |
             org.assimbly.googledrive
             org.assimbly.hl7
             org.assimbly.mail
