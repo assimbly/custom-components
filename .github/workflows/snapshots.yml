@@ -1,6 +1,7 @@
 name: Publish Snapshots
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 0 * * *'
   push:
@@ -8,7 +9,7 @@ on:
       - 'workflows/adding-github-actions'
 
 jobs:
-  delete_older_snapshots:
+  delete_old_snapshots:
 
     runs-on: ubuntu-latest
     permissions:
@@ -17,7 +18,7 @@ jobs:
 
     steps:
 
-      - name: Delete older snapshots
+      - name: Delete older snapshots 1
         uses: smartsquaregmbh/delete-old-packages@v0.7.0
         with:
           organization: assimbly
@@ -26,15 +27,15 @@ jobs:
           version-pattern: "^\\S+\\-SNAPSHOT$"
           names: |
             org.assimbly.custom-components
+            org.assimbly.smooksnoxml
+            org.assimbly.auth
             org.assimbly.aggregate
             org.assimbly.aleris
             org.assimbly.amazon
             org.assimbly.archive
-            org.assimbly.auth
             org.assimbly.cookies
             org.assimbly.csvtoxml
             org.assimbly.docconverter
-            org.assimbly.smooksnoxml
             org.assimbly.edi
             org.assimbly.edifact
             org.assimbly.edifactcommon
@@ -45,8 +46,9 @@ jobs:
             org.assimbly.exceltoxml
             org.assimbly.flv
             org.assimbly.fmuta
-      
-      - name: Delete older snapshots
+            org.assimbly.formtoxml
+
+      - name: Delete older snapshots 2
         uses: smartsquaregmbh/delete-old-packages@v0.7.0
         with:
           organization: assimbly
@@ -54,8 +56,6 @@ jobs:
           keep: 0
           version-pattern: "^\\S+\\-SNAPSHOT$"
           names: |
-            org.assimbly.globalvariables
-            org.assimbly.formtoxml
             org.assimbly.googledrive
             org.assimbly.hl7
             org.assimbly.mail
@@ -67,15 +67,16 @@ jobs:
             org.assimbly.sandbox
             org.assimbly.simplereplace
             org.assimbly.smb
-            org.assimbly.sql
             org.assimbly.soap
+            org.assimbly.sql
+            org.assimbly.tenantvariables            
             org.assimbly.throttling
             org.assimbly.xmltocsv
             org.assimbly.xmltoexcel
             org.assimbly.xmltojson
 
-  publish_base_snapshot:
-    needs: [delete_older_snapshots]
+  publish_new_snapshot:
+    needs: [delete_old_snapshots]
 
     runs-on: ubuntu-latest
     permissions:
@@ -130,14 +131,6 @@ jobs:
                       "password": "${{ secrets.GITHUB_TOKEN }}"
                   }
               ]
-
-      - name: Update POM Version
-        env:
-          VERSION: 4.0.0-SNAPSHOT
-        run: |
-            echo "Updating to version: ${VERSION}"
-            mvn versions:set -DgenerateBackupPoms=false -DnewVersion=${VERSION}
-            mvn versions:set-property -Dproperty=assimbly.version -DnewVersion=${VERSION}
 
       - name: Publish package
         run: mvn --batch-mode deploy -DskipTests
