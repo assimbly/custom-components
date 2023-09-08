@@ -27,7 +27,7 @@ public class JdbcValidationService {
                                            @QueryParam("port") int port,
                                            @QueryParam("useSSL") boolean useSSL,
                                            @QueryParam("enabledTLSProtocols") String enabledTLSProtocols,
-                                           @QueryParam("escapedChars") boolean escapedChars,
+                                           @QueryParam("escapeChars") boolean escapeChars,
                                            @QueryParam("database") String database) {
         Connection connection = null;
 
@@ -45,7 +45,7 @@ public class JdbcValidationService {
                         .setPort(port)
                         .setSecure(useSSL)
                         .setEnabledTLSProtocols(enabledTLSProtocols)
-                        .setEscapeChars(escapedChars)
+                        .setEscapeChars(escapeChars)
                         .setDatabase(database)
                     .build();
 
