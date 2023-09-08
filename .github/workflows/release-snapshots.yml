@@ -41,6 +41,9 @@ jobs:
             org.assimbly.encoder
             org.assimbly.enrich
             org.assimbly.exceltoxml
+            org.assimbly.flv
+            org.assimbly.fmuta
+            org.assimbly.formtoxml
 
       - name: Delete older snapshots 2
         uses: smartsquaregmbh/delete-old-packages@v0.7.0
@@ -50,9 +53,6 @@ jobs:
           keep: 0
           version-pattern: "^\\S+\\-SNAPSHOT$"
           names: |
-            org.assimbly.flv
-            org.assimbly.fmuta
-            org.assimbly.formtoxml
             org.assimbly.googledrive
             org.assimbly.hl7
             org.assimbly.mail
@@ -60,15 +60,6 @@ jobs:
             org.assimbly.oauth2token
             org.assimbly.pdf
             org.assimbly.pdftotext
-
-      - name: Delete older snapshots 3
-        uses: smartsquaregmbh/delete-old-packages@v0.7.0
-        with:
-          organization: assimbly
-          type: maven
-          keep: 0
-          version-pattern: "^\\S+\\-SNAPSHOT$"
-          names: |
             org.assimbly.replace
             org.assimbly.sandbox
             org.assimbly.simplereplace
