@@ -43,7 +43,6 @@ jobs:
             org.assimbly.exceltoxml
             org.assimbly.flv
             org.assimbly.fmuta
-            org.assimbly.formtoxml
 
       - name: Delete older snapshots 2
         uses: smartsquaregmbh/delete-old-packages@v0.7.0
@@ -53,6 +52,7 @@ jobs:
           keep: 0
           version-pattern: "^\\S+\\-SNAPSHOT$"
           names: |
+            org.assimbly.formtoxml
             org.assimbly.googledrive
             org.assimbly.hl7
             org.assimbly.mail
