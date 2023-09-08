@@ -66,11 +66,13 @@ jobs:
             org.assimbly.smb
             org.assimbly.soap
             org.assimbly.sql
-            org.assimbly.throttling
+            org.assimbly.tenantvariables
+            org.assimbly.throttling            
             org.assimbly.xmltocsv
             org.assimbly.xmltoexcel
             org.assimbly.xmltojson
 
   call-release-jars:
+    needs: delete_old_snapshots
     uses: ./.github/workflows/release-jars.yml
     secrets: inherit
