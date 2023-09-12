@@ -22,6 +22,9 @@ public class SqlConfiguration {
     @Metadata(required = true)
     private String host;
 
+    @UriPath(name = "instance")
+    private String instance;
+
     @UriPath(name = "port", defaultValue = "3306")
     private int port;
 
@@ -80,6 +83,13 @@ public class SqlConfiguration {
      */
     public void setHost(String host) {
         this.host = host;
+    }
+
+    /**
+     * Instance of the Database JDBC Connection.
+     */
+    public void setInstance(String instance) {
+        this.instance = instance;
     }
 
     /**
@@ -145,6 +155,10 @@ public class SqlConfiguration {
 
     public String getHost() {
         return host;
+    }
+
+    public String getInstance() {
+        return instance;
     }
 
     public int getPort() {

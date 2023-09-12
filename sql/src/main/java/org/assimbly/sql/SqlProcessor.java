@@ -36,6 +36,7 @@ public class SqlProcessor implements Processor {
                     .setPassword(config.getPassword())
                     .setDatabase(config.getDatabase())
                     .setHost(config.getHost())
+                    .setInstance(config.getInstance())
                     .setPort(config.getPort())
                     .setSecure(config.getUseSSL())
                     .setEnabledTLSProtocols(config.getTlsVersion())
