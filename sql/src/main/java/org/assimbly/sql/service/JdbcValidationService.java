@@ -23,6 +23,7 @@ public class JdbcValidationService {
     public ValidationErrorMessage validate(@QueryParam("type") String type,
                                            @QueryParam("user") String userName,
                                            @QueryParam("host") String host,
+                                           @QueryParam("instance") String instance,
                                            @QueryParam("pwd") String password,
                                            @QueryParam("port") int port,
                                            @QueryParam("useSSL") boolean useSSL,
@@ -33,20 +34,17 @@ public class JdbcValidationService {
 
         try {
             ConnectionType connectionType = ConnectionType.valueOf(type.toUpperCase());
-            host = URLDecoder.decode(host, "UTF-8");
-            userName = URLDecoder.decode(userName, "UTF-8");
-            password = URLDecoder.decode(password, "UTF-8");
-            database = URLDecoder.decode(database, "UTF-8");
 
             JDBCConnection jdbcConnection = JDBCConnection.builder()
-                        .setUsername(userName)
-                        .setPassword(password)
-                        .setHost(host)
+                        .setUsername(decodeParam(userName))
+                        .setPassword(decodeParam(password))
+                        .setHost(decodeParam(host))
+                        .setInstance(decodeParam(instance))
                         .setPort(port)
                         .setSecure(useSSL)
                         .setEnabledTLSProtocols(enabledTLSProtocols)
                         .setEscapeChars(escapeChars)
-                        .setDatabase(database)
+                        .setDatabase(decodeParam(database))
                     .build();
 
             DatabaseAdapter adapter = connectionType.getAdapter();
@@ -59,6 +57,10 @@ public class JdbcValidationService {
         }
 
         return null;
+    }
+
+    private String decodeParam(String param) throws UnsupportedEncodingException{
+        return URLDecoder.decode(param, "UTF-8");
     }
 
     private void close(Connection connection) {
