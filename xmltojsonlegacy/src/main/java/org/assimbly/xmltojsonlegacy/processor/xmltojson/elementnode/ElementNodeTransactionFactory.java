@@ -1,9 +1,9 @@
-package org.assimbly.xmltojsonlegacy.processor.elementnode;
+package org.assimbly.xmltojsonlegacy.processor.xmltojson.elementnode;
 
-import org.assimbly.xmltojsonlegacy.processor.elementnode.types.ObjectType;
-import org.assimbly.xmltojsonlegacy.processor.elementnode.types.OtherTypeWithNamespace;
-import org.assimbly.xmltojsonlegacy.processor.elementnode.types.OtherTypeWithoutNamespace;
-import org.assimbly.xmltojsonlegacy.processor.elementnode.types.RootArrayType;
+import org.assimbly.xmltojsonlegacy.processor.xmltojson.elementnode.types.ObjectType;
+import org.assimbly.xmltojsonlegacy.processor.xmltojson.elementnode.types.OtherTypeWithNamespace;
+import org.assimbly.xmltojsonlegacy.processor.xmltojson.elementnode.types.OtherTypeWithoutNamespace;
+import org.assimbly.xmltojsonlegacy.processor.xmltojson.elementnode.types.RootArrayType;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,9 +1,9 @@
-package org.assimbly.xmltojsonlegacy.processor.textnode;
+package org.assimbly.xmltojsonlegacy.processor.xmltojson.textnode;
 
-import org.assimbly.xmltojsonlegacy.processor.textnode.types.ObjectType;
-import org.assimbly.xmltojsonlegacy.processor.textnode.types.OneValueType;
-import org.assimbly.xmltojsonlegacy.processor.textnode.types.OtherType;
-import org.assimbly.xmltojsonlegacy.processor.textnode.types.RootNodeType;
+import org.assimbly.xmltojsonlegacy.processor.xmltojson.textnode.types.ObjectType;
+import org.assimbly.xmltojsonlegacy.processor.xmltojson.textnode.types.OneValueType;
+import org.assimbly.xmltojsonlegacy.processor.xmltojson.textnode.types.OtherType;
+import org.assimbly.xmltojsonlegacy.processor.xmltojson.textnode.types.RootNodeType;
 
 import java.util.HashMap;
 import java.util.Map;

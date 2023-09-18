@@ -1,9 +1,9 @@
-package org.assimbly.xmltojsonlegacy.processor.elementnode.types;
+package org.assimbly.xmltojsonlegacy.processor.xmltojson.elementnode.types;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.assimbly.xmltojsonlegacy.processor.elementnode.ElementNodeTransaction;
+import org.assimbly.xmltojsonlegacy.processor.xmltojson.elementnode.ElementNodeTransaction;
 import org.assimbly.xmltojsonlegacy.utils.ElementUtils;
 import org.assimbly.xmltojsonlegacy.utils.ExtractUtils;
 import org.w3c.dom.Element;

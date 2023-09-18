@@ -1,4 +1,4 @@
-package org.assimbly.xmltojsonlegacy.processor.textnode.types;
+package org.assimbly.xmltojsonlegacy.processor.xmltojson.textnode.types;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.assimbly.xmltojsonlegacy.Constants;
 import org.assimbly.xmltojsonlegacy.logs.Print;
-import org.assimbly.xmltojsonlegacy.processor.textnode.TextNodeTransaction;
+import org.assimbly.xmltojsonlegacy.processor.xmltojson.textnode.TextNodeTransaction;
 import org.assimbly.xmltojsonlegacy.utils.ElementUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

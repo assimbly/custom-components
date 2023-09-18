@@ -1,4 +1,4 @@
-package org.assimbly.xmltojsonlegacy.processor.textnode;
+package org.assimbly.xmltojsonlegacy.processor.xmltojson.textnode;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
