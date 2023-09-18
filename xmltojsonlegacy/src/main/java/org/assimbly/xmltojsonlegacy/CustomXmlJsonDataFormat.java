@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.camel.Exchange;
 import org.apache.camel.spi.DataFormat;
 import org.apache.log4j.Logger;
+import org.assimbly.xmltojsonlegacy.processor.JsonToXmlProcessor;
 import org.assimbly.xmltojsonlegacy.processor.XmlToJsonProcessor;
 import org.springframework.http.MediaType;
 import org.w3c.dom.*;
@@ -12,17 +13,25 @@ import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
+import java.io.StringWriter;
 
 public class CustomXmlJsonDataFormat implements DataFormat {
 
     static final Logger logger = Logger.getLogger(CustomXmlJsonDataFormat.class);
 
     // XML to JSON options
-    private boolean forceTopLevelObject, skipWhitespace, trimSpaces, skipNamespaces, removeNamespacePrefixes,
-            typeHints;
+    private boolean forceTopLevelObject, skipWhitespace, trimSpaces, skipNamespaces, removeNamespacePrefixes, typeHints;
+
+    // JSON to XML options
+    private String elementNameTag, arrayNameTag, rootNameTag;
+    private boolean namespaceLenient, typeHintsJson;
 
     // XML to JSON
     @Override
@@ -44,13 +53,22 @@ public class CustomXmlJsonDataFormat implements DataFormat {
     // JSON to XML
     @Override
     public Object unmarshal(Exchange exchange, InputStream stream) throws Exception {
-        String xml = "";
+        String json = exchange.getIn().getBody(String.class);
+        ObjectMapper jsonMapper = new ObjectMapper();
+        JsonNode jsonNode = jsonMapper.readTree(json);
 
-        // TODO
+        JsonToXmlProcessor jsonToXmlProcessor = new JsonToXmlProcessor(this);
+        Document xmlResp = jsonToXmlProcessor.convertJsonToXml(jsonNode, 0);
+
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        DOMSource source = new DOMSource(xmlResp);
+        StringWriter writer = new StringWriter();
+        StreamResult result = new StreamResult(writer);
+        transformer.transform(source, result);
 
         setContentTypeHeader(exchange, MediaType.APPLICATION_XML_VALUE);
-
-        return xml;
+        return writer.toString();
     }
 
     private static Document convertStringToXMLDocument(String xmlString) {
@@ -75,6 +93,7 @@ public class CustomXmlJsonDataFormat implements DataFormat {
             exchange.getIn().setHeader(Exchange.CONTENT_TYPE, contentType);
         }
     }
+
 
     public boolean isForceTopLevelObject() {
         return forceTopLevelObject;
@@ -122,6 +141,46 @@ public class CustomXmlJsonDataFormat implements DataFormat {
 
     public void setTypeHints(boolean typeHints) {
         this.typeHints = typeHints;
+    }
+
+    public String getElementNameTag() {
+        return elementNameTag;
+    }
+
+    public void setElementNameTag(String elementNameTag) {
+        this.elementNameTag = elementNameTag;
+    }
+
+    public String getArrayNameTag() {
+        return arrayNameTag;
+    }
+
+    public void setArrayNameTag(String arrayNameTag) {
+        this.arrayNameTag = arrayNameTag;
+    }
+
+    public String getRootNameTag() {
+        return rootNameTag;
+    }
+
+    public void setRootNameTag(String rootNameTag) {
+        this.rootNameTag = rootNameTag;
+    }
+
+    public boolean isNamespaceLenient() {
+        return namespaceLenient;
+    }
+
+    public void setNamespaceLenient(boolean namespaceLenient) {
+        this.namespaceLenient = namespaceLenient;
+    }
+
+    public boolean isTypeHintsJson() {
+        return typeHintsJson;
+    }
+
+    public void setTypeHintsJson(boolean typeHintsJson) {
+        this.typeHintsJson = typeHintsJson;
     }
 
     @Override

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <lh:List name="Fruit List" xmlns:lh="http://liquidhub.com/SimpleList">
+        <lh:Item>
+            <element>Apple</element>
+            <element>Banana</element>
+        </lh:Item>
+    </lh:List>
+</root>

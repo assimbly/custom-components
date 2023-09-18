@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<o>
+    <Orders class="object" xmlns="http://DataAccess.com/webservices/" xmlns:m="http://DataAccess.com/webservicesOrders/" xmlns:x="http://DataAccess.com/webservicesCustomer/">
+        <x:Order class="object" >
+            <OrderNo class="object">1</OrderNo>
+            <m:Customer class="object" >
+                <State class="object">Yes</State>
+                <m:CustomerNo type="string" >99</m:CustomerNo>
+                <m:State type="string" >Angry</m:State>
+                <x:State class="object" >CA</x:State>
+            </m:Customer>
+        </x:Order>
+    </Orders>
+</o>
