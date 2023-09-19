@@ -1,4 +1,4 @@
-name: Release
+name: Finish Release
 
 on:
   workflow_dispatch:
@@ -8,9 +8,12 @@ on:
         description: 'Branch to use'
         default: 'develop'
         type: string
+      milestone:
+        description: 'Milestone to use as version'
+        type: string
 
 jobs:
-  release:
+  release-version:
 
     runs-on: ubuntu-latest
     permissions:
@@ -19,5 +22,5 @@ jobs:
 
     steps:
 
-      - name: Start release
-        run: echo "Start release of base"
+      - name: Finish release
+        run: echo "Finish release of base"

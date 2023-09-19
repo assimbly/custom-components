@@ -1,0 +1,26 @@
+name: Start Release
+
+on:
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      branch:
+        description: 'Branch to use'
+        default: 'develop'
+        type: string
+      milestone:
+        description: 'Milestone to use as version'
+        type: string
+
+jobs:
+  release:
+
+    runs-on: ubuntu-latest
+    permissions:
+        contents: read
+        packages: write
+
+    steps:
+
+      - name: Start release
+        run: echo "Start release of base"
