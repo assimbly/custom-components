@@ -30,7 +30,7 @@ public class CustomXmlJsonDataFormat implements DataFormat {
     private boolean forceTopLevelObject, skipWhitespace, trimSpaces, skipNamespaces, removeNamespacePrefixes, typeHints;
 
     // JSON to XML options
-    private String elementNameTag, arrayNameTag, rootNameTag;
+    private String elementName, arrayName, rootName;
     private boolean namespaceLenient, typeHintsJson;
 
     // XML to JSON
@@ -143,28 +143,28 @@ public class CustomXmlJsonDataFormat implements DataFormat {
         this.typeHints = typeHints;
     }
 
-    public String getElementNameTag() {
-        return elementNameTag;
+    public String getElementName() {
+        return elementName;
     }
 
-    public void setElementNameTag(String elementNameTag) {
-        this.elementNameTag = elementNameTag;
+    public void setElementName(String elementName) {
+        this.elementName = elementName;
     }
 
-    public String getArrayNameTag() {
-        return arrayNameTag;
+    public String getArrayName() {
+        return arrayName;
     }
 
-    public void setArrayNameTag(String arrayNameTag) {
-        this.arrayNameTag = arrayNameTag;
+    public void setArrayName(String arrayName) {
+        this.arrayName = arrayName;
     }
 
-    public String getRootNameTag() {
-        return rootNameTag;
+    public String getRootName() {
+        return rootName;
     }
 
-    public void setRootNameTag(String rootNameTag) {
-        this.rootNameTag = rootNameTag;
+    public void setRootName(String rootName) {
+        this.rootName = rootName;
     }
 
     public boolean isNamespaceLenient() {

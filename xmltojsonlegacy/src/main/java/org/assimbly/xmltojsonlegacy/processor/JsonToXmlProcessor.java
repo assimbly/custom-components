@@ -69,9 +69,9 @@ public class JsonToXmlProcessor {
         Element element;
         if(level ==0) {
             element = document.createElement(JsonUtils.getRootTagName(jsonNode.getNodeType(),
-                    xmlJsonDataFormat.getRootNameTag(), xmlJsonDataFormat.getArrayNameTag()));
+                    xmlJsonDataFormat.getRootName(), xmlJsonDataFormat.getArrayName()));
         } else {
-            element = document.createElement(elementName !=null ? elementName : xmlJsonDataFormat.getElementNameTag());
+            element = document.createElement(elementName !=null ? elementName : xmlJsonDataFormat.getElementName());
         }
         return element;
     }

@@ -471,35 +471,35 @@ public class JsonToXmlTest extends CamelTestSupport {
                 new RouteBuilder() {
                     public void configure() {
                         from("direct:unmarshal_Element_Array_Root")
-                                .to("dataformat:custom-xmljsonlegacy:unmarshal?elementNameTag=element&arrayNameTag=array&rootNameTag=root")
+                                .to("dataformat:custom-xmljsonlegacy:unmarshal?elementName=element&arrayName=array&rootName=root")
                                 .to("mock:result");
                     }
                 },
                 new RouteBuilder() {
                     public void configure() {
                         from("direct:unmarshal_Element_Array_Root_NamespaceLenient")
-                                .to("dataformat:custom-xmljsonlegacy:unmarshal?elementNameTag=element&arrayNameTag=array&rootNameTag=root&namespaceLenient=true")
+                                .to("dataformat:custom-xmljsonlegacy:unmarshal?elementName=element&arrayName=array&rootName=root&namespaceLenient=true")
                                 .to("mock:result");
                     }
                 },
                 new RouteBuilder() {
                     public void configure() {
                         from("direct:unmarshal_Element_Array_Root_TypeHints")
-                                .to("dataformat:custom-xmljsonlegacy:unmarshal?elementNameTag=element&arrayNameTag=array&rootNameTag=root&typeHints=true")
+                                .to("dataformat:custom-xmljsonlegacy:unmarshal?elementName=element&arrayName=array&rootName=root&typeHints=true")
                                 .to("mock:result");
                     }
                 },
                 new RouteBuilder() {
                     public void configure() {
                         from("direct:unmarshal_Element_Array_Root_NamespaceLenient_TypeHints")
-                                .to("dataformat:custom-xmljsonlegacy:unmarshal?elementNameTag=element&arrayNameTag=array&rootNameTag=root&namespaceLenient=true&typeHints=true")
+                                .to("dataformat:custom-xmljsonlegacy:unmarshal?elementName=element&arrayName=array&rootName=root&namespaceLenient=true&typeHints=true")
                                 .to("mock:result");
                     }
                 },
                 new RouteBuilder() {
                     public void configure() {
                         from("direct:unmarshal_Element_Array_NamespaceLenient_TypeHints")
-                                .to("dataformat:custom-xmljsonlegacy:unmarshal?elementNameTag=element&arrayNameTag=array&namespaceLenient=true&typeHints=true")
+                                .to("dataformat:custom-xmljsonlegacy:unmarshal?elementName=element&arrayName=array&namespaceLenient=true&typeHints=true")
                                 .to("mock:result");
                     }
                 },
