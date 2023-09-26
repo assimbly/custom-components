@@ -10,7 +10,7 @@
     <name>custom-components</name>
     <url>https://www.org.assimbly</url>
 
-    <version>4.0.1</version>
+    <version>4.0.3</version>
 
     <modules>
         <module>aggregate</module>
@@ -32,7 +32,6 @@
         <module>flv</module>
         <module>fmuta</module>
         <module>formtoxml</module>
-        <module>globalvariables</module>
         <module>googledrive</module>
         <module>hl7</module>
         <module>mail</module>
