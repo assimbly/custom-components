@@ -43,10 +43,14 @@ jobs:
 
       - name: create a new branch
         run: |
-          git fetch --all          
+          export GIT_TRACE_PACKET=1
+          export GIT_TRACE=1
+          export GIT_CURL_VERBOSE=1
+          git config --global core.compression 0
           git config --global push.autoSetupRemote true
           git config --local user.email "raymondmeester@gmail.com"
           git config --local user.name "skin27"
+          git fetch --all
           git checkout -b ${{inputs.milestone}}
 
       - name: Push changes
