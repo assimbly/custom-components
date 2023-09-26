@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<o>
+    <lh:List class="object" name="Fruit List" xmlns:lh="http://liquidhub.com/SimpleList">
+        <lh:Item class="array">
+            <element type="string">Apple</element>
+            <element type="string">Banana</element>
+        </lh:Item>
+    </lh:List>
+</o>

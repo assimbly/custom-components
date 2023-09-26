@@ -1,0 +1,35 @@
+= XMLToJSON Component
+:doctitle: XMLT0JSONLEGACY
+:shortname: xmltojsonlegacy
+:artifactid: xmltojsonlegacy
+:description: Converts XML to JSON or JSON to XML in the old format (legacy)
+:since: 1.23.0
+:supportlevel: Stable
+:component-header: Producer is supported
+//Manually maintained attributes
+
+*Since Camel {since}*
+
+*{component-header}*
+
+The components converts a XML into JSON or JSON into XML
+
+Maven users will need to add the following dependency to their `pom.xml`
+for this component:
+
+[source,xml]
+------------------------------------------------------------
+<dependency>
+    <groupId>org.assimbly</groupId>
+    <artifactId>xmltojsonlegacy</artifactId>
+	<version>x.x.x</version>
+    <!-- use the same version as your Assimbly version -->
+</dependency>
+------------------------------------------------------------
+
+== URI format
+
+--------------------------------------------
+dataformat:custom-xmljsonlegacy:marshal
+--------------------------------------------
+

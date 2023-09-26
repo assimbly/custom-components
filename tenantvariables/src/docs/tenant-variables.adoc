@@ -1,0 +1,35 @@
+= Tenant Variables Component
+:doctitle: TENANT VARIABLES
+:shortname: tenantvariables
+:artifactid: tenantvariables
+:description: Create, read, update and delete variables in a Mongo Database
+:since: 2.23.0
+:supportlevel: Stable
+:component-header: Producer is supported
+//Manually maintained attributes
+
+*Since Camel {since}*
+
+*{component-header}*
+
+The components creates, reads, updates and delete variables (values) in a Mongo Database.
+
+Maven users will need to add the following dependency to their `pom.xml`
+for this component:
+
+[source,xml]
+------------------------------------------------------------
+<dependency>
+    <groupId>org.assimbly</groupId>
+    <artifactId>tenantvariables</artifactId>
+	<version>x.x.x</version>
+    <!-- use the same version as your Assimbly version -->
+</dependency>
+------------------------------------------------------------
+
+== URI format
+
+--------------------------------------------
+tenantvariables://nameofvar
+--------------------------------------------
+

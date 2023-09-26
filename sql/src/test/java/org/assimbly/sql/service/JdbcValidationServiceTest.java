@@ -50,6 +50,6 @@ public class JdbcValidationServiceTest {
             mocked.when(() -> builderMock.setDatabase(database)).thenReturn(builderMock);
         }
 
-        service.validate("mysql", usernameEncoded, hostEncoded, passwordEncoded, 3306, true, "TLSv1,TLSv1.1,TLSv1.2", false, databaseEncoded);
+        service.validate("mysql", usernameEncoded, hostEncoded, null, passwordEncoded, 3306, true, "TLSv1,TLSv1.1,TLSv1.2", false, databaseEncoded);
     }
 }

@@ -1,0 +1,24 @@
+{
+    "products":
+    [
+        {
+            "id":"1",
+            "name":"spoon"
+        },
+        {
+            "id":"2",
+            "name":"knife"
+        }
+    ],
+    "images":
+    [
+        {
+            "id":"1",
+            "name":"spoon"
+        },
+        {
+            "id":"2",
+            "name":"knife"
+        }
+    ]
+}

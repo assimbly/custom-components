@@ -1,0 +1,37 @@
+{
+    "root":
+    [
+        {
+            "@class":"array",
+            "product":
+            [
+                {
+                    "@class":"object",
+                    "id":
+                    {
+                        "@type":"string",
+                        "#text":"1"
+                    },
+                    "name":
+                    {
+                        "@type":"string",
+                        "#text":"spoon"
+                    }
+                },
+                {
+                    "@class":"object",
+                    "id":
+                    {
+                        "@type":"string",
+                        "#text":"2"
+                    },
+                    "name":
+                    {
+                        "@type":"string",
+                        "#text":"knife"
+                    }
+                }
+            ]
+        }
+    ]
+}

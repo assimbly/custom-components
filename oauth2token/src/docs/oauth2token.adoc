@@ -1,4 +1,4 @@
-= Global Variables Component
+= OAuth2 Token Component
 :doctitle: OAUTH2 TOKEN
 :shortname: oauth2token
 :artifactid: oauth2token

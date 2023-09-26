@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<o context="{&quot;name&quot;:&quot;http://schema.org/name&quot;,&quot;uri&quot;:{&quot;@id&quot;:&quot;http://xmlns.com/foaf/0.1/homepage&quot;,&quot;@type&quot;:&quot;@id&quot;}}">
+    <name type="string">Norman Walsh</name>
+    <uri type="string">https://nwalsh.com/</uri>
+</o>

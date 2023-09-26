@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Formula1>
+    <Drivers class="array">
+        <Driver class="object">
+            <Name type="string">Max Verstappen</Name>
+            <Age type="number">19</Age>
+        </Driver>
+        <Driver class="object">
+            <Name type="string">Nico Hulkenberg</Name>
+            <Age type="number">30</Age>
+        </Driver>
+    </Drivers>
+    <Teams class="array">
+        <Team class="object">
+            <Name type="String">Redbull Racing</Name>
+            <Principal type="string">Christian Horner</Principal>
+        </Team>
+        <Team class="object">
+            <Name type="String">Renault</Name>
+            <Principal type="string">Carlos Ghosn, Jérôme Stoll, Cyril Abiteboul</Principal>
+        </Team>
+    </Teams>
+</Formula1>

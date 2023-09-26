@@ -26,16 +26,13 @@ public class GoogleDriveClientFactory {
         this.jsonFactory = new JacksonFactory();
     }
 
-    public Drive makeClient(String clientId, String clientSecret, String applicationName, String refreshToken, String accessToken) {
+    public Drive makeClient(String clientId, String clientSecret, String applicationName, String accessToken) {
         if (clientId == null || clientSecret == null) {
             throw new IllegalArgumentException("clientId and clientSecret are required to create Google Drive client.");
         }
         try {
             Credential credential = authorize(clientId, clientSecret);
 
-            if (refreshToken != null && !"".equals(refreshToken)) {
-                credential.setRefreshToken(refreshToken);
-            }
             if (accessToken != null && !"".equals(accessToken)) {
                 credential.setAccessToken(accessToken);
             }

@@ -1,0 +1,17 @@
+{
+    "root": {
+        "@xmlns:ns1": "http://www.example.com/ns1",
+        "ns1:person": [
+            {
+                "ns1:name": "John Doe",
+                "ns1:age": "30",
+                "ns1:email": "john.doe@example.com"
+            },
+            {
+                "ns1:name": "Jane Smith",
+                "ns1:age": "28",
+                "ns1:email": "jane.smith@example.com"
+            }
+        ]
+    }
+}
