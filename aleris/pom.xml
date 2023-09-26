@@ -1,61 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>custom-components</artifactId>
-    <groupId>org.assimbly</groupId>
-	  <version>4.0.3</version>
-  </parent>
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>custom-components</artifactId>
+		<groupId>org.assimbly</groupId>
+		<version>4.0.3</version>
+	</parent>
 
-  <artifactId>aleris</artifactId>
+	<artifactId>aleris</artifactId>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.versions.rules>file:///${project.basedir}/../rules.xml</maven.versions.rules>
-  </properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.versions.rules>file:///${project.basedir}/../rules.xml</maven.versions.rules>
+	</properties>
 
-  <distributionManagement> 
+	<distributionManagement>
 		<repository>
-	  		<id>github</id> 
-			<name>Temporary Staging Repository</name> 
+			<id>github</id>
+			<name>Temporary Staging Repository</name>
 			<url>https://maven.pkg.github.com/assimbly/custom-components</url>
-		</repository> 
-  </distributionManagement>
+		</repository>
+	</distributionManagement>
 
-  <dependencies>
-	  <dependency>
-		  <groupId>com.sun.xml.bind</groupId>
-		  <artifactId>jaxb-core</artifactId>
-		  <version>2.3.0.1</version>
-	  </dependency>
-	  <dependency>
-		  <groupId>javax.xml.bind</groupId>
-		  <artifactId>jaxb-api</artifactId>
-		  <version>2.3.1</version>
-	  </dependency>
-	  <dependency>
-		  <groupId>com.sun.xml.bind</groupId>
-		  <artifactId>jaxb-impl</artifactId>
-		  <version>2.3.1</version>
-	  </dependency>
-	  <dependency>
-		  <groupId>org.javassist</groupId>
-		  <artifactId>javassist</artifactId>
-		  <version>${java-assist.version}</version>
-	  </dependency>
+	<dependencies>
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-core</artifactId>
+			<version>2.3.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-impl</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>${java-assist.version}</version>
+		</dependency>
 
-	  <dependency>
-		  <groupId>org.slf4j</groupId>
-		  <artifactId>slf4j-api</artifactId>
-		  <version>${slf4j.version}</version>
-	  </dependency>
-	  <dependency>
-		  <groupId>org.slf4j</groupId>
-		  <artifactId>slf4j-simple</artifactId>
-		  <version>${slf4j.version}</version>
-	  </dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
 
-  </dependencies>
+	</dependencies>
 
 	<build>
 		<plugins>
