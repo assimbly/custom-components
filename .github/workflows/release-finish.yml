@@ -67,6 +67,7 @@ jobs:
 
   merge-new-branch:
 
+    needs: call-update-version
     runs-on: ubuntu-latest
 
     permissions:
@@ -76,7 +77,6 @@ jobs:
     steps:
 
       - name: Merge release to main
-        needs: call-update-version
         uses: devmasx/merge-branch@master
         with:
           type: now
@@ -87,6 +87,7 @@ jobs:
 
   delete_old_packages:
 
+    needs: merge-new-version
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -95,7 +96,6 @@ jobs:
     steps:
 
       - name: Delete older snapshots
-        needs: merge-new-version
         uses: smartsquaregmbh/delete-old-packages@v0.7.0
         with:
           organization: assimbly
@@ -104,16 +104,54 @@ jobs:
           token: ${{ secrets.MAVEN_TOKEN }}
           semver-pattern: ${{ inputs.milestone }}
           names: |
-            org.assimbly.base
-            org.assimbly.common-base
-            org.assimbly.camel-base
-            org.assimbly.spring-base
-            org.assimbly.activemq-base
-            org.assimbly.test-base
-            org.assimbly.database-drivers
-            org.assimbly.camel-components
-            org.assimbly.utils
-            org.assimbly.extra
+            org.assimbly.custom-components
+            org.assimbly.smooksnoxml
+            org.assimbly.auth
+            org.assimbly.aggregate
+            org.assimbly.aleris
+            org.assimbly.amazon
+            org.assimbly.archive
+            org.assimbly.cookies
+            org.assimbly.csvtoxml
+            org.assimbly.docconverter
+            org.assimbly.edi
+            org.assimbly.edifact
+            org.assimbly.edifactcommon
+            org.assimbly.edifactdotweb
+            org.assimbly.edifactstandards
+            org.assimbly.encoder
+            org.assimbly.enrich
+            org.assimbly.exceltoxml
+            org.assimbly.flv
+            org.assimbly.fmuta
+
+      - name: Delete older snapshots 2
+        uses: smartsquaregmbh/delete-old-packages@v0.7.0
+        with:
+          organization: assimbly
+          type: maven
+          keep: 0
+          token: ${{ secrets.MAVEN_TOKEN }}
+          semver-pattern: ${{ inputs.milestone }}
+          names: |
+            org.assimbly.formtoxml
+            org.assimbly.googledrive
+            org.assimbly.hl7
+            org.assimbly.mail
+            org.assimbly.multipart
+            org.assimbly.oauth2token
+            org.assimbly.pdf
+            org.assimbly.pdftotext
+            org.assimbly.replace
+            org.assimbly.sandbox
+            org.assimbly.simplereplace
+            org.assimbly.smb
+            org.assimbly.soap
+            org.assimbly.sql
+            org.assimbly.throttling            
+            org.assimbly.xmltocsv
+            org.assimbly.xmltoexcel
+            org.assimbly.xmltojson
 
   call-release-jars:
     needs: delete-old-packages
