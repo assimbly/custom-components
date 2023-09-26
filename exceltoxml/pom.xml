@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>custom-components</artifactId>
 		<groupId>org.assimbly</groupId>
 		<version>4.0.3</version>
 	</parent>
 
-  <artifactId>exceltoxml</artifactId>
+	<artifactId>exceltoxml</artifactId>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.release>11</maven.compiler.release>
-    <maven.versions.rules>file:///${project.basedir}/../rules.xml</maven.versions.rules>
-  </properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.release>11</maven.compiler.release>
+		<maven.versions.rules>file:///${project.basedir}/../rules.xml</maven.versions.rules>
+	</properties>
 
-  <distributionManagement> 
+	<distributionManagement>
 		<repository>
-	  		<id>github</id> 
-			<name>Temporary Staging Repository</name> 
+			<id>github</id>
+			<name>Temporary Staging Repository</name>
 			<url>https://maven.pkg.github.com/assimbly/custom-components</url>
-		</repository> 
-  </distributionManagement>
+		</repository>
+	</distributionManagement>
 
 
 	<dependencies>
 
-	  <dependency>
-		  <groupId>org.apache.poi</groupId>
-		  <artifactId>poi</artifactId>
-		  <version>${poi.version}</version>
-	  </dependency>
-	  <dependency>
-		  <groupId>org.apache.poi</groupId>
-		  <artifactId>poi-ooxml</artifactId>
-		  <version>${poi.version}</version>
-	  </dependency>
-  </dependencies>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>${poi.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>${poi.version}</version>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<plugins>
