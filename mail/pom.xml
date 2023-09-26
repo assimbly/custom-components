@@ -50,7 +50,7 @@
 	  </dependency>
 	  <dependency>
 		  <groupId>${project.groupId}</groupId>
-		  <artifactId>tenantvariables</artifactId>
+		  <artifactId>globalvariables</artifactId>
 		  <version>${project.version}</version>
 	  </dependency>
 	  <dependency>

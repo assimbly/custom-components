@@ -464,6 +464,7 @@
 		  <artifactId>d99b-binding</artifactId>
 		  <version>${smooks-fragments.version}</version>
 	  </dependency>
+
   </dependencies>
 
 	<build>

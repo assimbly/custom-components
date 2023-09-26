@@ -32,7 +32,6 @@
         <module>flv</module>
         <module>fmuta</module>
         <module>formtoxml</module>
-        <module>tenantvariables</module>
         <module>googledrive</module>
         <module>hl7</module>
         <module>mail</module>
@@ -51,7 +50,6 @@
         <module>xmltocsv</module>
         <module>xmltoexcel</module>
         <module>xmltojson</module>
-        <module>xmltojsonlegacy</module>
     </modules>
 
     <distributionManagement> 
@@ -74,7 +72,7 @@
         <bouncycastle.version>1.70</bouncycastle.version>
         <config-admin.version>1.9.26</config-admin.version>
         <cxf.version>3.6.0</cxf.version>
-        <camel.version>3.20.6</camel.version>
+        <camel.version>3.20.5</camel.version>
         <docconverter.version>1.8.1</docconverter.version>
         <google.api.version>v3-rev197-1.25.0</google.api.version>
         <google.auth.version>1.5.0</google.auth.version>
@@ -85,15 +83,14 @@
         <java-assist.version>3.29.2-GA</java-assist.version>
         <jaxen.version>1.2.0</jaxen.version>
         <javax.version>1.6.2</javax.version>
-        <javax-jaxb-api.version>2.3.1</javax-jaxb-api.version>
-        <jcifs.version>2.1.36</jcifs.version>
+        <jcifs.version>2.1.34</jcifs.version>
         <kalium.version>0.8.0</kalium.version>
         <mime4j.version>0.8.9</mime4j.version>
         <mongo.version>3.12.14</mongo.version>
         <morphia.version>1.3.2</morphia.version>
         <morpia-core.version>1.6.1</morpia-core.version>
         <osgi.version>6.0.0</osgi.version>
-        <pdfbox.version>2.0.29</pdfbox.version>
+        <pdfbox.version>2.0.28</pdfbox.version>
         <poi.version>5.2.3</poi.version>
         <saaj-impl.version>1.5.3</saaj-impl.version>
         <saxon.version>9.7.0-21</saxon.version>
@@ -140,12 +137,6 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient-osgi</artifactId>
             <version>${httpcomponents.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>${javax-jaxb-api.version}</version>
         </dependency>
 
     </dependencies>
