@@ -1,93 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>custom-components</artifactId>
 		<groupId>org.assimbly</groupId>
 		<version>4.0.3</version>
 	</parent>
 
-  <artifactId>globalvariables</artifactId>
+	<artifactId>tenantvariables</artifactId>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.release>11</maven.compiler.release>
-    <maven.versions.rules>file:///${project.basedir}/../rules.xml</maven.versions.rules>
-  </properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.release>11</maven.compiler.release>
+		<maven.versions.rules>file:///${project.basedir}/../rules.xml</maven.versions.rules>
+	</properties>
 
-  <distributionManagement> 
+	<distributionManagement>
 		<repository>
-	  		<id>github</id> 
-			<name>Temporary Staging Repository</name> 
+			<id>github</id>
+			<name>Temporary Staging Repository</name>
 			<url>https://maven.pkg.github.com/assimbly/custom-components</url>
-		</repository> 
-  </distributionManagement>
+		</repository>
+	</distributionManagement>
 
-  <dependencies>
-	  <dependency>
-		  <groupId>org.abstractj.kalium</groupId>
-		  <artifactId>kalium</artifactId>
-		  <version>${kalium.version}</version>
-	  </dependency>
-	  <!--<dependency>
-		  <groupId>org.springframework.boot</groupId>
-		  <artifactId>spring-boot-starter-data-mongodb</artifactId>
-		  <version>2.6.9</version>
-	  </dependency>-->
-	  <dependency>
-		  <groupId>org.mongodb</groupId>
-		  <artifactId>mongo-java-driver</artifactId>
-		  <version>${mongo.version}</version>
-	  </dependency>
+	<dependencies>
+		<dependency>
+			<groupId>org.abstractj.kalium</groupId>
+			<artifactId>kalium</artifactId>
+			<version>${kalium.version}</version>
+		</dependency>
 
-	  <dependency>
-		  <groupId>dev.morphia.morphia</groupId>
-		  <artifactId>core</artifactId>
-		  <version>${morpia-core.version}</version>
-	  </dependency>
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongo-java-driver</artifactId>
+			<version>${mongo.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>dev.morphia.morphia</groupId>
+			<artifactId>core</artifactId>
+			<version>${morpia-core.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.mongodb</groupId>
+					<artifactId>mongodb-driver-legacy</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.mongodb</groupId>
+					<artifactId>mongodb-driver-core</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.mongodb.morphia</groupId>
+			<artifactId>morphia</artifactId>
+			<version>${morphia.version}</version>
+		</dependency>
 
-	  <!--
-	  <dependency>
-		  <groupId>org.mongodb.morphia</groupId>
-		  <artifactId>morphia</artifactId>
-		  <version>${morphia.version}</version>
-	  </dependency>
-		-->
+		<dependency>
+			<groupId>com.muquit.libsodiumjna</groupId>
+			<artifactId>libsodium-jna</artifactId>
+			<version>1.0.4</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>log4j</groupId>
+					<artifactId>log4j</artifactId>
+				</exclusion>
+			</exclusions>
 
-	  <dependency>
-		  <groupId>com.muquit.libsodiumjna</groupId>
-		  <artifactId>libsodium-jna</artifactId>
-		  <version>1.0.4</version>
-		  <exclusions>
-			  <exclusion>
-				  <groupId>org.slf4j</groupId>
-				  <artifactId>slf4j-log4j12</artifactId>
-			  </exclusion>
-			  <exclusion>
-				  <groupId>log4j</groupId>
-				  <artifactId>log4j</artifactId>
-			  </exclusion>
-		  </exclusions>
+		</dependency>
 
-	  </dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>log4j-over-slf4j</artifactId>
+			<version>1.7.36</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>log4j</groupId>
+					<artifactId>log4j</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 
-	  <dependency>
-		  <groupId>org.slf4j</groupId>
-		  <artifactId>log4j-over-slf4j</artifactId>
-		  <version>1.7.36</version>
-		  <exclusions>
-			  <exclusion>
-				  <groupId>org.slf4j</groupId>
-				  <artifactId>slf4j-log4j12</artifactId>
-			  </exclusion>
-			  <exclusion>
-				  <groupId>log4j</groupId>
-				  <artifactId>log4j</artifactId>
-			  </exclusion>
-		  </exclusions>
-	  </dependency>
-
-  </dependencies>
+	</dependencies>
 
 	<build>
 		<plugins>
