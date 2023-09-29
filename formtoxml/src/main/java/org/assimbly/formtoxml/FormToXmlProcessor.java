@@ -4,6 +4,7 @@ import com.thoughtworks.xstream.XStream;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.assimbly.formtoxml.converter.XstreamMapEntryConverter;
+import org.springframework.http.MediaType;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
@@ -49,6 +50,8 @@ public class FormToXmlProcessor implements Processor {
             xStream.toXML(items, writer);
 
             String xml = outputStream.toString(configuration.getEncoding());
+            
+            exchange.getIn().setHeader(Exchange.CONTENT_TYPE, MediaType.APPLICATION_XML_VALUE);
             exchange.getIn().setBody(xml);
         }
     }
