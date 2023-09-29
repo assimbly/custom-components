@@ -107,7 +107,7 @@ public class SqlProcessor implements Processor {
                 resultSet.close();
             } else {
 
-                if(statement.getUpdateCount() == 1)
+                if(statement.getUpdateCount() > 0)
                     resultSet = statement.getGeneratedKeys();
 
                 if(resultSet != null) {
