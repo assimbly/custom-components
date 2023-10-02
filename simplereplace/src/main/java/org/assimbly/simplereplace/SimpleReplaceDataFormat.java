@@ -11,21 +11,24 @@ import java.io.OutputStream;
 public class SimpleReplaceDataFormat implements DataFormat {
 
     @Override
-    public void marshal(Exchange exchange, Object graph, OutputStream stream) {
+    public void marshal(Exchange exchange, Object graph, OutputStream stream) throws Exception {
     }
 
     @Override
     public Object unmarshal(Exchange exchange, InputStream body) throws Exception {
 
+        String inputBody = exchange.getIn().getBody(String.class);
+
         try (OutputStream result = new ByteArrayOutputStream()) {
 
-            boolean endsWithNewLine = exchange.getIn().getBody(String.class).endsWith("\n");
+            boolean endsWithNewLine = inputBody.endsWith("\n");
 
-            SimpleExpression expression = new SimpleExpression(exchange.getIn().getBody(String.class));
+            SimpleExpression expression = new SimpleExpression(inputBody);
             result.write(expression.evaluate(exchange, byte[].class));
 
-            if (endsWithNewLine)
+            if (endsWithNewLine) {
                 result.write('\n');
+            }
 
             return result;
         }
