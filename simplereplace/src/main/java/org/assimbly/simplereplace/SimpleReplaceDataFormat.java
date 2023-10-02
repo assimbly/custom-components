@@ -26,8 +26,9 @@ public class SimpleReplaceDataFormat implements DataFormat {
             SimpleExpression expression = new SimpleExpression(inputBody);
             result.write(expression.evaluate(exchange, byte[].class));
 
-            if (endsWithNewLine)
+            if (endsWithNewLine) {
                 result.write('\n');
+            }
 
             return result;
         }
