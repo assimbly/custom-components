@@ -30,7 +30,7 @@ public class SimpleReplaceDataFormat implements DataFormat {
                 result.write('\n');
             }
 
-            return result;
+            return result.toString();
         }
     }
 
