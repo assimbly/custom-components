@@ -38,6 +38,7 @@
         <module>mail</module>
         <module>multipart</module>
         <module>oauth2token</module>
+        <module>oriflame</module>
         <module>pdf</module>
         <module>pdftotext</module>
         <module>replace</module>
