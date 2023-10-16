@@ -1,0 +1,27 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap:Body>
+        <INVENTORY_TRANSACTIONS xmlns="urn:ifsworld-com:schemas:post_inventory_transactions">
+            <GLN>WMSDC21234567890</GLN>
+            <SITE>DCBUD</SITE>
+            <SOURCE>WMS</SOURCE>
+            <TRANSACTION_TYPE>INVENTORY_MOVE</TRANSACTION_TYPE>
+            <ITEMS>
+                <INVENTORY_TRANSACTION>
+                    <BATCH_NO>batch12345</BATCH_NO>
+                    <BOX_ID>1234567</BOX_ID>
+                    <COUNTRY_OF_ORIGIN>SE</COUNTRY_OF_ORIGIN>
+                    <ERROR_TEXT>no error</ERROR_TEXT>
+                    <EXPIRY_DATE>2015-07-01T00:00:00.000+00:00</EXPIRY_DATE>
+                    <GTIN>1234567890</GTIN>
+                    <LOCATION_NO>O</LOCATION_NO>
+                    <LOCATION_NO_TO>K</LOCATION_NO_TO>
+                    <PART_NO>21188.1</PART_NO>
+                    <QUANTITY>168.0</QUANTITY>
+                    <REASON_CODE>KIT</REASON_CODE>
+                    <STATUS>OK</STATUS>
+                    <STOCK_ADJ_DATE>2012-12-05T00:00:00.000+00:00</STOCK_ADJ_DATE>
+                </INVENTORY_TRANSACTION>
+            </ITEMS>
+        </INVENTORY_TRANSACTIONS>
+    </soap:Body>
+</soap:Envelope>
