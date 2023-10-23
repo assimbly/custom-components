@@ -8,6 +8,7 @@ import org.assimbly.xmltojsonlegacy.processor.jsontoxml.node.NodeTransactionFact
 import org.assimbly.xmltojsonlegacy.utils.JsonUtils;
 import org.w3c.dom.*;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.util.HashMap;
@@ -45,12 +46,12 @@ public class JsonToXmlProcessor {
 
     // convert each json step into a xml document
     public static Element convertEachJsonStepIntoXmlDocument(
-            JsonNode jsonNode, Document document, Element element, String elementName, int level, HashMap<String,
-            String> xmlnsMap
+            JsonNode jsonNode, Document document, Element element, String elementName, int level,
+            HashMap<String, String> xmlnsMap
     ) {
 
         try {
-            element = createElement(jsonNode, document, elementName, level);
+            element = createElement(jsonNode, document, elementName, level, xmlnsMap);
 
             NodeTransaction transactionProcessor = NodeTransactionFactory.getProcessorFor(jsonNode.isArray(),
                     jsonNode.isObject());
@@ -65,14 +66,29 @@ public class JsonToXmlProcessor {
     }
 
     // create new element
-    private static Element createElement(JsonNode jsonNode, Document document, String elementName, int level) {
+    private static Element createElement(
+            JsonNode jsonNode, Document document, String elementName, int level, HashMap<String, String> xmlnsMap
+    ) {
         Element element;
+        String nameSpaceURI, nameSpace, name = "";
+
         if(level ==0) {
-            element = document.createElement(JsonUtils.getRootTagName(jsonNode.getNodeType(),
-                    xmlJsonDataFormat.getRootName(), xmlJsonDataFormat.getArrayName()));
+            name = JsonUtils.getRootTagName(jsonNode.getNodeType(),
+                    xmlJsonDataFormat.getRootName(), xmlJsonDataFormat.getArrayName());
         } else {
-            element = document.createElement(elementName !=null ? elementName : xmlJsonDataFormat.getElementName());
+            name = (elementName !=null ? elementName : xmlJsonDataFormat.getElementName());
         }
+
+        String[] nameInfo = name.split(":");
+        if(nameInfo.length > 1) {
+            nameSpace = String.format("%s:%s", XMLConstants.XMLNS_ATTRIBUTE, nameInfo[0]);
+        } else {
+            nameSpace = XMLConstants.XMLNS_ATTRIBUTE;
+        }
+        nameSpaceURI = (xmlnsMap.get(nameSpace)!=null ? xmlnsMap.get(nameSpace) : "");
+
+        element = document.createElementNS(nameSpaceURI, name);
+
         return element;
     }
 
