@@ -23,7 +23,7 @@ public class JwtBuilderTest {
 
         String jwt = JwtBuilder.build(name, scope);
 
-        JwtParser parser = Jwts.parser().setSigningKey(key.getBytes("UTF-8"));
+        JwtParser parser = Jwts.parser().setSigningKey(key.getBytes("UTF-8")).build();
         Claims body = parser.parseClaimsJws(jwt).getBody();
 
         assertEquals("Wrong name claim found", name, body.get("name"));

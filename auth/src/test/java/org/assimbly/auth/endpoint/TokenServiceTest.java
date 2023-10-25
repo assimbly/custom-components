@@ -2,6 +2,7 @@ package org.assimbly.auth.endpoint;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.JwtParserBuilder;
 import io.jsonwebtoken.Jwts;
 import org.assimbly.util.helper.Base64Helper;
 import org.junit.BeforeClass;
@@ -45,7 +46,7 @@ public class TokenServiceTest {
         Response response = tokenService.issueToken(header);
         String token = response.getEntity().toString();
 
-        JwtParser parser = Jwts.parser().setSigningKey(key.getBytes("UTF-8"));
+        JwtParser parser = Jwts.parser().setSigningKey(key.getBytes("UTF-8")).build();
         Claims body = parser.parseClaimsJws(token).getBody();
 
         assertNotEquals("Returned token is an empty string", "", token);

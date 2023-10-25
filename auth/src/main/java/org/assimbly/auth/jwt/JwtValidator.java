@@ -2,6 +2,7 @@ package org.assimbly.auth.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import org.slf4j.LoggerFactory;
 import org.assimbly.auth.util.helper.ConfigHelper;
@@ -54,9 +55,11 @@ public final class JwtValidator {
      */
     public static Claims decode(String jwt) throws JwtException, UnsupportedEncodingException {
         String key = ConfigHelper.get("secretKey");
-
-        return Jwts.parser()
+        JwtParser parser = Jwts.parser()
                 .setSigningKey(key.getBytes("UTF-8"))
+                .build();
+
+        return parser
                 .parseClaimsJws(jwt)
                 .getBody();
     }
