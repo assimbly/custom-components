@@ -28,7 +28,9 @@ public class ObjectType implements NodeTransaction {
                 if(key.equals(XMLConstants.XMLNS_ATTRIBUTE) || key.indexOf(XMLConstants.XMLNS_ATTRIBUTE+":")==0) {
                     // namespace
                     String namespace = JsonUtils.getAndSetNamespace(xmlnsMap, key, value.asText());
-                    element.setAttribute(key, namespace);
+                    if(namespace != null) {
+                        element.setAttribute(key, namespace);
+                    }
                 } else {
                     switch (key) {
                         case Constants.JSON_XML_ATTR_CONTEXT:

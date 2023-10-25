@@ -1,0 +1,30 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap:Body>
+        <ITEM_INFORMATION xmlns="urn:ifsworld-com:schemas:post_item_information">
+            <SITE>DCBUD</SITE>
+            <SOURCE>WMS</SOURCE>
+            <ITEM_INFORMATION_DETAILS>
+                <ITEM_INFORMATION_DETAIL>
+                    <BPP>96.0</BPP>
+                    <BOX_SIZE>36.0</BOX_SIZE>
+                    <BOX_WEIGHT>4.42</BOX_WEIGHT>
+                    <CATALOG_NO>25045.1</CATALOG_NO>
+                    <COUNTRY_OF_ORIGIN_1>PL</COUNTRY_OF_ORIGIN_1>
+                    <DESCRIPTION>Volare Soap Flowers</DESCRIPTION>
+                    <DIMENSIONS>0.39x0.20x0.15</DIMENSIONS>
+                    <EXPIRING>Y</EXPIRING>
+                    <GTIN>1234567890</GTIN>
+                    <INVENTORY_VALUE>0.57</INVENTORY_VALUE>
+                    <STATE>MODIFIED</STATE>
+                    <UOM>PCS</UOM>
+                    <COMPONENT_PARTS>
+                        <COMPONENT_PART>
+                            <PART_NO>123</PART_NO>
+                            <PART_QTY>10.0</PART_QTY>
+                        </COMPONENT_PART>
+                    </COMPONENT_PARTS>
+                </ITEM_INFORMATION_DETAIL>
+            </ITEM_INFORMATION_DETAILS>
+        </ITEM_INFORMATION>
+    </soap:Body>
+</soap:Envelope>

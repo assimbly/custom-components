@@ -8,8 +8,9 @@ import java.util.HashMap;
 public class JsonUtils {
 
     public static String getAndSetNamespace(HashMap<String, String> xmlnsMap, String key, String value) {
-        if(xmlnsMap.containsKey(key))
-            return xmlnsMap.get(key);
+        if(xmlnsMap.containsKey(key)) {
+            return null;
+        }
         xmlnsMap.put(key, value);
         return value;
     }
