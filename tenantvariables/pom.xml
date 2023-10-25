@@ -59,7 +59,7 @@
 		<dependency>
 			<groupId>com.muquit.libsodiumjna</groupId>
 			<artifactId>libsodium-jna</artifactId>
-			<version>1.0.4</version>
+			<version>${libsodium-jna.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
@@ -76,7 +76,7 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>log4j-over-slf4j</artifactId>
-			<version>1.7.36</version>
+			<version>${slf4j.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
