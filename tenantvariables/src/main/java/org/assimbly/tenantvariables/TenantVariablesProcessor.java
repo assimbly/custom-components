@@ -4,8 +4,11 @@ import com.jayway.jsonpath.JsonPath;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.language.groovy.GroovyExpression;
+import org.apache.camel.language.simple.SimpleExpressionBuilder;
+import org.apache.camel.language.simple.SimpleExpressionParser;
 import org.apache.camel.language.xpath.XPathBuilder;
 import org.apache.camel.language.simple.SimpleLanguage;
+import org.apache.camel.model.language.SimpleExpression;
 import org.assimbly.util.EncryptionUtil;
 import org.assimbly.util.exception.EnvironmentException;
 import org.assimbly.util.exception.TenantVariableNotFoundException;
@@ -169,8 +172,10 @@ public class TenantVariablesProcessor implements Processor {
             if (isBodyVariable(varValue))
                 varValue = interpolateBody(varValue, exchange);
 
-        if(SimpleLanguage.hasSimpleFunction(varValue))
-            varValue = SimpleLanguage.expression(varValue).evaluate(exchange, String.class);
+        if(SimpleLanguage.hasSimpleFunction(varValue)) {
+            SimpleExpression simpleExpression = new SimpleExpression(varValue);
+            varValue = simpleExpression.evaluate(exchange, String.class);
+        }
 
         return varValue;
     }
@@ -182,7 +187,8 @@ public class TenantVariablesProcessor implements Processor {
         try {
             switch (expressionType){
                 case "simple":
-                    varValue = SimpleLanguage.expression(varValue).evaluate(exchange, String.class);
+                    SimpleExpression simpleExpression = new SimpleExpression(varValue);
+                    varValue = simpleExpression.evaluate(exchange, String.class);
                     break;
                 case "constant":
                     // do nothing

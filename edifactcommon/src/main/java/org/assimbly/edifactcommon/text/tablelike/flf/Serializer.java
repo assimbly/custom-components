@@ -15,6 +15,7 @@
 package org.assimbly.edifactcommon.text.tablelike.flf;
 
 import org.assimbly.edifactcommon.text.tablelike.*;
+import org.assimbly.edifactcommon.text.tablelike.Record;
 import org.assimbly.edifactcommon.text.tablelike.Table;
 
 import java.io.IOException;
@@ -69,7 +70,7 @@ public class Serializer extends org.assimbly.edifactcommon.text.tablelike.Serial
     }
 
     protected boolean doStoreRecord(Record record) {
-        return true;
+        return false;
     }
 
 }

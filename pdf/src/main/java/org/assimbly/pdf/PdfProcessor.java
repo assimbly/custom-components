@@ -3,6 +3,7 @@ package org.assimbly.pdf;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.Processor;
+import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
@@ -26,7 +27,7 @@ public class PdfProcessor implements Processor {
 
         byte[] template = endpoint.requestPdfTemplate();
 
-        try(PDDocument document = PDDocument.load(template)) {
+        try(PDDocument document = Loader.loadPDF(template)) {
 
             PDDocumentCatalog docCatalog = document.getDocumentCatalog();
             PDAcroForm acroForm = docCatalog.getAcroForm();

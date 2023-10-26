@@ -4,7 +4,8 @@ import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.jackson2.JacksonFactory;
+
+import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.drive.Drive;
 import org.apache.camel.RuntimeCamelException;
 
@@ -15,7 +16,7 @@ import java.security.GeneralSecurityException;
 public class GoogleDriveClientFactory {
 
     private NetHttpTransport transport;
-    private JacksonFactory jsonFactory;
+    private GsonFactory jsonFactory;
 
     public GoogleDriveClientFactory() {
         try {
@@ -23,7 +24,7 @@ public class GoogleDriveClientFactory {
         } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
         }
-        this.jsonFactory = new JacksonFactory();
+        this.jsonFactory = new GsonFactory();
     }
 
     public Drive makeClient(String clientId, String clientSecret, String applicationName, String accessToken) {
