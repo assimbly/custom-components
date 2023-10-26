@@ -15,8 +15,8 @@ import org.assimbly.soap.domain.SoapHeader;
 import org.assimbly.soap.domain.SoapHttpHeader;
 import org.assimbly.soap.util.helpers.*;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.core.MediaType;
 import javax.wsdl.*;
 import javax.wsdl.extensions.schema.Schema;
 import java.io.IOException;

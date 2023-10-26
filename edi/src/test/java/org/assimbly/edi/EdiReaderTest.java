@@ -1,7 +1,7 @@
 package org.assimbly.edi;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.apache.camel.test.junit5.params.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.milyn.Smooks;
 
 import javax.xml.transform.stream.StreamResult;
@@ -21,7 +21,7 @@ public class EdiReaderTest {
     private Smooks smooks;
     private EdiReaderConfigurator config;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         smooks = new Smooks();
         config = new EdiReaderConfigurator(SEGMENT, FIELD, COMPONENT, SUB_COMPONENT);

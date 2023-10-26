@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 
 import jcifs.smb.SmbFile;
 
-@UriEndpoint(scheme = "smb", title = "SMB", syntax = "smb://user@server.example.com/sharename?password=secret&localWorkDirectory=/tmp", consumerClass = SmbConsumer.class)
+@UriEndpoint(scheme = "smb", title = "SMB", syntax = "smb://user@server.example.com/sharename?password=secret&localWorkDirectory=/tmp")
 public class SmbEndpoint extends GenericFileEndpoint<SmbFile> {
 
     private static final Logger LOG = LoggerFactory.getLogger(SmbEndpoint.class);

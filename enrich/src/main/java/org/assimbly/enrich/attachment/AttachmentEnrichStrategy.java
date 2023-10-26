@@ -9,7 +9,7 @@ import org.apache.camel.Message;
 import org.apache.log4j.Logger;
 import org.apache.tika.io.IOUtils;
 
-import javax.activation.DataHandler;
+import jakarta.activation.DataHandler;
 import java.io.IOException;
 import java.io.InputStream;
 

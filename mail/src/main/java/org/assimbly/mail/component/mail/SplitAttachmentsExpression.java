@@ -36,11 +36,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.activation.DataHandler;
-import javax.mail.Header;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.Part;
+import jakarta.activation.DataHandler;
+import jakarta.mail.Header;
+import jakarta.mail.MessagingException;
+import jakarta.mail.Multipart;
+import jakarta.mail.Part;
 
 /**
  * A {@link org.apache.camel.Expression} which can be used to split a {@link MailMessage} per attachment. For example if
@@ -84,7 +84,7 @@ public class SplitAttachmentsExpression extends ExpressionAdapter {
          * https://assimblyworld.atlassian.net/browse/DOV-220
          */
         MailMessage inMessage = (MailMessage) exchange.getIn();
-        javax.mail.Message message = inMessage.getOriginalMessage();
+        jakarta.mail.Message message = inMessage.getOriginalMessage();
 
         try {
             extractAttachmentsFromMail(message, attachments);
@@ -169,7 +169,7 @@ public class SplitAttachmentsExpression extends ExpressionAdapter {
      *
      * Assimbly Edit: Copied from org.apache.camel.component.mail.MailBinding (2.20.1)
      */
-    private void extractAttachmentsFromMail(javax.mail.Message message, Map<String, Attachment> map)
+    private void extractAttachmentsFromMail(jakarta.mail.Message message, Map<String, Attachment> map)
             throws MessagingException, IOException {
 
         LOG.trace("Extracting attachments +++ start +++");
@@ -222,7 +222,7 @@ public class SplitAttachmentsExpression extends ExpressionAdapter {
                     @SuppressWarnings("unchecked")
                     Enumeration<Header> headers = part.getAllHeaders();
                     while (headers.hasMoreElements()) {
-                        javax.mail.Header header = headers.nextElement();
+                        jakarta.mail.Header header = headers.nextElement();
                         camelAttachment.addHeader(header.getName(), header.getValue());
                     }
                     map.put(fileName, camelAttachment);

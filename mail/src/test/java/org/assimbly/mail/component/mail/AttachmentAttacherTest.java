@@ -1,5 +1,6 @@
 package org.assimbly.mail.component.mail;
 
+import junit.framework.Assert;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.attachment.AttachmentMessage;
@@ -9,7 +10,7 @@ import org.apache.camel.test.junit5.CamelTestSupport;
 import org.apache.camel.test.junit5.TestSupport;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.Assert;
+
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

@@ -22,9 +22,9 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.internet.InternetAddress;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.InternetAddress;
 
 import com.sun.mail.imap.SortTerm;
 

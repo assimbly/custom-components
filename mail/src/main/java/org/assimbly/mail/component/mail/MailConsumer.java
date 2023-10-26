@@ -24,27 +24,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
-import javax.mail.Flags;
-import javax.mail.Folder;
-import javax.mail.FolderNotFoundException;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Store;
-import javax.mail.search.SearchTerm;
+import jakarta.mail.Flags;
+import jakarta.mail.Folder;
+import jakarta.mail.FolderNotFoundException;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.PasswordAuthentication;
+import jakarta.mail.Store;
+import jakarta.mail.search.SearchTerm;
 
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;
 import com.sun.mail.imap.SortTerm;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePropertyKey;
-import org.apache.camel.ExtendedCamelContext;
-import org.apache.camel.ExtendedExchange;
 import org.apache.camel.Processor;
 import org.apache.camel.RuntimeCamelException;
 import org.apache.camel.attachment.Attachment;
 import org.apache.camel.attachment.AttachmentMessage;
 import org.apache.camel.spi.BeanIntrospection;
+import org.apache.camel.support.PluginHelper;
 import org.apache.camel.support.ScheduledBatchPollingConsumer;
 import org.apache.camel.support.SynchronizationAdapter;
 import org.apache.camel.util.CastUtils;
@@ -55,7 +54,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A {@link org.apache.camel.Consumer Consumer} which consumes messages from JavaMail using a
- * {@link javax.mail.Transport Transport} and dispatches them to the {@link Processor}
+ * {@link jakarta.mail.Transport Transport} and dispatches them to the {@link Processor}
  */
 public class MailConsumer extends ScheduledBatchPollingConsumer {
     public static final String MAIL_MESSAGE_UID = "CamelMailMessageId";
@@ -235,7 +234,7 @@ public class MailConsumer extends ScheduledBatchPollingConsumer {
             final Message mail = exchange.getIn(MailMessage.class).getOriginalMessage();
 
             // add on completion to handle after work when the exchange is done
-            exchange.adapt(ExtendedExchange.class).addOnCompletion(new SynchronizationAdapter() {
+            exchange.getExchangeExtension().addOnCompletion(new SynchronizationAdapter() {
                 @Override
                 public void onComplete(Exchange exchange) {
                     processCommit(mail, exchange);
@@ -271,8 +270,8 @@ public class MailConsumer extends ScheduledBatchPollingConsumer {
         if (mail.getClass().getSimpleName().startsWith("IMAP")) {
             try {
                 LOG.trace("Calling setPeek(true) on mail message {}", mail);
-                BeanIntrospection beanIntrospection
-                        = getEndpoint().getCamelContext().adapt(ExtendedCamelContext.class).getBeanIntrospection();
+                BeanIntrospection beanIntrospection = PluginHelper.getBeanIntrospection(getEndpoint().getCamelContext());
+
                 beanIntrospection.setProperty(getEndpoint().getCamelContext(), mail, "peek", true);
             } catch (Exception e) {
                 // ignore
@@ -403,7 +402,7 @@ public class MailConsumer extends ScheduledBatchPollingConsumer {
                 Exchange exchange = createExchange(message);
                 if (getEndpoint().getConfiguration().isMapMailMessage()) {
                     // ensure the mail message is mapped, which can be ensured by touching the body/header/attachment
-                    LOG.trace("Mapping from javax.mail.Message to Camel MailMessage");
+                    LOG.trace("Mapping from jakarta.mail.Message to Camel MailMessage");
                     exchange.getIn().getBody();
                     exchange.getIn().getHeaders();
                     // must also map attachments

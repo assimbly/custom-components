@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.assimbly.aleris.certificate.*;
 
 
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,7 +17,7 @@ public class CertificatesMarshallerTest {
     /**
      * Tests whether instances of Certificates are marshalled to the XML format specified by Euramax.
      * It ensures that the correct JAXB annotations are used.
-     * @throws javax.xml.bind.JAXBException
+     * @throws jakarta.xml.bind.JAXBException
      * @throws IOException
      */
     @Test

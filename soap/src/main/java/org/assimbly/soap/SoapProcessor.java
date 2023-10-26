@@ -25,7 +25,7 @@ import javax.wsdl.extensions.schema.SchemaImport;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.soap.*;
+import jakarta.xml.soap.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;

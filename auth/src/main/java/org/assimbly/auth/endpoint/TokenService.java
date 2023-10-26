@@ -11,8 +11,8 @@ import org.assimbly.auth.domain.User;
 import org.assimbly.auth.mongo.MongoDao;
 import org.assimbly.util.helper.Base64Helper;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Response;
 import java.io.UnsupportedEncodingException;
 
 import static java.nio.charset.StandardCharsets.UTF_8;

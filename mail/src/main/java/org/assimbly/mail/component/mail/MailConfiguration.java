@@ -20,13 +20,10 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import javax.mail.Message;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.net.ssl.SSLContext;
+import jakarta.mail.Message;
+import jakarta.mail.PasswordAuthentication;
+import jakarta.mail.Session;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.RuntimeCamelException;
@@ -38,6 +35,8 @@ import org.apache.camel.support.jsse.SSLContextParameters;
 import org.apache.camel.util.ObjectHelper;
 import org.assimbly.tenantvariables.domain.TenantVariable;
 import org.assimbly.tenantvariables.mongo.MongoDao;
+
+import javax.net.ssl.SSLContext;
 
 import static org.assimbly.mail.component.mail.MailConstants.MAIL_GENERATE_MISSING_ATTACHMENT_NAMES_NEVER;
 import static org.assimbly.mail.component.mail.MailConstants.MAIL_HANDLE_DUPLICATE_ATTACHMENT_NAMES_NEVER;
@@ -308,7 +307,7 @@ public class MailConfiguration implements Cloneable {
 
         if (debugMode) {
             // add more debug for the SSL communication as well
-            properties.put("javax.net.debug", "all");
+            properties.put("jakarta.net.debug", "all");
         }
 
         if (sslContextParameters != null && isSecureProtocol()) {
@@ -580,8 +579,8 @@ public class MailConfiguration implements Cloneable {
      * Specifies whether Camel should map the received mail message to Camel body/headers/attachments. If set to true,
      * the body of the mail message is mapped to the body of the Camel IN message, the mail headers are mapped to IN
      * headers, and the attachments to Camel IN attachment message. If this option is set to false then the IN message
-     * contains a raw javax.mail.Message. You can retrieve this raw message by calling
-     * exchange.getIn().getBody(javax.mail.Message.class).
+     * contains a raw jakarta.mail.Message. You can retrieve this raw message by calling
+     * exchange.getIn().getBody(jakarta.mail.Message.class).
      */
     public void setMapMailMessage(boolean mapMailMessage) {
         this.mapMailMessage = mapMailMessage;
@@ -823,7 +822,7 @@ public class MailConfiguration implements Cloneable {
     }
 
     /**
-     * Will mark the javax.mail.Message as peeked before processing the mail message. This applies to IMAPMessage
+     * Will mark the jakarta.mail.Message as peeked before processing the mail message. This applies to IMAPMessage
      * messages types only. By using peek the mail will not be eager marked as SEEN on the mail server, which allows us
      * to rollback the mail message if there is an error processing in Camel.
      */

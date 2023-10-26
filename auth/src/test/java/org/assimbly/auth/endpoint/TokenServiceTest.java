@@ -11,7 +11,7 @@ import org.assimbly.auth.MongoTestHelper;
 import org.assimbly.auth.domain.User;
 import org.assimbly.auth.util.helper.ConfigHelper;
 
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 import java.io.IOException;
 
 import static junit.framework.TestCase.assertEquals;

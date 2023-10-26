@@ -16,7 +16,7 @@
  */
 package org.assimbly.mail.component.mail;
 
-import javax.mail.Folder;
+import jakarta.mail.Folder;
 
 /**
  * Is used for doing post processing tasks on the mailbox once the normal processing ended. This includes for example
