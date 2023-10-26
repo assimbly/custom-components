@@ -2,11 +2,10 @@ package org.assimbly.auth.endpoint;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.JwtParserBuilder;
 import io.jsonwebtoken.Jwts;
 import org.assimbly.util.helper.Base64Helper;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.assimbly.auth.MongoTestHelper;
 import org.assimbly.auth.domain.User;
 import org.assimbly.auth.util.helper.ConfigHelper;
@@ -14,9 +13,7 @@ import org.assimbly.auth.util.helper.ConfigHelper;
 import jakarta.ws.rs.core.Response;
 import java.io.IOException;
 
-import static junit.framework.TestCase.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TokenServiceTest {
 
@@ -29,7 +26,7 @@ public class TokenServiceTest {
 
     private static TokenService tokenService;
 
-    @BeforeClass
+    @BeforeAll
     public static void initClass() {
         user = MongoTestHelper.setup();
         database = MongoTestHelper.getDb();
@@ -50,8 +47,8 @@ public class TokenServiceTest {
         Claims body = parser.parseClaimsJws(token).getBody();
 
         assertNotEquals("Returned token is an empty string", "", token);
-        assertNotNull("Token not created", body);
-        assertEquals("Wrong claims for token created", "joe", body.get("name"));
+        assertNotNull(body, "Token not created");
+        assertEquals("joe", body.get("name"), "Wrong claims for token created");
     }
 
     @Test
@@ -59,7 +56,7 @@ public class TokenServiceTest {
         String header = header("", PASSWORD);
         Response response = tokenService.issueToken(header);
 
-        assertEquals("Bad Request code 400 not received as a response", 400, response.getStatus());
+        assertEquals(400, response.getStatus(), "Bad Request code 400 not received as a response");
     }
 
     @Test
@@ -67,7 +64,7 @@ public class TokenServiceTest {
         String header = header(EMAIL, "");
         Response response = tokenService.issueToken(header);
 
-        assertEquals("Bad Request code 400 not received as a response", 400, response.getStatus());
+        assertEquals(400, response.getStatus(), "Bad Request code 400 not received as a response");
     }
 
     @Test
@@ -75,7 +72,7 @@ public class TokenServiceTest {
         String header = header("steve", "zyxvwu");
         Response response = tokenService.issueToken(header);
 
-        assertEquals("Not Authorised Request code 401 not received as a response", 401, response.getStatus());
+        assertEquals(401, response.getStatus(), "Not Authorised Request code 401 not received as a response");
     }
 
     @Test
@@ -83,8 +80,8 @@ public class TokenServiceTest {
         String header = header(EMAIL + "2", PASSWORD + "2");
         Response response = tokenService.issueToken(header);
 
-        assertEquals("Not Authorised Request code 401 not received as a response", 401, response.getStatus());
-        assertEquals("Wrong response entity", Errors.UNAUTHORIZED, response.getEntity());
+        assertEquals(401, response.getStatus(), "Not Authorised Request code 401 not received as a response");
+        assertEquals(Errors.UNAUTHORIZED, response.getEntity(), "Wrong response entity");
     }
 
     @Test
@@ -92,8 +89,8 @@ public class TokenServiceTest {
         String header = header(EMAIL + "3", PASSWORD + "3");
         Response response = tokenService.issueToken(header);
 
-        assertEquals("Not Authorised Request code 401 not received as a response", 401, response.getStatus());
-        assertEquals("Wrong response entity", Errors.INVALID_TENANT, response.getEntity());
+        assertEquals(401, response.getStatus(), "Not Authorised Request code 401 not received as a response");
+        assertEquals(Errors.INVALID_TENANT, response.getEntity(), "Wrong response entity");
     }
 
     private String header(String email, String password) throws IOException {

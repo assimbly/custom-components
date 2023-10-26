@@ -3,9 +3,9 @@ package org.assimbly.aleris.converter;
 import org.apache.commons.io.IOUtils;
 import org.assimbly.aleris.CertificatesCreator;
 import org.assimbly.aleris.certificate.Certificates;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -15,7 +15,7 @@ public class AlerisCertificateConverterTest {
     private static final CertificatesCreator creator = new CertificatesCreator();
     private AlerisCertificateConverter converter;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.converter = new AlerisCertificateConverter();
     }
@@ -31,7 +31,7 @@ public class AlerisCertificateConverterTest {
         final Certificates actualCertificates = converter.convert(readCertificateFromResources("/converter/roermond.cert"));
         final Certificates expectedCertificates = createCertificates(false, elementNames, 1, 1, 1);
 
-        Assert.assertEquals(expectedCertificates, actualCertificates);
+        Assertions.assertEquals(expectedCertificates, actualCertificates);
     }
 
     /**
@@ -45,7 +45,7 @@ public class AlerisCertificateConverterTest {
         final Certificates actualCertificates = converter.convert(readCertificateFromResources("/converter/corby.cert"));
         final Certificates expectedCertificates = createCertificates(true, elementNames, 2, 1, 1);
 
-        Assert.assertEquals(expectedCertificates, actualCertificates);
+        Assertions.assertEquals(expectedCertificates, actualCertificates);
     }
 
     /**
@@ -59,7 +59,7 @@ public class AlerisCertificateConverterTest {
         final Certificates actualCertificates = converter.convert(readCertificateFromResources("/converter/multiple.cert"));
         final Certificates expectedCertificates = createCertificates(false, elementNames, 3, 2, 1);
 
-        Assert.assertEquals(expectedCertificates, actualCertificates);
+        Assertions.assertEquals(expectedCertificates, actualCertificates);
     }
 
     /**
@@ -73,7 +73,7 @@ public class AlerisCertificateConverterTest {
         final Certificates actualCertificates = converter.convert(readCertificateFromResources("/converter/few-elements.cert"));
         final Certificates expectedCertificates = createCertificates(false, elementNames, 4, 1, 1);
 
-        Assert.assertEquals(expectedCertificates, actualCertificates);
+        Assertions.assertEquals(expectedCertificates, actualCertificates);
     }
 
     /**
@@ -87,7 +87,7 @@ public class AlerisCertificateConverterTest {
         final Certificates actualCertificates = converter.convert(readCertificateFromResources("/converter/additional-constraints.cert"));
         final Certificates expectedCertificates = createCertificates(false, elementNames, 5, 1, 1);
 
-        Assert.assertEquals(expectedCertificates, actualCertificates);
+        Assertions.assertEquals(expectedCertificates, actualCertificates);
     }
 
     /**
@@ -101,7 +101,7 @@ public class AlerisCertificateConverterTest {
         final Certificates actualCertificates = converter.convert(readCertificateFromResources("/converter/english.cert"));
         final Certificates expectedCertificates = createCertificates(true, elementNames, 1, 1, 1);
 
-        Assert.assertEquals(expectedCertificates, actualCertificates);
+        Assertions.assertEquals(expectedCertificates, actualCertificates);
     }
 
     /**
@@ -115,7 +115,7 @@ public class AlerisCertificateConverterTest {
         final Certificates actualCertificates = converter.convert(readCertificateFromResources("/converter/two-pages.cert"));
         final Certificates expectedCertificates = createCertificates(false, elementNames, 2, 1, 2);
 
-        Assert.assertEquals(expectedCertificates, actualCertificates);
+        Assertions.assertEquals(expectedCertificates, actualCertificates);
     }
 
     /**
@@ -129,7 +129,7 @@ public class AlerisCertificateConverterTest {
         final Certificates actualCertificates = converter.convert(readCertificateFromResources("/converter/sub-coil.cert"));
         final Certificates expectedCertificates = createCertificates(false, elementNames, 6, 1, 1);
 
-        Assert.assertEquals(expectedCertificates, actualCertificates);
+        Assertions.assertEquals(expectedCertificates, actualCertificates);
     }
 
     /**
@@ -144,7 +144,7 @@ public class AlerisCertificateConverterTest {
         final Certificates actualCertificates = converter.convert(readCertificateFromResources("/converter/properties-per-sub-coil.cert"));
         final Certificates expectedCertificates = createCertificates(true, elementNames, 6, 1, 2);
 
-        Assert.assertEquals(expectedCertificates, actualCertificates);
+        Assertions.assertEquals(expectedCertificates, actualCertificates);
     }
 
     private String readCertificateFromResources(String resourceName) throws IOException {

@@ -1,16 +1,17 @@
 package org.assimbly.aleris.converter;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class AlerisCrateContentSplitterTest {
     private AlerisCrateContentSplitter splitter;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         splitter = new AlerisCrateContentSplitter();
     }
@@ -21,7 +22,7 @@ public class AlerisCrateContentSplitterTest {
         Map<String, String> expected = new HashMap<>();
         expected.put("123", "0456");
         expected.put("012", "0345");
-        Assert.assertEquals(expected, crateNumbers);
+        assertEquals(expected, crateNumbers);
     }
 
     @Test
@@ -30,7 +31,7 @@ public class AlerisCrateContentSplitterTest {
         Map<String, String> expected = new HashMap<>();
         expected.put("123", "0456");
         expected.put("012", "0345");
-        Assert.assertEquals(expected, crateNumbers);
+        assertEquals(expected, crateNumbers);
     }
 
     @Test
@@ -39,6 +40,6 @@ public class AlerisCrateContentSplitterTest {
         Map<String, String> expected = new HashMap<>();
         expected.put("123", "0004");
         expected.put("012", "34567");
-        Assert.assertEquals(expected, crateNumbers);
+        assertEquals(expected, crateNumbers);
     }
 }

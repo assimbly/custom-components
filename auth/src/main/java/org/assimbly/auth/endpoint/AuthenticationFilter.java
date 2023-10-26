@@ -3,7 +3,7 @@ package org.assimbly.auth.endpoint;
 import org.assimbly.auth.endpoint.annotation.Secured;
 import org.assimbly.auth.jwt.JwtValidator;
 
-import javax.annotation.Priority;
+import jakarta.annotation.Priority;
 import jakarta.ws.rs.Priorities;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;

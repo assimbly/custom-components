@@ -1,10 +1,9 @@
 package org.assimbly.soap.util.helpers;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockserver.integration.ClientAndServer;
 import org.assimbly.soap.domain.SoapHttpHeader;
 
@@ -14,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockserver.integration.ClientAndServer.startClientAndServer;
 import static org.mockserver.matchers.Times.exactly;
 import static org.mockserver.model.HttpRequest.request;
@@ -25,12 +25,12 @@ public class WSDLHelperTest {
     private final File output = new File("target/test-classes/response.wsdl");
     private ClientAndServer mockServer;
 
-    @Before
+    @BeforeEach
     public void startServer() {
         mockServer = startClientAndServer(1080);
     }
 
-    @After
+    @AfterEach
     public void stopServer() {
         mockServer.stop();
     }
@@ -46,7 +46,7 @@ public class WSDLHelperTest {
 
         String actual = IOUtils.toString(classLoader.getResourceAsStream("response.wsdl"), StandardCharsets.UTF_8);
 
-        Assert.assertEquals("<wsdl/>", actual);
+        assertEquals("<wsdl/>", actual);
     }
 
     @Test
@@ -59,7 +59,7 @@ public class WSDLHelperTest {
 
         String actual = IOUtils.toString(classLoader.getResourceAsStream("response.wsdl"), StandardCharsets.UTF_8);
 
-        Assert.assertEquals("Unauthorized", actual);
+        assertEquals("Unauthorized", actual);
     }
 
     private void mockResult(String token, String body, int status) {

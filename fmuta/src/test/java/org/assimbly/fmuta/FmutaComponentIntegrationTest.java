@@ -6,7 +6,6 @@ import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.dataformat.univocity.UniVocityCsvDataFormat;
 import org.apache.camel.model.dataformat.UniVocityHeader;
 import org.apache.camel.test.junit5.CamelTestSupport;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;

@@ -1,10 +1,10 @@
 package org.assimbly.auth.mongo;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mongodb.morphia.Datastore;
 
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class MongoClientProviderTest {
 
@@ -12,7 +12,7 @@ public class MongoClientProviderTest {
     public void getClient() {
         Datastore datastore = MongoClientProvider.getInstance().getDatastore("test");
 
-        assertNotNull("MongoClient is null", datastore);
+        assertNotNull(datastore, "MongoClient is null");
         assertNotEquals("Connection not set", "", datastore.getMongo().getConnectPoint());
     }
 

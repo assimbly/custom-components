@@ -7,8 +7,8 @@ import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.impl.engine.ExplicitCamelContextNameStrategy;
 import org.apache.camel.model.language.ConstantExpression;
 import org.apache.camel.support.DefaultExchange;
-import org.apache.camel.test.junit4.CamelTestSupport;
 
+import org.apache.camel.test.junit5.CamelTestSupport;
 import org.assimbly.util.exception.TenantVariableNotFoundException;
 import org.junit.jupiter.api.*;
 import org.assimbly.tenantvariables.domain.EnvironmentValue;
@@ -18,6 +18,8 @@ import org.assimbly.tenantvariables.mongo.MongoDao;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TenantVariablesTest extends CamelTestSupport {
 

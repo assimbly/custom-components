@@ -1,5 +1,6 @@
 package org.assimbly.enrich.attachment;
 
+import jakarta.activation.DataSource;
 import org.apache.camel.AggregationStrategy;
 import org.apache.camel.attachment.AttachmentMessage;
 import org.assimbly.util.helper.MimeTypeHelper;
@@ -58,7 +59,8 @@ public class AttachmentEnrichStrategy implements AggregationStrategy {
 
         ByteArrayDataSource byteArrayDataSource = new ByteArrayDataSource(data, mimeType);
 
-        dataHandler = new DataHandler(byteArrayDataSource);
+        // todo Jakarta/Camel4
+        //dataHandler = new DataHandler((DataSource) byteArrayDataSource);
 
         logger.info(String.format("Adding attachment '%s' with mime type: '%s'", attachmentName, mimeType));
 

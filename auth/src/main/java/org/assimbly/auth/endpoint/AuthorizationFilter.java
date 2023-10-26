@@ -8,7 +8,7 @@ import org.assimbly.auth.jwt.JwtValidator;
 import org.assimbly.auth.mongo.MongoDao;
 import org.assimbly.auth.util.helper.ConfigHelper;
 
-import javax.annotation.Priority;
+import jakarta.annotation.Priority;
 import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.Priorities;
 import jakarta.ws.rs.container.ContainerRequestContext;

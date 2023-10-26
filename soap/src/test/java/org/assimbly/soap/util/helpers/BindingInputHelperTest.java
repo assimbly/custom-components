@@ -4,8 +4,8 @@ import com.ibm.wsdl.extensions.soap.SOAPHeaderImpl;
 import com.ibm.wsdl.extensions.soap12.SOAP12BodyImpl;
 import com.ibm.wsdl.extensions.soap12.SOAP12HeaderImpl;
 import org.assimbly.util.Pair;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import javax.wsdl.Binding;
 import javax.wsdl.BindingOperation;
@@ -15,14 +15,14 @@ import javax.wsdl.factory.WSDLFactory;
 import javax.wsdl.xml.WSDLReader;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class BindingInputHelperTest {
 
     private static Definition definition;
 
-    @Before
+    @BeforeEach
     public void setup() throws WSDLException {
         WSDLFactory factory = WSDLFactory.newInstance();
         WSDLReader reader = factory.newWSDLReader();

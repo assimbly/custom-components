@@ -1,18 +1,20 @@
 package org.assimbly.aleris.converter;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class AlerisChemicalAnalysisSplitterTest {
     private AlerisChemicalAnalysisSplitter splitter;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.splitter = new AlerisChemicalAnalysisSplitter();
     }
@@ -20,12 +22,14 @@ public class AlerisChemicalAnalysisSplitterTest {
     @Test
     public void getElementNames() {
         List<String> elementNames = splitter.getElementNames("line1\nline2\n  AL  ZI   MN  \nline3\nline4");
-        Assert.assertEquals(Arrays.asList("AL", "ZI", "MN"), elementNames);
+        assertEquals(Arrays.asList("AL", "ZI", "MN"), elementNames);
     }
 
-    @Test(expected = IllegalAlerisCertificateException.class)
+    @Test
     public void getNonExistingElementNames() {
-        splitter.getElementNames("");
+        Assertions.assertThrows(IllegalAlerisCertificateException.class, () -> {
+            splitter.getElementNames("");
+        });
     }
 
     @Test
@@ -36,6 +40,6 @@ public class AlerisChemicalAnalysisSplitterTest {
         expected.put("001", Arrays.asList("0095823", "0,09", "0,31"));
         expected.put("002", Arrays.asList("0095824", "0,19", "0,32"));
 
-        Assert.assertEquals(expected, castAnalyses);
+        assertEquals(expected, castAnalyses);
     }
 }
