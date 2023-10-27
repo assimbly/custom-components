@@ -1,24 +1,35 @@
 package org.assimbly.tenantvariables;
 
+import org.abstractj.kalium.crypto.Random;
 import org.apache.camel.CamelExecutionException;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.impl.engine.ExplicitCamelContextNameStrategy;
 import org.apache.camel.model.language.ConstantExpression;
 import org.apache.camel.support.DefaultExchange;
-import org.apache.camel.test.junit4.CamelTestSupport;
 
+import org.apache.camel.test.junit4.CamelTestSupport;
 import org.assimbly.util.exception.TenantVariableNotFoundException;
-import org.junit.jupiter.api.*;
+import org.assimbly.util.helper.Base64Helper;
+import org.junit.After;
+import org.junit.Before;
 import org.assimbly.tenantvariables.domain.EnvironmentValue;
 import org.assimbly.tenantvariables.domain.TenantVariable;
 import org.assimbly.tenantvariables.mongo.MongoDao;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
+import static org.abstractj.kalium.NaCl.Sodium.CRYPTO_SECRETBOX_XSALSA20POLY1305_NONCEBYTES;
+
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({TenantVariablesProcessor.class})
 public class TenantVariablesTest extends CamelTestSupport {
 
     private final String VARIABLE_DEFAULT_VALUE = "Unassigned";
@@ -80,7 +91,7 @@ public class TenantVariablesTest extends CamelTestSupport {
 
     private static final String TENANT = "default";
 
-    @AfterEach
+    @After
     @Override
     public void tearDown() throws Exception {
         try {
@@ -90,7 +101,7 @@ public class TenantVariablesTest extends CamelTestSupport {
         }
     }
 
-    @AfterEach
+    @After
     public void after(){
         List<TenantVariable> variables = MongoDao.findAll(TENANT);
 
@@ -99,8 +110,8 @@ public class TenantVariablesTest extends CamelTestSupport {
         }
     }
 
-    @AfterAll
-    public static void afterAll(){
+    @After
+    public void afterAll(){
         List<TenantVariable> variables = MongoDao.findAll(TENANT);
 
         for(TenantVariable g : variables){
@@ -109,17 +120,15 @@ public class TenantVariablesTest extends CamelTestSupport {
     }
 
     @Override
-    @BeforeEach
+    @Before
     public void setUp() throws Exception {
+
         // Starts the CamelContext
         super.setUp();
 
-        // Start Camel
-        context = new DefaultCamelContext();
-        context.addRoutes(createRouteBuilder());
-        context.start();
-
-        template = context.createProducerTemplate();
+        PowerMockito.mockStatic(System.class);
+        PowerMockito.when(System.getenv("ASSIMBLY_ENCRYPTION_SECRET")).thenReturn("assimblyassimblyassimblyassimbly");
+        PowerMockito.when(System.getenv("ASSIMBLY_ENV")).thenReturn("test");
 
         MongoDao.updateTenantVariable(createVariable(), TENANT);
         MongoDao.updateTenantVariable(createEncryptedVariable(), TENANT);
@@ -223,14 +232,12 @@ public class TenantVariablesTest extends CamelTestSupport {
         };
     }
 
-    @Test
+    @Test(expected = CamelExecutionException.class)
     public void testGetUnassigedVariable() throws Exception {
-        Assertions.assertThrows(CamelExecutionException.class, () -> {
-            // Trigger flow
-            template.sendBody("direct:getWithSpace", "");
+        // Trigger flow
+        template.sendBody("direct:getWithSpace", "");
 
-            getMockEndpoint("mock:out").expectedMessageCount(1);
-        });
+        getMockEndpoint("mock:out").expectedMessageCount(1);
     }
 
     @Test
@@ -470,16 +477,18 @@ public class TenantVariablesTest extends CamelTestSupport {
     private TenantVariable createEncryptedVariable() {
         TenantVariable variable = new TenantVariable(ENCRYPTED_VARIABLE_NAME);
 
-        String encryptedVariableValue = PROCESSOR.encrypt(VARIABLE_VALUE);
+        byte[] nonce = new Random().randomBytes(CRYPTO_SECRETBOX_XSALSA20POLY1305_NONCEBYTES);
+        String encryptedVariableValue = Base64Helper.marshal(PROCESSOR.encrypt(VARIABLE_VALUE, nonce));
 
         EnvironmentValue environmentValue = new EnvironmentValue("test");
 
         environmentValue.setValue(encryptedVariableValue);
-        environmentValue.setNonce(null);
+        environmentValue.setNonce(Base64Helper.marshal(nonce));
         environmentValue.setEncrypted(true);
 
         variable.put(environmentValue);
 
         return variable;
     }
+
 }
