@@ -1,7 +1,5 @@
 package org.assimbly.mail.component.mail;
 
-import jakarta.activation.DataSource;
-import org.apache.axiom.attachments.ByteArrayDataSource;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.Processor;
@@ -38,13 +36,11 @@ public class AttachmentAttacher implements Processor {
             emailBody = "";
 
         AttachmentMessage attMsg = exchange.getIn(AttachmentMessage.class);
-
-        //to do Jakarta/Camel4
-        //attMsg.addAttachment(fileName, new DataHandler((DataSource) new ByteArrayDataSource(IOUtils.toByteArray(is), mimeType)));
-
-        //in.addAttachment(fileName, new DataHandler(new ByteArrayDataSource(IOUtils.toByteArray(is), mimeType)));
+        attMsg.addAttachment(fileName, new DataHandler(IOUtils.toByteArray(is), mimeType));
 
         in.setHeader(Exchange.CONTENT_TYPE, "text/plain");
-        in.setBody(String.valueOf(emailBody));
+        in.setBody(emailBody);
+
     }
+
 }
