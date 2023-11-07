@@ -35,12 +35,12 @@ public final class MailConstants {
     @Metadata(description = "The content type", javaType = "String")
     public static final String MAIL_CONTENT_TYPE = "contentType";
     @Metadata(label = "consumer",
-            description = "After processing a mail message, it can be copied to a mail folder with the given name.",
-            javaType = "String")
+              description = "After processing a mail message, it can be copied to a mail folder with the given name.",
+              javaType = "String")
     public static final String MAIL_COPY_TO = "copyTo";
     @Metadata(label = "consumer",
-            description = "After processing a mail message, it can be moved to a mail folder with the given name.",
-            javaType = "String")
+              description = "After processing a mail message, it can be moved to a mail folder with the given name.",
+              javaType = "String")
     public static final String MAIL_MOVE_TO = "moveTo";
     @Metadata(label = "consumer", description = "Deletes the messages after they have been processed.", javaType = "boolean")
     public static final String MAIL_DELETE = "delete";
@@ -54,6 +54,7 @@ public final class MailConstants {
     public static final String MAIL_GENERATE_MISSING_ATTACHMENT_NAMES_UUID = "uuid";
     public static final String MAIL_HANDLE_DUPLICATE_ATTACHMENT_NAMES_NEVER = "never";
     public static final String MAIL_HANDLE_DUPLICATE_ATTACHMENT_NAMES_UUID_PREFIX = "uuidPrefix";
+    public static final String MAIL_HANDLE_DUPLICATE_ATTACHMENT_NAMES_UUID_SUFFIX = "uuidSuffix";
 
     private MailConstants() {
         // utility class

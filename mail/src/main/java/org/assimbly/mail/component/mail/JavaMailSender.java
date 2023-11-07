@@ -32,7 +32,7 @@ public interface JavaMailSender {
      * Send the mail
      *
      * @param  mimeMessage                   the message to send
-     * @throws javax.mail.MessagingException is thrown if error sending the mail.
+     * @throws MessagingException is thrown if error sending the mail.
      */
     void send(MimeMessage mimeMessage) throws MessagingException;
 

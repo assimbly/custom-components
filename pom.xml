@@ -14,7 +14,7 @@
 
     <modules>
         <module>aggregate</module>
-        <module>aleris</module>
+        <!--<module>aleris</module>-->
         <module>amazon</module>
         <module>archive</module>
         <module>auth</module>
@@ -30,7 +30,7 @@
         <module>enrich</module>
         <module>exceltoxml</module>
         <module>flv</module>
-        <module>fmuta</module>
+        <!--<module>fmuta</module>-->
         <module>formtoxml</module>
         <module>tenantvariables</module>
         <module>googledrive</module>

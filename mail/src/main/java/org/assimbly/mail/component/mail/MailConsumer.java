@@ -598,12 +598,7 @@ public class MailConsumer extends ScheduledBatchPollingConsumer {
             }
             store = sender.getSession().getStore(config.getProtocol());
             PasswordAuthentication passwordAuth = config.getPasswordAuthentication();
-            store.connect(
-                    config.getHost(),
-                    config.getPort(),
-                    passwordAuth.getUserName(),
-                    config.isBasicAuthentication() ? passwordAuth.getPassword() : config.getAccessToken()
-            );
+            store.connect(config.getHost(), config.getPort(), passwordAuth.getUserName(), passwordAuth.getPassword());
 
             serverCanSort = hasSortCapability(store);
         }
