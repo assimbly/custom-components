@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ShipmentMAG>
+    <notify type="boolean">true</notify>
+    <items class="array">
+        <e class="object">
+            <qty type="number">1</qty>
+            <order_item_id type="number">1123285</order_item_id>
+        </e>
+    </items>
+    <tracks>
+        <e>
+            <carrier_code type="string">tig_postnl</carrier_code>
+            <title type="string">PostNL</title>
+            <track_number type="string">3STHXG0794709</track_number>
+        </e>
+    </tracks>
+    <arguments class="object">
+        <extension_attributes class="object">
+            <source_code>warehouse</source_code>
+        </extension_attributes>
+    </arguments>
+</ShipmentMAG>

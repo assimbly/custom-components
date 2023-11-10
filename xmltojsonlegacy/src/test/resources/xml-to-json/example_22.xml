@@ -1,0 +1,38 @@
+<outbound>
+    <poNumber>PAO19702</poNumber>
+    <OriginalPackingslipnumber>PAO19702</OriginalPackingslipnumber>
+    <customerRef1>VOV94529</customerRef1>
+    <shipmentDate>2023/10/16</shipmentDate>
+    <cashOnDelivery>false</cashOnDelivery>
+    <carrierId>9999</carrierId>
+    <backOrder>true</backOrder>
+    <shipToAddress>
+        <shipToAddressName>Home24 SE - Zentrale Berlin</shipToAddressName>
+        <shipToAddressStreetName>Marienweg</shipToAddressStreetName>
+        <shipToAddressNumber>30</shipToAddressNumber>
+        <shipToAddressZipCode>50226</shipToAddressZipCode>
+        <shipToAddressCity>Frechen</shipToAddressCity>
+        <shipToAddressCountry>DE</shipToAddressCountry>
+        <shipToAddressTelephone>30-60988000</shipToAddressTelephone>
+    </shipToAddress>
+    <invoiceAddress>
+        <invoiceAddressName>Home24 SE - Zentrale Berlin</invoiceAddressName>
+        <invoiceAddressStreetName>Otto-Ostrowski-Strasse</invoiceAddressStreetName>
+        <invoiceAddressNumber>3</invoiceAddressNumber>
+        <invoiceAddressZipCode>10249</invoiceAddressZipCode>
+        <invoiceAddressCity>Berlin</invoiceAddressCity>
+        <invoiceAddressCountry>DE</invoiceAddressCountry>
+        <invoiceAddressTelephone>30-60988000</invoiceAddressTelephone>
+        <invoiceAddressEmail>@EMPTY@</invoiceAddressEmail>
+    </invoiceAddress>
+    <articleItems>
+        <articleItem>
+            <articleCode>3602ST</articleCode>
+            <quantity>1</quantity>
+        </articleItem>
+        <articleItem>
+            <articleCode>K1001RS</articleCode>
+            <quantity>1</quantity>
+        </articleItem>
+    </articleItems>
+</outbound>

@@ -616,6 +616,136 @@ public class XmlToJsonTest extends CamelTestSupport {
         );
     }
 
+    /*****************************************
+     ** Example 17
+     *****************************************/
+
+    @Test
+    public void testXmlJson_17_FFFFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshal_TypeHints",
+                "xml-to-json/example_17.xml",
+                "xml-to-json/example_17_FFFFFT.json"
+        );
+    }
+
+    /*****************************************
+     ** Example 18
+     *****************************************/
+
+    @Test
+    public void testXmlJson_18_FFFFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshal_TypeHints",
+                "xml-to-json/example_18.xml",
+                "xml-to-json/example_18_FFFFFT.json"
+        );
+    }
+
+    /*****************************************
+     ** Example 19
+     *****************************************/
+
+    @Test
+    public void testXmlJson_19_FFFFTT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshal_TypeHints",
+                "xml-to-json/example_19.xml",
+                "xml-to-json/example_19_FFFFTT.json"
+        );
+    }
+
+    /*****************************************
+     ** Example 20
+     *****************************************/
+
+    @Test
+    public void testXmlJson_20_FFFTTT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshal_TypeHints",
+                "xml-to-json/example_20.xml",
+                "xml-to-json/example_20_FFFTTT.json"
+        );
+    }
+
+    /*****************************************
+     ** Example 21
+     *****************************************/
+
+    @Test
+    public void testXmlJson_21_FFTFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshal_TypeHints",
+                "xml-to-json/example_21.xml",
+                "xml-to-json/example_21_FFTFFT.json"
+        );
+    }
+
+    /*****************************************
+     ** Example 22
+     *****************************************/
+
+    @Test
+    public void testXmlJson_22_FTTTTF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshal_TypeHints",
+                "xml-to-json/example_22.xml",
+                "xml-to-json/example_22_FTTTTF.json"
+        );
+    }
+
+    /*****************************************
+     ** Example 23
+     *****************************************/
+
+    @Test
+    public void testXmlJson_23_TFFFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshal_TypeHints",
+                "xml-to-json/example_23.xml",
+                "xml-to-json/example_23_TFFFFT.json"
+        );
+    }
+
+    /*****************************************
+     ** Example 24
+     *****************************************/
+
+    @Test
+    public void testXmlJson_24_TFFTTT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshal_TypeHints",
+                "xml-to-json/example_24.xml",
+                "xml-to-json/example_24_TFFTTT.json"
+        );
+    }
+
+    /*****************************************
+     ** Example 25
+     *****************************************/
+
+    @Test
+    public void testXmlJson_25_TTTFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshal_TypeHints",
+                "xml-to-json/example_25.xml",
+                "xml-to-json/example_25_TTTFFT.json"
+        );
+    }
+
+    /*****************************************
+     ** Example 26
+     *****************************************/
+
+    @Test
+    public void testXmlJson_26_FFFFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshal_TypeHints",
+                "xml-to-json/example_26.xml",
+                "xml-to-json/example_26_FFFFFF.json"
+        );
+    }
+
     private void compareInputXmlFileWithOutputJsonFile(String routeName, String inputXmlFile, String outputJsonFile)
             throws IOException, InterruptedException {
         String defaultXml = IOUtils.toString(classLoader.getResourceAsStream(inputXmlFile), StandardCharsets.UTF_8);
