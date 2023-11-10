@@ -1,11 +1,14 @@
 package org.assimbly.xmltojsonlegacy.utils;
 
+import org.assimbly.xmltojsonlegacy.Constants;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.XMLConstants;
+import java.util.Arrays;
+import java.util.List;
 
 public class ElementUtils {
 
@@ -97,6 +100,14 @@ public class ElementUtils {
             }
         }
         return depth;
+    }
+
+    public static boolean isAnSpecialAttribute(String attribute) {
+        return Constants.SPECIAL_JSON_XML_ATTR_TYPES.contains(attribute);
+    }
+
+    public static boolean isAnXmlnsAttribute(String attribute) {
+        return attribute.equals("xmlns") || attribute.indexOf("xmlns:") == 0;
     }
 
 }

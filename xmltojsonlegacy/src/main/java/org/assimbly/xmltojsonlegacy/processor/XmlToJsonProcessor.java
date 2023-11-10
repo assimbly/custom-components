@@ -143,11 +143,17 @@ public class XmlToJsonProcessor {
 
     // add attributes in the object node
     private static void addAttributesInObjectNode(Element element, ObjectNode rootObjectNode, boolean isAttributeObject) {
-        if(!xmlJsonDataFormat.isTypeHints() && !isAttributeObject && element.hasAttributes()){
+        if(!isAttributeObject && element.hasAttributes()){
             NamedNodeMap attrMap = element.getAttributes();
             for (int j = 0; j < attrMap.getLength(); j++) {
                 Node node = attrMap.item(j);
-                rootObjectNode.put(Constants.JSON_XML_ATTR_PREFIX+node.getNodeName(), node.getNodeValue());
+                String attr = node.getNodeName();
+                if((!xmlJsonDataFormat.isTypeHints() && !ElementUtils.isAnXmlnsAttribute(attr)) ||
+                        xmlJsonDataFormat.isTypeHints() && !ElementUtils.isAnSpecialAttribute(attr) &&
+                                !ElementUtils.isAnXmlnsAttribute(attr)
+                ) {
+                    rootObjectNode.put(Constants.JSON_XML_ATTR_PREFIX+node.getNodeName(), node.getNodeValue());
+                }
             }
         }
     }
