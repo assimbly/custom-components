@@ -26,10 +26,13 @@ public class ExtractUtils {
             Element childElement, boolean isFirstSibling, String namespace, boolean skipNamespaces,
             boolean removeNamespacePrefixes
     ) {
-        rootObjectNode.set(
-                ElementUtils.getElementName(childNode, namespace, removeNamespacePrefixes, skipNamespaces),
-                XmlToJsonProcessor.convertXmlToJson(childElement, level +1, classAttr, numSiblings, isFirstSibling, namespace)
-        );
+        String propertyName = ElementUtils.getElementName(childNode, namespace, removeNamespacePrefixes, skipNamespaces);
+        JsonNode node = XmlToJsonProcessor.convertXmlToJson(childElement, level +1, classAttr, numSiblings, isFirstSibling, namespace);
+        if(node.size() == 1) {
+            rootObjectNode.put(propertyName, node.get(propertyName).asText());
+        } else {
+            rootObjectNode.set(propertyName, node);
+        }
     }
 
     // extract child as array type
@@ -70,8 +73,22 @@ public class ExtractUtils {
                         addNodeWithAttributeInfo(childElement, ElementUtils.getNodeValue(childElement, trimSpaces))
                 );
             } else {
-                rootObjectNode.put(ElementUtils.getElementName(childElement, namespace, removeNamespacePrefixes, skipNamespaces),
-                        ElementUtils.getNodeValue(childElement, trimSpaces));
+                String fieldName = ElementUtils.getElementName(childElement, namespace, removeNamespacePrefixes, skipNamespaces);
+                String fieldValue = ElementUtils.getNodeValue(childElement, trimSpaces);
+                if(rootObjectNode.has(fieldName)) {
+                    JsonNode nodeValues = rootObjectNode.get(fieldName);
+                    if(nodeValues.isArray()) {
+                        ((ArrayNode)nodeValues).add(fieldValue);
+                    } else {
+                        ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode();
+                        arrayNode.add(nodeValues.asText());
+                        arrayNode.add(fieldValue);
+                        nodeValues = arrayNode;
+                    }
+                    rootObjectNode.set(fieldName, nodeValues);
+                } else {
+                    rootObjectNode.put(fieldName, fieldValue);
+                }
             }
         }
     }
