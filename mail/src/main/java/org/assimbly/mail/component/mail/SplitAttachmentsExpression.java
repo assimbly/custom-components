@@ -104,7 +104,7 @@ public class SplitAttachmentsExpression extends ExpressionAdapter {
         return bos.toByteArray();
     }
 
-    public boolean hasAttachements(Exchange exchange) {
+    public boolean hasAttachments(Exchange exchange) {
         return exchange.getIn(AttachmentMessage.class).hasAttachments();
     }
 
