@@ -649,7 +649,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_19_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshal_TypeHints",
+                "marshal_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_19.xml",
                 "xml-to-json/example_19_FFFFTT.json"
         );
@@ -662,7 +662,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_20_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshal_TypeHints",
+                "marshal_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_20.xml",
                 "xml-to-json/example_20_FFFTTT.json"
         );
@@ -675,7 +675,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_21_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshal_TypeHints",
+                "marshal_TrimSpaces_TypeHints",
                 "xml-to-json/example_21.xml",
                 "xml-to-json/example_21_FFTFFT.json"
         );
@@ -688,7 +688,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_22_FTTTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshal_TypeHints",
+                "marshal_SkipWhitespace_TrimSpaces_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_22.xml",
                 "xml-to-json/example_22_FTTTTF.json"
         );
@@ -701,7 +701,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_23_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshal_TypeHints",
+                "marshal_ForceTop_TypeHints",
                 "xml-to-json/example_23.xml",
                 "xml-to-json/example_23_TFFFFT.json"
         );
@@ -714,7 +714,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_24_TFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshal_TypeHints",
+                "marshal_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_24.xml",
                 "xml-to-json/example_24_TFFTTT.json"
         );
@@ -727,7 +727,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_25_TTTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshal_TypeHints",
+                "marshal_ForceTop_SkipWhitespace_TrimSpaces_TypeHints",
                 "xml-to-json/example_25.xml",
                 "xml-to-json/example_25_TTTFFT.json"
         );
@@ -740,7 +740,7 @@ public class XmlToJsonTest extends CamelTestSupport {
     @Test
     public void testXmlJson_26_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
-                "marshal_TypeHints",
+                "marshal",
                 "xml-to-json/example_26.xml",
                 "xml-to-json/example_26_FFFFFF.json"
         );
@@ -839,6 +839,34 @@ public class XmlToJsonTest extends CamelTestSupport {
                     public void configure() {
                         from("direct:marshal_RemoveNamespacePrefixes_TypeHints")
                                 .to("dataformat:custom-xmljsonlegacy:marshal?removeNamespacePrefixes=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        from("direct:marshal_SkipNamespaces_RemoveNamespacePrefixes_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?skipNamespaces=true&removeNamespacePrefixes=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        from("direct:marshal_SkipWhitespace_TrimSpaces_SkipNamespaces_RemoveNamespacePrefixes")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?skipWhitespace=true&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        from("direct:marshal_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        from("direct:marshal_ForceTop_SkipWhitespace_TrimSpaces_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=true&typeHints=true")
                                 .to("mock:result");
                     }
                 },
