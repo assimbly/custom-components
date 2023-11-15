@@ -28,10 +28,15 @@ public class ExtractUtils {
     ) {
         String propertyName = ElementUtils.getElementName(childNode, namespace, removeNamespacePrefixes, skipNamespaces);
         JsonNode node = XmlToJsonProcessor.convertXmlToJson(childElement, level +1, classAttr, numSiblings, isFirstSibling, namespace);
-        if(node.size() == 1) {
-            rootObjectNode.put(propertyName, node.get(propertyName).asText());
-        } else {
-            rootObjectNode.set(propertyName, node);
+        switch (node.size()) {
+            case 0:
+                rootObjectNode.set(propertyName, JsonNodeFactory.instance.arrayNode());
+                break;
+            case 1:
+                rootObjectNode.put(propertyName, node.get(propertyName).asText());
+                break;
+            default:
+                rootObjectNode.set(propertyName, node);
         }
     }
 
@@ -114,14 +119,14 @@ public class ExtractUtils {
     private static void setValueUsingAttributeType(
             ObjectNode rootObjectNode, JsonNode subElement, String label, String childTypeAttr, boolean trimSpaces
     ) {
-        switch (childTypeAttr) {
+        switch (childTypeAttr.toLowerCase()) {
             case Constants.JSON_XML_ATTR_TYPE_NUMBER:
                 rootObjectNode.put(label, subElement.asInt());
                 break;
             case Constants.JSON_XML_ATTR_TYPE_BOOLEAN:
                 rootObjectNode.put(label, subElement.asBoolean());
                 break;
-            case Constants.JSON_XML_ATTR_TYPE_STRING:
+            default:
                 String value = subElement.asText();
                 if(trimSpaces){
                     value = (value.trim().equalsIgnoreCase("null") ? null : value.trim());
@@ -130,8 +135,6 @@ public class ExtractUtils {
                 }
                 rootObjectNode.put(label, value);
                 break;
-            default:
-                // do nothing
         }
     }
 
