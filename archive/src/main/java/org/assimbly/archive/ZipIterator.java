@@ -119,7 +119,7 @@ public class ZipIterator implements Iterator<Message>, Closeable {
                 answer.getHeaders().putAll(exchange.getIn().getHeaders());
                 answer.setHeader("zipFileName", current.getName());
                 answer.setHeader(Exchange.FILE_NAME, current.getName());
-                answer.setBody(new org.assimbly.archive.ZipInputStreamWrapper(zipInputStream));
+                answer.setBody(new ZipInputStreamWrapper(zipInputStream));
                 return answer;
             } else {
                 LOGGER.trace("close zipInputStream");

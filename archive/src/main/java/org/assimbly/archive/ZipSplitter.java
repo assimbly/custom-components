@@ -21,7 +21,6 @@ import java.io.InputStream;
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
 import org.apache.camel.Message;
-import org.assimbly.archive.ZipIterator;
 
 /**
  * ZipSplitter the expression builder which can be used after the splitter Based on the thread
