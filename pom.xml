@@ -16,7 +16,7 @@
         <module>aggregate</module>
         <!--<module>aleris</module>-->
         <module>amazon</module>
-        <module>archive</module>
+        <!--<module>archive</module>-->
         <module>auth</module>
         <module>cookies</module>
         <module>csvtoxml</module>
@@ -87,7 +87,7 @@
         <jaxen.version>1.2.0</jaxen.version>
         <javax.version>1.6.2</javax.version>
         <javax-jaxb-api.version>2.3.1</javax-jaxb-api.version>
-        <jcifs.version>2.1.36</jcifs.version>
+        <jcifs.version>2.1.37</jcifs.version>
         <kalium.version>0.8.0</kalium.version>
         <mime4j.version>0.8.9</mime4j.version>
         <mockito.version>3.3.3</mockito.version>
