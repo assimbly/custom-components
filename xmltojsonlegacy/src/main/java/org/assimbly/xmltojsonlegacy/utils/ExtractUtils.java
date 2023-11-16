@@ -64,12 +64,16 @@ public class ExtractUtils {
     ) {
         if(typeHints) {
             JsonNode subNode = XmlToJsonProcessor.convertXmlToJson(childElement, level +1, classAttr, numSiblings, isFirstSibling, namespace);
-            for (JsonNode subElement : subNode) {
-                subNode.fields().forEachRemaining(entry -> {
-                    String label = entry.getKey();
-                    String childTypeAttr = childElement.getAttribute(Constants.JSON_XML_ATTR_TYPE);
-                    setValueUsingAttributeType(rootObjectNode, subElement, label, childTypeAttr, trimSpaces);
-                });
+            if(subNode.isEmpty()) {
+                setEmptyArrayNodeInRootObjectNode(rootObjectNode, childElement.getTagName());
+            } else {
+                for (JsonNode subElement : subNode) {
+                    subNode.fields().forEachRemaining(entry -> {
+                        String label = entry.getKey();
+                        String childTypeAttr = childElement.getAttribute(Constants.JSON_XML_ATTR_TYPE);
+                        setValueUsingAttributeType(rootObjectNode, subElement, label, childTypeAttr, trimSpaces);
+                    });
+                }
             }
         } else {
             if(classAttr!=null && !classAttr.equals("")) {
@@ -136,6 +140,11 @@ public class ExtractUtils {
                 rootObjectNode.put(label, value);
                 break;
         }
+    }
+
+    // set empty array node in rootObjectNode
+    private static void setEmptyArrayNodeInRootObjectNode(ObjectNode rootObjectNode, String label) {
+        rootObjectNode.set(label, JsonNodeFactory.instance.arrayNode());
     }
 
 }
