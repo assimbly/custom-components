@@ -14,6 +14,7 @@ import org.assimbly.xmltojsonlegacy.processor.xmltojson.textnode.TextNodeTransac
 import org.assimbly.xmltojsonlegacy.processor.xmltojson.textnode.TextNodeTransactionFactory;
 import org.assimbly.xmltojsonlegacy.utils.ElementUtils;
 import org.assimbly.xmltojsonlegacy.utils.ElementChecker;
+import org.assimbly.xmltojsonlegacy.utils.ExtractUtils;
 import org.w3c.dom.*;
 
 public class XmlToJsonProcessor {
@@ -96,6 +97,9 @@ public class XmlToJsonProcessor {
                                     childNode, element, rootArrayNode, rootObjectNode, level, index, nodeListSize,
                                     isRootArray, isRootNode, isObject, isOneValue, namespace
                             );
+                            if(ExtractUtils.rootObjectNodeContainsTextAttribute(rootObjectNode)) {
+                                isRootArray = false;
+                            }
                             if (processTextResp != null)
                                 return processTextResp;
                         }

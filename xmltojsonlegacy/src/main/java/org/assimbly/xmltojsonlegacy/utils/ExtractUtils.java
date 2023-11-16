@@ -10,6 +10,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import java.util.Iterator;
+
 public class ExtractUtils {
 
     // extract child as other type and add into the array node
@@ -145,6 +147,23 @@ public class ExtractUtils {
     // set empty array node in rootObjectNode
     private static void setEmptyArrayNodeInRootObjectNode(ObjectNode rootObjectNode, String label) {
         rootObjectNode.set(label, JsonNodeFactory.instance.arrayNode());
+    }
+
+    // check if rootObjectNode contains attributes
+    public static boolean rootObjectNodeContainsAttributes(ObjectNode rootObjectNode) {
+        Iterator<String> fieldNamesIterator = rootObjectNode.fieldNames();
+        while (fieldNamesIterator.hasNext()) {
+            String fieldName = fieldNamesIterator.next();
+            if (fieldName.startsWith(Constants.JSON_XML_ATTR_PREFIX)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // check if rootObjectNode contains text attributes
+    public static boolean rootObjectNodeContainsTextAttribute(ObjectNode rootObjectNode) {
+        return rootObjectNode!=null && rootObjectNode.has(Constants.JSON_XML_TEXT_FIELD);
     }
 
 }
