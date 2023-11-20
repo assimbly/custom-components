@@ -132,7 +132,8 @@ public class ExtractUtils {
             case Constants.JSON_XML_ATTR_TYPE_BOOLEAN:
                 rootObjectNode.put(label, subElement.asBoolean());
                 break;
-            default:
+            case Constants.JSON_XML_ATTR_TYPE_STRING:
+            case "":
                 String value = subElement.asText();
                 if(trimSpaces){
                     value = (value.trim().equalsIgnoreCase("null") ? null : value.trim());
@@ -141,6 +142,8 @@ public class ExtractUtils {
                 }
                 rootObjectNode.put(label, value);
                 break;
+            default:
+                // do nothing
         }
     }
 
