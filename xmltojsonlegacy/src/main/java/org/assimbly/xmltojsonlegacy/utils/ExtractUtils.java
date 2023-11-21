@@ -35,7 +35,11 @@ public class ExtractUtils {
                 rootObjectNode.set(propertyName, JsonNodeFactory.instance.arrayNode());
                 break;
             case 1:
-                rootObjectNode.put(propertyName, node.get(propertyName).asText());
+                if(node.isArray()) {
+                    rootObjectNode.put(propertyName, node);
+                } else {
+                    rootObjectNode.put(propertyName, node.get(propertyName));
+                }
                 break;
             default:
                 rootObjectNode.set(propertyName, node);
@@ -73,7 +77,7 @@ public class ExtractUtils {
                     subNode.fields().forEachRemaining(entry -> {
                         String label = entry.getKey();
                         String childTypeAttr = childElement.getAttribute(Constants.JSON_XML_ATTR_TYPE);
-                        setValueUsingAttributeType(rootObjectNode, subElement, label, childTypeAttr, trimSpaces);
+                        setValueUsingAttributeType(rootObjectNode, subElement, label, null, childTypeAttr, trimSpaces);
                     });
                 }
             }
@@ -122,19 +126,19 @@ public class ExtractUtils {
 
 
     // set value as specified in the attribute type
-    private static void setValueUsingAttributeType(
-            ObjectNode rootObjectNode, JsonNode subElement, String label, String childTypeAttr, boolean trimSpaces
+    public static void setValueUsingAttributeType(
+            ObjectNode rootObjectNode, JsonNode subElement, String label, String value, String childTypeAttr, boolean trimSpaces
     ) {
         switch (childTypeAttr.toLowerCase()) {
             case Constants.JSON_XML_ATTR_TYPE_NUMBER:
-                rootObjectNode.put(label, subElement.asInt());
+                rootObjectNode.put(label, (subElement!=null ? subElement.asInt() : Integer.parseInt(value)));
                 break;
             case Constants.JSON_XML_ATTR_TYPE_BOOLEAN:
-                rootObjectNode.put(label, subElement.asBoolean());
+                rootObjectNode.put(label, (subElement!=null ? subElement.asBoolean() : Boolean.valueOf(value).booleanValue()));
                 break;
             case Constants.JSON_XML_ATTR_TYPE_STRING:
             case "":
-                String value = subElement.asText();
+                value = (subElement!=null ? subElement.asText() : value);
                 if(trimSpaces){
                     value = (value.trim().equalsIgnoreCase("null") ? null : value.trim());
                 } else {
@@ -145,6 +149,19 @@ public class ExtractUtils {
             default:
                 // do nothing
         }
+    }
+
+    public static String getAttributeTypeFromElement(Element nodeElement) {
+        if(nodeElement!=null && nodeElement.getAttributes() != null) {
+            NamedNodeMap attributeMap = nodeElement.getAttributes();
+            for (int i = 0; i < attributeMap.getLength(); i++) {
+                Node attribute = attributeMap.item(i);
+                if (attribute.getNodeName().equals(Constants.JSON_XML_ATTR_TYPE)) {
+                    return attribute.getNodeValue();
+                }
+            }
+        }
+        return "";
     }
 
     // set empty array node in rootObjectNode
