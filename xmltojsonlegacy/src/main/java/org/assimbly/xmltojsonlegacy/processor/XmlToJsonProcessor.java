@@ -43,10 +43,12 @@ public class XmlToJsonProcessor {
 
         boolean hasAttributes = element.hasAttributes();
         boolean isRootNode = (level == 0);
+        boolean areSiblingsNamesEqual = ElementUtils.areSiblingsNamesEqual(element);
+        boolean areChildrenNamesEqual = ElementUtils.areChildrenNamesEqual(element);
         namespace = (isRootNode ? ElementUtils.getNamespace(element) : namespace);
         boolean isRootArray = ElementChecker.isRootArray(
                 level, numberOfChildren, numberOfSiblings, parentSiblings, classAttr, parentClass, hasAttributes,
-                elementDeepestDepth, namespace, xmlJsonDataFormat.isTypeHints()
+                elementDeepestDepth, namespace, xmlJsonDataFormat.isTypeHints(), areChildrenNamesEqual
         );
         boolean isObject = ElementChecker.isObject(elementDeepestDepth, numberOfChildren, classAttr);
         boolean isOneValue = ElementChecker.isOneValue(level, numberOfSiblings, parentClass, elementDeepestDepth);
@@ -95,7 +97,7 @@ public class XmlToJsonProcessor {
                         } else {
                             JsonNode processTextResp = processTextNode(
                                     childNode, element, rootArrayNode, rootObjectNode, level, index, nodeListSize,
-                                    isRootArray, isRootNode, isObject, isOneValue, namespace
+                                    isRootArray, isRootNode, isObject, isOneValue, namespace, areSiblingsNamesEqual
                             );
                             if(ExtractUtils.rootObjectNodeContainsTextAttribute(rootObjectNode)) {
                                 isRootArray = false;
@@ -135,13 +137,14 @@ public class XmlToJsonProcessor {
     // process an element node of type Text
     private static JsonNode processTextNode(
             Node childNode, Element element, ArrayNode rootArrayNode, ObjectNode rootObjectNode, int level, int index,
-            int nodeListSize, boolean isRootArray, boolean isRootNode, boolean isObject, boolean isOneValue, String namespace
+            int nodeListSize, boolean isRootArray, boolean isRootNode, boolean isObject, boolean isOneValue, String namespace,
+            boolean areSiblingsNamesEqual
     ) {
         TextNodeTransaction transactionProcessor = TextNodeTransactionFactory.getProcessorFor(isRootNode, isObject, isOneValue);
         return transactionProcessor.process(childNode, element, rootArrayNode, rootObjectNode, level, index, nodeListSize,
                 isRootArray, isRootNode, isObject, isOneValue, namespace, xmlJsonDataFormat.isForceTopLevelObject(),
                 xmlJsonDataFormat.isTrimSpaces(), xmlJsonDataFormat.isSkipNamespaces(),
-                xmlJsonDataFormat.isRemoveNamespacePrefixes(), xmlJsonDataFormat.isTypeHints()
+                xmlJsonDataFormat.isRemoveNamespacePrefixes(), xmlJsonDataFormat.isTypeHints(), areSiblingsNamesEqual
         );
     }
 

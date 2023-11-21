@@ -18,7 +18,7 @@ public class OneValueType implements TextNodeTransaction {
             Node childNode, Element element, ArrayNode rootArrayNode, ObjectNode rootObjectNode, int level, int index,
             int nodeListSize, boolean isRootArray, boolean isRootNode, boolean isObject, boolean isOneValue,
             String namespace, boolean forceTopLevelObject, boolean trimSpaces, boolean skipNamespaces,
-            boolean removeNamespacePrefixes, boolean typeHints
+            boolean removeNamespacePrefixes, boolean typeHints, boolean areSiblingsNamesEqual
     ) {
         //process text node identified as one value
         Print.data(" 2. ONE VALUE", level);

@@ -9,14 +9,14 @@ public class ElementChecker {
     public static boolean isRootArray(
             int level, int numberOfChildren, int numberOfSiblings, int parentSiblings, String classAttr,
             String parentClass, boolean hasAttributes, int elementDeepestDepth, String namespace,
-            boolean isTypeHintsEnabled
+            boolean isTypeHintsEnabled, boolean areChildrenNamesEqual
     ) {
         boolean isRootArray = false;
         if(isTypeHintsEnabled) {
             if (level == 0 && numberOfChildren == 1 && namespace==null) {
                 isRootArray = true;
             }
-            if (elementDeepestDepth == 2 && namespace==null) {
+            if (elementDeepestDepth == 2 && namespace==null && areChildrenNamesEqual) {
                 isRootArray = true;
             }
             if (elementDeepestDepth == 1 && parentClass != null &&
