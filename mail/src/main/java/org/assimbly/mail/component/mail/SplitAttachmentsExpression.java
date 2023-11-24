@@ -65,7 +65,7 @@ public class SplitAttachmentsExpression extends ExpressionAdapter {
             List<Message> answer = new ArrayList<>();
             AttachmentMessage inMessage = exchange.getIn(AttachmentMessage.class);
             for (Map.Entry<String, Attachment> entry : inMessage.getAttachmentObjects().entrySet()) {
-                Message attachmentMessage = extractAttachment(entry.getValue(), entry.getKey(), exchange.getContext());
+                Message attachmentMessage = extractAttachment(entry.getValue(), entry.getKey(), exchange, exchange.getContext());
                 if (attachmentMessage != null) {
                     answer.add(attachmentMessage);
                 }
@@ -80,9 +80,10 @@ public class SplitAttachmentsExpression extends ExpressionAdapter {
         }
     }
 
-    private Message extractAttachment(Attachment attachment, String attachmentName, CamelContext camelContext)
+    private Message extractAttachment(Attachment attachment, String attachmentName, Exchange exchange, CamelContext camelContext)
             throws Exception {
         final Message outMessage = new DefaultMessage(camelContext);
+        outMessage.setHeaders(exchange.getIn().getHeaders());
         outMessage.setHeader(HEADER_NAME, attachmentName);
         Object obj = attachment.getDataHandler().getContent();
         if (obj instanceof InputStream) {
