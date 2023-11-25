@@ -56,6 +56,7 @@ public class SplitAttachmentsExpression extends ExpressionAdapter {
 
     @Override
     public Object evaluate(Exchange exchange) {
+
         // must use getAttachments to ensure attachments is initial populated
         if (!exchange.getIn(AttachmentMessage.class).hasAttachments()) {
             return null;
@@ -80,11 +81,16 @@ public class SplitAttachmentsExpression extends ExpressionAdapter {
         }
     }
 
-    private Message extractAttachment(Attachment attachment, String attachmentName, Exchange exchange, CamelContext camelContext)
-            throws Exception {
+    private Message extractAttachment(Attachment attachment, String attachmentName, Exchange exchange, CamelContext camelContext) throws Exception {
+
         final Message outMessage = new DefaultMessage(camelContext);
-        outMessage.setHeaders(exchange.getIn().getHeaders());
+
+        for (Map.Entry<String, Object> entry : exchange.getIn().getHeaders().entrySet()) {
+            outMessage.setHeader(entry.getKey(), entry.getValue());
+         }
+
         outMessage.setHeader(HEADER_NAME, attachmentName);
+
         Object obj = attachment.getDataHandler().getContent();
         if (obj instanceof InputStream) {
             outMessage.setBody(readMimePart((InputStream) obj));
