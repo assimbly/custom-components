@@ -33,6 +33,7 @@ import org.apache.camel.spi.UriParams;
 import org.apache.camel.spi.UriPath;
 import org.apache.camel.support.jsse.SSLContextParameters;
 import org.apache.camel.util.ObjectHelper;
+
 import org.assimbly.tenantvariables.domain.TenantVariable;
 import org.assimbly.tenantvariables.mongo.MongoDao;
 
@@ -40,7 +41,6 @@ import javax.net.ssl.SSLContext;
 
 import static org.assimbly.mail.component.mail.MailConstants.MAIL_GENERATE_MISSING_ATTACHMENT_NAMES_NEVER;
 import static org.assimbly.mail.component.mail.MailConstants.MAIL_HANDLE_DUPLICATE_ATTACHMENT_NAMES_NEVER;
-
 /**
  * Represents the configuration data for communicating over email
  */
@@ -48,10 +48,8 @@ import static org.assimbly.mail.component.mail.MailConstants.MAIL_HANDLE_DUPLICA
 public class MailConfiguration implements Cloneable {
 
     private transient ClassLoader applicationClassLoader;
-    private transient Map recipients = new HashMap<>();
-
+    private transient Map<Message.RecipientType, String> recipients = new HashMap<>();
     private String TENANT_VARIABLE_EXP = "\\@\\{(.*?)\\}";
-
     // protocol is implied by component name so it should not be in UriPath
     private transient String protocol;
 
@@ -157,9 +155,9 @@ public class MailConfiguration implements Cloneable {
     @UriParam(label = "consumer,advanced")
     private boolean failOnDuplicateFileAttachment;
     @UriParam(label = "consumer,advanced")
-    private String generateMissingAttachmentNames = MAIL_GENERATE_MISSING_ATTACHMENT_NAMES_NEVER;
+    private String generateMissingAttachmentNames = MailConstants.MAIL_GENERATE_MISSING_ATTACHMENT_NAMES_NEVER;
     @UriParam(label = "consumer,advanced")
-    private String handleDuplicateAttachmentNames = MAIL_HANDLE_DUPLICATE_ATTACHMENT_NAMES_NEVER;
+    private String handleDuplicateAttachmentNames = MailConstants.MAIL_HANDLE_DUPLICATE_ATTACHMENT_NAMES_NEVER;
 
     public MailConfiguration() {
     }
@@ -207,23 +205,23 @@ public class MailConfiguration implements Cloneable {
             }
         }
 
-        int port = uri.getPort();
-        if (port > 0) {
-            setPort(port);
+        int uriPort = uri.getPort();
+        if (uriPort > 0) {
+            setPort(uriPort);
         } else if (this.port <= 0) {
             // resolve default port if no port number was provided, and not already configured with a port number
             setPort(MailUtils.getDefaultPortForProtocol(uri.getScheme()));
         }
     }
 
-    protected JavaMailSender createJavaMailSender() {
+    protected JavaMailSender createJavaMailSender(CamelContext context) {
         JavaMailSender answer = new DefaultJavaMailSender();
 
         if (javaMailProperties != null) {
             answer.setJavaMailProperties(javaMailProperties);
         } else {
             // set default properties if none provided
-            answer.setJavaMailProperties(createJavaMailProperties());
+            answer.setJavaMailProperties(createJavaMailProperties(context));
             // add additional properties if provided
             if (additionalJavaMailProperties != null) {
                 answer.getJavaMailProperties().putAll(additionalJavaMailProperties);
@@ -250,13 +248,13 @@ public class MailConfiguration implements Cloneable {
         }
         if (session != null) {
             answer.setSession(session);
-            String host = session.getProperty("mail.smtp.host");
-            if (host != null && !host.isEmpty()) {
-                answer.setHost(host);
+            String hostPropertyValue = session.getProperty("mail.smtp.host");
+            if (hostPropertyValue != null && !hostPropertyValue.isEmpty()) {
+                answer.setHost(hostPropertyValue);
             }
-            String port = session.getProperty("mail.smtp.port");
-            if (port != null && !port.isEmpty()) {
-                answer.setPort(Integer.parseInt(port));
+            String portPropertyValue = session.getProperty("mail.smtp.port");
+            if (portPropertyValue != null && !portPropertyValue.isEmpty()) {
+                answer.setPort(Integer.parseInt(portPropertyValue));
             }
         } else {
             ClassLoader tccl = Thread.currentThread().getContextClassLoader();
@@ -265,13 +263,11 @@ public class MailConfiguration implements Cloneable {
                     Thread.currentThread().setContextClassLoader(applicationClassLoader);
                 }
                 // use our authenticator that does no live user interaction but returns the already configured username and password
-                Session session = Session.getInstance(
-                        answer.getJavaMailProperties(),
-                        authenticator == null ? new DefaultAuthenticator(getUsername(), (isBasicAuthentication() ? getPassword() : null)) : authenticator
-                );
+                Session sessionInstance = Session.getInstance(answer.getJavaMailProperties(),
+                        authenticator == null ? new DefaultAuthenticator(getUsername(), getPassword()) : authenticator);
                 // sets the debug mode of the underlying mail framework
-                session.setDebug(debugMode);
-                answer.setSession(session);
+                sessionInstance.setDebug(debugMode);
+                answer.setSession(sessionInstance);
             } finally {
                 Thread.currentThread().setContextClassLoader(tccl);
             }
@@ -280,7 +276,7 @@ public class MailConfiguration implements Cloneable {
         return answer;
     }
 
-    private Properties createJavaMailProperties() {
+    private Properties createJavaMailProperties(CamelContext context) {
         // clone the system properties and set the java mail properties
         Properties properties = (Properties) System.getProperties().clone();
         properties.put("mail." + protocol + ".connectiontimeout", connectionTimeout);
@@ -311,12 +307,12 @@ public class MailConfiguration implements Cloneable {
         }
 
         if (sslContextParameters != null && isSecureProtocol()) {
-            properties.put("mail." + protocol + ".socketFactory", createSSLContext().getSocketFactory());
+            properties.put("mail." + protocol + ".socketFactory", createSSLContext(context).getSocketFactory());
             properties.put("mail." + protocol + ".socketFactory.fallback", "false");
             properties.put("mail." + protocol + ".socketFactory.port", "" + port);
         }
         if (sslContextParameters != null && isStartTlsEnabled()) {
-            properties.put("mail." + protocol + ".ssl.socketFactory", createSSLContext().getSocketFactory());
+            properties.put("mail." + protocol + ".ssl.socketFactory", createSSLContext(context).getSocketFactory());
             properties.put("mail." + protocol + ".ssl.socketFactory.port", "" + port);
         }
 
@@ -332,9 +328,9 @@ public class MailConfiguration implements Cloneable {
                 ? new PasswordAuthentication(username, password) : authenticator.getPasswordAuthentication();
     }
 
-    private SSLContext createSSLContext() {
+    private SSLContext createSSLContext(CamelContext context) {
         try {
-            return sslContextParameters.createSSLContext(null);
+            return sslContextParameters.createSSLContext(context);
         } catch (Exception e) {
             throw new RuntimeCamelException("Error initializing SSLContext.", e);
         }
@@ -353,7 +349,7 @@ public class MailConfiguration implements Cloneable {
             return ObjectHelper.equal(additionalJavaMailProperties.getProperty("mail." + protocol + ".starttls.enable"), "true",
                     true)
                     || ObjectHelper.equal(additionalJavaMailProperties.getProperty("mail." + protocol + ".starttls.required"),
-                    "true", true);
+                            "true", true);
         }
 
         return false;
@@ -376,7 +372,7 @@ public class MailConfiguration implements Cloneable {
     }
 
     /**
-     * To use a custom {@link org.assimbly.mail.component.mail.JavaMailSender} for sending emails.
+     * To use a custom {@link JavaMailSender} for sending emails.
      */
     public void setJavaMailSender(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
@@ -436,15 +432,11 @@ public class MailConfiguration implements Cloneable {
     }
 
     /**
-     * The authenticator for login. If set then the password and username are ignored. Can be
+     * The authenticator for login. If set then the <code>password</code> and <code>username</code> are ignored. Can be
      * used for tokens which can expire and therefore must be read dynamically.
      */
     public void setAuthenticator(MailAuthenticator authenticator) {
         this.authenticator = authenticator;
-    }
-
-    public String getSubject() {
-        return subject;
     }
 
     /**
@@ -483,6 +475,10 @@ public class MailConfiguration implements Cloneable {
 
     public void setEnvironment(String environment) {
         this.environment = environment;
+    }
+
+    public String getSubject() {
+        return subject;
     }
 
     /**
@@ -657,7 +653,7 @@ public class MailConfiguration implements Cloneable {
         return bcc;
     }
 
-    public Map getRecipients() {
+    public Map<Message.RecipientType, String> getRecipients() {
         return recipients;
     }
 
@@ -837,8 +833,7 @@ public class MailConfiguration implements Cloneable {
     /**
      * If the mail consumer cannot retrieve a given mail message, then this option allows to skip the message and move
      * on to retrieve the next mail message.
-     *
-
+     * <p/>
      * The default behavior would be the consumer throws an exception and no mails from the batch would be able to be
      * routed by Camel.
      */
@@ -854,9 +849,7 @@ public class MailConfiguration implements Cloneable {
      * If the mail consumer cannot retrieve a given mail message, then this option allows to handle the caused exception
      * by the consumer's error handler. By enable the bridge error handler on the consumer, then the Camel routing error
      * handler can handle the exception instead.
-     *
-
-
+     * <p/>
      * The default behavior would be the consumer throws an exception and no mails from the batch would be able to be
      * routed by Camel.
      */
@@ -888,12 +881,12 @@ public class MailConfiguration implements Cloneable {
         return mimeDecodeHeaders;
     }
 
-    public boolean isDecodeFilename() {
-        return decodeFilename;
-    }
-
     public boolean isBasicAuthentication() {
         return (authenticationType == null || authenticationType.equals("basic"));
+    }
+
+    public boolean isDecodeFilename() {
+        return decodeFilename;
     }
 
     /**
@@ -936,8 +929,10 @@ public class MailConfiguration implements Cloneable {
 
     /**
      * Set the strategy to handle duplicate filenames of attachments never: attachments that have a filename which is
-     * already present in the attachments will be ignored unless failOnDuplicateFileAttachment is set to true
-     * uuidPrefix: this will prefix the duplicate attachment filenames each with a uuid and underscore (uuid_)
+     * already present in the attachments will be ignored unless failOnDuplicateFileAttachment is set to true.
+     * uuidPrefix: this will prefix the duplicate attachment filenames each with a uuid and underscore
+     * (uuid_filename.fileextension). uuidSuffix: this will suffix the duplicate attachment filenames each with a
+     * underscore and uuid (filename_uuid.fileextension).
      *
      * @param handleDuplicateAttachmentNames
      */

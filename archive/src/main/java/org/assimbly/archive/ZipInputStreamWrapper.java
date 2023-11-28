@@ -14,20 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.assimbly.mail.component.mail;
+package org.assimbly.archive;
 
-import jakarta.mail.PasswordAuthentication;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
-/**
- * Mail authenticator that supplies username and password
- */
-public class MailAuthenticator extends jakarta.mail.Authenticator {
+class ZipInputStreamWrapper extends BufferedInputStream {
 
-    // makes the method public
-    /** Override this method in your implementation. */
-    @Override
-    public PasswordAuthentication getPasswordAuthentication() {
-        return super.getPasswordAuthentication();
+    ZipInputStreamWrapper(InputStream in, int size) {
+        super(in, size);
     }
 
+    ZipInputStreamWrapper(InputStream in) {
+        super(in);
+    }
+
+    @Override
+    public void close() throws IOException {
+        InputStream input = in;
+        try {
+            in = null;
+            super.close();
+        } finally {
+            in = input;
+        }
+    }
 }

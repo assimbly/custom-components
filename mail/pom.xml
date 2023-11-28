@@ -22,14 +22,42 @@
 		</repository> 
   </distributionManagement>
 
-  <dependencies>
+	<dependencies>
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>${javax.version}</version>
+			<exclusions>
+				<!-- javax activation is part of the JDK now -->
+				<exclusion>
+					<groupId>javax.activation</groupId>
+					<artifactId>activation</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>enrich</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>tenantvariables</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongo-java-driver</artifactId>
+			<version>${mongo.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mongodb.morphia</groupId>
+			<artifactId>morphia</artifactId>
+			<version>${morphia.version}</version>
+		</dependency>
 
-	  <dependency>
-		  <groupId>org.apache.camel</groupId>
-		  <artifactId>camel-velocity</artifactId>
-		  <version>${camel.version}</version>
-	  </dependency>
 
+<<<<<<< HEAD
 	  <dependency>
 		  <groupId>jakarta.mail</groupId>
 		  <artifactId>jakarta.mail-api</artifactId>
@@ -79,6 +107,23 @@
 	  </dependency>
 
   </dependencies>
+=======
+
+		<!-- testing -->
+		<dependency>
+			<groupId>org.jvnet.mock-javamail</groupId>
+			<artifactId>mock-javamail</artifactId>
+			<version>1.9</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.mail</groupId>
+					<artifactId>mail</artifactId>
+				</exclusion>
+			</exclusions>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+>>>>>>> develop
 
 	<build>
 		<plugins>

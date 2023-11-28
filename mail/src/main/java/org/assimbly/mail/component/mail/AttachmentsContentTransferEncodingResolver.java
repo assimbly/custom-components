@@ -19,21 +19,19 @@ package org.assimbly.mail.component.mail;
 import jakarta.mail.BodyPart;
 
 /**
- * Resolver to determine Content-Transfer-Encoding for file attachments.
-
+ * Resolver to determine Content-Transfer-Encoding for file attachments. <br/>
  * Normally this will be determined automatically, this resolver can be used to override this behavior.
  */
 public interface AttachmentsContentTransferEncodingResolver {
 
     /**
      * Resolves the content-transfer-encoding.
-     *
-
-     * Return null if you cannot resolve a content-transfer-encoding or want to rely on the mail provider to
+     * <p/>
+     * Return <tt>null</tt> if you cannot resolve a content-transfer-encoding or want to rely on the mail provider to
      * resolve it for you.
      *
      * @param  messageBodyPart the body part
-     * @return                 the content-transfer-encoding or null to rely on the mail provider
+     * @return                 the content-transfer-encoding or <tt>null</tt> to rely on the mail provider
      */
     String resolveContentTransferEncoding(BodyPart messageBodyPart);
 

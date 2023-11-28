@@ -17,9 +17,10 @@
 package org.assimbly.mail.component.mail;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
@@ -27,7 +28,6 @@ import org.apache.camel.Message;
 import org.apache.camel.RuntimeCamelException;
 import org.apache.camel.attachment.Attachment;
 import org.apache.camel.attachment.AttachmentMessage;
-import org.apache.camel.attachment.DefaultAttachment;
 import org.apache.camel.support.DefaultMessage;
 import org.apache.camel.support.ExpressionAdapter;
 import org.apache.camel.util.IOHelper;
@@ -59,16 +59,9 @@ import jakarta.mail.Part;
  */
 public class SplitAttachmentsExpression extends ExpressionAdapter {
 
-    final static Logger LOG = LoggerFactory.getLogger(SplitAttachmentsExpression.class);
-
     public static final String HEADER_NAME = "CamelSplitAttachmentId";
 
-    private boolean extractAttachments;
-
-    public SplitAttachmentsExpression() { }
-
-    public SplitAttachmentsExpression(boolean extractAttachments) {
-        this.extractAttachments = extractAttachments;
+    public SplitAttachmentsExpression() {
     }
 
     @Override
@@ -103,32 +96,16 @@ public class SplitAttachmentsExpression extends ExpressionAdapter {
 
         try {
             List<Message> answer = new ArrayList<>();
-            AttachmentMessage inAttachMessage = exchange.getIn(AttachmentMessage.class);
-            for (Map.Entry<String, Attachment> entry : inAttachMessage.getAttachmentObjects().entrySet()) {
-                Message attachmentMessage;
-                if (extractAttachments) {
-                    attachmentMessage = extractAttachment(entry.getValue(), entry.getKey(), exchange.getContext());
-                } else {
-                    attachmentMessage = splitAttachment(exchange, entry.getKey(), entry.getValue().getDataHandler());
-                }
-
+            AttachmentMessage inMessage = exchange.getIn(AttachmentMessage.class);
+            for (Map.Entry<String, Attachment> entry : inMessage.getAttachmentObjects().entrySet()) {
+                Message attachmentMessage = extractAttachment(entry.getValue(), entry.getKey(), exchange, exchange.getContext());
                 if (attachmentMessage != null) {
                     answer.add(attachmentMessage);
                 }
             }
 
-            for(Message m : answer){
-                for(String hKey : exchange.getIn().getHeaders().keySet()) {
-                    Object header = exchange.getIn().getHeader(hKey);
-                    if(m.getHeader(hKey) == null)
-                        m.setHeader(hKey, header);
-                }
-
-                if(m.getHeader("From") != null) {
-                    String email = m.getHeader("From").toString();
-                    m.setHeader("Source-Email", StringUtils.substringBetween(email, "<", ">"));
-                }
-            }
+            // clear attachments on original message after we have split them
+            inMessage.getAttachmentObjects().clear();
 
             return answer;
         } catch (Exception e) {
@@ -136,19 +113,16 @@ public class SplitAttachmentsExpression extends ExpressionAdapter {
         }
     }
 
-    private Message splitAttachment(Exchange exchange, String attachmentName, DataHandler attachmentHandler) {
-        final Exchange exchangeCopy = exchange.copy();
-        Map<String, DataHandler> attachments = exchangeCopy.getIn(AttachmentMessage.class).getAttachments();
-        attachments.clear();
-        attachments.put(attachmentName, attachmentHandler);
-        exchangeCopy.getIn().setHeader(HEADER_NAME, attachmentName);
-        return exchangeCopy.getIn();
-    }
+    private Message extractAttachment(Attachment attachment, String attachmentName, Exchange exchange, CamelContext camelContext) throws Exception {
 
-    private Message extractAttachment(Attachment attachment, String attachmentName, CamelContext camelContext)
-            throws Exception {
         final Message outMessage = new DefaultMessage(camelContext);
+
+        for (Map.Entry<String, Object> entry : exchange.getIn().getHeaders().entrySet()) {
+            outMessage.setHeader(entry.getKey(), entry.getValue());
+         }
+
         outMessage.setHeader(HEADER_NAME, attachmentName);
+
         Object obj = attachment.getDataHandler().getContent();
         if (obj instanceof InputStream) {
             outMessage.setBody(readMimePart((InputStream) obj));
@@ -239,41 +213,8 @@ public class SplitAttachmentsExpression extends ExpressionAdapter {
         return bos.toByteArray();
     }
 
-    /**
-     * Assimbly Edit: Custom method to force unique filenames that will be stored in the Attachments Map as
-     * duplicated filenames will cause the first file to be overwritten.
-     *
-     * https://assimblyworld.atlassian.net/browse/DOV-220
-     */
-    private String createUniqueFileName(String fileName, int occurrence, Map<String, Attachment> attachmentMap) {
-        String ext = FilenameUtils.getExtension(fileName);
-        String name = FilenameUtils.getBaseName(fileName);
-
-        String newFileName = String.format("%s (%s).%s", name, occurrence, ext);
-
-        if (attachmentMap.containsKey(newFileName)) {
-            return createUniqueFileName(fileName, occurrence + 1, attachmentMap);
-        }
-
-        return newFileName;
-    }
-
-    /**
-     * Assimbly Edit: Copied from org.apache.camel.component.mail.MailBinding (2.20.1)
-     */
-    private boolean validDisposition(String disposition, String fileName) {
-        return disposition != null
-                && fileName != null
-                && (disposition.equalsIgnoreCase(Part.ATTACHMENT) || disposition.equalsIgnoreCase(Part.INLINE));
-    }
-
-
-    public boolean isExtractAttachments() {
-        return extractAttachments;
-    }
-
-    public void setExtractAttachments(boolean extractAttachments) {
-        this.extractAttachments = extractAttachments;
+    public boolean hasAttachments(Exchange exchange) {
+        return exchange.getIn(AttachmentMessage.class).hasAttachments();
     }
 
 }

@@ -28,11 +28,15 @@ public class QueueMessageChecker implements Processor {
 
         String jmxUrl = "service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi";
 
-        if(environment!=null && amqJmxPort!=null) {
-            jmxUrl = "service:jmx:rmi:///jndi/rmi://assimbly-broker"
-                    + (environment.equals("local") ? ":1616" : "-"
+        if(amqJmxPort==null) {
+            amqJmxPort = "1616";
+        }
+
+        if(environment!=null) {
+            jmxUrl = "service:jmx:rmi:///jndi/rmi://assimbly-broker-"
                     + environment
-                    + ":" + amqJmxPort) + "/jmxrmi";
+                    + ":"
+                    + amqJmxPort + "/jmxrmi";
         }
 
         JMXServiceURL jmx = new JMXServiceURL(jmxUrl);

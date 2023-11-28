@@ -9,14 +9,13 @@
     <packaging>pom</packaging>
     <name>custom-components</name>
     <url>https://www.org.assimbly</url>
-
     <version>4.1.0-SNAPSHOT</version>
 
     <modules>
         <module>aggregate</module>
-        <module>aleris</module>
+        <!--<module>aleris</module>-->
         <module>amazon</module>
-        <module>archive</module>
+        <!--<module>archive</module>-->
         <module>auth</module>
         <module>cookies</module>
         <module>csvtoxml</module>
@@ -30,7 +29,7 @@
         <module>enrich</module>
         <module>exceltoxml</module>
         <module>flv</module>
-        <module>fmuta</module>
+        <!--<module>fmuta</module>-->
         <module>formtoxml</module>
         <module>tenantvariables</module>
         <module>googledrive</module>
@@ -90,6 +89,7 @@
         <kalium.version>0.8.0</kalium.version>
         <libsodium-jna.version>1.0.4</libsodium-jna.version>
         <mime4j.version>0.8.9</mime4j.version>
+        <mockito.version>3.3.3</mockito.version>
         <mongo.version>3.12.14</mongo.version>
         <morphia.version>1.3.2</morphia.version>
         <morpia-core.version>1.6.1</morpia-core.version>

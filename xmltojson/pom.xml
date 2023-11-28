@@ -4,7 +4,11 @@
 	<parent>
 		<artifactId>custom-components</artifactId>
 		<groupId>org.assimbly</groupId>
+<<<<<<< HEAD
 		<version>4.1.0-SNAPSHOT</version>
+=======
+		<version>4.0.5-SNAPSHOT</version>
+>>>>>>> develop
 	</parent>
 
   <artifactId>xmltojson</artifactId>
