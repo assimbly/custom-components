@@ -1,40 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>custom-components</artifactId>
 		<groupId>org.assimbly</groupId>
 		<version>4.1.0-SNAPSHOT</version>
 	</parent>
 
-  <artifactId>mail</artifactId>
+	<artifactId>mail</artifactId>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.versions.rules>file:///${project.basedir}/../rules.xml</maven.versions.rules>
 	</properties>
 
-  <distributionManagement> 
+	<distributionManagement>
 		<repository>
-	  		<id>github</id> 
-			<name>Temporary Staging Repository</name> 
+			<id>github</id>
+			<name>Temporary Staging Repository</name>
 			<url>https://maven.pkg.github.com/assimbly/custom-components</url>
-		</repository> 
-  </distributionManagement>
+		</repository>
+	</distributionManagement>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-velocity</artifactId>
+			<version>${camel.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>jakarta.mail</groupId>
+			<artifactId>jakarta.mail-api</artifactId>
+			<version>${jakarta.mail.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>com.sun.mail</groupId>
-			<artifactId>javax.mail</artifactId>
-			<version>${javax.version}</version>
-			<exclusions>
-				<!-- javax activation is part of the JDK now -->
-				<exclusion>
-					<groupId>javax.activation</groupId>
-					<artifactId>activation</artifactId>
-				</exclusion>
-			</exclusions>
+			<artifactId>jakarta.mail</artifactId>
+			<version>2.0.1</version>
 		</dependency>
+
+
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>enrich</artifactId>
@@ -56,74 +64,21 @@
 			<version>${morphia.version}</version>
 		</dependency>
 
-
-<<<<<<< HEAD
-	  <dependency>
-		  <groupId>jakarta.mail</groupId>
-		  <artifactId>jakarta.mail-api</artifactId>
-		  <version>${jakarta.mail.version}</version>
-	  </dependency>
-
-	  <dependency>
-		  <groupId>com.sun.mail</groupId>
-		  <artifactId>jakarta.mail</artifactId>
-		  <version>2.0.1</version>
-	  </dependency>
-
-
-	  <dependency>
-		  <groupId>${project.groupId}</groupId>
-		  <artifactId>enrich</artifactId>
-		  <version>${project.version}</version>
-	  </dependency>
-	  <dependency>
-		  <groupId>${project.groupId}</groupId>
-		  <artifactId>tenantvariables</artifactId>
-		  <version>${project.version}</version>
-	  </dependency>
-	  <dependency>
-		  <groupId>org.mongodb</groupId>
-		  <artifactId>mongo-java-driver</artifactId>
-		  <version>${mongo.version}</version>
-	  </dependency>
-	  <dependency>
-		  <groupId>org.mongodb.morphia</groupId>
-		  <artifactId>morphia</artifactId>
-		  <version>${morphia.version}</version>
-	  </dependency>
-
-	  <!-- Test Specific -->
-	  <dependency>
-		  <groupId>org.skyscreamer</groupId>
-		  <artifactId>jsonassert</artifactId>
-		  <version>${skyscreamer.version}</version>
-		  <exclusions>
-			  <exclusion>
-				  <groupId>com.vaadin.external.google</groupId>
-				  <artifactId>android-json</artifactId>
-			  </exclusion>
-		  </exclusions>
-		  <scope>test</scope>
-	  </dependency>
-
-  </dependencies>
-=======
-
-		<!-- testing -->
+		<!-- Test Specific -->
 		<dependency>
-			<groupId>org.jvnet.mock-javamail</groupId>
-			<artifactId>mock-javamail</artifactId>
-			<version>1.9</version>
+			<groupId>org.skyscreamer</groupId>
+			<artifactId>jsonassert</artifactId>
+			<version>${skyscreamer.version}</version>
 			<exclusions>
 				<exclusion>
-					<groupId>javax.mail</groupId>
-					<artifactId>mail</artifactId>
+					<groupId>com.vaadin.external.google</groupId>
+					<artifactId>android-json</artifactId>
 				</exclusion>
 			</exclusions>
 			<scope>test</scope>
 		</dependency>
+
 	</dependencies>
->>>>>>> develop
 
 	<build>
 		<plugins>
