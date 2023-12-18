@@ -71,7 +71,10 @@ public class ExtractUtils {
         if(typeHints) {
             JsonNode subNode = XmlToJsonProcessor.convertXmlToJson(childElement, level +1, classAttr, numSiblings, isFirstSibling, namespace);
             if(subNode.isEmpty()) {
-                setEmptyArrayNodeInRootObjectNode(rootObjectNode, childElement.getTagName());
+                if(ElementChecker.isElementAttributeNull(childElement, Constants.JSON_XML_ATTR_TYPE) &&
+                        ElementChecker.isElementNodeValueNull(childElement)) {
+                    setEmptyArrayNodeInRootObjectNode(rootObjectNode, childElement.getTagName());
+                }
             } else {
                 for (JsonNode subElement : subNode) {
                     subNode.fields().forEachRemaining(entry -> {
@@ -136,8 +139,11 @@ public class ExtractUtils {
             case Constants.JSON_XML_ATTR_TYPE_BOOLEAN:
                 rootObjectNode.put(label, (subElement!=null ? subElement.asBoolean() : Boolean.valueOf(value).booleanValue()));
                 break;
-            case Constants.JSON_XML_ATTR_TYPE_STRING:
-            case "":
+            case Constants.JSON_XML_ATTR_TYPE_ARRAY:
+            case Constants.JSON_XML_ATTR_TYPE_OBJECT:
+                // do nothing
+                break;
+            default:
                 value = (subElement!=null ? subElement.asText() : value);
                 if(trimSpaces){
                     value = (value.trim().equalsIgnoreCase("null") ? null : value.trim());
@@ -146,8 +152,6 @@ public class ExtractUtils {
                 }
                 rootObjectNode.put(label, value);
                 break;
-            default:
-                // do nothing
         }
     }
 

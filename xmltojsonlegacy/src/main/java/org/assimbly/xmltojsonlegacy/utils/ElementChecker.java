@@ -119,4 +119,14 @@ public class ElementChecker {
     public static boolean isFirstSiblingByNumCounts(int numCounts) {
         return numCounts == 1;
     }
+
+    // check if element node value is null
+    public static boolean isElementNodeValueNull(Element element) {
+        return element.getNodeValue() == null;
+    }
+
+    // check if element attribute is null
+    public static boolean isElementAttributeNull(Element element, String attribute) {
+        return element.getAttributes().getNamedItem(attribute) == null;
+    }
 }
