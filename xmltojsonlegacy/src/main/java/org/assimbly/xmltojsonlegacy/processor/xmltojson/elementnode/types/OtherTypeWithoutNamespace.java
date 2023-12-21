@@ -14,8 +14,8 @@ public class OtherTypeWithoutNamespace implements ElementNodeTransaction {
     @Override
     public JsonNode process(
             Node childNode, ArrayNode rootArrayNode, ObjectNode rootObjectNode, int nodeCount, int level,
-            int numberOfChildren, int numberOfSiblings, String classAttr, boolean isRootArray, boolean isObject,
-            boolean isSingleChildren, boolean isFirstChild, boolean isFirstSibling, Element childElement,
+            int numberOfChildren, int numberOfSiblings, String parentClass, String classAttr, boolean isRootArray,
+            boolean isObject, boolean isSingleChildren, boolean isFirstChild, boolean isFirstSibling, Element childElement,
             String namespace, boolean trimSpaces, boolean skipNamespaces, boolean removeNamespacePrefixes, boolean typeHints
     ) {
         if(!typeHints) {
@@ -24,12 +24,12 @@ public class OtherTypeWithoutNamespace implements ElementNodeTransaction {
                     (numberOfChildren == 1 && ElementUtils.calculateNumberOfChildren(childElement) > 1)
             ) {
                 ExtractUtils.extractChildAsOtherInObjectNode(
-                        level, rootObjectNode, numberOfSiblings, classAttr, (Element) childNode, childElement,
+                        level, rootObjectNode, numberOfSiblings, parentClass, classAttr, (Element) childNode, childElement,
                         isFirstSibling, namespace, skipNamespaces, removeNamespacePrefixes
                 );
             } else {
                 ExtractUtils.extractChildAsOtherInArrayNode(
-                        level, rootArrayNode, numberOfSiblings, classAttr, (Element) childNode, childElement,
+                        level, rootArrayNode, numberOfSiblings, parentClass, classAttr, (Element) childNode, childElement,
                         isFirstSibling, namespace
                 );
                 rootObjectNode.set(
@@ -40,7 +40,7 @@ public class OtherTypeWithoutNamespace implements ElementNodeTransaction {
         } else {
             // extract child as other type and add into the object node
             ExtractUtils.extractChildAsOtherInObjectNode(
-                    level, rootObjectNode, numberOfSiblings, classAttr, (Element) childNode, childElement,
+                    level, rootObjectNode, numberOfSiblings, parentClass, classAttr, (Element) childNode, childElement,
                     isFirstSibling, namespace, skipNamespaces, removeNamespacePrefixes
             );
         }

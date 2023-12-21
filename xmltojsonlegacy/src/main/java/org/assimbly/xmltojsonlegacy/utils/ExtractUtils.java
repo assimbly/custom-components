@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.xerces.dom.DeferredElementImpl;
 import org.assimbly.xmltojsonlegacy.Constants;
 import org.assimbly.xmltojsonlegacy.processor.XmlToJsonProcessor;
 import org.w3c.dom.Element;
@@ -16,29 +18,34 @@ public class ExtractUtils {
 
     // extract child as other type and add into the array node
     public static void extractChildAsOtherInArrayNode(
-            int level, ArrayNode rootArrayNode, int numSiblings, String classAttr, Element childNode,
+            int level, ArrayNode rootArrayNode, int numSiblings, String parentClass, String classAttr, Element childNode,
             Element childElement, boolean isFirstSibling, String namespace
     ) {
-        rootArrayNode.add(XmlToJsonProcessor.convertXmlToJson(childElement, level +1, classAttr, numSiblings, isFirstSibling, namespace));
+        rootArrayNode.add(XmlToJsonProcessor.convertXmlToJson(childElement, level +1, parentClass, classAttr, numSiblings, isFirstSibling, namespace));
     }
 
     // extract child as other type and add into the object node
     public static void extractChildAsOtherInObjectNode(
-            int level, ObjectNode rootObjectNode, int numSiblings, String classAttr, Element childNode,
+            int level, ObjectNode rootObjectNode, int numSiblings, String parentClass, String classAttr, Element childNode,
             Element childElement, boolean isFirstSibling, String namespace, boolean skipNamespaces,
             boolean removeNamespacePrefixes
     ) {
         String propertyName = ElementUtils.getElementName(childNode, namespace, removeNamespacePrefixes, skipNamespaces);
-        JsonNode node = XmlToJsonProcessor.convertXmlToJson(childElement, level +1, classAttr, numSiblings, isFirstSibling, namespace);
+        JsonNode node = XmlToJsonProcessor.convertXmlToJson(childElement, level +1, parentClass, classAttr, numSiblings, isFirstSibling, namespace);
+        int childCount = ((DeferredElementImpl) childElement).getChildElementCount();
         switch (node.size()) {
             case 0:
                 rootObjectNode.set(propertyName, JsonNodeFactory.instance.arrayNode());
                 break;
             case 1:
-                if(node.isArray()) {
+                if(node.isArray() || (childCount > 0 && StringUtils.isEmpty(classAttr))) {
                     rootObjectNode.put(propertyName, node);
                 } else {
-                    rootObjectNode.put(propertyName, node.get(propertyName));
+                    if(classAttr==null || !classAttr.equals(Constants.JSON_XML_ATTR_TYPE_OBJECT)) {
+                        rootObjectNode.put(propertyName, node.get(propertyName));
+                    } else {
+                        rootObjectNode.set(propertyName, node);
+                    }
                 }
                 break;
             default:
@@ -48,10 +55,10 @@ public class ExtractUtils {
 
     // extract child as array type
     public static void extractChildAsArray(
-            int level, ArrayNode rootArrayNode, int numSiblings, String classAttr, Element childElement,
+            int level, ArrayNode rootArrayNode, int numSiblings, String parentClass, String classAttr, Element childElement,
             boolean isFirstSibling, String namespace
     ) {
-        JsonNode subNode = XmlToJsonProcessor.convertXmlToJson(childElement, level +1, classAttr, numSiblings, isFirstSibling, namespace);
+        JsonNode subNode = XmlToJsonProcessor.convertXmlToJson(childElement, level +1, parentClass, classAttr, numSiblings, isFirstSibling, namespace);
 
         if(subNode.isArray() && ElementChecker.isLastElement(childElement)) {
             for (JsonNode subElement : subNode) {
@@ -64,12 +71,12 @@ public class ExtractUtils {
 
     // extract child as object type
     public static void extractChildAsObject(
-            int level, ObjectNode rootObjectNode, int numSiblings, String classAttr, Element childElement,
+            int level, ObjectNode rootObjectNode, int numSiblings, String parentClass, String classAttr, Element childElement,
             boolean isFirstSibling, String namespace, boolean trimSpaces, boolean skipNamespaces,
             boolean removeNamespacePrefixes, boolean typeHints
     ) {
         if(typeHints) {
-            JsonNode subNode = XmlToJsonProcessor.convertXmlToJson(childElement, level +1, classAttr, numSiblings, isFirstSibling, namespace);
+            JsonNode subNode = XmlToJsonProcessor.convertXmlToJson(childElement, level +1, parentClass, classAttr, numSiblings, isFirstSibling, namespace);
             if(subNode.isEmpty()) {
                 if(ElementChecker.isElementAttributeNull(childElement, Constants.JSON_XML_ATTR_TYPE) &&
                         ElementChecker.isElementNodeValueNull(childElement)) {

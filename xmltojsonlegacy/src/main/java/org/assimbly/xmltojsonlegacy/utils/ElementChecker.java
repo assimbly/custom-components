@@ -1,5 +1,6 @@
 package org.assimbly.xmltojsonlegacy.utils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.assimbly.xmltojsonlegacy.Constants;
 import org.w3c.dom.Element;
 
@@ -16,7 +17,10 @@ public class ElementChecker {
             if (level == 0 && numberOfChildren == 1 && namespace==null) {
                 isRootArray = true;
             }
-            if (elementDeepestDepth == 2 && namespace==null && areChildrenNamesEqual) {
+            if (elementDeepestDepth > 2 && namespace==null && areChildrenNamesEqual) {
+                isRootArray = true;
+            }
+            if (elementDeepestDepth == 2 && namespace==null && areChildrenNamesEqual && (StringUtils.isEmpty(classAttr) || !classAttr.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT))) {
                 isRootArray = true;
             }
             if (elementDeepestDepth == 1 && parentClass != null &&

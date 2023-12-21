@@ -15,17 +15,17 @@ public class RootArrayType implements ElementNodeTransaction {
     @Override
     public JsonNode process(
             Node childNode, ArrayNode rootArrayNode, ObjectNode rootObjectNode, int nodeCount, int level,
-            int numberOfChildren, int numberOfSiblings, String classAttr, boolean isRootArray, boolean isObject,
-            boolean isSingleChildren, boolean isFirstChild, boolean isFirstSibling, Element childElement,
+            int numberOfChildren, int numberOfSiblings, String parentClass, String classAttr, boolean isRootArray,
+            boolean isObject, boolean isSingleChildren, boolean isFirstChild, boolean isFirstSibling, Element childElement,
             String namespace, boolean trimSpaces, boolean skipNamespaces, boolean removeNamespacePrefixes, boolean typeHints
     ) {
         Print.data(" 1. IS ROOT ARRAY", level);
         if(isSingleChildren && isFirstChild) {
             // recursive call with child element
-            return XmlToJsonProcessor.convertXmlToJson(childElement, level +1, classAttr, numberOfSiblings, isFirstSibling, namespace);
+            return XmlToJsonProcessor.convertXmlToJson(childElement, level +1, parentClass, classAttr, numberOfSiblings, isFirstSibling, namespace);
         } else {
             // extract child as an array
-            ExtractUtils.extractChildAsArray(level, rootArrayNode, numberOfSiblings, classAttr, childElement, isFirstSibling, namespace);
+            ExtractUtils.extractChildAsArray(level, rootArrayNode, numberOfSiblings, parentClass, classAttr, childElement, isFirstSibling, namespace);
         }
         return null;
     }
