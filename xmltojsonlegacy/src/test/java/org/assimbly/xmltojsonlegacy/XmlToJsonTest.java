@@ -746,6 +746,19 @@ public class XmlToJsonTest extends CamelTestSupport {
         );
     }
 
+    /*****************************************
+     ** Example 27
+     *****************************************/
+
+    @Test
+    public void testXmlJson_27_FFFFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "marshal_TypeHints",
+                "xml-to-json/example_27.xml",
+                "xml-to-json/example_27_FFFFFT.json"
+        );
+    }
+
     private void compareInputXmlFileWithOutputJsonFile(String routeName, String inputXmlFile, String outputJsonFile)
             throws IOException, InterruptedException {
         String defaultXml = IOUtils.toString(classLoader.getResourceAsStream(inputXmlFile), StandardCharsets.UTF_8);
