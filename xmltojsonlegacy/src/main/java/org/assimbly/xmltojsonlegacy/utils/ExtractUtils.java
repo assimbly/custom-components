@@ -42,7 +42,11 @@ public class ExtractUtils {
                     rootObjectNode.put(propertyName, node);
                 } else {
                     if(classAttr==null || !classAttr.equals(Constants.JSON_XML_ATTR_TYPE_OBJECT)) {
-                        rootObjectNode.put(propertyName, node.get(propertyName));
+                        if(node.get(propertyName) != null) {
+                            rootObjectNode.put(propertyName, node.get(propertyName));
+                        } else {
+                            rootObjectNode.set(propertyName, node);
+                        }
                     } else {
                         rootObjectNode.set(propertyName, node);
                     }
@@ -92,7 +96,8 @@ public class ExtractUtils {
                 }
             }
         } else {
-            if(classAttr!=null && !classAttr.equals("")) {
+            String type = childElement.getAttribute(Constants.JSON_XML_ATTR_TYPE);
+            if(classAttr!=null && !classAttr.equals("") && type!=null && !type.equals("") || type!=null && !type.equals("")) {
                 rootObjectNode.set(
                         ElementUtils.getElementName(childElement, namespace, removeNamespacePrefixes, skipNamespaces),
                         addNodeWithAttributeInfo(childElement, ElementUtils.getNodeValue(childElement, trimSpaces))
@@ -112,7 +117,11 @@ public class ExtractUtils {
                     }
                     rootObjectNode.set(fieldName, nodeValues);
                 } else {
-                    rootObjectNode.put(fieldName, fieldValue);
+                    if(fieldValue.equalsIgnoreCase("")) {
+                        rootObjectNode.set(fieldName, JsonNodeFactory.instance.arrayNode());
+                    } else {
+                        rootObjectNode.put(fieldName, fieldValue);
+                    }
                 }
             }
         }
@@ -129,7 +138,7 @@ public class ExtractUtils {
                 attrInfoObjectNode.put(Constants.JSON_XML_ATTR_PREFIX+node.getNodeName(), node.getNodeValue());
             }
         }
-        attrInfoObjectNode.put(Constants.JSON_XML_TEXT_FIELD, value);
+        attrInfoObjectNode.put(Constants.JSON_XML_TEXT_FIELD, value.equalsIgnoreCase("null") ? null : value);
 
         return attrInfoObjectNode;
     }
@@ -157,7 +166,20 @@ public class ExtractUtils {
                 } else {
                     value = (value.equalsIgnoreCase("null") ? null : value);
                 }
-                rootObjectNode.put(label, value);
+                if(rootObjectNode.has(label)) {
+                    JsonNode nodeValues = rootObjectNode.get(label);
+                    if(nodeValues.isArray()) {
+                        ((ArrayNode)nodeValues).add(value);
+                    } else {
+                        ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode();
+                        arrayNode.add(nodeValues.asText());
+                        arrayNode.add(value);
+                        nodeValues = arrayNode;
+                    }
+                    rootObjectNode.set(label, nodeValues);
+                } else {
+                    rootObjectNode.put(label, value);
+                }
                 break;
         }
     }
