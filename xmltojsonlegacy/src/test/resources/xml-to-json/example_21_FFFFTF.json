@@ -1,0 +1,263 @@
+{
+    "Persons": {
+        "@class": "array",
+        "element": [
+            {
+                "AvatarUrl": {
+                    "@type": "string",
+                    "#text": null
+                },
+                "BirthDay": {
+                    "@type": "string",
+                    "#text": "2009-04-22"
+                },
+                "CityName": {
+                    "@type": "string",
+                    "#text": "Heerenveen"
+                },
+                "Code": {
+                    "@type": "string",
+                    "#text": null
+                },
+                "Id": {
+                    "@type": "string",
+                    "#text": "eeeeeeee-3ac1-4115-b30e-ec1affa3b5e2"
+                },
+                "FirstNames": {
+                    "@type": "string",
+                    "#text": "Jan"
+                },
+                "Gender": {
+                    "@type": "string",
+                    "#text": "M"
+                },
+                "HouseNumber": {
+                    "@type": "string",
+                    "#text": "82"
+                },
+                "Initials": {
+                    "@type": "string",
+                    "#text": "TR"
+                },
+                "LastName": {
+                    "@type": "string",
+                    "#text": "de Groot"
+                },
+                "LastNamePrefix": {
+                    "@type": "string",
+                    "#text": null
+                },
+                "LoginName": {
+                    "@type": "string",
+                    "#text": "109859"
+                },
+                "MaidenName": {
+                    "@type": "string",
+                    "#text": null
+                },
+                "Number": {
+                    "@type": "string",
+                    "#text": "109859"
+                },
+                "Password": {
+                    "@type": "string",
+                    "#text": null
+                },
+                "PhoneNumber1": {
+                    "@type": "string",
+                    "#text": "06-12345678"
+                },
+                "PhoneNumber2": {
+                    "@type": "string",
+                    "#text": "06-12345678"
+                },
+                "PostalCode": {
+                    "@type": "string",
+                    "#text": "8411KG"
+                },
+                "PrivateEmail": {
+                    "@type": "string",
+                    "#text": null
+                },
+                "StreetName": {
+                    "@type": "string",
+                    "#text": "Straat"
+                },
+                "Uid": {
+                    "@type": "string",
+                    "#text": null
+                },
+                "UidMappingId": {
+                    "@type": "string",
+                    "#text": null
+                },
+                "UserDefinedFieldsJson": {
+                    "@type": "array",
+                    "#text": null
+                },
+                "UsualName": {
+                    "@type": "string",
+                    "#text": "Tjibbe"
+                },
+                "WorkEmail": {
+                    "@type": "string",
+                    "#text": "109859@leerling.abcd.nl"
+                }
+            },
+            {
+                "AvatarUrl": {
+                    "@type": "string",
+                    "#text": null
+                },
+                "BirthDay": {
+                    "@type": "string",
+                    "#text": "2008-06-23"
+                },
+                "CityName": {
+                    "@type": "string",
+                    "#text": "Heerenveen"
+                },
+                "Code": {
+                    "@type": "string",
+                    "#text": null
+                },
+                "Id": {
+                    "@type": "string",
+                    "#text": "eeeeeeee-2553-4404-977e-4f35918297e5"
+                },
+                "FirstNames": {
+                    "@type": "string",
+                    "#text": "Kees"
+                },
+                "Gender": {
+                    "@type": "string",
+                    "#text": "M"
+                },
+                "HouseNumber": {
+                    "@type": "string",
+                    "#text": "2"
+                },
+                "Initials": {
+                    "@type": "string",
+                    "#text": "B"
+                },
+                "LastName": {
+                    "@type": "string",
+                    "#text": "Jong"
+                },
+                "LastNamePrefix": {
+                    "@type": "string",
+                    "#text": "de"
+                },
+                "LoginName": {
+                    "@type": "string",
+                    "#text": "109355"
+                },
+                "MaidenName": {
+                    "@type": "string",
+                    "#text": null
+                },
+                "Number": {
+                    "@type": "string",
+                    "#text": "109355"
+                },
+                "Password": {
+                    "@type": "string",
+                    "#text": null
+                },
+                "PhoneNumber1": {
+                    "@type": "string",
+                    "#text": "06-12345678"
+                },
+                "PhoneNumber2": {
+                    "@type": "string",
+                    "#text": "06-12345678"
+                },
+                "PostalCode": {
+                    "@type": "string",
+                    "#text": "8467SG"
+                },
+                "PrivateEmail": {
+                    "@type": "string",
+                    "#text": null
+                },
+                "StreetName": {
+                    "@type": "string",
+                    "#text": "Straat"
+                },
+                "Uid": {
+                    "@type": "string",
+                    "#text": null
+                },
+                "UidMappingId": {
+                    "@type": "string",
+                    "#text": null
+                },
+                "UserDefinedFieldsJson": {
+                    "@type": "array",
+                    "#text": null
+                },
+                "UsualName": {
+                    "@type": "string",
+                    "#text": "Bjorn"
+                },
+                "WorkEmail": {
+                    "@type": "string",
+                    "#text": "109355@leerling.abcd.nl"
+                }
+            }
+        ]
+    },
+    "Groups": {
+        "@class": "array",
+        "element": [
+            {
+                "GroupId": {
+                    "@type": "string",
+                    "#text": "2"
+                },
+                "IsPrimary": {
+                    "@type": "boolean",
+                    "#text": "false"
+                },
+                "PersonId": {
+                    "@type": "string",
+                    "#text": "e5bed0c4-3ac1-4115-b30e-ec1affa3b5e2"
+                },
+                "Location": {
+                    "@type": "string",
+                    "#text": "De Compagnie"
+                },
+                "Type": {
+                    "@type": "string",
+                    "#text": "Grade"
+                }
+            },
+            {
+                "GroupId": {
+                    "@type": "string",
+                    "#text": "3"
+                },
+                "IsPrimary": {
+                    "@type": "boolean",
+                    "#text": "false"
+                },
+                "PersonId": {
+                    "@type": "string",
+                    "#text": "1379386f-2553-4404-977e-4f35918297e5"
+                },
+                "Location": {
+                    "@type": "string",
+                    "#text": "De Compagnie"
+                },
+                "Type": {
+                    "@type": "string",
+                    "#text": "Grade"
+                }
+            }
+        ]
+    },
+    "PersonRelations": {
+        "@class": "array"
+    }
+}
