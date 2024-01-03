@@ -46,7 +46,10 @@ public class ElementChecker {
             if(level == 0 && numberOfChildren == 1 && namespace==null) {
                 isRootArray = true;
             }
-            if (elementDeepestDepth == 2 && classAttr!=null && classAttr.equals("") && namespace==null) {
+            if (elementDeepestDepth > 2 && namespace==null && areChildrenNamesEqual) {
+                isRootArray = true;
+            }
+            if (elementDeepestDepth == 2 && namespace==null && areChildrenNamesEqual && classAttr!=null && classAttr.equals("")) {
                 isRootArray = true;
             }
             if(elementDeepestDepth == 1 && parentClass!=null &&
