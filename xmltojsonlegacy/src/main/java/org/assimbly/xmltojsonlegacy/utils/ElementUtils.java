@@ -40,7 +40,7 @@ public class ElementUtils {
     // get element name
     // removes namespace from element name when isRemoveNamespacePrefixes flag is enabled
     public static String getElementName(Element nodeElement, String namespace, boolean removeNamespacePrefixes, boolean skipNamespaces) {
-        if(!skipNamespaces && removeNamespacePrefixes && namespace!=null){
+        if(removeNamespacePrefixes && namespace!=null){
             String tagName = nodeElement.getTagName();
             return tagName.replaceFirst(namespace+":", "");
         } else {
