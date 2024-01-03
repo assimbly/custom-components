@@ -39,9 +39,11 @@ public class OtherType implements TextNodeTransaction {
             }
         } else {
             if(ElementChecker.isLastElement(element)) {
-                rootObjectNode.put(
-                        ElementUtils.getElementName(element, namespace, removeNamespacePrefixes, skipNamespaces),
-                        ElementUtils.getNodeValue(childNode, trimSpaces));
+                String name = ElementUtils.getElementName(element, namespace, removeNamespacePrefixes, skipNamespaces);
+                if(!ElementChecker.isElementAttributeNull(element, Constants.JSON_XML_ATTR_TYPE)) {
+                    name = Constants.JSON_XML_TEXT_FIELD;
+                }
+                rootObjectNode.put(name, ElementUtils.getNodeValue(childNode, trimSpaces));
             }
         }
         return null;
