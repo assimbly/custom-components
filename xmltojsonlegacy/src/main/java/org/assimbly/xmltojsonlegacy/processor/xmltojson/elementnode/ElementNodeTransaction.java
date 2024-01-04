@@ -10,9 +10,10 @@ public interface ElementNodeTransaction {
 
     JsonNode process(
             Node childNode, ArrayNode rootArrayNode, ObjectNode rootObjectNode, int nodeCount, int level,
-            int numberOfChildren, int numberOfSiblings, String classAttr, boolean isRootArray, boolean isObject,
-            boolean isSingleChildren, boolean isFirstChild, boolean isFirstSibling, Element childElement,
-            String namespace, boolean trimSpaces, boolean skipNamespaces, boolean removeNamespacePrefixes, boolean typeHints
+            int numberOfChildren, int numberOfSiblings, String parentClass, String classAttr, boolean isRootArray,
+            boolean isObject, boolean isSingleChildren, boolean isFirstChild, boolean isFirstSibling,
+            Element childElement, String namespace, boolean trimSpaces, boolean skipNamespaces,
+            boolean removeNamespacePrefixes, boolean typeHints
     );
 
 }

@@ -1,0 +1,49 @@
+{
+    "rmessage": {
+        "@action": "POST",
+        "@id": "4426432",
+        "@message": "stockAdjustments",
+        "@messageId": "stockAdjustments:1404458",
+        "@step": "1",
+        "adminCode": {
+            "@type": "string",
+            "#text": "01"
+        },
+        "attribute": {
+            "@type": "string",
+            "#text": "WMS: 2023105T171505_000"
+        },
+        "lines": [
+            {
+                "adminCode": {
+                    "@type": "string",
+                    "#text": "01"
+                },
+                "productIdentifier": {
+                    "@class": "object",
+                    "productCode": {
+                        "@type": "string",
+                        "#text": "1404458"
+                    }
+                },
+                "quantity": {
+                    "@type": "number",
+                    "#text": "35"
+                },
+                "unitCode": {
+                    "@type": "string",
+                    "#text": "1_STUK"
+                },
+                "wareHouseCode": {
+                    "@type": "string",
+                    "#text": "MAG2"
+                },
+                "wareHouseLocationCode": {
+                    "@type": "string",
+                    "#text": "VRIJ"
+                }
+            }
+        ],
+        "stockAdjustmentCode": "001"
+    }
+}

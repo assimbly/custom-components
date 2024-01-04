@@ -1,0 +1,17 @@
+{
+  "root": [
+    {
+      "product": {
+        "@class": "object",
+        "id": {
+          "@type": "string",
+          "#text": "1"
+        }
+      },
+      "label": {
+        "@type": "string",
+        "#text": "2"
+      }
+    }
+  ]
+}

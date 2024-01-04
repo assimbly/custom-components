@@ -1,0 +1,90 @@
+[
+    {
+        "productcode": "101960",
+        "unitcode": "STUKS",
+        "stockquantity_on_hand": {
+            "@type": "number",
+            "#text": "302"
+        },
+        "stockquantity_on_the_way": {
+            "@type": "number",
+            "#text": "120"
+        },
+        "stockdate_available": "2023-12-20",
+        "discontinued": {
+            "@type": "boolean",
+            "#text": "false"
+        },
+        "product_purchase": {
+            "@type": "boolean",
+            "#text": "false"
+        },
+        "eancode": "8718056001873"
+    },
+    {
+        "productcode": "102440",
+        "unitcode": "STUKS",
+        "stockquantity_on_hand": {
+            "@type": "number",
+            "#text": "3"
+        },
+        "stockquantity_on_the_way": {
+            "@type": "number",
+            "#text": "6"
+        },
+        "stockdate_available": "2023-12-24",
+        "discontinued": {
+            "@type": "boolean",
+            "#text": "false"
+        },
+        "product_purchase": {
+            "@type": "boolean",
+            "#text": "false"
+        },
+        "eancode": "8718056002887"
+    },
+    {
+        "productcode": "102520",
+        "unitcode": "STUKS",
+        "stockquantity_on_hand": {
+            "@type": "number",
+            "#text": "0"
+        },
+        "stockquantity_on_the_way": {
+            "@type": "number",
+            "#text": "0"
+        },
+        "stockdate_available": [],
+        "discontinued": {
+            "@type": "boolean",
+            "#text": "true"
+        },
+        "product_purchase": {
+            "@type": "boolean",
+            "#text": "false"
+        },
+        "eancode": "8718056002962"
+    },
+    {
+        "productcode": "103930",
+        "unitcode": "STUKS",
+        "stockquantity_on_hand": {
+            "@type": "number",
+            "#text": "22"
+        },
+        "stockquantity_on_the_way": {
+            "@type": "number",
+            "#text": "0"
+        },
+        "stockdate_available": [],
+        "discontinued": {
+            "@type": "boolean",
+            "#text": "false"
+        },
+        "product_purchase": {
+            "@type": "boolean",
+            "#text": "false"
+        },
+        "eancode": "8718056006953"
+    }
+]

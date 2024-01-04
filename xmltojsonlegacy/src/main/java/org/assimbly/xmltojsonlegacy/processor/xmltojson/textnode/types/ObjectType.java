@@ -13,9 +13,9 @@ public class ObjectType implements TextNodeTransaction {
     @Override
     public JsonNode process(
             Node childNode, Element element, ArrayNode rootArrayNode, ObjectNode rootObjectNode, int level, int index,
-            int nodeListSize, boolean isRootArray, boolean isRootNode, boolean isObject, boolean isOneValue,
-            String namespace, boolean forceTopLevelObject, boolean trimSpaces, boolean skipNamespaces,
-            boolean removeNamespacePrefixes, boolean typeHints
+            int nodeListSize, String grandParentClass, String parentClass, boolean isRootArray, boolean isRootNode,
+            boolean isObject, boolean isOneValue, String namespace, boolean forceTopLevelObject, boolean trimSpaces,
+            boolean skipNamespaces, boolean removeNamespacePrefixes, boolean typeHints, boolean areSiblingsNamesEqual
     ) {
         //process text node identified as an object
         Print.data(" 2. OBJECT", level);

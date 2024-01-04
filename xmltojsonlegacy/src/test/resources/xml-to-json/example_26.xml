@@ -1,0 +1,4 @@
+<lh:List xmlns:lh="http://liquidhub.com/SimpleList" name="Fruit List">
+    <lh:Item>Apple</lh:Item>
+    <lh:Item>Banana</lh:Item>
+</lh:List>

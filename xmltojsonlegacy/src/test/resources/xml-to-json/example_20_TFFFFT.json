@@ -1,0 +1,23 @@
+{
+    "ShipmentMAG": {
+        "notify": true,
+        "items": [
+            {
+                "qty": 1,
+                "order_item_id": 1123285
+            }
+        ],
+        "tracks": [
+            {
+                "carrier_code": "tig_postnl",
+                "title": "PostNL",
+                "track_number": "3STHXG0794709"
+            }
+        ],
+        "arguments": {
+            "extension_attributes": {
+                "source_code": "warehouse"
+            }
+        }
+    }
+}

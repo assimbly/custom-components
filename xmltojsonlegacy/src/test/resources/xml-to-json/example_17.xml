@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rmessage action="POST" id="4426432" message="stockAdjustments" messageId="stockAdjustments:1404458" step="1">
+    <adminCode type="string">01</adminCode>
+    <attribute type="string">WMS: 2023105T171505_000</attribute>
+    <lines>
+        <e>
+            <adminCode type="string">01</adminCode>
+            <productIdentifier class="object">
+                <productCode type="string">1404458</productCode>
+            </productIdentifier>
+            <quantity type="number">35</quantity>
+            <unitCode type="string">1_STUK</unitCode>
+            <wareHouseCode type="string">MAG2</wareHouseCode>
+            <wareHouseLocationCode type="string">VRIJ</wareHouseLocationCode>
+        </e>
+    </lines>
+    <stockAdjustmentCode>001</stockAdjustmentCode>
+</rmessage>

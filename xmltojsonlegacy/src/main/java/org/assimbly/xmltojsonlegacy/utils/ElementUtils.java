@@ -1,11 +1,15 @@
 package org.assimbly.xmltojsonlegacy.utils;
 
+import org.assimbly.xmltojsonlegacy.Constants;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.XMLConstants;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 public class ElementUtils {
 
@@ -36,7 +40,7 @@ public class ElementUtils {
     // get element name
     // removes namespace from element name when isRemoveNamespacePrefixes flag is enabled
     public static String getElementName(Element nodeElement, String namespace, boolean removeNamespacePrefixes, boolean skipNamespaces) {
-        if(!skipNamespaces && removeNamespacePrefixes && namespace!=null){
+        if(removeNamespacePrefixes && namespace!=null){
             String tagName = nodeElement.getTagName();
             return tagName.replaceFirst(namespace+":", "");
         } else {
@@ -97,6 +101,58 @@ public class ElementUtils {
             }
         }
         return depth;
+    }
+
+    public static boolean isAnSpecialAttribute(String attribute) {
+        return Constants.SPECIAL_JSON_XML_ATTR_TYPES.contains(attribute);
+    }
+
+    public static boolean isAnXmlnsAttribute(String attribute) {
+        return attribute.equals("xmlns") || attribute.indexOf("xmlns:") == 0;
+    }
+
+    // check if siblings have the same name
+    public static boolean areSiblingsNamesEqual(Element element) {
+        String name = null;
+        // Get the parent of the element
+        Node parent = element.getParentNode();
+        if (parent != null) {
+            NodeList siblings = parent.getChildNodes();
+            for (int i = 0; i < siblings.getLength(); i++) {
+                Node sibling = siblings.item(i);
+                if (sibling.getNodeType() == Node.ELEMENT_NODE) {
+                    if(name != null) {
+                        if(!name.equals(sibling.getNodeName())) {
+                            return false;
+                        }
+                    } else {
+                        name = sibling.getNodeName();
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    // check if children have the same name
+    public static boolean areChildrenNamesEqual(Element element) {
+        String name = null;
+        // Get the direct child nodes of the parent element
+        NodeList childNodes = element.getChildNodes();
+        // Count the number of direct children elements
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node childNode = childNodes.item(i);
+            if (childNode.getNodeType() == Node.ELEMENT_NODE) {
+                if(name != null) {
+                    if(!name.equals(childNode.getNodeName())) {
+                        return false;
+                    }
+                } else {
+                    name = childNode.getNodeName();
+                }
+            }
+        }
+        return true;
     }
 
 }
