@@ -95,7 +95,7 @@ public class GoogleDriveConsumer extends ScheduledPollConsumer implements Consum
                 postProcess(fileModel, file);
             }
         } catch (GoogleJsonResponseException e) {
-            LOG.error("Google Drive Consume error:", e);
+            LOG.info(" >> GoogleJsonResponseException occurred");
             service = this.endpoint.getClient(true);
         }
 
