@@ -103,7 +103,7 @@ public class GoogleDriveConsumer extends ScheduledPollConsumer implements Consum
             if(connectionAttempts < connectionAttemptsMax) {
                 LOG.warn(String.format(
                         "Could not connect to Google Drive directory. Try again after %d seconds (attempt %s of %s)",
-                        endpoint.getDelay(),
+                        endpoint.getDelay() / 1000L,
                         connectionAttempts,
                         connectionAttemptsMax
                 ));
