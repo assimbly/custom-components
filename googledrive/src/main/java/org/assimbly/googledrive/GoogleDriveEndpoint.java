@@ -24,8 +24,6 @@ import static org.assimbly.googledrive.domain.GSuiteFilesTypeHelper.isGSuiteFile
 @SuppressWarnings("PackageAccessibility")
 public class GoogleDriveEndpoint extends ProcessorEndpoint {
 
-    private static final Logger LOG = LoggerFactory.getLogger(GoogleDriveEndpoint.class);
-
     private static final String APPLICATION_NAME = "Assimbly";
     private static final String CLIENT_ID = System.getenv("GOOGLE_CLIENT_ID");
     private static final String CLIENT_SECRET = System.getenv("GOOGLE_CLIENT_SECRET");
@@ -77,7 +75,6 @@ public class GoogleDriveEndpoint extends ProcessorEndpoint {
 
     Drive getClient(boolean forceFlag) {
         if (client == null || forceFlag) {
-            LOG.info(" >> Get client");
             client = getClientFactory().makeClient(CLIENT_ID, CLIENT_SECRET, APPLICATION_NAME,
                     configuration.getAccessToken());
         }
