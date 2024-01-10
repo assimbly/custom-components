@@ -179,9 +179,10 @@ public class XmlToJsonProcessor {
             for (int j = 0; j < attrMap.getLength(); j++) {
                 Node node = attrMap.item(j);
                 String attr = node.getNodeName();
-                if((!xmlJsonDataFormat.isTypeHints() && !ElementUtils.isAnXmlnsAttribute(attr)) ||
-                        xmlJsonDataFormat.isTypeHints() && !ElementUtils.isAnSpecialAttribute(attr) &&
-                                !ElementUtils.isAnXmlnsAttribute(attr)
+                if(!xmlJsonDataFormat.isTypeHints() ||
+                        xmlJsonDataFormat.isTypeHints() && !ElementUtils.isAnSpecialAttribute(attr) && (
+                                !ElementUtils.isAnXmlnsAttribute(attr) || !xmlJsonDataFormat.isSkipNamespaces()
+                        )
                 ) {
                     rootObjectNode.put(Constants.JSON_XML_ATTR_PREFIX+node.getNodeName(), node.getNodeValue());
                 }
