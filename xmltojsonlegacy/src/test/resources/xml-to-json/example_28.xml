@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <products class="array">
+        <product class="object">
+            <id type="string">1</id>
+        </product>
+    </products>
+</root>
