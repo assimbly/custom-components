@@ -19,19 +19,21 @@ public class ExtractUtils {
     // extract child as other type and add into the array node
     public static void extractChildAsOtherInArrayNode(
             int level, ArrayNode rootArrayNode, int numSiblings, String parentClass, String classAttr, Element childNode,
-            Element childElement, boolean isFirstSibling, String namespace
+            Element childElement, boolean isFirstSibling, String namespace, boolean areSiblingsNamesEqual,
+            boolean isParentSiblingsNamesEqual, boolean hasAttributes, boolean hasParentAttributes
     ) {
-        rootArrayNode.add(XmlToJsonProcessor.convertXmlToJson(childElement, level +1, parentClass, classAttr, numSiblings, isFirstSibling, namespace));
+        rootArrayNode.add(XmlToJsonProcessor.convertXmlToJson(childElement, level +1, parentClass, classAttr, numSiblings, isParentSiblingsNamesEqual, areSiblingsNamesEqual, hasParentAttributes, hasAttributes, isFirstSibling, namespace));
     }
 
     // extract child as other type and add into the object node
     public static void extractChildAsOtherInObjectNode(
             int level, ObjectNode rootObjectNode, int numSiblings, String parentClass, String classAttr, Element childNode,
             Element childElement, boolean isFirstSibling, String namespace, boolean skipNamespaces,
-            boolean removeNamespacePrefixes
+            boolean removeNamespacePrefixes, boolean areSiblingsNamesEqual, boolean isParentSiblingsNamesEqual,
+            boolean hasAttributes, boolean hasParentAttributes
     ) {
         String propertyName = ElementUtils.getElementName(childNode, namespace, removeNamespacePrefixes, skipNamespaces);
-        JsonNode node = XmlToJsonProcessor.convertXmlToJson(childElement, level +1, parentClass, classAttr, numSiblings, isFirstSibling, namespace);
+        JsonNode node = XmlToJsonProcessor.convertXmlToJson(childElement, level +1, parentClass, classAttr, numSiblings, isParentSiblingsNamesEqual, areSiblingsNamesEqual, hasParentAttributes, hasAttributes, isFirstSibling, namespace);
         int childCount = ((DeferredElementImpl) childElement).getChildElementCount();
         switch (node.size()) {
             case 0:
@@ -60,9 +62,10 @@ public class ExtractUtils {
     // extract child as array type
     public static void extractChildAsArray(
             int level, ArrayNode rootArrayNode, int numSiblings, String parentClass, String classAttr, Element childElement,
-            boolean isFirstSibling, String namespace
+            boolean isFirstSibling, String namespace, boolean areSiblingsNamesEqual, boolean isParentSiblingsNamesEqual,
+            boolean hasAttributes, boolean hasParentAttributes
     ) {
-        JsonNode subNode = XmlToJsonProcessor.convertXmlToJson(childElement, level +1, parentClass, classAttr, numSiblings, isFirstSibling, namespace);
+        JsonNode subNode = XmlToJsonProcessor.convertXmlToJson(childElement, level +1, parentClass, classAttr, numSiblings, isParentSiblingsNamesEqual, areSiblingsNamesEqual, hasParentAttributes, hasAttributes, isFirstSibling, namespace);
 
         if(subNode.isArray() && ElementChecker.isLastElement(childElement)) {
             for (JsonNode subElement : subNode) {
@@ -77,10 +80,11 @@ public class ExtractUtils {
     public static void extractChildAsObject(
             int level, ObjectNode rootObjectNode, int numSiblings, String parentClass, String classAttr, Element childElement,
             boolean isFirstSibling, String namespace, boolean trimSpaces, boolean skipNamespaces,
-            boolean removeNamespacePrefixes, boolean typeHints
+            boolean removeNamespacePrefixes, boolean typeHints, boolean areSiblingsNamesEqual, boolean isParentSiblingsNamesEqual,
+            boolean hasAttributes, boolean hasParentAttributes
     ) {
         if(typeHints) {
-            JsonNode subNode = XmlToJsonProcessor.convertXmlToJson(childElement, level +1, parentClass, classAttr, numSiblings, isFirstSibling, namespace);
+            JsonNode subNode = XmlToJsonProcessor.convertXmlToJson(childElement, level +1, parentClass, classAttr, numSiblings, isParentSiblingsNamesEqual, areSiblingsNamesEqual, hasParentAttributes, hasAttributes, isFirstSibling, namespace);
             if(subNode.isEmpty()) {
                 if(ElementChecker.isElementAttributeNull(childElement, Constants.JSON_XML_ATTR_TYPE) &&
                         ElementChecker.isElementNodeValueNull(childElement)) {
@@ -88,11 +92,34 @@ public class ExtractUtils {
                 }
             } else {
                 for (JsonNode subElement : subNode) {
-                    subNode.fields().forEachRemaining(entry -> {
-                        String label = entry.getKey();
-                        String childTypeAttr = childElement.getAttribute(Constants.JSON_XML_ATTR_TYPE);
-                        setValueUsingAttributeType(rootObjectNode, subElement, label, null, childTypeAttr, trimSpaces);
-                    });
+                    if(subNode.fields().hasNext()) {
+                        subNode.fields().forEachRemaining(entry -> {
+                            String label = entry.getKey();
+                            String childTypeAttr = childElement.getAttribute(Constants.JSON_XML_ATTR_TYPE);
+                            setValueUsingAttributeType(rootObjectNode, subElement, label, null, childTypeAttr, trimSpaces);
+                        });
+                    } else {
+                        String fieldName = ElementUtils.getElementName(childElement, namespace, removeNamespacePrefixes, skipNamespaces);
+                        String fieldValue = ElementUtils.getNodeValue(childElement, trimSpaces);
+                        if(rootObjectNode.has(fieldName)) {
+                            JsonNode nodeValues = rootObjectNode.get(fieldName);
+                            if(nodeValues.isArray()) {
+                                ((ArrayNode)nodeValues).add(fieldValue);
+                            } else {
+                                ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode();
+                                arrayNode.add(nodeValues.asText());
+                                arrayNode.add(fieldValue);
+                                nodeValues = arrayNode;
+                            }
+                            rootObjectNode.set(fieldName, nodeValues);
+                        } else {
+                            if(fieldValue.equalsIgnoreCase("")) {
+                                rootObjectNode.set(fieldName, JsonNodeFactory.instance.arrayNode());
+                            } else {
+                                rootObjectNode.put(fieldName, fieldValue);
+                            }
+                        }
+                    }
                 }
             }
         } else {
