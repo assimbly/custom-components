@@ -16,11 +16,13 @@ public class OtherTypeWithNamespace implements ElementNodeTransaction {
             Node childNode, ArrayNode rootArrayNode, ObjectNode rootObjectNode, int nodeCount, int level,
             int numberOfChildren, int numberOfSiblings, String parentClass, String classAttr, boolean isRootArray,
             boolean isObject, boolean isSingleChildren, boolean isFirstChild, boolean isFirstSibling, Element childElement,
-            String namespace, boolean trimSpaces, boolean skipNamespaces, boolean removeNamespacePrefixes, boolean typeHints
+            String namespace, boolean trimSpaces, boolean skipNamespaces, boolean removeNamespacePrefixes, boolean typeHints,
+            boolean areSiblingsNamesEqual, boolean isParentSiblingsNamesEqual,
+            boolean hasAttributes, boolean hasParentAttributes
     ) {
         ExtractUtils.extractChildAsOtherInArrayNode(
                 level, rootArrayNode, numberOfSiblings, parentClass, classAttr, (Element) childNode, childElement,
-                isFirstSibling, namespace
+                isFirstSibling, namespace, areSiblingsNamesEqual, isParentSiblingsNamesEqual, hasAttributes, hasParentAttributes
         );
         rootObjectNode.set(
                 ElementUtils.getElementName((Element) childNode, namespace, removeNamespacePrefixes, skipNamespaces),

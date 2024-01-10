@@ -18,21 +18,30 @@ public class OneValueType implements TextNodeTransaction {
             Node childNode, Element element, ArrayNode rootArrayNode, ObjectNode rootObjectNode, int level, int index,
             int nodeListSize, String grandParentClass, String parentClass, boolean isRootArray, boolean isRootNode,
             boolean isObject, boolean isOneValue, String namespace, boolean forceTopLevelObject, boolean trimSpaces,
-            boolean skipNamespaces, boolean removeNamespacePrefixes, boolean typeHints, boolean areSiblingsNamesEqual
+            boolean skipNamespaces, boolean removeNamespacePrefixes, boolean typeHints, boolean areSiblingsNamesEqual,
+            boolean isParentSiblingsNamesEqual, boolean hasAttributes, boolean hasParentAttributes
     ) {
         //process text node identified as one value
         Print.data(" 2. ONE VALUE", level);
+        boolean isFirstLevel = level == 1;
+        if(isFirstLevel) {
+            childNode = element;
+        }
         if(typeHints) {
             if(ExtractUtils.rootObjectNodeContainsAttributes(rootObjectNode)) {
                 rootObjectNode.put(Constants.JSON_XML_TEXT_FIELD, ElementUtils.getNodeValue(childNode, trimSpaces));
+                if(isFirstLevel) return rootObjectNode;
             } else {
                 rootArrayNode.add(ElementUtils.getNodeValue(childNode, trimSpaces));
+                if(isFirstLevel) return rootArrayNode;
             }
         } else {
             if(element.hasAttributes()) {
                 rootObjectNode.put(Constants.JSON_XML_TEXT_FIELD, ElementUtils.getNodeValue(childNode, trimSpaces));
+                if(isFirstLevel) return rootObjectNode;
             } else {
                 rootArrayNode.add(ElementUtils.getNodeValue(childNode, trimSpaces));
+                if(isFirstLevel) return rootArrayNode;
             }
         }
         return null;

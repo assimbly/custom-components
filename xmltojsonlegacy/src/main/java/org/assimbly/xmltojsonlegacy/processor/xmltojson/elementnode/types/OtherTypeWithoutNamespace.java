@@ -19,7 +19,9 @@ public class OtherTypeWithoutNamespace implements ElementNodeTransaction {
             Node childNode, ArrayNode rootArrayNode, ObjectNode rootObjectNode, int nodeCount, int level,
             int numberOfChildren, int numberOfSiblings, String parentClass, String classAttr, boolean isRootArray,
             boolean isObject, boolean isSingleChildren, boolean isFirstChild, boolean isFirstSibling, Element childElement,
-            String namespace, boolean trimSpaces, boolean skipNamespaces, boolean removeNamespacePrefixes, boolean typeHints
+            String namespace, boolean trimSpaces, boolean skipNamespaces, boolean removeNamespacePrefixes, boolean typeHints,
+            boolean areSiblingsNamesEqual, boolean isParentSiblingsNamesEqual,
+            boolean hasAttributes, boolean hasParentAttributes
     ) {
         if(!typeHints) {
             // extract child as other type and add into the array node
@@ -31,12 +33,13 @@ public class OtherTypeWithoutNamespace implements ElementNodeTransaction {
             ) {
                 ExtractUtils.extractChildAsOtherInObjectNode(
                         level, rootObjectNode, numberOfSiblings, parentClass, classAttr, (Element) childNode, childElement,
-                        isFirstSibling, namespace, skipNamespaces, removeNamespacePrefixes
+                        isFirstSibling, namespace, skipNamespaces, removeNamespacePrefixes, areSiblingsNamesEqual,
+                        isParentSiblingsNamesEqual, hasAttributes, hasParentAttributes
                 );
             } else {
                 ExtractUtils.extractChildAsOtherInArrayNode(
                         level, rootArrayNode, numberOfSiblings, parentClass, classAttr, (Element) childNode, childElement,
-                        isFirstSibling, namespace
+                        isFirstSibling, namespace, areSiblingsNamesEqual, isParentSiblingsNamesEqual, hasAttributes, hasParentAttributes
                 );
                 rootObjectNode.set(
                         ElementUtils.getElementName((Element) childNode, namespace, removeNamespacePrefixes, skipNamespaces),
@@ -47,7 +50,8 @@ public class OtherTypeWithoutNamespace implements ElementNodeTransaction {
             // extract child as other type and add into the object node
             ExtractUtils.extractChildAsOtherInObjectNode(
                     level, rootObjectNode, numberOfSiblings, parentClass, classAttr, (Element) childNode, childElement,
-                    isFirstSibling, namespace, skipNamespaces, removeNamespacePrefixes
+                    isFirstSibling, namespace, skipNamespaces, removeNamespacePrefixes, areSiblingsNamesEqual,
+                    isParentSiblingsNamesEqual, hasAttributes, hasParentAttributes
             );
         }
         return null;

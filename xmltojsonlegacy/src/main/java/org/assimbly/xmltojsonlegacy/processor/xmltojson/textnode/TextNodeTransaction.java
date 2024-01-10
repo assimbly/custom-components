@@ -12,7 +12,8 @@ public interface TextNodeTransaction {
             Node childNode, Element element, ArrayNode rootArrayNode, ObjectNode rootObjectNode, int level, int index,
             int nodeListSize, String grandParentClass, String parentClass, boolean isRootArray, boolean isRootNode,
             boolean isObject, boolean isOneValue, String namespace, boolean forceTopLevelObject, boolean trimSpaces,
-            boolean skipNamespaces, boolean removeNamespacePrefixes, boolean typeHints, boolean areSiblingsNamesEqual
+            boolean skipNamespaces, boolean removeNamespacePrefixes, boolean typeHints, boolean areSiblingsNamesEqual,
+            boolean isParentSiblingsNamesEqual, boolean hasAttributes, boolean hasParentAttributes
     );
 
 }

@@ -13,7 +13,8 @@ public interface ElementNodeTransaction {
             int numberOfChildren, int numberOfSiblings, String parentClass, String classAttr, boolean isRootArray,
             boolean isObject, boolean isSingleChildren, boolean isFirstChild, boolean isFirstSibling,
             Element childElement, String namespace, boolean trimSpaces, boolean skipNamespaces,
-            boolean removeNamespacePrefixes, boolean typeHints
+            boolean removeNamespacePrefixes, boolean typeHints, boolean areSiblingsNamesEqual, boolean isParentSiblingsNamesEqual,
+            boolean hasAttributes, boolean hasParentAttributes
     );
 
 }
