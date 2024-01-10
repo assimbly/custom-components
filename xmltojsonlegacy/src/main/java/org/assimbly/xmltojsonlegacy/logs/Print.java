@@ -12,7 +12,10 @@ public class Print {
     public static void elementDetails(
             Element element, int level, String grandParentClass, String parentClass, int parentSiblings, boolean isRootArray, boolean isOneValue,
             boolean isObject, boolean isFirstChild, int numberOfSiblings, int numberOfChildren, String classAttr,
-            String typeAttr, String namespace, boolean removeNamespacePrefixes, boolean skipNamespaces
+            String typeAttr, String namespace, boolean removeNamespacePrefixes, boolean skipNamespaces,
+            boolean isParentSiblingsNamesEqual, boolean areSiblingsNamesEqual, boolean areChildrenNamesEqual,
+            boolean hasGrandParentAttributes, boolean hasParentAttributes, boolean hasSimpleAttributes,
+            int elementDeepestDepth
     ) {
         if(logger.isDebugEnabled()) {
             data(" >> Element: " +
@@ -30,6 +33,16 @@ public class Print {
             data("    isOneValue: " + isOneValue, level);
             data("    isObject: " + isObject, level);
             data("    isFirstChild: " + isFirstChild, level);
+
+            data("    isParentSiblingsNamesEqual: " + isParentSiblingsNamesEqual, level);
+            data("    areSiblingsNamesEqual: " + areSiblingsNamesEqual, level);
+            data("    areChildrenNamesEqual: " + areChildrenNamesEqual, level);
+
+            data("    hasGrandParentAttributes: " + hasGrandParentAttributes, level);
+            data("    hasParentAttributes: " + hasParentAttributes, level);
+            data("    hasSimpleAttributes: " + hasSimpleAttributes, level);
+
+            data("    elementDeepestDepth: " + elementDeepestDepth, level);
         }
     }
 
