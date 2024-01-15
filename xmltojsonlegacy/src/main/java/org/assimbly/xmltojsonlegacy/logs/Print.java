@@ -19,7 +19,7 @@ public class Print {
     ) {
         if(logger.isDebugEnabled()) {
             data(" >> Element: " +
-                    ElementUtils.getElementName(element, namespace, removeNamespacePrefixes, skipNamespaces),
+                    ElementUtils.getElementName(element, removeNamespacePrefixes, skipNamespaces),
                     level
             );
             data("    typeAttr: " + typeAttr, level);

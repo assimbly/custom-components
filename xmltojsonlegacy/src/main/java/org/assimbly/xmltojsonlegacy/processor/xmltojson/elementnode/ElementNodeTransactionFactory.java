@@ -24,7 +24,7 @@ public class ElementNodeTransactionFactory {
         put(ElementNodeType.OTHER_WITHOUT_NAMESPACE, new OtherTypeWithoutNamespace());
     }};
 
-    public static ElementNodeTransaction getProcessorFor(boolean isObject, boolean isRootArray, String namespace) {
+    public static ElementNodeTransaction getProcessorFor(boolean isObject, boolean isRootArray, boolean isElementDefiningNamespaces) {
         ElementNodeType type;
 
         if(isObject) {
@@ -33,7 +33,7 @@ public class ElementNodeTransactionFactory {
             if(isRootArray) {
                 type = ElementNodeType.ROOT_ARRAY;
             } else {
-                if(namespace!=null) {
+                if(isElementDefiningNamespaces) {
                     type = ElementNodeType.OTHER_WITH_NAMESPACE;
                 } else {
                     type = ElementNodeType.OTHER_WITHOUT_NAMESPACE;

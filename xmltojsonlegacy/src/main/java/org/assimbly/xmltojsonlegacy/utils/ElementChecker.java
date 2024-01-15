@@ -13,19 +13,19 @@ public class ElementChecker {
     // check if it's a root array
     public static boolean isRootArray(
             int level, int numberOfChildren, int numberOfSiblings, int parentSiblings, String classAttr,
-            String parentClass, int elementDeepestDepth, String namespace, boolean isTypeHintsEnabled,
+            String parentClass, int elementDeepestDepth, boolean isElementDefiningNamespaces, boolean isTypeHintsEnabled,
             boolean areChildrenNamesEqual, boolean isParentSiblingsNamesEqual, boolean isGrandParentSiblingsNamesEqual,
             boolean hasAttributes,  boolean hasParentAttributes, boolean hasGrandParentAttributes
     ) {
         boolean isRootArray = false;
         if(isTypeHintsEnabled) {
-            if (level == 0 && numberOfChildren == 1 && namespace==null) {
+            if (level == 0 && numberOfChildren == 1 && !isElementDefiningNamespaces) {
                 isRootArray = true;
             }
-            if (elementDeepestDepth > 2 && namespace==null && areChildrenNamesEqual) {
+            if (elementDeepestDepth > 2 && !isElementDefiningNamespaces && areChildrenNamesEqual) {
                 isRootArray = true;
             }
-            if (elementDeepestDepth == 2 && namespace==null && areChildrenNamesEqual && (StringUtils.isEmpty(classAttr) || !classAttr.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT))) {
+            if (elementDeepestDepth == 2 && !isElementDefiningNamespaces && areChildrenNamesEqual && (StringUtils.isEmpty(classAttr) || !classAttr.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT))) {
                 isRootArray = true;
             }
             if (elementDeepestDepth == 1 && parentClass != null &&
@@ -44,13 +44,13 @@ public class ElementChecker {
                 isRootArray = true;
             }
         } else {
-            if(level == 0 && numberOfChildren == 1 && namespace==null) {
+            if(level == 0 && numberOfChildren == 1 && !isElementDefiningNamespaces) {
                 isRootArray = true;
             }
-            if (elementDeepestDepth > 2 && namespace==null && areChildrenNamesEqual) {
+            if (elementDeepestDepth > 2 && !isElementDefiningNamespaces && areChildrenNamesEqual) {
                 isRootArray = true;
             }
-            if (elementDeepestDepth == 2 && namespace==null && areChildrenNamesEqual && classAttr!=null && classAttr.equals("")) {
+            if (elementDeepestDepth == 2 && !isElementDefiningNamespaces && areChildrenNamesEqual && classAttr!=null && classAttr.equals("")) {
                 isRootArray = true;
             }
             if(elementDeepestDepth == 1 && parentClass!=null &&

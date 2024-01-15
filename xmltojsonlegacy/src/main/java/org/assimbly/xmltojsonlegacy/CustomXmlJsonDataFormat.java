@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.HashMap;
 
 public class CustomXmlJsonDataFormat implements DataFormat {
 
@@ -46,7 +47,7 @@ public class CustomXmlJsonDataFormat implements DataFormat {
                 null, null, 0,
                 true, true,
                 false, false,
-                true, null
+                true, null, new HashMap<String, Namespace>()
         );
 
         setContentTypeHeader(exchange, MediaType.APPLICATION_JSON_VALUE);

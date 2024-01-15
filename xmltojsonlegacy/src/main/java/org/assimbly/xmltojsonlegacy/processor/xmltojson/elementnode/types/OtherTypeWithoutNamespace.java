@@ -5,12 +5,15 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.lang3.StringUtils;
 import org.assimbly.xmltojsonlegacy.Constants;
+import org.assimbly.xmltojsonlegacy.Namespace;
 import org.assimbly.xmltojsonlegacy.processor.xmltojson.elementnode.ElementNodeTransaction;
 import org.assimbly.xmltojsonlegacy.utils.ElementChecker;
 import org.assimbly.xmltojsonlegacy.utils.ElementUtils;
 import org.assimbly.xmltojsonlegacy.utils.ExtractUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+
+import java.util.HashMap;
 
 public class OtherTypeWithoutNamespace implements ElementNodeTransaction {
 
@@ -19,9 +22,9 @@ public class OtherTypeWithoutNamespace implements ElementNodeTransaction {
             Node childNode, ArrayNode rootArrayNode, ObjectNode rootObjectNode, int nodeCount, int level,
             int numberOfChildren, int numberOfSiblings, String parentClass, String classAttr, boolean isRootArray,
             boolean isObject, boolean isSingleChildren, boolean isFirstChild, boolean isFirstSibling, Element childElement,
-            String namespace, boolean trimSpaces, boolean skipNamespaces, boolean removeNamespacePrefixes, boolean typeHints,
-            boolean areSiblingsNamesEqual, boolean isParentSiblingsNamesEqual,
-            boolean hasAttributes, boolean hasParentAttributes
+            String namespace, HashMap<String, Namespace> xmlnsMap, boolean trimSpaces, boolean skipNamespaces,
+            boolean removeNamespacePrefixes, boolean typeHints, boolean areSiblingsNamesEqual,
+            boolean isParentSiblingsNamesEqual, boolean hasAttributes, boolean hasParentAttributes, boolean areChildrenNamesEqual
     ) {
         if(!typeHints) {
             // extract child as other type and add into the array node
@@ -33,16 +36,17 @@ public class OtherTypeWithoutNamespace implements ElementNodeTransaction {
             ) {
                 ExtractUtils.extractChildAsOtherInObjectNode(
                         level, rootObjectNode, numberOfSiblings, parentClass, classAttr, (Element) childNode, childElement,
-                        isFirstSibling, namespace, skipNamespaces, removeNamespacePrefixes, areSiblingsNamesEqual,
-                        isParentSiblingsNamesEqual, hasAttributes, hasParentAttributes
+                        isFirstSibling, namespace, xmlnsMap, skipNamespaces, removeNamespacePrefixes, areSiblingsNamesEqual,
+                        isParentSiblingsNamesEqual, hasAttributes, hasParentAttributes, trimSpaces
                 );
             } else {
                 ExtractUtils.extractChildAsOtherInArrayNode(
                         level, rootArrayNode, numberOfSiblings, parentClass, classAttr, (Element) childNode, childElement,
-                        isFirstSibling, namespace, areSiblingsNamesEqual, isParentSiblingsNamesEqual, hasAttributes, hasParentAttributes
+                        isFirstSibling, namespace, xmlnsMap, areSiblingsNamesEqual, isParentSiblingsNamesEqual, hasAttributes,
+                        hasParentAttributes
                 );
                 rootObjectNode.set(
-                        ElementUtils.getElementName((Element) childNode, namespace, removeNamespacePrefixes, skipNamespaces),
+                        ElementUtils.getElementName((Element) childNode, removeNamespacePrefixes, skipNamespaces),
                         rootArrayNode
                 );
             }
@@ -50,8 +54,8 @@ public class OtherTypeWithoutNamespace implements ElementNodeTransaction {
             // extract child as other type and add into the object node
             ExtractUtils.extractChildAsOtherInObjectNode(
                     level, rootObjectNode, numberOfSiblings, parentClass, classAttr, (Element) childNode, childElement,
-                    isFirstSibling, namespace, skipNamespaces, removeNamespacePrefixes, areSiblingsNamesEqual,
-                    isParentSiblingsNamesEqual, hasAttributes, hasParentAttributes
+                    isFirstSibling, namespace, xmlnsMap, skipNamespaces, removeNamespacePrefixes, areSiblingsNamesEqual,
+                    isParentSiblingsNamesEqual, hasAttributes, hasParentAttributes, trimSpaces
             );
         }
         return null;
