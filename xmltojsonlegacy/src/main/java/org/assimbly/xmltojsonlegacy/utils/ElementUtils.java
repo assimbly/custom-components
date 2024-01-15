@@ -1,6 +1,7 @@
 package org.assimbly.xmltojsonlegacy.utils;
 
 import org.assimbly.xmltojsonlegacy.Constants;
+import org.assimbly.xmltojsonlegacy.Namespace;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -37,15 +38,44 @@ public class ElementUtils {
         return null;
     }
 
+    // get element name prefix
+    public static String getElementNamePrefix(Element nodeElement) {
+        if(nodeElement!=null) {
+            String name = nodeElement.getNodeName();
+            if(name!=null && name.contains(":")) {
+                return name.substring(0, name.indexOf(":"));
+            }
+        }
+        return null;
+    }
+
+    // get namespaces on this node
+    public static HashMap<String, Namespace> getNamespacesOnThisNode(Element nodeElement, HashMap<String, Namespace> xmlnsMap, int level) {
+        HashMap<String, Namespace> xmlnsMapFromThisNode = new HashMap<>(xmlnsMap);
+        if(nodeElement.hasAttributes()){
+            NamedNodeMap attrMap = nodeElement.getAttributes();
+            for (int j = 0; j < attrMap.getLength(); j++) {
+                Node node = attrMap.item(j);
+                String attributeName = node.getNodeName();
+                if(attributeName.equals(XMLConstants.XMLNS_ATTRIBUTE) || attributeName.indexOf(XMLConstants.XMLNS_ATTRIBUTE+":")==0) {
+                    Namespace namespace = new Namespace(node.getNodeValue(), level);
+                    xmlnsMapFromThisNode.put(attributeName, namespace);
+                }
+            }
+        }
+        return xmlnsMapFromThisNode;
+    }
+
     // get element name
     // removes namespace from element name when isRemoveNamespacePrefixes flag is enabled
-    public static String getElementName(Element nodeElement, String namespace, boolean removeNamespacePrefixes, boolean skipNamespaces) {
-        if(removeNamespacePrefixes && namespace!=null){
-            String tagName = nodeElement.getTagName();
-            return tagName.replaceFirst(namespace+":", "");
-        } else {
-            return nodeElement.getTagName();
+    public static String getElementName(Element nodeElement, boolean removeNamespacePrefixes, boolean skipNamespaces) {
+        String tagName = nodeElement.getTagName();
+        if(removeNamespacePrefixes){
+            if(tagName.contains(":")) {
+                tagName = tagName.substring(tagName.indexOf(":")+1);
+            }
         }
+        return tagName;
     }
 
     // get element value
@@ -109,6 +139,21 @@ public class ElementUtils {
 
     public static boolean isAnXmlnsAttribute(String attribute) {
         return attribute.equals("xmlns") || attribute.indexOf("xmlns:") == 0;
+    }
+
+    // check if element defines namespaces
+    public static boolean isElementDefiningNamespaces(Element element, HashMap<String, Namespace> xmlnsMap) {
+        if(element.hasAttributes()){
+            NamedNodeMap attrMap = element.getAttributes();
+            for (int j = 0; j < attrMap.getLength(); j++) {
+                Node node = attrMap.item(j);
+                String attributeName = node.getNodeName();
+                if(attributeName.equals(XMLConstants.XMLNS_ATTRIBUTE) || attributeName.startsWith(XMLConstants.XMLNS_ATTRIBUTE+":")){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     // check if siblings have the same name
