@@ -25,8 +25,8 @@ public class EncoderProcessor implements Processor {
 
         byte[] bytes = exchange.getIn().getBody(byte[].class);
 
-        String original = new String(bytes, StandardCharsets.UTF_8);
-        String result = new String(original.getBytes(config.getOriginCharset()), config.getTargetCharset());
+        String original = new String(bytes, config.getOriginCharset());
+        String result = new String(original.getBytes(), config.getTargetCharset());
 
         exchange.getIn().setBody(result);
 
