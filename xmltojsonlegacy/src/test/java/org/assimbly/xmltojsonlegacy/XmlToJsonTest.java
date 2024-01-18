@@ -2665,6 +2665,7 @@ public class XmlToJsonTest extends CamelTestSupport {
         return new RouteBuilder[] {
                 new RouteBuilder() {
                     public void configure() {
+                        // FFFFFF
                         from("direct:marshal")
                                 .to("dataformat:custom-xmljsonlegacy:marshal")
                                 .to("mock:result");
@@ -2672,48 +2673,7 @@ public class XmlToJsonTest extends CamelTestSupport {
                 },
                 new RouteBuilder() {
                     public void configure() {
-                        from("direct:marshal_ForceTop")
-                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true")
-                                .to("mock:result");
-                    }
-                },
-                new RouteBuilder() {
-                    public void configure() {
-                        from("direct:marshal_ForceTop_RemoveNamespacePrefixes")
-                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&removeNamespacePrefixes=true")
-                                .to("mock:result");
-                    }
-                },
-                new RouteBuilder() {
-                    public void configure() {
-                        from("direct:marshal_ForceTop_RemoveNamespacePrefixes_TypeHints")
-                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&removeNamespacePrefixes=true&typeHints=true")
-                                .to("mock:result");
-                    }
-                },
-                new RouteBuilder() {
-                    public void configure() {
-                        from("direct:marshal_TrimSpaces")
-                                .to("dataformat:custom-xmljsonlegacy:marshal?trimSpaces=true")
-                                .to("mock:result");
-                    }
-                },
-                new RouteBuilder() {
-                    public void configure() {
-                        from("direct:marshal_SkipNamespaces")
-                                .to("dataformat:custom-xmljsonlegacy:marshal?skipNamespaces=true")
-                                .to("mock:result");
-                    }
-                },
-                new RouteBuilder() {
-                    public void configure() {
-                        from("direct:marshal_RemoveNamespacePrefixes")
-                                .to("dataformat:custom-xmljsonlegacy:marshal?removeNamespacePrefixes=true")
-                                .to("mock:result");
-                    }
-                },
-                new RouteBuilder() {
-                    public void configure() {
+                        // FFFFFT
                         from("direct:marshal_TypeHints")
                                 .to("dataformat:custom-xmljsonlegacy:marshal?typeHints=true")
                                 .to("mock:result");
@@ -2721,27 +2681,15 @@ public class XmlToJsonTest extends CamelTestSupport {
                 },
                 new RouteBuilder() {
                     public void configure() {
-                        from("direct:marshal_ForceTop_TypeHints")
-                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&typeHints=true")
+                        // FFFFTF
+                        from("direct:marshal_RemoveNamespacePrefixes")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?removeNamespacePrefixes=true")
                                 .to("mock:result");
                     }
                 },
                 new RouteBuilder() {
                     public void configure() {
-                        from("direct:marshal_TrimSpaces_TypeHints")
-                                .to("dataformat:custom-xmljsonlegacy:marshal?trimSpaces=true&typeHints=true")
-                                .to("mock:result");
-                    }
-                },
-                new RouteBuilder() {
-                    public void configure() {
-                        from("direct:marshal_SkipNamespaces_TypeHints")
-                                .to("dataformat:custom-xmljsonlegacy:marshal?skipNamespaces=true&typeHints=true")
-                                .to("mock:result");
-                    }
-                },
-                new RouteBuilder() {
-                    public void configure() {
+                        // FFFFTT
                         from("direct:marshal_RemoveNamespacePrefixes_TypeHints")
                                 .to("dataformat:custom-xmljsonlegacy:marshal?removeNamespacePrefixes=true&typeHints=true")
                                 .to("mock:result");
@@ -2749,6 +2697,23 @@ public class XmlToJsonTest extends CamelTestSupport {
                 },
                 new RouteBuilder() {
                     public void configure() {
+                        // FFFTFF
+                        from("direct:marshal_SkipNamespaces")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?skipNamespaces=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // FFFTFT
+                        from("direct:marshal_SkipNamespaces_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?skipNamespaces=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // FFFTTF
                         from("direct:marshal_SkipNamespaces_RemoveNamespacePrefixes")
                                 .to("dataformat:custom-xmljsonlegacy:marshal?skipNamespaces=true&removeNamespacePrefixes=true")
                                 .to("mock:result");
@@ -2756,6 +2721,7 @@ public class XmlToJsonTest extends CamelTestSupport {
                 },
                 new RouteBuilder() {
                     public void configure() {
+                        // FFFTTT
                         from("direct:marshal_SkipNamespaces_RemoveNamespacePrefixes_TypeHints")
                                 .to("dataformat:custom-xmljsonlegacy:marshal?skipNamespaces=true&removeNamespacePrefixes=true&typeHints=true")
                                 .to("mock:result");
@@ -2763,6 +2729,183 @@ public class XmlToJsonTest extends CamelTestSupport {
                 },
                 new RouteBuilder() {
                     public void configure() {
+                        // FFTFFF
+                        from("direct:marshal_TrimSpaces")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?trimSpaces=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // FFTFFT
+                        from("direct:marshal_TrimSpaces_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?trimSpaces=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // FFTFTF
+                        from("direct:marshal_TrimSpaces_RemoveNamespacePrefixes")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?trimSpaces=true&removeNamespacePrefixes=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // FFTFTT
+                        from("direct:marshal_TrimSpaces_RemoveNamespacePrefixes_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?trimSpaces=true&removeNamespacePrefixes=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // FFTTFF
+                        from("direct:marshal_TrimSpaces_SkipNamespaces")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?trimSpaces=true&skipNamespaces=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // FFTTFT
+                        from("direct:marshal_TrimSpaces_SkipNamespaces_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?trimSpaces=true&skipNamespaces=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // FFTTTF
+                        from("direct:marshal_TrimSpaces_SkipNamespaces_RemoveNamespacePrefixes")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // FFTTTT
+                        from("direct:marshal_TrimSpaces_SkipNamespaces_RemoveNamespacePrefixes_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // FTFFFF
+                        from("direct:marshal_SkipWhitespace")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?skipWhitespace=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // FTFFFT
+                        from("direct:marshal_SkipWhitespace_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?skipWhitespace=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // FTFFTF
+                        from("direct:marshal_SkipWhitespace_RemoveNamespacePrefixes")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?skipWhitespace=true&removeNamespacePrefixes=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // FTFFTT
+                        from("direct:marshal_SkipWhitespace_RemoveNamespacePrefixes_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?skipWhitespace=true&removeNamespacePrefixes=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // FTFTFF
+                        from("direct:marshal_SkipWhitespace_SkipNamespaces")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?skipWhitespace=true&skipNamespaces=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // FTFTFT
+                        from("direct:marshal_SkipWhitespace_SkipNamespaces_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?skipWhitespace=true&skipNamespaces=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // FTFTTF
+                        from("direct:marshal_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?skipWhitespace=true&skipNamespaces=true&removeNamespacePrefixes=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // FTFTTT
+                        from("direct:marshal_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?skipWhitespace=true&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // FTTFFF
+                        from("direct:marshal_SkipWhitespace_TrimSpaces")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?skipWhitespace=true&trimSpaces=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // FTTFFT
+                        from("direct:marshal_SkipWhitespace_TrimSpaces_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?skipWhitespace=true&trimSpaces=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // FTTFTF
+                        from("direct:marshal_SkipWhitespace_TrimSpaces_RemoveNamespacePrefixes")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?skipWhitespace=true&trimSpaces=true&removeNamespacePrefixes=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // FTTFTT
+                        from("direct:marshal_SkipWhitespace_TrimSpaces_RemoveNamespacePrefixes_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?skipWhitespace=true&trimSpaces=true&removeNamespacePrefixes=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // FTTTFF
+                        from("direct:marshal_SkipWhitespace_TrimSpaces_SkipNamespaces")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?skipWhitespace=true&trimSpaces=true&skipNamespaces=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // FTTTFT
+                        from("direct:marshal_SkipWhitespace_TrimSpaces_SkipNamespaces_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?skipWhitespace=true&trimSpaces=true&skipNamespaces=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // FTTTTF
                         from("direct:marshal_SkipWhitespace_TrimSpaces_SkipNamespaces_RemoveNamespacePrefixes")
                                 .to("dataformat:custom-xmljsonlegacy:marshal?skipWhitespace=true&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=true")
                                 .to("mock:result");
@@ -2770,6 +2913,47 @@ public class XmlToJsonTest extends CamelTestSupport {
                 },
                 new RouteBuilder() {
                     public void configure() {
+                        // FTTTTT
+                        from("direct:marshal_SkipWhitespace_TrimSpaces_SkipNamespaces_RemoveNamespacePrefixes_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?skipWhitespace=true&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // TFFFFF
+                        from("direct:marshal_ForceTop")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // TFFFFT
+                        from("direct:marshal_ForceTop_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // TFFFTF
+                        from("direct:marshal_ForceTop_RemoveNamespacePrefixes")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&removeNamespacePrefixes=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // TFFFTT
+                        from("direct:marshal_ForceTop_RemoveNamespacePrefixes_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&removeNamespacePrefixes=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // TFFTFF
                         from("direct:marshal_ForceTop_SkipNamespaces")
                                 .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&skipNamespaces=true")
                                 .to("mock:result");
@@ -2777,6 +2961,7 @@ public class XmlToJsonTest extends CamelTestSupport {
                 },
                 new RouteBuilder() {
                     public void configure() {
+                        // TFFTFT
                         from("direct:marshal_ForceTop_SkipNamespaces_TypeHints")
                                 .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&skipNamespaces=true&typeHints=true")
                                 .to("mock:result");
@@ -2784,6 +2969,7 @@ public class XmlToJsonTest extends CamelTestSupport {
                 },
                 new RouteBuilder() {
                     public void configure() {
+                        // TFFTTF
                         from("direct:marshal_ForceTop_SkipNamespaces_RemoveNamespacePrefixes")
                                 .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&skipNamespaces=true&removeNamespacePrefixes=true")
                                 .to("mock:result");
@@ -2791,6 +2977,7 @@ public class XmlToJsonTest extends CamelTestSupport {
                 },
                 new RouteBuilder() {
                     public void configure() {
+                        // TFFTTT
                         from("direct:marshal_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints")
                                 .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=true")
                                 .to("mock:result");
@@ -2798,8 +2985,193 @@ public class XmlToJsonTest extends CamelTestSupport {
                 },
                 new RouteBuilder() {
                     public void configure() {
+                        // TFTFFF
+                        from("direct:marshal_ForceTop_TrimSpaces")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&trimSpaces=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // TFTFFT
+                        from("direct:marshal_ForceTop_TrimSpaces_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&trimSpaces=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // TFTFTF
+                        from("direct:marshal_ForceTop_TrimSpaces_RemoveNamespacePrefixes")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&trimSpaces=true&removeNamespacePrefixes=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // TFTFTT
+                        from("direct:marshal_ForceTop_TrimSpaces_RemoveNamespacePrefixes_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&trimSpaces=true&removeNamespacePrefixes=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // TFTTFF
+                        from("direct:marshal_ForceTop_TrimSpaces_SkipNamespaces")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&trimSpaces=true&skipNamespaces=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // TFTTFT
+                        from("direct:marshal_ForceTop_TrimSpaces_SkipNamespaces_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&trimSpaces=true&skipNamespaces=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // TFTTTF
+                        from("direct:marshal_ForceTop_TrimSpaces_SkipNamespaces_RemoveNamespacePrefixes")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // TFTTTT
+                        from("direct:marshal_ForceTop_TrimSpaces_SkipNamespaces_RemoveNamespacePrefixes_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // TTFFFF
+                        from("direct:marshal_ForceTop_SkipWhitespace")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&skipWhitespace=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // TTFFFT
+                        from("direct:marshal_ForceTop_SkipWhitespace_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&skipWhitespace=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // TTFFTF
+                        from("direct:marshal_ForceTop_SkipWhitespace_RemoveNamespacePrefixes")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&skipWhitespace=true&removeNamespacePrefixes=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // TTFFTT
+                        from("direct:marshal_ForceTop_SkipWhitespace_RemoveNamespacePrefixes_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&skipWhitespace=true&removeNamespacePrefixes=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // TTFTFF
+                        from("direct:marshal_ForceTop_SkipWhitespace_SkipNamespaces")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&skipWhitespace=true&skipNamespaces=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // TTFTFT
+                        from("direct:marshal_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&skipWhitespace=true&skipNamespaces=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // TTFTTF
+                        from("direct:marshal_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&skipWhitespace=true&skipNamespaces=true&removeNamespacePrefixes=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // TTFTTT
+                        from("direct:marshal_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&skipWhitespace=true&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // TTTFFF
+                        from("direct:marshal_ForceTop_SkipWhitespace_TrimSpaces")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // TTTFFT
                         from("direct:marshal_ForceTop_SkipWhitespace_TrimSpaces_TypeHints")
                                 .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // TTTFTF
+                        from("direct:marshal_ForceTop_SkipWhitespace_TrimSpaces_RemoveNamespacePrefixes")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=true&removeNamespacePrefixes=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // TTTFTT
+                        from("direct:marshal_ForceTop_SkipWhitespace_TrimSpaces_RemoveNamespacePrefixes_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=true&removeNamespacePrefixes=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // TTTTFF
+                        from("direct:marshal_ForceTop_SkipWhitespace_TrimSpaces_SkipNamespaces")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=true&skipNamespaces=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // TTTTFT
+                        from("direct:marshal_ForceTop_SkipWhitespace_TrimSpaces_SkipNamespaces_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=true&skipNamespaces=true&typeHints=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // TTTTTF
+                        from("direct:marshal_ForceTop_SkipWhitespace_TrimSpaces_SkipNamespaces_RemoveNamespacePrefixes")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=true")
+                                .to("mock:result");
+                    }
+                },
+                new RouteBuilder() {
+                    public void configure() {
+                        // TTTTTT
+                        from("direct:marshal_ForceTop_SkipWhitespace_TrimSpaces_SkipNamespaces_RemoveNamespacePrefixes_TypeHints")
+                                .to("dataformat:custom-xmljsonlegacy:marshal?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=true")
                                 .to("mock:result");
                     }
                 },
