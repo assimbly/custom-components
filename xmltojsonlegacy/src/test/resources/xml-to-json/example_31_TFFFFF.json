@@ -1,0 +1,76 @@
+{
+  "rmessage": {
+    "@RESTgroupId": "30005",
+    "@action": "POST",
+    "@applicationId": "WHOLESALE",
+    "@comment": "Ophalen productinformatie, qry1",
+    "@id": "2010",
+    "@message": "requestQueryExecute",
+    "@step": "2",
+    "ddg_headers": [
+      {
+        "@action": "xpath",
+        "@name": "unitCode5",
+        "#text": "//resultData/e/lb-180_cdstandeenhd"
+      },
+      {
+        "@action": "xpath",
+        "@name": "productId5",
+        "#text": "//resultData/e/bb-040_cdprodukt"
+      },
+      {
+        "@action": "xpath",
+        "@name": "resultFound5",
+        "#text": "//result/resultFound"
+      },
+      {
+        "@action": "xpath",
+        "@name": "Verpakkingseenheid5",
+        "#text": "//resultData/e/lb-180_cdblokeenhd"
+      },
+      {
+        "@action": "xpath",
+        "@name": "VerpaktPer5",
+        "#text": "if ('' = 'false') then (1) else (//resultData/e/verpakT_PER)"
+      },
+      {
+        "@action": "xpath",
+        "@name": "packingSizeDiffersFromQtyOrdered5",
+        "#text": "if ( != 0 ) then ( 1 mod != 0 ) else false()"
+      },
+      {
+        "@action": "xpath",
+        "@name": "resultCount5",
+        "#text": "count(distinct-values(//..//resultData/e/bb-040_cdprodukt))"
+      }
+    ],
+    "queryCode": "DDG_VO_GETINTITEMNR",
+    "queryCriteria": [
+      {
+        "fieldName": "Administratie",
+        "fieldStringValue": {
+          "@type": "string",
+          "#text": "03"
+        }
+      },
+      {
+        "fieldName": "InternProductId",
+        "fieldStringValue": {
+          "@type": "string",
+          "#text": "90019998"
+        }
+      },
+      {
+        "fieldName": "ExternProductId",
+        "fieldStringValue": {
+          "@type": "string",
+          "#text": "90019998"
+        }
+      }
+    ],
+    "useFieldCodes": {
+      "@type": "boolean",
+      "#text": "true"
+    }
+  }
+}

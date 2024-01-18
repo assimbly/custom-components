@@ -47,28 +47,16 @@
     "queryCriteria": [
         {
             "fieldName": "Administratie",
-            "fieldStringValue": {
-                "@type": "string",
-                "#text": "03"
-            }
+            "fieldStringValue": "03"
         },
         {
             "fieldName": "InternProductId",
-            "fieldStringValue": {
-                "@type": "string",
-                "#text": "90019998"
-            }
+            "fieldStringValue": "90019998"
         },
         {
             "fieldName": "ExternProductId",
-            "fieldStringValue": {
-                "@type": "string",
-                "#text": "90019998"
-            }
+            "fieldStringValue": "90019998"
         }
     ],
-    "useFieldCodes": {
-        "@type": "boolean",
-        "#text": "true"
-    }
+    "useFieldCodes": true
 }
