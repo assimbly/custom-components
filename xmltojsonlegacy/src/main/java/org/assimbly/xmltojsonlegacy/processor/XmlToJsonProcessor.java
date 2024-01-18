@@ -55,15 +55,12 @@ public class XmlToJsonProcessor {
         boolean isRootNode = (level == 0);
         boolean areSiblingsNamesEqual = ElementUtils.areSiblingsNamesEqual(element);
         boolean areChildrenNamesEqual = ElementUtils.areChildrenNamesEqual(element);
-        boolean isAttributeObject = ElementChecker.isAttributeObject(
-                level, parentClass, elementDeepestDepth, xmlJsonDataFormat.isTypeHints()
-        );
 
         HashMap<String, Namespace> xmlnsMapOnThisNode = ElementUtils.getNamespacesOnThisNode(element, xmlnsMap, level);
 
         // add attributes in the object node
         ExtractUtils.addAttributesInObjectNode(
-                element, rootObjectNode, isAttributeObject, xmlJsonDataFormat.isTypeHints(), xmlJsonDataFormat.isSkipNamespaces()
+                element, rootObjectNode, xmlJsonDataFormat.isTypeHints(), xmlJsonDataFormat.isSkipNamespaces()
         );
         // add namespace attribute
         ExtractUtils.addNamespaceAttributeInObjectNode(
@@ -74,15 +71,14 @@ public class XmlToJsonProcessor {
         String namespace = ElementUtils.getElementNamePrefix(element);
 
         boolean isRootArray = ElementChecker.isRootArray(
-                level, numberOfChildren, numberOfSiblings, parentSiblings, classAttr, parentClass,
+                level, numberOfChildren, numberOfSiblings, parentSiblings, classAttr, parentClass, grandParentClass,
                 elementDeepestDepth, isElementDefiningNamespaces, xmlJsonDataFormat.isTypeHints(),
-                areChildrenNamesEqual, isParentSiblingsNamesEqual, isGrandParentSiblingsNamesEqual,
+                areChildrenNamesEqual, areSiblingsNamesEqual, isParentSiblingsNamesEqual, isGrandParentSiblingsNamesEqual,
                 hasAttributes, hasParentAttributes, hasGrandParentAttributes
         );
         boolean isObject = ElementChecker.isObject(
-                elementDeepestDepth, numberOfChildren, classAttr, numberOfSiblings, xmlJsonDataFormat.isTypeHints(),
-                isParentSiblingsNamesEqual,
-                hasParentAttributes, parentClass
+                level, elementDeepestDepth, numberOfChildren, classAttr, numberOfSiblings, xmlJsonDataFormat.isTypeHints(),
+                isParentSiblingsNamesEqual, areChildrenNamesEqual, hasParentAttributes, parentClass
         );
         boolean isOneValue = ElementChecker.isOneValue(
                 parentClass, elementDeepestDepth, xmlJsonDataFormat.isTypeHints(),
