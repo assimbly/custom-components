@@ -40,15 +40,24 @@ public class CustomXmlJsonDataFormat implements DataFormat {
         String xml = exchange.getIn().getBody(String.class);
         Document document = convertStringToXMLDocument(xml);
         ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNodeResp = null;
 
-        XmlToJsonProcessor xmlToJsonJsonProcessor = new XmlToJsonProcessor(this);
-        JsonNode jsonNodeResp = xmlToJsonJsonProcessor.convertXmlToJson(
-                document.getDocumentElement(), 0,
-                null, null, 0,
-                true, true,
-                false, false,
-                true, null, new HashMap<String, Namespace>()
-        );
+        if(skipWhitespace && trimSpaces && skipNamespaces &&
+                (!forceTopLevelObject && (!removeNamespacePrefixes || removeNamespacePrefixes && typeHints) ||
+                        forceTopLevelObject && (!removeNamespacePrefixes || removeNamespacePrefixes && !typeHints))
+        ) {
+            // no transformation available
+            jsonNodeResp = objectMapper.createObjectNode().put("noTransformation", "Available");
+        } else {
+            XmlToJsonProcessor xmlToJsonJsonProcessor = new XmlToJsonProcessor(this);
+            jsonNodeResp = xmlToJsonJsonProcessor.convertXmlToJson(
+                    document.getDocumentElement(), 0,
+                    null, null, 0,
+                    true, true,
+                    false, false,
+                    true, null, new HashMap<String, Namespace>()
+            );
+        }
 
         setContentTypeHeader(exchange, MediaType.APPLICATION_JSON_VALUE);
         stream.write(objectMapper.writeValueAsString(jsonNodeResp).getBytes());
