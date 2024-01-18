@@ -21,19 +21,10 @@ public class ElementUtils {
             for (int j = 0; j < attrMap.getLength(); j++) {
                 Node node = attrMap.item(j);
                 String attributeName = node.getNodeName();
-                if(attributeName.startsWith(XMLConstants.XMLNS_ATTRIBUTE) && !attributeName.equals(XMLConstants.XMLNS_ATTRIBUTE)){
+                if(attributeName.equals(XMLConstants.XMLNS_ATTRIBUTE) || attributeName.indexOf(XMLConstants.XMLNS_ATTRIBUTE+":")==0) {
                     return node;
                 }
             }
-        }
-        return null;
-    }
-
-    // get namespace
-    public static String getNamespace(Element nodeElement) {
-        Node namespaceNode = getNamespaceNode(nodeElement);
-        if(namespaceNode!=null) {
-            return namespaceNode.getNodeName().replaceFirst(XMLConstants.XMLNS_ATTRIBUTE+":", "");
         }
         return null;
     }
