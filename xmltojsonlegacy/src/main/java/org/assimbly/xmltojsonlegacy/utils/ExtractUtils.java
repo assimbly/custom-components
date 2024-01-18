@@ -27,9 +27,14 @@ public class ExtractUtils {
             Element childElement, boolean isFirstSibling, String namespace, HashMap<String, Namespace> xmlnsMap,
             boolean areSiblingsNamesEqual, boolean isParentSiblingsNamesEqual, boolean hasAttributes, boolean hasParentAttributes
     ) {
-        rootArrayNode.add(XmlToJsonProcessor.convertXmlToJson(
+        JsonNode node = XmlToJsonProcessor.convertXmlToJson(
                 childElement, level +1, parentClass, classAttr, numSiblings, isParentSiblingsNamesEqual,
-                areSiblingsNamesEqual, hasParentAttributes, hasAttributes, isFirstSibling, namespace, xmlnsMap));
+                areSiblingsNamesEqual, hasParentAttributes, hasAttributes, isFirstSibling, namespace, xmlnsMap);
+        if(node.isArray() && !node.get(0).isObject()) {
+            rootArrayNode.add(node.get(0));
+        } else {
+            rootArrayNode.add(node);
+        }
     }
 
     // extract child as other type and add into the object node
@@ -52,12 +57,8 @@ public class ExtractUtils {
                 if(node.isArray() || (childCount > 0 && StringUtils.isEmpty(classAttr))) {
                     rootObjectNode.put(propertyName, node);
                 } else {
-                    if(classAttr==null || !classAttr.equals(Constants.JSON_XML_ATTR_TYPE_OBJECT)) {
-                        if(node.get(propertyName) != null) {
-                            rootObjectNode.put(propertyName, node.get(propertyName));
-                        } else {
-                            rootObjectNode.set(propertyName, node);
-                        }
+                    if(node.get(propertyName) != null) {
+                        rootObjectNode.put(propertyName, node.get(propertyName));
                     } else {
                         rootObjectNode.set(propertyName, node);
                     }
@@ -242,18 +243,17 @@ public class ExtractUtils {
 
     // add attributes in the object node
     public static void addAttributesInObjectNode(
-            Element element, ObjectNode rootObjectNode, boolean isAttributeObject, boolean typeHints, boolean skipNamespaces
+            Element element, ObjectNode rootObjectNode, boolean typeHints, boolean skipNamespaces
     ) {
-        if(!isAttributeObject && element.hasAttributes()){
+        if(element.hasAttributes()){
             NamedNodeMap attrMap = element.getAttributes();
             for (int j = 0; j < attrMap.getLength(); j++) {
                 Node node = attrMap.item(j);
                 String attr = node.getNodeName();
-                if(!typeHints && !skipNamespaces ||
-                        typeHints && !ElementUtils.isAnSpecialAttribute(attr) && (
-                                !ElementUtils.isAnXmlnsAttribute(attr) || !skipNamespaces
-                        )
-                ) {
+                if(ElementUtils.isAnXmlnsAttribute(attr) && skipNamespaces) {
+                    continue;
+                }
+                if(!typeHints || typeHints && !ElementUtils.isAnSpecialAttribute(attr)) {
                     rootObjectNode.put(Constants.JSON_XML_ATTR_PREFIX+node.getNodeName(), node.getNodeValue());
                 }
             }
