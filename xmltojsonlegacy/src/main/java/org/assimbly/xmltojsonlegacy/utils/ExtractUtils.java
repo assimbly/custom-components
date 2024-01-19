@@ -30,7 +30,7 @@ public class ExtractUtils {
         JsonNode node = XmlToJsonProcessor.convertXmlToJson(
                 childElement, level +1, parentClass, classAttr, numSiblings, isParentSiblingsNamesEqual,
                 areSiblingsNamesEqual, hasParentAttributes, hasAttributes, isFirstSibling, namespace, xmlnsMap);
-        if(node.isArray() && !node.get(0).isObject()) {
+        if(node.isArray() && !node.get(0).isObject() && (rootArrayNode.isEmpty() || !classAttr.equals(Constants.JSON_XML_ATTR_TYPE_ARRAY))) {
             rootArrayNode.add(node.get(0));
         } else {
             rootArrayNode.add(node);
