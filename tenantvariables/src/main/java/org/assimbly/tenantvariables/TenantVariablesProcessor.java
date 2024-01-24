@@ -102,7 +102,7 @@ public class TenantVariablesProcessor implements Processor {
 
         if(gVariable == null) {
             throw new TenantVariableNotFoundException(
-                    String.format("The Tenant Variable \"%s\" was not found in the database.", name)
+                    String.format("The Tenant Variable \"%1$s\" for tenant \"%2$s\" was not found in the database.", name, tenant)
             );
         }
 
