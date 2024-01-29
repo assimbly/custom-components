@@ -76,10 +76,10 @@
         <config-admin.version>1.9.26</config-admin.version>
         <cxf.version>3.6.0</cxf.version>
         <camel.version>3.20.6</camel.version>
-        <docconverter.version>1.8.1</docconverter.version>
+        <docconverter.version>1.9.0</docconverter.version>
         <google.api.version>v3-rev197-1.25.0</google.api.version>
         <google.auth.version>1.5.0</google.auth.version>
-        <google.oauth.version>1.34.1</google.oauth.version>
+        <google.oauth.version>1.35.0</google.oauth.version>
         <hapi.version>2.3</hapi.version>
         <httpclient.version>4.5.14</httpclient.version>
         <httpcomponents.version>4.5.14</httpcomponents.version>
@@ -96,7 +96,7 @@
         <morpia-core.version>1.6.1</morpia-core.version>
         <osgi.version>6.0.0</osgi.version>
         <pdfbox.version>2.0.29</pdfbox.version>
-        <poi.version>5.2.4</poi.version>
+        <poi.version>5.2.5</poi.version>
         <powermock.version>2.0.9</powermock.version>
         <saaj-impl.version>1.5.3</saaj-impl.version>
         <saxon.version>9.7.0-21</saxon.version>
