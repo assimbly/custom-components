@@ -1,0 +1,34 @@
+{
+    "root": {
+        "products": {
+            "@class": "array",
+            "product": [
+                {
+                    "@class": "object",
+                    "id": null,
+                    "name": null
+                },
+                {
+                    "@class": "object",
+                    "id": null,
+                    "name": null
+                }
+            ]
+        },
+        "images": {
+            "@class": "array",
+            "image": [
+                {
+                    "@class": "object",
+                    "id": null,
+                    "name": null
+                },
+                {
+                    "@class": "object",
+                    "id": null,
+                    "name": null
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "Order": {
+        "OrderNo": null,
+        "Customer": {
+            "CustomerNo": null,
+            "State": [
+                null,
+                null,
+                null
+            ]
+        }
+    }
+}
