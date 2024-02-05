@@ -22,6 +22,7 @@ import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.HashMap;
+import java.util.Set;
 
 public class CustomXmlJsonDataFormat implements DataFormat {
 
@@ -29,6 +30,13 @@ public class CustomXmlJsonDataFormat implements DataFormat {
 
     // XML to JSON options
     private boolean forceTopLevelObject, skipWhitespace, trimSpaces, skipNamespaces, removeNamespacePrefixes, typeHints;
+
+    // set with options to discard
+    private Set<String> discardXmlToJsonOptionsSet = Set.of(
+            "FFTFTF", "FFTFTT", "FFTTFF", "FFTTFT", "FFTTTF", "FFTTTT", "FTTFFF", "FTTFFT", "FTTFTF", "FTTFTT", "FTTTFF",
+            "FTTTFT", "FTTTTT", "TFTFFF", "TFTFFT", "TFTFTF", "TFTFTT", "TFTTFF", "TFTTFT", "TFTTTF", "TFTTTT", "TTFTTT",
+            "TTTFFF", "TTTFTF", "TTTFTT", "TTTTFF", "TTTTFT", "TTTTTF"
+    );
 
     // JSON to XML options
     private String elementName, arrayName, rootName;
@@ -42,10 +50,15 @@ public class CustomXmlJsonDataFormat implements DataFormat {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNodeResp = null;
 
-        if(skipWhitespace && trimSpaces && skipNamespaces &&
-                (!forceTopLevelObject && (!removeNamespacePrefixes || removeNamespacePrefixes && typeHints) ||
-                        forceTopLevelObject && (!removeNamespacePrefixes || removeNamespacePrefixes && !typeHints))
-        ) {
+        String optionCode = "" +
+                (forceTopLevelObject ? "T" : "F") +
+                (skipWhitespace ? "T" : "F") +
+                (trimSpaces ? "T" : "F") +
+                (skipNamespaces ? "T" : "F") +
+                (removeNamespacePrefixes ? "T" : "F") +
+                (typeHints ? "T" : "F");
+
+        if(discardXmlToJsonOptionsSet.contains(optionCode)) {
             // no transformation available
             jsonNodeResp = objectMapper.createObjectNode().put("noTransformation", "Available");
         } else {
