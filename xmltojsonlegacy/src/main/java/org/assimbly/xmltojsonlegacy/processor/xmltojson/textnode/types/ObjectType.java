@@ -20,7 +20,7 @@ public class ObjectType implements TextNodeTransaction {
             boolean isObject, boolean isOneValue, String namespace, HashMap<String, Namespace> xmlnsMap,
             boolean forceTopLevelObject, boolean trimSpaces, boolean skipNamespaces, boolean removeNamespacePrefixes,
             boolean typeHints, boolean areSiblingsNamesEqual, boolean isParentSiblingsNamesEqual, boolean hasAttributes,
-            boolean hasParentAttributes
+            boolean hasParentAttributes, boolean isElementMustBeNull
     ) {
         //process text node identified as an object
         Print.data(" 2. OBJECT", level);

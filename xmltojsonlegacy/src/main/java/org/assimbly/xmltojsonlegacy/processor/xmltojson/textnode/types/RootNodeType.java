@@ -23,7 +23,7 @@ public class RootNodeType implements TextNodeTransaction {
             boolean isObject, boolean isOneValue, String namespace, HashMap<String, Namespace> xmlnsMap,
             boolean forceTopLevelObject, boolean trimSpaces, boolean skipNamespaces, boolean removeNamespacePrefixes,
             boolean typeHints, boolean areSiblingsNamesEqual, boolean isParentSiblingsNamesEqual, boolean hasAttributes,
-            boolean hasParentAttributes
+            boolean hasParentAttributes, boolean isElementMustBeNull
     ) {
         //process text node identified as a root node
         Print.data(" 2. ROOT", level);

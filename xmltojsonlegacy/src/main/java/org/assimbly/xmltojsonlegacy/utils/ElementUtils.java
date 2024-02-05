@@ -40,6 +40,16 @@ public class ElementUtils {
         return null;
     }
 
+    // get element namespace label
+    public static String getElementNamespaceLabel(Element nodeElement) {
+        String elementNamePrefix = getElementNamePrefix(nodeElement);
+        String namespaceLabel = XMLConstants.XMLNS_ATTRIBUTE;
+        if (elementNamePrefix != null) {
+            namespaceLabel += ":" + elementNamePrefix;
+        }
+        return namespaceLabel;
+    }
+
     // get namespaces on this node
     public static HashMap<String, Namespace> getNamespacesOnThisNode(Element nodeElement, HashMap<String, Namespace> xmlnsMap, int level) {
         HashMap<String, Namespace> xmlnsMapFromThisNode = new HashMap<>(xmlnsMap);
@@ -189,6 +199,19 @@ public class ElementUtils {
             }
         }
         return true;
+    }
+
+    // check if node element is included on a namespace
+    public static boolean isElementOnNamespace(Element nodeElement, HashMap<String, Namespace> xmlnsMap) {
+        if(xmlnsMap == null || xmlnsMap.isEmpty()) {
+            return false;
+        }
+        String namespaceLabel = ElementUtils.getElementNamespaceLabel(nodeElement);
+        Namespace namespace = xmlnsMap.get(namespaceLabel);
+        if(namespace!=null) {
+            return true;
+        }
+        return false;
     }
 
 }

@@ -23,19 +23,21 @@ public class OtherTypeWithNamespace implements ElementNodeTransaction {
             boolean isObject, boolean isSingleChildren, boolean isFirstChild, boolean isFirstSibling, Element childElement,
             String namespace, HashMap<String, Namespace> xmlnsMap, boolean trimSpaces, boolean skipNamespaces,
             boolean removeNamespacePrefixes, boolean typeHints, boolean areSiblingsNamesEqual,
-            boolean isParentSiblingsNamesEqual, boolean hasAttributes, boolean hasParentAttributes, boolean areChildrenNamesEqual
+            boolean isParentSiblingsNamesEqual, boolean hasAttributes, boolean hasParentAttributes, boolean areChildrenNamesEqual,
+            boolean isElementMustBeNull, boolean isElementOnNamespace
     ) {
         if(numberOfChildren == 1 || numberOfChildren > 1 && !areChildrenNamesEqual) {
             ExtractUtils.extractChildAsOtherInObjectNode(
                     level, rootObjectNode, numberOfSiblings, parentClass, classAttr, (Element) childNode, childElement,
                     isFirstSibling, namespace, xmlnsMap, skipNamespaces, removeNamespacePrefixes, areSiblingsNamesEqual,
-                    isParentSiblingsNamesEqual, hasAttributes, hasParentAttributes, trimSpaces
+                    isParentSiblingsNamesEqual, hasAttributes, hasParentAttributes, trimSpaces, isElementMustBeNull,
+                    isElementOnNamespace
             );
         } else {
             ExtractUtils.extractChildAsOtherInArrayNode(
                     level, rootArrayNode, numberOfSiblings, parentClass, classAttr, (Element) childNode, childElement,
                     isFirstSibling, namespace, xmlnsMap, areSiblingsNamesEqual, isParentSiblingsNamesEqual, hasAttributes,
-                    hasParentAttributes
+                    hasParentAttributes, isElementMustBeNull
             );
             rootObjectNode.set(
                     ElementUtils.getElementName((Element) childNode, removeNamespacePrefixes, skipNamespaces),

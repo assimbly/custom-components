@@ -2,10 +2,13 @@ package org.assimbly.xmltojsonlegacy.utils;
 
 import org.apache.commons.lang3.StringUtils;
 import org.assimbly.xmltojsonlegacy.Constants;
+import org.assimbly.xmltojsonlegacy.Namespace;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import javax.xml.XMLConstants;
+import java.util.HashMap;
 import java.util.Set;
 
 public class ElementChecker {
@@ -15,7 +18,7 @@ public class ElementChecker {
             int level, int numberOfChildren, int numberOfSiblings, int parentSiblings, String classAttr,
             String parentClass, String grandParentClass, int elementDeepestDepth, boolean isElementDefiningNamespaces, boolean isTypeHintsEnabled,
             boolean areChildrenNamesEqual, boolean areSiblingsNamesEqual, boolean isParentSiblingsNamesEqual, boolean isGrandParentSiblingsNamesEqual,
-            boolean hasAttributes,  boolean hasParentAttributes, boolean hasGrandParentAttributes
+            boolean hasAttributes,  boolean hasParentAttributes, boolean hasGrandParentAttributes, boolean isElementOnNamespace
     ) {
         boolean isRootArray = false;
         if(isTypeHintsEnabled) {
@@ -30,12 +33,12 @@ public class ElementChecker {
             ) {
                 isRootArray = true;
             }
-            if (elementDeepestDepth == 1 && parentClass != null &&
+            if (elementDeepestDepth == 1 && parentClass != null &&  !isElementOnNamespace &&
                     (parentClass.equals("") || parentClass.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_ARRAY))
             ) {
                 isRootArray = true;
             }
-            if (elementDeepestDepth == 1 && classAttr != null &&
+            if (elementDeepestDepth == 1 && classAttr != null && !isElementOnNamespace &&
                     ((classAttr.equals("") && numberOfChildren > 1) || classAttr.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT))
             ) {
                 isRootArray = true;
@@ -59,7 +62,7 @@ public class ElementChecker {
             if (elementDeepestDepth == 2 && !isElementDefiningNamespaces && areChildrenNamesEqual && !hasAttributes) {
                 isRootArray = true;
             }
-            if(elementDeepestDepth == 1 && !isElementDefiningNamespaces && areChildrenNamesEqual && !hasAttributes) {
+            if(elementDeepestDepth == 1 && !isElementDefiningNamespaces && areChildrenNamesEqual && !hasAttributes && !isElementOnNamespace) {
                 isRootArray = true;
             }
             if(elementDeepestDepth == 1 && classAttr!=null && classAttr.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT)) {
@@ -114,6 +117,47 @@ public class ElementChecker {
 
         }
         return isOneValue;
+    }
+
+    // check if element should be null
+    public static boolean isElementMustBeNull(
+            boolean skipWhitespace, Node node, HashMap<String, Namespace> xmlnsMap, boolean isTypeHintsEnabled
+    ) {
+        if(!skipWhitespace) {
+            return false;
+        }
+
+        if(isTypeHintsEnabled && node.hasAttributes()) {
+            NamedNodeMap attributes = node.getAttributes();
+            for (int i = 0; i < attributes.getLength(); i++) {
+                Node attribute = attributes.item(i);
+                String attrName = attribute.getNodeName();
+                if(attrName.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE)) {
+                    String attrValue = attribute.getNodeValue();
+                    if(attrValue.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_NUMBER) || attrValue.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_BOOLEAN)) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        if(node.getNodeType() == Node.ELEMENT_NODE) {
+            Element nodeElement = (Element)node;
+            int elementDeepestDepth = ElementUtils.calculateElementDeepestDepth(nodeElement);
+
+            String namespaceLabel = ElementUtils.getElementNamespaceLabel(nodeElement);
+            Namespace namespace = xmlnsMap.get(namespaceLabel);
+
+            if(elementDeepestDepth == 0 && (namespace!=null || nodeElement.hasAttributes())) {
+                return true;
+            }
+        } else {
+            if(node.hasAttributes()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     // check if it's a single children

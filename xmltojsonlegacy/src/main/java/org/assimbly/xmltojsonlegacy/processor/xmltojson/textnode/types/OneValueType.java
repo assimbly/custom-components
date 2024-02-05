@@ -23,7 +23,7 @@ public class OneValueType implements TextNodeTransaction {
             boolean isObject, boolean isOneValue, String namespace, HashMap<String, Namespace> xmlnsMap,
             boolean forceTopLevelObject, boolean trimSpaces, boolean skipNamespaces, boolean removeNamespacePrefixes,
             boolean typeHints, boolean areSiblingsNamesEqual, boolean isParentSiblingsNamesEqual, boolean hasAttributes,
-            boolean hasParentAttributes
+            boolean hasParentAttributes, boolean isElementMustBeNull
     ) {
         //process text node identified as one value
         Print.data(" 2. ONE VALUE", level);

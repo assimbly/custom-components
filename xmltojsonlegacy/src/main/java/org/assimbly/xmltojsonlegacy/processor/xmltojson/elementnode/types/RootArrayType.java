@@ -8,6 +8,7 @@ import org.assimbly.xmltojsonlegacy.Namespace;
 import org.assimbly.xmltojsonlegacy.logs.Print;
 import org.assimbly.xmltojsonlegacy.processor.XmlToJsonProcessor;
 import org.assimbly.xmltojsonlegacy.processor.xmltojson.elementnode.ElementNodeTransaction;
+import org.assimbly.xmltojsonlegacy.utils.ElementUtils;
 import org.assimbly.xmltojsonlegacy.utils.ExtractUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -23,11 +24,15 @@ public class RootArrayType implements ElementNodeTransaction {
             boolean isObject, boolean isSingleChildren, boolean isFirstChild, boolean isFirstSibling, Element childElement,
             String namespace, HashMap<String, Namespace> xmlnsMap, boolean trimSpaces, boolean skipNamespaces,
             boolean removeNamespacePrefixes, boolean typeHints, boolean areSiblingsNamesEqual,
-            boolean isParentSiblingsNamesEqual, boolean hasAttributes, boolean hasParentAttributes, boolean areChildrenNamesEqual
+            boolean isParentSiblingsNamesEqual, boolean hasAttributes, boolean hasParentAttributes, boolean areChildrenNamesEqual,
+            boolean isElementMustBeNull, boolean isElementOnNamespace
     ) {
         Print.data(" 1. IS ROOT ARRAY", level);
         if(isSingleChildren && isFirstChild && StringUtils.isNotEmpty(parentClass)) {
             // recursive call with child element
+            if(isElementMustBeNull) {
+                return ExtractUtils.createInternalNullObjectNode();
+            }
             return XmlToJsonProcessor.convertXmlToJson(
                     childElement, level +1, parentClass, classAttr, numberOfSiblings, isParentSiblingsNamesEqual,
                     areSiblingsNamesEqual, hasParentAttributes, hasAttributes, isFirstSibling, namespace, xmlnsMap);
@@ -35,7 +40,7 @@ public class RootArrayType implements ElementNodeTransaction {
             // extract child as an array
             ExtractUtils.extractChildAsArray(
                     level, rootArrayNode, numberOfSiblings, parentClass, classAttr, childElement, isFirstSibling,
-                    namespace, xmlnsMap, areSiblingsNamesEqual, isParentSiblingsNamesEqual, hasAttributes, hasParentAttributes);
+                    namespace, xmlnsMap, areSiblingsNamesEqual, isParentSiblingsNamesEqual, hasAttributes, hasParentAttributes, isElementMustBeNull);
         }
         return null;
     }

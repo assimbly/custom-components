@@ -21,14 +21,15 @@ public class ObjectType implements ElementNodeTransaction {
             boolean isObject, boolean isSingleChildren, boolean isFirstChild, boolean isFirstSibling, Element childElement,
             String namespace, HashMap<String, Namespace> xmlnsMap, boolean trimSpaces, boolean skipNamespaces,
             boolean removeNamespacePrefixes, boolean typeHints, boolean areSiblingsNamesEqual,
-            boolean isParentSiblingsNamesEqual, boolean hasAttributes, boolean hasParentAttributes, boolean areChildrenNamesEqual
+            boolean isParentSiblingsNamesEqual, boolean hasAttributes, boolean hasParentAttributes, boolean areChildrenNamesEqual,
+            boolean isElementMustBeNull, boolean isElementOnNamespace
     ) {
         // extract child as an object
         Print.data(" 1. IS OBJECT", level);
         ExtractUtils.extractChildAsObject(
                 level, rootObjectNode, numberOfSiblings, parentClass, classAttr, childElement, isFirstSibling, namespace,
                 xmlnsMap, trimSpaces, skipNamespaces, removeNamespacePrefixes, typeHints, areSiblingsNamesEqual,
-                isParentSiblingsNamesEqual, hasAttributes, hasParentAttributes
+                isParentSiblingsNamesEqual, hasAttributes, hasParentAttributes, isElementMustBeNull
         );
         return null;
     }
