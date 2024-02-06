@@ -121,39 +121,74 @@ public class ElementChecker {
 
     // check if element should be null
     public static boolean isElementMustBeNull(
-            boolean skipWhitespace, Node node, HashMap<String, Namespace> xmlnsMap, boolean isTypeHintsEnabled
+            boolean skipWhitespace, Node node, HashMap<String, Namespace> xmlnsMap, boolean isTypeHintsEnabled,
+            boolean isTTFTTF, String grandParentClass, String parentClass, boolean areParentSiblingsNamesEqual
     ) {
         if(!skipWhitespace) {
             return false;
         }
 
-        if(isTypeHintsEnabled && node.hasAttributes()) {
-            NamedNodeMap attributes = node.getAttributes();
-            for (int i = 0; i < attributes.getLength(); i++) {
-                Node attribute = attributes.item(i);
-                String attrName = attribute.getNodeName();
-                if(attrName.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE)) {
-                    String attrValue = attribute.getNodeValue();
-                    if(attrValue.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_NUMBER) || attrValue.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_BOOLEAN)) {
+        if(isTTFTTF) {
+
+            if(node.getNodeType() == Node.ELEMENT_NODE) {
+                Element nodeElement = (Element)node;
+
+                int elementDeepestDepth = ElementUtils.calculateElementDeepestDepth(nodeElement);
+                if(elementDeepestDepth == 0) {
+                    boolean isElementOnNamespace = ElementUtils.isElementOnNamespace(nodeElement, xmlnsMap);
+                    if(!node.hasAttributes()) {
+                        if(isElementOnNamespace) {
+                            return true;
+                        }
                         return false;
+                    }
+
+                    boolean areSiblingsNamesEqual = ElementUtils.areSiblingsNamesEqual(nodeElement);
+                    if(areSiblingsNamesEqual && areParentSiblingsNamesEqual) {
+                        return true;
+                    }
+
+                    NamedNodeMap attributes = node.getAttributes();
+                    for (int i = 0; i < attributes.getLength(); i++) {
+                        Node attribute = attributes.item(i);
+                        String attrName = attribute.getNodeName();
+                        if(!attrName.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE)) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+
+        } else {
+            if(isTypeHintsEnabled && node.hasAttributes()) {
+                NamedNodeMap attributes = node.getAttributes();
+                for (int i = 0; i < attributes.getLength(); i++) {
+                    Node attribute = attributes.item(i);
+                    String attrName = attribute.getNodeName();
+                    if(attrName.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE)) {
+                        String attrValue = attribute.getNodeValue();
+                        if(attrValue.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_NUMBER) || attrValue.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_BOOLEAN)) {
+                            return false;
+                        }
                     }
                 }
             }
-        }
 
-        if(node.getNodeType() == Node.ELEMENT_NODE) {
-            Element nodeElement = (Element)node;
-            int elementDeepestDepth = ElementUtils.calculateElementDeepestDepth(nodeElement);
+            if(node.getNodeType() == Node.ELEMENT_NODE) {
+                Element nodeElement = (Element)node;
+                int elementDeepestDepth = ElementUtils.calculateElementDeepestDepth(nodeElement);
 
-            String namespaceLabel = ElementUtils.getElementNamespaceLabel(nodeElement);
-            Namespace namespace = xmlnsMap.get(namespaceLabel);
+                String namespaceLabel = ElementUtils.getElementNamespaceLabel(nodeElement);
+                Namespace namespace = xmlnsMap.get(namespaceLabel);
 
-            if(elementDeepestDepth == 0 && (namespace!=null || nodeElement.hasAttributes())) {
-                return true;
-            }
-        } else {
-            if(node.hasAttributes()) {
-                return true;
+                if(elementDeepestDepth == 0 && (namespace!=null || nodeElement.hasAttributes())) {
+                    return true;
+                }
+            } else {
+                if(node.hasAttributes()) {
+                    return true;
+                }
             }
         }
 

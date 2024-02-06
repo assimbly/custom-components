@@ -30,6 +30,8 @@ public class CustomXmlJsonDataFormat implements DataFormat {
 
     // XML to JSON options
     private boolean forceTopLevelObject, skipWhitespace, trimSpaces, skipNamespaces, removeNamespacePrefixes, typeHints;
+    // special case
+    private boolean isTTFTTF = false;
 
     // set with options to discard
     private Set<String> discardXmlToJsonOptionsSet = Set.of(
@@ -37,6 +39,9 @@ public class CustomXmlJsonDataFormat implements DataFormat {
             "FTTTFT", "FTTTTT", "TFTFFF", "TFTFFT", "TFTFTF", "TFTFTT", "TFTTFF", "TFTTFT", "TFTTTF", "TFTTTT", "TTFTTT",
             "TTTFFF", "TTTFTF", "TTTFTT", "TTTTFF", "TTTTFT", "TTTTTF"
     );
+    // special cases
+    private String XML_2_JSON_TTFTFT = "TTFTFT";
+    private String XML_2_JSON_TTFTTF = "TTFTTF";
 
     // JSON to XML options
     private String elementName, arrayName, rootName;
@@ -57,6 +62,16 @@ public class CustomXmlJsonDataFormat implements DataFormat {
                 (skipNamespaces ? "T" : "F") +
                 (removeNamespacePrefixes ? "T" : "F") +
                 (typeHints ? "T" : "F");
+
+        if(optionCode.equalsIgnoreCase(XML_2_JSON_TTFTFT)) {
+            setRemoveNamespacePrefixes(true);
+            setTypeHints(false);
+        } else if(optionCode.equalsIgnoreCase(XML_2_JSON_TTFTTF)) {
+            isTTFTTF = true;
+            setSkipNamespaces(false);
+            setRemoveNamespacePrefixes(false);
+            setTypeHints(true);
+        }
 
         if(discardXmlToJsonOptionsSet.contains(optionCode)) {
             // no transformation available
@@ -208,6 +223,10 @@ public class CustomXmlJsonDataFormat implements DataFormat {
 
     public void setTypeHintsJson(boolean typeHintsJson) {
         this.typeHintsJson = typeHintsJson;
+    }
+
+    public boolean isTTFTTF() {
+        return isTTFTTF;
     }
 
     @Override

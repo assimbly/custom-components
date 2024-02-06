@@ -105,7 +105,10 @@ public class XmlToJsonProcessor {
             int nodeCount = 0;
             for (int index = 0; index < nodeListSize; index++) {
                 Node childNode = nodeList.item(index);
-                boolean isElementMustBeNull = ElementChecker.isElementMustBeNull(xmlJsonDataFormat.isSkipWhitespace(), childNode, xmlnsMapOnThisNode, xmlJsonDataFormat.isTypeHints());
+                boolean isElementMustBeNull = ElementChecker.isElementMustBeNull(
+                        xmlJsonDataFormat.isSkipWhitespace(), childNode, xmlnsMapOnThisNode, xmlJsonDataFormat.isTypeHints(),
+                        xmlJsonDataFormat.isTTFTTF(), parentClass, classAttr, areSiblingsNamesEqual
+                );
 
                 switch (childNode.getNodeType()) {
                     case Node.ELEMENT_NODE:
