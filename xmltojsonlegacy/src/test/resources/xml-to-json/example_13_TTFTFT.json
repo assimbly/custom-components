@@ -1,0 +1,16 @@
+{
+    "root": {
+        "person": [
+            {
+                "name": null,
+                "age": null,
+                "email": null
+            },
+            {
+                "name": null,
+                "age": null,
+                "email": null
+            }
+        ]
+    }
+}

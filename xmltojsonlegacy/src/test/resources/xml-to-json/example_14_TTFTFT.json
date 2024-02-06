@@ -1,0 +1,19 @@
+{
+    "root": {
+        "@class": "array",
+        "person": [
+            {
+                "@class": "object",
+                "name": null,
+                "age": null,
+                "email": null
+            },
+            {
+                "@class": "object",
+                "name": null,
+                "age": null,
+                "email": null
+            }
+        ]
+    }
+}

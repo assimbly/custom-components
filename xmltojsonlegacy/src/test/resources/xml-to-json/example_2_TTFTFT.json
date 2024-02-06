@@ -1,0 +1,19 @@
+{
+    "root": [
+        {
+            "@class": "array",
+            "product": [
+                {
+                    "@class": "object",
+                    "id": null,
+                    "name": null
+                },
+                {
+                    "@class": "object",
+                    "id": null,
+                    "name": null
+                }
+            ]
+        }
+    ]
+}
