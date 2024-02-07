@@ -24,4 +24,6 @@ public class Constants {
             Constants.JSON_XML_ATTR_TYPE
     );
 
+    public static final String INTERNAL_NULL_OBJECT_NODE_VALUE = "@NULL@";
+
 }

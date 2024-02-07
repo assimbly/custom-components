@@ -475,12 +475,12 @@ public class ExtractUtils {
 
     // create a JsonNode with internal null value
     public static JsonNode createInternalNullObjectNode() {
-        return new TextNode("@NULL@");
+        return new TextNode(Constants.INTERNAL_NULL_OBJECT_NODE_VALUE);
     }
 
     // checks if node contains an internal null value
     public static boolean isInternalNullObjectNodePresent(JsonNode node) {
-        return node.isTextual() && node.asText().equals("@NULL@");
+        return node.isTextual() && node.asText().equals(Constants.INTERNAL_NULL_OBJECT_NODE_VALUE);
     }
 
 }
