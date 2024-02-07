@@ -31,7 +31,7 @@ public class CustomXmlJsonDataFormat implements DataFormat {
     // XML to JSON options
     private boolean forceTopLevelObject, skipWhitespace, trimSpaces, skipNamespaces, removeNamespacePrefixes, typeHints;
     // special case
-    private boolean isTTFTTF = false;
+    private boolean isSpecialCaseTTFTTF = false;
 
     // set with options to discard
     private Set<String> discardXmlToJsonOptionsSet = Set.of(
@@ -67,7 +67,7 @@ public class CustomXmlJsonDataFormat implements DataFormat {
             setRemoveNamespacePrefixes(true);
             setTypeHints(false);
         } else if(optionCode.equalsIgnoreCase(XML_2_JSON_TTFTTF)) {
-            isTTFTTF = true;
+            isSpecialCaseTTFTTF = true;
             setSkipNamespaces(false);
             setRemoveNamespacePrefixes(false);
             setTypeHints(true);
@@ -225,8 +225,8 @@ public class CustomXmlJsonDataFormat implements DataFormat {
         this.typeHintsJson = typeHintsJson;
     }
 
-    public boolean isTTFTTF() {
-        return isTTFTTF;
+    public boolean isSpecialCaseTTFTTF() {
+        return isSpecialCaseTTFTTF;
     }
 
     @Override

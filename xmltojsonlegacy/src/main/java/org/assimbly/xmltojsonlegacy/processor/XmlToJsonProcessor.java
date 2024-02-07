@@ -18,9 +18,7 @@ import org.assimbly.xmltojsonlegacy.utils.ElementChecker;
 import org.assimbly.xmltojsonlegacy.utils.ExtractUtils;
 import org.w3c.dom.*;
 
-import javax.xml.XMLConstants;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class XmlToJsonProcessor {
 
@@ -106,7 +104,7 @@ public class XmlToJsonProcessor {
                 Node childNode = nodeList.item(index);
                 boolean isElementMustBeNull = ElementChecker.isElementMustBeNull(
                         xmlJsonDataFormat.isSkipWhitespace(), childNode, xmlnsMapOnThisNode,
-                        xmlJsonDataFormat.isTypeHints(), xmlJsonDataFormat.isTTFTTF(), areSiblingsNamesEqual
+                        xmlJsonDataFormat.isTypeHints(), xmlJsonDataFormat.isSpecialCaseTTFTTF(), areSiblingsNamesEqual
                 );
 
                 switch (childNode.getNodeType()) {

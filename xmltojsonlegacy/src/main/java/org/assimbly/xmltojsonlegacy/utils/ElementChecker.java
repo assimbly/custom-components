@@ -168,44 +168,14 @@ public class ElementChecker {
     // check if element should be null
     public static boolean isElementMustBeNull(
             boolean skipWhitespace, Node node, HashMap<String, Namespace> xmlnsMap, boolean isTypeHintsEnabled,
-            boolean isTTFTTF, boolean areParentSiblingsNamesEqual
+            boolean isSpecialCaseTTFTTF, boolean areParentSiblingsNamesEqual
     ) {
         if(!skipWhitespace) {
             return false;
         }
 
-        if(isTTFTTF) {
-
-            if(node.getNodeType() == Node.ELEMENT_NODE) {
-                Element nodeElement = (Element)node;
-
-                int elementDeepestDepth = ElementUtils.calculateElementDeepestDepth(nodeElement);
-                if(elementDeepestDepth == 0) {
-                    boolean isElementOnNamespace = ElementUtils.isElementOnNamespace(nodeElement, xmlnsMap);
-                    if(!node.hasAttributes()) {
-                        if(isElementOnNamespace) {
-                            return true;
-                        }
-                        return false;
-                    }
-
-                    boolean areSiblingsNamesEqual = ElementUtils.areSiblingsNamesEqual(nodeElement);
-                    if(areSiblingsNamesEqual && areParentSiblingsNamesEqual) {
-                        return true;
-                    }
-
-                    NamedNodeMap attributes = node.getAttributes();
-                    for (int i = 0; i < attributes.getLength(); i++) {
-                        Node attribute = attributes.item(i);
-                        String attrName = attribute.getNodeName();
-                        if(!attrName.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE)) {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            }
-
+        if(isSpecialCaseTTFTTF) {
+            return isSpecialCaseTTFTTFMustBeNull(node, xmlnsMap, areParentSiblingsNamesEqual);
         } else {
             if(isTypeHintsEnabled && node.hasAttributes()) {
                 NamedNodeMap attributes = node.getAttributes();
@@ -238,8 +208,43 @@ public class ElementChecker {
                     return true;
                 }
             }
-        }
 
+            return false;
+        }
+    }
+
+    private static boolean isSpecialCaseTTFTTFMustBeNull(
+            Node node, HashMap<String, Namespace> xmlnsMap, boolean areParentSiblingsNamesEqual
+    ) {
+        if(node.getNodeType() == Node.ELEMENT_NODE) {
+            Element nodeElement = (Element) node;
+
+            int elementDeepestDepth = ElementUtils.calculateElementDeepestDepth(nodeElement);
+            if(elementDeepestDepth == 0) {
+                boolean isElementOnNamespace = ElementUtils.isElementOnNamespace(nodeElement, xmlnsMap);
+                if(!node.hasAttributes()) {
+                    if(isElementOnNamespace) {
+                        return true;
+                    }
+                    return false;
+                }
+
+                boolean areSiblingsNamesEqual = ElementUtils.areSiblingsNamesEqual(nodeElement);
+                if(areSiblingsNamesEqual && areParentSiblingsNamesEqual) {
+                    return true;
+                }
+
+                NamedNodeMap attributes = node.getAttributes();
+                for (int i = 0; i < attributes.getLength(); i++) {
+                    Node attribute = attributes.item(i);
+                    String attrName = attribute.getNodeName();
+                    if(!attrName.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
         return false;
     }
 
