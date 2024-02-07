@@ -65,16 +65,9 @@ public class ExtractUtils {
                 if(node.isArray() || (childCount > 0 && StringUtils.isEmpty(classAttr))) {
                     if(isElementOnNamespace && node.isArray()) {
                         if(rootObjectNode.has(propertyName)) {
-                            JsonNode nodeValues = rootObjectNode.get(propertyName);
-                            if(nodeValues.isArray()) {
-                                ((ArrayNode)nodeValues).add(!isElementMustBeNull ? node.get(0) : null);
-                            } else {
-                                ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode();
-                                arrayNode.add(nodeValues.textValue());
-                                arrayNode.add(!isElementMustBeNull ? node.get(0) : null);
-                                nodeValues = arrayNode;
-                            }
-                            rootObjectNode.set(propertyName, nodeValues);
+                            addObjectToExistingFieldOnRootObjectNode(
+                                    rootObjectNode, propertyName, node.get(0), JsonNode.class, isElementMustBeNull
+                            );
                         } else {
                             rootObjectNode.put(propertyName, !isElementMustBeNull ? node.get(0) : null);
                         }
@@ -156,16 +149,9 @@ public class ExtractUtils {
                             String fieldName = ElementUtils.getElementName(childElement, removeNamespacePrefixes);
                             String fieldValue = ElementUtils.getNodeValue(childElement, trimSpaces);
                             if(rootObjectNode.has(fieldName)) {
-                                JsonNode nodeValues = rootObjectNode.get(fieldName);
-                                if(nodeValues.isArray()) {
-                                    ((ArrayNode)nodeValues).add(!isElementMustBeNull ? fieldValue : null);
-                                } else {
-                                    ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode();
-                                    arrayNode.add(nodeValues.textValue());
-                                    arrayNode.add(!isElementMustBeNull ? fieldValue : null);
-                                    nodeValues = arrayNode;
-                                }
-                                rootObjectNode.set(fieldName, nodeValues);
+                                addObjectToExistingFieldOnRootObjectNode(
+                                        rootObjectNode, fieldName, fieldValue, String.class, isElementMustBeNull
+                                );
                             } else {
                                 if(fieldValue.equalsIgnoreCase("")) {
                                     rootObjectNode.set(fieldName, JsonNodeFactory.instance.arrayNode());
@@ -258,16 +244,9 @@ public class ExtractUtils {
 
         if(rootObjectNode!=null) {
             if(rootObjectNode.has(name.get())) {
-                JsonNode nodeValues = rootObjectNode.get(name.get());
-                if(nodeValues.isArray()) {
-                    ((ArrayNode)nodeValues).add(!isElementMustBeNull ? objectNode : null);
-                } else {
-                    ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode();
-                    arrayNode.add(nodeValues);
-                    arrayNode.add(!isElementMustBeNull ? objectNode : null);
-                    nodeValues = arrayNode;
-                }
-                rootObjectNode.set(name.get(), nodeValues);
+                addObjectToExistingFieldOnRootObjectNode(
+                        rootObjectNode, name.get(), objectNode, ObjectNode.class, isElementMustBeNull
+                );
             } else {
                 rootObjectNode.put(name.get(), !isElementMustBeNull ? objectNode : null);
             }
@@ -481,6 +460,30 @@ public class ExtractUtils {
     // checks if node contains an internal null value
     public static boolean isInternalNullObjectNodePresent(JsonNode node) {
         return node.isTextual() && node.asText().equals(Constants.INTERNAL_NULL_OBJECT_NODE_VALUE);
+    }
+
+    // add object to existing field on rootObjectNode
+    private static void addObjectToExistingFieldOnRootObjectNode(
+            ObjectNode rootObjectNode, String field, Object value, Class<?> valueType, boolean isElementMustBeNull
+    ) {
+        JsonNode newValue = null;
+        if(valueType == ObjectNode.class || valueType == JsonNode.class) {
+            newValue = (JsonNode) value;
+        } else if (valueType == String.class) {
+            newValue = JsonNodeFactory.instance.textNode((String) value);
+        } else {
+            throw new IllegalArgumentException("Unsupported value type: " + valueType);
+        }
+
+        JsonNode nodeValues = rootObjectNode.get(field);
+        if(!nodeValues.isArray()) {
+            ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode();
+            arrayNode.add(nodeValues);
+            nodeValues = arrayNode;
+        }
+
+        ((ArrayNode)nodeValues).add(!isElementMustBeNull ? newValue : null);
+        rootObjectNode.set(field, nodeValues);
     }
 
 }
