@@ -288,7 +288,7 @@ public class ExtractUtils {
                 attrInfoObjectNode.put(Constants.JSON_XML_ATTR_PREFIX+node.getNodeName(), node.getNodeValue());
             }
         }
-        attrInfoObjectNode.put(Constants.JSON_XML_TEXT_FIELD, value.equalsIgnoreCase("null") ? null : value);
+        attrInfoObjectNode.put(Constants.JSON_XML_TEXT_FIELD, value.equalsIgnoreCase(Constants.NULL_VALUE) ? null : value);
 
         return attrInfoObjectNode;
     }
@@ -390,9 +390,9 @@ public class ExtractUtils {
             default:
                 value = (subElement!=null ? subElement.asText() : value);
                 if(trimSpaces){
-                    value = (value.trim().equalsIgnoreCase("null") ? null : value.trim());
+                    value = (value.trim().equalsIgnoreCase(Constants.NULL_VALUE) ? null : value.trim());
                 } else {
-                    value = (value.equalsIgnoreCase("null") ? null : value);
+                    value = (value.equalsIgnoreCase(Constants.NULL_VALUE) ? null : value);
                 }
                 objectNode.put(
                         label,
@@ -429,9 +429,9 @@ public class ExtractUtils {
             default:
                 value = (subElement!=null ? subElement.asText() : value);
                 if(trimSpaces){
-                    value = (value.trim().equalsIgnoreCase("null") ? null : value.trim());
+                    value = (value.trim().equalsIgnoreCase(Constants.NULL_VALUE) ? null : value.trim());
                 } else {
-                    value = (value.equalsIgnoreCase("null") ? null : value);
+                    value = (value.equalsIgnoreCase(Constants.NULL_VALUE) ? null : value);
                 }
                 arrayNode.add(!isElementMustBeNull ? value : null);
                 break;
