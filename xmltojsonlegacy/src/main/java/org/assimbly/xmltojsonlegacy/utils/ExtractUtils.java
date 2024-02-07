@@ -67,7 +67,7 @@ public class ExtractUtils {
                         if(rootObjectNode.has(propertyName)) {
                             JsonNode nodeValues = rootObjectNode.get(propertyName);
                             if(nodeValues.isArray()) {
-                                ((ArrayNode)nodeValues).add(node.get(0));
+                                ((ArrayNode)nodeValues).add(!isElementMustBeNull ? node.get(0) : null);
                             } else {
                                 ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode();
                                 arrayNode.add(nodeValues.textValue());
@@ -158,7 +158,7 @@ public class ExtractUtils {
                             if(rootObjectNode.has(fieldName)) {
                                 JsonNode nodeValues = rootObjectNode.get(fieldName);
                                 if(nodeValues.isArray()) {
-                                    ((ArrayNode)nodeValues).add(fieldValue);
+                                    ((ArrayNode)nodeValues).add(!isElementMustBeNull ? fieldValue : null);
                                 } else {
                                     ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode();
                                     arrayNode.add(nodeValues.textValue());
