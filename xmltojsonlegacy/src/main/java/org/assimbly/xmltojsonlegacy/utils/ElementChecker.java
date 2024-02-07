@@ -21,71 +21,106 @@ public class ElementChecker {
             boolean isParentSiblingsNamesEqual, boolean isGrandParentSiblingsNamesEqual, boolean hasAttributes,
             boolean hasParentAttributes, boolean isElementOnNamespace
     ) {
-        boolean isRootArray = false;
+        boolean isRootArray;
         if(isTypeHintsEnabled) {
-            if (level == 0 && numberOfChildren == 1 && !isElementDefiningNamespaces) {
-                isRootArray = true;
-            }
-            if (elementDeepestDepth > 2 && !isElementDefiningNamespaces && areChildrenNamesEqual) {
-                isRootArray = true;
-            }
-            if (elementDeepestDepth == 2 && !isElementDefiningNamespaces && areChildrenNamesEqual &&
-                    (areSiblingsNamesEqual || !classAttr.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT))
-            ) {
-                isRootArray = true;
-            }
-            if (elementDeepestDepth == 1 && parentClass != null &&  !isElementOnNamespace &&
-                    (parentClass.equals("") || parentClass.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_ARRAY))
-            ) {
-                isRootArray = true;
-            }
-            if (elementDeepestDepth == 1 && classAttr != null && !isElementOnNamespace && (
-                    (classAttr.equals("") && numberOfChildren > 1) ||
-                            classAttr.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT)
-            )) {
-                isRootArray = true;
-            }
-            if (elementDeepestDepth == 0 && !hasAttributes && !hasParentAttributes &&
-                    (numberOfSiblings == 1 || numberOfSiblings > 1 && areSiblingsNamesEqual) &&
-                    (!parentClass.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT) ||
-                            parentClass.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
-                                    isParentSiblingsNamesEqual) &&
-                    (!grandParentClass.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT) ||
-                            grandParentClass.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
-                                    isGrandParentSiblingsNamesEqual)
-            ) {
-                isRootArray = true;
-            }
+            isRootArray = isRootArrayWithTypeHints(
+                    level, numberOfChildren, numberOfSiblings, classAttr, parentClass, grandParentClass,
+                    elementDeepestDepth, isElementDefiningNamespaces, areChildrenNamesEqual, areSiblingsNamesEqual,
+                    isParentSiblingsNamesEqual, isGrandParentSiblingsNamesEqual, hasAttributes, hasParentAttributes,
+                    isElementOnNamespace
+            );
         } else {
-            if(level == 0 && numberOfChildren == 1 && !isElementDefiningNamespaces && !hasAttributes) {
+            isRootArray = isRootArrayWithoutTypeHints(
+                    level, numberOfChildren, numberOfSiblings, parentSiblings, classAttr, elementDeepestDepth,
+                    isElementDefiningNamespaces, areChildrenNamesEqual, areSiblingsNamesEqual, hasAttributes,
+                    isElementOnNamespace
+            );
+        }
+        return isRootArray;
+    }
+
+    private static boolean isRootArrayWithTypeHints(
+            int level, int numberOfChildren, int numberOfSiblings, String classAttr, String parentClass,
+            String grandParentClass, int elementDeepestDepth, boolean isElementDefiningNamespaces,
+            boolean areChildrenNamesEqual, boolean areSiblingsNamesEqual, boolean isParentSiblingsNamesEqual,
+            boolean isGrandParentSiblingsNamesEqual, boolean hasAttributes, boolean hasParentAttributes,
+            boolean isElementOnNamespace
+    ) {
+        boolean isRootArray = false;
+
+        if (level == 0 && numberOfChildren == 1 && !isElementDefiningNamespaces) {
+            isRootArray = true;
+        }
+        if (elementDeepestDepth > 2 && !isElementDefiningNamespaces && areChildrenNamesEqual) {
+            isRootArray = true;
+        }
+        if (elementDeepestDepth == 2 && !isElementDefiningNamespaces && areChildrenNamesEqual &&
+                (areSiblingsNamesEqual || !classAttr.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT))
+        ) {
+            isRootArray = true;
+        }
+        if (elementDeepestDepth == 1 && parentClass != null &&  !isElementOnNamespace &&
+                (parentClass.equals("") || parentClass.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_ARRAY))
+        ) {
+            isRootArray = true;
+        }
+        if (elementDeepestDepth == 1 && classAttr != null && !isElementOnNamespace && (
+                (classAttr.equals("") && numberOfChildren > 1) ||
+                        classAttr.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT)
+        )) {
+            isRootArray = true;
+        }
+        if (elementDeepestDepth == 0 && !hasAttributes && !hasParentAttributes &&
+                (numberOfSiblings == 1 || numberOfSiblings > 1 && areSiblingsNamesEqual) &&
+                (!parentClass.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT) ||
+                        parentClass.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
+                                isParentSiblingsNamesEqual) &&
+                (!grandParentClass.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT) ||
+                        grandParentClass.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
+                                isGrandParentSiblingsNamesEqual)
+        ) {
+            isRootArray = true;
+        }
+
+        return isRootArray;
+    }
+
+    private static boolean isRootArrayWithoutTypeHints(
+            int level, int numberOfChildren, int numberOfSiblings, int parentSiblings, String classAttr,
+            int elementDeepestDepth, boolean isElementDefiningNamespaces, boolean areChildrenNamesEqual,
+            boolean areSiblingsNamesEqual, boolean hasAttributes, boolean isElementOnNamespace
+    ) {
+        boolean isRootArray = false;
+
+        if(level == 0 && numberOfChildren == 1 && !isElementDefiningNamespaces && !hasAttributes) {
+            isRootArray = true;
+        }
+        if (elementDeepestDepth > 2 && !isElementDefiningNamespaces && areChildrenNamesEqual && !hasAttributes) {
+            isRootArray = true;
+        }
+        if (elementDeepestDepth == 2 && !isElementDefiningNamespaces && areChildrenNamesEqual && !hasAttributes) {
+            isRootArray = true;
+        }
+        if(elementDeepestDepth == 1 && !isElementDefiningNamespaces && areChildrenNamesEqual && !hasAttributes &&
+                !isElementOnNamespace
+        ) {
+            isRootArray = true;
+        }
+        if(elementDeepestDepth == 1 && classAttr !=null &&
+                classAttr.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT)
+        ) {
+            if(parentSiblings > 1) {
                 isRootArray = true;
-            }
-            if (elementDeepestDepth > 2 && !isElementDefiningNamespaces && areChildrenNamesEqual && !hasAttributes) {
-                isRootArray = true;
-            }
-            if (elementDeepestDepth == 2 && !isElementDefiningNamespaces && areChildrenNamesEqual && !hasAttributes) {
-                isRootArray = true;
-            }
-            if(elementDeepestDepth == 1 && !isElementDefiningNamespaces && areChildrenNamesEqual && !hasAttributes &&
-                    !isElementOnNamespace
-            ) {
-                isRootArray = true;
-            }
-            if(elementDeepestDepth == 1 && classAttr!=null &&
-                    classAttr.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT)
-            ) {
-                if(parentSiblings > 1) {
-                    isRootArray = true;
-                } else {
-                    isRootArray = false;
-                }
-            }
-            if (elementDeepestDepth == 0 && !hasAttributes && (
-                    numberOfSiblings == 1 || numberOfSiblings > 1 && areSiblingsNamesEqual
-            )) {
-                isRootArray = true;
+            } else {
+                isRootArray = false;
             }
         }
+        if (elementDeepestDepth == 0 && !hasAttributes && (
+                numberOfSiblings == 1 || numberOfSiblings > 1 && areSiblingsNamesEqual
+        )) {
+            isRootArray = true;
+        }
+
         return isRootArray;
     }
 
