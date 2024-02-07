@@ -18,10 +18,7 @@ public class Print {
             int elementDeepestDepth
     ) {
         if(logger.isDebugEnabled()) {
-            data(" >> Element: " +
-                    ElementUtils.getElementName(element, removeNamespacePrefixes, skipNamespaces),
-                    level
-            );
+            data(" >> Element: " + ElementUtils.getElementName(element, removeNamespacePrefixes), level);
             data("    typeAttr: " + typeAttr, level);
             data("    classAttr: " + classAttr, level);
             data("    grandParentClass: " + grandParentClass, level);

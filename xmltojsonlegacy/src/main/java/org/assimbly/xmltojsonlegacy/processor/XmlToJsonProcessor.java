@@ -34,11 +34,9 @@ public class XmlToJsonProcessor {
 
     // convert xml to json
     public static JsonNode convertXmlToJson(
-            Element element, int level,
-            String grandParentClass, String parentClass, int parentSiblings,
-            boolean isGrandParentSiblingsNamesEqual, boolean isParentSiblingsNamesEqual,
-            boolean hasGrandParentAttributes, boolean hasParentAttributes,
-            boolean isFirstChild, String parentNamespace, HashMap<String, Namespace> xmlnsMap
+            Element element, int level, String grandParentClass, String parentClass, int parentSiblings,
+            boolean isGrandParentSiblingsNamesEqual, boolean isParentSiblingsNamesEqual, boolean hasGrandParentAttributes,
+            boolean hasParentAttributes, boolean isFirstChild, String parentNamespace, HashMap<String, Namespace> xmlnsMap
     ) {
 
         ObjectNode rootObjectNode = JsonNodeFactory.instance.objectNode();
@@ -51,7 +49,9 @@ public class XmlToJsonProcessor {
         String classAttr = element.getAttribute(Constants.JSON_XML_ATTR_CLASS);
         String typeAttr = element.getAttribute(Constants.JSON_XML_ATTR_TYPE);
 
-        boolean hasAttributes = (xmlJsonDataFormat.isTypeHints() ? ElementChecker.hasSimpleAttributes(element) : element.hasAttributes());
+        boolean hasAttributes = (
+                xmlJsonDataFormat.isTypeHints() ? ElementChecker.hasSimpleAttributes(element) : element.hasAttributes()
+        );
         boolean isRootNode = (level == 0);
         boolean areSiblingsNamesEqual = ElementUtils.areSiblingsNamesEqual(element);
         boolean areChildrenNamesEqual = ElementUtils.areChildrenNamesEqual(element);
@@ -60,42 +60,41 @@ public class XmlToJsonProcessor {
 
         // add attributes in the object node
         ExtractUtils.addAttributesInObjectNode(
-                element, rootObjectNode, xmlJsonDataFormat.isTypeHints(), xmlJsonDataFormat.isSkipNamespaces(), xmlJsonDataFormat.isSkipWhitespace()
+                element, rootObjectNode, xmlJsonDataFormat.isTypeHints(), xmlJsonDataFormat.isSkipNamespaces()
         );
         // add namespace attribute
         ExtractUtils.addNamespaceAttributeInObjectNode(
                 element, rootObjectNode, xmlnsMapOnThisNode, parentNamespace, level, xmlJsonDataFormat.isSkipNamespaces()
         );
 
-        boolean isElementDefiningNamespaces = ElementUtils.isElementDefiningNamespaces(element, xmlnsMapOnThisNode);
+        boolean isElementDefiningNamespaces = ElementUtils.isElementDefiningNamespaces(element);
         boolean isElementOnNamespace = ElementUtils.isElementOnNamespace(element, xmlnsMapOnThisNode);
         String namespace = ElementUtils.getElementNamePrefix(element);
 
         boolean isRootArray = ElementChecker.isRootArray(
                 level, numberOfChildren, numberOfSiblings, parentSiblings, classAttr, parentClass, grandParentClass,
-                elementDeepestDepth, isElementDefiningNamespaces, xmlJsonDataFormat.isTypeHints(),
-                areChildrenNamesEqual, areSiblingsNamesEqual, isParentSiblingsNamesEqual, isGrandParentSiblingsNamesEqual,
-                hasAttributes, hasParentAttributes, hasGrandParentAttributes, isElementOnNamespace
+                elementDeepestDepth, isElementDefiningNamespaces, xmlJsonDataFormat.isTypeHints(), areChildrenNamesEqual,
+                areSiblingsNamesEqual, isParentSiblingsNamesEqual, isGrandParentSiblingsNamesEqual, hasAttributes,
+                hasParentAttributes, isElementOnNamespace
         );
         boolean isObject = ElementChecker.isObject(
                 level, elementDeepestDepth, numberOfChildren, classAttr, numberOfSiblings, xmlJsonDataFormat.isTypeHints(),
                 isParentSiblingsNamesEqual, areChildrenNamesEqual, hasParentAttributes, parentClass
         );
         boolean isOneValue = ElementChecker.isOneValue(
-                parentClass, elementDeepestDepth, xmlJsonDataFormat.isTypeHints(),
-                isParentSiblingsNamesEqual, areSiblingsNamesEqual, areChildrenNamesEqual, parentSiblings,
-                isGrandParentSiblingsNamesEqual, isParentSiblingsNamesEqual);
+                parentClass, elementDeepestDepth, xmlJsonDataFormat.isTypeHints(), areSiblingsNamesEqual,
+                areChildrenNamesEqual, isGrandParentSiblingsNamesEqual, isParentSiblingsNamesEqual
+        );
         boolean isSingleChildren = ElementChecker.isSingleChildren(
                 elementDeepestDepth, numberOfChildren, classAttr, xmlJsonDataFormat.isTypeHints()
         );
 
         Print.elementDetails(
-                element, level, grandParentClass, parentClass, parentSiblings, isRootArray, isOneValue, isObject, isFirstChild,
-                numberOfSiblings, numberOfChildren, classAttr, typeAttr, namespace,
+                element, level, grandParentClass, parentClass, parentSiblings, isRootArray, isOneValue, isObject,
+                isFirstChild, numberOfSiblings, numberOfChildren, classAttr, typeAttr, namespace,
                 xmlJsonDataFormat.isRemoveNamespacePrefixes(), xmlJsonDataFormat.isSkipNamespaces(),
-                isParentSiblingsNamesEqual, areSiblingsNamesEqual, areChildrenNamesEqual,
-                hasGrandParentAttributes, hasParentAttributes, hasAttributes,
-                elementDeepestDepth
+                isParentSiblingsNamesEqual, areSiblingsNamesEqual, areChildrenNamesEqual, hasGrandParentAttributes,
+                hasParentAttributes, hasAttributes, elementDeepestDepth
         );
 
         // Check if the current element has child nodes
@@ -106,8 +105,8 @@ public class XmlToJsonProcessor {
             for (int index = 0; index < nodeListSize; index++) {
                 Node childNode = nodeList.item(index);
                 boolean isElementMustBeNull = ElementChecker.isElementMustBeNull(
-                        xmlJsonDataFormat.isSkipWhitespace(), childNode, xmlnsMapOnThisNode, xmlJsonDataFormat.isTypeHints(),
-                        xmlJsonDataFormat.isTTFTTF(), parentClass, classAttr, areSiblingsNamesEqual
+                        xmlJsonDataFormat.isSkipWhitespace(), childNode, xmlnsMapOnThisNode,
+                        xmlJsonDataFormat.isTypeHints(), xmlJsonDataFormat.isTTFTTF(), areSiblingsNamesEqual
                 );
 
                 switch (childNode.getNodeType()) {
@@ -118,8 +117,8 @@ public class XmlToJsonProcessor {
                                 childNode, rootArrayNode, rootObjectNode, nodeCount, level, numberOfChildren,
                                 numberOfSiblings, parentClass, classAttr, isRootArray, isObject, isSingleChildren,
                                 isFirstChild, namespace, xmlnsMapOnThisNode, areSiblingsNamesEqual,
-                                isParentSiblingsNamesEqual, hasAttributes, hasParentAttributes,
-                                isElementDefiningNamespaces, areChildrenNamesEqual, isElementMustBeNull, isElementOnNamespace
+                                isParentSiblingsNamesEqual, hasAttributes, hasParentAttributes, isElementDefiningNamespaces,
+                                areChildrenNamesEqual, isElementMustBeNull, isElementOnNamespace
                         );
                         if (processNodeResp != null)
                             return processNodeResp;
@@ -158,8 +157,8 @@ public class XmlToJsonProcessor {
     // process an element node of type Node
     private static JsonNode processElementNode(
             Node childNode, ArrayNode rootArrayNode, ObjectNode rootObjectNode, int nodeCount, int level,
-            int numberOfChildren, int numberOfSiblings, String parentClass, String classAttr,
-            boolean isRootArray, boolean isObject, boolean isSingleChildren, boolean isFirstChild, String namespace,
+            int numberOfChildren, int numberOfSiblings, String parentClass, String classAttr, boolean isRootArray,
+            boolean isObject, boolean isSingleChildren, boolean isFirstChild, String namespace,
             HashMap<String, Namespace> xmlnsMap, boolean areSiblingsNamesEqual, boolean isParentSiblingsNamesEqual,
             boolean hasAttributes, boolean hasParentAttributes, boolean isElementDefiningNamespaces,
             boolean areChildrenNamesEqual, boolean isElementMustBeNull, boolean isElementOnNamespace
@@ -167,7 +166,9 @@ public class XmlToJsonProcessor {
         boolean isFirstSibling = ElementChecker.isFirstSiblingByNumCounts(nodeCount);
         Element childElement = (Element) childNode;
 
-        ElementNodeTransaction transactionProcessor = ElementNodeTransactionFactory.getProcessorFor(isObject, isRootArray, isElementDefiningNamespaces);
+        ElementNodeTransaction transactionProcessor = ElementNodeTransactionFactory.getProcessorFor(
+                isObject, isRootArray, isElementDefiningNamespaces
+        );
         return transactionProcessor.process(
                 childNode, rootArrayNode, rootObjectNode, nodeCount, level, numberOfChildren, numberOfSiblings,
                 parentClass, classAttr, isRootArray, isObject, isSingleChildren, isFirstChild, isFirstSibling,
@@ -186,12 +187,15 @@ public class XmlToJsonProcessor {
             boolean areSiblingsNamesEqual, boolean isParentSiblingsNamesEqual, boolean hasAttributes,
             boolean hasParentAttributes, boolean isElementMustBeNull
     ) {
-        TextNodeTransaction transactionProcessor = TextNodeTransactionFactory.getProcessorFor(isRootNode, isObject, isOneValue);
+        TextNodeTransaction transactionProcessor = TextNodeTransactionFactory.getProcessorFor(
+                isRootNode, isObject, isOneValue
+        );
         return transactionProcessor.process(childNode, element, rootArrayNode, rootObjectNode, level, index, nodeListSize,
                 grandParentClass, parentClass, isRootArray, isRootNode, isObject, isOneValue, namespace, xmlnsMap,
-                xmlJsonDataFormat.isForceTopLevelObject(), xmlJsonDataFormat.isTrimSpaces(), xmlJsonDataFormat.isSkipNamespaces(),
-                xmlJsonDataFormat.isRemoveNamespacePrefixes(), xmlJsonDataFormat.isTypeHints(), areSiblingsNamesEqual,
-                isParentSiblingsNamesEqual, hasAttributes, hasParentAttributes, isElementMustBeNull
+                xmlJsonDataFormat.isForceTopLevelObject(), xmlJsonDataFormat.isTrimSpaces(),
+                xmlJsonDataFormat.isSkipNamespaces(), xmlJsonDataFormat.isRemoveNamespacePrefixes(),
+                xmlJsonDataFormat.isTypeHints(), areSiblingsNamesEqual, isParentSiblingsNamesEqual, hasAttributes,
+                hasParentAttributes, isElementMustBeNull
         );
     }
 

@@ -28,15 +28,18 @@ public class RootNodeType implements TextNodeTransaction {
         //process text node identified as a root node
         Print.data(" 2. ROOT", level);
         if(index+1 >= nodeListSize) {
-            boolean isElementDefiningNamespaces = ElementUtils.isElementDefiningNamespaces(element, xmlnsMap);
+            boolean isElementDefiningNamespaces = ElementUtils.isElementDefiningNamespaces(element);
             if(isElementDefiningNamespaces && !skipNamespaces) {
                 Node namespaceNode = ElementUtils.getNamespaceNode(element);
-                rootObjectNode.put(Constants.JSON_XML_ATTR_PREFIX+namespaceNode.getNodeName(), namespaceNode.getNodeValue());
+                rootObjectNode.put(
+                        Constants.JSON_XML_ATTR_PREFIX+namespaceNode.getNodeName(),
+                        namespaceNode.getNodeValue()
+                );
             }
             if(forceTopLevelObject) {
                 ObjectNode parentNode =  JsonNodeFactory.instance.objectNode();
                 parentNode.set(
-                        ElementUtils.getElementName(element, removeNamespacePrefixes, skipNamespaces),
+                        ElementUtils.getElementName(element, removeNamespacePrefixes),
                         isRootArray ? rootArrayNode : rootObjectNode
                 );
                 return parentNode;

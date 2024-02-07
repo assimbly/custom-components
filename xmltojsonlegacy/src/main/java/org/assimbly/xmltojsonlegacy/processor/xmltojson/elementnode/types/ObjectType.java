@@ -18,11 +18,11 @@ public class ObjectType implements ElementNodeTransaction {
     public JsonNode process(
             Node childNode, ArrayNode rootArrayNode, ObjectNode rootObjectNode, int nodeCount, int level,
             int numberOfChildren, int numberOfSiblings, String parentClass, String classAttr, boolean isRootArray,
-            boolean isObject, boolean isSingleChildren, boolean isFirstChild, boolean isFirstSibling, Element childElement,
-            String namespace, HashMap<String, Namespace> xmlnsMap, boolean trimSpaces, boolean skipNamespaces,
-            boolean removeNamespacePrefixes, boolean typeHints, boolean areSiblingsNamesEqual,
-            boolean isParentSiblingsNamesEqual, boolean hasAttributes, boolean hasParentAttributes, boolean areChildrenNamesEqual,
-            boolean isElementMustBeNull, boolean isElementOnNamespace
+            boolean isObject, boolean isSingleChildren, boolean isFirstChild, boolean isFirstSibling,
+            Element childElement, String namespace, HashMap<String, Namespace> xmlnsMap, boolean trimSpaces,
+            boolean skipNamespaces, boolean removeNamespacePrefixes, boolean typeHints, boolean areSiblingsNamesEqual,
+            boolean isParentSiblingsNamesEqual, boolean hasAttributes, boolean hasParentAttributes,
+            boolean areChildrenNamesEqual, boolean isElementMustBeNull, boolean isElementOnNamespace
     ) {
         // extract child as an object
         Print.data(" 1. IS OBJECT", level);

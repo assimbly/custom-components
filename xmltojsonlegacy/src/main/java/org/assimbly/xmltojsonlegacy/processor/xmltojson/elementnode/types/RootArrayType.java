@@ -21,11 +21,11 @@ public class RootArrayType implements ElementNodeTransaction {
     public JsonNode process(
             Node childNode, ArrayNode rootArrayNode, ObjectNode rootObjectNode, int nodeCount, int level,
             int numberOfChildren, int numberOfSiblings, String parentClass, String classAttr, boolean isRootArray,
-            boolean isObject, boolean isSingleChildren, boolean isFirstChild, boolean isFirstSibling, Element childElement,
-            String namespace, HashMap<String, Namespace> xmlnsMap, boolean trimSpaces, boolean skipNamespaces,
-            boolean removeNamespacePrefixes, boolean typeHints, boolean areSiblingsNamesEqual,
-            boolean isParentSiblingsNamesEqual, boolean hasAttributes, boolean hasParentAttributes, boolean areChildrenNamesEqual,
-            boolean isElementMustBeNull, boolean isElementOnNamespace
+            boolean isObject, boolean isSingleChildren, boolean isFirstChild, boolean isFirstSibling,
+            Element childElement, String namespace, HashMap<String, Namespace> xmlnsMap, boolean trimSpaces,
+            boolean skipNamespaces, boolean removeNamespacePrefixes, boolean typeHints, boolean areSiblingsNamesEqual,
+            boolean isParentSiblingsNamesEqual, boolean hasAttributes, boolean hasParentAttributes,
+            boolean areChildrenNamesEqual, boolean isElementMustBeNull, boolean isElementOnNamespace
     ) {
         Print.data(" 1. IS ROOT ARRAY", level);
         if(isSingleChildren && isFirstChild && StringUtils.isNotEmpty(parentClass)) {
@@ -40,7 +40,9 @@ public class RootArrayType implements ElementNodeTransaction {
             // extract child as an array
             ExtractUtils.extractChildAsArray(
                     level, rootArrayNode, numberOfSiblings, parentClass, classAttr, childElement, isFirstSibling,
-                    namespace, xmlnsMap, areSiblingsNamesEqual, isParentSiblingsNamesEqual, hasAttributes, hasParentAttributes, isElementMustBeNull);
+                    namespace, xmlnsMap, areSiblingsNamesEqual, isParentSiblingsNamesEqual, hasAttributes,
+                    hasParentAttributes, isElementMustBeNull
+            );
         }
         return null;
     }

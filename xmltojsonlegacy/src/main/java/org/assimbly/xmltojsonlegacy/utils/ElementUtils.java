@@ -8,9 +8,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.XMLConstants;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 public class ElementUtils {
 
@@ -21,7 +19,9 @@ public class ElementUtils {
             for (int j = 0; j < attrMap.getLength(); j++) {
                 Node node = attrMap.item(j);
                 String attributeName = node.getNodeName();
-                if(attributeName.equals(XMLConstants.XMLNS_ATTRIBUTE) || attributeName.indexOf(XMLConstants.XMLNS_ATTRIBUTE+":")==0) {
+                if(attributeName.equals(XMLConstants.XMLNS_ATTRIBUTE) ||
+                        attributeName.indexOf(XMLConstants.XMLNS_ATTRIBUTE+":")==0
+                ) {
                     return node;
                 }
             }
@@ -51,14 +51,18 @@ public class ElementUtils {
     }
 
     // get namespaces on this node
-    public static HashMap<String, Namespace> getNamespacesOnThisNode(Element nodeElement, HashMap<String, Namespace> xmlnsMap, int level) {
+    public static HashMap<String, Namespace> getNamespacesOnThisNode(
+            Element nodeElement, HashMap<String, Namespace> xmlnsMap, int level
+    ) {
         HashMap<String, Namespace> xmlnsMapFromThisNode = new HashMap<>(xmlnsMap);
         if(nodeElement.hasAttributes()){
             NamedNodeMap attrMap = nodeElement.getAttributes();
             for (int j = 0; j < attrMap.getLength(); j++) {
                 Node node = attrMap.item(j);
                 String attributeName = node.getNodeName();
-                if(attributeName.equals(XMLConstants.XMLNS_ATTRIBUTE) || attributeName.indexOf(XMLConstants.XMLNS_ATTRIBUTE+":")==0) {
+                if(attributeName.equals(XMLConstants.XMLNS_ATTRIBUTE) ||
+                        attributeName.indexOf(XMLConstants.XMLNS_ATTRIBUTE+":")==0
+                ) {
                     Namespace namespace = new Namespace(node.getNodeValue(), level);
                     xmlnsMapFromThisNode.put(attributeName, namespace);
                 }
@@ -69,7 +73,7 @@ public class ElementUtils {
 
     // get element name
     // removes namespace from element name when isRemoveNamespacePrefixes flag is enabled
-    public static String getElementName(Element nodeElement, boolean removeNamespacePrefixes, boolean skipNamespaces) {
+    public static String getElementName(Element nodeElement, boolean removeNamespacePrefixes) {
         String tagName = nodeElement.getTagName();
         if(removeNamespacePrefixes){
             if(tagName.contains(":")) {
@@ -143,13 +147,15 @@ public class ElementUtils {
     }
 
     // check if element defines namespaces
-    public static boolean isElementDefiningNamespaces(Element element, HashMap<String, Namespace> xmlnsMap) {
+    public static boolean isElementDefiningNamespaces(Element element) {
         if(element.hasAttributes()){
             NamedNodeMap attrMap = element.getAttributes();
             for (int j = 0; j < attrMap.getLength(); j++) {
                 Node node = attrMap.item(j);
                 String attributeName = node.getNodeName();
-                if(attributeName.equals(XMLConstants.XMLNS_ATTRIBUTE) || attributeName.startsWith(XMLConstants.XMLNS_ATTRIBUTE+":")){
+                if(attributeName.equals(XMLConstants.XMLNS_ATTRIBUTE) ||
+                        attributeName.startsWith(XMLConstants.XMLNS_ATTRIBUTE+":")
+                ){
                     return true;
                 }
             }
@@ -208,10 +214,7 @@ public class ElementUtils {
         }
         String namespaceLabel = ElementUtils.getElementNamespaceLabel(nodeElement);
         Namespace namespace = xmlnsMap.get(namespaceLabel);
-        if(namespace!=null) {
-            return true;
-        }
-        return false;
+        return namespace != null;
     }
 
 }

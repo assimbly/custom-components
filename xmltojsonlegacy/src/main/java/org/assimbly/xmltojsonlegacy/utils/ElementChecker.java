@@ -16,9 +16,10 @@ public class ElementChecker {
     // check if it's a root array
     public static boolean isRootArray(
             int level, int numberOfChildren, int numberOfSiblings, int parentSiblings, String classAttr,
-            String parentClass, String grandParentClass, int elementDeepestDepth, boolean isElementDefiningNamespaces, boolean isTypeHintsEnabled,
-            boolean areChildrenNamesEqual, boolean areSiblingsNamesEqual, boolean isParentSiblingsNamesEqual, boolean isGrandParentSiblingsNamesEqual,
-            boolean hasAttributes,  boolean hasParentAttributes, boolean hasGrandParentAttributes, boolean isElementOnNamespace
+            String parentClass, String grandParentClass, int elementDeepestDepth, boolean isElementDefiningNamespaces,
+            boolean isTypeHintsEnabled, boolean areChildrenNamesEqual, boolean areSiblingsNamesEqual,
+            boolean isParentSiblingsNamesEqual, boolean isGrandParentSiblingsNamesEqual, boolean hasAttributes,
+            boolean hasParentAttributes, boolean isElementOnNamespace
     ) {
         boolean isRootArray = false;
         if(isTypeHintsEnabled) {
@@ -38,17 +39,20 @@ public class ElementChecker {
             ) {
                 isRootArray = true;
             }
-            if (elementDeepestDepth == 1 && classAttr != null && !isElementOnNamespace &&
-                    ((classAttr.equals("") && numberOfChildren > 1) || classAttr.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT))
-            ) {
+            if (elementDeepestDepth == 1 && classAttr != null && !isElementOnNamespace && (
+                    (classAttr.equals("") && numberOfChildren > 1) ||
+                            classAttr.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT)
+            )) {
                 isRootArray = true;
             }
             if (elementDeepestDepth == 0 && !hasAttributes && !hasParentAttributes &&
                     (numberOfSiblings == 1 || numberOfSiblings > 1 && areSiblingsNamesEqual) &&
                     (!parentClass.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT) ||
-                            parentClass.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT) && isParentSiblingsNamesEqual) &&
+                            parentClass.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
+                                    isParentSiblingsNamesEqual) &&
                     (!grandParentClass.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT) ||
-                            grandParentClass.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT) && isGrandParentSiblingsNamesEqual)
+                            grandParentClass.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
+                                    isGrandParentSiblingsNamesEqual)
             ) {
                 isRootArray = true;
             }
@@ -62,10 +66,14 @@ public class ElementChecker {
             if (elementDeepestDepth == 2 && !isElementDefiningNamespaces && areChildrenNamesEqual && !hasAttributes) {
                 isRootArray = true;
             }
-            if(elementDeepestDepth == 1 && !isElementDefiningNamespaces && areChildrenNamesEqual && !hasAttributes && !isElementOnNamespace) {
+            if(elementDeepestDepth == 1 && !isElementDefiningNamespaces && areChildrenNamesEqual && !hasAttributes &&
+                    !isElementOnNamespace
+            ) {
                 isRootArray = true;
             }
-            if(elementDeepestDepth == 1 && classAttr!=null && classAttr.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT)) {
+            if(elementDeepestDepth == 1 && classAttr!=null &&
+                    classAttr.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT)
+            ) {
                 if(parentSiblings > 1) {
                     isRootArray = true;
                 } else {
@@ -91,9 +99,12 @@ public class ElementChecker {
         if(elementDeepestDepth == 1 && classAttr!=null && (
                 numberOfChildren > 1  && (level == 0 || level > 0 && !areChildrenNamesEqual) ||
                         numberOfChildren == 1 && classAttr.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
-                                (!isTypeHintsEnabled || numberOfSiblings > 1 && isTypeHintsEnabled && !parentClass.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_ARRAY) ||
-                        isTypeHintsEnabled && classAttr.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
-                                (!hasParentAttributes && !isParentSiblingsNamesEqual))
+                                (!isTypeHintsEnabled ||
+                                        numberOfSiblings > 1 && isTypeHintsEnabled &&
+                                                !parentClass.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_ARRAY) ||
+                                        isTypeHintsEnabled &&
+                                                classAttr.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
+                                                (!hasParentAttributes && !isParentSiblingsNamesEqual))
         )) {
                 isObject = true;
         }
@@ -101,10 +112,10 @@ public class ElementChecker {
     }
 
     // check if it's one value
-    public static boolean isOneValue(String parentClass, int elementDeepestDepth,
-                                     boolean isTypeHintsEnabled, boolean topTreeSiblingsNamesEqual,
-                                     boolean areSiblingsNamesEqual, boolean areChildrenNamesEqual, int parentSiblings,
-                                     boolean isGrandParentSiblingsNamesEqual, boolean isParentSiblingsNamesEqual) {
+    public static boolean isOneValue(
+            String parentClass, int elementDeepestDepth, boolean isTypeHintsEnabled, boolean areSiblingsNamesEqual,
+            boolean areChildrenNamesEqual, boolean isGrandParentSiblingsNamesEqual, boolean isParentSiblingsNamesEqual
+    ) {
         boolean isOneValue = false;
         if(elementDeepestDepth == 0 && areSiblingsNamesEqual && areChildrenNamesEqual && (
                 !isTypeHintsEnabled || (
@@ -122,7 +133,7 @@ public class ElementChecker {
     // check if element should be null
     public static boolean isElementMustBeNull(
             boolean skipWhitespace, Node node, HashMap<String, Namespace> xmlnsMap, boolean isTypeHintsEnabled,
-            boolean isTTFTTF, String grandParentClass, String parentClass, boolean areParentSiblingsNamesEqual
+            boolean isTTFTTF, boolean areParentSiblingsNamesEqual
     ) {
         if(!skipWhitespace) {
             return false;
@@ -168,7 +179,9 @@ public class ElementChecker {
                     String attrName = attribute.getNodeName();
                     if(attrName.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE)) {
                         String attrValue = attribute.getNodeValue();
-                        if(attrValue.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_NUMBER) || attrValue.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_BOOLEAN)) {
+                        if(attrValue.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_NUMBER) ||
+                                attrValue.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_BOOLEAN)
+                        ) {
                             return false;
                         }
                     }
@@ -196,7 +209,9 @@ public class ElementChecker {
     }
 
     // check if it's a single children
-    public static boolean isSingleChildren(int elementDeepestDepth, int numberOfChildren, String classAttr, boolean isTypeHintsEnabled) {
+    public static boolean isSingleChildren(
+            int elementDeepestDepth, int numberOfChildren, String classAttr, boolean isTypeHintsEnabled
+    ) {
         boolean isSingleChildren = false;
         if(!isTypeHintsEnabled) {
             if(elementDeepestDepth == 1 && numberOfChildren == 1

@@ -21,43 +21,42 @@ public class OtherTypeWithoutNamespace implements ElementNodeTransaction {
     public JsonNode process(
             Node childNode, ArrayNode rootArrayNode, ObjectNode rootObjectNode, int nodeCount, int level,
             int numberOfChildren, int numberOfSiblings, String parentClass, String classAttr, boolean isRootArray,
-            boolean isObject, boolean isSingleChildren, boolean isFirstChild, boolean isFirstSibling, Element childElement,
-            String namespace, HashMap<String, Namespace> xmlnsMap, boolean trimSpaces, boolean skipNamespaces,
-            boolean removeNamespacePrefixes, boolean typeHints, boolean areSiblingsNamesEqual,
-            boolean isParentSiblingsNamesEqual, boolean hasAttributes, boolean hasParentAttributes, boolean areChildrenNamesEqual,
-            boolean isElementMustBeNull, boolean isElementOnNamespace
+            boolean isObject, boolean isSingleChildren, boolean isFirstChild, boolean isFirstSibling,
+            Element childElement, String namespace, HashMap<String, Namespace> xmlnsMap, boolean trimSpaces,
+            boolean skipNamespaces, boolean removeNamespacePrefixes, boolean typeHints, boolean areSiblingsNamesEqual,
+            boolean isParentSiblingsNamesEqual, boolean hasAttributes, boolean hasParentAttributes,
+            boolean areChildrenNamesEqual, boolean isElementMustBeNull, boolean isElementOnNamespace
     ) {
         if(!typeHints) {
             // extract child as other type and add into the array node
             int children = ElementUtils.calculateNumberOfChildren(childElement);
-            boolean classAttrOnChildElementIsNUll = ElementChecker.isElementAttributeNull(childElement, Constants.JSON_XML_ATTR_CLASS);
+            boolean classAttrOnChildElementIsNUll = ElementChecker.isElementAttributeNull(
+                    childElement, Constants.JSON_XML_ATTR_CLASS
+            );
             if((level == 0 && numberOfChildren > 1) ||
                     (numberOfChildren == 1 && children >= 1 && !classAttrOnChildElementIsNUll) ||
                     !ElementUtils.areSiblingsNamesEqual(childElement) ||
                     isElementOnNamespace
             ) {
                 ExtractUtils.extractChildAsOtherInObjectNode(
-                        level, rootObjectNode, numberOfSiblings, parentClass, classAttr, (Element) childNode, childElement,
-                        isFirstSibling, namespace, xmlnsMap, skipNamespaces, removeNamespacePrefixes, areSiblingsNamesEqual,
-                        isParentSiblingsNamesEqual, hasAttributes, hasParentAttributes, trimSpaces, isElementMustBeNull,
-                        isElementOnNamespace
+                        level, rootObjectNode, numberOfSiblings, parentClass, classAttr, (Element) childNode,
+                        childElement, isFirstSibling, namespace, xmlnsMap, removeNamespacePrefixes,
+                        areSiblingsNamesEqual, isParentSiblingsNamesEqual, hasAttributes, hasParentAttributes, trimSpaces,
+                        isElementMustBeNull, isElementOnNamespace
                 );
             } else {
                 ExtractUtils.extractChildAsOtherInArrayNode(
-                        level, rootArrayNode, numberOfSiblings, parentClass, classAttr, (Element) childNode, childElement,
-                        isFirstSibling, namespace, xmlnsMap, areSiblingsNamesEqual, isParentSiblingsNamesEqual, hasAttributes,
-                        hasParentAttributes, isElementMustBeNull
+                        level, rootArrayNode, numberOfSiblings, parentClass, classAttr, childElement, isFirstSibling,
+                        namespace, xmlnsMap, areSiblingsNamesEqual, isParentSiblingsNamesEqual, hasAttributes,
+                        hasParentAttributes
                 );
-                rootObjectNode.set(
-                        ElementUtils.getElementName((Element) childNode, removeNamespacePrefixes, skipNamespaces),
-                        rootArrayNode
-                );
+                rootObjectNode.set(ElementUtils.getElementName((Element) childNode, removeNamespacePrefixes), rootArrayNode);
             }
         } else {
             // extract child as other type and add into the object node
             ExtractUtils.extractChildAsOtherInObjectNode(
                     level, rootObjectNode, numberOfSiblings, parentClass, classAttr, (Element) childNode, childElement,
-                    isFirstSibling, namespace, xmlnsMap, skipNamespaces, removeNamespacePrefixes, areSiblingsNamesEqual,
+                    isFirstSibling, namespace, xmlnsMap, removeNamespacePrefixes, areSiblingsNamesEqual,
                     isParentSiblingsNamesEqual, hasAttributes, hasParentAttributes, trimSpaces, isElementMustBeNull,
                     isElementOnNamespace
             );
