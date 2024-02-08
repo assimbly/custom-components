@@ -39,7 +39,7 @@ public class ElementChecker {
         return isRootArray;
     }
 
-    // check if it's a root array with type hints activated
+    // check if it's a root array with type hints enabled
     private static boolean isRootArrayWithTypeHints(
             int level, int numberOfChildren, int numberOfSiblings, String classAttr, String parentClass,
             String grandParentClass, int elementDeepestDepth, boolean isElementDefiningNamespaces,
@@ -86,7 +86,7 @@ public class ElementChecker {
         return isRootArray;
     }
 
-    // check if it's a root array without having type hints activated
+    // check if it's a root array without type hints enabled
     private static boolean isRootArrayWithoutTypeHints(
             int level, int numberOfChildren, int numberOfSiblings, int parentSiblings, String classAttr,
             int elementDeepestDepth, boolean isElementDefiningNamespaces, boolean areChildrenNamesEqual,
