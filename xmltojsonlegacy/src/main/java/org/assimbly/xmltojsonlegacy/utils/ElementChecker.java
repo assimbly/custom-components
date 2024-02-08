@@ -39,6 +39,7 @@ public class ElementChecker {
         return isRootArray;
     }
 
+    // check if it's a root array with type hints activated
     private static boolean isRootArrayWithTypeHints(
             int level, int numberOfChildren, int numberOfSiblings, String classAttr, String parentClass,
             String grandParentClass, int elementDeepestDepth, boolean isElementDefiningNamespaces,
@@ -85,6 +86,7 @@ public class ElementChecker {
         return isRootArray;
     }
 
+    // check if it's a root array without having type hints activated
     private static boolean isRootArrayWithoutTypeHints(
             int level, int numberOfChildren, int numberOfSiblings, int parentSiblings, String classAttr,
             int elementDeepestDepth, boolean isElementDefiningNamespaces, boolean areChildrenNamesEqual,
@@ -213,6 +215,7 @@ public class ElementChecker {
         }
     }
 
+    // check if element should be null - special case TTFTTF
     private static boolean isSpecialCaseTTFTTFMustBeNull(
             Node node, HashMap<String, Namespace> xmlnsMap, boolean areParentSiblingsNamesEqual
     ) {

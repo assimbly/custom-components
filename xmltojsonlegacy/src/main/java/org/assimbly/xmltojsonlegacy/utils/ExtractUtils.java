@@ -417,6 +417,7 @@ public class ExtractUtils {
         }
     }
 
+    // get attribute type value from a element
     public static String getAttributeTypeFromElement(Element nodeElement) {
         if(nodeElement!=null && nodeElement.getAttributes() != null) {
             NamedNodeMap attributeMap = nodeElement.getAttributes();

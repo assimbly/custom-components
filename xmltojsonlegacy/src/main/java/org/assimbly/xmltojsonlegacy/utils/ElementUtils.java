@@ -138,10 +138,12 @@ public class ElementUtils {
         return depth;
     }
 
+    // check if attribute is a special attribute
     public static boolean isAnSpecialAttribute(String attribute) {
         return Constants.SPECIAL_JSON_XML_ATTR_TYPES.contains(attribute);
     }
 
+    // check if attribute is a xmlns
     public static boolean isAnXmlnsAttribute(String attribute) {
         return attribute.equals("xmlns") || attribute.indexOf("xmlns:") == 0;
     }
