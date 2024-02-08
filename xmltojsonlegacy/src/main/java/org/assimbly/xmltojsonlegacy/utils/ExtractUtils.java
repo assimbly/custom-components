@@ -123,97 +123,124 @@ public class ExtractUtils {
             boolean hasParentAttributes, boolean isElementMustBeNull
     ) {
         if(typeHints) {
-            JsonNode subNode = XmlToJsonProcessor.convertXmlToJson(
-                    childElement, level +1, parentClass, classAttr, numSiblings, isParentSiblingsNamesEqual,
-                    areSiblingsNamesEqual, hasParentAttributes, hasAttributes, isFirstSibling, namespace, xmlnsMap);
-            if(subNode.isEmpty()) {
-                if(ElementChecker.isElementAttributeNull(childElement, Constants.JSON_XML_ATTR_TYPE) &&
-                        ElementChecker.isElementNodeValueNull(childElement)) {
-                    setEmptyArrayNodeInRootObjectNode(rootObjectNode, childElement.getTagName());
-                }
+            extractChildAsObjectWithTypeHints(
+                    level, rootObjectNode, numSiblings, parentClass, classAttr, childElement, isFirstSibling, namespace,
+                    xmlnsMap, trimSpaces, removeNamespacePrefixes, areSiblingsNamesEqual, isParentSiblingsNamesEqual,
+                    hasAttributes, hasParentAttributes, isElementMustBeNull
+            );
+        } else {
+            extractChildAsObjectWithoutTypeHints(
+                    level, rootObjectNode, classAttr, childElement, namespace, xmlnsMap, trimSpaces, skipNamespaces,
+                    removeNamespacePrefixes, isElementMustBeNull
+            );
+        }
+    }
+
+    // extract child as object type with type hints enabled
+    private static void extractChildAsObjectWithTypeHints(
+            int level, ObjectNode rootObjectNode, int numSiblings, String parentClass, String classAttr,
+            Element childElement, boolean isFirstSibling, String namespace, HashMap<String, Namespace> xmlnsMap,
+            boolean trimSpaces, boolean removeNamespacePrefixes, boolean areSiblingsNamesEqual,
+            boolean isParentSiblingsNamesEqual, boolean hasAttributes, boolean hasParentAttributes,
+            boolean isElementMustBeNull
+    ) {
+        JsonNode subNode = XmlToJsonProcessor.convertXmlToJson(
+                childElement, level +1, parentClass, classAttr, numSiblings, isParentSiblingsNamesEqual,
+                areSiblingsNamesEqual, hasParentAttributes, hasAttributes, isFirstSibling, namespace, xmlnsMap);
+        if(subNode.isEmpty()) {
+            if(ElementChecker.isElementAttributeNull(childElement, Constants.JSON_XML_ATTR_TYPE) &&
+                    ElementChecker.isElementNodeValueNull(childElement)) {
+                setEmptyArrayNodeInRootObjectNode(rootObjectNode, childElement.getTagName());
+            }
+        } else {
+            if(JsonUtils.isJsonNodeInOneLevelAndWithNamespace(subNode)) {
+                transformJsonNodeWithNamespace(rootObjectNode, subNode, trimSpaces, isElementMustBeNull);
             } else {
-                if(JsonUtils.isJsonNodeInOneLevelAndWithNamespace(subNode)) {
-                    transformJsonNodeWithNamespace(rootObjectNode, subNode, trimSpaces, isElementMustBeNull);
-                } else {
-                    for (JsonNode subElement : subNode) {
-                        if(subNode.fields().hasNext()) {
-                            subNode.fields().forEachRemaining(entry -> {
-                                String label = entry.getKey();
-                                String childTypeAttr = childElement.getAttribute(Constants.JSON_XML_ATTR_TYPE);
-                                setValueUsingAttributeType(
-                                        rootObjectNode, subElement, label, null, childTypeAttr, trimSpaces,
-                                        isElementMustBeNull
-                                );
-                            });
+                for (JsonNode subElement : subNode) {
+                    if(subNode.fields().hasNext()) {
+                        subNode.fields().forEachRemaining(entry -> {
+                            String label = entry.getKey();
+                            String childTypeAttr = childElement.getAttribute(Constants.JSON_XML_ATTR_TYPE);
+                            setValueUsingAttributeType(
+                                    rootObjectNode, subElement, label, null, childTypeAttr, trimSpaces,
+                                    isElementMustBeNull
+                            );
+                        });
+                    } else {
+                        String fieldName = ElementUtils.getElementName(childElement, removeNamespacePrefixes);
+                        String fieldValue = ElementUtils.getNodeValue(childElement, trimSpaces);
+                        if(rootObjectNode.has(fieldName)) {
+                            addObjectToExistingFieldOnRootObjectNode(
+                                    rootObjectNode, fieldName, fieldValue, String.class, isElementMustBeNull
+                            );
                         } else {
-                            String fieldName = ElementUtils.getElementName(childElement, removeNamespacePrefixes);
-                            String fieldValue = ElementUtils.getNodeValue(childElement, trimSpaces);
-                            if(rootObjectNode.has(fieldName)) {
-                                addObjectToExistingFieldOnRootObjectNode(
-                                        rootObjectNode, fieldName, fieldValue, String.class, isElementMustBeNull
-                                );
+                            if(fieldValue.equalsIgnoreCase("")) {
+                                rootObjectNode.set(fieldName, JsonNodeFactory.instance.arrayNode());
                             } else {
-                                if(fieldValue.equalsIgnoreCase("")) {
-                                    rootObjectNode.set(fieldName, JsonNodeFactory.instance.arrayNode());
-                                } else {
-                                    rootObjectNode.put(fieldName, !isElementMustBeNull ? fieldValue : null);
-                                }
+                                rootObjectNode.put(fieldName, !isElementMustBeNull ? fieldValue : null);
                             }
                         }
                     }
                 }
             }
+        }
+    }
+
+    // extract child as object type without type hints enabled
+    private static void extractChildAsObjectWithoutTypeHints(
+            int level, ObjectNode rootObjectNode, String classAttr, Element childElement, String namespace,
+            HashMap<String, Namespace> xmlnsMap, boolean trimSpaces, boolean skipNamespaces,
+            boolean removeNamespacePrefixes, boolean isElementMustBeNull)
+    {
+        String type = childElement.getAttribute(Constants.JSON_XML_ATTR_TYPE);
+        if(classAttr !=null && !classAttr.equals("") && type!=null && !type.equals("") || type!=null &&
+                !type.equals("")
+        ) {
+            rootObjectNode.set(
+                    ElementUtils.getElementName(childElement, removeNamespacePrefixes),
+                    (!isElementMustBeNull ?
+                            addNodeWithAttributeInfo(childElement, ElementUtils.getNodeValue(childElement, trimSpaces)) :
+                            null)
+            );
         } else {
-            String type = childElement.getAttribute(Constants.JSON_XML_ATTR_TYPE);
-            if(classAttr!=null && !classAttr.equals("") && type!=null && !type.equals("") || type!=null &&
-                    !type.equals("")
-            ) {
-                rootObjectNode.set(
-                        ElementUtils.getElementName(childElement, removeNamespacePrefixes),
-                        (!isElementMustBeNull ?
-                                addNodeWithAttributeInfo(childElement, ElementUtils.getNodeValue(childElement, trimSpaces)) :
-                                null)
-                );
+            String fieldName = ElementUtils.getElementName(childElement, removeNamespacePrefixes);
+            String fieldValue = ElementUtils.getNodeValue(childElement, trimSpaces);
+            if(rootObjectNode.has(fieldName)) {
+                JsonNode nodeValues = rootObjectNode.get(fieldName);
+                if(nodeValues.isArray()) {
+                    ObjectNode attrInfoObjectNode = JsonNodeFactory.instance.objectNode();
+                    boolean isNamespaceAdded = addNamespaceAttributeInObjectNode(
+                            childElement, attrInfoObjectNode, xmlnsMap, namespace, level, skipNamespaces
+                    );
+                    if(isNamespaceAdded) {
+                        attrInfoObjectNode.put(Constants.JSON_XML_TEXT_FIELD, fieldValue);
+                        ((ArrayNode)nodeValues).add(!isElementMustBeNull ? attrInfoObjectNode : null);
+                    } else {
+                        ((ArrayNode)nodeValues).add(!isElementMustBeNull ? fieldValue : null);
+                    }
+                } else {
+                    ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode();
+                    arrayNode.add(nodeValues);
+                    arrayNode.add(!isElementMustBeNull ? fieldValue: null);
+                    nodeValues = arrayNode;
+                }
+                rootObjectNode.set(fieldName, nodeValues);
             } else {
-                String fieldName = ElementUtils.getElementName(childElement, removeNamespacePrefixes);
-                String fieldValue = ElementUtils.getNodeValue(childElement, trimSpaces);
-                if(rootObjectNode.has(fieldName)) {
-                    JsonNode nodeValues = rootObjectNode.get(fieldName);
-                    if(nodeValues.isArray()) {
+                if(fieldValue.equalsIgnoreCase("")) {
+                    rootObjectNode.set(fieldName, JsonNodeFactory.instance.arrayNode());
+                } else {
+                    if(isElementMustBeNull) {
+                        rootObjectNode.putNull(fieldName);
+                    } else {
                         ObjectNode attrInfoObjectNode = JsonNodeFactory.instance.objectNode();
                         boolean isNamespaceAdded = addNamespaceAttributeInObjectNode(
                                 childElement, attrInfoObjectNode, xmlnsMap, namespace, level, skipNamespaces
                         );
                         if(isNamespaceAdded) {
                             attrInfoObjectNode.put(Constants.JSON_XML_TEXT_FIELD, fieldValue);
-                            ((ArrayNode)nodeValues).add(!isElementMustBeNull ? attrInfoObjectNode : null);
+                            rootObjectNode.put(fieldName, attrInfoObjectNode);
                         } else {
-                            ((ArrayNode)nodeValues).add(!isElementMustBeNull ? fieldValue : null);
-                        }
-                    } else {
-                        ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode();
-                        arrayNode.add(nodeValues);
-                        arrayNode.add(!isElementMustBeNull ? fieldValue: null);
-                        nodeValues = arrayNode;
-                    }
-                    rootObjectNode.set(fieldName, nodeValues);
-                } else {
-                    if(fieldValue.equalsIgnoreCase("")) {
-                        rootObjectNode.set(fieldName, JsonNodeFactory.instance.arrayNode());
-                    } else {
-                        if(isElementMustBeNull) {
-                            rootObjectNode.putNull(fieldName);
-                        } else {
-                            ObjectNode attrInfoObjectNode = JsonNodeFactory.instance.objectNode();
-                            boolean isNamespaceAdded = addNamespaceAttributeInObjectNode(
-                                    childElement, attrInfoObjectNode, xmlnsMap, namespace, level, skipNamespaces
-                            );
-                            if(isNamespaceAdded) {
-                                attrInfoObjectNode.put(Constants.JSON_XML_TEXT_FIELD, fieldValue);
-                                rootObjectNode.put(fieldName, attrInfoObjectNode);
-                            } else {
-                                rootObjectNode.put(fieldName, fieldValue);
-                            }
+                            rootObjectNode.put(fieldName, fieldValue);
                         }
                     }
                 }
