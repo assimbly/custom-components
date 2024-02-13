@@ -102,7 +102,7 @@
         <smooks.version>1.7.1</smooks.version>
         <smooks-fragments.version>1.7.1.0</smooks-fragments.version>
         <skyscreamer.version>1.5.1</skyscreamer.version>
-        <slf4j.version>2.0.11</slf4j.version>
+        <slf4j.version>2.0.12</slf4j.version>
         <tika.version>1.16</tika.version>
         <wsdl4j.version>1.6.3</wsdl4j.version>
         <xmlunit.version>1.6</xmlunit.version>
