@@ -70,7 +70,7 @@
         <maven.versions.rules>file:///${project.basedir}/rules.xml</maven.versions.rules>
 
         <axiom.version>1.2.20</axiom.version>
-        <assimbly.version>4.1.0-SNAPSHOT</assimbly.version>
+        <assimbly.version>5.0.0</assimbly.version>
         <bouncycastle.version>1.70</bouncycastle.version>
         <config-admin.version>1.9.26</config-admin.version>
         <cxf.version>4.0.3</cxf.version>
