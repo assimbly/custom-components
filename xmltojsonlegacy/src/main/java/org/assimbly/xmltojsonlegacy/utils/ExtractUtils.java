@@ -26,11 +26,13 @@ public class ExtractUtils {
     public static void extractChildAsOtherInArrayNode(
             int level, ArrayNode rootArrayNode, int numSiblings, String parentClass, String classAttr, Element childElement,
             boolean isFirstSibling, String namespace, HashMap<String, Namespace> xmlnsMap, boolean areSiblingsNamesEqual,
-            boolean isParentSiblingsNamesEqual, boolean hasAttributes, boolean hasParentAttributes
+            boolean isParentSiblingsNamesEqual, boolean hasAttributes, boolean hasParentAttributes,
+            boolean isElementWithEmptyContent
     ) {
         JsonNode node = XmlToJsonProcessor.convertXmlToJson(
                 childElement, level +1, parentClass, classAttr, numSiblings, isParentSiblingsNamesEqual,
-                areSiblingsNamesEqual, hasParentAttributes, hasAttributes, isFirstSibling, namespace, xmlnsMap);
+                areSiblingsNamesEqual, hasParentAttributes, hasAttributes, isFirstSibling, namespace, xmlnsMap,
+                isElementWithEmptyContent);
         if(isInternalNullObjectNodePresent(node)) {
             rootArrayNode.addNull();
             return;
@@ -50,12 +52,13 @@ public class ExtractUtils {
             Element childElement, boolean isFirstSibling, String namespace, HashMap<String, Namespace> xmlnsMap,
             boolean removeNamespacePrefixes, boolean areSiblingsNamesEqual, boolean isParentSiblingsNamesEqual,
             boolean hasAttributes, boolean hasParentAttributes, boolean trimSpaces, boolean isElementMustBeNull,
-            boolean isElementOnNamespace
+            boolean isElementOnNamespace, boolean isElementWithEmptyContent
     ) {
         String propertyName = ElementUtils.getElementName(childNode, removeNamespacePrefixes);
         JsonNode node = XmlToJsonProcessor.convertXmlToJson(
                 childElement, level +1, parentClass, classAttr, numSiblings, isParentSiblingsNamesEqual,
-                areSiblingsNamesEqual, hasParentAttributes, hasAttributes, isFirstSibling, namespace, xmlnsMap);
+                areSiblingsNamesEqual, hasParentAttributes, hasAttributes, isFirstSibling, namespace, xmlnsMap,
+                isElementWithEmptyContent);
         int childCount = ((DeferredElementImpl) childElement).getChildElementCount();
         switch (node.size()) {
             case 0:
@@ -99,11 +102,12 @@ public class ExtractUtils {
             int level, ArrayNode rootArrayNode, int numSiblings, String parentClass, String classAttr, Element childElement,
             boolean isFirstSibling, String namespace, HashMap<String, Namespace> xmlnsMap, boolean areSiblingsNamesEqual,
             boolean isParentSiblingsNamesEqual, boolean hasAttributes, boolean hasParentAttributes,
-            boolean isElementMustBeNull
+            boolean isElementMustBeNull, boolean isElementWithEmptyContent
     ) {
         JsonNode subNode = XmlToJsonProcessor.convertXmlToJson(
                 childElement, level +1, parentClass, classAttr, numSiblings, isParentSiblingsNamesEqual,
-                areSiblingsNamesEqual, hasParentAttributes, hasAttributes, isFirstSibling, namespace, xmlnsMap);
+                areSiblingsNamesEqual, hasParentAttributes, hasAttributes, isFirstSibling, namespace, xmlnsMap,
+                isElementWithEmptyContent);
 
         if(subNode.isArray() && ElementChecker.isLastElement(childElement)) {
             for (JsonNode subElement : subNode) {
@@ -120,13 +124,13 @@ public class ExtractUtils {
             Element childElement, boolean isFirstSibling, String namespace, HashMap<String, Namespace> xmlnsMap,
             boolean trimSpaces, boolean skipNamespaces, boolean removeNamespacePrefixes, boolean typeHints,
             boolean areSiblingsNamesEqual, boolean isParentSiblingsNamesEqual, boolean hasAttributes,
-            boolean hasParentAttributes, boolean isElementMustBeNull
+            boolean hasParentAttributes, boolean isElementMustBeNull, boolean isElementWithEmptyContent
     ) {
         if(typeHints) {
             extractChildAsObjectWithTypeHints(
                     level, rootObjectNode, numSiblings, parentClass, classAttr, childElement, isFirstSibling, namespace,
                     xmlnsMap, trimSpaces, removeNamespacePrefixes, areSiblingsNamesEqual, isParentSiblingsNamesEqual,
-                    hasAttributes, hasParentAttributes, isElementMustBeNull
+                    hasAttributes, hasParentAttributes, isElementMustBeNull, isElementWithEmptyContent
             );
         } else {
             extractChildAsObjectWithoutTypeHints(
@@ -142,11 +146,12 @@ public class ExtractUtils {
             Element childElement, boolean isFirstSibling, String namespace, HashMap<String, Namespace> xmlnsMap,
             boolean trimSpaces, boolean removeNamespacePrefixes, boolean areSiblingsNamesEqual,
             boolean isParentSiblingsNamesEqual, boolean hasAttributes, boolean hasParentAttributes,
-            boolean isElementMustBeNull
+            boolean isElementMustBeNull, boolean isElementWithEmptyContent
     ) {
         JsonNode subNode = XmlToJsonProcessor.convertXmlToJson(
                 childElement, level +1, parentClass, classAttr, numSiblings, isParentSiblingsNamesEqual,
-                areSiblingsNamesEqual, hasParentAttributes, hasAttributes, isFirstSibling, namespace, xmlnsMap);
+                areSiblingsNamesEqual, hasParentAttributes, hasAttributes, isFirstSibling, namespace, xmlnsMap,
+                isElementWithEmptyContent);
         if(subNode.isEmpty()) {
             if(ElementChecker.isElementAttributeNull(childElement, Constants.JSON_XML_ATTR_TYPE) &&
                     ElementChecker.isElementNodeValueNull(childElement)) {

@@ -83,7 +83,7 @@ public class CustomXmlJsonDataFormat implements DataFormat {
                     null, null, 0,
                     true, true,
                     false, false,
-                    true, null, new HashMap<String, Namespace>()
+                    true, null, new HashMap<String, Namespace>(), false
             );
         }
 

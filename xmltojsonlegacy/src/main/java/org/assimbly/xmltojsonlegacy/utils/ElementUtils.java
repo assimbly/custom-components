@@ -219,4 +219,19 @@ public class ElementUtils {
         return namespace != null;
     }
 
+    // check if node element have an empty text content
+    public static boolean isElementWithEmptyTextContent(Element nodeElement, int elementDeepestDepth) {
+        if(nodeElement.hasChildNodes()) {
+            NodeList nodeList = nodeElement.getChildNodes();
+            int nodeListSize = nodeList.getLength();
+            for(int index = 0; index < nodeListSize; index++) {
+                Node childNode = nodeList.item(index);
+                if(childNode.getNodeType() == Node.TEXT_NODE) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 }

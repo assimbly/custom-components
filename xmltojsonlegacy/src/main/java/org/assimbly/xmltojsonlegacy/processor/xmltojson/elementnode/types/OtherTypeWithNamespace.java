@@ -24,20 +24,21 @@ public class OtherTypeWithNamespace implements ElementNodeTransaction {
             Element childElement, String namespace, HashMap<String, Namespace> xmlnsMap, boolean trimSpaces,
             boolean skipNamespaces, boolean removeNamespacePrefixes, boolean typeHints, boolean areSiblingsNamesEqual,
             boolean isParentSiblingsNamesEqual, boolean hasAttributes, boolean hasParentAttributes,
-            boolean areChildrenNamesEqual, boolean isElementMustBeNull, boolean isElementOnNamespace
+            boolean areChildrenNamesEqual, boolean isElementMustBeNull, boolean isElementOnNamespace,
+            boolean isElementWithEmptyContent
     ) {
         if(numberOfChildren == 1 || numberOfChildren > 1 && !areChildrenNamesEqual) {
             ExtractUtils.extractChildAsOtherInObjectNode(
                     level, rootObjectNode, numberOfSiblings, parentClass, classAttr, (Element) childNode, childElement,
                     isFirstSibling, namespace, xmlnsMap, removeNamespacePrefixes, areSiblingsNamesEqual,
                     isParentSiblingsNamesEqual, hasAttributes, hasParentAttributes, trimSpaces, isElementMustBeNull,
-                    isElementOnNamespace
+                    isElementOnNamespace, isElementWithEmptyContent
             );
         } else {
             ExtractUtils.extractChildAsOtherInArrayNode(
                     level, rootArrayNode, numberOfSiblings, parentClass, classAttr, childElement, isFirstSibling,
                     namespace, xmlnsMap, areSiblingsNamesEqual, isParentSiblingsNamesEqual, hasAttributes,
-                    hasParentAttributes
+                    hasParentAttributes, isElementWithEmptyContent
             );
             rootObjectNode.set(ElementUtils.getElementName((Element) childNode, removeNamespacePrefixes), rootArrayNode);
         }

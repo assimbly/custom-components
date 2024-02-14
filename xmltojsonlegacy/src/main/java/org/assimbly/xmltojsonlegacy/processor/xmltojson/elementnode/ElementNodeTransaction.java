@@ -18,7 +18,8 @@ public interface ElementNodeTransaction {
             Element childElement, String namespace, HashMap<String, Namespace> xmlnsMap, boolean trimSpaces,
             boolean skipNamespaces, boolean removeNamespacePrefixes, boolean typeHints, boolean areSiblingsNamesEqual,
             boolean isParentSiblingsNamesEqual, boolean hasAttributes, boolean hasParentAttributes,
-            boolean areChildrenNamesEqual, boolean isElementMustBeNull, boolean isElementOnNamespace
+            boolean areChildrenNamesEqual, boolean isElementMustBeNull, boolean isElementOnNamespace,
+            boolean isElementWithEmptyContent
     );
 
 }

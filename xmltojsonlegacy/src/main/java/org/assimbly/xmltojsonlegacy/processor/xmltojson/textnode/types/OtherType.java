@@ -25,7 +25,7 @@ public class OtherType implements TextNodeTransaction {
             boolean isObject, boolean isOneValue, String namespace, HashMap<String, Namespace> xmlnsMap,
             boolean forceTopLevelObject, boolean trimSpaces, boolean skipNamespaces, boolean removeNamespacePrefixes,
             boolean typeHints, boolean areSiblingsNamesEqual, boolean isParentSiblingsNamesEqual, boolean hasAttributes,
-            boolean hasParentAttributes, boolean isElementMustBeNull
+            boolean hasParentAttributes, boolean isElementMustBeNull, boolean isElementWithEmptyContent
     ) {
         //process text node identified as other
         Print.data(" 2. OTHER", level);

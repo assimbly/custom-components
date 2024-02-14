@@ -23,7 +23,7 @@ public class RootNodeType implements TextNodeTransaction {
             boolean isObject, boolean isOneValue, String namespace, HashMap<String, Namespace> xmlnsMap,
             boolean forceTopLevelObject, boolean trimSpaces, boolean skipNamespaces, boolean removeNamespacePrefixes,
             boolean typeHints, boolean areSiblingsNamesEqual, boolean isParentSiblingsNamesEqual, boolean hasAttributes,
-            boolean hasParentAttributes, boolean isElementMustBeNull
+            boolean hasParentAttributes, boolean isElementMustBeNull, boolean isElementWithEmptyContent
     ) {
         //process text node identified as a root node
         Print.data(" 2. ROOT", level);
@@ -35,14 +35,6 @@ public class RootNodeType implements TextNodeTransaction {
                         Constants.JSON_XML_ATTR_PREFIX+namespaceNode.getNodeName(),
                         namespaceNode.getNodeValue()
                 );
-            }
-            if(forceTopLevelObject) {
-                ObjectNode parentNode =  JsonNodeFactory.instance.objectNode();
-                parentNode.set(
-                        ElementUtils.getElementName(element, removeNamespacePrefixes),
-                        isRootArray ? rootArrayNode : rootObjectNode
-                );
-                return parentNode;
             }
         }
         return null;

@@ -25,7 +25,8 @@ public class OtherTypeWithoutNamespace implements ElementNodeTransaction {
             Element childElement, String namespace, HashMap<String, Namespace> xmlnsMap, boolean trimSpaces,
             boolean skipNamespaces, boolean removeNamespacePrefixes, boolean typeHints, boolean areSiblingsNamesEqual,
             boolean isParentSiblingsNamesEqual, boolean hasAttributes, boolean hasParentAttributes,
-            boolean areChildrenNamesEqual, boolean isElementMustBeNull, boolean isElementOnNamespace
+            boolean areChildrenNamesEqual, boolean isElementMustBeNull, boolean isElementOnNamespace,
+            boolean isElementWithEmptyContent
     ) {
         if(!typeHints) {
             // extract child as other type and add into the array node
@@ -33,7 +34,8 @@ public class OtherTypeWithoutNamespace implements ElementNodeTransaction {
             boolean classAttrOnChildElementIsNUll = ElementChecker.isElementAttributeNull(
                     childElement, Constants.JSON_XML_ATTR_CLASS
             );
-            if((level == 0 && numberOfChildren > 1) ||
+            if(isElementWithEmptyContent ||
+                    (level == 0 && numberOfChildren > 1) ||
                     (numberOfChildren == 1 && children >= 1 && !classAttrOnChildElementIsNUll) ||
                     !ElementUtils.areSiblingsNamesEqual(childElement) ||
                     isElementOnNamespace
@@ -42,13 +44,13 @@ public class OtherTypeWithoutNamespace implements ElementNodeTransaction {
                         level, rootObjectNode, numberOfSiblings, parentClass, classAttr, (Element) childNode,
                         childElement, isFirstSibling, namespace, xmlnsMap, removeNamespacePrefixes,
                         areSiblingsNamesEqual, isParentSiblingsNamesEqual, hasAttributes, hasParentAttributes, trimSpaces,
-                        isElementMustBeNull, isElementOnNamespace
+                        isElementMustBeNull, isElementOnNamespace, isElementWithEmptyContent
                 );
             } else {
                 ExtractUtils.extractChildAsOtherInArrayNode(
                         level, rootArrayNode, numberOfSiblings, parentClass, classAttr, childElement, isFirstSibling,
                         namespace, xmlnsMap, areSiblingsNamesEqual, isParentSiblingsNamesEqual, hasAttributes,
-                        hasParentAttributes
+                        hasParentAttributes, isElementWithEmptyContent
                 );
                 rootObjectNode.set(ElementUtils.getElementName((Element) childNode, removeNamespacePrefixes), rootArrayNode);
             }
@@ -58,7 +60,7 @@ public class OtherTypeWithoutNamespace implements ElementNodeTransaction {
                     level, rootObjectNode, numberOfSiblings, parentClass, classAttr, (Element) childNode, childElement,
                     isFirstSibling, namespace, xmlnsMap, removeNamespacePrefixes, areSiblingsNamesEqual,
                     isParentSiblingsNamesEqual, hasAttributes, hasParentAttributes, trimSpaces, isElementMustBeNull,
-                    isElementOnNamespace
+                    isElementOnNamespace, isElementWithEmptyContent
             );
         }
         return null;

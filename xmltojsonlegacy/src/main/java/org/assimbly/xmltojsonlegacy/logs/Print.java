@@ -15,7 +15,7 @@ public class Print {
             String typeAttr, String namespace, boolean removeNamespacePrefixes, boolean skipNamespaces,
             boolean isParentSiblingsNamesEqual, boolean areSiblingsNamesEqual, boolean areChildrenNamesEqual,
             boolean hasGrandParentAttributes, boolean hasParentAttributes, boolean hasSimpleAttributes,
-            int elementDeepestDepth
+            int elementDeepestDepth, boolean isElementWithEmptyContent
     ) {
         if(logger.isDebugEnabled()) {
             data(" >> Element: " + ElementUtils.getElementName(element, removeNamespacePrefixes), level);
@@ -30,6 +30,7 @@ public class Print {
             data("    isOneValue: " + isOneValue, level);
             data("    isObject: " + isObject, level);
             data("    isFirstChild: " + isFirstChild, level);
+            data("    isElementWithEmptyContent: " + isElementWithEmptyContent, level);
 
             data("    isParentSiblingsNamesEqual: " + isParentSiblingsNamesEqual, level);
             data("    areSiblingsNamesEqual: " + areSiblingsNamesEqual, level);

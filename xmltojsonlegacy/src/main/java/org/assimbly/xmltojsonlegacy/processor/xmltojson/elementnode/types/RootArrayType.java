@@ -25,7 +25,8 @@ public class RootArrayType implements ElementNodeTransaction {
             Element childElement, String namespace, HashMap<String, Namespace> xmlnsMap, boolean trimSpaces,
             boolean skipNamespaces, boolean removeNamespacePrefixes, boolean typeHints, boolean areSiblingsNamesEqual,
             boolean isParentSiblingsNamesEqual, boolean hasAttributes, boolean hasParentAttributes,
-            boolean areChildrenNamesEqual, boolean isElementMustBeNull, boolean isElementOnNamespace
+            boolean areChildrenNamesEqual, boolean isElementMustBeNull, boolean isElementOnNamespace,
+            boolean isElementWithEmptyContent
     ) {
         Print.data(" 1. IS ROOT ARRAY", level);
         if(isSingleChildren && isFirstChild && StringUtils.isNotEmpty(parentClass)) {
@@ -35,13 +36,14 @@ public class RootArrayType implements ElementNodeTransaction {
             }
             return XmlToJsonProcessor.convertXmlToJson(
                     childElement, level +1, parentClass, classAttr, numberOfSiblings, isParentSiblingsNamesEqual,
-                    areSiblingsNamesEqual, hasParentAttributes, hasAttributes, isFirstSibling, namespace, xmlnsMap);
+                    areSiblingsNamesEqual, hasParentAttributes, hasAttributes, isFirstSibling, namespace, xmlnsMap,
+                    isElementWithEmptyContent);
         } else {
             // extract child as an array
             ExtractUtils.extractChildAsArray(
                     level, rootArrayNode, numberOfSiblings, parentClass, classAttr, childElement, isFirstSibling,
                     namespace, xmlnsMap, areSiblingsNamesEqual, isParentSiblingsNamesEqual, hasAttributes,
-                    hasParentAttributes, isElementMustBeNull
+                    hasParentAttributes, isElementMustBeNull, isElementWithEmptyContent
             );
         }
         return null;
