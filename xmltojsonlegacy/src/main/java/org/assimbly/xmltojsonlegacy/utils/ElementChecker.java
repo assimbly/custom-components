@@ -63,7 +63,8 @@ public class ElementChecker {
             isRootArray = true;
         }
         if (elementDeepestDepth == 1 && parentClass != null && !isElementOnNamespace &&
-                (parentClass.equals("") || parentClass.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_ARRAY))
+                (parentClass.equals("") || parentClass.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_ARRAY) ||
+                        parentClass.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT))
         ) {
             isRootArray = true;
         }
