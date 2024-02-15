@@ -174,8 +174,9 @@ public class ElementChecker {
 
     // check if element should be null
     public static boolean isElementMustBeNull(
-            boolean skipWhitespace, Node node, HashMap<String, Namespace> xmlnsMap, boolean isTypeHintsEnabled,
-            boolean isSpecialCaseTTFTTF, boolean areParentSiblingsNamesEqual
+            boolean skipWhitespace, Element parentElement, Node node, HashMap<String, Namespace> xmlnsMap,
+            boolean isTypeHintsEnabled, boolean isSpecialCaseTTFTTF, boolean areParentSiblingsNamesEqual,
+            boolean areChildrenNamesEqual
     ) {
         if(!skipWhitespace) {
             return false;
@@ -207,7 +208,14 @@ public class ElementChecker {
                 String namespaceLabel = ElementUtils.getElementNamespaceLabel(nodeElement);
                 Namespace namespace = xmlnsMap.get(namespaceLabel);
 
+                boolean isParentClassObject = hasAttribute(
+                        parentElement, Constants.JSON_XML_ATTR_CLASS, Constants.JSON_XML_ATTR_TYPE_OBJECT
+                );
+
                 if(elementDeepestDepth == 0 && (namespace!=null || nodeElement.hasAttributes())) {
+                    if(isTypeHintsEnabled && isParentClassObject && !areChildrenNamesEqual) {
+                        return false;
+                    }
                     return true;
                 }
             } else {
@@ -295,6 +303,22 @@ public class ElementChecker {
                 Constants.JSON_XML_ATTR_CLASS
         );
         return hasOtherAttributes(element, complexAttr);
+    }
+
+    // check if element have a specific attribute name and value
+    public static boolean hasAttribute(Element element, String attrName, String attrValue) {
+        if(element != null && element.hasAttributes()){
+            NamedNodeMap attrMap = element.getAttributes();
+            for (int j = 0; j < attrMap.getLength(); j++) {
+                Node node = attrMap.item(j);
+                String attributeName = node.getNodeName();
+                String attributeValue = node.getNodeValue();
+                if(attributeName.equals(attrName) && attributeValue.equals(attrValue)){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     // check if it's the last element

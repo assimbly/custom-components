@@ -41,7 +41,6 @@ public class CustomXmlJsonDataFormat implements DataFormat {
     );
     // special cases
     private String specialCaseTTFTFT = "TTFTFT";
-    private String specialCaseTTFTTF = "TTFTTF";
 
     // JSON to XML options
     private String elementName, arrayName, rootName;
@@ -64,13 +63,7 @@ public class CustomXmlJsonDataFormat implements DataFormat {
                 (typeHints ? "T" : "F");
 
         if(optionCode.equalsIgnoreCase(specialCaseTTFTFT)) {
-            setRemoveNamespacePrefixes(true);
-            setTypeHints(false);
-        } else if(optionCode.equalsIgnoreCase(specialCaseTTFTTF)) {
             isSpecialCaseTTFTTF = true;
-            setSkipNamespaces(false);
-            setRemoveNamespacePrefixes(false);
-            setTypeHints(true);
         }
 
         if(discardXmlToJsonOptionsSet.contains(optionCode)) {
