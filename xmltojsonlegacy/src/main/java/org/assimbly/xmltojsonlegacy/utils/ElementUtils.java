@@ -85,11 +85,11 @@ public class ElementUtils {
 
     // get element value
     public static String getNodeValue(Node node, boolean trimSpaces) {
+        String textContent = node.getTextContent().replaceAll("\\r\\n|\\n", "");
         if(trimSpaces){
-            return node.getTextContent().trim();
-        } else {
-            return node.getTextContent();
+            textContent = textContent.trim();
         }
+        return textContent;
     }
 
     // calculate number of siblings of an element
