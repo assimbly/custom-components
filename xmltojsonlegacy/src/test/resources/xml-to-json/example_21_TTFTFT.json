@@ -1,85 +1,75 @@
 {
     "root": {
-        "Persons": {
-            "@class": "array",
-            "element": [
-                {
-                    "AvatarUrl": null,
-                    "BirthDay": null,
-                    "CityName": null,
-                    "Code": null,
-                    "Id": null,
-                    "FirstNames": null,
-                    "Gender": null,
-                    "HouseNumber": null,
-                    "Initials": null,
-                    "LastName": null,
-                    "LastNamePrefix": null,
-                    "LoginName": null,
-                    "MaidenName": null,
-                    "Number": null,
-                    "Password": null,
-                    "PhoneNumber1": null,
-                    "PhoneNumber2": null,
-                    "PostalCode": null,
-                    "PrivateEmail": null,
-                    "StreetName": null,
-                    "Uid": null,
-                    "UidMappingId": null,
-                    "UserDefinedFieldsJson": null,
-                    "UsualName": null,
-                    "WorkEmail": null
-                },
-                {
-                    "AvatarUrl": null,
-                    "BirthDay": null,
-                    "CityName": null,
-                    "Code": null,
-                    "Id": null,
-                    "FirstNames": null,
-                    "Gender": null,
-                    "HouseNumber": null,
-                    "Initials": null,
-                    "LastName": null,
-                    "LastNamePrefix": null,
-                    "LoginName": null,
-                    "MaidenName": null,
-                    "Number": null,
-                    "Password": null,
-                    "PhoneNumber1": null,
-                    "PhoneNumber2": null,
-                    "PostalCode": null,
-                    "PrivateEmail": null,
-                    "StreetName": null,
-                    "Uid": null,
-                    "UidMappingId": null,
-                    "UserDefinedFieldsJson": null,
-                    "UsualName": null,
-                    "WorkEmail": null
-                }
-            ]
-        },
-        "Groups": {
-            "@class": "array",
-            "element": [
-                {
-                    "GroupId": null,
-                    "IsPrimary": null,
-                    "PersonId": null,
-                    "Location": null,
-                    "Type": null
-                },
-                {
-                    "GroupId": null,
-                    "IsPrimary": null,
-                    "PersonId": null,
-                    "Location": null,
-                    "Type": null
-                }
-            ]
-        },
-        "PersonRelations": {
-            "@class": "array"
-        }
+        "Persons": [
+            {
+                "AvatarUrl": null,
+                "BirthDay": "2009-04-22",
+                "CityName": "Heerenveen",
+                "Code": null,
+                "Id": "eeeeeeee-3ac1-4115-b30e-ec1affa3b5e2",
+                "FirstNames": "Jan",
+                "Gender": "M",
+                "HouseNumber": "82",
+                "Initials": "TR",
+                "LastName": "de Groot",
+                "LastNamePrefix": null,
+                "LoginName": "109859",
+                "MaidenName": null,
+                "Number": "109859",
+                "Password": null,
+                "PhoneNumber1": "06-12345678",
+                "PhoneNumber2": "06-12345678",
+                "PostalCode": "8411KG",
+                "PrivateEmail": null,
+                "StreetName": "Straat",
+                "Uid": null,
+                "UidMappingId": null,
+                "UsualName": "Tjibbe",
+                "WorkEmail": "109859@leerling.abcd.nl"
+            },
+            {
+                "AvatarUrl": null,
+                "BirthDay": "2008-06-23",
+                "CityName": "Heerenveen",
+                "Code": null,
+                "Id": "eeeeeeee-2553-4404-977e-4f35918297e5",
+                "FirstNames": "Kees",
+                "Gender": "M",
+                "HouseNumber": "2",
+                "Initials": "B",
+                "LastName": "Jong",
+                "LastNamePrefix": "de",
+                "LoginName": "109355",
+                "MaidenName": null,
+                "Number": "109355",
+                "Password": null,
+                "PhoneNumber1": "06-12345678",
+                "PhoneNumber2": "06-12345678",
+                "PostalCode": "8467SG",
+                "PrivateEmail": null,
+                "StreetName": "Straat",
+                "Uid": null,
+                "UidMappingId": null,
+                "UsualName": "Bjorn",
+                "WorkEmail": "109355@leerling.abcd.nl"
+            }
+        ],
+        "Groups": [
+            {
+                "GroupId": "2",
+                "IsPrimary": false,
+                "PersonId": "e5bed0c4-3ac1-4115-b30e-ec1affa3b5e2",
+                "Location": "De Compagnie",
+                "Type": "Grade"
+            },
+            {
+                "GroupId": "3",
+                "IsPrimary": false,
+                "PersonId": "1379386f-2553-4404-977e-4f35918297e5",
+                "Location": "De Compagnie",
+                "Type": "Grade"
+            }
+        ],
+        "PersonRelations": []
     }
 }

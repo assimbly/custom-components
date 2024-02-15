@@ -5,18 +5,19 @@
         "@message": "stockAdjustments",
         "@messageId": "stockAdjustments:1404458",
         "@step": "1",
-        "adminCode": "01",
-        "attribute": "WMS: 2023105T171505_000",
+        "adminCode": null,
+        "attribute": null,
         "lines": [
             {
-                "adminCode": "01",
+                "adminCode": null,
                 "productIdentifier": {
-                    "productCode": "1404458"
+                    "@class": "object",
+                    "productCode": null
                 },
-                "quantity": 35,
-                "unitCode": "1_STUK",
-                "wareHouseCode": "MAG2",
-                "wareHouseLocationCode": "VRIJ"
+                "quantity": null,
+                "unitCode": null,
+                "wareHouseCode": null,
+                "wareHouseLocationCode": null
             }
         ],
         "stockAdjustmentCode": "001"

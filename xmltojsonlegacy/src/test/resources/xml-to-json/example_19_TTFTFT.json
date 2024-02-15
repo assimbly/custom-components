@@ -1,9 +1,9 @@
 {
     "SalesOrders": {
         "@processingCodes": "",
-        "adminCode": null,
-        "customerCode": null,
-        "orderTypeCode": null,
+        "adminCode": "10",
+        "customerCode": "5076",
+        "orderTypeCode": "WEB",
         "reference": "FAKRO23007529 KOPPEJAN 23-013",
         "Messages": [
             [

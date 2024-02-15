@@ -1,34 +1,24 @@
 {
     "Formula1": {
-        "Drivers": {
-            "@class": "array",
-            "Driver": [
-                {
-                    "@class": "object",
-                    "Name": null,
-                    "Age": null
-                },
-                {
-                    "@class": "object",
-                    "Name": null,
-                    "Age": null
-                }
-            ]
-        },
-        "Teams": {
-            "@class": "array",
-            "Team": [
-                {
-                    "@class": "object",
-                    "Name": null,
-                    "Principal": null
-                },
-                {
-                    "@class": "object",
-                    "Name": null,
-                    "Principal": null
-                }
-            ]
-        }
+        "Drivers": [
+            {
+                "Name": "Max Verstappen",
+                "Age": 19
+            },
+            {
+                "Name": "Nico Hulkenberg",
+                "Age": 30
+            }
+        ],
+        "Teams": [
+            {
+                "Name": "Redbull Racing",
+                "Principal": "Christian Horner"
+            },
+            {
+                "Name": "Renault",
+                "Principal": "Carlos Ghosn, Jérôme Stoll, Cyril Abiteboul"
+            }
+        ]
     }
 }

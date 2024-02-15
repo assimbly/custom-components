@@ -2,10 +2,9 @@
     "root": [
         {
             "product": {
-                "@class": "object",
-                "id": null
+                "id": "1"
             },
-            "label": null
+            "label": "2"
         }
     ]
 }

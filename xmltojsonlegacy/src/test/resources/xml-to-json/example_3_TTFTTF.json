@@ -1,24 +1,34 @@
 {
     "root": {
-        "products": [
-            {
-                "id": "1",
-                "name": "spoon"
-            },
-            {
-                "id": "2",
-                "name": "knife"
-            }
-        ],
-        "images": [
-            {
-                "id": "1",
-                "name": "spoon"
-            },
-            {
-                "id": "2",
-                "name": "knife"
-            }
-        ]
+        "products": {
+            "@class": "array",
+            "product": [
+                {
+                    "@class": "object",
+                    "id": null,
+                    "name": null
+                },
+                {
+                    "@class": "object",
+                    "id": null,
+                    "name": null
+                }
+            ]
+        },
+        "images": {
+            "@class": "array",
+            "image": [
+                {
+                    "@class": "object",
+                    "id": null,
+                    "name": null
+                },
+                {
+                    "@class": "object",
+                    "id": null,
+                    "name": null
+                }
+            ]
+        }
     }
 }

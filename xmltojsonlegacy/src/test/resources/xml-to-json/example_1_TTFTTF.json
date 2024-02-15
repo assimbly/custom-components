@@ -1,12 +1,13 @@
 {
     "root": [
-        [
-            [
-                null
-            ],
-            [
-                null
+        {
+            "@class": "array",
+            "product": [
+                null,
+                [
+                    null
+                ]
             ]
-        ]
+        }
     ]
 }

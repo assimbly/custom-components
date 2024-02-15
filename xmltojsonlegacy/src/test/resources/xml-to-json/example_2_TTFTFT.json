@@ -1,19 +1,14 @@
 {
     "root": [
-        {
-            "@class": "array",
-            "product": [
-                {
-                    "@class": "object",
-                    "id": null,
-                    "name": null
-                },
-                {
-                    "@class": "object",
-                    "id": null,
-                    "name": null
-                }
-            ]
-        }
+        [
+            {
+                "id": "1",
+                "name": "spoon"
+            },
+            {
+                "id": "2",
+                "name": "knife"
+            }
+        ]
     ]
 }

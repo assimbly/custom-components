@@ -1,25 +1,21 @@
 {
     "ShipmentMAG": {
-        "notify": null,
-        "items": {
-            "@class": "array",
-            "e": {
-                "@class": "object",
-                "qty": null,
-                "order_item_id": null
+        "notify": true,
+        "items": [
+            {
+                "qty": 1,
+                "order_item_id": 1123285
             }
-        },
+        ],
         "tracks": [
             {
-                "carrier_code": null,
-                "title": null,
-                "track_number": null
+                "carrier_code": "tig_postnl",
+                "title": "PostNL",
+                "track_number": "3STHXG0794709"
             }
         ],
         "arguments": {
-            "@class": "object",
             "extension_attributes": {
-                "@class": "object",
                 "source_code": "warehouse"
             }
         }

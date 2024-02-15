@@ -1,16 +1,15 @@
 {
     "root": {
-        "@xmlns:ns1": "http://www.example.com/ns1",
-        "ns1:person": [
+        "person": [
             {
-                "ns1:name": null,
-                "ns1:age": null,
-                "ns1:email": null
+                "name": null,
+                "age": null,
+                "email": null
             },
             {
-                "ns1:name": null,
-                "ns1:age": null,
-                "ns1:email": null
+                "name": null,
+                "age": null,
+                "email": null
             }
         ]
     }

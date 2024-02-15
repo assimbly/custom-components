@@ -20,17 +20,17 @@
         "queryCriteria": [
             {
                 "fieldName": "Administratie",
-                "fieldStringValue": null
+                "fieldStringValue": "03"
             },
             {
                 "fieldName": "InternProductId",
-                "fieldStringValue": null
+                "fieldStringValue": "90019998"
             },
             {
                 "fieldName": "ExternProductId",
-                "fieldStringValue": null
+                "fieldStringValue": "90019998"
             }
         ],
-        "useFieldCodes": null
+        "useFieldCodes": true
     }
 }

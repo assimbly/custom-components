@@ -1,93 +1,124 @@
 {
     "RequestProductStockREST": {
-        "productIdentifiers": [
-            {
-                "productIdentifier": {
-                    "productCode": "30977"
+        "productIdentifiers": {
+            "@class": "array",
+            "e": [
+                {
+                    "@class": "object",
+                    "productIdentifier": {
+                        "@class": "object",
+                        "productCode": "30977"
+                    },
+                    "unitCode": null
                 },
-                "unitCode": "ST"
-            },
-            {
-                "productIdentifier": {
-                    "productCode": "72068"
+                {
+                    "@class": "object",
+                    "productIdentifier": {
+                        "@class": "object",
+                        "productCode": "72068"
+                    },
+                    "unitCode": null
                 },
-                "unitCode": "ST"
-            },
-            {
-                "productIdentifier": {
-                    "productCode": "72162"
+                {
+                    "@class": "object",
+                    "productIdentifier": {
+                        "@class": "object",
+                        "productCode": "72162"
+                    },
+                    "unitCode": null
                 },
-                "unitCode": "ST"
-            },
-            {
-                "productIdentifier": {
-                    "productCode": "73042"
+                {
+                    "@class": "object",
+                    "productIdentifier": {
+                        "@class": "object",
+                        "productCode": "73042"
+                    },
+                    "unitCode": null
                 },
-                "unitCode": "ST"
-            },
-            {
-                "productIdentifier": {
-                    "productCode": "73071"
+                {
+                    "@class": "object",
+                    "productIdentifier": {
+                        "@class": "object",
+                        "productCode": "73071"
+                    },
+                    "unitCode": null
                 },
-                "unitCode": "ST"
-            },
-            {
-                "productIdentifier": {
-                    "productCode": "73078"
+                {
+                    "@class": "object",
+                    "productIdentifier": {
+                        "@class": "object",
+                        "productCode": "73078"
+                    },
+                    "unitCode": null
                 },
-                "unitCode": "ST"
-            },
-            {
-                "productIdentifier": {
-                    "productCode": "74391"
+                {
+                    "@class": "object",
+                    "productIdentifier": {
+                        "@class": "object",
+                        "productCode": "74391"
+                    },
+                    "unitCode": null
                 },
-                "unitCode": "ST"
-            },
-            {
-                "productIdentifier": {
-                    "productCode": "74394"
+                {
+                    "@class": "object",
+                    "productIdentifier": {
+                        "@class": "object",
+                        "productCode": "74394"
+                    },
+                    "unitCode": null
                 },
-                "unitCode": "ST"
-            },
-            {
-                "productIdentifier": {
-                    "productCode": "74408"
+                {
+                    "@class": "object",
+                    "productIdentifier": {
+                        "@class": "object",
+                        "productCode": "74408"
+                    },
+                    "unitCode": null
                 },
-                "unitCode": "ST"
-            },
-            {
-                "productIdentifier": {
-                    "productCode": "74534"
+                {
+                    "@class": "object",
+                    "productIdentifier": {
+                        "@class": "object",
+                        "productCode": "74534"
+                    },
+                    "unitCode": null
                 },
-                "unitCode": "ST"
-            },
-            {
-                "productIdentifier": {
-                    "productCode": "44554"
+                {
+                    "@class": "object",
+                    "productIdentifier": {
+                        "@class": "object",
+                        "productCode": "44554"
+                    },
+                    "unitCode": null
                 },
-                "unitCode": "ST"
-            },
-            {
-                "productIdentifier": {
-                    "productCode": "44555"
+                {
+                    "@class": "object",
+                    "productIdentifier": {
+                        "@class": "object",
+                        "productCode": "44555"
+                    },
+                    "unitCode": null
                 },
-                "unitCode": "ST"
-            },
-            {
-                "productIdentifier": {
-                    "productCode": "83865"
+                {
+                    "@class": "object",
+                    "productIdentifier": {
+                        "@class": "object",
+                        "productCode": "83865"
+                    },
+                    "unitCode": null
                 },
-                "unitCode": "ST"
-            },
-            {
-                "productIdentifier": {
-                    "productCode": "84552"
-                },
-                "unitCode": "ST"
-            }
-        ],
-        "useFieldCodes": true,
-        "limit": 25000,
+                {
+                    "@class": "object",
+                    "productIdentifier": {
+                        "@class": "object",
+                        "productCode": "84552"
+                    },
+                    "unitCode": null
+                }
+            ]
+        },
+        "useFieldCodes": null,
+        "limit": null,
         "warehouseGroup": "BOLAND"
     }
 }

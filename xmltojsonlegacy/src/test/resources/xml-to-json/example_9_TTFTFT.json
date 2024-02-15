@@ -1,12 +1,10 @@
 {
     "root": [
-        {
-            "@class": "array",
-            "product": {
-                "@class": "object",
-                "id": null,
-                "name": null
+        [
+            {
+                "id": "1",
+                "name": "spoon"
             }
-        }
+        ]
     ]
 }
