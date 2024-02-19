@@ -86,7 +86,7 @@ public class SmbEndpoint extends GenericFileEndpoint<SmbFile> {
 
     @Override
     public Exchange createExchange(final GenericFile<SmbFile> file) {
-        Exchange answer = new DefaultExchange(this);
+        Exchange answer = new DefaultExchange(getCamelContext());
         if (file != null) {
             file.bindToExchange(answer);
         }
