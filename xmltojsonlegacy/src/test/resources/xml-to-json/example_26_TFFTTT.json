@@ -1,0 +1,9 @@
+{
+    "List": {
+        "@name": "Fruit List",
+        "Item": [
+            "Apple",
+            "Banana"
+        ]
+    }
+}

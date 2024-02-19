@@ -10,7 +10,7 @@ public class Print {
 
     // print some information about a specific tree level
     public static void elementDetails(
-            Element element, int level, String parentClass, int parentSiblings, boolean isRootArray, boolean isOneValue,
+            Element element, int level, String grandParentClass, String parentClass, int parentSiblings, boolean isRootArray, boolean isOneValue,
             boolean isObject, boolean isFirstChild, int numberOfSiblings, int numberOfChildren, String classAttr,
             String typeAttr, String namespace, boolean removeNamespacePrefixes, boolean skipNamespaces
     ) {
@@ -21,6 +21,7 @@ public class Print {
             );
             data("    typeAttr: " + typeAttr, level);
             data("    classAttr: " + classAttr, level);
+            data("    grandParentClass: " + grandParentClass, level);
             data("    parentClass: " + parentClass, level);
             data("    numberOfChildren: " + numberOfChildren, level);
             data("    numberOfSiblings: " + numberOfSiblings, level);

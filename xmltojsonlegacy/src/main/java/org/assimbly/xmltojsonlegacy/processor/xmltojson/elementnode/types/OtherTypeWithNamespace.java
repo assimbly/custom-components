@@ -14,12 +14,12 @@ public class OtherTypeWithNamespace implements ElementNodeTransaction {
     @Override
     public JsonNode process(
             Node childNode, ArrayNode rootArrayNode, ObjectNode rootObjectNode, int nodeCount, int level,
-            int numberOfChildren, int numberOfSiblings, String classAttr, boolean isRootArray, boolean isObject,
-            boolean isSingleChildren, boolean isFirstChild, boolean isFirstSibling, Element childElement,
+            int numberOfChildren, int numberOfSiblings, String parentClass, String classAttr, boolean isRootArray,
+            boolean isObject, boolean isSingleChildren, boolean isFirstChild, boolean isFirstSibling, Element childElement,
             String namespace, boolean trimSpaces, boolean skipNamespaces, boolean removeNamespacePrefixes, boolean typeHints
     ) {
         ExtractUtils.extractChildAsOtherInArrayNode(
-                level, rootArrayNode, numberOfSiblings, classAttr, (Element) childNode, childElement,
+                level, rootArrayNode, numberOfSiblings, parentClass, classAttr, (Element) childNode, childElement,
                 isFirstSibling, namespace
         );
         rootObjectNode.set(

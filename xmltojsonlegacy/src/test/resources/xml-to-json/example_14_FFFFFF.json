@@ -1,0 +1,18 @@
+{
+    "@xmlns:ns1": "http://www.example.com/ns1",
+    "@class": "array",
+    "ns1:person": [
+        {
+            "@class": "object",
+            "ns1:name": "John Doe",
+            "ns1:age": "30",
+            "ns1:email": "john.doe@example.com"
+        },
+        {
+            "@class": "object",
+            "ns1:name": "Jane Smith",
+            "ns1:age": "28",
+            "ns1:email": "jane.smith@example.com"
+        }
+    ]
+}

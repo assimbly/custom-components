@@ -9,6 +9,8 @@ import org.apache.camel.Producer;
 import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.support.ProcessorEndpoint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.assimbly.googledrive.domain.GSuiteFilesTypeHelper.getConversionMimeType;
 import static org.assimbly.googledrive.domain.GSuiteFilesTypeHelper.getGSuiteFileName;
@@ -72,7 +74,7 @@ public class GoogleDriveEndpoint extends ProcessorEndpoint {
     }
 
     Drive getClient(boolean forceFlag) {
-        if (client == null) {
+        if (client == null || forceFlag) {
             client = getClientFactory().makeClient(CLIENT_ID, CLIENT_SECRET, APPLICATION_NAME,
                     configuration.getAccessToken());
         }

@@ -87,8 +87,11 @@ public class TenantVariablesProcessor implements Processor {
 
         TenantVariable gVariable = MongoDao.findTenantVariableByName(name, tenant);
 
-        if(gVariable == null)
-            throw new TenantVariableNotFoundException("The Tenant Variable \"" + name + "\" was not found in the database.");
+        if(gVariable == null) {
+            throw new TenantVariableNotFoundException(
+                    String.format("The Tenant Variable \"%1$s\" for tenant \"%2$s\" was not found in the database.", name, tenant)
+            );
+        }
 
         if(!gVariable.find(environment).isPresent())
             throw new TenantVariableNotFoundException("The Tenant Variable \"" + name + "\" has no values for the "+ environment +" environment.");
