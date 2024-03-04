@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<o>
+    <images class="array">
+        <element class="object">
+            <id type="string">1</id>
+            <name type="string">spoon</name>
+        </element>
+        <element class="object">
+            <id type="string">2</id>
+            <name type="string">knife</name>
+        </element>
+    </images>
+    <products class="array">
+        <element class="object">
+            <id type="string">1</id>
+            <name type="string">spoon</name>
+        </element>
+        <element class="object">
+            <id type="string">2</id>
+            <name type="string">knife</name>
+        </element>
+    </products>
+</o>

@@ -35,6 +35,7 @@
         <module>tenantvariables</module>
         <module>googledrive</module>
         <module>hl7</module>
+        <module>jsontoxmllegacy</module>
         <module>mail</module>
         <module>multipart</module>
         <module>oauth2token</module>
