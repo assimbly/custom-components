@@ -14,29 +14,35 @@ public class ElementUtils {
 
     // get namespace node, if it's defined
     public static Node getNamespaceNode(Element nodeElement) {
-        if(nodeElement.hasAttributes()){
-            NamedNodeMap attrMap = nodeElement.getAttributes();
-            for (int j = 0; j < attrMap.getLength(); j++) {
-                Node node = attrMap.item(j);
-                String attributeName = node.getNodeName();
-                if(attributeName.equals(XMLConstants.XMLNS_ATTRIBUTE) ||
-                        attributeName.indexOf(XMLConstants.XMLNS_ATTRIBUTE+":")==0
-                ) {
-                    return node;
-                }
+        if(!nodeElement.hasAttributes()){
+            return null;
+        }
+
+        NamedNodeMap attrMap = nodeElement.getAttributes();
+        for (int j = 0; j < attrMap.getLength(); j++) {
+            Node node = attrMap.item(j);
+            String attributeName = node.getNodeName();
+            if(attributeName.equals(XMLConstants.XMLNS_ATTRIBUTE) ||
+                    attributeName.indexOf(XMLConstants.XMLNS_ATTRIBUTE+":")==0
+            ) {
+                return node;
             }
         }
+
         return null;
     }
 
     // get element name prefix
     public static String getElementNamePrefix(Element nodeElement) {
-        if(nodeElement!=null) {
-            String name = nodeElement.getNodeName();
-            if(name!=null && name.contains(":")) {
-                return name.substring(0, name.indexOf(":"));
-            }
+        if(nodeElement==null) {
+            return null;
         }
+
+        String name = nodeElement.getNodeName();
+        if(name!=null && name.contains(":")) {
+            return name.substring(0, name.indexOf(":"));
+        }
+
         return null;
     }
 
@@ -54,20 +60,23 @@ public class ElementUtils {
     public static HashMap<String, Namespace> getNamespacesOnThisNode(
             Element nodeElement, HashMap<String, Namespace> xmlnsMap, int level
     ) {
+        if(!nodeElement.hasAttributes()){
+            return new HashMap<>(xmlnsMap);
+        }
+
         HashMap<String, Namespace> xmlnsMapFromThisNode = new HashMap<>(xmlnsMap);
-        if(nodeElement.hasAttributes()){
-            NamedNodeMap attrMap = nodeElement.getAttributes();
-            for (int j = 0; j < attrMap.getLength(); j++) {
-                Node node = attrMap.item(j);
-                String attributeName = node.getNodeName();
-                if(attributeName.equals(XMLConstants.XMLNS_ATTRIBUTE) ||
-                        attributeName.indexOf(XMLConstants.XMLNS_ATTRIBUTE+":")==0
-                ) {
-                    Namespace namespace = new Namespace(node.getNodeValue(), level);
-                    xmlnsMapFromThisNode.put(attributeName, namespace);
-                }
+        NamedNodeMap attrMap = nodeElement.getAttributes();
+        for (int j = 0; j < attrMap.getLength(); j++) {
+            Node node = attrMap.item(j);
+            String attributeName = node.getNodeName();
+            if(attributeName.equals(XMLConstants.XMLNS_ATTRIBUTE) ||
+                    attributeName.indexOf(XMLConstants.XMLNS_ATTRIBUTE+":")==0
+            ) {
+                Namespace namespace = new Namespace(node.getNodeValue(), level);
+                xmlnsMapFromThisNode.put(attributeName, namespace);
             }
         }
+
         return xmlnsMapFromThisNode;
     }
 
@@ -94,18 +103,21 @@ public class ElementUtils {
 
     // calculate number of siblings of an element
     public static int calculateNumberOfSiblings(Element element) {
-        int count = 0;
         // Get the parent of the element
         Node parent = element.getParentNode();
-        if (parent != null) {
-            NodeList siblings = parent.getChildNodes();
-            for (int i = 0; i < siblings.getLength(); i++) {
-                Node sibling = siblings.item(i);
-                if (sibling.getNodeType() == Node.ELEMENT_NODE) {
-                    count++;
-                }
+        if (parent == null) {
+            return 0;
+        }
+
+        int count = 0;
+        NodeList siblings = parent.getChildNodes();
+        for (int i = 0; i < siblings.getLength(); i++) {
+            Node sibling = siblings.item(i);
+            if (sibling.getNodeType() == Node.ELEMENT_NODE) {
+                count++;
             }
         }
+
         return count;
     }
 
@@ -150,41 +162,47 @@ public class ElementUtils {
 
     // check if element defines namespaces
     public static boolean isElementDefiningNamespaces(Element element) {
-        if(element.hasAttributes()){
-            NamedNodeMap attrMap = element.getAttributes();
-            for (int j = 0; j < attrMap.getLength(); j++) {
-                Node node = attrMap.item(j);
-                String attributeName = node.getNodeName();
-                if(attributeName.equals(XMLConstants.XMLNS_ATTRIBUTE) ||
-                        attributeName.startsWith(XMLConstants.XMLNS_ATTRIBUTE+":")
-                ){
-                    return true;
-                }
+        if(!element.hasAttributes()){
+            return false;
+        }
+
+        NamedNodeMap attrMap = element.getAttributes();
+        for (int j = 0; j < attrMap.getLength(); j++) {
+            Node node = attrMap.item(j);
+            String attributeName = node.getNodeName();
+            if(attributeName.equals(XMLConstants.XMLNS_ATTRIBUTE) ||
+                    attributeName.startsWith(XMLConstants.XMLNS_ATTRIBUTE+":")
+            ){
+                return true;
             }
         }
+
         return false;
     }
 
     // check if siblings have the same name
     public static boolean areSiblingsNamesEqual(Element element) {
-        String name = null;
         // Get the parent of the element
         Node parent = element.getParentNode();
-        if (parent != null) {
-            NodeList siblings = parent.getChildNodes();
-            for (int i = 0; i < siblings.getLength(); i++) {
-                Node sibling = siblings.item(i);
-                if (sibling.getNodeType() == Node.ELEMENT_NODE) {
-                    if(name != null) {
-                        if(!name.equals(sibling.getNodeName())) {
-                            return false;
-                        }
-                    } else {
-                        name = sibling.getNodeName();
+        if (parent == null) {
+            return true;
+        }
+
+        String name = null;
+        NodeList siblings = parent.getChildNodes();
+        for (int i = 0; i < siblings.getLength(); i++) {
+            Node sibling = siblings.item(i);
+            if (sibling.getNodeType() == Node.ELEMENT_NODE) {
+                if(name != null) {
+                    if(!name.equals(sibling.getNodeName())) {
+                        return false;
                     }
+                } else {
+                    name = sibling.getNodeName();
                 }
             }
         }
+
         return true;
     }
 
@@ -196,16 +214,19 @@ public class ElementUtils {
         // Count the number of direct children elements
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node childNode = childNodes.item(i);
-            if (childNode.getNodeType() == Node.ELEMENT_NODE) {
-                if(name != null) {
-                    if(!name.equals(childNode.getNodeName())) {
-                        return false;
-                    }
-                } else {
-                    name = childNode.getNodeName();
+            if (childNode.getNodeType() != Node.ELEMENT_NODE) {
+                continue;
+            }
+
+            if(name != null) {
+                if(!name.equals(childNode.getNodeName())) {
+                    return false;
                 }
+            } else {
+                name = childNode.getNodeName();
             }
         }
+
         return true;
     }
 
@@ -214,6 +235,7 @@ public class ElementUtils {
         if(xmlnsMap == null || xmlnsMap.isEmpty()) {
             return false;
         }
+
         String namespaceLabel = ElementUtils.getElementNamespaceLabel(nodeElement);
         Namespace namespace = xmlnsMap.get(namespaceLabel);
         return namespace != null;
@@ -221,16 +243,19 @@ public class ElementUtils {
 
     // check if node element have an empty text content
     public static boolean isElementWithEmptyTextContent(Element nodeElement, int elementDeepestDepth) {
-        if(nodeElement.hasChildNodes()) {
-            NodeList nodeList = nodeElement.getChildNodes();
-            int nodeListSize = nodeList.getLength();
-            for(int index = 0; index < nodeListSize; index++) {
-                Node childNode = nodeList.item(index);
-                if(childNode.getNodeType() == Node.TEXT_NODE) {
-                    return false;
-                }
+        if(!nodeElement.hasChildNodes()) {
+            return true;
+        }
+
+        NodeList nodeList = nodeElement.getChildNodes();
+        int nodeListSize = nodeList.getLength();
+        for(int index = 0; index < nodeListSize; index++) {
+            Node childNode = nodeList.item(index);
+            if(childNode.getNodeType() == Node.TEXT_NODE) {
+                return false;
             }
         }
+
         return true;
     }
 
