@@ -1,0 +1,10 @@
+{
+    "List": {
+        "@xmlns:lh": "http://liquidhub.com/SimpleList",
+        "@name": "Fruit List",
+        "Item": [
+            null,
+            null
+        ]
+    }
+}

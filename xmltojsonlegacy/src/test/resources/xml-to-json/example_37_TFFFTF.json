@@ -1,0 +1,13 @@
+{
+    "Orders": {
+        "@xmlns": "http://DataAccess.com/webservices/",
+        "@xmlns:m": "http://DataAccess.com/webservicesOrders/",
+        "@xmlns:x": "http://DataAccess.com/webservicesCustomer/",
+        "Order": {
+            "OrderNo": [
+                "1",
+                "2"
+            ]
+        }
+    }
+}

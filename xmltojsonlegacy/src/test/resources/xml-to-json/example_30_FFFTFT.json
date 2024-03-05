@@ -1,0 +1,11 @@
+{
+    "x:Order": {
+        "OrderNo": "1",
+        "m:Customer": {
+            "m:CustomerNo": "99",
+            "x:State": "CA",
+            "m:State": "Angry",
+            "State": "Yes"
+        }
+    }
+}

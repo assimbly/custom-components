@@ -1,0 +1,34 @@
+{
+    "Formula1": {
+        "Drivers": {
+            "@class": "array",
+            "Driver": [
+                {
+                    "@class": "object",
+                    "Name": null,
+                    "Age": null
+                },
+                {
+                    "@class": "object",
+                    "Name": null,
+                    "Age": null
+                }
+            ]
+        },
+        "Teams": {
+            "@class": "array",
+            "Team": [
+                {
+                    "@class": "object",
+                    "Name": null,
+                    "Principal": null
+                },
+                {
+                    "@class": "object",
+                    "Name": null,
+                    "Principal": null
+                }
+            ]
+        }
+    }
+}

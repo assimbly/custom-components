@@ -1,0 +1,9 @@
+{
+    "lh:List": {
+        "@name": "Fruit List",
+        "lh:Item": [
+            null,
+            null
+        ]
+    }
+}

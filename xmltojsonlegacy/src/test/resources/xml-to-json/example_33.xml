@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <customer>
+        <addresses>
+            <element>
+                <city>VAULX MILIEU</city>
+                <country_id>FR</country_id>
+                <custom_attributes>
+                    <element>
+                        <attribute_code>type</attribute_code>
+                        <value>shipping</value>
+                    </element>
+                </custom_attributes>
+                <default_shipping>true</default_shipping>
+                <firstname>Deguise Toi</firstname>
+                <postcode>38090</postcode>
+                <street>
+                    <element>Bis Rue Le Chatelier 1</element>
+                </street>
+                <vat_id>AAAWAQ</vat_id>
+            </element>
+            <element>
+                <city>SAINT QUENTIN FALLAVIER</city>
+                <country_id>FR</country_id>
+                <custom_attributes>
+                    <element>
+                        <attribute_code>type</attribute_code>
+                        <value>shipping</value>
+                    </element>
+                </custom_attributes>
+                <firstname>Deguise Toi</firstname>
+                <postcode>38070</postcode>
+                <street>
+                    <element>Rue de santoyon 45</element>
+                </street>
+                <vat_id>AABIOL</vat_id>
+            </element>
+            <element>
+                <city>WERNAU</city>
+                <country_id>DE</country_id>
+                <custom_attributes>
+                    <element>
+                        <attribute_code>type</attribute_code>
+                        <value>shipping</value>
+                    </element>
+                </custom_attributes>
+                <firstname>Deguise Toi</firstname>
+                <postcode>73249</postcode>
+                <street>
+                    <element>Antonius Strass 18-20</element>
+                </street>
+                <vat_id>AABKCN</vat_id>
+            </element>
+            <element>
+                <city>WERNAU</city>
+                <country_id>DE</country_id>
+                <custom_attributes>
+                    <element>
+                        <attribute_code>type</attribute_code>
+                        <value>shipping</value>
+                    </element>
+                </custom_attributes>
+                <firstname>Deguise Toi</firstname>
+                <postcode>73249</postcode>
+                <street>
+                    <element>Antonius Strass </element>
+                </street>
+                <vat_id>AABKGP</vat_id>
+            </element>
+            <element>
+                <city>VAULX MILIEU</city>
+                <country_id>FR</country_id>
+                <custom_attributes>
+                    <element>
+                        <attribute_code>type</attribute_code>
+                        <value>billing</value>
+                    </element>
+                </custom_attributes>
+                <default_billing>true</default_billing>
+                <firstname>Deguise Toi</firstname>
+                <postcode>38090</postcode>
+                <street>
+                    <element>Bis Rue Le Chatelier 1</element>
+                </street>
+                <vat_id>AAAWAQ</vat_id>
+            </element>
+        </addresses>
+        <custom_attributes>
+            <element>
+                <attribute_code>disable_account</attribute_code>
+                <value>0</value>
+            </element>
+        </custom_attributes>
+        <email>m.morel@jadeofrance.com</email>
+        <firstname>Deguise Toi</firstname>
+        <group_id>721</group_id>
+        <id>235</id>
+        <store_id>3</store_id>
+        <websiteId>1</websiteId>
+    </customer>
+</root>
