@@ -143,7 +143,7 @@ public class ElementChecker {
             return false;
         }
 
-        if(config.isSpecialCaseTTFTFT()) {
+        if(config.isSpecialCaseTTFTTF()) {
             return isSpecialCaseTTFTTFMustBeNull(config, childNode);
         }
 

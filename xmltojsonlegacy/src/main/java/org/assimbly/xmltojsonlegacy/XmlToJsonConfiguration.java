@@ -247,7 +247,7 @@ public class XmlToJsonConfiguration implements Cloneable{
         isParentWithEmptyTextContent = parentWithEmptyTextContent;
     }
 
-    public boolean isSpecialCaseTTFTFT() {
+    public boolean isSpecialCaseTTFTTF() {
         return (isForceTopLevelObject() && isSkipWhitespace() && !isTrimSpaces() && isSkipNamespaces() &&
                 !isRemoveNamespacePrefixes() && isTypeHints());
     }
