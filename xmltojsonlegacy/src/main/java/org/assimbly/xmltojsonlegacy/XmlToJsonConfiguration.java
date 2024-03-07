@@ -61,7 +61,7 @@ public class XmlToJsonConfiguration implements Cloneable{
     private boolean isGrandParentSiblingsNamesEqual = true;
     private boolean isParentSiblingsNamesEqual = true;
     private boolean isFirstChild = true;
-    private boolean isFirstSibling;
+    private boolean isFirstSibling = false;
     private boolean isParentWithEmptyTextContent = false;
     private boolean hasGrandParentAttributes = false;
     private boolean hasParentAttributes = false;
@@ -69,7 +69,7 @@ public class XmlToJsonConfiguration implements Cloneable{
     // inside vars
     private ArrayNode rootArrayNode;
     private ObjectNode rootObjectNode;
-    private HashMap<String, Namespace> xmlnsMapOnThisNode;
+    private HashMap<String, Namespace> xmlnsMapOnThisNode = new HashMap<>();
 
     private String classAttr;
     private String typeAttr;
@@ -459,6 +459,14 @@ public class XmlToJsonConfiguration implements Cloneable{
 
     public void setToDiscard(boolean toDiscard) {
         isToDiscard = toDiscard;
+    }
+
+    public void init() {
+        setXmlnsMap(new HashMap<>());
+        setXmlnsMapOnThisNode(new HashMap<>());
+        setElement(null);
+        setRootObjectNode(JsonNodeFactory.instance.objectNode());
+        setRootArrayNode(JsonNodeFactory.instance.arrayNode());
     }
 
     public void initVariables() {

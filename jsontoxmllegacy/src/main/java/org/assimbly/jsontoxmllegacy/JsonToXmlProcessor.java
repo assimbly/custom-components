@@ -32,6 +32,7 @@ public class JsonToXmlProcessor implements Processor {
         ObjectMapper jsonMapper = new ObjectMapper();
 
         JsonToXmlConfiguration config = endpoint.getConfiguration();
+        config.init();
 
         String json = exchange.getIn().getBody(String.class);
         config.setJsonNode(jsonMapper.readTree(json));

@@ -36,6 +36,7 @@ public class XmlToJsonProcessor implements Processor {
         ObjectMapper objectMapper = new ObjectMapper();
 
         XmlToJsonConfiguration config = endpoint.getConfiguration();
+        config.init();
 
         String xml = exchange.getIn().getBody(String.class);
         Document document = convertStringToXMLDocument(xml);
