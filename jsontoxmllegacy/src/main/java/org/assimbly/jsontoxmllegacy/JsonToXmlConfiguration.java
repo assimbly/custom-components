@@ -133,6 +133,13 @@ public class JsonToXmlConfiguration implements Cloneable{
         this.name = name;
     }
 
+    public void init() {
+        setDocument(null);
+        setElement(null);
+        setJsonNode(null);
+        setXmlnsMap(new HashMap<>());
+    }
+
     // create sub level configuration
     public JsonToXmlConfiguration createSubLevelConfig(JsonNode jsonNode, String name) {
         try {
