@@ -1,0 +1,40 @@
+{
+    "outbound": {
+        "poNumber": "PAO19702",
+        "OriginalPackingslipnumber": "PAO19702",
+        "customerRef1": "VOV94529",
+        "shipmentDate": "2023/10/16",
+        "cashOnDelivery": "false",
+        "carrierId": "9999",
+        "backOrder": "true",
+        "shipToAddress": {
+            "shipToAddressName": "Home24 SE - Zentrale Berlin",
+            "shipToAddressStreetName": "Marienweg",
+            "shipToAddressNumber": "30",
+            "shipToAddressZipCode": "50226",
+            "shipToAddressCity": "Frechen",
+            "shipToAddressCountry": "DE",
+            "shipToAddressTelephone": "30-60988000"
+        },
+        "invoiceAddress": {
+            "invoiceAddressName": "Home24 SE - Zentrale Berlin",
+            "invoiceAddressStreetName": "Otto-Ostrowski-Strasse",
+            "invoiceAddressNumber": "3",
+            "invoiceAddressZipCode": "10249",
+            "invoiceAddressCity": "Berlin",
+            "invoiceAddressCountry": "DE",
+            "invoiceAddressTelephone": "30-60988000",
+            "invoiceAddressEmail": "@EMPTY@"
+        },
+        "articleItems": [
+            {
+                "articleCode": "3602ST",
+                "quantity": "1"
+            },
+            {
+                "articleCode": "K1001RS",
+                "quantity": "1"
+            }
+        ]
+    }
+}

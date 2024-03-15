@@ -1,0 +1,102 @@
+{
+  "root": [
+    {
+      "addresses": [
+        {
+          "city": "VAULX MILIEU",
+          "country_id": "FR",
+          "custom_attributes": [
+            {
+              "attribute_code": "type",
+              "value": "shipping"
+            }
+          ],
+          "default_shipping": "true",
+          "firstname": "Deguise Toi",
+          "postcode": "38090",
+          "street": [
+            "Bis Rue Le Chatelier 1"
+          ],
+          "vat_id": "AAAWAQ"
+        },
+        {
+          "city": "SAINT QUENTIN FALLAVIER",
+          "country_id": "FR",
+          "custom_attributes": [
+            {
+              "attribute_code": "type",
+              "value": "shipping"
+            }
+          ],
+          "firstname": "Deguise Toi",
+          "postcode": "38070",
+          "street": [
+            "Rue de santoyon 45"
+          ],
+          "vat_id": "AABIOL"
+        },
+        {
+          "city": "WERNAU",
+          "country_id": "DE",
+          "custom_attributes": [
+            {
+              "attribute_code": "type",
+              "value": "shipping"
+            }
+          ],
+          "firstname": "Deguise Toi",
+          "postcode": "73249",
+          "street": [
+            "Antonius Strass 18-20"
+          ],
+          "vat_id": "AABKCN"
+        },
+        {
+          "city": "WERNAU",
+          "country_id": "DE",
+          "custom_attributes": [
+            {
+              "attribute_code": "type",
+              "value": "shipping"
+            }
+          ],
+          "firstname": "Deguise Toi",
+          "postcode": "73249",
+          "street": [
+            "Antonius Strass "
+          ],
+          "vat_id": "AABKGP"
+        },
+        {
+          "city": "VAULX MILIEU",
+          "country_id": "FR",
+          "custom_attributes": [
+            {
+              "attribute_code": "type",
+              "value": "billing"
+            }
+          ],
+          "default_billing": "true",
+          "firstname": "Deguise Toi",
+          "postcode": "38090",
+          "street": [
+            "Bis Rue Le Chatelier 1"
+          ],
+          "vat_id": "AAAWAQ"
+        }
+      ],
+      "custom_attributes": [
+        {
+          "attribute_code": "disable_account",
+          "value": "0"
+        }
+      ],
+      "email": "m.morel@jadeofrance.com",
+      "firstname": "Deguise Toi",
+      "group_id": "721",
+      "id": "235",
+      "store_id": "3",
+      "websiteId": "1"
+    }
+  ]
+}

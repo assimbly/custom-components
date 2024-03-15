@@ -1,0 +1,10 @@
+[
+    {
+        "@class": "array",
+        "product": {
+            "@class": "object",
+            "id": null,
+            "name": null
+        }
+    }
+]

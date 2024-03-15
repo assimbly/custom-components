@@ -1,0 +1,85 @@
+{
+    "root": {
+        "Persons": {
+            "@class": "array",
+            "element": [
+                {
+                    "AvatarUrl": null,
+                    "BirthDay": null,
+                    "CityName": null,
+                    "Code": null,
+                    "Id": null,
+                    "FirstNames": null,
+                    "Gender": null,
+                    "HouseNumber": null,
+                    "Initials": null,
+                    "LastName": null,
+                    "LastNamePrefix": null,
+                    "LoginName": null,
+                    "MaidenName": null,
+                    "Number": null,
+                    "Password": null,
+                    "PhoneNumber1": null,
+                    "PhoneNumber2": null,
+                    "PostalCode": null,
+                    "PrivateEmail": null,
+                    "StreetName": null,
+                    "Uid": null,
+                    "UidMappingId": null,
+                    "UserDefinedFieldsJson": null,
+                    "UsualName": null,
+                    "WorkEmail": null
+                },
+                {
+                    "AvatarUrl": null,
+                    "BirthDay": null,
+                    "CityName": null,
+                    "Code": null,
+                    "Id": null,
+                    "FirstNames": null,
+                    "Gender": null,
+                    "HouseNumber": null,
+                    "Initials": null,
+                    "LastName": null,
+                    "LastNamePrefix": null,
+                    "LoginName": null,
+                    "MaidenName": null,
+                    "Number": null,
+                    "Password": null,
+                    "PhoneNumber1": null,
+                    "PhoneNumber2": null,
+                    "PostalCode": null,
+                    "PrivateEmail": null,
+                    "StreetName": null,
+                    "Uid": null,
+                    "UidMappingId": null,
+                    "UserDefinedFieldsJson": null,
+                    "UsualName": null,
+                    "WorkEmail": null
+                }
+            ]
+        },
+        "Groups": {
+            "@class": "array",
+            "element": [
+                {
+                    "GroupId": null,
+                    "IsPrimary": null,
+                    "PersonId": null,
+                    "Location": null,
+                    "Type": null
+                },
+                {
+                    "GroupId": null,
+                    "IsPrimary": null,
+                    "PersonId": null,
+                    "Location": null,
+                    "Type": null
+                }
+            ]
+        },
+        "PersonRelations": {
+            "@class": "array"
+        }
+    }
+}

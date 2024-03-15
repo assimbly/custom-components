@@ -1,0 +1,13 @@
+{
+    "Orders": {
+        "x:Order": {
+            "OrderNo": null,
+            "m:Customer": {
+                "m:CustomerNo": null,
+                "x:State": null,
+                "m:State": null,
+                "State": null
+            }
+        }
+    }
+}

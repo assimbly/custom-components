@@ -1,0 +1,122 @@
+{
+    "productIdentifiers": {
+        "@class": "array",
+        "e": [
+            {
+                "@class": "object",
+                "productIdentifier": {
+                    "@class": "object",
+                    "productCode": "30977"
+                },
+                "unitCode": null
+            },
+            {
+                "@class": "object",
+                "productIdentifier": {
+                    "@class": "object",
+                    "productCode": "72068"
+                },
+                "unitCode": null
+            },
+            {
+                "@class": "object",
+                "productIdentifier": {
+                    "@class": "object",
+                    "productCode": "72162"
+                },
+                "unitCode": null
+            },
+            {
+                "@class": "object",
+                "productIdentifier": {
+                    "@class": "object",
+                    "productCode": "73042"
+                },
+                "unitCode": null
+            },
+            {
+                "@class": "object",
+                "productIdentifier": {
+                    "@class": "object",
+                    "productCode": "73071"
+                },
+                "unitCode": null
+            },
+            {
+                "@class": "object",
+                "productIdentifier": {
+                    "@class": "object",
+                    "productCode": "73078"
+                },
+                "unitCode": null
+            },
+            {
+                "@class": "object",
+                "productIdentifier": {
+                    "@class": "object",
+                    "productCode": "74391"
+                },
+                "unitCode": null
+            },
+            {
+                "@class": "object",
+                "productIdentifier": {
+                    "@class": "object",
+                    "productCode": "74394"
+                },
+                "unitCode": null
+            },
+            {
+                "@class": "object",
+                "productIdentifier": {
+                    "@class": "object",
+                    "productCode": "74408"
+                },
+                "unitCode": null
+            },
+            {
+                "@class": "object",
+                "productIdentifier": {
+                    "@class": "object",
+                    "productCode": "74534"
+                },
+                "unitCode": null
+            },
+            {
+                "@class": "object",
+                "productIdentifier": {
+                    "@class": "object",
+                    "productCode": "44554"
+                },
+                "unitCode": null
+            },
+            {
+                "@class": "object",
+                "productIdentifier": {
+                    "@class": "object",
+                    "productCode": "44555"
+                },
+                "unitCode": null
+            },
+            {
+                "@class": "object",
+                "productIdentifier": {
+                    "@class": "object",
+                    "productCode": "83865"
+                },
+                "unitCode": null
+            },
+            {
+                "@class": "object",
+                "productIdentifier": {
+                    "@class": "object",
+                    "productCode": "84552"
+                },
+                "unitCode": null
+            }
+        ]
+    },
+    "useFieldCodes": null,
+    "limit": null,
+    "warehouseGroup": "BOLAND"
+}

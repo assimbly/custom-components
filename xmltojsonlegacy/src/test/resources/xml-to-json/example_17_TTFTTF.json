@@ -1,0 +1,25 @@
+{
+    "rmessage": {
+        "@action": "POST",
+        "@id": "4426432",
+        "@message": "stockAdjustments",
+        "@messageId": "stockAdjustments:1404458",
+        "@step": "1",
+        "adminCode": null,
+        "attribute": null,
+        "lines": [
+            {
+                "adminCode": null,
+                "productIdentifier": {
+                    "@class": "object",
+                    "productCode": null
+                },
+                "quantity": null,
+                "unitCode": null,
+                "wareHouseCode": null,
+                "wareHouseLocationCode": null
+            }
+        ],
+        "stockAdjustmentCode": "001"
+    }
+}

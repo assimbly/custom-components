@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RequestProductStockREST>
+    <productIdentifiers class="array">
+        <e class="object">
+            <productIdentifier class="object">
+                <productCode>30977</productCode>
+            </productIdentifier>
+            <unitCode type="string">ST</unitCode>
+        </e>
+        <e class="object">
+            <productIdentifier class="object">
+                <productCode>72068</productCode>
+            </productIdentifier>
+            <unitCode type="string">ST</unitCode>
+        </e>
+        <e class="object">
+            <productIdentifier class="object">
+                <productCode>72162</productCode>
+            </productIdentifier>
+            <unitCode type="string">ST</unitCode>
+        </e>
+        <e class="object">
+            <productIdentifier class="object">
+                <productCode>73042</productCode>
+            </productIdentifier>
+            <unitCode type="string">ST</unitCode>
+        </e>
+        <e class="object">
+            <productIdentifier class="object">
+                <productCode>73071</productCode>
+            </productIdentifier>
+            <unitCode type="string">ST</unitCode>
+        </e>
+        <e class="object">
+            <productIdentifier class="object">
+                <productCode>73078</productCode>
+            </productIdentifier>
+            <unitCode type="string">ST</unitCode>
+        </e>
+        <e class="object">
+            <productIdentifier class="object">
+                <productCode>74391</productCode>
+            </productIdentifier>
+            <unitCode type="string">ST</unitCode>
+        </e>
+        <e class="object">
+            <productIdentifier class="object">
+                <productCode>74394</productCode>
+            </productIdentifier>
+            <unitCode type="string">ST</unitCode>
+        </e>
+        <e class="object">
+            <productIdentifier class="object">
+                <productCode>74408</productCode>
+            </productIdentifier>
+            <unitCode type="string">ST</unitCode>
+        </e>
+        <e class="object">
+            <productIdentifier class="object">
+                <productCode>74534</productCode>
+            </productIdentifier>
+            <unitCode type="string">ST</unitCode>
+        </e>
+        <e class="object">
+            <productIdentifier class="object">
+                <productCode>44554</productCode>
+            </productIdentifier>
+            <unitCode type="string">ST</unitCode>
+        </e>
+        <e class="object">
+            <productIdentifier class="object">
+                <productCode>44555</productCode>
+            </productIdentifier>
+            <unitCode type="string">ST</unitCode>
+        </e>
+        <e class="object">
+            <productIdentifier class="object">
+                <productCode>83865</productCode>
+            </productIdentifier>
+            <unitCode type="string">ST</unitCode>
+        </e>
+        <e class="object">
+            <productIdentifier class="object">
+                <productCode>84552</productCode>
+            </productIdentifier>
+            <unitCode type="string">ST</unitCode>
+        </e>
+    </productIdentifiers>
+    <useFieldCodes type="boolean">true</useFieldCodes>
+    <limit type="number">25000</limit>
+    <warehouseGroup>BOLAND</warehouseGroup>
+</RequestProductStockREST>
