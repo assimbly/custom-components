@@ -2,85 +2,85 @@ package org.assimbly.aggregate.xml;
 
 import org.apache.camel.AggregationStrategy;
 import org.apache.camel.Exchange;
-import org.apache.log4j.Logger;
-import org.w3c.dom.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.assimbly.util.helper.XmlHelper;
+import org.w3c.dom.Node;
+import org.w3c.dom.bootstrap.DOMImplementationRegistry;
+import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSSerializer;
+import org.xml.sax.InputSource;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.StringReader;
 
 
 public class XmlAggregateStrategy implements AggregationStrategy {
 
-    private final static Logger logger = Logger.getLogger(XmlAggregateStrategy.class);
+    protected Logger log = LoggerFactory.getLogger(getClass());
 
     @Override
-    public Exchange aggregate(Exchange original, Exchange resource) {
-        try
-        {
-            Document aggregated = XmlHelper.newDocument("<Aggregated/>");
-
-            if (resource == null && original == null) {
-                throw new Exception("Something went wrong fetching the input data.");
-            }
-
-            Document originalXml = getXml(original),
-                     resourceXml = getXml(resource);
-
-            if(originalXml == null && resourceXml == null)
-                throw new Exception("Something went wrong parsing the XML inputs.");
-
-            if (originalXml == null) {
-                aggregated = XmlHelper.mergeIn(aggregated, resourceXml);
-                resource.getIn().setBody(XmlHelper.prettyPrint(aggregated));
-                return resource;
-            }
-
-            if (resourceXml == null) {
-                aggregated = XmlHelper.mergeIn(aggregated, originalXml);
-                original.getIn().setBody(XmlHelper.prettyPrint(aggregated));
-                return original;
-            }
-            /*
-                This avoids creating a new root element "Aggregated" when two aggregate components are used after each other,
-                otherwise you would get:
-
-                <Aggregated>
-                    <Aggregated>
-
-                    </Aggregated>
-                </Aggregated>
-            */
-
-            if(originalXml.getDocumentElement().getTagName().equals("Aggregated")){
-                aggregated = originalXml;
-                aggregated = XmlHelper.mergeIn(aggregated, resourceXml);
-            }else{
-                aggregated = XmlHelper.mergeIn(aggregated, originalXml);
-                aggregated = XmlHelper.mergeIn(aggregated, resourceXml);
-            }
-            original.getIn().setBody(XmlHelper.prettyPrint(aggregated));
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        }
-        return original;
-    }
-
-    private Document getXml(Exchange exchange) {
+    public Exchange aggregate(Exchange newExchange, Exchange splitExchange) {
 
         try {
-            Document document = XmlHelper.newDocument(exchange.getIn().getBody(String.class));
 
-            if (document == null)
-                logger.warn("No valid XML returned by the route to the Aggregate component.");
+            int CamelSplitIndex = splitExchange.getProperty("CamelSplitIndex",Integer.class);
 
-            return document;
+            if(CamelSplitIndex==1){
+                return splitExchange;
+            }
+
+            String splitXml = getBody(splitExchange);
+            String newXml = getBody(newExchange);
+
+            if(newXml == null && splitXml == null) {
+                throw new Exception("XML Aggregate: Inputs are empty.");
+            }
+
+            newXml = newXml + splitXml;
+            boolean CamelSplitComplete = splitExchange.getProperty("CamelSplitComplete",Boolean.class);
+
+            if(CamelSplitComplete){
+                newXml = format("<Aggregated>" + newXml + "</Aggregated>");
+            }
+
+            newExchange.getIn().setBody(newXml);
 
         } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        return newExchange;
+    }
 
-            if (logger.isDebugEnabled()) {
-                logger.debug("Unable to get data from the route to the Aggregate component.");
+    private String getBody(Exchange exchange) {
+
+        try {
+            return exchange.getIn().getBody(String.class);
+        } catch (Exception e) {
+            if (log.isDebugEnabled()) {
+                log.debug("Unable to get data from the route to the Aggregate component.");
             }
         }
 
         return null;
+    }
+
+    public String format(String xml) {
+
+        try {
+            final InputSource src = new InputSource(new StringReader(xml));
+            final Node document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(src).getDocumentElement();
+            final Boolean keepDeclaration = Boolean.valueOf(xml.startsWith("<?xml"));
+            final DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
+            final DOMImplementationLS impl = (DOMImplementationLS) registry.getDOMImplementation("LS");
+            final LSSerializer writer = impl.createLSSerializer();
+
+            writer.getDomConfig().setParameter("format-pretty-print", Boolean.TRUE); // Set this to true if the output needs to be beautified.
+            writer.getDomConfig().setParameter("xml-declaration", keepDeclaration); // Set this to true if the declaration is needed to be outputted.
+
+            return writer.writeToString(document);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
