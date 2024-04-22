@@ -15,7 +15,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
 
     private final ClassLoader classLoader = getClass().getClassLoader();
 
-    @EndpointInject(uri = "mock:result")
+    @EndpointInject("mock:result")
     protected MockEndpoint resultEndpoint;
 
     @Produce
