@@ -13,9 +13,7 @@
 
     <modules>
         <module>aggregate</module>
-        <!--<module>aleris</module>-->
         <module>amazon</module>
-        <!--<module>archive</module>-->
         <module>auth</module>
         <module>cookies</module>
         <module>csvtoxml</module>
@@ -29,11 +27,9 @@
         <module>enrich</module>
         <module>exceltoxml</module>
         <module>flv</module>
-        <!--<module>fmuta</module>-->
         <module>formtoxml</module>
         <module>tenantvariables</module>
         <module>googledrive</module>
-        <module>hl7</module>
         <module>jsontoxmllegacy</module>
         <module>mail</module>
         <module>multipart</module>
@@ -44,11 +40,9 @@
         <module>replace</module>
         <module>sandbox</module>
         <module>simplereplace</module>
-        <module>smb</module>
         <module>smooksnoxml</module>
         <module>soap</module>
         <module>sql</module>
-        <!--<module>throttling</module>-->
         <module>xmltocsv</module>
         <module>xmltoexcel</module>
         <module>xmltojson</module>
