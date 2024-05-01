@@ -7,7 +7,7 @@
 		<version>5.0.0</version>
 	</parent>
 
-  <artifactId>pdf</artifactId>
+  <artifactId>smb</artifactId>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -24,24 +24,9 @@
 
   <dependencies>
 	  <dependency>
-		  <groupId>org.apache.pdfbox</groupId>
-		  <artifactId>pdfbox</artifactId>
-		  <version>${pdfbox.version}</version>
-	  </dependency>  
-	  <dependency>
-		  <groupId>org.bouncycastle</groupId>
-		  <artifactId>bcprov-jdk18on</artifactId>
-		  <version>${bouncycastle.version}</version>
-	  </dependency>
-	  <dependency>
-		  <groupId>org.bouncycastle</groupId>
-          <artifactId>bcprov-jdk18on</artifactId>
-		  <version>${bouncycastle.version}</version>
-	  </dependency>
-	  <dependency>
-		  <groupId>org.bouncycastle</groupId>
-          <artifactId>bcprov-jdk18on</artifactId>
-		  <version>${bouncycastle.version}</version>
+		  <groupId>org.codelibs</groupId>
+		  <artifactId>jcifs</artifactId>
+		  <version>${jcifs.version}</version>
 	  </dependency>
   </dependencies>
 

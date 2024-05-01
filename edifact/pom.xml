@@ -30,6 +30,11 @@
 			<version>${jaxen.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.mvel</groupId>
+			<artifactId>mvel2</artifactId>
+			<version>${mvel.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.milyn</groupId>
 			<artifactId>milyn-smooks-all</artifactId>
 			<version>${smooks.version}</version>

@@ -39,6 +39,7 @@
         <module>pdftotext</module>
         <module>replace</module>
         <module>sandbox</module>
+        <module>smb</module>
         <module>simplereplace</module>
         <module>smooksnoxml</module>
         <module>soap</module>
@@ -66,7 +67,7 @@
 
         <axiom.version>1.2.20</axiom.version>
         <assimbly.version>5.0.0</assimbly.version>
-        <bouncycastle.version>1.70</bouncycastle.version>
+        <bouncycastle.version>1.78.1</bouncycastle.version>
         <config-admin.version>1.9.26</config-admin.version>
         <cxf.version>4.0.4</cxf.version>
         <camel.version>4.5.0</camel.version>
@@ -84,6 +85,7 @@
         <jcifs.version>2.1.37</jcifs.version>
         <kalium.version>0.8.0</kalium.version>
         <libsodium-jna.version>1.0.4</libsodium-jna.version>
+        <mvel.version>2.5.2.Final</mvel.version>
         <mime4j.version>0.8.11</mime4j.version>
         <mockito.version>3.3.3</mockito.version>
         <mongo.version>3.12.14</mongo.version>
