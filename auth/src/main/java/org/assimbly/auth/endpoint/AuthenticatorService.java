@@ -1,6 +1,7 @@
 package org.assimbly.auth.endpoint;
 
 import com.google.common.base.CaseFormat;
+import com.mongodb.client.MongoClient;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
 import com.warrenstrange.googleauth.GoogleAuthenticatorQRGenerator;
@@ -26,9 +27,9 @@ public class AuthenticatorService {
 
     private MongoDao mongoDao;
 
-    public AuthenticatorService(String database){
-        authenticator.setCredentialRepository(new GoogleCredentialsRepository(database));
-        mongoDao = new MongoDao(database);
+    public AuthenticatorService(MongoClient mongoClient, String databaseName){
+        authenticator.setCredentialRepository(new GoogleCredentialsRepository(mongoClient, databaseName));
+        mongoDao = new MongoDao(mongoClient.getDatabase(databaseName));
     }
 
     @GET

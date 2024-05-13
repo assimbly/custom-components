@@ -17,6 +17,7 @@ import org.assimbly.tenantvariables.mongo.MongoDao;
 
 import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -123,8 +124,8 @@ public class TenantVariablesTest extends CamelTestSupport {
 
         template = context.createProducerTemplate();
 
-        MongoDao.updateTenantVariable(createVariable(), TENANT);
-        MongoDao.updateTenantVariable(createEncryptedVariable(), TENANT);
+        MongoDao.updateTenantVariable(createVariable(), TENANT, false);
+        MongoDao.updateTenantVariable(createEncryptedVariable(), TENANT, false);
 
         context.setNameStrategy(new ExplicitCamelContextNameStrategy("ID_12345"));
     }
@@ -238,9 +239,11 @@ public class TenantVariablesTest extends CamelTestSupport {
     @Test
     public void testGetVariableWithHeader() throws Exception {
         TenantVariable variable = MongoDao.findTenantVariableByName(VARIABLE_NAME, TENANT);
+        boolean variableExist = !Objects.isNull(variable);
+
         variable.put(new EnvironmentValue("test"));
 
-        MongoDao.updateTenantVariable(variable, TENANT);
+        MongoDao.updateTenantVariable(variable, TENANT, variableExist);
 
         template.sendBody("direct:getWithHeader", "");
 

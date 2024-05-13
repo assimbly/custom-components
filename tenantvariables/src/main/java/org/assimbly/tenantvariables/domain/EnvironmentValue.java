@@ -1,14 +1,17 @@
 package org.assimbly.tenantvariables.domain;
 
-import dev.morphia.annotations.Entity;
-import dev.morphia.annotations.Id;
 import org.bson.types.ObjectId;
 
-@Entity("values")
 public class EnvironmentValue {
 
-    @Id
-    private ObjectId _id;
+    public static final String ID_FIELD = "_id";
+    public static final String ENVIRONMENT_FIELD = "environment";
+    public static final String VALUE_FIELD = "value";
+    public static final String ENCRYPTED_FIELD = "encrypted";
+    public static final String LAST_UPDATE_FIELD = "last_update";
+    public static final String UPDATED_BY_FIELD = "updatedBy";
+
+    private String _id;
 
     private String environment;
     private String value;
@@ -16,13 +19,13 @@ public class EnvironmentValue {
     private String nonce;
     private boolean encrypted;
 
-    private long last_update;
+    private long lastUpdate;
     private String updatedBy;
 
     public EnvironmentValue() {}
 
     public EnvironmentValue(String environment) {
-        this._id = new ObjectId();
+        this._id = String.valueOf(new ObjectId());
         this.environment = environment;
         this.encrypted = false;
         this.value = "Unassigned";
@@ -60,7 +63,27 @@ public class EnvironmentValue {
         this.nonce = nonce;
     }
 
-    public void setUpdatedAt(long last_update) { this.last_update = last_update; }
+    public String get_id() {
+        return _id;
+    }
 
-    public void setUpdatedBy(String updatedBy) { this.updatedBy = updatedBy; }
+    public void set_id(String _id) {
+        this._id = _id;
+    }
+
+    public long getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(long lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+    }
 }

@@ -1,60 +1,43 @@
 package org.assimbly.tenantvariables.mongo;
 
-import com.mongodb.MongoClient;
-import dev.morphia.Datastore;
-import dev.morphia.Morphia;
-import org.assimbly.tenantvariables.domain.EnvironmentValue;
-import org.assimbly.tenantvariables.domain.TenantVariable;
+import com.mongodb.MongoClientSettings;
+import com.mongodb.ServerAddress;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoDatabase;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class MongoClientProvider implements Serializable {
 
     private static final MongoClientProvider INSTANCE = new MongoClientProvider();
 
     private MongoClient client;
-    private Morphia morphia;
 
     public static MongoClientProvider getInstance() {
         return INSTANCE;
     }
 
     /**
-     * Get the `flux_production` Mongo database represented as a Morphia Datastore.
+     * Get the `flux_production` Mongo database.
      *
-     * @return the database represented as a Datastore.
+     * @return the database.
      */
-    Datastore getDatastore(String name) {
-        if (morphia == null || client == null) {
+    MongoDatabase getDatabase(String name) {
+        if (client == null) {
             init();
         }
-
-        Datastore datastore = morphia.createDatastore(client, name);
-        datastore.ensureIndexes();
-
-        return datastore;
-    }
-
-    Morphia getMorphia() {
-        if (morphia == null || client == null) {
-            init();
-        }
-
-        return morphia;
+        return client.getDatabase(name);
     }
 
     /**
-     * Initialize Morphia and the MongoClient.
-     * Point Morphia to the domain package.
+     * Initialize the MongoClient.
      */
     private void init() {
-
-        morphia = new Morphia();
-        morphia.map(EnvironmentValue.class, TenantVariable.class);
-
-        client = new MongoClient("flux-mongo", 27017);
-
-        //client.getDatabase("default").getCollection("tenant_variables");
-
+        client = MongoClients.create(MongoClientSettings.builder()
+                .applyToClusterSettings(builder ->
+                        builder.hosts(Arrays.asList(new ServerAddress("flux-mongo", 27017))))
+                .build());
     }
 }
