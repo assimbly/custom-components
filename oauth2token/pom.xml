@@ -44,13 +44,13 @@
 
 		<dependency>
 			<groupId>org.mongodb</groupId>
-			<artifactId>mongo-java-driver</artifactId>
+			<artifactId>mongodb-driver-sync</artifactId>
 			<version>${mongo.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.mongodb.morphia</groupId>
-			<artifactId>morphia</artifactId>
-			<version>${morphia.version}</version>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongodb-driver-core</artifactId>
+			<version>${mongo.version}</version>
 		</dependency>
 
 	</dependencies>
