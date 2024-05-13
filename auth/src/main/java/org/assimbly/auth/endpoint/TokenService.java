@@ -1,5 +1,6 @@
 package org.assimbly.auth.endpoint;
 
+import com.mongodb.client.MongoDatabase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.assimbly.auth.InvalidTenantException;
@@ -24,7 +25,7 @@ public class TokenService {
 
     private MongoDao mongoDao;
 
-    public TokenService(String database){
+    public TokenService(MongoDatabase database){
         mongoDao = new MongoDao(database);
     }
 

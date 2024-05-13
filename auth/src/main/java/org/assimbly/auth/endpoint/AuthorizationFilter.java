@@ -1,10 +1,12 @@
 package org.assimbly.auth.endpoint;
 
+import com.mongodb.client.MongoClient;
 import org.assimbly.auth.domain.Role;
 import org.assimbly.auth.domain.Tenant;
 import org.assimbly.auth.domain.User;
 import org.assimbly.auth.endpoint.annotation.Secured;
 import org.assimbly.auth.jwt.JwtValidator;
+import org.assimbly.auth.mongo.MongoClientProvider;
 import org.assimbly.auth.mongo.MongoDao;
 import org.assimbly.auth.util.helper.ConfigHelper;
 
@@ -45,11 +47,15 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     private ResourceInfo resourceInfo;
 
     public AuthorizationFilter() {
-        this.mongoDao = new MongoDao(ConfigHelper.get("baseDatabaseName"));
+        String baseDatabaseName = ConfigHelper.get("baseDatabaseName");
+        MongoClient mongoClient = MongoClientProvider.getClient();
+        this.mongoDao = new MongoDao(mongoClient, baseDatabaseName);
+        //this.mongoDao = new MongoDao(ConfigHelper.get("baseDatabaseName"));
     }
 
-    public AuthorizationFilter(String database){
-        mongoDao = new MongoDao(database);
+    public AuthorizationFilter(String baseDatabaseName){
+        MongoClient mongoClient = MongoClientProvider.getClient();
+        this.mongoDao = new MongoDao(mongoClient, baseDatabaseName);
     }
 
     /**
