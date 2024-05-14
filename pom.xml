@@ -28,7 +28,6 @@
         <module>exceltoxml</module>
         <module>flv</module>
         <module>formtoxml</module>
-        <module>tenantvariables</module>
         <module>googledrive</module>
         <module>jsontoxmllegacy</module>
         <module>mail</module>
@@ -44,6 +43,7 @@
         <module>smooksnoxml</module>
         <module>soap</module>
         <module>sql</module>
+        <module>tenantvariables</module>
         <module>xmltocsv</module>
         <module>xmltoexcel</module>
         <module>xmltojson</module>
@@ -70,7 +70,7 @@
         <bouncycastle.version>1.78.1</bouncycastle.version>
         <config-admin.version>1.9.26</config-admin.version>
         <cxf.version>4.0.4</cxf.version>
-        <camel.version>4.5.0</camel.version>
+        <camel.version>4.6.0</camel.version>
         <docconverter.version>1.9.0</docconverter.version>
         <google.api.version>v3-rev20240327-2.0.0</google.api.version>
         <google.auth.version>1.5.0</google.auth.version>
