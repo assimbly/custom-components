@@ -4,8 +4,6 @@ import com.jayway.jsonpath.JsonPath;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.language.groovy.GroovyExpression;
-import org.apache.camel.language.simple.SimpleExpressionBuilder;
-import org.apache.camel.language.simple.SimpleExpressionParser;
 import org.apache.camel.language.xpath.XPathBuilder;
 import org.apache.camel.language.simple.SimpleLanguage;
 import org.apache.camel.model.language.SimpleExpression;
@@ -35,7 +33,7 @@ public class TenantVariablesProcessor implements Processor {
 
     private EncryptionUtil encryptionUtil = new EncryptionUtil(ASSIMBLY_ENCRYPTION_SECRET, "PBEWithHMACSHA512AndAES_256");
 
-    private final String TENANT_DEFAULT = "default";
+    private final String DEFAULT_TENANT_NAME = "default";
     private static final String ASSIMBLY_ENV = "ASSIMBLY_ENV";
     private final String BODY_VARIABLE_REGEX = "\\$\\{body(?:As\\(.*\\))?}";
 
@@ -80,7 +78,7 @@ public class TenantVariablesProcessor implements Processor {
 
     private void getTenantVariable(Exchange exchange) {
         String name = endpoint.getConfiguration().getName();
-        String tenant = (endpoint.getConfiguration().getTenant()!=null ? endpoint.getConfiguration().getTenant() : TENANT_DEFAULT);
+        String tenant = (endpoint.getConfiguration().getTenant()!=null ? endpoint.getConfiguration().getTenant() : DEFAULT_TENANT_NAME);
         String environment = (endpoint.getConfiguration().getEnvironment()!=null ? endpoint.getConfiguration().getEnvironment() : getEnvironment());
 
         name = interpolateVar(name, exchange, false);
@@ -110,7 +108,7 @@ public class TenantVariablesProcessor implements Processor {
         String value = endpoint.getConfiguration().getValue();
         String name = endpoint.getConfiguration().getName();
         String modifier = endpoint.getConfiguration().getModifier();
-        String tenant = (endpoint.getConfiguration().getTenant()!=null ? endpoint.getConfiguration().getTenant() : TENANT_DEFAULT);
+        String tenant = (endpoint.getConfiguration().getTenant()!=null ? endpoint.getConfiguration().getTenant() : DEFAULT_TENANT_NAME);
         String environment = (endpoint.getConfiguration().getEnvironment()!=null ? endpoint.getConfiguration().getEnvironment() : getEnvironment());
         long modifyDate = System.currentTimeMillis();
 
@@ -119,8 +117,9 @@ public class TenantVariablesProcessor implements Processor {
         value = interpolateVar(Base64Helper.unmarshal(value, UTF_8), exchange, expressionType);
 
         TenantVariable gVariable = MongoDao.findTenantVariableByName(name, tenant);
+        boolean gVariableExist = !Objects.isNull(gVariable);
 
-        if(Objects.isNull(gVariable)) {
+        if(!gVariableExist) {
             gVariable = new TenantVariable(name);
             gVariable.setCreatedAt(modifyDate);
             gVariable.setCreatedBy(modifier);
@@ -146,15 +145,15 @@ public class TenantVariablesProcessor implements Processor {
 
         variable.setEncrypted(encrypt);
         variable.setValue(value);
-        variable.setUpdatedAt(modifyDate);
+        variable.setLastUpdate(modifyDate);
         variable.setUpdatedBy(modifier);
 
-        MongoDao.updateTenantVariable(gVariable, tenant);
+        MongoDao.updateTenantVariable(gVariable, tenant, gVariableExist);
     }
 
     private void deleteTenantVariable(Exchange exchange) {
         String name = endpoint.getConfiguration().getName();
-        String tenant = (endpoint.getConfiguration().getTenant()!=null ? endpoint.getConfiguration().getTenant() : TENANT_DEFAULT);
+        String tenant = (endpoint.getConfiguration().getTenant()!=null ? endpoint.getConfiguration().getTenant() : DEFAULT_TENANT_NAME);
 
         if(ExchangeHelper.hasVariables(name))
             name = ExchangeHelper.interpolate(name, exchange);

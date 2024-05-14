@@ -1,21 +1,27 @@
 package org.assimbly.auth.mongo;
 
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
 import org.bson.types.ObjectId;
-import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.query.UpdateOperations;
 import org.assimbly.auth.domain.Tenant;
 import org.assimbly.auth.domain.User;
 
 public class MongoDao {
 
-    private static final String ID_FIELD = "_id";
-    private static final String EMAIL_FIELD = "email";
-    private static final String PW_FIELD = "password_digest";
+    private final MongoDatabase database;
 
-    private String database;
-
-    public MongoDao(String database){
+    public MongoDao(MongoDatabase database){
         this.database = database;
+    }
+
+    public MongoDao(MongoClient mongoClient, String databaseName) {
+        this.database = mongoClient.getDatabase(databaseName);
+    }
+
+    private MongoCollection<Document> getCollection(String collectionName){
+        return database.getCollection(collectionName);
     }
 
     /**
@@ -27,56 +33,51 @@ public class MongoDao {
      * @return a User object representing the user if found, otherwise null.
      */
     public User findUser(String email, String password) {
-        Datastore datastore = MongoClientProvider.getInstance().getDatastore(database);
-
-        return datastore.createQuery(User.class)
-                .field(EMAIL_FIELD).equal(email)
-                .field(PW_FIELD).equal(password)
-                .get();
+        Document query = new Document(User.EMAIL_FIELD, email).append(User.PASSWORD_DIGEST_FIELD, password);
+        Document userDocument = getCollection("users").find(query).first();
+        if (userDocument != null) {
+            return User.fromDocument(userDocument); // Convert Document to User object
+        }
+        return null;
     }
 
     public User findUser(String id) {
-        Datastore datastore = MongoClientProvider.getInstance().getDatastore(database);
-
-        return datastore.createQuery(User.class)
-                .field(ID_FIELD).equal(new ObjectId(id))
-                .get();
+        Document query = new Document(User.ID_FIELD, id);
+        Document userDocument = getCollection("users").find(query).first();
+        if (userDocument != null) {
+            return User.fromDocument(userDocument); // Convert Document to User object
+        }
+        return null;
     }
 
     public User findUserByEmail(String email) {
-        Datastore datastore = MongoClientProvider.getInstance().getDatastore(database);
-
-        return datastore.createQuery(User.class)
-                .field(EMAIL_FIELD).equal(email)
-                .get();
+        Document query = new Document(User.EMAIL_FIELD, email);
+        Document userDocument = getCollection("users").find(query).first();
+        if (userDocument != null) {
+            return User.fromDocument(userDocument); // Convert Document to User object
+        }
+        return null;
     }
 
     public Tenant findTenant(User user) {
-        Datastore datastore = MongoClientProvider.getInstance().getDatastore(database);
-
-        return datastore.createQuery(Tenant.class)
-                .field(ID_FIELD).equal(user.getTenantId())
-                .get();
+        Document query = new Document(Tenant.ID_FIELD, user.getTenantId());
+        Document tenantDocument = getCollection("tenants").find(query).first();
+        if (tenantDocument != null) {
+            return Tenant.fromDocument(tenantDocument);
+        }
+        return null;
     }
 
     public void updateAuthenticatorSettings(User user, String secretKey, Boolean usesTwoFactor) {
-        Datastore datastore = MongoClientProvider.getInstance().getDatastore(database);
-
-        UpdateOperations<User> operations = datastore.createUpdateOperations(User.class)
-                .set("secret_key", secretKey)
-                .set("uses_two_factor", usesTwoFactor);
-
-        datastore.update(user, operations);
+        getCollection("users").updateOne(new Document(User.ID_FIELD, user.getId()),
+                new Document("$set", new Document("secret_key", secretKey)
+                        .append("uses_two_factor", usesTwoFactor)));
     }
 
     public void removeAuthenticatorSettings(User user){
-        Datastore datastore = MongoClientProvider.getInstance().getDatastore(database);
-
-        UpdateOperations<User> operations = datastore.createUpdateOperations(User.class)
-                .unset("secret_key")
-                .set("uses_two_factor", false);
-
-        datastore.update(user, operations);
+        getCollection("users").updateOne(new Document(User.ID_FIELD, user.getId()),
+                new Document("$unset", new Document("secret_key", "")
+                        .append("uses_two_factor", false)));
     }
 
 }

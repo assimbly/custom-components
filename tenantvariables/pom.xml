@@ -32,28 +32,13 @@
 
 		<dependency>
 			<groupId>org.mongodb</groupId>
-			<artifactId>mongo-java-driver</artifactId>
+			<artifactId>mongodb-driver-sync</artifactId>
 			<version>${mongo.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>dev.morphia.morphia</groupId>
-			<artifactId>core</artifactId>
-			<version>${morpia-core.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.mongodb</groupId>
-					<artifactId>mongodb-driver-legacy</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.mongodb</groupId>
-					<artifactId>mongodb-driver-core</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.mongodb.morphia</groupId>
-			<artifactId>morphia</artifactId>
-			<version>${morphia.version}</version>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongodb-driver-core</artifactId>
+			<version>${mongo.version}</version>
 		</dependency>
 
 		<dependency>

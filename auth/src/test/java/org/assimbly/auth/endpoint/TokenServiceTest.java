@@ -1,8 +1,12 @@
 package org.assimbly.auth.endpoint;
 
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoDatabase;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
+import org.assimbly.auth.mongo.MongoClientProvider;
+import org.assimbly.auth.mongo.MongoDao;
 import org.assimbly.util.helper.Base64Helper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -11,6 +15,8 @@ import org.assimbly.auth.domain.User;
 import org.assimbly.auth.util.helper.ConfigHelper;
 
 import jakarta.ws.rs.core.Response;
+import org.mockito.Mockito;
+
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,7 +37,9 @@ public class TokenServiceTest {
         user = MongoTestHelper.setup();
         database = MongoTestHelper.getDb();
 
-        tokenService = new TokenService(database);
+        MongoDatabase mongoDatabase = MongoClients.create().getDatabase(database);
+
+        tokenService = new TokenService(mongoDatabase);
     }
 
     @Test
