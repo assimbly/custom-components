@@ -51,7 +51,9 @@ public class TenantVariable {
         TenantVariable tenantVariable = new TenantVariable();
         tenantVariable.set_id(document.getObjectId(ID_FIELD));
         tenantVariable.setName(document.getString(NAME_FIELD));
-        tenantVariable.setCreatedAt(document.getLong(CREATED_AT_FIELD));
+        if(document.getLong(CREATED_AT_FIELD) != null) {
+            tenantVariable.setCreatedAt(document.getLong(CREATED_AT_FIELD));
+        }
         tenantVariable.setCreatedBy(document.getString(CREATED_BY_FIELD));
 
         List<Document> valuesList = (List<Document>) document.get(VALUES_FIELD);
@@ -61,7 +63,9 @@ public class TenantVariable {
             environmentValue.setEnvironment(valueDoc.getString(EnvironmentValue.ENVIRONMENT_FIELD));
             environmentValue.setValue(valueDoc.getString(EnvironmentValue.VALUE_FIELD));
             environmentValue.setEncrypted(valueDoc.getBoolean(EnvironmentValue.ENCRYPTED_FIELD));
-            environmentValue.setLastUpdate(valueDoc.getLong(EnvironmentValue.LAST_UPDATE_FIELD));
+            if(valueDoc.getLong(EnvironmentValue.LAST_UPDATE_FIELD) != null) {
+                environmentValue.setLastUpdate(valueDoc.getLong(EnvironmentValue.LAST_UPDATE_FIELD));
+            }
             environmentValue.setUpdatedBy(valueDoc.getString(EnvironmentValue.UPDATED_BY_FIELD));
             tenantVariable.put(environmentValue);
         }
