@@ -74,7 +74,7 @@
         <docconverter.version>1.9.0</docconverter.version>
         <google.api.version>v3-rev20240327-2.0.0</google.api.version>
         <google.auth.version>1.5.0</google.auth.version>
-        <google.oauth.version>1.35.0</google.oauth.version>
+        <google.oauth.version>1.36.0</google.oauth.version>
         <hapi.version>2.5.1</hapi.version>
         <httpclient.version>4.5.14</httpclient.version>
         <httpcomponents.version>4.5.14</httpcomponents.version>
@@ -92,7 +92,7 @@
         <osgi.version>6.0.0</osgi.version>
         <pdfbox.version>3.0.2</pdfbox.version>
         <poi.version>5.2.5</poi.version>
-        <saaj-impl.version>3.0.3</saaj-impl.version>
+        <saaj-impl.version>3.0.4</saaj-impl.version>
         <saxon.version>9.7.0-21</saxon.version>
         <smooks.version>1.7.1</smooks.version>
         <smooks-fragments.version>1.7.1.0</smooks-fragments.version>
