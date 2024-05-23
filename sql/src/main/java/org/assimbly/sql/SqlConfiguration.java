@@ -1,11 +1,16 @@
 package org.assimbly.sql;
 
+import org.apache.camel.Exchange;
+import org.apache.camel.language.simple.SimpleLanguage;
+import org.apache.camel.model.language.SimpleExpression;
 import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
 import org.apache.camel.spi.UriPath;
+import org.apache.commons.lang3.StringUtils;
 import org.assimbly.util.helper.Base64Helper;
 import org.assimbly.sql.domain.ConnectionType;
+import org.assimbly.util.helper.ExchangeHelper;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -14,19 +19,19 @@ import java.nio.charset.StandardCharsets;
 @UriParams
 public class SqlConfiguration {
 
-    @UriPath(name = "username")
+    @UriParam
     @Metadata(required = true)
     private String username;
 
-    @UriPath(name = "host")
+    @UriParam
     @Metadata(required = true)
     private String host;
 
-    @UriPath(name = "instance")
+    @UriParam
     private String instance;
 
-    @UriPath(name = "port", defaultValue = "3306")
-    private int port;
+    @UriParam(defaultValue = "3306")
+    private String port;
 
     @UriParam
     @Metadata(required = true, secret = true)
@@ -65,10 +70,10 @@ public class SqlConfiguration {
         setHost(connection.getHost());
 
         // Set Default
-        setPort(3306);
+        setPort("3306");
         setUseSSL(false);
 
-        setPort(connection.getPort());
+        setPort(String.valueOf(connection.getPort()));
     }
 
     /**
@@ -96,7 +101,7 @@ public class SqlConfiguration {
      * Optional: Port to use to connect to the Database JDBC Connection.
      * Default: 3306
      */
-    public void setPort(int port) {
+    public void setPort(String port) {
         this.port = port;
     }
 
@@ -149,32 +154,34 @@ public class SqlConfiguration {
         this.tlsVersion = tlsVersion;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUsername(Exchange exchange) {
+        return interpolateVar(username, exchange);
     }
 
-    public String getHost() {
-        return host;
+    public String getHost(Exchange exchange) {
+        return interpolateVar(host, exchange);
     }
 
-    public String getInstance() {
-        return instance;
+    public String getInstance(Exchange exchange) {
+        return interpolateVar(instance, exchange);
     }
 
-    public int getPort() {
-        return port;
+    public String getPort(Exchange exchange) {
+        return interpolateVar(port, exchange);
     }
 
-    public String getPassword() {
-        return Base64Helper.unmarshal(password, StandardCharsets.UTF_8);
+    public String getPassword(Exchange exchange) {
+        String password = Base64Helper.unmarshal(this.password, StandardCharsets.UTF_8);
+        return interpolateVar(password, exchange);
     }
 
-    public String getDatabase() {
-        return database;
+    public String getDatabase(Exchange exchange) {
+        return interpolateVar(database, exchange);
     }
 
-    public String getQuery() {
-        return Base64Helper.unmarshal(query, StandardCharsets.UTF_8);
+    public String getQuery(Exchange exchange) {
+        String query = Base64Helper.unmarshal(this.query, StandardCharsets.UTF_8);
+        return interpolateVar(query, exchange);
     }
 
     public ConnectionType getConnectionType() {
@@ -202,5 +209,19 @@ public class SqlConfiguration {
             return 2;
 
         return 1;
+    }
+
+    private String interpolateVar(String fieldValue, Exchange exchange) {
+
+        if(StringUtils.isEmpty(fieldValue)) {
+            return fieldValue;
+        }
+
+        if(SimpleLanguage.hasSimpleFunction(fieldValue)) {
+            SimpleExpression simpleExpression = new SimpleExpression(fieldValue);
+            fieldValue = simpleExpression.evaluate(exchange, String.class);
+        }
+
+        return fieldValue;
     }
 }
