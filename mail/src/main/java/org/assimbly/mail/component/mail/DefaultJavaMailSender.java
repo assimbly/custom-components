@@ -26,6 +26,7 @@ import jakarta.mail.Session;
 import jakarta.mail.Transport;
 import jakarta.mail.internet.MimeMessage;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +41,7 @@ public class DefaultJavaMailSender implements JavaMailSender {
     private String host;
     private String username;
     private String password;
+    private String accessToken;
     private MailAuthenticator authenticator;
     // -1 means using the default port to access the service
     private int port = -1;
@@ -84,10 +86,23 @@ public class DefaultJavaMailSender implements JavaMailSender {
     }
 
     @Override
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    @Override
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    @Override
     public Session getSession() {
         if (session == null) {
             session = Session.getInstance(getJavaMailProperties(),
-                    authenticator == null ? new DefaultAuthenticator(username, password) : authenticator);
+                    authenticator == null ?
+                            new DefaultAuthenticator(username, getAccessTokenOrPassword()) :
+                            authenticator
+            );
         }
         return session;
     }
@@ -142,7 +157,11 @@ public class DefaultJavaMailSender implements JavaMailSender {
     public PasswordAuthentication getPasswordAuthentication() {
         // call authenticator so that the authenticator can dynamically determine the password or token
         return authenticator == null
-                ? new PasswordAuthentication(username, password) : authenticator.getPasswordAuthentication();
+                ? new PasswordAuthentication(username, getAccessTokenOrPassword()) : authenticator.getPasswordAuthentication();
+    }
+
+    private String getAccessTokenOrPassword() {
+        return (StringUtils.isNoneEmpty(accessToken) ? accessToken : password);
     }
 
     @Override
