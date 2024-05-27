@@ -16,6 +16,7 @@ public class MailEndpointConfigurer extends PropertyConfigurerSupport implements
     public boolean configure(CamelContext camelContext, Object obj, String name, Object value, boolean ignoreCase) {
         MailEndpoint target = (MailEndpoint) obj;
         switch (ignoreCase ? name.toLowerCase() : name) {
+            case "accesstoken": target.getConfiguration().setAccessToken(property(camelContext, java.lang.String.class, value)); return true;
             case "additionaljavamailproperties":
             case "additionalJavaMailProperties": target.getConfiguration().setAdditionalJavaMailProperties(property(camelContext, java.util.Properties.class, value)); return true;
             case "alternativebodyheader":
@@ -146,6 +147,7 @@ public class MailEndpointConfigurer extends PropertyConfigurerSupport implements
     @Override
     public Class<?> getOptionType(String name, boolean ignoreCase) {
         switch (ignoreCase ? name.toLowerCase() : name) {
+            case "accesstoken": return java.lang.String.class;
             case "additionaljavamailproperties":
             case "additionalJavaMailProperties": return java.util.Properties.class;
             case "alternativebodyheader":

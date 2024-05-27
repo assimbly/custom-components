@@ -34,13 +34,10 @@ import org.apache.camel.spi.UriPath;
 import org.apache.camel.support.jsse.SSLContextParameters;
 import org.apache.camel.util.ObjectHelper;
 
-import org.assimbly.tenantvariables.domain.TenantVariable;
 import org.assimbly.tenantvariables.mongo.MongoDao;
 
 import javax.net.ssl.SSLContext;
 
-import static org.assimbly.mail.component.mail.MailConstants.MAIL_GENERATE_MISSING_ATTACHMENT_NAMES_NEVER;
-import static org.assimbly.mail.component.mail.MailConstants.MAIL_HANDLE_DUPLICATE_ATTACHMENT_NAMES_NEVER;
 /**
  * Represents the configuration data for communicating over email
  */
@@ -240,6 +237,9 @@ public class MailConfiguration implements Cloneable {
         if (password != null && isBasicAuthentication()) {
             answer.setPassword(password);
         }
+        if (accessToken != null && !isBasicAuthentication()) {
+            answer.setAccessToken(getAccessToken());
+        }
         if (authenticator != null) {
             answer.setAuthenticator(authenticator);
         }
@@ -264,7 +264,7 @@ public class MailConfiguration implements Cloneable {
                 }
                 // use our authenticator that does no live user interaction but returns the already configured username and password
                 Session sessionInstance = Session.getInstance(answer.getJavaMailProperties(),
-                        authenticator == null ? new DefaultAuthenticator(getUsername(), getPassword()) : authenticator);
+                        authenticator == null ? new DefaultAuthenticator(getUsername(), (isBasicAuthentication() ? getPassword() : null)) : authenticator);
                 // sets the debug mode of the underlying mail framework
                 sessionInstance.setDebug(debugMode);
                 answer.setSession(sessionInstance);
@@ -293,6 +293,8 @@ public class MailConfiguration implements Cloneable {
         }
 
         if(!isBasicAuthentication()) {
+            properties.put("mail." + protocol + ".auth.mechanisms", "XOAUTH2");
+            properties.put("mail." + protocol + ".auth", "true");
             properties.put("mail." + protocol + ".sasl.enable", "true");
             properties.put("mail." + protocol + ".sasl.mechanisms", "XOAUTH2");
         }
