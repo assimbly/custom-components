@@ -58,6 +58,10 @@ public interface JavaMailSender {
 
     String getPassword();
 
+    void setAccessToken(String accessToken);
+
+    String getAccessToken();
+
     void setProtocol(String protocol);
 
     String getProtocol();
