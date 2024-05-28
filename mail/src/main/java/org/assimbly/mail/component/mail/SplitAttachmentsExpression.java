@@ -276,4 +276,8 @@ public class SplitAttachmentsExpression extends ExpressionAdapter {
         this.extractAttachments = extractAttachments;
     }
 
+    public boolean hasAttachments(Exchange exchange) {
+        return exchange.getIn(AttachmentMessage.class).hasAttachments();
+    }
+
 }
