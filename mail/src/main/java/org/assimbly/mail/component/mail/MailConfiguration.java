@@ -234,11 +234,10 @@ public class MailConfiguration implements Cloneable {
         if (username != null) {
             answer.setUsername(username);
         }
-        if (password != null && isBasicAuthentication()) {
+        if (isBasicAuthentication()) {
             answer.setPassword(password);
-        }
-        if (accessToken != null && !isBasicAuthentication()) {
-            answer.setAccessToken(getAccessToken());
+        } else {
+            answer.setPassword(getAccessToken());
         }
         if (authenticator != null) {
             answer.setAuthenticator(authenticator);
