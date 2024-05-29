@@ -27,7 +27,12 @@
 		  <groupId>org.apache.pdfbox</groupId>
 		  <artifactId>pdfbox</artifactId>
 		  <version>${pdfbox.version}</version>
-	  </dependency>  
+	  </dependency>
+	  <dependency>
+		  <groupId>org.apache.pdfbox</groupId>
+		  <artifactId>pdfbox-io</artifactId>
+		  <version>${pdfbox.version}</version>
+	  </dependency>
 	  <dependency>
 		  <groupId>org.bouncycastle</groupId>
 		  <artifactId>bcprov-jdk18on</artifactId>

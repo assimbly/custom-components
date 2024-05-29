@@ -33,6 +33,7 @@ public class PdfEndpoint extends ProcessorEndpoint {
     }
 
     public byte[] requestPdfTemplate() throws URISyntaxException, IOException {
+
         URI url = new URI(configuration.getUrl());
 
         HttpClient client = HttpClientBuilder.create().build();
