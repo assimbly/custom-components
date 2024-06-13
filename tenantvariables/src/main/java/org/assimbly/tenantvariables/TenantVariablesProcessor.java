@@ -1,13 +1,14 @@
 package org.assimbly.tenantvariables;
 
 import com.jayway.jsonpath.JsonPath;
+import org.abstractj.kalium.crypto.Random;
+import org.abstractj.kalium.crypto.SecretBox;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.language.groovy.GroovyExpression;
 import org.apache.camel.language.xpath.XPathBuilder;
 import org.apache.camel.language.simple.SimpleLanguage;
 import org.apache.camel.model.language.SimpleExpression;
-import org.assimbly.util.EncryptionUtil;
 import org.assimbly.util.exception.EnvironmentException;
 import org.assimbly.util.exception.TenantVariableNotFoundException;
 import org.assimbly.util.helper.Base64Helper;
@@ -24,14 +25,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.abstractj.kalium.NaCl.Sodium.CRYPTO_SECRETBOX_XSALSA20POLY1305_NONCEBYTES;
 
 public class TenantVariablesProcessor implements Processor {
 
     private static final Logger LOG = LoggerFactory.getLogger(TenantVariablesProcessor.class);
 
     private static final String ASSIMBLY_ENCRYPTION_SECRET = "ASSIMBLY_ENCRYPTION_SECRET";
-
-    private EncryptionUtil encryptionUtil = new EncryptionUtil(ASSIMBLY_ENCRYPTION_SECRET, "PBEWithHMACSHA512AndAES_256");
 
     private final String DEFAULT_TENANT_NAME = "default";
     private static final String ASSIMBLY_ENV = "ASSIMBLY_ENV";
@@ -62,24 +62,41 @@ public class TenantVariablesProcessor implements Processor {
         }
     }
 
-    public String decrypt(String encryptedValue) {
-        String value = encryptionUtil.getTextEncryptor().decrypt(encryptedValue);
-        return value;
+    public String decrypt(byte[] value, byte[] nonce) {
+        SecretBox box = new SecretBox(System.getenv(ASSIMBLY_ENCRYPTION_SECRET).getBytes());
+        byte[] decrypted = box.decrypt(nonce, value);
+        return new String(decrypted);
     }
 
-    public String encrypt(String value) {
-        String encryptedValue = encryptionUtil.getTextEncryptor().encrypt(value);
-        return encryptedValue;
+    byte[] encrypt(String value, byte[] nonce) {
+        SecretBox box = new SecretBox(System.getenv(ASSIMBLY_ENCRYPTION_SECRET).getBytes());
+        byte[] encriptedValue = box.encrypt(nonce, value.getBytes());
+        return encriptedValue;
     }
 
     public String getValueByEnvironmentValue(EnvironmentValue environmentVar) {
-        return (environmentVar.isEncrypted() ? decrypt(environmentVar.getValue()) : environmentVar.getValue());
+        if(environmentVar.isEncrypted()) {
+            return decrypt(
+                    Base64Helper.unmarshal(environmentVar.getValue()),
+                    Base64Helper.unmarshal(environmentVar.getNonce())
+            );
+        } else {
+            return environmentVar.getValue();
+        }
     }
 
     private void getTenantVariable(Exchange exchange) {
         String name = endpoint.getConfiguration().getName();
-        String tenant = (endpoint.getConfiguration().getTenant()!=null ? endpoint.getConfiguration().getTenant() : DEFAULT_TENANT_NAME);
-        String environment = (endpoint.getConfiguration().getEnvironment()!=null ? endpoint.getConfiguration().getEnvironment() : getEnvironment());
+        String tenant = (
+                endpoint.getConfiguration().getTenant()!=null ?
+                        endpoint.getConfiguration().getTenant() :
+                        DEFAULT_TENANT_NAME
+        );
+        String environment = (
+                endpoint.getConfiguration().getEnvironment()!=null ?
+                        endpoint.getConfiguration().getEnvironment() :
+                        getEnvironment()
+        );
 
         name = interpolateVar(name, exchange, false);
 
@@ -91,12 +108,19 @@ public class TenantVariablesProcessor implements Processor {
             );
         }
 
-        if(!gVariable.find(environment).isPresent())
-            throw new TenantVariableNotFoundException("The Tenant Variable \"" + name + "\" has no values for the "+ environment +" environment.");
+        if(!gVariable.find(environment).isPresent()) {
+            throw new TenantVariableNotFoundException(
+                    String.format("The Tenant Variable \"%s\" has no values for the %s environment.", name, environment)
+            );
+        }
 
         EnvironmentValue variable = gVariable.find(environment).get();
 
-        String value = (variable.isEncrypted() ? decrypt(variable.getValue()) : variable.getValue());
+        String value = (
+                variable.isEncrypted() ?
+                        decrypt(Base64Helper.unmarshal(variable.getValue()), Base64Helper.unmarshal(variable.getNonce())) :
+                        variable.getValue()
+        );
 
         String header = interpolateVar(endpoint.getConfiguration().getHeader(), exchange, false);
 
@@ -108,8 +132,16 @@ public class TenantVariablesProcessor implements Processor {
         String value = endpoint.getConfiguration().getValue();
         String name = endpoint.getConfiguration().getName();
         String modifier = endpoint.getConfiguration().getModifier();
-        String tenant = (endpoint.getConfiguration().getTenant()!=null ? endpoint.getConfiguration().getTenant() : DEFAULT_TENANT_NAME);
-        String environment = (endpoint.getConfiguration().getEnvironment()!=null ? endpoint.getConfiguration().getEnvironment() : getEnvironment());
+        String tenant = (
+                endpoint.getConfiguration().getTenant()!=null ?
+                        endpoint.getConfiguration().getTenant() :
+                        DEFAULT_TENANT_NAME
+        );
+        String environment = (
+                endpoint.getConfiguration().getEnvironment()!=null ?
+                        endpoint.getConfiguration().getEnvironment() :
+                        getEnvironment()
+        );
         long modifyDate = System.currentTimeMillis();
 
         name = interpolateVar(name, exchange, false);
@@ -138,7 +170,9 @@ public class TenantVariablesProcessor implements Processor {
         boolean encrypt = endpoint.getConfiguration().isEncrypt();
 
         if(encrypt) {
-            value = encrypt(variable.getValue());
+            byte[] nonce = new Random().randomBytes(CRYPTO_SECRETBOX_XSALSA20POLY1305_NONCEBYTES);
+            value = Base64Helper.marshal(encrypt(value, nonce));
+            variable.setNonce(Base64Helper.marshal(nonce));
         } else {
             variable.setNonce(null);
         }
@@ -153,15 +187,20 @@ public class TenantVariablesProcessor implements Processor {
 
     private void deleteTenantVariable(Exchange exchange) {
         String name = endpoint.getConfiguration().getName();
-        String tenant = (endpoint.getConfiguration().getTenant()!=null ? endpoint.getConfiguration().getTenant() : DEFAULT_TENANT_NAME);
+        String tenant = (
+                endpoint.getConfiguration().getTenant()!=null ? endpoint.getConfiguration().getTenant() : DEFAULT_TENANT_NAME
+        );
 
         if(ExchangeHelper.hasVariables(name))
             name = ExchangeHelper.interpolate(name, exchange);
 
         TenantVariable variable = MongoDao.findTenantVariableByName(name, tenant);
 
-        if(variable == null)
-            throw new TenantVariableNotFoundException("The Tenant Variable \"" + name + "\" was not found in the database.");
+        if(variable == null) {
+            throw new TenantVariableNotFoundException(
+                    String.format("The Tenant Variable \"%s\" was not found in the database.", name)
+            );
+        }
 
         MongoDao.deleteTenantVariable(variable, tenant);
     }
