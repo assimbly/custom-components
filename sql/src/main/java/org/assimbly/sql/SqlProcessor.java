@@ -50,7 +50,7 @@ public class SqlProcessor implements Processor {
         if(connection == null)
             throw new SQLException("Could not connect to the database, check your settings.");
 
-        Document result = executeQuery(exchange, connection, config.getQuery(exchange).trim());
+        Document result = executeQuery(exchange, connection, config.getQuery().trim());
 
         exchange.getIn().setBody(XmlHelper.prettyPrint(result));
     }
