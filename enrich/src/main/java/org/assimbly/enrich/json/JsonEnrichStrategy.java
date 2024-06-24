@@ -15,6 +15,8 @@ public class JsonEnrichStrategy implements AggregationStrategy {
     @Override
     public Exchange aggregate(Exchange original, Exchange resource) {
 
+        System.out.println("1");
+
         if(resource == null) {
             return original;
         }
