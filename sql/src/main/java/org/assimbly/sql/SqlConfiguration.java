@@ -179,9 +179,8 @@ public class SqlConfiguration {
         return interpolateVar(database, exchange);
     }
 
-    public String getQuery(Exchange exchange) {
-        String query = Base64Helper.unmarshal(this.query, StandardCharsets.UTF_8);
-        return interpolateVar(query, exchange);
+    public String getQuery() {
+        return Base64Helper.unmarshal(this.query, StandardCharsets.UTF_8);
     }
 
     public ConnectionType getConnectionType() {
