@@ -24,6 +24,11 @@
   </distributionManagement>
 
   <dependencies>
+	  <dependency>
+		  <groupId>org.hibernate</groupId>
+		  <artifactId>hibernate-core</artifactId>
+		  <version>${hibernate-core.version}</version>
+	  </dependency>
 
       <dependency>
           <groupId>org.milyn</groupId>
@@ -34,6 +39,10 @@
                   <groupId>javax.servlet</groupId>
                   <artifactId>servlet-api</artifactId>
               </exclusion>
+			  <exclusion>
+				  <groupId>org.hibernate</groupId>
+				  <artifactId>hibernate-core</artifactId>
+			  </exclusion>
           </exclusions>
       </dependency>
 
