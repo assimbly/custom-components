@@ -89,7 +89,7 @@ public class MailProducer extends DefaultAsyncProducer {
     protected JavaMailSender getSender(Exchange exchange) {
         // do we have special headers
         Map<String, Object> additional = URISupport.extractProperties(exchange.getMessage().getHeaders(), "mail.smtp.");
-        if (additional.isEmpty()) {
+        if (additional.isEmpty() && getEndpoint().getConfiguration().isBasicAuthentication()) {
             // no then use default sender
             LOG.trace("Using default JavaMailSender");
             return defaultSender;
