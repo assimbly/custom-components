@@ -6,6 +6,7 @@ import org.assimbly.xmltojsonlegacy.XmlToJsonConfiguration;
 import org.assimbly.xmltojsonlegacy.XmlToJsonProcessor;
 import org.assimbly.xmltojsonlegacy.logs.Print;
 import org.assimbly.xmltojsonlegacy.transaction.elementnode.ElementNodeTransaction;
+import org.assimbly.xmltojsonlegacy.utils.ElementUtils;
 import org.assimbly.xmltojsonlegacy.utils.ExtractUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

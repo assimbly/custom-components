@@ -1,5 +1,6 @@
 package org.assimbly.xmltojsonlegacy.checker;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.assimbly.xmltojsonlegacy.Constants;
 import org.assimbly.xmltojsonlegacy.Namespace;
 import org.assimbly.xmltojsonlegacy.XmlToJsonConfiguration;
@@ -15,7 +16,7 @@ public class ElementChecker {
     // check if it's a root array
     public static boolean isRootArray(XmlToJsonConfiguration config) {
         boolean isRootArray;
-        if(config.isElementWithEmptyTextContent()) {
+        if(config.isElementWithEmptyTextContent() && !config.getClassAttr().equals(Constants.JSON_XML_ATTR_TYPE_ARRAY)) {
             return false;
         }
         if(config.isTypeHints()) {
@@ -124,8 +125,15 @@ public class ElementChecker {
 
     // check if it's one value
     public static boolean isOneValue(XmlToJsonConfiguration config) {
-        if(config.getElementDeepestDepth() == 0 && !config.isParentWithEmptyTextContent() && config.isAreSiblingsNamesEqual() && config.isAreChildrenNamesEqual() && (
-                !config.isTypeHints() || (
+        JsonNode valueAsJson = null;
+        if(config.getElement().getFirstChild()!=null) {
+            valueAsJson = ElementUtils.getValidJson(config.getElement().getFirstChild().getNodeValue());
+        }
+        if(config.getElementDeepestDepth() == 0 &&
+                (!config.isParentWithEmptyTextContent() || !config.isElementWithEmptyTextContent() && valueAsJson!=null) &&
+                config.isAreSiblingsNamesEqual() &&
+                config.isAreChildrenNamesEqual() &&
+                (!config.isTypeHints() || (
                         config.getParentClass() == null ||
                                 !config.getParentClass().equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT) ||
                                 (config.isGrandParentSiblingsNamesEqual() && config.isParentSiblingsNamesEqual())

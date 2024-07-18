@@ -46,7 +46,11 @@ public class ExtractUtils {
         int childCount = ((DeferredElementImpl) childElement).getChildElementCount();
         switch (node.size()) {
             case 0:
-                config.getRootObjectNode().set(propertyName, JsonNodeFactory.instance.arrayNode());
+                ArrayNode newArrayNode = JsonNodeFactory.instance.arrayNode();
+                if(isInternalNullObjectNodePresent(node)) {
+                    newArrayNode.addNull();
+                }
+                config.getRootObjectNode().set(propertyName, newArrayNode);
                 break;
             case 1:
                 if(node.isArray() || (childCount > 0 && StringUtils.isEmpty(config.getClassAttr()))) {
@@ -450,6 +454,32 @@ public class ExtractUtils {
 
         ((ArrayNode)nodeValues).add(!config.isElementMustBeNull() ? newValue : null);
         config.getRootObjectNode().set(field, nodeValues);
+    }
+
+    public static void addValueOnRootArrayNode(XmlToJsonConfiguration config, Node node) {
+        JsonNode valueAsJson = ElementUtils.getValidJson(node.getTextContent());
+        if(valueAsJson!=null) {
+            if(valueAsJson.isArray()) {
+                config.setRootArrayNode((ArrayNode) valueAsJson);
+                config.setRootArray(true);
+            } else {
+                config.setRootObjectNode((ObjectNode) valueAsJson);
+                config.setRootArray(false);
+            }
+        } else {
+            String valueAsStr = ElementUtils.getNodeValue(node, config.isTrimSpaces());
+            config.getRootArrayNode().add(valueAsStr);
+        }
+    }
+
+    public static void putValueOnRootObjectNode(XmlToJsonConfiguration config, Node node) {
+        JsonNode valueAsJson = ElementUtils.getValidJson(node.getTextContent());
+        if(valueAsJson!=null) {
+            config.getRootObjectNode().put(Constants.JSON_XML_TEXT_FIELD, valueAsJson);
+        } else {
+            String valueAsStr = ElementUtils.getNodeValue(node, config.isTrimSpaces());
+            config.getRootObjectNode().put(Constants.JSON_XML_TEXT_FIELD, valueAsStr);
+        }
     }
 
 }

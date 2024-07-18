@@ -493,7 +493,7 @@ public class XmlToJsonConfiguration implements Cloneable{
         setElementOnNamespace(ElementUtils.isElementOnNamespace(element, xmlnsMapOnThisNode));
         setNamespace(ElementUtils.getElementNamePrefix(element));
         setElementWithEmptyTextContent(
-                !isSkipWhitespace() && ElementUtils.isElementWithEmptyTextContent(element, elementDeepestDepth)
+                !isSkipWhitespace() && ElementUtils.isElementWithEmptyTextContent(element)
         );
 
         setRootArray(ElementChecker.isRootArray(this));
