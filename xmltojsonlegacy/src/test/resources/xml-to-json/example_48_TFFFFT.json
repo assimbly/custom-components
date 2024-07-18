@@ -1,0 +1,12 @@
+{
+    "root": {
+        "Persons": [
+            {
+                "UserDefinedFieldsJson": {
+                    "udf1": "16147",
+                    "udf2": "16147"
+                }
+            }
+        ]
+    }
+}

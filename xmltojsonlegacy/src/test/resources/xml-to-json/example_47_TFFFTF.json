@@ -1,0 +1,16 @@
+{
+    "root": [
+        {
+            "@class": "array",
+            "element": {
+                "UserDefinedFieldsJson": {
+                    "@class": "string",
+                    "#text": {
+                        "udf1": "16147",
+                        "udf2": "16147"
+                    }
+                }
+            }
+        }
+    ]
+}

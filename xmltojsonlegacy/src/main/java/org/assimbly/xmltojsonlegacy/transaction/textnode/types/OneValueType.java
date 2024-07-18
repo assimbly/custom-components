@@ -24,12 +24,12 @@ public class OneValueType implements TextNodeTransaction {
                 config.getRootObjectNode().put(Constants.JSON_XML_TEXT_FIELD, ElementUtils.getNodeValue(childNode, config.isTrimSpaces()));
                 if(isFirstLevel) return config.getRootObjectNode();
             } else {
-                config.getRootArrayNode().add(ElementUtils.getNodeValue(childNode, config.isTrimSpaces()));
+                ExtractUtils.addValueOnRootArrayNode(config, childNode);
                 if(isFirstLevel) return config.getRootArrayNode();
             }
         } else {
             if(config.getElement().hasAttributes()) {
-                config.getRootObjectNode().put(Constants.JSON_XML_TEXT_FIELD, ElementUtils.getNodeValue(childNode, config.isTrimSpaces()));
+                ExtractUtils.putValueOnRootObjectNode(config, childNode);
                 if(isFirstLevel) return config.getRootObjectNode();
             } else {
                 config.getRootArrayNode().add(ElementUtils.getNodeValue(childNode, config.isTrimSpaces()));
