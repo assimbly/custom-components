@@ -69,10 +69,10 @@
         <assimbly.version>5.0.0</assimbly.version>
         <bouncycastle.version>1.78.1</bouncycastle.version>
         <config-admin.version>1.9.26</config-admin.version>
-        <cxf.version>4.0.4</cxf.version>
+        <cxf.version>4.0.5</cxf.version>
         <camel.version>4.7.0</camel.version>
         <docconverter.version>1.10.0</docconverter.version>
-        <google.api.version>v3-rev20240521-2.0.0</google.api.version>
+        <google.api.version>v3-rev20240722-2.0.0</google.api.version>
         <google.auth.version>1.5.0</google.auth.version>
         <google.oauth.version>1.36.0</google.oauth.version>
         <hapi.version>2.5.1</hapi.version>
