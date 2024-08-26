@@ -72,11 +72,11 @@
         <cxf.version>4.0.5</cxf.version>
         <camel.version>4.7.0</camel.version>
         <docconverter.version>1.10.0</docconverter.version>
-        <google.api.version>v3-rev20240730-2.0.0</google.api.version>
+        <google.api.version>v3-rev20240809-2.0.0</google.api.version>
         <google.auth.version>1.5.0</google.auth.version>
         <google.oauth.version>1.36.0</google.oauth.version>
         <hapi.version>2.5.1</hapi.version>
-        <hibernate-core.version>6.5.2.Final</hibernate-core.version>
+        <hibernate-core.version>6.6.0.Final</hibernate-core.version>
         <httpclient.version>4.5.14</httpclient.version>
         <httpcomponents.version>4.5.14</httpcomponents.version>
         <java-assist.version>3.29.2-GA</java-assist.version>
@@ -100,7 +100,7 @@
         <smooks.version>1.7.1</smooks.version>
         <smooks-fragments.version>1.7.1.0</smooks-fragments.version>
         <skyscreamer.version>1.5.3</skyscreamer.version>
-        <slf4j.version>2.0.15</slf4j.version>
+        <slf4j.version>2.0.16</slf4j.version>
         <tika.version>1.16</tika.version>
         <wsdl4j.version>1.6.3</wsdl4j.version>
         <xmlunit.version>1.6</xmlunit.version>
@@ -200,7 +200,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.1.0</version>
+                    <version>3.3.1</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
