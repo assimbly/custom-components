@@ -32,12 +32,12 @@ public class SqlProcessor implements Processor {
         SqlConfiguration config = endpoint.getConfiguration();
 
         JDBCConnection jdbcConnection = JDBCConnection.builder()
-                    .setUsername(config.getUsername())
-                    .setPassword(config.getPassword())
-                    .setDatabase(config.getDatabase())
-                    .setHost(config.getHost())
-                    .setInstance(config.getInstance())
-                    .setPort(config.getPort())
+                    .setUsername(config.getUsername(exchange))
+                    .setPassword(config.getPassword(exchange))
+                    .setDatabase(config.getDatabase(exchange))
+                    .setHost(config.getHost(exchange))
+                    .setInstance(config.getInstance(exchange))
+                    .setPort(Integer.parseInt(config.getPort(exchange)))
                     .setSecure(config.getUseSSL())
                     .setEnabledTLSProtocols(config.getTlsVersion())
                     .setEscapeChars(config.getEscapeChars())

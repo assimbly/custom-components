@@ -1,5 +1,7 @@
 package org.assimbly.xmltojsonlegacy.utils;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assimbly.xmltojsonlegacy.Constants;
 import org.assimbly.xmltojsonlegacy.Namespace;
 import org.w3c.dom.Element;
@@ -99,6 +101,21 @@ public class ElementUtils {
             textContent = textContent.trim();
         }
         return textContent;
+    }
+
+
+    public static JsonNode getValidJson(String value) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(value);
+            if (jsonNode.isObject() || jsonNode.isArray()) {
+                return jsonNode;
+            } else {
+                return null; // Not a valid JSON object or array
+            }
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     // calculate number of siblings of an element
@@ -242,7 +259,7 @@ public class ElementUtils {
     }
 
     // check if node element have an empty text content
-    public static boolean isElementWithEmptyTextContent(Element nodeElement, int elementDeepestDepth) {
+    public static boolean isElementWithEmptyTextContent(Element nodeElement) {
         if(!nodeElement.hasChildNodes()) {
             return true;
         }
@@ -251,7 +268,9 @@ public class ElementUtils {
         int nodeListSize = nodeList.getLength();
         for(int index = 0; index < nodeListSize; index++) {
             Node childNode = nodeList.item(index);
-            if(childNode.getNodeType() == Node.TEXT_NODE) {
+            boolean isTextNode = childNode.getNodeType() == Node.TEXT_NODE;
+            boolean isTextNodeEmpty = (childNode.getTextContent() == null || childNode.getTextContent().replace("\n", "").isEmpty());
+            if(isTextNode && !isTextNodeEmpty) {
                 return false;
             }
         }

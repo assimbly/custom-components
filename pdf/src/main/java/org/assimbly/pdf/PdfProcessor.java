@@ -3,15 +3,14 @@ package org.assimbly.pdf;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.Processor;
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.io.RandomAccessReadBuffer;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.assimbly.util.helper.Base64Helper;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 public class PdfProcessor implements Processor {
 
@@ -24,9 +23,11 @@ public class PdfProcessor implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
 
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
         byte[] template = endpoint.requestPdfTemplate();
 
-        try(PDDocument document = PDDocument.load(template)) {
+        try(PDDocument document = Loader.loadPDF(template)) {
 
             PDDocumentCatalog docCatalog = document.getDocumentCatalog();
             PDAcroForm acroForm = docCatalog.getAcroForm();
@@ -34,24 +35,23 @@ public class PdfProcessor implements Processor {
             Message in = exchange.getIn();
 
             acroForm.getFields().stream()
-                    .filter(pdField -> in.getHeaders().containsKey(pdField.getFullyQualifiedName()))
-                    .forEach(pdField -> {
+                    .filter(pdfField -> in.getHeaders().containsKey(pdfField.getFullyQualifiedName()))
+                    .forEach(pdfField -> {
                         try {
-                            pdField.setValue(in.getHeader(pdField.getFullyQualifiedName(), String.class));
-                            pdField.setReadOnly(true);
+                            pdfField.setValue(in.getHeader(pdfField.getFullyQualifiedName(), String.class));
+                            pdfField.setReadOnly(true);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                     });
 
-            try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                 BufferedOutputStream bos = new BufferedOutputStream(baos)) {
-                document.save(bos);
 
-                exchange.getIn().setBody(baos.toByteArray());
-            }
+            document.save(baos);
+            document.close();
 
+            exchange.getIn().setBody(baos.toByteArray());
             exchange.getIn().setHeader(Exchange.CONTENT_TYPE, "application/pdf");
+
         }
     }
 }

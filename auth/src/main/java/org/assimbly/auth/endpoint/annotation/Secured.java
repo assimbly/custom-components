@@ -2,7 +2,7 @@ package org.assimbly.auth.endpoint.annotation;
 
 import org.assimbly.auth.domain.Role;
 
-import javax.ws.rs.NameBinding;
+import jakarta.ws.rs.NameBinding;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 

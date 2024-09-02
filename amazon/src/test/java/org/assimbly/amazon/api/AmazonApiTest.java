@@ -2,15 +2,16 @@ package org.assimbly.amazon.api;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.assimbly.amazon.domain.Amazon;
 import org.assimbly.amazon.domain.Region;
 import org.assimbly.amazon.exception.MarketplaceNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AmazonApiTest {
 
@@ -19,7 +20,7 @@ public class AmazonApiTest {
     private static AmazonMarketplaceApi api;
     private static List<NameValuePair> form;
 
-    @Before
+    @BeforeEach
     public void init() throws MarketplaceNotFoundException {
         form = new ArrayList<>();
         form.add(new BasicNameValuePair("FeedType", "_POST_PRODUCT_DATA_"));
@@ -37,7 +38,7 @@ public class AmazonApiTest {
         String actual = api.getUrlEncodedForm();
         String expected = "FeedType=_POST_PRODUCT_DATA_&PurgeAndReplace=false&Encoded=%3D+%21";
 
-        Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -47,7 +48,7 @@ public class AmazonApiTest {
         NameValuePair expected =
                 new BasicNameValuePair("Signature", "N+RmfABaBxf20r0TJlDwd5ZtnAQJhJ5jALr5tFwKV6E=");
 
-        Assert.assertEquals(3, form.size());
-        Assert.assertEquals(expected, form.get(2));
+        assertEquals(3, form.size());
+        assertEquals(expected, form.get(2));
     }
 }

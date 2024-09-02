@@ -1,7 +1,7 @@
 package org.assimbly.soap.util.helpers;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -15,13 +15,13 @@ import javax.xml.namespace.QName;
 
 import java.util.Vector;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SchemaHelperTest {
 
     private static Definition definition;
 
-    @Before
+    @BeforeEach
     public void setup() throws WSDLException {
         WSDLFactory factory = WSDLFactory.newInstance();
         WSDLReader reader = factory.newWSDLReader();

@@ -2,19 +2,19 @@ package org.assimbly.auth.jwt;
 
 import org.assimbly.auth.JwtTestHelper;
 import org.assimbly.auth.util.helper.ConfigHelper;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.UnsupportedEncodingException;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class JwtValidatorTest {
 
     private static String key;
 
-    @BeforeClass
+    @BeforeAll
     public static void init() {
         key = ConfigHelper.get("secretKey");
     }

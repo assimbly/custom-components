@@ -1,13 +1,12 @@
 package org.assimbly.mail.component.mail;
 
-import org.apache.axiom.attachments.ByteArrayDataSource;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.attachment.AttachmentMessage;
 import org.apache.commons.io.IOUtils;
 import org.assimbly.util.helper.MimeTypeHelper;
 
-import javax.activation.DataHandler;
+import jakarta.activation.DataHandler;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -35,9 +34,12 @@ public class AttachmentAttacher implements Processor {
         if (emailBody == null)
             emailBody = "";
 
-        in.addAttachment(fileName, new DataHandler(new ByteArrayDataSource(IOUtils.toByteArray(is), mimeType)));
+        AttachmentMessage attMsg = exchange.getIn(AttachmentMessage.class);
+        attMsg.addAttachment(fileName, new DataHandler(IOUtils.toByteArray(is), mimeType));
 
         in.setHeader(Exchange.CONTENT_TYPE, "text/plain");
         in.setBody(emailBody);
+
     }
+
 }

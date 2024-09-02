@@ -8,9 +8,9 @@ import org.apache.commons.io.IOUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.assimbly.util.helper.Base64Helper;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import org.assimbly.amazon.AmazonConfiguration;
 
 import java.io.IOException;
@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AmazonServiceTest {
 
@@ -30,7 +32,7 @@ public class AmazonServiceTest {
     private static AmazonServiceImpl service;
 
 
-    @Before
+    @BeforeEach
     public void init() {
         service = new AmazonServiceImpl();
         configuration = new AmazonConfiguration();
@@ -67,7 +69,7 @@ public class AmazonServiceTest {
 
         Map<String, String> result = service.interpolate(configuration.getParameters(), exchange);
 
-        Assert.assertEquals("_POST_INVENTORY_AVAILABILITY_DATA_", result.get("FeedType"));
+        assertEquals("_POST_INVENTORY_AVAILABILITY_DATA_", result.get("FeedType"));
     }
 
     @Test
@@ -81,7 +83,7 @@ public class AmazonServiceTest {
 
         String actual = service.computeContentMD5Value(input);
 
-        Assert.assertEquals("LhKDa4uDxuzBekZWGaSrNA==", actual);
+        assertEquals("LhKDa4uDxuzBekZWGaSrNA==", actual);
     }
 
     @Test
@@ -93,14 +95,14 @@ public class AmazonServiceTest {
         Map<String, String> result = service.applyOverrideHeaders(configuration.getParameters(), exchange.getIn().getHeaders());
         String actual = result.get("FeedType");
 
-        Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
 
         exchange.getIn().setHeader("AssimblyAmazonFeedType", "_POST_INVENTORY_AVAILABILITY_DATA_");
 
         result = service.applyOverrideHeaders(configuration.getParameters(), exchange.getIn().getHeaders());
         actual = result.get("FeedType");
 
-        Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -123,7 +125,7 @@ public class AmazonServiceTest {
 
         List<NameValuePair> actual = service.toForm(parameters);
 
-        Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
 }

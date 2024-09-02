@@ -25,10 +25,12 @@ import javax.wsdl.extensions.schema.SchemaImport;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.soap.*;
+import jakarta.xml.soap.*;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -119,24 +121,31 @@ public class SoapProcessor implements Processor {
 
         Map<String, Object> response = WSDLHelper.execute(destination, soapMessage, exchange);
 
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
         /*
          * When the extract parameter is "true" remove the SOAP Envelope element
          * and the SOAP Body element from the response.
          *
          * Eg. get only the XML.
          */
+        SOAPMessage soapResponse = (SOAPMessage) response.get("ResponseMessage");
+
         if (config.isExtract()) {
-            SOAPMessage soapResponse = (SOAPMessage) response.get("ResponseMessage");
             Node element = soapResponse.getSOAPBody().getFirstChild();
 
             // When first node is actually a text() node, get the second one
             if (element.getNodeName().startsWith("#"))
                 element = soapResponse.getSOAPBody().getChildNodes().item(1);
 
-            response.put("ResponseBody", XmlHelper.prettyPrint(element));
+            String extractedXml = XmlHelper.prettyPrint(element);
+            byteArrayOutputStream.write(extractedXml.getBytes(StandardCharsets.UTF_8));
+        } else {
+            soapResponse.writeTo(byteArrayOutputStream);
         }
 
-        exchange.getIn().setBody(response.get("ResponseBody"));
+        byte[] responseBytes = byteArrayOutputStream.toByteArray();
+        exchange.getIn().setBody(responseBytes);
     }
 
     private Map<String, String> mimeHeaders(Binding binding, SoapConfiguration config) throws IOException {

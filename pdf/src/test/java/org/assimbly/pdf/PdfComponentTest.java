@@ -23,7 +23,7 @@ public class PdfComponentTest extends CamelTestSupport {
 
     private final ClassLoader classLoader = getClass().getClassLoader();
 
-    @EndpointInject(uri = "mock:out")
+    @EndpointInject("mock:out")
     private MockEndpoint resultEndpoint;
 
     private HttpServer localServer;

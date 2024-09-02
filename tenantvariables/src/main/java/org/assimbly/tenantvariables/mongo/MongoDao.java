@@ -1,18 +1,17 @@
 package org.assimbly.tenantvariables.mongo;
 
-import dev.morphia.Datastore;
-import dev.morphia.query.Query;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
 import org.assimbly.tenantvariables.TenantVariablesProcessor;
 import org.assimbly.tenantvariables.domain.EnvironmentValue;
 import org.assimbly.tenantvariables.domain.TenantVariable;
 import org.assimbly.tenantvariables.exception.EnvironmentValueNotFoundException;
+import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,6 +19,7 @@ public class MongoDao {
 
     private static final Logger LOG = LoggerFactory.getLogger(MongoDao.class);
 
+    private static final String TENANT_VARIABLES_COLLECTION_NAME = "tenant_variables";
     private static final String NAME_FIELD = "name";
 
     private static final String CREATED_BY_SYSTEM = "System";
@@ -28,13 +28,29 @@ public class MongoDao {
     private static final String TENANT_VARIABLE_EXPRESSION = "@\\{(.*?)}";
 
     public static TenantVariable findTenantVariableByName(String variableName, String tenant) {
-        Datastore datastore = MongoClientProvider.getInstance().getDatastore(tenant);
-        return datastore.find(TenantVariable.class).field(NAME_FIELD).equal(variableName).get();
+        MongoDatabase database = MongoClientProvider.getInstance().getDatabase(tenant);
+        MongoCollection<Document> collection = database.getCollection(TENANT_VARIABLES_COLLECTION_NAME);
+
+        Document document = collection.find(new Document(NAME_FIELD, variableName)).first();
+        if (document != null) {
+            return TenantVariable.fromDocument(document);
+        }
+        return null;
     }
 
     public static List<TenantVariable> findAll(String tenant) {
-        Datastore datastore = MongoClientProvider.getInstance().getDatastore(tenant);
-        return datastore.createQuery(TenantVariable.class).asList();
+        MongoDatabase database = MongoClientProvider.getInstance().getDatabase(tenant);
+        MongoCollection<Document> collection = database.getCollection(TENANT_VARIABLES_COLLECTION_NAME);
+
+        List<TenantVariable> tenantVariables = new ArrayList<>();
+        try (MongoCursor<Document> cursor = collection.find().iterator()) {
+            while (cursor.hasNext()) {
+                Document document = cursor.next();
+                TenantVariable tenantVariable = TenantVariable.fromDocument(document);
+                tenantVariables.add(tenantVariable);
+            }
+        }
+        return tenantVariables;
     }
 
     public static String getTenantVariableValue(String tenantVarName, String tenant, String environment) {
@@ -111,8 +127,9 @@ public class MongoDao {
             String tenantVarName, String tenantVarValue, String tenant, String environment
     ) {
         TenantVariable tenantVariable = findTenantVariableByName(tenantVarName, tenant);
+        boolean tenantVariableExist = !Objects.isNull(tenantVariable);
 
-        if(Objects.isNull(tenantVariable)) {
+        if(!tenantVariableExist) {
             tenantVariable = new TenantVariable(tenantVarName);
             tenantVariable.setCreatedAt(new Date().getTime());
             tenantVariable.setCreatedBy(CREATED_BY_SYSTEM);
@@ -125,28 +142,32 @@ public class MongoDao {
 
         variable.setEncrypted(false);
         variable.setValue(tenantVarValue);
-        variable.setUpdatedAt(new Date().getTime());
+        variable.setLastUpdate(new Date().getTime());
         variable.setUpdatedBy(UPDATED_BY_SYSTEM);
 
-        updateTenantVariable(tenantVariable, tenant);
+        updateTenantVariable(tenantVariable, tenant, tenantVariableExist);
     }
 
-    public static void updateTenantVariable(TenantVariable tenantVariable, String tenant){
-        Datastore datastore = MongoClientProvider.getInstance().getDatastore(tenant);
-        datastore.save(tenantVariable);
+    public static void updateTenantVariable(TenantVariable tenantVariable, String tenant, boolean tenantVariableExist){
+        MongoDatabase database = MongoClientProvider.getInstance().getDatabase(tenant);
+        MongoCollection<Document> collection = database.getCollection(TENANT_VARIABLES_COLLECTION_NAME);
+        if(tenantVariableExist) {
+            collection.replaceOne(new Document(TenantVariable.ID_FIELD, tenantVariable.get_id()), tenantVariable.toDocument());
+        } else {
+            collection.insertOne(tenantVariable.toDocument());
+        }
     }
 
     public static void deleteTenantVariable(TenantVariable tenantVariable, String tenant) {
-        Datastore datastore = MongoClientProvider.getInstance().getDatastore(tenant);
-        datastore.delete(tenantVariable);
+        MongoDatabase database = MongoClientProvider.getInstance().getDatabase(tenant);
+        MongoCollection<Document> collection = database.getCollection(TENANT_VARIABLES_COLLECTION_NAME);
+        collection.deleteOne(new Document(TenantVariable.ID_FIELD, tenantVariable.get_id()));
     }
 
     public static void deleteTenantVariablesByName(String tenantVarName, String tenant) {
-        Datastore datastore = MongoClientProvider.getInstance().getDatastore(tenant);
-        Query<TenantVariable> query = datastore.createQuery(TenantVariable.class)
-                .field("name")
-                .contains(tenantVarName);
-        datastore.delete(query);
+        MongoDatabase database = MongoClientProvider.getInstance().getDatabase(tenant);
+        MongoCollection<Document> collection = database.getCollection(TENANT_VARIABLES_COLLECTION_NAME);
+        collection.deleteMany(new Document(TenantVariable.NAME_FIELD, tenantVarName));
     }
 
 }

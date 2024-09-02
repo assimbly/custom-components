@@ -17,10 +17,12 @@ public class OtherTypeWithoutNamespace implements ElementNodeTransaction {
         if(!config.isTypeHints()) {
             // extract child as other type and add into the array node
             int children = ElementUtils.calculateNumberOfChildren((Element) childNode);
+            boolean childrenHasEmptyTextContent = ElementUtils.isElementWithEmptyTextContent((Element) childNode);
             boolean classAttrOnChildElementIsNUll = ElementChecker.isElementAttributeNull(
                     (Element) childNode, Constants.JSON_XML_ATTR_CLASS
             );
             if(config.isElementWithEmptyTextContent() ||
+                    childrenHasEmptyTextContent ||
                     (config.getLevel() == 0 && config.getNumberOfChildren() > 1) ||
                     (config.getNumberOfChildren() == 1 && children >= 1 && !classAttrOnChildElementIsNUll) ||
                     !ElementUtils.areSiblingsNamesEqual((Element) childNode) ||

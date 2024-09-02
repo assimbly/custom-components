@@ -2,8 +2,8 @@ package org.assimbly.cookies;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.support.DefaultExchange;
-import org.apache.http.cookie.Cookie;
 import org.apache.camel.test.junit5.CamelTestSupport;
+import org.apache.hc.client5.http.cookie.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

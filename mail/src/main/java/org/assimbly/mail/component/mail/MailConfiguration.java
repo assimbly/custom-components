@@ -21,10 +21,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import javax.mail.Message;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.net.ssl.SSLContext;
+import jakarta.mail.Message;
+import jakarta.mail.PasswordAuthentication;
+import jakarta.mail.Session;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.RuntimeCamelException;
@@ -35,8 +34,9 @@ import org.apache.camel.spi.UriPath;
 import org.apache.camel.support.jsse.SSLContextParameters;
 import org.apache.camel.util.ObjectHelper;
 
-import org.assimbly.tenantvariables.domain.TenantVariable;
 import org.assimbly.tenantvariables.mongo.MongoDao;
+
+import javax.net.ssl.SSLContext;
 
 /**
  * Represents the configuration data for communicating over email
@@ -234,8 +234,10 @@ public class MailConfiguration implements Cloneable {
         if (username != null) {
             answer.setUsername(username);
         }
-        if (password != null && isBasicAuthentication()) {
+        if (isBasicAuthentication()) {
             answer.setPassword(password);
+        } else {
+            answer.setPassword(getAccessToken());
         }
         if (authenticator != null) {
             answer.setAuthenticator(authenticator);
@@ -261,7 +263,7 @@ public class MailConfiguration implements Cloneable {
                 }
                 // use our authenticator that does no live user interaction but returns the already configured username and password
                 Session sessionInstance = Session.getInstance(answer.getJavaMailProperties(),
-                        authenticator == null ? new DefaultAuthenticator(getUsername(), getPassword()) : authenticator);
+                        authenticator == null ? new DefaultAuthenticator(getUsername(), (isBasicAuthentication() ? getPassword() : null)) : authenticator);
                 // sets the debug mode of the underlying mail framework
                 sessionInstance.setDebug(debugMode);
                 answer.setSession(sessionInstance);
@@ -290,6 +292,8 @@ public class MailConfiguration implements Cloneable {
         }
 
         if(!isBasicAuthentication()) {
+            properties.put("mail." + protocol + ".auth.mechanisms", "XOAUTH2");
+            properties.put("mail." + protocol + ".auth", "true");
             properties.put("mail." + protocol + ".sasl.enable", "true");
             properties.put("mail." + protocol + ".sasl.mechanisms", "XOAUTH2");
         }
@@ -300,7 +304,7 @@ public class MailConfiguration implements Cloneable {
 
         if (debugMode) {
             // add more debug for the SSL communication as well
-            properties.put("javax.net.debug", "all");
+            properties.put("jakarta.net.debug", "all");
         }
 
         if (sslContextParameters != null && isSecureProtocol()) {
@@ -572,8 +576,8 @@ public class MailConfiguration implements Cloneable {
      * Specifies whether Camel should map the received mail message to Camel body/headers/attachments. If set to true,
      * the body of the mail message is mapped to the body of the Camel IN message, the mail headers are mapped to IN
      * headers, and the attachments to Camel IN attachment message. If this option is set to false then the IN message
-     * contains a raw javax.mail.Message. You can retrieve this raw message by calling
-     * exchange.getIn().getBody(javax.mail.Message.class).
+     * contains a raw jakarta.mail.Message. You can retrieve this raw message by calling
+     * exchange.getIn().getBody(jakarta.mail.Message.class).
      */
     public void setMapMailMessage(boolean mapMailMessage) {
         this.mapMailMessage = mapMailMessage;
@@ -815,7 +819,7 @@ public class MailConfiguration implements Cloneable {
     }
 
     /**
-     * Will mark the javax.mail.Message as peeked before processing the mail message. This applies to IMAPMessage
+     * Will mark the jakarta.mail.Message as peeked before processing the mail message. This applies to IMAPMessage
      * messages types only. By using peek the mail will not be eager marked as SEEN on the mail server, which allows us
      * to rollback the mail message if there is an error processing in Camel.
      */

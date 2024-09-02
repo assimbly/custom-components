@@ -1,24 +1,26 @@
 package org.assimbly.auth.endpoint;
 
+import com.mongodb.client.MongoClient;
 import org.assimbly.auth.domain.Role;
 import org.assimbly.auth.domain.Tenant;
 import org.assimbly.auth.domain.User;
 import org.assimbly.auth.endpoint.annotation.Secured;
 import org.assimbly.auth.jwt.JwtValidator;
+import org.assimbly.auth.mongo.MongoClientProvider;
 import org.assimbly.auth.mongo.MongoDao;
 import org.assimbly.auth.util.helper.ConfigHelper;
 
-import javax.annotation.Priority;
-import javax.ws.rs.ForbiddenException;
-import javax.ws.rs.Priorities;
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ContainerRequestFilter;
-import javax.ws.rs.container.ResourceInfo;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Provider;
+import jakarta.annotation.Priority;
+import jakarta.ws.rs.ForbiddenException;
+import jakarta.ws.rs.Priorities;
+import jakarta.ws.rs.container.ContainerRequestContext;
+import jakarta.ws.rs.container.ContainerRequestFilter;
+import jakarta.ws.rs.container.ResourceInfo;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.MultivaluedMap;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.ext.Provider;
 import java.io.IOException;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
@@ -45,11 +47,15 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     private ResourceInfo resourceInfo;
 
     public AuthorizationFilter() {
-        this.mongoDao = new MongoDao(ConfigHelper.get("baseDatabaseName"));
+        String baseDatabaseName = ConfigHelper.get("baseDatabaseName");
+        MongoClient mongoClient = MongoClientProvider.getClient();
+        this.mongoDao = new MongoDao(mongoClient, baseDatabaseName);
+        //this.mongoDao = new MongoDao(ConfigHelper.get("baseDatabaseName"));
     }
 
-    public AuthorizationFilter(String database){
-        mongoDao = new MongoDao(database);
+    public AuthorizationFilter(String baseDatabaseName){
+        MongoClient mongoClient = MongoClientProvider.getClient();
+        this.mongoDao = new MongoDao(mongoClient, baseDatabaseName);
     }
 
     /**

@@ -2,6 +2,8 @@ package org.assimbly.pdftotext;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.io.RandomAccessRead;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.http.MediaType;
@@ -12,9 +14,10 @@ public class PdfToTextProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        InputStream input = exchange.getIn().getBody(InputStream.class);
 
-        PDDocument document = PDDocument.load(input);
+        byte[] input = exchange.getIn().getBody(byte[].class);
+
+        PDDocument document = Loader.loadPDF(input);
 
         PDFTextStripper stripper = new PDFTextStripper();
 

@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>custom-components</artifactId>
 		<groupId>org.assimbly</groupId>
-		<version>4.0.6</version>
+		<version>5.0.0</version>
 	</parent>
 
   <artifactId>pdf</artifactId>
@@ -29,18 +29,13 @@
 		  <version>${pdfbox.version}</version>
 	  </dependency>
 	  <dependency>
-		  <groupId>org.bouncycastle</groupId>
-		  <artifactId>bcprov-jdk15on</artifactId>
-		  <version>${bouncycastle.version}</version>
+		  <groupId>org.apache.pdfbox</groupId>
+		  <artifactId>pdfbox-io</artifactId>
+		  <version>${pdfbox.version}</version>
 	  </dependency>
 	  <dependency>
 		  <groupId>org.bouncycastle</groupId>
-		  <artifactId>bcmail-jdk15on</artifactId>
-		  <version>${bouncycastle.version}</version>
-	  </dependency>
-	  <dependency>
-		  <groupId>org.bouncycastle</groupId>
-		  <artifactId>bcpkix-jdk15on</artifactId>
+		  <artifactId>bcprov-jdk18on</artifactId>
 		  <version>${bouncycastle.version}</version>
 	  </dependency>
   </dependencies>
@@ -58,7 +53,7 @@
 						<configuration>
 							<toolchains>
 								<jdk>
-									<version>11</version>
+									<version>21</version>
 								</jdk>
 							</toolchains>
 						</configuration>

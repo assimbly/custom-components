@@ -8,9 +8,7 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.ByteArrayBody;
 import org.apache.log4j.Logger;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 
 public class MultipartProcessor implements Processor {
 
@@ -52,12 +50,12 @@ public class MultipartProcessor implements Processor {
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         entity.build().writeTo(out);
-        InputStream inputStream = new ByteArrayInputStream(out.toByteArray());
 
         // Set multipart entity as the outgoing message’s body and set content type
         exchange.getIn().setHeader("Content-Type", "multipart/form-data; boundary=--------------------------Assimbly");
-        exchange.getIn().setBody(inputStream);
 
+        byte[] outBytes = out.toByteArray();
+        exchange.getIn().setBody(outBytes);
     }
 
 }

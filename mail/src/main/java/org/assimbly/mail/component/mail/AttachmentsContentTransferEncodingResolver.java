@@ -16,7 +16,7 @@
  */
 package org.assimbly.mail.component.mail;
 
-import javax.mail.BodyPart;
+import jakarta.mail.BodyPart;
 
 /**
  * Resolver to determine Content-Transfer-Encoding for file attachments. <br/>

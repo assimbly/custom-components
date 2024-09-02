@@ -21,7 +21,7 @@ import javax.wsdl.xml.WSDLReader;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.soap.*;
+import jakarta.xml.soap.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 

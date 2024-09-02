@@ -1,7 +1,9 @@
 package org.assimbly.xmltoexcel.helpers;
 
 import org.apache.poi.ss.usermodel.*;
-import org.junit.Assert;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class AssertExcel {
     public static void assertWorkbooksAreEqual(Workbook actual, Workbook expected) {
@@ -15,11 +17,9 @@ public class AssertExcel {
         int expectedFirstRowNum = expected.getFirstRowNum();
         int expectedLastRowNum = expected.getLastRowNum();
 
-        Assert.assertEquals("Expected sheet names to be equal", expectedSheetName, actual.getSheetName());
-        Assert.assertEquals("Expected first row numbers to be equal in sheet: " + expectedSheetName,
-                expectedFirstRowNum, actual.getFirstRowNum());
-        Assert.assertEquals("Expected last row numbers to be equal in sheet: " + expectedSheetName,
-                expectedLastRowNum, actual.getLastRowNum());
+        assertEquals(expectedSheetName, actual.getSheetName(), "Expected sheet names to be equal");
+        assertEquals(expectedFirstRowNum, actual.getFirstRowNum(), "Expected first row numbers to be equal in sheet: " + expectedSheetName);
+        assertEquals(expectedLastRowNum, actual.getLastRowNum(), "Expected last row numbers to be equal in sheet: " + expectedSheetName);
 
         for (int i = expectedFirstRowNum; i <= expectedLastRowNum; i++) {
             assertRowsAreEqual(expectedSheetName, actual.getRow(i), expected.getRow(i));
@@ -30,10 +30,8 @@ public class AssertExcel {
         int expectedFirstCellNum = expected.getFirstCellNum();
         int expectedLastCellNum = expected.getLastCellNum();
 
-        Assert.assertEquals("Expected first cell numbers to be equal in sheet: " + sheetName,
-                expectedFirstCellNum, actual.getFirstCellNum());
-        Assert.assertEquals("Expected last cell numbers to be equal in sheet: " + sheetName,
-                expectedLastCellNum, actual.getLastCellNum());
+        assertEquals(expectedFirstCellNum, actual.getFirstCellNum(), "Expected first cell numbers to be equal in sheet: " + sheetName);
+        assertEquals(expectedLastCellNum, actual.getLastCellNum(), "Expected last cell numbers to be equal in sheet: " + sheetName);
 
         for (int i = expectedFirstCellNum; i <= expectedLastCellNum; i++) {
             assertCellsAreEqual(sheetName, actual.getCell(i), expected.getCell(i));
@@ -42,12 +40,12 @@ public class AssertExcel {
 
     private static void assertCellsAreEqual(String sheetName, Cell actual, Cell expected) {
         if (expected == null) {
-            Assert.assertNull(actual);
+            assertNull(actual);
             return;
         }
 
-        Assert.assertEquals(String.format("Expected the cell type of cell %s to be equal in sheet: %s",
-                expected.getAddress(), sheetName), expected.getCellType(), actual.getCellType());
+        assertEquals(expected.getCellType(), actual.getCellType(), String.format("Expected the cell type of cell %s to be equal in sheet: %s",
+                expected.getAddress(), sheetName));
 
         assertCellValuesAreEqual(sheetName, actual, expected);
     }
@@ -65,7 +63,7 @@ public class AssertExcel {
             expectedValue = expected.getStringCellValue();
         }
 
-        Assert.assertEquals(String.format("Expected the values of cell %s to be equal in sheet: %s",
-                expected.getAddress(), sheetName), expectedValue, actualValue);
+        assertEquals(expectedValue, actualValue, String.format("Expected the values of cell %s to be equal in sheet: %s",
+                expected.getAddress(), sheetName));
     }
 }

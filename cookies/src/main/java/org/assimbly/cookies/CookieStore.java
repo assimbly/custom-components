@@ -2,11 +2,11 @@ package org.assimbly.cookies;
 
 import org.apache.camel.spi.BeanProcessorFactory;
 import org.apache.camel.spi.annotations.JdkService;
+import org.apache.hc.client5.http.cookie.Cookie;
+import org.apache.hc.client5.http.impl.cookie.BasicClientCookie;
 import org.assimbly.util.helper.ExchangeHelper;
 import org.apache.camel.Exchange;
-import org.apache.http.cookie.Cookie;
-import org.apache.http.impl.client.BasicCookieStore;
-import org.apache.http.impl.cookie.BasicClientCookie;
+import org.apache.hc.client5.http.cookie.BasicCookieStore;
 
 import java.util.List;
 
