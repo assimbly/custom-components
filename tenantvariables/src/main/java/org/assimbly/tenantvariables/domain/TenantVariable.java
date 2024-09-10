@@ -14,6 +14,7 @@ public class TenantVariable {
     public static final String CREATED_AT_FIELD = "createdAt";
     public static final String CREATED_BY_FIELD = "createdBy";
     public static final String VALUES_FIELD = "values";
+    public static final String TAG_IDS_FIELD = "tag_ids";
 
     private ObjectId _id;
     private String name;
@@ -22,15 +23,19 @@ public class TenantVariable {
 
     private List<EnvironmentValue> values;
 
+    private List<ObjectId> tagIds;
+
     public TenantVariable(){
         this._id = new ObjectId();
         this.values = new ArrayList<>();
+        this.tagIds = new ArrayList<>();
     }
 
     public TenantVariable(String name){
         this._id = new ObjectId();
         this.name = name;
         this.values = new ArrayList<>();
+        this.tagIds = new ArrayList<>();
     }
 
     public List<EnvironmentValue> getValues() {
@@ -71,6 +76,8 @@ public class TenantVariable {
             tenantVariable.put(environmentValue);
         }
 
+        tenantVariable.setTagIds(document.getList(TAG_IDS_FIELD, ObjectId.class));
+
         return tenantVariable;
     }
 
@@ -94,6 +101,8 @@ public class TenantVariable {
             valuesList.add(valueDoc);
         }
         document.append(VALUES_FIELD, valuesList);
+
+        document.append(TAG_IDS_FIELD, this.getTagIds());
 
         return document;
     }
@@ -125,4 +134,12 @@ public class TenantVariable {
     }
 
     public void setCreatedBy(String createdBy) { this.createdBy = createdBy; }
+
+    public List<ObjectId> getTagIds() {
+        return tagIds;
+    }
+
+    public void setTagIds(List<ObjectId> tagIds) {
+        this.tagIds = tagIds;
+    }
 }
