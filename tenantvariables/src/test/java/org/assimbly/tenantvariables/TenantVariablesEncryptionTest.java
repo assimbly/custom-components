@@ -17,11 +17,12 @@ public class TenantVariablesEncryptionTest {
 
     private static TenantVariablesProcessor processor;
 
+
     @BeforeAll
-    public static void setup(){
+    public static void setup() {
         processor = new TenantVariablesProcessor();
-        try (MockedStatic<System> mockedSystem = Mockito.mockStatic(System.class)) {
-            mockedSystem.when(() -> System.getenv("ASSIMBLY_ENCRYPTION_SECRET")).thenReturn("assimblyassimblyassimblyassimbly");
+        try (MockedStatic<EnvironmentVariables> mockedEnv = Mockito.mockStatic(EnvironmentVariables.class)) {
+            mockedEnv.when(() -> EnvironmentVariables.getEnv("ASSIMBLY_ENCRYPTION_SECRET")).thenReturn("assimblyassimblyassimblyassimbly");
         }
     }
 

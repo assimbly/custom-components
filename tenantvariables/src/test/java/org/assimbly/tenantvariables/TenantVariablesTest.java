@@ -4,7 +4,6 @@ import org.abstractj.kalium.crypto.Random;
 import org.apache.camel.CamelExecutionException;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.impl.engine.ExplicitCamelContextNameStrategy;
 import org.apache.camel.model.language.ConstantExpression;
 import org.apache.camel.support.DefaultExchange;
@@ -87,16 +86,6 @@ public class TenantVariablesTest extends CamelTestSupport {
     private static final String TENANT = "default";
 
     @AfterEach
-    @Override
-    public void tearDown() throws Exception {
-        try {
-            super.tearDown();
-        } catch (Exception e) {
-            // TODO: follow up reported issue with this method after upgrading Camel
-        }
-    }
-
-    @AfterEach
     public void after(){
         List<TenantVariable> variables = MongoDao.findAll(TENANT);
 
@@ -114,18 +103,8 @@ public class TenantVariablesTest extends CamelTestSupport {
         }
     }
 
-    @Override
     @BeforeEach
-    public void setUp() throws Exception {
-        // Starts the CamelContext
-        super.setUp();
-
-        // Start Camel
-        context = new DefaultCamelContext();
-        context.addRoutes(createRouteBuilder());
-        context.start();
-
-        template = context.createProducerTemplate();
+    public void setMongoDao() throws Exception {
 
         MongoDao.updateTenantVariable(createVariable(), TENANT, false);
         MongoDao.updateTenantVariable(createEncryptedVariable(), TENANT, false);
