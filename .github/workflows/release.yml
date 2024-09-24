@@ -12,6 +12,7 @@ on:
       milestone:
         description: 'Milestone to use as version'
         type: string
+        required: true
 
   workflow_call:
     inputs:
@@ -22,6 +23,7 @@ on:
       milestone:
         description: 'Milestone to use as version'
         type: string
+        required: true
 
 jobs:
   delete_old_snapshots:
@@ -39,7 +41,7 @@ jobs:
           organization: assimbly
           type: maven
           keep: 0
-          version-pattern: "^${{ steps.check_version.outputs.VERSION_TO_DELETE }}$"
+          semver-pattern: "${{inputs.milestone}}"
           names: |
             org.assimbly.oauth2token
             org.assimbly.replace
@@ -59,15 +61,6 @@ jobs:
             org.assimbly.soap
             org.assimbly.tenantvariables
             org.assimbly.oriflame
-
-      - name: Delete packages
-        uses: smartsquaregmbh/delete-old-packages@v0.8.1
-        with:
-          organization: assimbly
-          type: maven
-          keep: 0
-          version-pattern: "^${{ steps.check_version.outputs.VERSION_TO_DELETE }}$"
-          names: |
             org.assimbly.docconverter
             org.assimbly.csvtoxml
             org.assimbly.amazon
@@ -88,7 +81,6 @@ jobs:
             org.assimbly.xmltojsonlegacy
             org.assimbly.custom-components
 
-
   release-jars:
     needs: delete_old_snapshots
     runs-on: ubuntu-latest
@@ -101,7 +93,7 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v4
         with:
-          repository: assimbly/runtime
+          repository: assimbly/custom-components
           ref: ${{ inputs.branch }}
           fetch-depth: 0
           token: ${{ secrets.RELEASE_TOKEN }}

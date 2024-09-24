@@ -10,6 +10,7 @@ on:
       milestone:
         description: 'Milestone to use as version'
         type: string
+        required: true
 
   workflow_call:
     inputs:
@@ -20,6 +21,7 @@ on:
       milestone:
         description: 'Milestone to use as version'
         type: string
+        required: true
 
 jobs:
   update_version:
@@ -33,7 +35,7 @@ jobs:
     steps:
 
       - name: Checkout the code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: assimbly/custom-components
           ref: ${{ inputs.branch }}
