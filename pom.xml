@@ -76,7 +76,7 @@
         <google.auth.version>1.5.0</google.auth.version>
         <google.oauth.version>1.36.0</google.oauth.version>
         <hapi.version>2.5.1</hapi.version>
-        <hibernate-core.version>6.6.0.Final</hibernate-core.version>
+        <hibernate-core.version>6.6.1.Final</hibernate-core.version>
         <httpclient.version>4.5.14</httpclient.version>
         <httpcomponents.version>4.5.14</httpcomponents.version>
         <java-assist.version>3.29.2-GA</java-assist.version>
