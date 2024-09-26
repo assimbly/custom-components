@@ -2,7 +2,7 @@ package org.assimbly.oauth2token.service;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.assimbly.tenantvariables.mongo.MongoDao;
+import org.assimbly.oauth2token.tenant.TenantVariableManager;
 import org.assimbly.util.exception.OAuth2TokenException;
 import org.json.JSONObject;
 import org.assimbly.auth.endpoint.annotation.Secured;
@@ -73,13 +73,13 @@ public class TokenService {
         String tokenTenantVarName = OAUTH2_PREFIX + id + OAUTH2_TOKEN_TENANT_VAR_SUFFIX;
 
         // check if there's a tenant variable inside tenantVar, and return real value
-        String scope = MongoDao.getTenantVariableValue(scopeVarName, tenant, environment);
-        String clientId = MongoDao.getTenantVariableValue(clientIdVarName, tenant, environment);
-        String clientSecret = MongoDao.getTenantVariableValue(clientSecretVarName, tenant, environment);
-        String redirectUri = MongoDao.getTenantVariableValue(redirectUriVarName, tenant, environment);
-        String uriToken = MongoDao.getTenantVariableValue(uriTokenVarName, tenant, environment);
-        String credentialsType = MongoDao.getTenantVariableValue(credentialsTypeVarName, tenant, environment);
-        String tokenTenantVar = MongoDao.getTenantVariableValue(tokenTenantVarName, tenant, environment);
+        String scope = TenantVariableManager.getTenantVariableValue(scopeVarName, tenant, environment);
+        String clientId = TenantVariableManager.getTenantVariableValue(clientIdVarName, tenant, environment);
+        String clientSecret = TenantVariableManager.getTenantVariableValue(clientSecretVarName, tenant, environment);
+        String redirectUri = TenantVariableManager.getTenantVariableValue(redirectUriVarName, tenant, environment);
+        String uriToken = TenantVariableManager.getTenantVariableValue(uriTokenVarName, tenant, environment);
+        String credentialsType = TenantVariableManager.getTenantVariableValue(credentialsTypeVarName, tenant, environment);
+        String tokenTenantVar = TenantVariableManager.getTenantVariableValue(tokenTenantVarName, tenant, environment);
 
         boolean customCredentialsType = StringUtils.isEmpty(credentialsType) ||
                 credentialsType.equals(CREDENTIALS_TYPE_CUSTOM);
@@ -98,20 +98,20 @@ public class TokenService {
         // save token info into tenant vars
         String expiresIn = tokenInfoMap.get(SERVICE_PARAM_EXPIRES_IN);
         if(expiresIn!=null && !expiresIn.isEmpty()) {
-            MongoDao.saveTenantVariable(expireDateVarName, expiresIn, tenant, environment);
+            TenantVariableManager.saveTenantVariable(expireDateVarName, expiresIn, tenant, environment);
         }
         String accessToken = tokenInfoMap.get(SERVICE_PARAM_ACCESS_TOKEN);
         if(accessToken!=null && !accessToken.isEmpty()) {
-            MongoDao.saveTenantVariable(accessTokenVarName, accessToken, tenant, environment);
-            MongoDao.saveTenantVariable(tokenTenantVar, accessToken, tenant, environment);
+            TenantVariableManager.saveTenantVariable(accessTokenVarName, accessToken, tenant, environment);
+            TenantVariableManager.discoverAndSaveTenantVariable(tokenTenantVar, accessToken, tenant, environment);
         }
         String refreshToken = tokenInfoMap.get(SERVICE_PARAM_REFRESH_TOKEN);
         if(refreshToken!=null && !refreshToken.isEmpty()) {
-            MongoDao.saveTenantVariable(refreshTokenVarName, refreshToken, tenant, environment);
+            TenantVariableManager.saveTenantVariable(refreshTokenVarName, refreshToken, tenant, environment);
         }
 
         // set refresh flag to inactive
-        MongoDao.saveTenantVariable(refreshFlagVarName, "0", tenant, environment);
+        TenantVariableManager.saveTenantVariable(refreshFlagVarName, "0", tenant, environment);
 
         // return token info hashmap
         return tokenInfoMap;
@@ -136,16 +136,16 @@ public class TokenService {
 
         try {
             // set refresh flag to active
-            MongoDao.saveTenantVariable(refreshFlagVarName, "1", tenant, environment);
+            TenantVariableManager.saveTenantVariable(refreshFlagVarName, "1", tenant, environment);
 
             // check if there's a tenant variable inside tenantVar, and return real value
-            String scope = MongoDao.getTenantVariableValue(scopeVarName, tenant, environment);
-            String clientId = MongoDao.getTenantVariableValue(clientIdVarName, tenant, environment);
-            String clientSecret = MongoDao.getTenantVariableValue(clientSecretVarName, tenant, environment);
-            String redirectUri = MongoDao.getTenantVariableValue(redirectUriVarName, tenant, environment);
-            String refreshToken = MongoDao.getTenantVariableValue(refreshTokenVarName, tenant, environment);
-            String uriToken = MongoDao.getTenantVariableValue(uriTokenVarName, tenant, environment);
-            String credentialsType = MongoDao.getTenantVariableValue(credentialsTypeVarName, tenant, environment);
+            String scope = TenantVariableManager.getTenantVariableValue(scopeVarName, tenant, environment);
+            String clientId = TenantVariableManager.getTenantVariableValue(clientIdVarName, tenant, environment);
+            String clientSecret = TenantVariableManager.getTenantVariableValue(clientSecretVarName, tenant, environment);
+            String redirectUri = TenantVariableManager.getTenantVariableValue(redirectUriVarName, tenant, environment);
+            String refreshToken = TenantVariableManager.getTenantVariableValue(refreshTokenVarName, tenant, environment);
+            String uriToken = TenantVariableManager.getTenantVariableValue(uriTokenVarName, tenant, environment);
+            String credentialsType = TenantVariableManager.getTenantVariableValue(credentialsTypeVarName, tenant, environment);
 
             boolean customCredentialsType = StringUtils.isEmpty(credentialsType) ||
                     credentialsType.equals(CREDENTIALS_TYPE_CUSTOM);
@@ -164,23 +164,23 @@ public class TokenService {
             // save token info into tenant vars
             String expiresInResp = tokenInfoMap.get(SERVICE_PARAM_EXPIRES_IN);
             if(expiresInResp!=null && !expiresInResp.isEmpty()) {
-                MongoDao.saveTenantVariable(expireDateVarName, expiresInResp, tenant, environment);
+                TenantVariableManager.saveTenantVariable(expireDateVarName, expiresInResp, tenant, environment);
             }
             String accessTokenResp = tokenInfoMap.get(SERVICE_PARAM_ACCESS_TOKEN);
             if(accessTokenResp!=null && !accessTokenResp.isEmpty()) {
-                MongoDao.saveTenantVariable(accessTokenVarName, accessTokenResp, tenant, environment);
+                TenantVariableManager.saveTenantVariable(accessTokenVarName, accessTokenResp, tenant, environment);
                 accessToken = accessTokenResp;
             }
             String refreshTokenResp = tokenInfoMap.get(SERVICE_PARAM_REFRESH_TOKEN);
             if(refreshTokenResp!=null && !refreshTokenResp.isEmpty()) {
-                MongoDao.saveTenantVariable(refreshTokenVarName, refreshTokenResp, tenant, environment);
+                TenantVariableManager.saveTenantVariable(refreshTokenVarName, refreshTokenResp, tenant, environment);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             // set refresh flag to inactive
-            MongoDao.saveTenantVariable(refreshFlagVarName, "0", tenant, environment);
+            TenantVariableManager.saveTenantVariable(refreshFlagVarName, "0", tenant, environment);
         }
 
         // return new access token
