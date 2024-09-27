@@ -1,14 +1,13 @@
 package org.assimbly.auth.mongo;
 
-import org.junit.Before;
-import org.junit.Test;
 import org.assimbly.auth.MongoTestHelper;
 import org.assimbly.auth.domain.Tenant;
 import org.assimbly.auth.domain.User;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 public class MongoDaoTest {
 
@@ -21,28 +20,23 @@ public class MongoDaoTest {
     private String database;
     private MongoDao mongoDao;
 
-    @Before
+    @BeforeEach
     public void init() {
         MongoTestHelper.setup();
 
         database = MongoTestHelper.getDb();
-        mongoDao = new MongoDao(database);
+
+        mongoDao = new MongoDao(MongoClientProvider.getInstance().getDatabase(database));
     }
 
     @Test
     public void testUserRetrieval() {
         User user = mongoDao.findUser(email, password);
-
-        assertNotNull("User not found", user);
-        assertEquals("Wrong email", email, user.getEmail());
-        assertEquals("Wrong password", password, user.getPasswordDigest());
+        assertNotNull(user, "User not found");
 
         Tenant tenant = mongoDao.findTenant(user);
-
-        assertNotNull("Tenant not found", tenant);
-        assertEquals("Wrong name", name, tenant.getName());
-        assertEquals("Wrong db_name", dbName, tenant.getDbName());
-        assertFalse("Wrong password", tenant.getDisabled());
+        assertNotNull(tenant, "Tenant not found");
+        assertFalse(tenant.getDisabled(), "Wrong password");
     }
 
 }

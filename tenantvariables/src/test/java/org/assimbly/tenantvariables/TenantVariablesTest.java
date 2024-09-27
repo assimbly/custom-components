@@ -8,28 +8,22 @@ import org.apache.camel.impl.engine.ExplicitCamelContextNameStrategy;
 import org.apache.camel.model.language.ConstantExpression;
 import org.apache.camel.support.DefaultExchange;
 
-import org.apache.camel.test.junit4.CamelTestSupport;
+import org.apache.camel.test.junit5.CamelTestSupport;
 import org.assimbly.util.exception.TenantVariableNotFoundException;
 import org.assimbly.util.helper.Base64Helper;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.*;
 import org.assimbly.tenantvariables.domain.EnvironmentValue;
 import org.assimbly.tenantvariables.domain.TenantVariable;
 import org.assimbly.tenantvariables.mongo.MongoDao;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.abstractj.kalium.NaCl.Sodium.CRYPTO_SECRETBOX_XSALSA20POLY1305_NONCEBYTES;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({TenantVariablesProcessor.class})
 public class TenantVariablesTest extends CamelTestSupport {
 
     private final String VARIABLE_DEFAULT_VALUE = "Unassigned";
@@ -71,8 +65,8 @@ public class TenantVariablesTest extends CamelTestSupport {
             "}";
 
     private final String BODY_MULTILINE_VALUE = "Multiline\n" +
-                                                "Body\n" +
-                                                "Test";
+            "Body\n" +
+            "Test";
 
     private final String BASE64_HEADER_ONLY = "JHtoZWFkZXIuSGVhZGVyTmFtZX0=";
     private final String BASE64_BODY_ONLY = "JHtib2R5fQ==";
@@ -91,17 +85,7 @@ public class TenantVariablesTest extends CamelTestSupport {
 
     private static final String TENANT = "default";
 
-    @After
-    @Override
-    public void tearDown() throws Exception {
-        try {
-            super.tearDown();
-        } catch (Exception e) {
-            // TODO: follow up reported issue with this method after upgrading Camel
-        }
-    }
-
-    @After
+    @AfterEach
     public void after(){
         List<TenantVariable> variables = MongoDao.findAll(TENANT);
 
@@ -110,8 +94,8 @@ public class TenantVariablesTest extends CamelTestSupport {
         }
     }
 
-    @After
-    public void afterAll(){
+    @AfterAll
+    public static void afterAll(){
         List<TenantVariable> variables = MongoDao.findAll(TENANT);
 
         for(TenantVariable g : variables){
@@ -119,19 +103,11 @@ public class TenantVariablesTest extends CamelTestSupport {
         }
     }
 
-    @Override
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    public void setMongoDao() throws Exception {
 
-        // Starts the CamelContext
-        super.setUp();
-
-        PowerMockito.mockStatic(System.class);
-        PowerMockito.when(System.getenv("ASSIMBLY_ENCRYPTION_SECRET")).thenReturn("assimblyassimblyassimblyassimbly");
-        PowerMockito.when(System.getenv("ASSIMBLY_ENV")).thenReturn("test");
-
-        MongoDao.updateTenantVariable(createVariable(), TENANT);
-        MongoDao.updateTenantVariable(createEncryptedVariable(), TENANT);
+        MongoDao.updateTenantVariable(createVariable(), TENANT, false);
+        MongoDao.updateTenantVariable(createEncryptedVariable(), TENANT, false);
 
         context.setNameStrategy(new ExplicitCamelContextNameStrategy("ID_12345"));
     }
@@ -232,20 +208,24 @@ public class TenantVariablesTest extends CamelTestSupport {
         };
     }
 
-    @Test(expected = CamelExecutionException.class)
+    @Test
     public void testGetUnassigedVariable() throws Exception {
-        // Trigger flow
-        template.sendBody("direct:getWithSpace", "");
+        Assertions.assertThrows(CamelExecutionException.class, () -> {
+            // Trigger flow
+            template.sendBody("direct:getWithSpace", "");
 
-        getMockEndpoint("mock:out").expectedMessageCount(1);
+            getMockEndpoint("mock:out").expectedMessageCount(1);
+        });
     }
 
     @Test
     public void testGetVariableWithHeader() throws Exception {
         TenantVariable variable = MongoDao.findTenantVariableByName(VARIABLE_NAME, TENANT);
+        boolean variableExist = !Objects.isNull(variable);
+
         variable.put(new EnvironmentValue("test"));
 
-        MongoDao.updateTenantVariable(variable, TENANT);
+        MongoDao.updateTenantVariable(variable, TENANT, variableExist);
 
         template.sendBody("direct:getWithHeader", "");
 
@@ -490,5 +470,4 @@ public class TenantVariablesTest extends CamelTestSupport {
 
         return variable;
     }
-
 }

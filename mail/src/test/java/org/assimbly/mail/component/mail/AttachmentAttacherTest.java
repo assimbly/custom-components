@@ -7,12 +7,16 @@ import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.support.DefaultExchange;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.apache.camel.test.junit5.TestSupport;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.Assert;
+
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AttachmentAttacherTest extends CamelTestSupport  {
 
@@ -31,7 +35,7 @@ public class AttachmentAttacherTest extends CamelTestSupport  {
         exchange.getIn().setHeader(Exchange.FILE_NAME, "juca.txt");
         attacher.process(exchange);
 
-        Assert.assertEquals("text/plain", exchange.getIn().getHeader(Exchange.CONTENT_TYPE));
+        Assertions.assertEquals("text/plain", exchange.getIn().getHeader(Exchange.CONTENT_TYPE));
     }
 
     @Test
@@ -43,8 +47,8 @@ public class AttachmentAttacherTest extends CamelTestSupport  {
         String fileName = exchange.getIn().getHeader(Exchange.FILE_NAME, String.class);
 
         TestSupport.assertStringContains(fileName, partialTimestamp);
-        Assert.assertTrue(fileName.startsWith("Assimbly-"));
-        Assert.assertTrue(fileName.endsWith(".txt"));
+        assertTrue(fileName.startsWith("Assimbly-"));
+        assertTrue(fileName.endsWith(".txt"));
     }
 
     @Test
@@ -53,8 +57,8 @@ public class AttachmentAttacherTest extends CamelTestSupport  {
         exchange.getIn().setHeader(Exchange.FILE_NAME, "juca.txt");
         attacher.process(exchange);
 
-        Assert.assertTrue(exchange.getIn(AttachmentMessage.class).getAttachmentObjects().containsKey("juca.txt"));
-        Assert.assertEquals("this is my body", exchange.getIn(AttachmentMessage.class).getAttachment("juca.txt").getContent());
+        Assertions.assertTrue(exchange.getIn(AttachmentMessage.class).getAttachmentObjects().containsKey("juca.txt"));
+        Assertions.assertEquals("this is my body", exchange.getIn(AttachmentMessage.class).getAttachment("juca.txt").getContent());
     }
 
     @Test
@@ -63,7 +67,7 @@ public class AttachmentAttacherTest extends CamelTestSupport  {
         exchange.getIn().setHeader(Exchange.FILE_NAME, "juca.txt");
         attacher.process(exchange);
 
-        Assert.assertEquals("", exchange.getIn().getBody(String.class));
+        Assertions.assertEquals("", exchange.getIn().getBody(String.class));
     }
 
     @Test
@@ -73,6 +77,6 @@ public class AttachmentAttacherTest extends CamelTestSupport  {
         exchange.getIn().setHeader(Exchange.FILE_NAME, "juca.txt");
         attacher.process(exchange);
 
-        Assert.assertEquals("my new body", exchange.getIn().getBody(String.class));
+        Assertions.assertEquals("my new body", exchange.getIn().getBody(String.class));
     }
 }

@@ -8,6 +8,7 @@ import org.apache.camel.Processor;
 import org.apache.camel.language.groovy.GroovyExpression;
 import org.apache.camel.language.xpath.XPathBuilder;
 import org.apache.camel.language.simple.SimpleLanguage;
+import org.apache.camel.model.language.SimpleExpression;
 import org.assimbly.util.exception.EnvironmentException;
 import org.assimbly.util.exception.TenantVariableNotFoundException;
 import org.assimbly.util.helper.Base64Helper;
@@ -32,7 +33,7 @@ public class TenantVariablesProcessor implements Processor {
 
     private static final String ASSIMBLY_ENCRYPTION_SECRET = "ASSIMBLY_ENCRYPTION_SECRET";
 
-    private final String TENANT_DEFAULT = "default";
+    private final String DEFAULT_TENANT_NAME = "default";
     private static final String ASSIMBLY_ENV = "ASSIMBLY_ENV";
     private final String BODY_VARIABLE_REGEX = "\\$\\{body(?:As\\(.*\\))?}";
 
@@ -69,7 +70,8 @@ public class TenantVariablesProcessor implements Processor {
 
     byte[] encrypt(String value, byte[] nonce) {
         SecretBox box = new SecretBox(System.getenv(ASSIMBLY_ENCRYPTION_SECRET).getBytes());
-        return box.encrypt(nonce, value.getBytes());
+        byte[] encriptedValue = box.encrypt(nonce, value.getBytes());
+        return encriptedValue;
     }
 
     public String getValueByEnvironmentValue(EnvironmentValue environmentVar) {
@@ -88,7 +90,7 @@ public class TenantVariablesProcessor implements Processor {
         String tenant = (
                 endpoint.getConfiguration().getTenant()!=null ?
                         endpoint.getConfiguration().getTenant() :
-                        TENANT_DEFAULT
+                        DEFAULT_TENANT_NAME
         );
         String environment = (
                 endpoint.getConfiguration().getEnvironment()!=null ?
@@ -102,7 +104,7 @@ public class TenantVariablesProcessor implements Processor {
 
         if(gVariable == null) {
             throw new TenantVariableNotFoundException(
-                    String.format("The Tenant Variable \"%s\" was not found in the database.", name)
+                    String.format("The Tenant Variable \"%1$s\" for tenant \"%2$s\" was not found in the database.", name, tenant)
             );
         }
 
@@ -133,7 +135,7 @@ public class TenantVariablesProcessor implements Processor {
         String tenant = (
                 endpoint.getConfiguration().getTenant()!=null ?
                         endpoint.getConfiguration().getTenant() :
-                        TENANT_DEFAULT
+                        DEFAULT_TENANT_NAME
         );
         String environment = (
                 endpoint.getConfiguration().getEnvironment()!=null ?
@@ -147,16 +149,17 @@ public class TenantVariablesProcessor implements Processor {
         value = interpolateVar(Base64Helper.unmarshal(value, UTF_8), exchange, expressionType);
 
         TenantVariable gVariable = MongoDao.findTenantVariableByName(name, tenant);
+        boolean gVariableExist = !Objects.isNull(gVariable);
 
-        if(Objects.isNull(gVariable)) {
+        if(!gVariableExist) {
             gVariable = new TenantVariable(name);
             gVariable.setCreatedAt(modifyDate);
             gVariable.setCreatedBy(modifier);
         }
 
-        if(environment != null && !gVariable.find(environment).isPresent()) {
+        if(environment != null && !gVariable.find(environment).isPresent()){
             gVariable.put(new EnvironmentValue(environment));
-        } else if(environment==null) {
+        }else if(environment==null){
             throw new TenantVariableNotFoundException("The Tenant Variable environment is not set.");
         }
 
@@ -176,21 +179,20 @@ public class TenantVariablesProcessor implements Processor {
 
         variable.setEncrypted(encrypt);
         variable.setValue(value);
-        variable.setUpdatedAt(modifyDate);
+        variable.setLastUpdate(modifyDate);
         variable.setUpdatedBy(modifier);
 
-        MongoDao.updateTenantVariable(gVariable, tenant);
+        MongoDao.updateTenantVariable(gVariable, tenant, gVariableExist);
     }
 
     private void deleteTenantVariable(Exchange exchange) {
         String name = endpoint.getConfiguration().getName();
         String tenant = (
-                endpoint.getConfiguration().getTenant()!=null ? endpoint.getConfiguration().getTenant() : TENANT_DEFAULT
+                endpoint.getConfiguration().getTenant()!=null ? endpoint.getConfiguration().getTenant() : DEFAULT_TENANT_NAME
         );
 
-        if(ExchangeHelper.hasVariables(name)) {
+        if(ExchangeHelper.hasVariables(name))
             name = ExchangeHelper.interpolate(name, exchange);
-        }
 
         TenantVariable variable = MongoDao.findTenantVariableByName(name, tenant);
 
@@ -204,18 +206,16 @@ public class TenantVariablesProcessor implements Processor {
     }
 
     private String interpolateVar(String varValue, Exchange exchange, boolean bodyFlag) {
-        if(ExchangeHelper.hasVariables(varValue)) {
+        if(ExchangeHelper.hasVariables(varValue))
             varValue = ExchangeHelper.interpolate(varValue, exchange);
-        }
 
-        if(bodyFlag) {
-            if (isBodyVariable(varValue)) {
+        if(bodyFlag)
+            if (isBodyVariable(varValue))
                 varValue = interpolateBody(varValue, exchange);
-            }
-        }
 
         if(SimpleLanguage.hasSimpleFunction(varValue)) {
-            varValue = SimpleLanguage.expression(varValue).evaluate(exchange, String.class);
+            SimpleExpression simpleExpression = new SimpleExpression(varValue);
+            varValue = simpleExpression.evaluate(exchange, String.class);
         }
 
         return varValue;
@@ -226,9 +226,10 @@ public class TenantVariablesProcessor implements Processor {
         String bodyContent = exchange.getIn().getBody(String.class);
 
         try {
-            switch (expressionType) {
+            switch (expressionType){
                 case "simple":
-                    varValue = SimpleLanguage.expression(varValue).evaluate(exchange, String.class);
+                    SimpleExpression simpleExpression = new SimpleExpression(varValue);
+                    varValue = simpleExpression.evaluate(exchange, String.class);
                     break;
                 case "constant":
                     // do nothing
@@ -247,7 +248,7 @@ public class TenantVariablesProcessor implements Processor {
                 default:
                     // do nothing
             }
-        } catch (Exception e) {
+        } catch (Exception e){
             throw new EnvironmentException("Error to interpolate variable.");
         }
 
@@ -265,9 +266,8 @@ public class TenantVariablesProcessor implements Processor {
         while (m.find()) {
             String bValue = exchange.getIn().getBody(String.class);
 
-            if (bValue != null) {
+            if (bValue != null)
                 m.appendReplacement(stringBuffer, escapeDollarSign(bValue));
-            }
         }
 
         m.appendTail(stringBuffer);

@@ -5,10 +5,10 @@ import org.assimbly.sql.adapter.*;
 import org.assimbly.sql.domain.ConnectionType;
 import org.assimbly.sql.domain.JDBCConnection;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.sql.Connection;

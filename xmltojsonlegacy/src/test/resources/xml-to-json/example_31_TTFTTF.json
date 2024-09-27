@@ -1,0 +1,36 @@
+{
+    "rmessage": {
+        "@RESTgroupId": "30005",
+        "@action": "POST",
+        "@applicationId": "WHOLESALE",
+        "@comment": "Ophalen productinformatie, qry1",
+        "@id": "2010",
+        "@message": "requestQueryExecute",
+        "@step": "2",
+        "ddg_headers": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "queryCode": "DDG_VO_GETINTITEMNR",
+        "queryCriteria": [
+            {
+                "fieldName": "Administratie",
+                "fieldStringValue": null
+            },
+            {
+                "fieldName": "InternProductId",
+                "fieldStringValue": null
+            },
+            {
+                "fieldName": "ExternProductId",
+                "fieldStringValue": null
+            }
+        ],
+        "useFieldCodes": null
+    }
+}

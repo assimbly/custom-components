@@ -3,13 +3,12 @@ package org.assimbly.enrich.attachment;
 import org.apache.camel.AggregationStrategy;
 import org.apache.camel.attachment.AttachmentMessage;
 import org.assimbly.util.helper.MimeTypeHelper;
-import org.apache.axiom.attachments.ByteArrayDataSource;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.log4j.Logger;
 import org.apache.tika.io.IOUtils;
 
-import javax.activation.DataHandler;
+import jakarta.activation.DataHandler;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -56,14 +55,12 @@ public class AttachmentEnrichStrategy implements AggregationStrategy {
             data = IOUtils.toByteArray(body);
         } catch (IOException e) { logger.error(e.getMessage()); }
 
-        ByteArrayDataSource byteArrayDataSource = new ByteArrayDataSource(data, mimeType);
-
-        dataHandler = new DataHandler(byteArrayDataSource);
-
         logger.info(String.format("Adding attachment '%s' with mime type: '%s'", attachmentName, mimeType));
 
         logger.info("Attachment details");
         logger.info(String.format("\tsize: %s", data.length));
+
+        dataHandler = new DataHandler(data, mimeType);
 
         AttachmentMessage am = original.getMessage(AttachmentMessage.class);
         am.addAttachment(attachmentName, dataHandler);

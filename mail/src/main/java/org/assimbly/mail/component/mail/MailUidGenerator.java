@@ -16,7 +16,7 @@
  */
 package org.assimbly.mail.component.mail;
 
-import javax.mail.Message;
+import jakarta.mail.Message;
 
 /**
  * To generate an unique ID of the mail message.

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <artifactId>custom-components</artifactId>
-        <groupId>org.assimbly</groupId>
-        <version>4.0.4</version>
-    </parent>
+	<parent>
+		<artifactId>custom-components</artifactId>
+		<groupId>org.assimbly</groupId>
+		<version>5.0.0</version>
+	</parent>
 
   <artifactId>smooksnoxml</artifactId>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.release>11</maven.compiler.release>
+    <maven.compiler.release>21</maven.compiler.release>
     <maven.versions.rules>file:///${project.basedir}/../rules.xml</maven.versions.rules>
   </properties>
 
@@ -24,6 +24,11 @@
   </distributionManagement>
 
   <dependencies>
+	  <dependency>
+		  <groupId>org.hibernate</groupId>
+		  <artifactId>hibernate-core</artifactId>
+		  <version>${hibernate-core.version}</version>
+	  </dependency>
 
       <dependency>
           <groupId>org.milyn</groupId>
@@ -34,6 +39,14 @@
                   <groupId>javax.servlet</groupId>
                   <artifactId>servlet-api</artifactId>
               </exclusion>
+			  <exclusion>
+				  <groupId>org.hibernate</groupId>
+				  <artifactId>hibernate-core</artifactId>
+			  </exclusion>
+			  <exclusion>
+				  <groupId>org.codehaus.groovy</groupId>
+				  <artifactId>groovy-all</artifactId>
+			  </exclusion>
           </exclusions>
       </dependency>
 
@@ -75,7 +88,7 @@
 						<configuration>
 							<toolchains>
 								<jdk>
-									<version>11</version>
+									<version>21</version>
 								</jdk>
 							</toolchains>
 						</configuration>

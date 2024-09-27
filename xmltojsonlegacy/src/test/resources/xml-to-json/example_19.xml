@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SalesOrders processingCodes="">
+    <adminCode type="string">10</adminCode>
+    <customerCode type="string">5076</customerCode>
+    <orderTypeCode type="string">WEB</orderTypeCode>
+    <reference>FAKRO23007529 KOPPEJAN 23-013</reference>
+    <Messages>
+        <Message>
+            <MessageText type="INFO" report="NO" blockHTTPcall="NO" data="XML" datatype="SourceOrder">\n;;;;INFO;Oorsprong van order: Onbekend</MessageText>
+        </Message>
+        <Message>
+            <MessageText type="INFO" report="NO" blockHTTPcall="NO">\n;;;;INFO;Geen zoeksleutel voor contactpersoon opgegeven.</MessageText>
+        </Message>
+    </Messages>
+</SalesOrders>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<artifactId>custom-components</artifactId>
 		<groupId>org.assimbly</groupId>
-		<version>4.0.4</version>
+		<version>5.0.0</version>
 	</parent>
-
 
 	<artifactId>edifact</artifactId>
 
@@ -30,9 +30,29 @@
 			<version>${jaxen.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.mvel</groupId>
+			<artifactId>mvel2</artifactId>
+			<version>${mvel.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate-core.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.milyn</groupId>
 			<artifactId>milyn-smooks-all</artifactId>
 			<version>${smooks.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.groovy</groupId>
+					<artifactId>groovy-all</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.milyn.edi.unedifact</groupId>
@@ -479,7 +499,7 @@
 						<configuration>
 							<toolchains>
 								<jdk>
-									<version>11</version>
+									<version>21</version>
 								</jdk>
 							</toolchains>
 						</configuration>

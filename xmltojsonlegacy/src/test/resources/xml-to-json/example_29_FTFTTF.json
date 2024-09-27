@@ -1,0 +1,15 @@
+[
+    {
+        "@class": "array",
+        "product": [
+            {
+                "@class": "object",
+                "id": null
+            },
+            {
+                "@class": "object",
+                "id": null
+            }
+        ]
+    }
+]

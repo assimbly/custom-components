@@ -1,6 +1,7 @@
 package org.assimbly.auth.endpoint;
 
 import com.google.common.base.CaseFormat;
+import com.mongodb.client.MongoClient;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
 import com.warrenstrange.googleauth.GoogleAuthenticatorQRGenerator;
@@ -11,10 +12,10 @@ import org.assimbly.auth.endpoint.annotation.Secured;
 import org.assimbly.auth.jwt.JwtValidator;
 import org.assimbly.auth.mongo.GoogleCredentialsRepository;
 import org.assimbly.auth.mongo.MongoDao;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -26,9 +27,9 @@ public class AuthenticatorService {
 
     private MongoDao mongoDao;
 
-    public AuthenticatorService(String database){
-        authenticator.setCredentialRepository(new GoogleCredentialsRepository(database));
-        mongoDao = new MongoDao(database);
+    public AuthenticatorService(MongoClient mongoClient, String databaseName){
+        authenticator.setCredentialRepository(new GoogleCredentialsRepository(mongoClient, databaseName));
+        mongoDao = new MongoDao(mongoClient.getDatabase(databaseName));
     }
 
     @GET

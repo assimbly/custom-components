@@ -21,7 +21,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.mail.search.SearchTerm;
+import jakarta.mail.search.SearchTerm;
 
 import com.sun.mail.imap.SortTerm;
 import org.apache.camel.CamelContext;
@@ -110,7 +110,6 @@ public class MailComponent extends HeaderFilterStrategyComponent implements SSLC
 
         endpoint.setContentTypeResolver(contentTypeResolver);
         setEndpointHeaderFilterStrategy(endpoint);
-
         setProperties(endpoint, parameters);
 
         // sanity check that we know the mail server

@@ -1,0 +1,115 @@
+{
+    "@class": "object",
+    "addresses": {
+        "@class": "array",
+        "e": [
+            {
+                "@class": "object",
+                "city": "WEERT",
+                "country_id": "NL",
+                "firstname": "John",
+                "postcode": "2212 LE",
+                "street": [
+                    "Street 15"
+                ],
+                "vat_id": "TTCVVL",
+                "default_shipping": {
+                    "@type": "boolean",
+                    "#text": "true"
+                },
+                "custom_attributes": {
+                    "@class": "array",
+                    "e": {
+                        "@class": "object",
+                        "attribute_code": {
+                            "@type": "string",
+                            "#text": "type"
+                        },
+                        "value": {
+                            "@type": "string",
+                            "#text": "shipping"
+                        }
+                    }
+                }
+            },
+            {
+                "@class": "object",
+                "city": "WEERT",
+                "country_id": "NL",
+                "firstname": "John",
+                "postcode": "2212 LE",
+                "street": [
+                    "Street 15"
+                ],
+                "vat_id": "TTCVVL",
+                "custom_attributes": {
+                    "@class": "array",
+                    "e": {
+                        "@class": "object",
+                        "attribute_code": {
+                            "@type": "string",
+                            "#text": "type"
+                        },
+                        "value": {
+                            "@type": "string",
+                            "#text": "shipping"
+                        }
+                    }
+                }
+            },
+            {
+                "@class": "object",
+                "city": "WEERT",
+                "country_id": "NL",
+                "firstname": "John",
+                "postcode": "2212 LE",
+                "street": [
+                    "Street 15"
+                ],
+                "vat_id": "TTCVVL",
+                "default_billing": {
+                    "@type": "boolean",
+                    "#text": "true"
+                },
+                "custom_attributes": {
+                    "@class": "array",
+                    "e": {
+                        "@class": "object",
+                        "attribute_code": {
+                            "@type": "string",
+                            "#text": "type"
+                        },
+                        "value": {
+                            "@type": "string",
+                            "#text": "billing"
+                        }
+                    }
+                }
+            }
+        ]
+    },
+    "email": "john@weert.nl",
+    "firstname": "John",
+    "id": {
+        "@type": "number",
+        "#text": "2600"
+    },
+    "websiteId": {
+        "@type": "number",
+        "#text": "1"
+    },
+    "group_id": {
+        "@type": "number",
+        "#text": "2354"
+    },
+    "store_id": {
+        "@type": "number",
+        "#text": "1"
+    },
+    "custom_attributes": [
+        {
+            "attribute_code": "disable_account",
+            "value": "0"
+        }
+    ]
+}

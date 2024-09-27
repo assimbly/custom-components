@@ -19,8 +19,8 @@ package org.assimbly.mail.component.mail;
 import java.io.IOException;
 import java.util.Map;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 
 import org.apache.camel.AsyncCallback;
 import org.apache.camel.Exchange;
@@ -89,14 +89,15 @@ public class MailProducer extends DefaultAsyncProducer {
     protected JavaMailSender getSender(Exchange exchange) {
         // do we have special headers
         Map<String, Object> additional = URISupport.extractProperties(exchange.getMessage().getHeaders(), "mail.smtp.");
-        if (additional.isEmpty()) {
+        if (additional.isEmpty() && getEndpoint().getConfiguration().isBasicAuthentication()) {
             // no then use default sender
             LOG.trace("Using default JavaMailSender");
             return defaultSender;
         } else {
             // create new mail sender specially for this
             LOG.debug("Creating new JavaMailSender to include additional {} java mail properties", additional.size());
-            JavaMailSender customSender = getEndpoint().getConfiguration().createJavaMailSender();
+            JavaMailSender customSender
+                    = getEndpoint().getConfiguration().createJavaMailSender(getEndpoint().getCamelContext());
             additional.forEach((k, v) -> {
                 if (v != null) {
                     // add with prefix so we dont loose that

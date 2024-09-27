@@ -1,0 +1,24 @@
+{
+    "@xmlns": "http://DataAccess.com/webservices/",
+    "@xmlns:m": "http://DataAccess.com/webservicesOrders/",
+    "@xmlns:x": "http://DataAccess.com/webservicesCustomer/",
+    "x:Order": {
+        "OrderNo": {
+            "@xmlns": "http://DataAccess.com/webservices/",
+            "#text": "1"
+        },
+        "m:Customer": {
+            "@xmlns:m": "http://DataAccess.com/webservicesOrders/",
+            "m:CustomerNo": "99",
+            "x:State": {
+                "@xmlns:x": "http://DataAccess.com/webservicesCustomer/",
+                "#text": "CA"
+            },
+            "m:State": "Angry",
+            "State": {
+                "@xmlns": "http://DataAccess.com/webservices/",
+                "#text": "Yes"
+            }
+        }
+    }
+}

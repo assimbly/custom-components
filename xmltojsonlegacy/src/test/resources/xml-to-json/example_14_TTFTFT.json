@@ -1,0 +1,16 @@
+{
+    "root": {
+        "ns1:person": [
+            {
+                "ns1:name": null,
+                "ns1:age": null,
+                "ns1:email": null
+            },
+            {
+                "ns1:name": null,
+                "ns1:age": null,
+                "ns1:email": null
+            }
+        ]
+    }
+}

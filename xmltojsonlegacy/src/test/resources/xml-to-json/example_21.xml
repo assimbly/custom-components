@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <Persons class="array">
+        <element>
+            <AvatarUrl type="string">null</AvatarUrl>
+            <BirthDay type="string">2009-04-22</BirthDay>
+            <CityName type="string">Heerenveen</CityName>
+            <Code type="string">null</Code>
+            <Id type="string">eeeeeeee-3ac1-4115-b30e-ec1affa3b5e2</Id>
+            <FirstNames type="string">Jan</FirstNames>
+            <Gender type="string">M</Gender>
+            <HouseNumber type="string">82</HouseNumber>
+            <Initials type="string">TR</Initials>
+            <LastName type="string">de Groot</LastName>
+            <LastNamePrefix type="string">null</LastNamePrefix>
+            <LoginName type="string">109859</LoginName>
+            <MaidenName type="string">null</MaidenName>
+            <Number type="string">109859</Number>
+            <Password type="string">null</Password>
+            <PhoneNumber1 type="string">06-12345678</PhoneNumber1>
+            <PhoneNumber2 type="string">06-12345678</PhoneNumber2>
+            <PostalCode type="string">8411KG</PostalCode>
+            <PrivateEmail type="string">null</PrivateEmail>
+            <StreetName type="string">Straat</StreetName>
+            <Uid type="string">null</Uid>
+            <UidMappingId type="string">null</UidMappingId>
+            <UserDefinedFieldsJson type="array">null</UserDefinedFieldsJson>
+            <UsualName type="string">Tjibbe</UsualName>
+            <WorkEmail type="string">109859@leerling.abcd.nl</WorkEmail>
+        </element>
+        <element>
+            <AvatarUrl type="string">null</AvatarUrl>
+            <BirthDay type="string">2008-06-23</BirthDay>
+            <CityName type="string">Heerenveen</CityName>
+            <Code type="string">null</Code>
+            <Id type="string">eeeeeeee-2553-4404-977e-4f35918297e5</Id>
+            <FirstNames type="string">Kees</FirstNames>
+            <Gender type="string">M</Gender>
+            <HouseNumber type="string">2</HouseNumber>
+            <Initials type="string">B</Initials>
+            <LastName type="string">Jong</LastName>
+            <LastNamePrefix type="string">de</LastNamePrefix>
+            <LoginName type="string">109355</LoginName>
+            <MaidenName type="string">null</MaidenName>
+            <Number type="string">109355</Number>
+            <Password type="string">null</Password>
+            <PhoneNumber1 type="string">06-12345678</PhoneNumber1>
+            <PhoneNumber2 type="string">06-12345678</PhoneNumber2>
+            <PostalCode type="string">8467SG</PostalCode>
+            <PrivateEmail type="string">null</PrivateEmail>
+            <StreetName type="string">Straat</StreetName>
+            <Uid type="string">null</Uid>
+            <UidMappingId type="string">null</UidMappingId>
+            <UserDefinedFieldsJson type="array">null</UserDefinedFieldsJson>
+            <UsualName type="string">Bjorn</UsualName>
+            <WorkEmail type="string">109355@leerling.abcd.nl</WorkEmail>
+        </element>
+    </Persons>
+    <Groups class="array">
+        <element>
+            <GroupId type="string">2</GroupId>
+            <IsPrimary type="boolean">false</IsPrimary>
+            <PersonId type="string">e5bed0c4-3ac1-4115-b30e-ec1affa3b5e2</PersonId>
+            <Location type="string">De Compagnie</Location>
+            <Type type="string">Grade</Type>
+        </element>
+        <element>
+            <GroupId type="string">3</GroupId>
+            <IsPrimary type="boolean">false</IsPrimary>
+            <PersonId type="string">1379386f-2553-4404-977e-4f35918297e5</PersonId>
+            <Location type="string">De Compagnie</Location>
+            <Type type="string">Grade</Type>
+        </element>
+    </Groups>
+    <PersonRelations class="array"></PersonRelations>
+</root>

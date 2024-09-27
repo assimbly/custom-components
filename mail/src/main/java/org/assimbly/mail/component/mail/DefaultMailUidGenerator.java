@@ -19,9 +19,9 @@ package org.assimbly.mail.component.mail;
 import java.util.Enumeration;
 import java.util.UUID;
 
-import javax.mail.Header;
-import javax.mail.Message;
-import javax.mail.MessagingException;
+import jakarta.mail.Header;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
 
 import org.apache.camel.util.ObjectHelper;
 import org.slf4j.Logger;
@@ -70,7 +70,7 @@ public class DefaultMailUidGenerator implements MailUidGenerator {
         // create an UID based on message headers on the message, that ought to be unique
         StringBuilder buffer = new StringBuilder();
         try {
-            Enumeration it = message.getAllHeaders();
+            Enumeration<?> it = message.getAllHeaders();
             while (it.hasMoreElements()) {
                 Header header = (Header) it.nextElement();
                 buffer.append(header.getName()).append("=").append(header.getValue()).append("\n");

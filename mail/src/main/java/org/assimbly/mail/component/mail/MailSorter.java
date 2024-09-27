@@ -18,13 +18,12 @@ package org.assimbly.mail.component.mail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.internet.InternetAddress;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.InternetAddress;
 
 import com.sun.mail.imap.SortTerm;
 
@@ -84,26 +83,23 @@ public final class MailSorter {
      *                                order
      */
     private static void sortMessages(Message[] messages, final List<SortTermWithDescending> sortTermsWithDescending) {
-        Arrays.sort(messages, new Comparator<Message>() {
-            @Override
-            public int compare(Message m1, Message m2) {
-                try {
-                    for (SortTermWithDescending reversableTerm : sortTermsWithDescending) {
-                        int comparison = compareMessageProperty(m1, m2, reversableTerm.getTerm());
-                        // Descending
-                        if (reversableTerm.isDescending()) {
-                            comparison = -comparison;
-                        }
-                        // Abort on first non-equal
-                        if (comparison != 0) {
-                            return comparison;
-                        }
+        Arrays.sort(messages, (Message m1, Message m2) -> {
+            try {
+                for (SortTermWithDescending reversableTerm : sortTermsWithDescending) {
+                    int comparison = compareMessageProperty(m1, m2, reversableTerm.getTerm());
+                    // Descending
+                    if (reversableTerm.isDescending()) {
+                        comparison = -comparison;
                     }
-                    // Equal
-                    return 0;
-                } catch (MessagingException e) {
-                    throw new IllegalArgumentException(e);
+                    // Abort on first non-equal
+                    if (comparison != 0) {
+                        return comparison;
+                    }
                 }
+                // Equal
+                return 0;
+            } catch (MessagingException e) {
+                throw new IllegalArgumentException(e);
             }
         });
     }

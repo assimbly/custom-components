@@ -8,7 +8,7 @@ import org.json.JSONObject;
 import org.assimbly.auth.endpoint.annotation.Secured;
 import org.assimbly.tenantvariables.TenantVariablesProcessor;
 
-import javax.ws.rs.*;
+import jakarta.ws.rs.*;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;

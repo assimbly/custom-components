@@ -1,0 +1,14 @@
+{
+  "root": [
+    {
+      "@class": "array",
+      "product": {
+        "@class": "object",
+        "id": {
+          "@type": "string",
+          "#text": "1"
+        }
+      }
+    }
+  ]
+}

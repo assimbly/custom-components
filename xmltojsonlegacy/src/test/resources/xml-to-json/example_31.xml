@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<rmessage RESTgroupId="30005" action="POST" applicationId="WHOLESALE" comment="Ophalen productinformatie, qry1" id="2010" message="requestQueryExecute" step="2">
+    <ddg_headers>
+        <xpath action="xpath" name="unitCode5">//resultData/e/lb-180_cdstandeenhd</xpath>
+        <xpath action="xpath" name="productId5">//resultData/e/bb-040_cdprodukt</xpath>
+        <xpath action="xpath" name="resultFound5">//result/resultFound</xpath>
+        <xpath action="xpath" name="Verpakkingseenheid5">//resultData/e/lb-180_cdblokeenhd</xpath>
+        <xpath action="xpath" name="VerpaktPer5">if ('' = 'false') then (1) else (//resultData/e/verpakT_PER)</xpath>
+        <xpath action="xpath" name="packingSizeDiffersFromQtyOrdered5">if ( != 0 ) then ( 1 mod != 0 ) else false()</xpath>
+        <xpath action="xpath" name="resultCount5">count(distinct-values(//..//resultData/e/bb-040_cdprodukt))</xpath>
+    </ddg_headers>
+    <queryCode>DDG_VO_GETINTITEMNR</queryCode>
+    <queryCriteria>
+        <e>
+            <fieldName>Administratie</fieldName>
+            <fieldStringValue type="string">03</fieldStringValue>
+        </e>
+        <e>
+            <fieldName>InternProductId</fieldName>
+            <fieldStringValue type="string">90019998</fieldStringValue>
+        </e>
+        <e>
+            <fieldName>ExternProductId</fieldName>
+            <fieldStringValue type="string">90019998</fieldStringValue>
+        </e>
+    </queryCriteria>
+    <useFieldCodes type="boolean">true</useFieldCodes>
+</rmessage>

@@ -1,0 +1,42 @@
+<stock>
+    <item>
+        <productcode>101960</productcode>
+        <unitcode>STUKS</unitcode>
+        <stockquantity_on_hand type="number">302</stockquantity_on_hand>
+        <stockquantity_on_the_way type="number">120</stockquantity_on_the_way>
+        <stockdate_available>2023-12-20</stockdate_available>
+        <discontinued type="boolean">false</discontinued>
+        <product_purchase type="boolean">false</product_purchase>
+        <eancode>8718056001873</eancode>
+    </item>
+    <item>
+        <productcode>102440</productcode>
+        <unitcode>STUKS</unitcode>
+        <stockquantity_on_hand type="number">3</stockquantity_on_hand>
+        <stockquantity_on_the_way type="number">6</stockquantity_on_the_way>
+        <stockdate_available>2023-12-24</stockdate_available>
+        <discontinued type="boolean">false</discontinued>
+        <product_purchase type="boolean">false</product_purchase>
+        <eancode>8718056002887</eancode>
+    </item>
+    <item>
+        <productcode>102520</productcode>
+        <unitcode>STUKS</unitcode>
+        <stockquantity_on_hand type="number">0</stockquantity_on_hand>
+        <stockquantity_on_the_way type="number">0</stockquantity_on_the_way>
+        <stockdate_available />
+        <discontinued type="boolean">true</discontinued>
+        <product_purchase type="boolean">false</product_purchase>
+        <eancode>8718056002962</eancode>
+    </item>
+    <item>
+        <productcode>103930</productcode>
+        <unitcode>STUKS</unitcode>
+        <stockquantity_on_hand type="number">22</stockquantity_on_hand>
+        <stockquantity_on_the_way type="number">0</stockquantity_on_the_way>
+        <stockdate_available />
+        <discontinued type="boolean">false</discontinued>
+        <product_purchase type="boolean">false</product_purchase>
+        <eancode>8718056006953</eancode>
+    </item>
+</stock>

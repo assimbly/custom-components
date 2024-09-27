@@ -1,0 +1,43 @@
+{
+    "notify": {
+        "@type": "boolean",
+        "#text": "true"
+    },
+    "items": {
+        "@class": "array",
+        "e": {
+            "@class": "object",
+            "qty": {
+                "@type": "number",
+                "#text": "1"
+            },
+            "order_item_id": {
+                "@type": "number",
+                "#text": "1123285"
+            }
+        }
+    },
+    "tracks": [
+        {
+            "carrier_code": {
+                "@type": "string",
+                "#text": "tig_postnl"
+            },
+            "title": {
+                "@type": "string",
+                "#text": "PostNL"
+            },
+            "track_number": {
+                "@type": "string",
+                "#text": "3STHXG0794709"
+            }
+        }
+    ],
+    "arguments": {
+        "@class": "object",
+        "extension_attributes": {
+            "@class": "object",
+            "source_code": "warehouse"
+        }
+    }
+}

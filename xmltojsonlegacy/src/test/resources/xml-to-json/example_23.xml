@@ -1,0 +1,158 @@
+<records>
+    <Product2>
+        <attributes>
+            <type>Product2</type>
+            <referenceId>27.89F8160NP/06</referenceId>
+        </attributes>
+        <Afbeelding__c>https://cdnstoragewiltec.blob.core.windows.net/assetdata/150x150/1034468/F8160NP.jpg</Afbeelding__c>
+        <Article_Code_ERP__c>27.89F8160NP/06</Article_Code_ERP__c>
+        <Blocked_PIM__c type="boolean">false</Blocked_PIM__c>
+        <Commercial_text_Arvas_NL_PIM__c>Comfortabele montage- en assemblage handschoen gemaakt van polyester met luchtdoorlatende PU coating. Zeer hoge vingergevoeligheid. Zeer flexibel en geschikt voor delicate werkzaamheden in droge omgevingen. Per 12 paar verpakt in polybag reduceert afval. EN388:2016 3131X</Commercial_text_Arvas_NL_PIM__c>
+        <Commercial_text_Delo_NL_PIM__c>Comfortabele montage- en assemblage handschoen gemaakt van polyester met luchtdoorlatende PU coating.zeer hoge vingergevoeligheidzeer flexibel en beweeglijk geschikt voor delicate werkzaamheden in droge omgevingenEN388:2016 3131XPer 12 paar verpakt in polybag reduceert afval . Per bundel van 12 paar verpakt. 120 paar per doos (10 bundels van 12 paar) </Commercial_text_Delo_NL_PIM__c>
+        <Commercial_text_Wiltec_NL_PIM__c>Comfortabele montage- en assemblage handschoen gemaakt van polyester met luchtdoorlatende PU coating.zeer hoge vingergevoeligheidzeer flexibel en beweeglijk geschikt voor delicate werkzaamheden in droge omgevingenEN388:2016 3131XPer 12 paar verpakt in polybag reduceert afval . Per bundel van 12 paar verpakt. 120 paar per doos (10 bundels van 12 paar) </Commercial_text_Wiltec_NL_PIM__c>
+        <Discontinued_PIM__c type="boolean">false</Discontinued_PIM__c>
+        <Description>AG Handschoen F8160NP 12 paar zwart</Description>
+        <External_ID_PIM__c>item-361457</External_ID_PIM__c>
+        <External_Product_Code_ERP__c>27.89F8160NP</External_Product_Code_ERP__c>
+        <IsActive type="boolean">true</IsActive>
+        <Measure_PIM__c>06</Measure_PIM__c>
+        <Name>AG Handschoen active flex F8160NP 12 paar zwart</Name>
+        <ProductCode>27.89F8160NP/06</ProductCode>
+        <Product_Company_Arvas__c>true</Product_Company_Arvas__c>
+        <Product_Company_Delo__c>false</Product_Company_Delo__c>
+        <Product_Company_Starks__c>true</Product_Company_Starks__c>
+        <Product_Company_WIltec__c>true</Product_Company_WIltec__c>
+        <Productgroup_PIM__c>Mechanisch bestendige handschoenen</Productgroup_PIM__c>
+        <Product_groep_ERP__c>040419001 | ActiveGear handschoenen algeme</Product_groep_ERP__c>
+    </Product2>
+    <Product2>
+        <attributes>
+            <type>Product2</type>
+            <referenceId>27.89F8160NP/07</referenceId>
+        </attributes>
+        <Afbeelding__c>https://cdnstoragewiltec.blob.core.windows.net/assetdata/150x150/1034468/F8160NP.jpg</Afbeelding__c>
+        <Article_Code_ERP__c>27.89F8160NP/07</Article_Code_ERP__c>
+        <Blocked_PIM__c type="boolean">false</Blocked_PIM__c>
+        <Commercial_text_Arvas_NL_PIM__c>Comfortabele montage- en assemblage handschoen gemaakt van polyester met luchtdoorlatende PU coating. Zeer hoge vingergevoeligheid. Zeer flexibel en geschikt voor delicate werkzaamheden in droge omgevingen. Per 12 paar verpakt in polybag reduceert afval. EN388:2016 3131X</Commercial_text_Arvas_NL_PIM__c>
+        <Commercial_text_Delo_NL_PIM__c>Comfortabele montage- en assemblage handschoen gemaakt van polyester met luchtdoorlatende PU coating.zeer hoge vingergevoeligheidzeer flexibel en beweeglijk geschikt voor delicate werkzaamheden in droge omgevingenEN388:2016 3131XPer 12 paar verpakt in polybag reduceert afval . Per bundel van 12 paar verpakt. 120 paar per doos (10 bundels van 12 paar) </Commercial_text_Delo_NL_PIM__c>
+        <Commercial_text_Wiltec_NL_PIM__c>Comfortabele montage- en assemblage handschoen gemaakt van polyester met luchtdoorlatende PU coating.zeer hoge vingergevoeligheidzeer flexibel en beweeglijk geschikt voor delicate werkzaamheden in droge omgevingenEN388:2016 3131XPer 12 paar verpakt in polybag reduceert afval . Per bundel van 12 paar verpakt. 120 paar per doos (10 bundels van 12 paar) </Commercial_text_Wiltec_NL_PIM__c>
+        <Discontinued_PIM__c type="boolean">false</Discontinued_PIM__c>
+        <Description>AG Handschoen F8160NP 12 paar zwart</Description>
+        <External_ID_PIM__c>item-361482</External_ID_PIM__c>
+        <External_Product_Code_ERP__c>27.89F8160NP</External_Product_Code_ERP__c>
+        <IsActive type="boolean">true</IsActive>
+        <Measure_PIM__c>07</Measure_PIM__c>
+        <Name>AG Handschoen active flex F8160NP 12 paar zwart</Name>
+        <ProductCode>27.89F8160NP/07</ProductCode>
+        <Product_Company_Arvas__c>true</Product_Company_Arvas__c>
+        <Product_Company_Delo__c>false</Product_Company_Delo__c>
+        <Product_Company_Starks__c>true</Product_Company_Starks__c>
+        <Product_Company_WIltec__c>true</Product_Company_WIltec__c>
+        <Productgroup_PIM__c>Mechanisch bestendige handschoenen</Productgroup_PIM__c>
+        <Product_groep_ERP__c>040419001 | ActiveGear handschoenen algeme</Product_groep_ERP__c>
+    </Product2>
+    <Product2>
+        <attributes>
+            <type>Product2</type>
+            <referenceId>27.89F8160NP/08</referenceId>
+        </attributes>
+        <Afbeelding__c>https://cdnstoragewiltec.blob.core.windows.net/assetdata/150x150/1034468/F8160NP.jpg</Afbeelding__c>
+        <Article_Code_ERP__c>27.89F8160NP/08</Article_Code_ERP__c>
+        <Blocked_PIM__c type="boolean">false</Blocked_PIM__c>
+        <Commercial_text_Arvas_NL_PIM__c>Comfortabele montage- en assemblage handschoen gemaakt van polyester met luchtdoorlatende PU coating. Zeer hoge vingergevoeligheid. Zeer flexibel en geschikt voor delicate werkzaamheden in droge omgevingen. Per 12 paar verpakt in polybag reduceert afval. EN388:2016 3131X</Commercial_text_Arvas_NL_PIM__c>
+        <Commercial_text_Delo_NL_PIM__c>Comfortabele montage- en assemblage handschoen gemaakt van polyester met luchtdoorlatende PU coating.zeer hoge vingergevoeligheidzeer flexibel en beweeglijk geschikt voor delicate werkzaamheden in droge omgevingenEN388:2016 3131XPer 12 paar verpakt in polybag reduceert afval . Per bundel van 12 paar verpakt. 120 paar per doos (10 bundels van 12 paar) </Commercial_text_Delo_NL_PIM__c>
+        <Commercial_text_Wiltec_NL_PIM__c>Comfortabele montage- en assemblage handschoen gemaakt van polyester met luchtdoorlatende PU coating.zeer hoge vingergevoeligheidzeer flexibel en beweeglijk geschikt voor delicate werkzaamheden in droge omgevingenEN388:2016 3131XPer 12 paar verpakt in polybag reduceert afval . Per bundel van 12 paar verpakt. 120 paar per doos (10 bundels van 12 paar) </Commercial_text_Wiltec_NL_PIM__c>
+        <Discontinued_PIM__c type="boolean">false</Discontinued_PIM__c>
+        <Description>AG Handschoen F8160NP 12 paar zwart</Description>
+        <External_ID_PIM__c>item-361485</External_ID_PIM__c>
+        <External_Product_Code_ERP__c>27.89F8160NP</External_Product_Code_ERP__c>
+        <IsActive type="boolean">true</IsActive>
+        <Measure_PIM__c>08</Measure_PIM__c>
+        <Name>AG Handschoen active flex F8160NP 12 paar zwart</Name>
+        <ProductCode>27.89F8160NP/08</ProductCode>
+        <Product_Company_Arvas__c>true</Product_Company_Arvas__c>
+        <Product_Company_Delo__c>false</Product_Company_Delo__c>
+        <Product_Company_Starks__c>true</Product_Company_Starks__c>
+        <Product_Company_WIltec__c>true</Product_Company_WIltec__c>
+        <Productgroup_PIM__c>Mechanisch bestendige handschoenen</Productgroup_PIM__c>
+        <Product_groep_ERP__c>040419001 | ActiveGear handschoenen algeme</Product_groep_ERP__c>
+    </Product2>
+    <Product2>
+        <attributes>
+            <type>Product2</type>
+            <referenceId>27.89F8160NP/09</referenceId>
+        </attributes>
+        <Afbeelding__c>https://cdnstoragewiltec.blob.core.windows.net/assetdata/150x150/1034468/F8160NP.jpg</Afbeelding__c>
+        <Article_Code_ERP__c>27.89F8160NP/09</Article_Code_ERP__c>
+        <Blocked_PIM__c type="boolean">false</Blocked_PIM__c>
+        <Commercial_text_Arvas_NL_PIM__c>Comfortabele montage- en assemblage handschoen gemaakt van polyester met luchtdoorlatende PU coating. Zeer hoge vingergevoeligheid. Zeer flexibel en geschikt voor delicate werkzaamheden in droge omgevingen. Per 12 paar verpakt in polybag reduceert afval. EN388:2016 3131X</Commercial_text_Arvas_NL_PIM__c>
+        <Commercial_text_Delo_NL_PIM__c>Comfortabele montage- en assemblage handschoen gemaakt van polyester met luchtdoorlatende PU coating.zeer hoge vingergevoeligheidzeer flexibel en beweeglijk geschikt voor delicate werkzaamheden in droge omgevingenEN388:2016 3131XPer 12 paar verpakt in polybag reduceert afval . Per bundel van 12 paar verpakt. 120 paar per doos (10 bundels van 12 paar) </Commercial_text_Delo_NL_PIM__c>
+        <Commercial_text_Wiltec_NL_PIM__c>Comfortabele montage- en assemblage handschoen gemaakt van polyester met luchtdoorlatende PU coating.zeer hoge vingergevoeligheidzeer flexibel en beweeglijk geschikt voor delicate werkzaamheden in droge omgevingenEN388:2016 3131XPer 12 paar verpakt in polybag reduceert afval . Per bundel van 12 paar verpakt. 120 paar per doos (10 bundels van 12 paar) </Commercial_text_Wiltec_NL_PIM__c>
+        <Discontinued_PIM__c type="boolean">false</Discontinued_PIM__c>
+        <Description>AG Handschoen F8160NP 12 paar zwart</Description>
+        <External_ID_PIM__c>item-361488</External_ID_PIM__c>
+        <External_Product_Code_ERP__c>27.89F8160NP</External_Product_Code_ERP__c>
+        <IsActive type="boolean">true</IsActive>
+        <Measure_PIM__c>09</Measure_PIM__c>
+        <Name>AG Handschoen active flex F8160NP 12 paar zwart</Name>
+        <ProductCode>27.89F8160NP/09</ProductCode>
+        <Product_Company_Arvas__c>true</Product_Company_Arvas__c>
+        <Product_Company_Delo__c>false</Product_Company_Delo__c>
+        <Product_Company_Starks__c>true</Product_Company_Starks__c>
+        <Product_Company_WIltec__c>true</Product_Company_WIltec__c>
+        <Productgroup_PIM__c>Mechanisch bestendige handschoenen</Productgroup_PIM__c>
+        <Product_groep_ERP__c>040419001 | ActiveGear handschoenen algeme</Product_groep_ERP__c>
+    </Product2>
+    <Product2>
+        <attributes>
+            <type>Product2</type>
+            <referenceId>27.89F8160NP/10</referenceId>
+        </attributes>
+        <Afbeelding__c>https://cdnstoragewiltec.blob.core.windows.net/assetdata/150x150/1034468/F8160NP.jpg</Afbeelding__c>
+        <Article_Code_ERP__c>27.89F8160NP/10</Article_Code_ERP__c>
+        <Blocked_PIM__c type="boolean">false</Blocked_PIM__c>
+        <Commercial_text_Arvas_NL_PIM__c>Comfortabele montage- en assemblage handschoen gemaakt van polyester met luchtdoorlatende PU coating. Zeer hoge vingergevoeligheid. Zeer flexibel en geschikt voor delicate werkzaamheden in droge omgevingen. Per 12 paar verpakt in polybag reduceert afval. EN388:2016 3131X</Commercial_text_Arvas_NL_PIM__c>
+        <Commercial_text_Delo_NL_PIM__c>Comfortabele montage- en assemblage handschoen gemaakt van polyester met luchtdoorlatende PU coating.zeer hoge vingergevoeligheidzeer flexibel en beweeglijk geschikt voor delicate werkzaamheden in droge omgevingenEN388:2016 3131XPer 12 paar verpakt in polybag reduceert afval . Per bundel van 12 paar verpakt. 120 paar per doos (10 bundels van 12 paar) </Commercial_text_Delo_NL_PIM__c>
+        <Commercial_text_Wiltec_NL_PIM__c>Comfortabele montage- en assemblage handschoen gemaakt van polyester met luchtdoorlatende PU coating.zeer hoge vingergevoeligheidzeer flexibel en beweeglijk geschikt voor delicate werkzaamheden in droge omgevingenEN388:2016 3131XPer 12 paar verpakt in polybag reduceert afval . Per bundel van 12 paar verpakt. 120 paar per doos (10 bundels van 12 paar) </Commercial_text_Wiltec_NL_PIM__c>
+        <Discontinued_PIM__c type="boolean">false</Discontinued_PIM__c>
+        <Description>AG Handschoen F8160NP 12 paar zwart</Description>
+        <External_ID_PIM__c>item-361491</External_ID_PIM__c>
+        <External_Product_Code_ERP__c>27.89F8160NP</External_Product_Code_ERP__c>
+        <IsActive type="boolean">true</IsActive>
+        <Measure_PIM__c>10</Measure_PIM__c>
+        <Name>AG Handschoen active flex F8160NP 12 paar zwart</Name>
+        <ProductCode>27.89F8160NP/10</ProductCode>
+        <Product_Company_Arvas__c>true</Product_Company_Arvas__c>
+        <Product_Company_Delo__c>false</Product_Company_Delo__c>
+        <Product_Company_Starks__c>true</Product_Company_Starks__c>
+        <Product_Company_WIltec__c>true</Product_Company_WIltec__c>
+        <Productgroup_PIM__c>Mechanisch bestendige handschoenen</Productgroup_PIM__c>
+        <Product_groep_ERP__c>040419001 | ActiveGear handschoenen algeme</Product_groep_ERP__c>
+    </Product2>
+    <Product2>
+        <attributes>
+            <type>Product2</type>
+            <referenceId>27.89F8160NP/11</referenceId>
+        </attributes>
+        <Afbeelding__c>https://cdnstoragewiltec.blob.core.windows.net/assetdata/150x150/1034468/F8160NP.jpg</Afbeelding__c>
+        <Article_Code_ERP__c>27.89F8160NP/11</Article_Code_ERP__c>
+        <Blocked_PIM__c type="boolean">false</Blocked_PIM__c>
+        <Commercial_text_Arvas_NL_PIM__c>Comfortabele montage- en assemblage handschoen gemaakt van polyester met luchtdoorlatende PU coating. Zeer hoge vingergevoeligheid. Zeer flexibel en geschikt voor delicate werkzaamheden in droge omgevingen. Per 12 paar verpakt in polybag reduceert afval. EN388:2016 3131X</Commercial_text_Arvas_NL_PIM__c>
+        <Commercial_text_Delo_NL_PIM__c>Comfortabele montage- en assemblage handschoen gemaakt van polyester met luchtdoorlatende PU coating.zeer hoge vingergevoeligheidzeer flexibel en beweeglijk geschikt voor delicate werkzaamheden in droge omgevingenEN388:2016 3131XPer 12 paar verpakt in polybag reduceert afval . Per bundel van 12 paar verpakt. 120 paar per doos (10 bundels van 12 paar) </Commercial_text_Delo_NL_PIM__c>
+        <Commercial_text_Wiltec_NL_PIM__c>Comfortabele montage- en assemblage handschoen gemaakt van polyester met luchtdoorlatende PU coating.zeer hoge vingergevoeligheidzeer flexibel en beweeglijk geschikt voor delicate werkzaamheden in droge omgevingenEN388:2016 3131XPer 12 paar verpakt in polybag reduceert afval . Per bundel van 12 paar verpakt. 120 paar per doos (10 bundels van 12 paar) </Commercial_text_Wiltec_NL_PIM__c>
+        <Discontinued_PIM__c type="boolean">false</Discontinued_PIM__c>
+        <Description>AG Handschoen F8160NP 12 paar zwart</Description>
+        <External_ID_PIM__c>item-361495</External_ID_PIM__c>
+        <External_Product_Code_ERP__c>27.89F8160NP</External_Product_Code_ERP__c>
+        <IsActive type="boolean">true</IsActive>
+        <Measure_PIM__c>11</Measure_PIM__c>
+        <Name>AG Handschoen active flex F8160NP 12 paar zwart</Name>
+        <ProductCode>27.89F8160NP/11</ProductCode>
+        <Product_Company_Arvas__c>true</Product_Company_Arvas__c>
+        <Product_Company_Delo__c>false</Product_Company_Delo__c>
+        <Product_Company_Starks__c>true</Product_Company_Starks__c>
+        <Product_Company_WIltec__c>true</Product_Company_WIltec__c>
+        <Productgroup_PIM__c>Mechanisch bestendige handschoenen</Productgroup_PIM__c>
+        <Product_groep_ERP__c>040419001 | ActiveGear handschoenen algeme</Product_groep_ERP__c>
+    </Product2>
+</records>

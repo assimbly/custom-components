@@ -1,0 +1,42 @@
+[
+    {
+        "productcode": "101960",
+        "unitcode": "STUKS",
+        "stockquantity_on_hand": null,
+        "stockquantity_on_the_way": null,
+        "stockdate_available": "2023-12-20",
+        "discontinued": null,
+        "product_purchase": null,
+        "eancode": "8718056001873"
+    },
+    {
+        "productcode": "102440",
+        "unitcode": "STUKS",
+        "stockquantity_on_hand": null,
+        "stockquantity_on_the_way": null,
+        "stockdate_available": "2023-12-24",
+        "discontinued": null,
+        "product_purchase": null,
+        "eancode": "8718056002887"
+    },
+    {
+        "productcode": "102520",
+        "unitcode": "STUKS",
+        "stockquantity_on_hand": null,
+        "stockquantity_on_the_way": null,
+        "stockdate_available": [],
+        "discontinued": null,
+        "product_purchase": null,
+        "eancode": "8718056002962"
+    },
+    {
+        "productcode": "103930",
+        "unitcode": "STUKS",
+        "stockquantity_on_hand": null,
+        "stockquantity_on_the_way": null,
+        "stockdate_available": [],
+        "discontinued": null,
+        "product_purchase": null,
+        "eancode": "8718056006953"
+    }
+]

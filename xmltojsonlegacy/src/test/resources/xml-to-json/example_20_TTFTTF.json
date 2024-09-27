@@ -1,0 +1,27 @@
+{
+    "ShipmentMAG": {
+        "notify": null,
+        "items": {
+            "@class": "array",
+            "e": {
+                "@class": "object",
+                "qty": null,
+                "order_item_id": null
+            }
+        },
+        "tracks": [
+            {
+                "carrier_code": null,
+                "title": null,
+                "track_number": null
+            }
+        ],
+        "arguments": {
+            "@class": "object",
+            "extension_attributes": {
+                "@class": "object",
+                "source_code": "warehouse"
+            }
+        }
+    }
+}
