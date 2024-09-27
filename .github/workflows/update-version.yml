@@ -37,7 +37,7 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v4
         with:
-          repository: ${{ github.repository }}
+          repository: custom-components
           ref: ${{ inputs.branch }}
           fetch-depth: 0
           token: ${{ secrets.RELEASE_TOKEN }}
@@ -59,12 +59,12 @@ jobs:
           git config --global core.compression 0
           git config --local user.email "raymondmeester@gmail.com"
           git config --local user.name "skin27"
-          git commit -a -m "Update version to ${{inputs.milestone}}"
+          git diff-index --quiet HEAD || git commit -a -m "Update version to ${{inputs.milestone}}"
 
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.RELEASE_TOKEN }}
-          repository: ${{ github.repository }}
-          ref: ${{ github.ref_name }}
+          repository: custom-components
+          ref: ${{ inputs.branch }}
           force_with_lease: true
