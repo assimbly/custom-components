@@ -24,64 +24,8 @@ on:
         required: true
 
 jobs:
-  delete_old_snapshots:
-
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-
-      - name: Delete packages
-        uses: smartsquaregmbh/delete-old-packages@v0.8.1
-        with:
-          organization: assimbly
-          type: maven
-          token: ${{ secrets.MAVEN_TOKEN }}
-          keep: 0
-          semver-pattern: "${{inputs.milestone}}"
-          names: |
-            org.assimbly.oauth2token
-            org.assimbly.replace
-            org.assimbly.xmltocsv
-            org.assimbly.pdftotext
-            org.assimbly.xmltojson
-            org.assimbly.googledrive
-            org.assimbly.multipart
-            org.assimbly.smb
-            org.assimbly.formtoxml
-            org.assimbly.simplereplace
-            org.assimbly.pdf
-            org.assimbly.sql
-            org.assimbly.sandbox
-            org.assimbly.xmltoexcel
-            org.assimbly.mail
-            org.assimbly.soap
-            org.assimbly.tenantvariables
-            org.assimbly.oriflame
-            org.assimbly.docconverter
-            org.assimbly.csvtoxml
-            org.assimbly.amazon
-            org.assimbly.edifactcommon
-            org.assimbly.auth
-            org.assimbly.exceltoxml
-            org.assimbly.edifact
-            org.assimbly.cookies
-            org.assimbly.encoder
-            org.assimbly.enrich
-            org.assimbly.aggregate
-            org.assimbly.edifactdotweb
-            org.assimbly.edi
-            org.assimbly.smooksnoxml
-            org.assimbly.flv
-            org.assimbly.edifactstandards
-            org.assimbly.jsontoxmllegacy
-            org.assimbly.xmltojsonlegacy
-            org.assimbly.custom-components
-
   release-jars:
-    needs: delete_old_snapshots
+    # needs: delete_old_snapshots
     runs-on: ubuntu-latest
     permissions:
       contents: read
