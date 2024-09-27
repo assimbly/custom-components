@@ -33,11 +33,10 @@ public class SqlComponentTest extends CamelTestSupport {
     private final String database = "mysql_test";
     private final String connectionType = "mysql";
     private final String escapeChars = "true";
-
     private String query = "";
     private String query2 = "";
-
     private DocumentBuilder builder;
+    private MySQLDatabase mysqlDatabase;
 
     @AfterEach
     public void after(){
@@ -58,19 +57,13 @@ public class SqlComponentTest extends CamelTestSupport {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         builder = factory.newDocumentBuilder();
 
-        MySQLDatabase mysqlDatabase = new MySQLDatabase();
+        mysqlDatabase = new MySQLDatabase();
 
         mysqlDatabase.create();
         mysqlDatabase.insertMockData();
         mysqlDatabase.createStoredProcedure();
+
     }
-
-    @Override
-    public void setUp() throws Exception {
-
-        super.setUp();
-    }
-
 
     protected RouteBuilder createCustomRouteBuilder() throws Exception {
         return new RouteBuilder() {
@@ -79,6 +72,7 @@ public class SqlComponentTest extends CamelTestSupport {
                 from("direct:execute")
                         .to("sql-custom://" + username + "@" + url + "?password=" + password + "&database=" + database + "&connectionType=" + connectionType + "&query=RAW(" + query + ")")
                         .to("mock:out");
+
 
                 from("direct:executeWithHeaders")
                         .setHeader("product_id", new ConstantExpression("id"))

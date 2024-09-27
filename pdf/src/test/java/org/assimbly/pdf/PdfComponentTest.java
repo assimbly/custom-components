@@ -5,11 +5,11 @@ import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.model.language.ConstantExpression;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.impl.bootstrap.HttpServer;
 import org.apache.http.impl.bootstrap.ServerBootstrap;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.assimbly.pdf.handler.BasicValidationHandler;
 
 import org.apache.camel.test.junit5.CamelTestSupport;
@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.File;
 import java.util.Objects;
 
 public class PdfComponentTest extends CamelTestSupport {
@@ -28,9 +29,7 @@ public class PdfComponentTest extends CamelTestSupport {
 
     private HttpServer localServer;
 
-    @BeforeEach
-    @Override
-    public void setUp() throws Exception {
+    public void startServer() throws Exception {
         localServer = ServerBootstrap.bootstrap().
                 setHttpProcessor(null).
                 setConnectionReuseStrategy(null).
@@ -40,14 +39,10 @@ public class PdfComponentTest extends CamelTestSupport {
                 registerHandler("/pdfs/flowid", new BasicValidationHandler("GET", "tenant=tenant&uuid=12345", IOUtils.toByteArray(classLoader.getResourceAsStream("template.pdf"))))
                 .create();
         localServer.start();
-
-        super.setUp();
     }
 
     @AfterEach
-    @Override
-    public void tearDown() throws Exception {
-        super.tearDown();
+    public void stopServer() throws Exception {
 
         if (localServer != null) {
             localServer.stop();
@@ -55,7 +50,8 @@ public class PdfComponentTest extends CamelTestSupport {
     }
 
     @Override
-    protected RouteBuilder createRouteBuilder() {
+    protected RouteBuilder createRouteBuilder() throws Exception {
+        startServer();
         return new RouteBuilder() {
             @Override
             public void configure() throws Exception {
