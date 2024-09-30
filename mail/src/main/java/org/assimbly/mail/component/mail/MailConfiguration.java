@@ -34,6 +34,7 @@ import org.apache.camel.spi.UriPath;
 import org.apache.camel.support.jsse.SSLContextParameters;
 import org.apache.camel.util.ObjectHelper;
 
+import org.assimbly.tenantvariables.domain.TenantVariable;
 import org.assimbly.tenantvariables.mongo.MongoDao;
 
 import javax.net.ssl.SSLContext;
@@ -455,7 +456,7 @@ public class MailConfiguration implements Cloneable {
      * The accessToken for login
      */
     public String getAccessToken() {
-        return MongoDao.interpolatePossibleTenantVariable(accessToken, getTenant());
+        return MongoDao.interpolatePossibleTenantVariable(accessToken, getTenant(), TenantVariable.TenantVarType.StaticTenantVariable);
     }
 
     public void setAccessToken(String accessToken) {
