@@ -1,6 +1,5 @@
 package org.assimbly.tenantvariables;
 
-import org.abstractj.kalium.crypto.Random;
 import org.apache.camel.CamelExecutionException;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
@@ -10,7 +9,6 @@ import org.apache.camel.support.DefaultExchange;
 
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.assimbly.util.exception.TenantVariableNotFoundException;
-import org.assimbly.util.helper.Base64Helper;
 import org.junit.jupiter.api.*;
 import org.assimbly.tenantvariables.domain.EnvironmentValue;
 import org.assimbly.tenantvariables.domain.TenantVariable;
@@ -22,7 +20,6 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.abstractj.kalium.NaCl.Sodium.CRYPTO_SECRETBOX_XSALSA20POLY1305_NONCEBYTES;
 
 public class TenantVariablesTest extends CamelTestSupport {
 
@@ -457,13 +454,12 @@ public class TenantVariablesTest extends CamelTestSupport {
     private TenantVariable createEncryptedVariable() {
         TenantVariable variable = new TenantVariable(ENCRYPTED_VARIABLE_NAME);
 
-        byte[] nonce = new Random().randomBytes(CRYPTO_SECRETBOX_XSALSA20POLY1305_NONCEBYTES);
-        String encryptedVariableValue = Base64Helper.marshal(PROCESSOR.encrypt(VARIABLE_VALUE, nonce));
+        String encryptedVariableValue = PROCESSOR.encrypt(VARIABLE_VALUE);
 
         EnvironmentValue environmentValue = new EnvironmentValue("test");
 
         environmentValue.setValue(encryptedVariableValue);
-        environmentValue.setNonce(Base64Helper.marshal(nonce));
+        environmentValue.setNonce(null);
         environmentValue.setEncrypted(true);
 
         variable.put(environmentValue);
