@@ -3,7 +3,7 @@ package org.assimbly.oauth2token;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.commons.lang3.StringUtils;
-import org.assimbly.tenantvariables.mongo.MongoDao;
+import org.assimbly.oauth2token.tenant.TenantVariableManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.assimbly.tenantvariables.TenantVariablesProcessor;
@@ -39,10 +39,10 @@ public class OAuth2TokenProcessor implements Processor {
         String refreshFlagVarName = TokenService.OAUTH2_PREFIX + id + TokenService.OAUTH2_REFRESH_FLAG_SUFFIX;
 
         // check if there's a tenant variable inside tenantVar, and return real value
-        String expireDate = MongoDao.getTenantVariableValue(expireDateVarName, tenant, environment);
-        String accessToken = MongoDao.getTenantVariableValue(accessTokenVarName, tenant, environment);
-        String refreshFlag = MongoDao.getTenantVariableValue(refreshFlagVarName, tenant, environment);
-        String tokenTenantVarValue = MongoDao.getTenantVariableValue(tokenName, tenant, environment);
+        String expireDate = TenantVariableManager.getTenantVariableValue(expireDateVarName, tenant, environment);
+        String accessToken = TenantVariableManager.getTenantVariableValue(accessTokenVarName, tenant, environment);
+        String refreshFlag = TenantVariableManager.getTenantVariableValue(refreshFlagVarName, tenant, environment);
+        String tokenTenantVarValue = TenantVariableManager.discoverAndGetTenantVariableValue(tokenName, tenant, environment);
 
         Calendar expireCal = Calendar.getInstance();
         Calendar expireDelayCal = Calendar.getInstance();
@@ -73,11 +73,14 @@ public class OAuth2TokenProcessor implements Processor {
             accessToken = TokenService.refreshTokenInfo(id, environment, tenant);
             if(accessToken!=null && (!accessToken.equals(accessTokenOld) || StringUtils.isEmpty(tokenTenantVarValue))) {
                 // add token to tenant variable
-                MongoDao.saveTenantVariable(tokenName, accessToken, tenant, environment);
+                TenantVariableManager.discoverAndSaveTenantVariable(tokenName, accessToken, tenant, environment);
             }
         }
 
-        // add token to the header
-        exchange.getOut().setHeader(tokenName, accessToken);
+        if(!TenantVariableManager.isStaticTenantVariable(tokenName)) {
+            // add token to the header
+            exchange.getOut().setHeader(tokenName, accessToken);
+        }
     }
+
 }
