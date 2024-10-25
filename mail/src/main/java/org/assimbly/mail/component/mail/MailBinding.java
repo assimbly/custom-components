@@ -149,7 +149,7 @@ public class MailBinding {
                 replyToAddresses
                         .add(asEncodedInternetAddress(reply.trim(), determineCharSet(endpoint.getConfiguration(), exchange)));
             }
-            mimeMessage.setReplyTo(replyToAddresses.toArray(new InternetAddress[replyToAddresses.size()]));
+            mimeMessage.setReplyTo(replyToAddresses.toArray(new InternetAddress[0]));
         }
 
         // must have at least one recipients otherwise we do not know where to send the mail
@@ -369,6 +369,10 @@ public class MailBinding {
             } else {
                 String disposition = part.getDisposition();
                 String fileName = part.getFileName();
+                // fix file name if using malicious parameter name
+                if (fileName != null) {
+                    fileName = fileName.replaceAll("[\n\r\t]", "_");
+                }
 
                 if (isAttachment(disposition) && (fileName == null || fileName.isEmpty())) {
                     if (generateMissingAttachmentNames != null
@@ -395,7 +399,7 @@ public class MailBinding {
                     LOG.trace("Part #{}: LineCount: {}", i, part.getLineCount());
                 }
 
-                if (validDisposition(disposition, fileName) || fileName != null && !fileName.isEmpty()) {
+                if (validDisposition(disposition, fileName) || (fileName != null && !fileName.isEmpty())) {
                     LOG.debug("Mail contains file attachment: {}", fileName);
                     if (handleDuplicateAttachmentNames != null) {
                         if (handleDuplicateAttachmentNames
@@ -831,7 +835,7 @@ public class MailBinding {
         }
 
         mimeMessage.addRecipients(asRecipientType(type),
-                recipientsAddresses.toArray(new InternetAddress[recipientsAddresses.size()]));
+                recipientsAddresses.toArray(new InternetAddress[0]));
     }
 
     private static String[] splitRecipients(String recipients) {
@@ -858,7 +862,7 @@ public class MailBinding {
 
     protected static String getAlternativeBody(MailConfiguration configuration, Exchange exchange) {
         String alternativeBodyHeader = configuration.getAlternativeBodyHeader();
-        return exchange.getIn().getHeader(alternativeBodyHeader, String.class);
+        return exchange.getIn().getHeader(alternativeBodyHeader, java.lang.String.class);
     }
 
     /**
