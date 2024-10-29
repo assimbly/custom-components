@@ -16,6 +16,8 @@ import java.util.List;
 
 public class InformixAdapter implements DatabaseAdapter {
 
+    private static volatile boolean registered;
+
     @Override
     public Connection connect(JDBCConnection connection) throws SQLException {
         List<NameValuePair> parameters = new ArrayList<>();
@@ -33,7 +35,10 @@ public class InformixAdapter implements DatabaseAdapter {
                 connection.getHost(), connection.getPort(), connection.getDatabase(), query);
 
         DriverManager.setLoginTimeout(5);
-        DriverManager.registerDriver(driver);
+        if(!registered) {
+            DriverManager.registerDriver(driver);
+            registered = true;
+        }
 
         return DriverManager.getConnection(url, connection.getUsername(), connection.getPassword());
     }
