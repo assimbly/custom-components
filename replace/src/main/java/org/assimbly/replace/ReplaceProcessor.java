@@ -21,19 +21,21 @@ public class ReplaceProcessor implements Processor {
 
         String body = exchange.getIn().getBody(String.class);
 
-
         ReplaceConfiguration config = endpoint.getConfiguration();
 
         String regex = config.getRegex();
-        String replaceWith = config.getReplaceWith();
+        String replaceWith = ExchangeHelper.unescapeExceptionalCharacters(config.getReplaceWith());
 
-        if(ExchangeHelper.hasVariables(regex))
+        if(ExchangeHelper.hasVariables(regex)) {
             regex = ExchangeHelper.interpolate(regex, exchange);
+        }
 
-        if(ExchangeHelper.hasVariables(replaceWith))
+        if(ExchangeHelper.hasVariables(replaceWith)) {
             replaceWith = ExchangeHelper.interpolate(replaceWith, exchange);
+        }
 
-        Pattern pattern = Pattern.compile(regex, config.getFlagsMagicConstant());
+        //Pattern pattern = Pattern.compile(regex, config.getFlagsMagicConstant());
+        Pattern pattern = Pattern.compile(regex);
 
         String result = "";
         if(config.getGroup() > 0){
