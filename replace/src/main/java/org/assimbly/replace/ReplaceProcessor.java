@@ -2,6 +2,7 @@ package org.assimbly.replace;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.apache.commons.lang3.StringUtils;
 import org.assimbly.util.helper.ExchangeHelper;
 
 import java.io.*;
@@ -26,16 +27,17 @@ public class ReplaceProcessor implements Processor {
         String regex = config.getRegex();
         String replaceWith = ExchangeHelper.unescapeExceptionalCharacters(config.getReplaceWith());
 
-        if(ExchangeHelper.hasVariables(regex)) {
-            regex = ExchangeHelper.interpolate(regex, exchange);
+        if(regex.startsWith("${header.")) {
+            String headerName = StringUtils.substringBetween(regex,"${header.","}");
+            regex = exchange.getIn().getHeader(headerName, String.class);
         }
 
-        if(ExchangeHelper.hasVariables(replaceWith)) {
-            replaceWith = ExchangeHelper.interpolate(replaceWith, exchange);
+        if(replaceWith.startsWith("${header.")) {
+            String headerName = StringUtils.substringBetween(replaceWith,"${header.","}");
+            replaceWith = exchange.getIn().getHeader(headerName, String.class);
         }
 
-        //Pattern pattern = Pattern.compile(regex, config.getFlagsMagicConstant());
-        Pattern pattern = Pattern.compile(regex);
+        Pattern pattern = Pattern.compile(regex, config.getFlagsMagicConstant());
 
         String result = "";
         if(config.getGroup() > 0){
