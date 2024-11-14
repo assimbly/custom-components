@@ -22,6 +22,9 @@ public class GoogleDriveConfiguration {
     @UriParam
     protected String directoryId;
 
+    @UriParam
+    protected String flowId;
+
     // consumer options
 
     @UriParam(label = "consumer")
@@ -105,5 +108,13 @@ public class GoogleDriveConfiguration {
 
     public void setGSuiteFiles(String gSuiteFiles) {
         this.gSuiteFiles = gSuiteFiles;
+    }
+
+    public String getFlowId() {
+        return flowId;
+    }
+
+    public void setFlowId(String flowId) {
+        this.flowId = flowId;
     }
 }
