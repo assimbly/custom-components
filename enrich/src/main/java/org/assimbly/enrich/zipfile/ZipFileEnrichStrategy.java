@@ -26,13 +26,18 @@ public class ZipFileEnrichStrategy implements AggregationStrategy {
     public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
         element_names = new ArrayList<>();
 
+        if (newExchange == null) {
+            // there’s no remote file to consume
+            return oldExchange;
+        }
+
         Message in = oldExchange.getIn();
         Message resource = newExchange.getIn();
 
         byte[] sourceZip = in.getBody(byte[].class);
-        byte[] resourceData = resource.getBody(byte[].class);
+        byte[] resourceData = newExchange.getContext().getTypeConverter().convertTo(byte[].class, resource.getBody());
 
-        String fileName = resource.getHeader(Exchange.FILE_NAME, String.class);
+        String fileName = resource.getHeader(Exchange.FILE_NAME_CONSUMED, String.class);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
