@@ -27,14 +27,21 @@ public class ReplaceProcessor implements Processor {
         String regex = config.getRegex();
         String replaceWith = ExchangeHelper.unescapeExceptionalCharacters(config.getReplaceWith());
 
-        if(regex.startsWith("${header.")) {
-            String headerName = StringUtils.substringBetween(regex,"${header.","}");
-            regex = exchange.getIn().getHeader(headerName, String.class);
+        if(regex.contains("${header.")) {
+            String[] headerNames = StringUtils.substringsBetween(regex, "${header.", "}");
+            for(String headerName: headerNames){
+                String headerValue = exchange.getIn().getHeader(headerName, String.class);
+                regex = StringUtils.replaceOnce(regex,"${header." + headerName + "}",headerValue);
+            }
+
         }
 
-        if(replaceWith.startsWith("${header.")) {
-            String headerName = StringUtils.substringBetween(replaceWith,"${header.","}");
-            replaceWith = exchange.getIn().getHeader(headerName, String.class);
+        if(replaceWith.contains("${header.")) {
+            String[] headerNames = StringUtils.substringsBetween(replaceWith, "${header.", "}");
+            for(String headerName: headerNames){
+                String headerValue = exchange.getIn().getHeader(headerName, String.class);
+                replaceWith = StringUtils.replaceOnce(replaceWith,"${header." + headerName + "}",headerValue);
+            }
         }
 
         Pattern pattern = Pattern.compile(regex, config.getFlagsMagicConstant());
