@@ -157,7 +157,9 @@ public class DefaultSmbClient implements SmbClient {
     // Catch NPE for empty folders - see the following discussion for details:
     // http://camel-extra.1091541.n5.nabble.com/NPE-on-SmbOperations-td256.html
     try {
-      fileList.addAll(Arrays.asList(dir.listFiles()));
+      if(dir.exists() && dir.isDirectory()) {
+        fileList.addAll(Arrays.asList(dir.listFiles()));
+      }
     } catch (NullPointerException ex) {
       StackTraceElement[] elements = ex.getStackTrace();
       if (elements != null && elements.length > 0 && elements[0] != null

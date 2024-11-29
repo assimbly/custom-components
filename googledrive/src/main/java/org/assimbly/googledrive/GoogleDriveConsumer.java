@@ -111,7 +111,7 @@ public class GoogleDriveConsumer extends ScheduledPollConsumer implements Consum
                 connectionAttempts += 1;
                 service = this.endpoint.getClient(true);
             } else {
-                LOG.error("GoogleJsonResponseException occurred. Connect to Google Drive directory failed:", e);
+                LOG.error("GoogleJsonResponseException occurred. Connect to Google Drive directory failed on flowId: "+configuration.getFlowId(), e);
             }
         }
 

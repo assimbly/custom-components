@@ -9,6 +9,8 @@ import java.sql.SQLException;
 
 public class OracleAdapter implements DatabaseAdapter {
 
+    private static volatile boolean registered;
+
     @Override
     public Connection connect(JDBCConnection connection) throws SQLException {
         OracleDriver driver = new OracleDriver();
@@ -19,7 +21,10 @@ public class OracleAdapter implements DatabaseAdapter {
         //TODO: Figure out how SSL is configured in Oracle JDBC Connection String
 
         DriverManager.setLoginTimeout(5);
-        DriverManager.registerDriver(driver);
+        if(!registered) {
+            DriverManager.registerDriver(driver);
+            registered = true;
+        }
 
         return DriverManager.getConnection(url, connection.getUsername(), connection.getPassword());
     }
