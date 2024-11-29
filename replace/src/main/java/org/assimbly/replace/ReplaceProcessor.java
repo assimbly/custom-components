@@ -2,6 +2,7 @@ package org.assimbly.replace;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.apache.commons.lang3.StringUtils;
 import org.assimbly.util.helper.ExchangeHelper;
 
 import java.io.*;
@@ -21,17 +22,27 @@ public class ReplaceProcessor implements Processor {
 
         String body = exchange.getIn().getBody(String.class);
 
-
         ReplaceConfiguration config = endpoint.getConfiguration();
 
         String regex = config.getRegex();
-        String replaceWith = config.getReplaceWith();
+        String replaceWith = ExchangeHelper.unescapeExceptionalCharacters(config.getReplaceWith());
 
-        if(ExchangeHelper.hasVariables(regex))
-            regex = ExchangeHelper.interpolate(regex, exchange);
+        if(regex.contains("${header.")) {
+            String[] headerNames = StringUtils.substringsBetween(regex, "${header.", "}");
+            for(String headerName: headerNames){
+                String headerValue = exchange.getIn().getHeader(headerName, String.class);
+                regex = StringUtils.replaceOnce(regex,"${header." + headerName + "}",headerValue);
+            }
 
-        if(ExchangeHelper.hasVariables(replaceWith))
-            replaceWith = ExchangeHelper.interpolate(replaceWith, exchange);
+        }
+
+        if(replaceWith.contains("${header.")) {
+            String[] headerNames = StringUtils.substringsBetween(replaceWith, "${header.", "}");
+            for(String headerName: headerNames){
+                String headerValue = exchange.getIn().getHeader(headerName, String.class);
+                replaceWith = StringUtils.replaceOnce(replaceWith,"${header." + headerName + "}",headerValue);
+            }
+        }
 
         Pattern pattern = Pattern.compile(regex, config.getFlagsMagicConstant());
 

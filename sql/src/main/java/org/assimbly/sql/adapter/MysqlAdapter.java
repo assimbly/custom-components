@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 
 public class MysqlAdapter implements DatabaseAdapter {
 
+    private static volatile boolean registered;
+
     @Override
     public Connection connect(JDBCConnection connection) throws SQLException {
         com.mysql.cj.jdbc.Driver driver = new com.mysql.cj.jdbc.Driver();
@@ -50,7 +52,10 @@ public class MysqlAdapter implements DatabaseAdapter {
                 connection.getHost(), connection.getPort(), connection.getDatabase(), query);
 
         DriverManager.setLoginTimeout(5);
-        DriverManager.registerDriver(driver);
+        if(!registered) {
+            DriverManager.registerDriver(driver);
+            registered = true;
+        }
 
         return DriverManager.getConnection(url, connection.getUsername(), connection.getPassword());
     }

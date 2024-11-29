@@ -3,6 +3,7 @@ package org.assimbly.tenantvariables.mongo;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import org.apache.commons.lang3.StringUtils;
 import org.assimbly.tenantvariables.TenantVariablesProcessor;
 import org.assimbly.tenantvariables.domain.EnvironmentValue;
 import org.assimbly.tenantvariables.domain.TenantVariable;
@@ -28,10 +29,18 @@ public class MongoDao {
     private static final String TENANT_VARIABLE_EXPRESSION = "@\\{(.*?)}";
 
     public static TenantVariable findTenantVariableByName(String variableName, String tenant) {
+        return findTenantVariableByName(variableName, tenant, TenantVariable.TenantVarType.TenantVariable);
+    }
+
+    public static TenantVariable findTenantVariableByName(String variableName, String tenant, TenantVariable.TenantVarType tenantVarType) {
         MongoDatabase database = MongoClientProvider.getInstance().getDatabase(tenant);
         MongoCollection<Document> collection = database.getCollection(TENANT_VARIABLES_COLLECTION_NAME);
 
-        Document document = collection.find(new Document(NAME_FIELD, variableName)).first();
+        Document query = new Document()
+                .append(TenantVariable.NAME_FIELD, variableName)
+                .append(TenantVariable.TYPE_FIELD, tenantVarType.name());
+
+        Document document = collection.find(query).first();
         if (document != null) {
             return TenantVariable.fromDocument(document);
         }
@@ -53,11 +62,15 @@ public class MongoDao {
         return tenantVariables;
     }
 
-    public static String getTenantVariableValue(String tenantVarName, String tenant, String environment) {
+    static public String getTenantVariableValue(String tenantVarName, String tenant, String environment) {
+        return getTenantVariableValue(tenantVarName, tenant, environment, TenantVariable.TenantVarType.TenantVariable);
+    }
 
-        TenantVariable tenantVar = MongoDao.findTenantVariableByName(tenantVarName, tenant);
+    public static String getTenantVariableValue(String tenantVarName, String tenant, String environment, TenantVariable.TenantVarType tenantVarType) {
+
+        TenantVariable tenantVar = MongoDao.findTenantVariableByName(tenantVarName, tenant, tenantVarType);
         if(tenantVar==null) {
-            LOG.info(String.format("tenantVar %s is NULL", tenantVarName));
+            LOG.info(String.format("tenantVar %s of type %s is NULL", tenantVarType.name(), tenantVarName));
             return null;
         }
 
@@ -94,6 +107,10 @@ public class MongoDao {
     }
 
     public static String interpolatePossibleTenantVariable(String value, String tenant) {
+        return interpolatePossibleTenantVariable(value, tenant, TenantVariable.TenantVarType.TenantVariable);
+    }
+
+    public static String interpolatePossibleTenantVariable(String value, String tenant, TenantVariable.TenantVarType tenantVarType) {
         StringBuffer valueBuf = new StringBuffer();
         String environment = TenantVariablesProcessor.getEnvironment();
         Pattern pattern = Pattern.compile(TENANT_VARIABLE_EXPRESSION);
@@ -104,7 +121,7 @@ public class MongoDao {
             TenantVariablesProcessor tenantVarProcessor = new TenantVariablesProcessor();
             String environmentVarValue = "";
 
-            TenantVariable tenantVar = MongoDao.findTenantVariableByName(varName, tenant);
+            TenantVariable tenantVar = MongoDao.findTenantVariableByName(varName, tenant, tenantVarType);
             Optional<EnvironmentValue> environmentVar = tenantVar.find(environment);
             if(environmentVar.isPresent()) {
                 environmentVarValue = tenantVarProcessor.getValueByEnvironmentValue(environmentVar.get());
@@ -123,20 +140,19 @@ public class MongoDao {
         return matcher.find();
     }
 
-    public static void saveTenantVariable(
+    static public void saveTenantVariable(
             String tenantVarName, String tenantVarValue, String tenant, String environment
     ) {
-        TenantVariable tenantVariable = findTenantVariableByName(tenantVarName, tenant);
+        saveTenantVariable(tenantVarName, tenantVarValue, tenant, environment, TenantVariable.TenantVarType.TenantVariable);
+    }
+
+    public static void saveTenantVariable(
+            String tenantVarName, String tenantVarValue, String tenant, String environment, TenantVariable.TenantVarType tenantVarType
+    ) {
+        TenantVariable tenantVariable = findTenantVariableByName(tenantVarName, tenant, tenantVarType);
         boolean tenantVariableExist = !Objects.isNull(tenantVariable);
 
-        if(!tenantVariableExist) {
-            tenantVariable = new TenantVariable(tenantVarName);
-            tenantVariable.setCreatedAt(new Date().getTime());
-            tenantVariable.setCreatedBy(CREATED_BY_SYSTEM);
-        }
-
-        if(!tenantVariable.find(environment).isPresent())
-            tenantVariable.put(new EnvironmentValue(environment));
+        tenantVariable = initTenantVariable(tenantVariable, tenantVarType, tenantVarName, environment, tenantVariableExist);
 
         EnvironmentValue variable = tenantVariable.find(environment).get();
 
@@ -146,6 +162,24 @@ public class MongoDao {
         variable.setUpdatedBy(UPDATED_BY_SYSTEM);
 
         updateTenantVariable(tenantVariable, tenant, tenantVariableExist);
+    }
+
+    private static TenantVariable initTenantVariable(TenantVariable tenantVariable, TenantVariable.TenantVarType tenantVarType, String tenantVarName, String environment, boolean tenantVariableExist) {
+        if(!tenantVariableExist) {
+            tenantVariable = new TenantVariable(tenantVarName);
+            tenantVariable.set_type(tenantVarType.name());
+        }
+        if(StringUtils.isEmpty(tenantVariable.getCreatedBy())) {
+            tenantVariable.setCreatedBy(CREATED_BY_SYSTEM);
+        }
+        if(tenantVariable.getCreatedAt() == 0) {
+            tenantVariable.setCreatedAt(new Date().getTime());
+        }
+        if(!tenantVariable.find(environment).isPresent()) {
+            tenantVariable.put(new EnvironmentValue(environment));
+        }
+
+        return tenantVariable;
     }
 
     public static void updateTenantVariable(TenantVariable tenantVariable, String tenant, boolean tenantVariableExist){

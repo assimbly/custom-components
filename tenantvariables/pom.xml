@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>custom-components</artifactId>
 		<groupId>org.assimbly</groupId>
-		<version>5.0.0</version>
+		<version>5.0.2-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>tenantvariables</artifactId>
@@ -24,12 +24,6 @@
 	</distributionManagement>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.abstractj.kalium</groupId>
-			<artifactId>kalium</artifactId>
-			<version>${kalium.version}</version>
-		</dependency>
-
 		<dependency>
 			<groupId>org.mongodb</groupId>
 			<artifactId>mongodb-driver-sync</artifactId>

@@ -391,6 +391,6 @@ public class SmbOperations<SmbFile> implements GenericFileOperations<SmbFile> {
 
     @Override
     public GenericFile<SmbFile> newGenericFile() {
-        throw new GenericFileOperationFailedException("Not yet supported");
+        return new GenericFile<>();
     }
 }

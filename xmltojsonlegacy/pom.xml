@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>custom-components</artifactId>
 		<groupId>org.assimbly</groupId>
-		<version>5.0.0</version>
+		<version>5.0.2-SNAPSHOT</version>
 	</parent>
 
   <artifactId>xmltojsonlegacy</artifactId>
@@ -23,11 +23,6 @@
   </distributionManagement>
 
   <dependencies>
-	  <dependency>
-		  <groupId>org.abstractj.kalium</groupId>
-		  <artifactId>kalium</artifactId>
-		  <version>0.8.0</version>
-	  </dependency>
   </dependencies>
 
 	<build>
