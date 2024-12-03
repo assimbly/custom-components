@@ -71,12 +71,12 @@
         <config-admin.version>1.9.26</config-admin.version>
         <cxf.version>4.0.5</cxf.version>
         <camel.version>4.8.1</camel.version>
-        <docconverter.version>1.11.0</docconverter.version>
-        <google.api.version>v3-rev20241014-2.0.0</google.api.version>
+        <docconverter.version>1.12.1</docconverter.version>
+        <google.api.version>v3-rev20241027-2.0.0</google.api.version>
         <google.auth.version>1.5.0</google.auth.version>
         <google.oauth.version>1.36.0</google.oauth.version>
         <hapi.version>2.5.1</hapi.version>
-        <hibernate-core.version>6.6.1.Final</hibernate-core.version>
+        <hibernate-core.version>6.6.3.Final</hibernate-core.version>
         <httpclient.version>4.5.14</httpclient.version>
         <httpcomponents.version>4.5.14</httpcomponents.version>
         <java-assist.version>3.29.2-GA</java-assist.version>
