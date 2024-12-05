@@ -316,14 +316,27 @@ public class ExtractUtils {
     ){
         switch (type.toLowerCase()) {
             case Constants.JSON_XML_ATTR_TYPE_NUMBER:
-                objectNode.put(
-                        label,
-                        !config.isElementMustBeNull()
-                            ? (subElement != null
-                                ? (subElement.asText().contains(".") ? subElement.asDouble() : subElement.asInt())
-                                : (value.contains(".") ? Double.parseDouble(value) : Integer.parseInt(value)))
-                            : null
-                );
+                if (config.isElementMustBeNull()) {
+                    objectNode.putNull(label);
+                    break;
+                }
+                if (subElement == null) {
+                    if(isInteger(value)) {
+                        objectNode.put(label, Integer.parseInt(value));
+                    } else if(isDouble(value)) {
+                        objectNode.put(label, Double.parseDouble(value));
+                    } else {
+                        objectNode.putNull(label);
+                    }
+                    break;
+                }
+                if(isInteger(subElement.asText())) {
+                    objectNode.put(label, subElement.asInt());
+                } else if(isDouble(subElement.asText())) {
+                    objectNode.put(label, subElement.asDouble());
+                } else {
+                    objectNode.putNull(label);
+                }
                 break;
             case Constants.JSON_XML_ATTR_TYPE_BOOLEAN:
                 objectNode.put(
@@ -358,13 +371,27 @@ public class ExtractUtils {
     ){
         switch (type.toLowerCase()) {
             case Constants.JSON_XML_ATTR_TYPE_NUMBER:
-                arrayNode.add(
-                        !config.isElementMustBeNull()
-                            ? (subElement != null
-                                ? (subElement.asText().contains(".") ? subElement.asDouble() : subElement.asInt())
-                                : (value.contains(".") ? Double.parseDouble(value) : Integer.parseInt(value)))
-                            : null
-                );
+                if (config.isElementMustBeNull()) {
+                    arrayNode.addNull();
+                    break;
+                }
+                if (subElement == null) {
+                    if(isInteger(value)) {
+                        arrayNode.add(Integer.parseInt(value));
+                    } else if(isDouble(value)) {
+                        arrayNode.add(Double.parseDouble(value));
+                    } else {
+                        arrayNode.addNull();
+                    }
+                    break;
+                }
+                if(isInteger(subElement.asText())) {
+                    arrayNode.add(subElement.asInt());
+                } else if(isDouble(subElement.asText())) {
+                    arrayNode.add(subElement.asDouble());
+                } else {
+                    arrayNode.addNull();
+                }
                 break;
             case Constants.JSON_XML_ATTR_TYPE_BOOLEAN:
                 arrayNode.add(
@@ -485,6 +512,30 @@ public class ExtractUtils {
         } else {
             String valueAsStr = ElementUtils.getNodeValue(node, config.isTrimSpaces());
             config.getRootObjectNode().put(Constants.JSON_XML_TEXT_FIELD, valueAsStr);
+        }
+    }
+
+    private static boolean isInteger(String str) {
+        if (str == null || str.isEmpty()) {
+            return false;
+        }
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private static boolean isDouble(String str) {
+        if (str == null || str.isEmpty()) {
+            return false;
+        }
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
         }
     }
 
