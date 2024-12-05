@@ -318,7 +318,11 @@ public class ExtractUtils {
             case Constants.JSON_XML_ATTR_TYPE_NUMBER:
                 objectNode.put(
                         label,
-                        !config.isElementMustBeNull() ? (subElement!=null ? subElement.asInt() : Integer.parseInt(value)) : null
+                        !config.isElementMustBeNull()
+                            ? (subElement != null
+                                ? (subElement.asText().contains(".") ? subElement.asDouble() : subElement.asInt())
+                                : (value.contains(".") ? Double.parseDouble(value) : Integer.parseInt(value)))
+                            : null
                 );
                 break;
             case Constants.JSON_XML_ATTR_TYPE_BOOLEAN:
@@ -355,9 +359,11 @@ public class ExtractUtils {
         switch (type.toLowerCase()) {
             case Constants.JSON_XML_ATTR_TYPE_NUMBER:
                 arrayNode.add(
-                        !config.isElementMustBeNull() ?
-                                subElement!=null ? subElement.asInt() : Integer.parseInt(value) :
-                                null
+                        !config.isElementMustBeNull()
+                            ? (subElement != null
+                                ? (subElement.asText().contains(".") ? subElement.asDouble() : subElement.asInt())
+                                : (value.contains(".") ? Double.parseDouble(value) : Integer.parseInt(value)))
+                            : null
                 );
                 break;
             case Constants.JSON_XML_ATTR_TYPE_BOOLEAN:
