@@ -1,0 +1,9 @@
+[
+    {
+        "attributeCode": "CDFH03",
+        "valueDecimal": {
+            "@type": "number",
+            "#text": "4321.65"
+        }
+    }
+]
