@@ -140,11 +140,6 @@ public class SmbConsumer extends GenericFileConsumer<SmbFile> {
     }
 
     @Override
-    protected boolean isRetrieveFile() {
-        return ((SmbEndpoint)getEndpoint()).isDownload();
-    }
-
-    @Override
     protected Exchange createExchange(final GenericFile<SmbFile> file) {
         Exchange exchange = createExchange(true);
         if (file != null) {
