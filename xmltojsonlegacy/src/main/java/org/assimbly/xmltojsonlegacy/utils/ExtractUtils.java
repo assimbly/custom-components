@@ -61,7 +61,9 @@ public class ExtractUtils {
                             config.getRootObjectNode().put(propertyName, !config.isElementMustBeNull() ? node.get(0) : null);
                         }
                     } else {
-                        config.getRootObjectNode().put(propertyName, !config.isElementMustBeNull() ? node : null);
+                        boolean simpleValueToInclude = node.isArray() && node.size() == 1 && node.get(0).isValueNode() && config.getElementDeepestDepth() <= 1;
+                        JsonNode nodeToInclude = simpleValueToInclude ? node.get(0) : node;
+                        config.getRootObjectNode().put(propertyName, !config.isElementMustBeNull() ? nodeToInclude : null);
                     }
                 } else {
                     if(node.get(propertyName) != null) {

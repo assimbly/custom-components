@@ -24,7 +24,7 @@ public class OtherTypeWithoutNamespace implements ElementNodeTransaction {
             if(config.isElementWithEmptyTextContent() ||
                     childrenHasEmptyTextContent ||
                     (config.getLevel() == 0 && config.getNumberOfChildren() > 1) ||
-                    (config.getNumberOfChildren() == 1 && children >= 1 && !classAttrOnChildElementIsNUll) ||
+                    (config.getNumberOfChildren() == 1 && (children == 0 || children >= 1 && (!classAttrOnChildElementIsNUll || childNode.hasAttributes()))) ||
                     !ElementUtils.areSiblingsNamesEqual((Element) childNode) ||
                     config.isElementOnNamespace()
             ) {

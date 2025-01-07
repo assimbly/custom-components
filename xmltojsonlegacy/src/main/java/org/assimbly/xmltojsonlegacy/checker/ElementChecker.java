@@ -31,20 +31,22 @@ public class ElementChecker {
     private static boolean isRootArrayWithTypeHints(XmlToJsonConfiguration config) {
         boolean isRootArray = false;
 
-        if (config.getLevel() == 0 && config.getNumberOfChildren() == 1 && !config.isElementDefiningNamespaces()) {
+        if (config.getLevel() == 0 && config.getNumberOfChildren() == 1 && !config.isElementDefiningNamespaces() && !config.isHasAttributes()) {
             isRootArray = true;
         }
         if (config.getElementDeepestDepth() > 2 && !config.isElementDefiningNamespaces() && config.isAreChildrenNamesEqual()) {
             isRootArray = true;
         }
         if (config.getElementDeepestDepth() == 2 && !config.isElementDefiningNamespaces() && config.isAreChildrenNamesEqual() &&
-                (config.isAreSiblingsNamesEqual() || !config.getClassAttr().equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT))
+                (config.isAreSiblingsNamesEqual() || !config.getClassAttr().equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT)) &&
+                !config.isHasAttributes()
         ) {
             isRootArray = true;
         }
         if (config.getElementDeepestDepth() == 1 && config.getParentClass() != null && !config.isElementOnNamespace() &&
                 (config.getParentClass().equals("") || config.getParentClass().equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_ARRAY) ||
-                        config.getParentClass().equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT))
+                        config.getParentClass().equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT)) &&
+                !config.isHasAttributes()
         ) {
             isRootArray = true;
         }
@@ -54,13 +56,13 @@ public class ElementChecker {
         )) {
             isRootArray = true;
         }
-        if (config.getElementDeepestDepth() == 0 && !config.isParentWithEmptyTextContent() && !config.isHasAttributes() && !config.isHasParentAttributes() &&
+        if (config.getElementDeepestDepth() == 0 && !config.isParentWithEmptyTextContent() && !config.isHasAttributes() &&
                 (config.getNumberOfSiblings() == 1 || config.getNumberOfSiblings() > 1 && config.isAreSiblingsNamesEqual()) &&
                 (!config.getParentClass().equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT) ||
                         config.getParentClass().equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
                                 config.isParentSiblingsNamesEqual()) &&
-                (!config.getGrandParentClass().equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT) ||
-                        config.getGrandParentClass().equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
+                (!Constants.JSON_XML_ATTR_TYPE_OBJECT.equalsIgnoreCase(config.getGrandParentClass()) ||
+                        Constants.JSON_XML_ATTR_TYPE_OBJECT.equalsIgnoreCase(config.getGrandParentClass()) &&
                                 config.isGrandParentSiblingsNamesEqual())
         ) {
             isRootArray = true;
