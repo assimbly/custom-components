@@ -12,6 +12,17 @@ public class TextType implements NodeTransaction {
     @Override
     public Element process(JsonToXmlConfiguration config) {
         // extract child as a text
+
+        if(config.getJsonNode().isNull()) {
+            if(config.isTypeHints()) {
+                config.getElement().setAttribute(Constants.JSON_XML_ATTR_CLASS, Constants.JSON_XML_ATTR_TYPE_OBJECT);
+                config.getElement().setAttribute(Constants.NULL_VALUE, "true");
+            } else {
+                config.getElement().setAttribute(Constants.JSON_NULL_VALUE, "true");
+            }
+            return config.getElement();
+        }
+
         Text textNode = config.getDocument().createTextNode(config.getJsonNode().asText());
         config.getElement().appendChild(textNode);
         if(config.getElement().hasAttribute(Constants.JSON_XML_ATTR_TYPE) || !config.isTypeHints()) {
