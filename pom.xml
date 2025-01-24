@@ -9,7 +9,7 @@
     <packaging>pom</packaging>
     <name>custom-components</name>
     <url>https://www.org.assimbly</url>
-    <version>5.0.1</version>
+    <version>5.0.2</version>
 
     <modules>
         <module>aggregate</module>
@@ -66,17 +66,17 @@
         <maven.versions.rules>file:///${project.basedir}/rules.xml</maven.versions.rules>
 
         <axiom.version>1.2.20</axiom.version>
-        <assimbly.version>5.0.1</assimbly.version>
+        <assimbly.version>5.0.2</assimbly.version>
         <bouncycastle.version>1.79</bouncycastle.version>
         <config-admin.version>1.9.26</config-admin.version>
         <cxf.version>4.0.5</cxf.version>
         <camel.version>4.8.1</camel.version>
-        <docconverter.version>1.11.0</docconverter.version>
-        <google.api.version>v3-rev20241014-2.0.0</google.api.version>
+        <docconverter.version>1.12.1</docconverter.version>
+        <google.api.version>v3-rev20241027-2.0.0</google.api.version>
         <google.auth.version>1.5.0</google.auth.version>
         <google.oauth.version>1.36.0</google.oauth.version>
         <hapi.version>2.5.1</hapi.version>
-        <hibernate-core.version>6.6.1.Final</hibernate-core.version>
+        <hibernate-core.version>6.6.3.Final</hibernate-core.version>
         <httpclient.version>4.5.14</httpclient.version>
         <httpcomponents.version>4.5.14</httpcomponents.version>
         <java-assist.version>3.29.2-GA</java-assist.version>

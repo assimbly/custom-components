@@ -1,0 +1,9 @@
+{
+    "rmessage": {
+        "@RESTgroupId": "40000",
+        "level2": {
+            "@test": "123",
+            "orderStatus": "O"
+        }
+    }
+}

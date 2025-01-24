@@ -47,6 +47,7 @@ public class ReplaceProcessor implements Processor {
         Pattern pattern = Pattern.compile(regex, config.getFlagsMagicConstant());
 
         String result = "";
+        replaceWith = Matcher.quoteReplacement(replaceWith);
         if(config.getGroup() > 0){
             result = replaceGroup(regex,body,config.getGroup(),replaceWith);
         }else{
