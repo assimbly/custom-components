@@ -9,7 +9,7 @@
     <packaging>pom</packaging>
     <name>custom-components</name>
     <url>https://www.org.assimbly</url>
-    <version>5.0.2</version>
+    <version>5.0.3-SNAPSHOT</version>
 
     <modules>
         <module>aggregate</module>
@@ -66,7 +66,7 @@
         <maven.versions.rules>file:///${project.basedir}/rules.xml</maven.versions.rules>
 
         <axiom.version>1.2.20</axiom.version>
-        <assimbly.version>5.0.2</assimbly.version>
+        <assimbly.version>5.0.3-SNAPSHOT</assimbly.version>
         <bouncycastle.version>1.79</bouncycastle.version>
         <config-admin.version>1.9.26</config-admin.version>
         <cxf.version>4.0.5</cxf.version>
