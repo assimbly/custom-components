@@ -49,7 +49,7 @@ public class ReplaceProcessor implements Processor {
         String result = "";
         replaceWith = Matcher.quoteReplacement(replaceWith);
         if(config.getGroup() > 0){
-            result = replaceGroup(regex,body, config.getGroup(), replaceWith);
+            result = replaceGroup(regex, body, config.getGroup(), replaceWith);
         }else{
             result = pattern.matcher(body).replaceAll(replaceWith);
         }
@@ -78,7 +78,7 @@ public class ReplaceProcessor implements Processor {
         m.appendTail(result);
 
         return result.toString();
-    
+
     }
 
 }
