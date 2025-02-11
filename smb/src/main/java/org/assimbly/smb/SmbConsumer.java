@@ -23,6 +23,7 @@ package org.assimbly.smb;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.function.Supplier;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
@@ -86,7 +87,17 @@ public class SmbConsumer extends GenericFileConsumer<SmbFile> {
             } else {
                 try {
                     GenericFile<SmbFile> genericFile = asGenericFile(fileName, smbFile);
-                    if (isValidFile(genericFile, false, smbFiles)) {
+                    if (isValidFile(new Supplier<GenericFile<SmbFile>>() {
+                        @Override
+                        public GenericFile<SmbFile> get() {
+                            return genericFile;
+                        }
+                    }, fileName, smbFile.getCanonicalPath(), new Supplier<String>() {
+                        @Override
+                        public String get() {
+                            return "";
+                        }
+                    }, false, smbFiles)) {
                         fileList.add(asGenericFile(fileName, smbFile));
                     }
                 } catch (IOException e) {
@@ -100,6 +111,16 @@ public class SmbConsumer extends GenericFileConsumer<SmbFile> {
     @Override
     protected void updateFileHeaders(final GenericFile<SmbFile> genericFile, final Message message) {
         // TODO
+    }
+
+    @Override
+    protected Supplier<String> getRelativeFilePath(String endpointPath, String path, String absolutePath, SmbFile file) {
+        return null;
+    }
+
+    @Override
+    protected boolean isMatched(Supplier<GenericFile<SmbFile>> file, String doneFileName, SmbFile[] files) {
+        return false;
     }
 
     // TODO: this needs some checking!
@@ -123,9 +144,6 @@ public class SmbConsumer extends GenericFileConsumer<SmbFile> {
         return answer;
     }
 
-
-
-    @Override
     protected boolean isMatched(final GenericFile<SmbFile> file, final String doneFileName, final SmbFile[] files) {
         String onlyName = FileUtil.stripPath(doneFileName);
 
