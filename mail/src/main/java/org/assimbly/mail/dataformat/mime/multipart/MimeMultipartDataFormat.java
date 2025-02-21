@@ -165,7 +165,11 @@ public class MimeMultipartDataFormat extends DefaultDataFormat {
                     }
                 }
             }
-            mm.writeTo(stream, headers.toArray(new String[0]));
+            //mm.writeTo(stream, headers.toArray(new String[0]));
+            //Workaround to apply the body also for InOut exchanges
+            ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+            mm.writeTo(byteStream, headers.toArray(new String[0]));
+            exchange.getIn().setBody(byteStream.toString());
         } else {
             // keep the original data
             InputStream is = ExchangeHelper.convertToMandatoryType(exchange, InputStream.class, graph);

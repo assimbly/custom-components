@@ -9,7 +9,7 @@
     <packaging>pom</packaging>
     <name>custom-components</name>
     <url>https://www.org.assimbly</url>
-    <version>5.0.2</version>
+    <version>5.0.3</version>
 
     <modules>
         <module>aggregate</module>
@@ -66,17 +66,17 @@
         <maven.versions.rules>file:///${project.basedir}/rules.xml</maven.versions.rules>
 
         <axiom.version>1.2.20</axiom.version>
-        <assimbly.version>5.0.2</assimbly.version>
-        <bouncycastle.version>1.79</bouncycastle.version>
+        <assimbly.version>5.0.3</assimbly.version>
+        <bouncycastle.version>1.80</bouncycastle.version>
         <config-admin.version>1.9.26</config-admin.version>
-        <cxf.version>4.0.5</cxf.version>
-        <camel.version>4.8.1</camel.version>
+        <cxf.version>4.1.0</cxf.version>
+        <camel.version>4.10.0</camel.version>
         <docconverter.version>1.12.1</docconverter.version>
-        <google.api.version>v3-rev20241027-2.0.0</google.api.version>
+        <google.api.version>v3-rev20250122-2.0.0</google.api.version>
         <google.auth.version>1.5.0</google.auth.version>
-        <google.oauth.version>1.36.0</google.oauth.version>
+        <google.oauth.version>1.37.0</google.oauth.version>
         <hapi.version>2.5.1</hapi.version>
-        <hibernate-core.version>6.6.3.Final</hibernate-core.version>
+        <hibernate-core.version>6.6.7.Final</hibernate-core.version>
         <httpclient.version>4.5.14</httpclient.version>
         <httpcomponents.version>4.5.14</httpcomponents.version>
         <java-assist.version>3.29.2-GA</java-assist.version>
@@ -87,14 +87,14 @@
         <jcifs.version>2.1.39</jcifs.version>
         <libsodium-jna.version>1.0.5</libsodium-jna.version>
         <mvel.version>2.5.2.Final</mvel.version>
-        <mime4j.version>0.8.11</mime4j.version>
+        <mime4j.version>0.8.12</mime4j.version>
         <mockito.version>3.3.3</mockito.version>
-        <mockito-core.version>5.14.2</mockito-core.version>
+        <mockito-core.version>5.15.2</mockito-core.version>
         <mockito-inline.version>5.2.0</mockito-inline.version>
         <mongo.version>4.7.2</mongo.version>
         <osgi.version>6.0.0</osgi.version>
-        <pdfbox.version>3.0.3</pdfbox.version>
-        <poi.version>5.3.0</poi.version>
+        <pdfbox.version>3.0.4</pdfbox.version>
+        <poi.version>5.4.0</poi.version>
         <saaj-impl.version>3.0.4</saaj-impl.version>
         <saxon.version>9.7.0-21</saxon.version>
         <smooks.version>1.7.1</smooks.version>

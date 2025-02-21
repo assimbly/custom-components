@@ -25,6 +25,7 @@ public class Constants {
     );
 
     public static final String INTERNAL_NULL_OBJECT_NODE_VALUE = "@NULL@";
+    public static final String JSON_NULL_VALUE = "json_null";
     public static final String NULL_VALUE = "null";
 
 }
