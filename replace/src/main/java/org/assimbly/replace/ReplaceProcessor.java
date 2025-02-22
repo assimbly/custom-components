@@ -47,8 +47,9 @@ public class ReplaceProcessor implements Processor {
         Pattern pattern = Pattern.compile(regex, config.getFlagsMagicConstant());
 
         String result = "";
+        replaceWith = Matcher.quoteReplacement(replaceWith);
         if(config.getGroup() > 0){
-            result = replaceGroup(regex,body,config.getGroup(),replaceWith);
+            result = replaceGroup(regex, body, config.getGroup(), replaceWith);
         }else{
             result = pattern.matcher(body).replaceAll(replaceWith);
         }
@@ -58,14 +59,26 @@ public class ReplaceProcessor implements Processor {
     }
 
     public static String replaceGroup(String regex, String source, int groupToReplace, String replacement) {
-        return replaceGroup(regex, source, groupToReplace, 1, replacement);
-    }
 
-    public static String replaceGroup(String regex, String source, int groupToReplace, int groupOccurrence, String replacement) {
         Matcher m = Pattern.compile(regex).matcher(source);
-        for (int i = 0; i < groupOccurrence; i++)
-            if (!m.find()) return source; // pattern not met, may also throw an exception here
-        return new StringBuilder(source).replace(m.start(groupToReplace), m.end(groupToReplace), replacement).toString();
+        StringBuffer result = new StringBuffer();
+
+        while (m.find()) {
+            // Append the part before the match
+            m.appendReplacement(result, source.substring(m.start(), m.start(groupToReplace)));
+
+            // Append the replacement for the group
+            result.append(replacement);
+
+            // Append the part after the group
+            result.append(source.substring(m.end(groupToReplace), m.end()));
+        }
+
+        // Append the remaining part of the source string after the last match
+        m.appendTail(result);
+
+        return result.toString();
+
     }
 
 }
