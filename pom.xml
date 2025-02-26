@@ -65,45 +65,35 @@
         <main.basedir>${project.basedir}</main.basedir>
         <maven.versions.rules>file:///${project.basedir}/rules.xml</maven.versions.rules>
 
-        <axiom.version>1.2.20</axiom.version>
+        <angus.mail.version>2.0.3</angus.mail.version>
         <assimbly.version>5.1.0</assimbly.version>
         <bouncycastle.version>1.80</bouncycastle.version>
         <config-admin.version>1.9.26</config-admin.version>
         <cxf.version>4.1.0</cxf.version>
         <camel.version>4.10.0</camel.version>
-        <docconverter.version>1.12.1</docconverter.version>
+        <docconverter.version>1.13.0</docconverter.version>
         <google.api.version>v3-rev20250216-2.0.0</google.api.version>
         <google.auth.version>1.5.0</google.auth.version>
         <google.oauth.version>1.38.0</google.oauth.version>
-        <hapi.version>2.5.1</hapi.version>
-        <hibernate-core.version>6.6.8.Final</hibernate-core.version>
-        <httpclient.version>4.5.14</httpclient.version>
+        <hibernate-core.version>6.6.9.Final</hibernate-core.version>
         <httpcomponents.version>4.5.14</httpcomponents.version>
-        <java-assist.version>3.29.2-GA</java-assist.version>
-        <jaxen.version>2.0.0</jaxen.version>
-        <angus.mail.version>2.0.3</angus.mail.version>
         <jakarta.activation.version>2.1.3</jakarta.activation.version>
-        <jakarta.mail.version>2.1.3</jakarta.mail.version>
-        <jcifs.version>2.1.39</jcifs.version>
+        <jaxen.version>2.0.0</jaxen.version>
         <libsodium-jna.version>1.0.5</libsodium-jna.version>
-        <mvel.version>2.5.2.Final</mvel.version>
         <mime4j.version>0.8.12</mime4j.version>
-        <mockito.version>3.3.3</mockito.version>
         <mockito-core.version>5.15.2</mockito-core.version>
         <mockito-inline.version>5.2.0</mockito-inline.version>
         <mongo.version>4.7.2</mongo.version>
-        <osgi.version>6.0.0</osgi.version>
+        <mvel.version>2.5.2.Final</mvel.version>
         <pdfbox.version>3.0.4</pdfbox.version>
         <poi.version>5.4.0</poi.version>
         <saaj-impl.version>3.0.4</saaj-impl.version>
-        <saxon.version>9.7.0-21</saxon.version>
+        <skyscreamer.version>1.5.3</skyscreamer.version>
         <smooks.version>1.7.1</smooks.version>
         <smooks-fragments.version>1.7.1.0</smooks-fragments.version>
-        <skyscreamer.version>1.5.3</skyscreamer.version>
-        <slf4j.version>2.0.16</slf4j.version>
-        <tika.version>1.16</tika.version>
+        <slf4j.version>2.0.17</slf4j.version>
         <wsdl4j.version>1.6.3</wsdl4j.version>
-        <xmlunit.version>1.6</xmlunit.version>
+
     </properties>
 
     <dependencies>
