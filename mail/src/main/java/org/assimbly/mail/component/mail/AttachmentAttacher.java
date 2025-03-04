@@ -8,6 +8,7 @@ import org.assimbly.util.helper.MimeTypeHelper;
 
 import jakarta.activation.DataHandler;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -35,8 +36,11 @@ public class AttachmentAttacher implements Processor {
             emailBody = "";
 
         AttachmentMessage attMsg = exchange.getIn(AttachmentMessage.class);
-        attMsg.addAttachment(fileName, new DataHandler(IOUtils.toByteArray(is), mimeType));
-
+        if(mimeType.contains("text")){
+            attMsg.addAttachment(fileName, new DataHandler(IOUtils.toString(is, StandardCharsets.UTF_8), mimeType));
+        }else{
+            attMsg.addAttachment(fileName, new DataHandler(IOUtils.toByteArray(is), mimeType));
+        }
         in.setHeader(Exchange.CONTENT_TYPE, "text/plain");
         in.setBody(emailBody);
 
