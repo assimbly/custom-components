@@ -70,18 +70,18 @@
         <bouncycastle.version>1.80</bouncycastle.version>
         <config-admin.version>1.9.26</config-admin.version>
         <cxf.version>4.1.0</cxf.version>
-        <camel.version>4.10.0</camel.version>
+        <camel.version>4.10.1</camel.version>
         <docconverter.version>1.13.0</docconverter.version>
         <google.api.version>v3-rev20250216-2.0.0</google.api.version>
         <google.auth.version>1.5.0</google.auth.version>
-        <google.oauth.version>1.38.0</google.oauth.version>
+        <google.oauth.version>1.39.0</google.oauth.version>
         <hibernate-core.version>6.6.9.Final</hibernate-core.version>
         <httpcomponents.version>4.5.14</httpcomponents.version>
         <jakarta.activation.version>2.1.3</jakarta.activation.version>
         <jaxen.version>2.0.0</jaxen.version>
         <libsodium-jna.version>1.0.5</libsodium-jna.version>
         <mime4j.version>0.8.12</mime4j.version>
-        <mockito-core.version>5.15.2</mockito-core.version>
+        <mockito-core.version>5.16.0</mockito-core.version>
         <mockito-inline.version>5.2.0</mockito-inline.version>
         <mongo.version>4.7.2</mongo.version>
         <mvel.version>2.5.2.Final</mvel.version>
