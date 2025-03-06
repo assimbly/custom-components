@@ -108,10 +108,6 @@ public class EdifactStandardsProcessor implements Processor {
                 org.assimbly.edifactstandards.xml.transformer.INVOICD96ATransformer invoicd96ATransformer = new org.assimbly.edifactstandards.xml.transformer.INVOICD96ATransformer();
                 invoicd96ATransformer.run(input, output);
                 break;
-            case XML_TO_INVOIC_D96A_V1:
-                org.assimbly.edifactstandards.xml.transformer.INVOICD96Av1Transformer invoicd96Av1Transformer = new org.assimbly.edifactstandards.xml.transformer.INVOICD96Av1Transformer();
-                invoicd96Av1Transformer.run(input, output);
-                break;
             case XML_TO_IFTSTA_D96A:
                 org.assimbly.edifactstandards.xml.transformer.IFTSTAD96ATransformer iftstad96ATransformer = new org.assimbly.edifactstandards.xml.transformer.IFTSTAD96ATransformer();
                 iftstad96ATransformer.run(input, output);
