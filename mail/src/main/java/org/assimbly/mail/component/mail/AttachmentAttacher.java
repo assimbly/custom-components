@@ -7,6 +7,9 @@ import org.apache.commons.io.IOUtils;
 import org.assimbly.util.helper.MimeTypeHelper;
 
 import jakarta.activation.DataHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -14,8 +17,11 @@ import java.util.Date;
 
 public class AttachmentAttacher implements Processor {
 
+    protected Logger log = LoggerFactory.getLogger(getClass());
+
     @Override
     public void process(Exchange exchange) throws Exception {
+
         AttachmentMessage in = exchange.getIn(AttachmentMessage.class);
 
         String fileName = in.getHeader(Exchange.FILE_NAME, String.class);
@@ -36,11 +42,18 @@ public class AttachmentAttacher implements Processor {
             emailBody = "";
 
         AttachmentMessage attMsg = exchange.getIn(AttachmentMessage.class);
-        if(mimeType.contains("text")){
-            attMsg.addAttachment(fileName, new DataHandler(IOUtils.toString(is, StandardCharsets.UTF_8), mimeType));
+
+        log.info("Adding attachment '{}' with mime type: '{}'", fileName, mimeType);
+        if(is!=null) {
+            if(mimeType.contains("text")){
+                attMsg.addAttachment(fileName, new DataHandler(IOUtils.toString(is, StandardCharsets.UTF_8), mimeType));
+            }else{
+                attMsg.addAttachment(fileName, new DataHandler(IOUtils.toByteArray(is), mimeType));
+            }
         }else{
-            attMsg.addAttachment(fileName, new DataHandler(IOUtils.toByteArray(is), mimeType));
+            log.warn("Can't attach '{}', because body is null", fileName);
         }
+
         in.setHeader(Exchange.CONTENT_TYPE, "text/plain");
         in.setBody(emailBody);
 
