@@ -18,7 +18,7 @@ import org.assimbly.edifactcommon.text.ITextNode;
 
 public class  DataTypeValidatorString extends DataTypeValidator {
 
-	public DataTypeValidatorString (int minLength, int maxLength, String[] validator) {
+	public DataTypeValidatorString (int minLength, int maxLength, DataValueValidator validator) {
 		super (minLength, maxLength, validator);
 	}
 
