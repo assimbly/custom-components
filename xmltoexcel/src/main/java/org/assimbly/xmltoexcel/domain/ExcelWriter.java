@@ -53,7 +53,7 @@ public class ExcelWriter {
     private void setCellValue(String value, Cell cell) {
         String integerRegex = "-?\\d+";
         if (value.matches(integerRegex)) {
-            cell.setCellValue(Integer.parseInt(value));
+            cell.setCellValue(Long.parseLong(value));
         }
         else cell.setCellValue(value);
     }
