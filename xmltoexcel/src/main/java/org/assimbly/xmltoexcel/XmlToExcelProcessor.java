@@ -192,7 +192,7 @@ public class XmlToExcelProcessor implements Processor {
                 NodeList childNodes = node.getChildNodes();
                 int childNodesLength = childNodes.getLength();
 
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                if (childNodesLength <= 1 && node.getNodeType() == Node.ELEMENT_NODE) {
                     headers.add(node.getNodeName());
                 }
 
