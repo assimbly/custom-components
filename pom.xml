@@ -69,13 +69,13 @@
         <assimbly.version>5.1.0</assimbly.version>
         <bouncycastle.version>1.80</bouncycastle.version>
         <config-admin.version>1.9.26</config-admin.version>
-        <cxf.version>4.1.0</cxf.version>
-        <camel.version>4.10.1</camel.version>
+        <cxf.version>4.1.1</cxf.version>
+        <camel.version>4.10.2</camel.version>
         <docconverter.version>1.13.0</docconverter.version>
-        <google.api.version>v3-rev20250216-2.0.0</google.api.version>
+        <google.api.version>v3-rev20250220-2.0.0</google.api.version>
         <google.auth.version>1.5.0</google.auth.version>
         <google.oauth.version>1.39.0</google.oauth.version>
-        <hibernate-core.version>6.6.9.Final</hibernate-core.version>
+        <hibernate-core.version>6.6.10.Final</hibernate-core.version>
         <httpcomponents.version>4.5.14</httpcomponents.version>
         <jakarta.activation.version>2.1.3</jakarta.activation.version>
         <jaxen.version>2.0.0</jaxen.version>
