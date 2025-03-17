@@ -38,7 +38,6 @@
         <module>pdftotext</module>
         <module>replace</module>
         <module>sandbox</module>
-        <!--<module>smb</module>-->
         <module>simplereplace</module>
         <module>smooksnoxml</module>
         <module>soap</module>
@@ -75,7 +74,7 @@
         <google.api.version>v3-rev20250220-2.0.0</google.api.version>
         <google.auth.version>1.5.0</google.auth.version>
         <google.oauth.version>1.39.0</google.oauth.version>
-        <hibernate-core.version>6.6.10.Final</hibernate-core.version>
+        <hibernate-core.version>6.6.11.Final</hibernate-core.version>
         <httpcomponents.version>4.5.14</httpcomponents.version>
         <jakarta.activation.version>2.1.3</jakarta.activation.version>
         <jaxen.version>2.0.0</jaxen.version>
