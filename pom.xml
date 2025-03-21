@@ -80,7 +80,7 @@
         <jaxen.version>2.0.0</jaxen.version>
         <libsodium-jna.version>1.0.5</libsodium-jna.version>
         <mime4j.version>0.8.12</mime4j.version>
-        <mockito-core.version>5.16.0</mockito-core.version>
+        <mockito-core.version>5.16.1</mockito-core.version>
         <mockito-inline.version>5.2.0</mockito-inline.version>
         <mongo.version>4.7.2</mongo.version>
         <mvel.version>2.5.2.Final</mvel.version>
