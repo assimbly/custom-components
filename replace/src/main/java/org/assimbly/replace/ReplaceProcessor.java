@@ -4,6 +4,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
+import org.assimbly.util.helper.ExchangeHelper;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,7 +25,7 @@ public class ReplaceProcessor implements Processor {
         ReplaceConfiguration config = endpoint.getConfiguration();
 
         String regex = config.getRegex();
-        String replaceWith = StringEscapeUtils.unescapeJava(config.getReplaceWith());
+        String replaceWith = ExchangeHelper.unescapeExceptionalCharacters(config.getReplaceWith());
 
         if(regex.contains("${header.")) {
             String[] headerNames = StringUtils.substringsBetween(regex, "${header.", "}");
