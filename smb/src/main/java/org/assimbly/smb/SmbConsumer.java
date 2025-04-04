@@ -21,25 +21,20 @@
  ***************************************************************************************/
 package org.assimbly.smb;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.function.Supplier;
-
+import jcifs.smb.SmbException;
+import jcifs.smb.SmbFile;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.Processor;
 import org.apache.camel.RuntimeCamelException;
-import org.apache.camel.component.file.GenericFile;
-import org.apache.camel.component.file.GenericFileConsumer;
-import org.apache.camel.component.file.GenericFileEndpoint;
-import org.apache.camel.component.file.GenericFileOperations;
-import org.apache.camel.component.file.GenericFileProcessStrategy;
+import org.apache.camel.component.file.*;
 import org.apache.camel.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jcifs.smb.SmbException;
-import jcifs.smb.SmbFile;
+import java.io.IOException;
+import java.util.List;
+import java.util.function.Supplier;
 
 public class SmbConsumer extends GenericFileConsumer<SmbFile> {
     private static final Logger LOGGER = LoggerFactory.getLogger(SmbConsumer.class);
@@ -87,17 +82,18 @@ public class SmbConsumer extends GenericFileConsumer<SmbFile> {
             } else {
                 try {
                     GenericFile<SmbFile> genericFile = asGenericFile(fileName, smbFile);
-                    if (isValidFile(new Supplier<GenericFile<SmbFile>>() {
-                        @Override
-                        public GenericFile<SmbFile> get() {
-                            return genericFile;
-                        }
-                    }, fileName, smbFile.getCanonicalPath(), new Supplier<String>() {
-                        @Override
-                        public String get() {
-                            return "";
-                        }
-                    }, false, smbFiles)) {
+                    SmbFile[] singleFileArray = new SmbFile[] { smbFile };
+
+                    boolean valid = isValidFile(
+                            () -> genericFile,
+                            smbFile.getName(),
+                            smbFile.getCanonicalPath(),
+                            () -> currentRelativePath + smbFile.getName(),
+                            false,
+                            singleFileArray
+                    );
+
+                    if (valid) {
                         fileList.add(asGenericFile(fileName, smbFile));
                     }
                 } catch (IOException e) {
