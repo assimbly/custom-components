@@ -46,7 +46,10 @@ public class JsonToXmlProcessor implements Processor {
 
         document.appendChild(element);
 
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        TransformerFactory transformerFactory = TransformerFactory.newInstance(
+                "com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl",
+                null
+        );
         Transformer transformer = transformerFactory.newTransformer();
         StringWriter writer = new StringWriter();
         transformer.transform(new DOMSource(document), new StreamResult(writer));
