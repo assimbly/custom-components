@@ -84,7 +84,7 @@ public class SmbConsumer extends GenericFileConsumer<SmbFile> {
                     GenericFile<SmbFile> genericFile = asGenericFile(fileName, smbFile);
                     SmbFile[] singleFileArray = new SmbFile[] { smbFile };
 
-                    boolean valid = isValidFile(
+                    boolean valid = isMatched(
                             () -> genericFile,
                             smbFile.getName(),
                             smbFile.getCanonicalPath(),
