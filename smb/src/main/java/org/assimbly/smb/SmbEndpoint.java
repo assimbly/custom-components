@@ -21,20 +21,17 @@
  ***************************************************************************************/
 package org.assimbly.smb;
 
+import jcifs.smb.SmbFile;
 import org.apache.camel.Exchange;
+import org.apache.camel.PollingConsumer;
 import org.apache.camel.Processor;
-import org.apache.camel.component.file.GenericFile;
-import org.apache.camel.component.file.GenericFileEndpoint;
-import org.apache.camel.component.file.GenericFileProcessStrategy;
-import org.apache.camel.component.file.GenericFileProducer;
+import org.apache.camel.component.file.*;
 import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.support.DefaultExchange;
 import org.apache.camel.support.processor.idempotent.MemoryIdempotentRepository;
 import org.assimbly.smb.strategy.SmbProcessStrategyFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import jcifs.smb.SmbFile;
 
 @UriEndpoint(scheme = "smb", title = "SMB", syntax = "smb://user@server.example.com/sharename?password=secret&localWorkDirectory=/tmp")
 public class SmbEndpoint extends GenericFileEndpoint<SmbFile> {
@@ -77,6 +74,11 @@ public class SmbEndpoint extends GenericFileEndpoint<SmbFile> {
         consumer.setEagerLimitMaxMessagesPerPoll(isEagerMaxMessagesPerPoll());
         configureConsumer(consumer);
         return consumer;
+    }
+
+    @Override
+    public PollingConsumer createPollingConsumer() throws Exception {
+        return new GenericFilePollingConsumer(this);
     }
 
     @Override
