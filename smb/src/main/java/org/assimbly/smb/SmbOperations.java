@@ -301,11 +301,7 @@ public class SmbOperations<SmbFile> implements GenericFileOperations<SmbFile> {
         InputStream is = null;
         try {
 
-            is = exchange.getMessage(InputStream.class);
-
-            if(is == null){
-                is = exchange.getIn().getBody(InputStream.class);
-            }
+            is = exchange.getIn().getBody(InputStream.class);
 
             login();
 
