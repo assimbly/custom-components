@@ -46,11 +46,17 @@ public class JsonToXmlProcessor implements Processor {
 
         document.appendChild(element);
 
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        TransformerFactory transformerFactory = TransformerFactory.newInstance(
+                "net.sf.saxon.TransformerFactoryImpl",
+                null
+        );
         Transformer transformer = transformerFactory.newTransformer();
         StringWriter writer = new StringWriter();
         transformer.transform(new DOMSource(document), new StreamResult(writer));
         String xmlContent = writer.toString();
+
+        // post-processing to convert self-closing tags to <tag></tag>
+        xmlContent = xmlContent.replaceAll("<(\\w+)([^>]*)/>", "<$1$2></$1>");
 
         setContent(exchange, xmlContent);
     }

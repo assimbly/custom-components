@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>custom-components</artifactId>
 		<groupId>org.assimbly</groupId>
-		<version>5.0.4</version>
+		<version>5.0.5</version>
 	</parent>
 
   <artifactId>pdftotext</artifactId>
@@ -32,11 +32,6 @@
 	  <dependency>
 		  <groupId>org.bouncycastle</groupId>
 		  <artifactId>bcprov-jdk18on</artifactId>
-		  <version>${bouncycastle.version}</version>
-	  </dependency>
-	  <dependency>
-		  <groupId>org.bouncycastle</groupId>
-          <artifactId>bcprov-jdk18on</artifactId>
 		  <version>${bouncycastle.version}</version>
 	  </dependency>
   </dependencies>
