@@ -75,7 +75,7 @@
         <google.api.version>v3-rev20250220-2.0.0</google.api.version>
         <google.auth.version>1.5.0</google.auth.version>
         <google.oauth.version>1.39.0</google.oauth.version>
-        <hibernate-core.version>6.6.12.Final</hibernate-core.version>
+        <hibernate-core.version>6.6.13.Final</hibernate-core.version>
         <httpcomponents.version>4.5.14</httpcomponents.version>
         <jakarta.activation.version>2.1.3</jakarta.activation.version>
         <jaxen.version>2.0.0</jaxen.version>
@@ -86,7 +86,7 @@
         <mongo.version>4.7.2</mongo.version>
         <mvel.version>2.5.2.Final</mvel.version>
         <pdfbox.version>3.0.4</pdfbox.version>
-        <poi.version>5.4.0</poi.version>
+        <poi.version>5.4.1</poi.version>
         <saaj-impl.version>3.0.4</saaj-impl.version>
         <skyscreamer.version>1.5.3</skyscreamer.version>
         <smooks.version>1.7.1</smooks.version>
