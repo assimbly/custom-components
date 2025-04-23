@@ -71,7 +71,7 @@
         <config-admin.version>1.9.26</config-admin.version>
         <cxf.version>4.1.0</cxf.version>
         <camel.version>4.10.3</camel.version>
-        <docconverter.version>1.12.1</docconverter.version>
+        <docconverter.version>1.13.0</docconverter.version>
         <google.api.version>v3-rev20250122-2.0.0</google.api.version>
         <google.auth.version>1.5.0</google.auth.version>
         <google.oauth.version>1.37.0</google.oauth.version>
@@ -243,14 +243,6 @@
                 </configuration>
             </plugin>
         </plugins>
-
-        <extensions>
-            <extension>
-                <groupId>org.apache.maven.extensions</groupId>
-                <artifactId>maven-build-cache-extension</artifactId>
-                <version>1.2.0</version>
-            </extension>
-        </extensions>
 
     </build>
 
