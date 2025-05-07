@@ -72,7 +72,7 @@
         <cxf.version>4.1.1</cxf.version>
         <camel.version>4.11.0</camel.version>
         <docconverter.version>1.13.0</docconverter.version>
-        <google.api.version>v3-rev20250220-2.0.0</google.api.version>
+        <google.api.version>v3-rev20250427-2.0.0</google.api.version>
         <google.auth.version>1.5.0</google.auth.version>
         <google.oauth.version>1.39.0</google.oauth.version>
         <hibernate-core.version>6.6.13.Final</hibernate-core.version>
@@ -85,7 +85,7 @@
         <mockito-inline.version>5.2.0</mockito-inline.version>
         <mongo.version>4.7.2</mongo.version>
         <mvel.version>2.5.2.Final</mvel.version>
-        <pdfbox.version>3.0.4</pdfbox.version>
+        <pdfbox.version>3.0.5</pdfbox.version>
         <poi.version>5.4.1</poi.version>
         <saaj-impl.version>3.0.4</saaj-impl.version>
         <skyscreamer.version>1.5.3</skyscreamer.version>
