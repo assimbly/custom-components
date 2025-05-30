@@ -56,7 +56,7 @@ public class JsonToXmlProcessor implements Processor {
         String xmlContent = writer.toString();
 
         // post-processing to convert self-closing tags to <tag></tag>
-        xmlContent = xmlContent.replaceAll("<(\\w+)([^>]*)/>", "<$1$2></$1>");
+        xmlContent = xmlContent.replaceAll("<([a-zA-Z_][\\w\\-.:]*)([^<>]*)/>", "<$1$2></$1>");
 
         setContent(exchange, xmlContent);
     }
