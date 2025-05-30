@@ -429,6 +429,55 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
         );
     }
 
+    /*****************************************
+     ** Example 9
+     *****************************************/
+
+    @Test
+    public void testJsonXml_9_EARFF() throws Exception {
+        compareInputJsonFileWithOutputXmlFile(
+                "jsontoxmllegacy_Element_Array_Root",
+                "json-to-xml/example_9.json",
+                "json-to-xml/example_9_EARFF.xml"
+        );
+    }
+
+    @Test
+    public void testJsonXml_9_EARTF() throws Exception {
+        compareInputJsonFileWithOutputXmlFile(
+                "jsontoxmllegacy_Element_Array_Root_NamespaceLenient",
+                "json-to-xml/example_9.json",
+                "json-to-xml/example_9_EARTF.xml"
+        );
+    }
+
+    @Test
+    public void testJsonXml_9_EARFT() throws Exception {
+        compareInputJsonFileWithOutputXmlFile(
+                "jsontoxmllegacy_Element_Array_Root_TypeHints",
+                "json-to-xml/example_9.json",
+                "json-to-xml/example_9_EARFT.xml"
+        );
+    }
+
+    @Test
+    public void testJsonXml_9_EARTT() throws Exception {
+        compareInputJsonFileWithOutputXmlFile(
+                "jsontoxmllegacy_Element_Array_Root_NamespaceLenient_TypeHints",
+                "json-to-xml/example_9.json",
+                "json-to-xml/example_9_EARTT.xml"
+        );
+    }
+
+    @Test
+    public void testJsonXml_9_EATT() throws Exception {
+        compareInputJsonFileWithOutputXmlFile(
+                "jsontoxmllegacy_Element_Array_NamespaceLenient_TypeHints",
+                "json-to-xml/example_9.json",
+                "json-to-xml/example_9_EATT.xml"
+        );
+    }
+
     private void compareInputJsonFileWithOutputXmlFile(String routeName, String inputJsonFile, String outputXmlFile)
             throws IOException, InterruptedException {
         String defaultJson = IOUtils.toString(classLoader.getResourceAsStream(inputJsonFile), StandardCharsets.UTF_8);
