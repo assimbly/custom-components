@@ -70,7 +70,7 @@
         <bouncycastle.version>1.80</bouncycastle.version>
         <config-admin.version>1.9.26</config-admin.version>
         <cxf.version>4.1.0</cxf.version>
-        <camel.version>4.10.4</camel.version>
+        <camel.version>4.10.5</camel.version>
         <docconverter.version>1.13.0</docconverter.version>
         <google.api.version>v3-rev20250427-2.0.0</google.api.version>
         <google.auth.version>1.5.0</google.auth.version>
