@@ -6,23 +6,19 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.assimbly.xmltojsonlegacy.logs.Print;
+import org.assimbly.xmltojsonlegacy.model.ElementMetadata;
+import org.assimbly.xmltojsonlegacy.service.MetadataAnalyzer;
+import org.assimbly.xmltojsonlegacy.service.XmlMetadataExtractor;
 import org.assimbly.xmltojsonlegacy.transaction.elementnode.ElementNodeTransaction;
 import org.assimbly.xmltojsonlegacy.transaction.elementnode.ElementNodeTransactionFactory;
 import org.assimbly.xmltojsonlegacy.transaction.textnode.TextNodeTransaction;
 import org.assimbly.xmltojsonlegacy.transaction.textnode.TextNodeTransactionFactory;
-import org.assimbly.xmltojsonlegacy.checker.ElementChecker;
-import org.assimbly.xmltojsonlegacy.utils.ElementUtils;
+import org.assimbly.xmltojsonlegacy.utils.ElementMetadataUtils;
 import org.assimbly.xmltojsonlegacy.utils.ExtractUtils;
 import org.springframework.http.MediaType;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.StringReader;
+import java.io.InputStream;
+import java.util.*;
 
 public class XmlToJsonProcessor implements Processor {
     private final XmlToJsonEndpoint endpoint;
@@ -33,133 +29,219 @@ public class XmlToJsonProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        ObjectMapper objectMapper = new ObjectMapper();
-
         XmlToJsonConfiguration config = endpoint.getConfiguration();
-        config.init();
 
-        String xml = exchange.getIn().getBody(String.class);
-        Document document = convertStringToXMLDocument(xml);
-        config.setElement(document.getDocumentElement());
-
-        if(config.isToDiscard()) {
+        if(config.isToDiscard(config)) {
             // no transformation available
+            ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNodeResp = objectMapper.createObjectNode().put("noTransformation", "Available");
-            setContent(exchange, objectMapper.writeValueAsString(jsonNodeResp));
+            setBodyOnExchange(exchange, objectMapper.writeValueAsString(jsonNodeResp));
             return;
         }
 
-        JsonNode jsonNodeResp = convertXmlToJson(config);
-        setContent(exchange, objectMapper.writeValueAsString(jsonNodeResp));
-    }
+        InputStream inputStream = exchange.getIn().getBody(InputStream.class);
 
-    public static JsonNode convertXmlToJson(XmlToJsonConfiguration config) {
+        // first pass - generate metadataMap
+        Map<String, ElementMetadata> metadataMap = XmlMetadataExtractor.extractMetadata(inputStream, config);
 
-        config.initVariables();
-
-        // add attributes in the object node
-        ExtractUtils.addAttributesInObjectNode(config);
-
-        // add namespace attribute
-        ExtractUtils.addNamespaceAttributeInObjectNode(config, config.getRootObjectNode(), config.getElement(), config.getParentNamespace());
-
-        if (!config.getElement().hasChildNodes()) {
-            getObjectResponse(config);
+        // group all paths by depth
+        Map<Integer, List<String>> depthMap = new HashMap<>();
+        for (Map.Entry<String, ElementMetadata> entry : metadataMap.entrySet()) {
+            int depth = entry.getValue().getLevel();
+            depthMap.computeIfAbsent(depth, k -> new ArrayList<>()).add(entry.getKey());
         }
 
-        NodeList nodeList = config.getElement().getChildNodes();
-        int nodeListSize = nodeList.getLength();
-        int nodeCount = 0;
-        for (int index = 0; index < nodeListSize; index++) {
-            Node childNode = nodeList.item(index);
-            config.setElementMustBeNull(ElementChecker.isElementMustBeNull(config, childNode));
+        // reverse order - bottom-up
+        List<Integer> depths = new ArrayList<>(depthMap.keySet());
+        depths.sort(Collections.reverseOrder());
 
-            switch (childNode.getNodeType()) {
-                case Node.ELEMENT_NODE:
-                    // process element as node
-                    nodeCount++;
-                    config.setNodeCount(nodeCount);
-                    JsonNode processNodeResp = processElementNode(config, childNode);
-                    if (processNodeResp != null)
-                        return processNodeResp;
-                    break;
+        // process from deepest to shallowest
+        for (int depth : depths) {
+            for (String path : depthMap.get(depth)) {
+                ElementMetadata metadata = metadataMap.get(path);
 
-                case Node.TEXT_NODE:
-                    // process element as text
-                    if (config.isObject() && config.isRootArray()) {
-                        Print.data(" 2. OBJECT && ARRAY", config.getLevel());
-                        if (config.getRootObjectNode().size() > 0)
-                            config.setRootArray(false);
-                    } else {
-                        JsonNode processTextResp = processTextNode(config, childNode, index, nodeListSize);
-                        if(ExtractUtils.rootObjectNodeContainsTextAttribute(config.getRootObjectNode())) {
-                            config.setRootArray(false);
-                        }
-                        if (processTextResp != null)
-                            return processTextResp;
-                    }
-                    break;
+                // build json node from metadata
+                JsonNode jsonNode = buildJsonNodeFromMetadata(metadataMap, metadata, config);
+                // save result in the metadata for parent access
+                metadata.setValueAsJson(jsonNode);
 
-                default:
-                    // do nothing
+                // clean children
+                for (String childPath : metadata.getChildPaths()) {
+                    metadataMap.remove(childPath);
+                }
             }
         }
 
-        return getObjectResponse(config);
+        // extract root json
+        Map.Entry<String, ElementMetadata> rootEntry = metadataMap.entrySet().iterator().next();
+        JsonNode finalJson = rootEntry.getValue().getValueAsJson();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        // set json on the exchange
+        setBodyOnExchange(exchange, objectMapper.writeValueAsString(finalJson));
+    }
+
+    private static JsonNode buildJsonNodeFromMetadata(
+            Map<String, ElementMetadata> metadataMap,
+            ElementMetadata metadata, XmlToJsonConfiguration config
+    ) {
+        // get parent metadata
+        ElementMetadata parentMetadata = ElementMetadataUtils.getParentMetadata(metadataMap, metadata);
+
+        // init metadata vars
+        initMetadataVars(metadataMap, metadata, config);
+
+        // add attributes in the object node
+        ExtractUtils.addAttributesInObjectNode(metadata, config);
+
+        String parentNamespacePrefix = parentMetadata != null ? parentMetadata.getNamespacePrefix() : null;
+        // add namespace attribute
+        ExtractUtils.addNamespaceAttributeInObjectNode(metadata, null, config, metadata.getObjectNode(), parentNamespacePrefix);
+
+        if(metadata.getChildrenCount() == 0) {
+            // process node as leaf
+            JsonNode processTextResp = processNodeAsLeaf(metadataMap, metadata, config);
+            if (processTextResp != null) {
+                return processTextResp;
+            }
+        } else {
+            // process node with children
+            JsonNode processTextResp = processNodeWithChildren(metadataMap, metadata, config);
+            if (processTextResp != null) {
+                return processTextResp;
+            }
+        }
+
+        // return json
+        return getJsonFromMetadata(metadata, config);
+    }
+
+    // process node with children
+    private static JsonNode processNodeWithChildren(Map<String, ElementMetadata> metadataMap, ElementMetadata metadata, XmlToJsonConfiguration config) {
+
+        // iterate over children
+        for (String childPath : metadata.getChildPaths()) {
+
+            // get child  metadata
+            ElementMetadata childMetadata = metadataMap.get(childPath);
+
+            if (childMetadata == null) {
+                continue;
+            }
+
+            // set elementMustBeNull flag
+            metadata.setElementMustBeNull(MetadataAnalyzer.isElementMustBeNull(metadataMap, metadata, childMetadata, config));
+
+            if (metadata.isObject() && metadata.isRootArray()) {
+                if (!metadata.getObjectNode().isEmpty() || !childMetadata.getObjectNode().isEmpty()) {
+                    // force rootArray flag
+                    metadata.setRootArray(false);
+                }
+            } else {
+                // process text node
+                JsonNode processTextResp = processTextNode(metadataMap, metadata, config);
+
+                if (ExtractUtils.rootObjectNodeContainsTextAttribute(metadata.getObjectNode())) {
+                    // force rootArray flag
+                    metadata.setRootArray(false);
+                }
+
+                if (processTextResp != null) {
+                    return processTextResp;
+                }
+            }
+
+            // get json child already processed
+            JsonNode childNode = childMetadata.getValueAsJson();
+            if (childNode == null) {
+                continue;
+            }
+
+            // process element node
+            JsonNode processNodeResp = processElementNode(metadataMap, metadata, childMetadata, childNode, config);
+            if (processNodeResp != null) {
+                return processNodeResp;
+            }
+        }
+
+        return null;
+    }
+
+    // process node as leaf (no children found)
+    private static JsonNode processNodeAsLeaf(Map<String, ElementMetadata> metadataMap, ElementMetadata metadata, XmlToJsonConfiguration config) {
+
+        if(metadata.getTextContent() != null && !metadata.getTextContent().isEmpty()) {
+
+            // set elementMustBeNull flag
+            metadata.setElementMustBeNull(MetadataAnalyzer.isElementMustBeNull(metadataMap, metadata, null, config));
+
+            if (metadata.isObject() && metadata.isRootArray()) {
+                if (!metadata.getObjectNode().isEmpty()) {
+                    // force rootArray flag
+                    metadata.setRootArray(false);
+                }
+            } else {
+                // process text node
+                JsonNode processTextResp = processTextNode(metadataMap, metadata, config);
+
+                if (ExtractUtils.rootObjectNodeContainsTextAttribute(metadata.getObjectNode())) {
+                    // force rootArray flag
+                    metadata.setRootArray(false);
+                }
+
+                if (processTextResp != null) {
+                    return processTextResp;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    // init metadata vars
+    private static void initMetadataVars(Map<String, ElementMetadata> metadataMap, ElementMetadata metadata, XmlToJsonConfiguration config) {
+        // init objectNode and arrayNode
+        metadata.setObjectNode(JsonNodeFactory.instance.objectNode());
+        metadata.setArrayNode(JsonNodeFactory.instance.arrayNode());
+        // init flags
+        metadata.setRootArray(MetadataAnalyzer.isRootArray(metadataMap, metadata, config));
+        metadata.setObject(MetadataAnalyzer.isObject(metadataMap, metadata, config));
+        metadata.setOneValue(MetadataAnalyzer.isOneValue(metadataMap, metadata, config));
     }
 
     // process an element node of type Node
-    private static JsonNode processElementNode(XmlToJsonConfiguration config, Node childNode) {
-        config.setFirstSibling(ElementChecker.isFirstSiblingByNumCounts(config.getNodeCount()));
-
-        ElementNodeTransaction transactionProcessor = ElementNodeTransactionFactory.getProcessorFor(config);
-        return transactionProcessor.process(config, childNode);
+    private static JsonNode processElementNode(
+            Map<String, ElementMetadata> metadataMap, ElementMetadata metadata, ElementMetadata childMetadata, JsonNode childNode, XmlToJsonConfiguration config
+    ) {
+        ElementNodeTransaction transactionProcessor = ElementNodeTransactionFactory.getProcessorFor(metadata);
+        return transactionProcessor.process(metadataMap, metadata, childMetadata, childNode, config);
     }
 
     // process an element node of type Text
-    private static JsonNode processTextNode(XmlToJsonConfiguration config, Node childNode, int index, int nodeListSize) {
-        TextNodeTransaction transactionProcessor = TextNodeTransactionFactory.getProcessorFor(config);
-        return transactionProcessor.process(config, childNode, index, nodeListSize);
+    private static JsonNode processTextNode(Map<String, ElementMetadata> metadataMap, ElementMetadata metadata, XmlToJsonConfiguration config) {
+        TextNodeTransaction transactionProcessor = TextNodeTransactionFactory.getProcessorFor(metadata);
+        return transactionProcessor.process(metadataMap, metadata, config);
     }
 
-    private static JsonNode getObjectResponse(XmlToJsonConfiguration config) {
-        if(config.isRootNode() && config.isForceTopLevelObject()) {
-            ObjectNode parentNode =  JsonNodeFactory.instance.objectNode();
-            parentNode.set(
-                    ElementUtils.getElementName(config.getElement(), config.isRemoveNamespacePrefixes()),
-                    config.isRootArray() ? config.getRootArrayNode() : config.getRootObjectNode()
-            );
+    // get json from metadata
+    private static JsonNode getJsonFromMetadata(ElementMetadata metadata, XmlToJsonConfiguration config) {
+        if(metadata.isRootNode() && config.isForceTopLevelObject()) {
+            ObjectNode parentNode = JsonNodeFactory.instance.objectNode();
+            parentNode.set(ElementMetadataUtils.getElementName(metadata, config.isRemoveNamespacePrefixes()), metadata.isRootArray() ? metadata.getArrayNode() : metadata.getObjectNode());
             return parentNode;
         } else {
-            return config.isRootArray() ? config.getRootArrayNode() : config.getRootObjectNode();
+            return metadata.isRootArray() ? metadata.getArrayNode() : metadata.getObjectNode();
         }
     }
 
-    private static Document convertStringToXMLDocument(String xmlString) {
-        DocumentBuilder builder = null;
-        Document doc = null;
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-
-        try {
-            builder = factory.newDocumentBuilder();
-            doc = builder.parse(new InputSource(new StringReader(xmlString)));
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            return doc;
-        }
-    }
-
-    private void setContent(Exchange exchange, String body) {
+    // set body on exchange
+    private void setBodyOnExchange(Exchange exchange, String body) {
         setContentTypeHeader(exchange);
         exchange.getIn().setBody(body);
     }
 
+    // set content type header
     private void setContentTypeHeader(Exchange exchange) {
-        if (exchange.hasOut()) {
-            exchange.getOut().setHeader(Exchange.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        } else {
-            exchange.getIn().setHeader(Exchange.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        }
+        exchange.getMessage().setHeader(Exchange.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
     }
 }

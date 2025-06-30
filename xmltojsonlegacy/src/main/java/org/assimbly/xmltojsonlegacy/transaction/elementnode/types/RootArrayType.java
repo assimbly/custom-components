@@ -1,30 +1,29 @@
 package org.assimbly.xmltojsonlegacy.transaction.elementnode.types;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.apache.commons.lang3.StringUtils;
 import org.assimbly.xmltojsonlegacy.XmlToJsonConfiguration;
-import org.assimbly.xmltojsonlegacy.XmlToJsonProcessor;
-import org.assimbly.xmltojsonlegacy.logs.Print;
+import org.assimbly.xmltojsonlegacy.model.ElementMetadata;
+import org.assimbly.xmltojsonlegacy.service.MetadataAnalyzer;
 import org.assimbly.xmltojsonlegacy.transaction.elementnode.ElementNodeTransaction;
-import org.assimbly.xmltojsonlegacy.utils.ElementUtils;
+import org.assimbly.xmltojsonlegacy.utils.ElementMetadataUtils;
 import org.assimbly.xmltojsonlegacy.utils.ExtractUtils;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
+
+import java.util.Map;
 
 public class RootArrayType implements ElementNodeTransaction {
 
     @Override
-    public JsonNode process(XmlToJsonConfiguration config, Node childNode) {
-        Print.data(" 1. IS ROOT ARRAY", config.getLevel());
-        if(config.isSingleChildren() && config.isFirstChild() && StringUtils.isNotEmpty(config.getParentClass())) {
+    public JsonNode process(Map<String, ElementMetadata> metadataMap, ElementMetadata metadata, ElementMetadata childMetadata, JsonNode childNode, XmlToJsonConfiguration config) {
+        ElementMetadata parentMetadata = ElementMetadataUtils.getParentMetadata(metadataMap, metadata);
+        if(MetadataAnalyzer.isSingleChildren(metadata, config) && metadata.getIndex() == 0 && parentMetadata.containsClassAttribute()) {
             // recursive call with child element
-            if(config.isElementMustBeNull()) {
+            if(metadata.isElementMustBeNull()) {
                 return ExtractUtils.createInternalNullObjectNode();
             }
-            return XmlToJsonProcessor.convertXmlToJson(config.createSubLevelConfig((Element) childNode));
+            return childNode;
         } else {
             // extract child as an array
-            ExtractUtils.extractChildAsArray(config, (Element) childNode);
+            ExtractUtils.extractChildAsArray(metadata, childMetadata, childNode);
         }
         return null;
     }
