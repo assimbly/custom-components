@@ -1,12 +1,14 @@
 package org.assimbly.xmltojsonlegacy.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.assimbly.xmltojsonlegacy.Constants;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.xml.XMLConstants;
 import java.util.Iterator;
 
 public class JsonUtils {
+
+    private JsonUtils() {}
 
     // checks if jsonNode have only one level and have declared namespaces
     public static boolean isJsonNodeInOneLevelAndWithNamespace(JsonNode jsonNode) {
@@ -28,7 +30,23 @@ public class JsonUtils {
                 }
             }
         }
-        return (numDataContent == 1 ? isNamespacePresent : false);
+        return numDataContent == 1 && isNamespacePresent;
+    }
+
+    // get JsonNode from value
+    // returns null if json object is not valid
+    public static JsonNode getValidJson(String value) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(value);
+            if (jsonNode.isObject() || jsonNode.isArray()) {
+                return jsonNode;
+            } else {
+                return null; // Not a valid JSON object or array
+            }
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }
