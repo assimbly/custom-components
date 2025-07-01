@@ -2,16 +2,16 @@ package org.assimbly.xmltojsonlegacy.transaction.textnode.types;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.assimbly.xmltojsonlegacy.XmlToJsonConfiguration;
-import org.assimbly.xmltojsonlegacy.logs.Print;
+import org.assimbly.xmltojsonlegacy.model.ElementMetadata;
 import org.assimbly.xmltojsonlegacy.transaction.textnode.TextNodeTransaction;
-import org.w3c.dom.Node;
+
+import java.util.Map;
 
 public class ObjectType implements TextNodeTransaction {
 
     @Override
-    public JsonNode process(XmlToJsonConfiguration config, Node childNode, int index, int nodeListSize) {
+    public JsonNode process(Map<String, ElementMetadata> metadataMap, ElementMetadata metadata, XmlToJsonConfiguration config) {
         //process text node identified as an object
-        Print.data(" 2. OBJECT", config.getLevel());
         return null;
     }
 }

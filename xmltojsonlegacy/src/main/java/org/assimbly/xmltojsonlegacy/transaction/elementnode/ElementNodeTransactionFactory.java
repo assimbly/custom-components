@@ -1,12 +1,12 @@
 package org.assimbly.xmltojsonlegacy.transaction.elementnode;
 
-import org.assimbly.xmltojsonlegacy.XmlToJsonConfiguration;
+import org.assimbly.xmltojsonlegacy.model.ElementMetadata;
 import org.assimbly.xmltojsonlegacy.transaction.elementnode.types.ObjectType;
 import org.assimbly.xmltojsonlegacy.transaction.elementnode.types.OtherTypeWithNamespace;
 import org.assimbly.xmltojsonlegacy.transaction.elementnode.types.OtherTypeWithoutNamespace;
 import org.assimbly.xmltojsonlegacy.transaction.elementnode.types.RootArrayType;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class ElementNodeTransactionFactory {
@@ -18,23 +18,25 @@ public class ElementNodeTransactionFactory {
         OTHER_WITHOUT_NAMESPACE;
     }
 
-    private static Map<ElementNodeType, ElementNodeTransaction> processElementNodeMap = new HashMap<>() {{
-        put(ElementNodeType.OBJECT, new ObjectType());
-        put(ElementNodeType.ROOT_ARRAY, new RootArrayType());
-        put(ElementNodeType.OTHER_WITH_NAMESPACE, new OtherTypeWithNamespace());
-        put(ElementNodeType.OTHER_WITHOUT_NAMESPACE, new OtherTypeWithoutNamespace());
-    }};
+    private static final Map<ElementNodeType, ElementNodeTransaction> processElementNodeMap = new EnumMap<>(ElementNodeType.class);
 
-    public static ElementNodeTransaction getProcessorFor(XmlToJsonConfiguration config) {
+    static {
+        processElementNodeMap.put(ElementNodeType.OBJECT, new ObjectType());
+        processElementNodeMap.put(ElementNodeType.ROOT_ARRAY, new RootArrayType());
+        processElementNodeMap.put(ElementNodeType.OTHER_WITH_NAMESPACE, new OtherTypeWithNamespace());
+        processElementNodeMap.put(ElementNodeType.OTHER_WITHOUT_NAMESPACE, new OtherTypeWithoutNamespace());
+    }
+
+    public static ElementNodeTransaction getProcessorFor(ElementMetadata metadata) {
         ElementNodeType type;
 
-        if(config.isObject()) {
+        if(metadata.isObject()) {
             type = ElementNodeType.OBJECT;
         } else {
-            if(config.isRootArray()) {
+            if(metadata.isRootArray()) {
                 type = ElementNodeType.ROOT_ARRAY;
             } else {
-                if(config.isElementDefiningNamespaces()) {
+                if(metadata.isDefinesNamespaces()) {
                     type = ElementNodeType.OTHER_WITH_NAMESPACE;
                 } else {
                     type = ElementNodeType.OTHER_WITHOUT_NAMESPACE;

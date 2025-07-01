@@ -1,41 +1,53 @@
 package org.assimbly.xmltojsonlegacy.transaction.textnode.types;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.assimbly.xmltojsonlegacy.Constants;
 import org.assimbly.xmltojsonlegacy.XmlToJsonConfiguration;
-import org.assimbly.xmltojsonlegacy.logs.Print;
+import org.assimbly.xmltojsonlegacy.model.ElementMetadata;
 import org.assimbly.xmltojsonlegacy.transaction.textnode.TextNodeTransaction;
-import org.assimbly.xmltojsonlegacy.utils.ElementUtils;
+import org.assimbly.xmltojsonlegacy.utils.Constants;
+import org.assimbly.xmltojsonlegacy.utils.ElementMetadataUtils;
 import org.assimbly.xmltojsonlegacy.utils.ExtractUtils;
-import org.w3c.dom.Node;
+
+import java.util.Map;
 
 public class OneValueType implements TextNodeTransaction {
 
     @Override
-    public JsonNode process(XmlToJsonConfiguration config, Node childNode, int index, int nodeListSize) {
+    public JsonNode process(Map<String, ElementMetadata> metadataMap, ElementMetadata metadata, XmlToJsonConfiguration config) {
         //process text node identified as one value
-        Print.data(" 2. ONE VALUE", config.getLevel());
-        boolean isFirstLevel = config.getLevel() == 1;
-        if(isFirstLevel) {
-            childNode = config.getElement();
-        }
+
+        double startTime = System.nanoTime();
+
+        JsonNode resp;
         if(config.isTypeHints()) {
-            if(ExtractUtils.rootObjectNodeContainsAttributes(config.getRootObjectNode())) {
-                config.getRootObjectNode().put(Constants.JSON_XML_TEXT_FIELD, ElementUtils.getNodeValue(childNode, config.isTrimSpaces()));
-                if(isFirstLevel) return config.getRootObjectNode();
-            } else {
-                ExtractUtils.addValueOnRootArrayNode(config, childNode);
-                if(isFirstLevel) return config.getRootArrayNode();
-            }
+            resp = processWithTypeHints(metadata, config);
         } else {
-            if(config.getElement().hasAttributes()) {
-                ExtractUtils.putValueOnRootObjectNode(config, childNode);
-                if(isFirstLevel) return config.getRootObjectNode();
-            } else {
-                config.getRootArrayNode().add(ElementUtils.getNodeValue(childNode, config.isTrimSpaces()));
-                if(isFirstLevel) return config.getRootArrayNode();
-            }
+            resp = processWithoutTypeHints(metadata, config);
         }
-        return null;
+
+        double durationInSeconds = (System.nanoTime() - startTime) / 1_000_000_000.0;
+        System.out.println(" > OneValueType (" + durationInSeconds + " sec)");
+
+        return metadata.getLevel() == 1 ? resp : null;
+    }
+
+    private static JsonNode processWithTypeHints(ElementMetadata metadata, XmlToJsonConfiguration config) {
+        if(ExtractUtils.rootObjectNodeContainsAttributes(metadata.getObjectNode())) {
+            metadata.getObjectNode().put(Constants.JSON_XML_TEXT_FIELD, ElementMetadataUtils.getNodeValue(metadata, config.isTrimSpaces()));
+            return metadata.getObjectNode();
+        } else {
+            ExtractUtils.addValueOnRootArrayNode(metadata, config);
+            return metadata.getArrayNode();
+        }
+    }
+
+    private static JsonNode processWithoutTypeHints(ElementMetadata metadata, XmlToJsonConfiguration config) {
+        if(!metadata.getAttributes().isEmpty()) {
+            ExtractUtils.putValueOnRootObjectNode(metadata, config);
+            return metadata.getObjectNode();
+        } else {
+            metadata.getArrayNode().add(ElementMetadataUtils.getNodeValue(metadata, config.isTrimSpaces()));
+            return metadata.getArrayNode();
+        }
     }
 }
