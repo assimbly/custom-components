@@ -131,27 +131,9 @@ public class XmlToJsonProcessor implements Processor {
                 continue;
             }
 
-            // set elementMustBeNull flag
-            metadata.setElementMustBeNull(MetadataAnalyzer.isElementMustBeNull(metadataMap, metadata, childMetadata, config));
-
-            if (metadata.isObject() && metadata.isRootArray()) {
-                if (!metadata.getObjectNode().isEmpty() || !childMetadata.getObjectNode().isEmpty()) {
-                    // force rootArray flag
-                    metadata.setRootArray(false);
-                }
-            } else {
-                // process text node
-                JsonNode processTextResp = processTextNode(metadataMap, metadata, config);
-
-                if (ExtractUtils.rootObjectNodeContainsTextAttribute(metadata.getObjectNode())) {
-                    // force rootArray flag
-                    metadata.setRootArray(false);
-                }
-
-                if (processTextResp != null) {
-                    return processTextResp;
-                }
-            }
+            // process element text
+            JsonNode processTextResp = processTextNode(metadataMap, metadata, childMetadata, config);
+            if (processTextResp != null) return processTextResp;
 
             // get json child already processed
             JsonNode childNode = childMetadata.getValueAsJson();
@@ -171,32 +153,9 @@ public class XmlToJsonProcessor implements Processor {
 
     // process node as leaf (no children found)
     private static JsonNode processNodeAsLeaf(Map<String, ElementMetadata> metadataMap, ElementMetadata metadata, XmlToJsonConfiguration config) {
-
         if(metadata.getTextContent() != null && !metadata.getTextContent().isEmpty()) {
-
-            // set elementMustBeNull flag
-            metadata.setElementMustBeNull(MetadataAnalyzer.isElementMustBeNull(metadataMap, metadata, null, config));
-
-            if (metadata.isObject() && metadata.isRootArray()) {
-                if (!metadata.getObjectNode().isEmpty()) {
-                    // force rootArray flag
-                    metadata.setRootArray(false);
-                }
-            } else {
-                // process text node
-                JsonNode processTextResp = processTextNode(metadataMap, metadata, config);
-
-                if (ExtractUtils.rootObjectNodeContainsTextAttribute(metadata.getObjectNode())) {
-                    // force rootArray flag
-                    metadata.setRootArray(false);
-                }
-
-                if (processTextResp != null) {
-                    return processTextResp;
-                }
-            }
+            return processTextNode(metadataMap, metadata, null, config);
         }
-
         return null;
     }
 
@@ -230,9 +189,29 @@ public class XmlToJsonProcessor implements Processor {
     }
 
     // process an element node of type Text
-    private static JsonNode processTextNode(Map<String, ElementMetadata> metadataMap, ElementMetadata metadata, XmlToJsonConfiguration config) {
-        TextNodeTransaction transactionProcessor = TextNodeTransactionFactory.getProcessorFor(metadata);
-        return transactionProcessor.process(metadataMap, metadata, config);
+    private static JsonNode processTextNode(Map<String, ElementMetadata> metadataMap, ElementMetadata metadata, ElementMetadata childMetadata, XmlToJsonConfiguration config) {
+
+        // set elementMustBeNull flag
+        metadata.setElementMustBeNull(MetadataAnalyzer.isElementMustBeNull(metadataMap, metadata, childMetadata, config));
+
+        if (metadata.isObject() && metadata.isRootArray()) {
+            if (!metadata.getObjectNode().isEmpty() || childMetadata != null && !childMetadata.getObjectNode().isEmpty()) {
+                // force rootArray flag
+                metadata.setRootArray(false);
+            }
+        } else {
+            // process text node
+            TextNodeTransaction transactionProcessor = TextNodeTransactionFactory.getProcessorFor(metadata);
+            JsonNode processTextResp = transactionProcessor.process(metadataMap, metadata, config);
+
+            if (ExtractUtils.rootObjectNodeContainsTextAttribute(metadata.getObjectNode())) {
+                // force rootArray flag
+                metadata.setRootArray(false);
+            }
+
+            return processTextResp;
+        }
+        return null;
     }
 
     // get json from metadata
