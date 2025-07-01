@@ -44,12 +44,22 @@ public class XmlToJsonProcessor implements Processor {
         // first pass - generate metadataMap
         Map<String, ElementMetadata> metadataMap = XmlMetadataExtractor.extractMetadata(inputStream, config);
 
+        // convert metadata to json nodes
+        convertMetadataToJsonNodes(metadataMap, config);
+
+        // extract root json
+        Map.Entry<String, ElementMetadata> rootEntry = metadataMap.entrySet().iterator().next();
+        JsonNode finalJson = rootEntry.getValue().getValueAsJson();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        // set json on the exchange
+        setBodyOnExchange(exchange, objectMapper.writeValueAsString(finalJson));
+    }
+
+    // convert metadata to json nodes
+    private static void convertMetadataToJsonNodes(Map<String, ElementMetadata> metadataMap, XmlToJsonConfiguration config) {
         // group all paths by depth
-        Map<Integer, List<String>> depthMap = new HashMap<>();
-        for (Map.Entry<String, ElementMetadata> entry : metadataMap.entrySet()) {
-            int depth = entry.getValue().getLevel();
-            depthMap.computeIfAbsent(depth, k -> new ArrayList<>()).add(entry.getKey());
-        }
+        Map<Integer, List<String>> depthMap = groupAllPathsByDepth(metadataMap);
 
         // reverse order - bottom-up
         List<Integer> depths = new ArrayList<>(depthMap.keySet());
@@ -71,14 +81,6 @@ public class XmlToJsonProcessor implements Processor {
                 }
             }
         }
-
-        // extract root json
-        Map.Entry<String, ElementMetadata> rootEntry = metadataMap.entrySet().iterator().next();
-        JsonNode finalJson = rootEntry.getValue().getValueAsJson();
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        // set json on the exchange
-        setBodyOnExchange(exchange, objectMapper.writeValueAsString(finalJson));
     }
 
     private static JsonNode buildJsonNodeFromMetadata(
@@ -196,6 +198,16 @@ public class XmlToJsonProcessor implements Processor {
         }
 
         return null;
+    }
+
+    // group all paths by depth
+    private static Map<Integer, List<String>> groupAllPathsByDepth(Map<String, ElementMetadata> metadataMap) {
+        Map<Integer, List<String>> depthMap = new HashMap<>();
+        for (Map.Entry<String, ElementMetadata> entry : metadataMap.entrySet()) {
+            int depth = entry.getValue().getLevel();
+            depthMap.computeIfAbsent(depth, k -> new ArrayList<>()).add(entry.getKey());
+        }
+        return depthMap;
     }
 
     // init metadata vars
