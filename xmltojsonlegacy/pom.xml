@@ -23,11 +23,6 @@
   </distributionManagement>
 
   <dependencies>
-<!--	  <dependency>
-		  <groupId>org.kordamp.json</groupId>
-		  <artifactId>json-lib-core</artifactId>
-		  <version>3.1.0</version>
-	  </dependency>-->
   </dependencies>
 
 	<build>
