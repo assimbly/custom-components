@@ -33,7 +33,9 @@ public class MetadataAnalyzer {
         ElementMetadata grandParentElementMetadata = metadataMap.getOrDefault(ElementMetadataUtils.getParentPath(parentElementMetadata.getPath()), new ElementMetadata());
         ElementMetadata greatGrandParentElementMetadata = metadataMap.getOrDefault(ElementMetadataUtils.getParentPath(grandParentElementMetadata.getPath()), new ElementMetadata());
 
-        if (metadata.getLevel() == 0 && metadata.getChildrenCount() == 1 && !metadata.isDefinesNamespaces() && !metadata.isHasAttributes()) {
+        if (metadata.getLevel() == 0 &&
+                ((metadata.getChildrenCount() == 1 && !metadata.isDefinesNamespaces() && !metadata.isHasAttributes()) || (metadata.getChildrenCount() == 0 && !metadata.isHasEmptyTextContent()))
+        ) {
             return true;
         }
         if (metadata.getDeepestDepth() > 2 && !metadata.isDefinesNamespaces() && metadata.areChildrenNamesEqual()) {
@@ -77,7 +79,9 @@ public class MetadataAnalyzer {
         ElementMetadata parentElementMetadata = metadataMap.getOrDefault(ElementMetadataUtils.getParentPath(metadata.getPath()), new ElementMetadata());
         ElementMetadata grandParentElementMetadata = metadataMap.getOrDefault(ElementMetadataUtils.getParentPath(parentElementMetadata.getPath()), new ElementMetadata());
 
-        if(metadata.getLevel() == 0 && metadata.getChildrenCount() == 1 && !metadata.isDefinesNamespaces() && !metadata.isHasAttributes()) {
+        if(metadata.getLevel() == 0 &&
+                ((metadata.getChildrenCount() == 1 && !metadata.isDefinesNamespaces() && !metadata.isHasAttributes()) || (metadata.getChildrenCount() == 0 && !metadata.isHasEmptyTextContent()))
+        ) {
             isRootArray = true;
         }
         if (metadata.getDeepestDepth() > 2 && !metadata.isDefinesNamespaces() && metadata.areChildrenNamesEqual() && !metadata.isHasAttributes()) {
