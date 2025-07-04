@@ -15,19 +15,12 @@ public class OneValueType implements TextNodeTransaction {
     @Override
     public JsonNode process(Map<String, ElementMetadata> metadataMap, ElementMetadata metadata, XmlToJsonConfiguration config) {
         //process text node identified as one value
-
-        double startTime = System.nanoTime();
-
         JsonNode resp;
         if(config.isTypeHints()) {
             resp = processWithTypeHints(metadata, config);
         } else {
             resp = processWithoutTypeHints(metadata, config);
         }
-
-        double durationInSeconds = (System.nanoTime() - startTime) / 1_000_000_000.0;
-        System.out.println(" > OneValueType (" + durationInSeconds + " sec)");
-
         return metadata.getLevel() == 1 ? resp : null;
     }
 
