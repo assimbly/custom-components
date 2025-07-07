@@ -1,32 +1,43 @@
 package org.assimbly.xmltojsonlegacy.transaction.textnode.types;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.assimbly.xmltojsonlegacy.Constants;
 import org.assimbly.xmltojsonlegacy.XmlToJsonConfiguration;
-import org.assimbly.xmltojsonlegacy.logs.Print;
+import org.assimbly.xmltojsonlegacy.model.ElementMetadata;
 import org.assimbly.xmltojsonlegacy.transaction.textnode.TextNodeTransaction;
-import org.assimbly.xmltojsonlegacy.utils.ElementUtils;
-import org.w3c.dom.Node;
+import org.assimbly.xmltojsonlegacy.utils.Constants;
+import org.assimbly.xmltojsonlegacy.utils.ElementMetadataUtils;
+import org.assimbly.xmltojsonlegacy.utils.ExtractUtils;
+
+import java.util.Map;
 
 public class RootNodeType implements TextNodeTransaction {
 
     @Override
-    public JsonNode process(XmlToJsonConfiguration config, Node childNode, int index, int nodeListSize) {
-        //process text node identified as a root node
-        Print.data(" 2. ROOT", config.getLevel());
-        if(index+1 < nodeListSize) {
-            return null;
+    public JsonNode process(Map<String, ElementMetadata> metadataMap, ElementMetadata metadata, XmlToJsonConfiguration config) {
+        //process text node identified as a root node1
+        if(metadata.getChildrenCount() == 0 && !metadata.isHasEmptyTextContent()) {
+            if (config.isTypeHints()) {
+                processWithTypeHints(metadata, config);
+            } else {
+                processWithoutTypeHints(metadata, config);
+            }
         }
-
-        boolean isElementDefiningNamespaces = ElementUtils.isElementDefiningNamespaces(config.getElement());
-        if(isElementDefiningNamespaces && !config.isSkipNamespaces()) {
-            Node namespaceNode = ElementUtils.getNamespaceNode(config.getElement());
-            config.getRootObjectNode().put(
-                    Constants.JSON_XML_ATTR_PREFIX+namespaceNode.getNodeName(),
-                    namespaceNode.getNodeValue()
-            );
-        }
-
         return null;
+    }
+
+    private static void processWithTypeHints(ElementMetadata metadata, XmlToJsonConfiguration config) {
+        if(ExtractUtils.rootObjectNodeContainsAttributes(metadata.getObjectNode())) {
+            metadata.getObjectNode().put(Constants.JSON_XML_TEXT_FIELD, ElementMetadataUtils.getNodeValue(metadata, config.isTrimSpaces()));
+        } else {
+            ExtractUtils.addValueOnRootArrayNode(metadata, config);
+        }
+    }
+
+    private static void processWithoutTypeHints(ElementMetadata metadata, XmlToJsonConfiguration config) {
+        if(!metadata.getAttributes().isEmpty()) {
+            ExtractUtils.putValueOnRootObjectNode(metadata, config);
+        } else {
+            metadata.getArrayNode().add(ElementMetadataUtils.getNodeValue(metadata, config.isTrimSpaces()));
+        }
     }
 }

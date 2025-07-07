@@ -9,7 +9,7 @@
     <packaging>pom</packaging>
     <name>custom-components</name>
     <url>https://www.org.assimbly</url>
-    <version>5.0.5</version>
+    <version>5.0.6</version>
 
     <modules>
         <module>aggregate</module>
@@ -66,17 +66,17 @@
         <maven.versions.rules>file:///${project.basedir}/rules.xml</maven.versions.rules>
 
         <axiom.version>1.2.20</axiom.version>
-        <assimbly.version>5.0.5</assimbly.version>
+        <assimbly.version>5.0.6</assimbly.version>
         <bouncycastle.version>1.80</bouncycastle.version>
         <config-admin.version>1.9.26</config-admin.version>
         <cxf.version>4.1.0</cxf.version>
-        <camel.version>4.10.3</camel.version>
-        <docconverter.version>1.12.1</docconverter.version>
-        <google.api.version>v3-rev20250122-2.0.0</google.api.version>
+        <camel.version>4.10.5</camel.version>
+        <docconverter.version>1.13.0</docconverter.version>
+        <google.api.version>v3-rev20250427-2.0.0</google.api.version>
         <google.auth.version>1.5.0</google.auth.version>
-        <google.oauth.version>1.37.0</google.oauth.version>
+        <google.oauth.version>1.39.0</google.oauth.version>
         <hapi.version>2.5.1</hapi.version>
-        <hibernate-core.version>6.6.7.Final</hibernate-core.version>
+        <hibernate-core.version>6.6.13.Final</hibernate-core.version>
         <httpclient.version>4.5.14</httpclient.version>
         <httpcomponents.version>4.5.14</httpcomponents.version>
         <java-assist.version>3.29.2-GA</java-assist.version>
@@ -93,14 +93,14 @@
         <mockito-inline.version>5.2.0</mockito-inline.version>
         <mongo.version>4.7.2</mongo.version>
         <osgi.version>6.0.0</osgi.version>
-        <pdfbox.version>3.0.4</pdfbox.version>
-        <poi.version>5.4.0</poi.version>
+        <pdfbox.version>3.0.5</pdfbox.version>
+        <poi.version>5.4.1</poi.version>
         <saaj-impl.version>3.0.4</saaj-impl.version>
         <saxon.version>9.7.0-21</saxon.version>
         <smooks.version>1.7.1</smooks.version>
         <smooks-fragments.version>1.7.1.0</smooks-fragments.version>
         <skyscreamer.version>1.5.3</skyscreamer.version>
-        <slf4j.version>2.0.16</slf4j.version>
+        <slf4j.version>2.0.17</slf4j.version>
         <tika.version>1.16</tika.version>
         <wsdl4j.version>1.6.3</wsdl4j.version>
         <xmlunit.version>1.6</xmlunit.version>
@@ -243,14 +243,6 @@
                 </configuration>
             </plugin>
         </plugins>
-
-        <extensions>
-            <extension>
-                <groupId>org.apache.maven.extensions</groupId>
-                <artifactId>maven-build-cache-extension</artifactId>
-                <version>1.2.0</version>
-            </extension>
-        </extensions>
 
     </build>
 

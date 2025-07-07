@@ -1,12 +1,12 @@
 package org.assimbly.xmltojsonlegacy.transaction.textnode;
 
-import org.assimbly.xmltojsonlegacy.XmlToJsonConfiguration;
+import org.assimbly.xmltojsonlegacy.model.ElementMetadata;
 import org.assimbly.xmltojsonlegacy.transaction.textnode.types.ObjectType;
 import org.assimbly.xmltojsonlegacy.transaction.textnode.types.OneValueType;
 import org.assimbly.xmltojsonlegacy.transaction.textnode.types.OtherType;
 import org.assimbly.xmltojsonlegacy.transaction.textnode.types.RootNodeType;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class TextNodeTransactionFactory {
@@ -18,21 +18,23 @@ public class TextNodeTransactionFactory {
         OTHER;
     }
 
-    private static Map<TextNodeType, TextNodeTransaction> processTextNodeMap = new HashMap<>() {{
-        put(TextNodeType.ROOT_NODE, new RootNodeType());
-        put(TextNodeType.ONE_VALUE, new OneValueType());
-        put(TextNodeType.OBJECT, new ObjectType());
-        put(TextNodeType.OTHER, new OtherType());
-    }};
+    private static final Map<TextNodeType, TextNodeTransaction> processTextNodeMap = new EnumMap<>(TextNodeType.class);
 
-    public static TextNodeTransaction getProcessorFor(XmlToJsonConfiguration config) {
+    static {
+        processTextNodeMap.put(TextNodeType.ROOT_NODE, new RootNodeType());
+        processTextNodeMap.put(TextNodeType.ONE_VALUE, new OneValueType());
+        processTextNodeMap.put(TextNodeType.OBJECT, new ObjectType());
+        processTextNodeMap.put(TextNodeType.OTHER, new OtherType());
+    }
+
+    public static TextNodeTransaction getProcessorFor(ElementMetadata metadata) {
         TextNodeType type;
 
-        if(config.isRootNode()) {
+        if(metadata.isRootNode()) {
             type = TextNodeType.ROOT_NODE;
-        } else if(config.isObject()) {
+        } else if(metadata.isObject()) {
             type = TextNodeType.OBJECT;
-        } else if(config.isOneValue()) {
+        } else if(metadata.isOneValue()) {
             type = TextNodeType.ONE_VALUE;
         } else {
             type = TextNodeType.OTHER;

@@ -1,6 +1,9 @@
 package org.assimbly.xmltojsonlegacy;
 
-import org.apache.camel.*;
+import org.apache.camel.EndpointInject;
+import org.apache.camel.Exchange;
+import org.apache.camel.Produce;
+import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit5.CamelTestSupport;
@@ -11,7 +14,7 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-public class XmlToJsonLegacyTest extends CamelTestSupport {
+class XmlToJsonLegacyTest extends CamelTestSupport {
 
     private final ClassLoader classLoader = getClass().getClassLoader();
 
@@ -26,7 +29,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     *****************************************/
 
     @Test
-    public void testXmlJson_1_FFFFFF() throws Exception {
+    void testXmlJson_1_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_1.xml",
@@ -35,7 +38,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_1_FFFFFT() throws Exception {
+    void testXmlJson_1_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_1.xml",
@@ -44,7 +47,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_1_FTFFFF() throws Exception {
+    void testXmlJson_1_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_1.xml",
@@ -53,7 +56,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_1_FTFFFT() throws Exception {
+    void testXmlJson_1_FTFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_TypeHints",
                 "xml-to-json/example_1.xml",
@@ -62,7 +65,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_1_FTFFTF() throws Exception {
+    void testXmlJson_1_FTFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes",
                 "xml-to-json/example_1.xml",
@@ -71,7 +74,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_1_FTFFTT() throws Exception {
+    void testXmlJson_1_FTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_1.xml",
@@ -80,7 +83,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_1_FTFTFT() throws Exception {
+    void testXmlJson_1_FTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_1.xml",
@@ -89,7 +92,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_1_FTFTTF() throws Exception {
+    void testXmlJson_1_FTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_1.xml",
@@ -98,7 +101,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_1_FTFTTT() throws Exception {
+    void testXmlJson_1_FTFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_1.xml",
@@ -107,7 +110,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_1_FTTTFF() throws Exception {
+    void testXmlJson_1_FTTTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_TrimSpaces_SkipNamespaces",
                 "xml-to-json/example_1.xml",
@@ -116,7 +119,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_1_FTTTFT() throws Exception {
+    void testXmlJson_1_FTTTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_TrimSpaces_SkipNamespaces_TypeHints",
                 "xml-to-json/example_1.xml",
@@ -125,7 +128,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_1_FTTTTT() throws Exception {
+    void testXmlJson_1_FTTTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_TrimSpaces_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_1.xml",
@@ -134,7 +137,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_1_TFFFFF() throws Exception {
+    void testXmlJson_1_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_1.xml",
@@ -143,7 +146,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_1_TFFFFT() throws Exception {
+    void testXmlJson_1_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_1.xml",
@@ -152,7 +155,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_1_TFFTTF() throws Exception {
+    void testXmlJson_1_TFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_1.xml",
@@ -161,7 +164,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_1_TTFFTF() throws Exception {
+    void testXmlJson_1_TTFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes",
                 "xml-to-json/example_1.xml",
@@ -170,7 +173,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_1_TTFFTT() throws Exception {
+    void testXmlJson_1_TTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_1.xml",
@@ -179,7 +182,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_1_TTFTFF() throws Exception {
+    void testXmlJson_1_TTFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces",
                 "xml-to-json/example_1.xml",
@@ -188,7 +191,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_1_TTFTFT() throws Exception {
+    void testXmlJson_1_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_1.xml",
@@ -197,7 +200,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_1_TTFTTF() throws Exception {
+    void testXmlJson_1_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_1.xml",
@@ -206,7 +209,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_1_TTTFFT() throws Exception {
+    void testXmlJson_1_TTTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_TypeHints",
                 "xml-to-json/example_1.xml",
@@ -215,7 +218,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_1_TTTTFF() throws Exception {
+    void testXmlJson_1_TTTTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_SkipNamespaces",
                 "xml-to-json/example_1.xml",
@@ -224,7 +227,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_1_TTTTFT() throws Exception {
+    void testXmlJson_1_TTTTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_SkipNamespaces_TypeHints",
                 "xml-to-json/example_1.xml",
@@ -233,7 +236,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_1_TTTTTF() throws Exception {
+    void testXmlJson_1_TTTTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_1.xml",
@@ -246,7 +249,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_2_FFFFFF() throws Exception {
+    void testXmlJson_2_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_2.xml",
@@ -255,7 +258,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_2_FFFFFT() throws Exception {
+    void testXmlJson_2_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_2.xml",
@@ -264,7 +267,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_2_FTFFFF() throws Exception {
+    void testXmlJson_2_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_2.xml",
@@ -273,7 +276,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_2_FTFFFT() throws Exception {
+    void testXmlJson_2_FTFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_TypeHints",
                 "xml-to-json/example_2.xml",
@@ -282,7 +285,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_2_FTFFTF() throws Exception {
+    void testXmlJson_2_FTFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes",
                 "xml-to-json/example_2.xml",
@@ -291,7 +294,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_2_FTFFTT() throws Exception {
+    void testXmlJson_2_FTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_2.xml",
@@ -300,7 +303,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_2_FTFTFT() throws Exception {
+    void testXmlJson_2_FTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_2.xml",
@@ -309,7 +312,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_2_FTFTTF() throws Exception {
+    void testXmlJson_2_FTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_2.xml",
@@ -318,7 +321,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_2_FTFTTT() throws Exception {
+    void testXmlJson_2_FTFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_2.xml",
@@ -327,7 +330,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_2_TFFFFF() throws Exception {
+    void testXmlJson_2_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_2.xml",
@@ -336,7 +339,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_2_TFFFFT() throws Exception {
+    void testXmlJson_2_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_2.xml",
@@ -345,7 +348,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_2_TFFTTT() throws Exception {
+    void testXmlJson_2_TFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_2.xml",
@@ -354,7 +357,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_2_TTFFTF() throws Exception {
+    void testXmlJson_2_TTFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes",
                 "xml-to-json/example_2.xml",
@@ -363,7 +366,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_2_TTFFTT() throws Exception {
+    void testXmlJson_2_TTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_2.xml",
@@ -372,7 +375,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_2_TTFTFF() throws Exception {
+    void testXmlJson_2_TTFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces",
                 "xml-to-json/example_2.xml",
@@ -381,7 +384,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_2_TTFTFT() throws Exception {
+    void testXmlJson_2_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_2.xml",
@@ -390,7 +393,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_2_TTFTTF() throws Exception {
+    void testXmlJson_2_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_2.xml",
@@ -399,7 +402,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_2_TTTFFT() throws Exception {
+    void testXmlJson_2_TTTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_TypeHints",
                 "xml-to-json/example_2.xml",
@@ -412,7 +415,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_3_FFFFFF() throws Exception {
+    void testXmlJson_3_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_3.xml",
@@ -421,7 +424,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_3_FFFFFT() throws Exception {
+    void testXmlJson_3_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_3.xml",
@@ -430,7 +433,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_3_FTFFFF() throws Exception {
+    void testXmlJson_3_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_3.xml",
@@ -439,7 +442,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_3_FTFFFT() throws Exception {
+    void testXmlJson_3_FTFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_TypeHints",
                 "xml-to-json/example_3.xml",
@@ -448,7 +451,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_3_FTFFTF() throws Exception {
+    void testXmlJson_3_FTFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes",
                 "xml-to-json/example_3.xml",
@@ -457,7 +460,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_3_FTFFTT() throws Exception {
+    void testXmlJson_3_FTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_3.xml",
@@ -466,7 +469,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_3_FTFTFT() throws Exception {
+    void testXmlJson_3_FTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_3.xml",
@@ -475,7 +478,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_3_FTFTTF() throws Exception {
+    void testXmlJson_3_FTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_3.xml",
@@ -484,7 +487,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_3_FTFTTT() throws Exception {
+    void testXmlJson_3_FTFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_3.xml",
@@ -493,7 +496,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_3_TFFFFF() throws Exception {
+    void testXmlJson_3_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_3.xml",
@@ -502,7 +505,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_3_TFFFFT() throws Exception {
+    void testXmlJson_3_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_3.xml",
@@ -511,7 +514,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_3_TTFFTF() throws Exception {
+    void testXmlJson_3_TTFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes",
                 "xml-to-json/example_3.xml",
@@ -520,7 +523,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_3_TTFFTT() throws Exception {
+    void testXmlJson_3_TTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_3.xml",
@@ -529,7 +532,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_3_TTFTFF() throws Exception {
+    void testXmlJson_3_TTFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces",
                 "xml-to-json/example_3.xml",
@@ -538,7 +541,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_3_TTFTFT() throws Exception {
+    void testXmlJson_3_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_3.xml",
@@ -547,7 +550,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_3_TTFTTF() throws Exception {
+    void testXmlJson_3_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_3.xml",
@@ -556,7 +559,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_3_TTTFFT() throws Exception {
+    void testXmlJson_3_TTTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_TypeHints",
                 "xml-to-json/example_3.xml",
@@ -569,7 +572,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_4_FFFFFF() throws Exception {
+    void testXmlJson_4_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_4.xml",
@@ -578,7 +581,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_4_FFFFFT() throws Exception {
+    void testXmlJson_4_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_4.xml",
@@ -587,7 +590,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_4_FTFFFF() throws Exception {
+    void testXmlJson_4_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_4.xml",
@@ -596,7 +599,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_4_FTFFFT() throws Exception {
+    void testXmlJson_4_FTFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_TypeHints",
                 "xml-to-json/example_4.xml",
@@ -605,7 +608,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_4_FTFFTF() throws Exception {
+    void testXmlJson_4_FTFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes",
                 "xml-to-json/example_4.xml",
@@ -614,7 +617,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_4_FTFFTT() throws Exception {
+    void testXmlJson_4_FTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_4.xml",
@@ -623,7 +626,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_4_FTFTFT() throws Exception {
+    void testXmlJson_4_FTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_4.xml",
@@ -632,7 +635,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_4_FTFTTF() throws Exception {
+    void testXmlJson_4_FTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_4.xml",
@@ -641,7 +644,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_4_FTFTTT() throws Exception {
+    void testXmlJson_4_FTFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_4.xml",
@@ -650,7 +653,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_4_TFFFFF() throws Exception {
+    void testXmlJson_4_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_4.xml",
@@ -659,7 +662,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_4_TFFFFT() throws Exception {
+    void testXmlJson_4_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_4.xml",
@@ -668,7 +671,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_4_TTFFTF() throws Exception {
+    void testXmlJson_4_TTFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes",
                 "xml-to-json/example_4.xml",
@@ -677,7 +680,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_4_TTFFTT() throws Exception {
+    void testXmlJson_4_TTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_4.xml",
@@ -686,7 +689,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_4_TTFTFF() throws Exception {
+    void testXmlJson_4_TTFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces",
                 "xml-to-json/example_4.xml",
@@ -695,7 +698,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_4_TTFTFT() throws Exception {
+    void testXmlJson_4_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_4.xml",
@@ -704,7 +707,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_4_TTFTTF() throws Exception {
+    void testXmlJson_4_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_4.xml",
@@ -713,7 +716,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_4_TTTFFT() throws Exception {
+    void testXmlJson_4_TTTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_TypeHints",
                 "xml-to-json/example_4.xml",
@@ -726,7 +729,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_5_FFFFFF() throws Exception {
+    void testXmlJson_5_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_5.xml",
@@ -735,7 +738,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_5_FFFFFT() throws Exception {
+    void testXmlJson_5_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_5.xml",
@@ -744,7 +747,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_5_FTFFFF() throws Exception {
+    void testXmlJson_5_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_5.xml",
@@ -753,7 +756,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_5_TFFFFF() throws Exception {
+    void testXmlJson_5_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_5.xml",
@@ -762,7 +765,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_5_TFFFFT() throws Exception {
+    void testXmlJson_5_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_5.xml",
@@ -771,7 +774,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_5_TTFTFT() throws Exception {
+    void testXmlJson_5_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_5.xml",
@@ -780,7 +783,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_5_TTFTTF() throws Exception {
+    void testXmlJson_5_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_5.xml",
@@ -793,7 +796,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_6_FFFFFF() throws Exception {
+    void testXmlJson_6_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_6.xml",
@@ -802,7 +805,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_6_FFFFFT() throws Exception {
+    void testXmlJson_6_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_6.xml",
@@ -811,7 +814,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_6_FTFFFF() throws Exception {
+    void testXmlJson_6_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_6.xml",
@@ -820,7 +823,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_6_TFFFFF() throws Exception {
+    void testXmlJson_6_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_6.xml",
@@ -829,7 +832,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_6_TFFFFT() throws Exception {
+    void testXmlJson_6_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_6.xml",
@@ -838,7 +841,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_6_TTFTFT() throws Exception {
+    void testXmlJson_6_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_6.xml",
@@ -847,7 +850,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_6_TTFTTF() throws Exception {
+    void testXmlJson_6_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_6.xml",
@@ -860,7 +863,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_7_FFFFFF() throws Exception {
+    void testXmlJson_7_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_7.xml",
@@ -869,7 +872,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_7_FFFFFT() throws Exception {
+    void testXmlJson_7_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_7.xml",
@@ -878,7 +881,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_7_FTFFFF() throws Exception {
+    void testXmlJson_7_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_7.xml",
@@ -887,7 +890,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_7_TFFFFF() throws Exception {
+    void testXmlJson_7_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_7.xml",
@@ -896,7 +899,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_7_TFFFFT() throws Exception {
+    void testXmlJson_7_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_7.xml",
@@ -905,7 +908,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_7_TTFTFT() throws Exception {
+    void testXmlJson_7_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_7.xml",
@@ -914,7 +917,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_7_TTFTTF() throws Exception {
+    void testXmlJson_7_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_7.xml",
@@ -927,7 +930,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_8_FFFFFF() throws Exception {
+    void testXmlJson_8_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_8.xml",
@@ -936,7 +939,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_8_FFFFFT() throws Exception {
+    void testXmlJson_8_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_8.xml",
@@ -945,7 +948,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_8_FTFFFF() throws Exception {
+    void testXmlJson_8_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_8.xml",
@@ -954,7 +957,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_8_TFFFFF() throws Exception {
+    void testXmlJson_8_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_8.xml",
@@ -963,7 +966,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_8_TFFFFT() throws Exception {
+    void testXmlJson_8_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_8.xml",
@@ -972,7 +975,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_8_TTFTFT() throws Exception {
+    void testXmlJson_8_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_8.xml",
@@ -981,7 +984,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_8_TTFTTF() throws Exception {
+    void testXmlJson_8_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_8.xml",
@@ -994,7 +997,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_9_FFFFFF() throws Exception {
+    void testXmlJson_9_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_9.xml",
@@ -1003,7 +1006,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_9_FFFFFT() throws Exception {
+    void testXmlJson_9_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_9.xml",
@@ -1012,7 +1015,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_9_FTFFFF() throws Exception {
+    void testXmlJson_9_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_9.xml",
@@ -1021,7 +1024,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_9_FTFFFT() throws Exception {
+    void testXmlJson_9_FTFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_TypeHints",
                 "xml-to-json/example_9.xml",
@@ -1030,7 +1033,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_9_FTFFTF() throws Exception {
+    void testXmlJson_9_FTFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes",
                 "xml-to-json/example_9.xml",
@@ -1039,7 +1042,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_9_FTFFTT() throws Exception {
+    void testXmlJson_9_FTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_9.xml",
@@ -1048,7 +1051,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_9_FTFTFT() throws Exception {
+    void testXmlJson_9_FTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_9.xml",
@@ -1057,7 +1060,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_9_FTFTTF() throws Exception {
+    void testXmlJson_9_FTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_9.xml",
@@ -1066,7 +1069,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_9_FTFTTT() throws Exception {
+    void testXmlJson_9_FTFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_9.xml",
@@ -1075,7 +1078,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_9_TFFFFF() throws Exception {
+    void testXmlJson_9_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_9.xml",
@@ -1084,7 +1087,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_9_TFFFFT() throws Exception {
+    void testXmlJson_9_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_9.xml",
@@ -1093,7 +1096,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_9_TTFFTF() throws Exception {
+    void testXmlJson_9_TTFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes",
                 "xml-to-json/example_9.xml",
@@ -1102,7 +1105,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_9_TTFFTT() throws Exception {
+    void testXmlJson_9_TTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_9.xml",
@@ -1111,7 +1114,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_9_TTFTFF() throws Exception {
+    void testXmlJson_9_TTFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces",
                 "xml-to-json/example_9.xml",
@@ -1120,7 +1123,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_9_TTFTFT() throws Exception {
+    void testXmlJson_9_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_9.xml",
@@ -1129,7 +1132,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_9_TTFTTF() throws Exception {
+    void testXmlJson_9_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_9.xml",
@@ -1138,7 +1141,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_9_TTTFFT() throws Exception {
+    void testXmlJson_9_TTTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_TypeHints",
                 "xml-to-json/example_9.xml",
@@ -1151,7 +1154,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_10_FFFFFF() throws Exception {
+    void testXmlJson_10_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_10.xml",
@@ -1160,7 +1163,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_10_FFFFFT() throws Exception {
+    void testXmlJson_10_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_10.xml",
@@ -1169,7 +1172,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_10_FTFFFF() throws Exception {
+    void testXmlJson_10_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_10.xml",
@@ -1178,7 +1181,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_10_TFFFFF() throws Exception {
+    void testXmlJson_10_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_10.xml",
@@ -1187,7 +1190,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_10_TFFFFT() throws Exception {
+    void testXmlJson_10_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_10.xml",
@@ -1196,7 +1199,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_10_TTFTFT() throws Exception {
+    void testXmlJson_10_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_10.xml",
@@ -1205,7 +1208,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_10_TTFTTF() throws Exception {
+    void testXmlJson_10_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_10.xml",
@@ -1218,7 +1221,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_11_FFFFFF() throws Exception {
+    void testXmlJson_11_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_11.xml",
@@ -1227,7 +1230,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_11_FFFFFT() throws Exception {
+    void testXmlJson_11_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_11.xml",
@@ -1237,7 +1240,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
 
 
     @Test
-    public void testXmlJson_11_FTFFFF() throws Exception {
+    void testXmlJson_11_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_11.xml",
@@ -1246,7 +1249,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_11_FTFFFT() throws Exception {
+    void testXmlJson_11_FTFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_TypeHints",
                 "xml-to-json/example_11.xml",
@@ -1255,7 +1258,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_11_FTFFTF() throws Exception {
+    void testXmlJson_11_FTFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes",
                 "xml-to-json/example_11.xml",
@@ -1264,7 +1267,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_11_FTFFTT() throws Exception {
+    void testXmlJson_11_FTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_11.xml",
@@ -1273,7 +1276,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_11_FTFTFT() throws Exception {
+    void testXmlJson_11_FTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_11.xml",
@@ -1282,7 +1285,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_11_FTFTTF() throws Exception {
+    void testXmlJson_11_FTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_11.xml",
@@ -1291,7 +1294,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_11_FTFTTT() throws Exception {
+    void testXmlJson_11_FTFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_11.xml",
@@ -1300,7 +1303,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_11_TFFFFF() throws Exception {
+    void testXmlJson_11_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_11.xml",
@@ -1309,7 +1312,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_11_TFFFFT() throws Exception {
+    void testXmlJson_11_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_11.xml",
@@ -1318,7 +1321,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_11_TTFFTF() throws Exception {
+    void testXmlJson_11_TTFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes",
                 "xml-to-json/example_11.xml",
@@ -1327,7 +1330,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_11_TTFFTT() throws Exception {
+    void testXmlJson_11_TTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_11.xml",
@@ -1336,7 +1339,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_11_TTFTFF() throws Exception {
+    void testXmlJson_11_TTFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces",
                 "xml-to-json/example_11.xml",
@@ -1345,7 +1348,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_11_TTFTFT() throws Exception {
+    void testXmlJson_11_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_11.xml",
@@ -1354,7 +1357,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_11_TTFTTF() throws Exception {
+    void testXmlJson_11_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_11.xml",
@@ -1363,7 +1366,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_11_TTTFFT() throws Exception {
+    void testXmlJson_11_TTTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_TypeHints",
                 "xml-to-json/example_11.xml",
@@ -1376,7 +1379,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_12_FFFFFF() throws Exception {
+    void testXmlJson_12_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_12.xml",
@@ -1385,7 +1388,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_12_FFFFFT() throws Exception {
+    void testXmlJson_12_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_12.xml",
@@ -1394,7 +1397,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_12_FTFFFF() throws Exception {
+    void testXmlJson_12_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_12.xml",
@@ -1403,7 +1406,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_12_TFFFFF() throws Exception {
+    void testXmlJson_12_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_12.xml",
@@ -1412,7 +1415,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_12_TFFFFT() throws Exception {
+    void testXmlJson_12_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_12.xml",
@@ -1421,7 +1424,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_12_TTFTFT() throws Exception {
+    void testXmlJson_12_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_12.xml",
@@ -1430,7 +1433,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_12_TTFTTF() throws Exception {
+    void testXmlJson_12_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_12.xml",
@@ -1443,7 +1446,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_13_FFFFFF() throws Exception {
+    void testXmlJson_13_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_13.xml",
@@ -1452,7 +1455,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_13_FFFFFT() throws Exception {
+    void testXmlJson_13_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_13.xml",
@@ -1461,7 +1464,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_13_FTFFFF() throws Exception {
+    void testXmlJson_13_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_13.xml",
@@ -1470,7 +1473,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_13_TFFFFF() throws Exception {
+    void testXmlJson_13_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_13.xml",
@@ -1479,7 +1482,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_13_TFFFFT() throws Exception {
+    void testXmlJson_13_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_13.xml",
@@ -1488,7 +1491,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_13_FFFFTF() throws Exception {
+    void testXmlJson_13_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_13.xml",
@@ -1497,7 +1500,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_13_FFFFTT() throws Exception {
+    void testXmlJson_13_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_13.xml",
@@ -1506,7 +1509,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_13_FFFTFT() throws Exception {
+    void testXmlJson_13_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_13.xml",
@@ -1515,7 +1518,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_13_TTFTFT() throws Exception {
+    void testXmlJson_13_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_13.xml",
@@ -1524,7 +1527,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_13_TTFTTF() throws Exception {
+    void testXmlJson_13_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_13.xml",
@@ -1537,7 +1540,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_14_FFFFFF() throws Exception {
+    void testXmlJson_14_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_14.xml",
@@ -1546,7 +1549,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_14_FFFFFT() throws Exception {
+    void testXmlJson_14_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_14.xml",
@@ -1555,7 +1558,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_14_FFFFTF() throws Exception {
+    void testXmlJson_14_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_14.xml",
@@ -1564,7 +1567,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_14_FFFFTT() throws Exception {
+    void testXmlJson_14_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_14.xml",
@@ -1573,7 +1576,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_14_FFFTFT() throws Exception {
+    void testXmlJson_14_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_14.xml",
@@ -1582,7 +1585,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_14_FTFFFF() throws Exception {
+    void testXmlJson_14_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_14.xml",
@@ -1591,7 +1594,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_14_TFFFFF() throws Exception {
+    void testXmlJson_14_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_14.xml",
@@ -1600,7 +1603,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_14_TFFFFT() throws Exception {
+    void testXmlJson_14_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_14.xml",
@@ -1609,7 +1612,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_14_TTFTFT() throws Exception {
+    void testXmlJson_14_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_14.xml",
@@ -1618,7 +1621,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_14_TTFTTF() throws Exception {
+    void testXmlJson_14_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_14.xml",
@@ -1631,7 +1634,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_15_FFTFFF() throws Exception {
+    void testXmlJson_15_FFTFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces",
                 "xml-to-json/example_15.xml",
@@ -1640,7 +1643,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_15_FFFFFF() throws Exception {
+    void testXmlJson_15_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_15.xml",
@@ -1649,7 +1652,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_15_FFFFFT() throws Exception {
+    void testXmlJson_15_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_15.xml",
@@ -1658,7 +1661,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_15_FFFFTF() throws Exception {
+    void testXmlJson_15_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_15.xml",
@@ -1667,7 +1670,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_15_FFFFTT() throws Exception {
+    void testXmlJson_15_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_15.xml",
@@ -1676,7 +1679,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_15_FFFTFT() throws Exception {
+    void testXmlJson_15_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_15.xml",
@@ -1685,7 +1688,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_15_FTFFFF() throws Exception {
+    void testXmlJson_15_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_15.xml",
@@ -1694,7 +1697,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_15_TFFFFF() throws Exception {
+    void testXmlJson_15_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_15.xml",
@@ -1703,7 +1706,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_15_TFFFFT() throws Exception {
+    void testXmlJson_15_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_15.xml",
@@ -1712,7 +1715,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_15_TTFTFT() throws Exception {
+    void testXmlJson_15_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_15.xml",
@@ -1721,7 +1724,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_15_TTFTTF() throws Exception {
+    void testXmlJson_15_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_15.xml",
@@ -1734,7 +1737,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_16_FFFFFF() throws Exception {
+    void testXmlJson_16_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_16.xml",
@@ -1743,7 +1746,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_16_FFTFFT() throws Exception {
+    void testXmlJson_16_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_16.xml",
@@ -1752,7 +1755,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_16_FFFFFT() throws Exception {
+    void testXmlJson_16_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_16.xml",
@@ -1761,7 +1764,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_16_FFFFTF() throws Exception {
+    void testXmlJson_16_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_16.xml",
@@ -1770,7 +1773,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_16_FFFFTT() throws Exception {
+    void testXmlJson_16_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_16.xml",
@@ -1779,7 +1782,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_16_FFFTFT() throws Exception {
+    void testXmlJson_16_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_16.xml",
@@ -1788,7 +1791,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_16_FTFFFF() throws Exception {
+    void testXmlJson_16_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_16.xml",
@@ -1797,7 +1800,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_16_TFFFFF() throws Exception {
+    void testXmlJson_16_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_16.xml",
@@ -1806,7 +1809,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_16_TFFFFT() throws Exception {
+    void testXmlJson_16_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_16.xml",
@@ -1815,7 +1818,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_16_TTFTFT() throws Exception {
+    void testXmlJson_16_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_16.xml",
@@ -1824,7 +1827,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_16_TTFTTF() throws Exception {
+    void testXmlJson_16_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_16.xml",
@@ -1837,7 +1840,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_17_FFFFFF() throws Exception {
+    void testXmlJson_17_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_17.xml",
@@ -1846,7 +1849,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_17_FFFFFT() throws Exception {
+    void testXmlJson_17_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_17.xml",
@@ -1855,7 +1858,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_17_FFTFFT() throws Exception {
+    void testXmlJson_17_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_17.xml",
@@ -1864,7 +1867,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_17_FFFFTF() throws Exception {
+    void testXmlJson_17_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_17.xml",
@@ -1873,7 +1876,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_17_FFFFTT() throws Exception {
+    void testXmlJson_17_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_17.xml",
@@ -1882,7 +1885,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_17_FFFTFT() throws Exception {
+    void testXmlJson_17_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_17.xml",
@@ -1891,7 +1894,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_17_FTFFFF() throws Exception {
+    void testXmlJson_17_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_17.xml",
@@ -1900,7 +1903,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_17_TFFFFF() throws Exception {
+    void testXmlJson_17_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_17.xml",
@@ -1909,7 +1912,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_17_TFFFFT() throws Exception {
+    void testXmlJson_17_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_17.xml",
@@ -1918,7 +1921,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_17_TTFTFT() throws Exception {
+    void testXmlJson_17_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_17.xml",
@@ -1927,7 +1930,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_17_TTFTTF() throws Exception {
+    void testXmlJson_17_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_17.xml",
@@ -1940,7 +1943,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_18_FFFFFF() throws Exception {
+    void testXmlJson_18_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_18.xml",
@@ -1949,7 +1952,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_18_FFFFFT() throws Exception {
+    void testXmlJson_18_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_18.xml",
@@ -1958,7 +1961,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_18_FFTFFT() throws Exception {
+    void testXmlJson_18_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_18.xml",
@@ -1967,7 +1970,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_18_FFFFTF() throws Exception {
+    void testXmlJson_18_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_18.xml",
@@ -1976,7 +1979,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_18_FFFFTT() throws Exception {
+    void testXmlJson_18_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_18.xml",
@@ -1985,7 +1988,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_18_FFFTFT() throws Exception {
+    void testXmlJson_18_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_18.xml",
@@ -1994,7 +1997,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_18_FTFFFF() throws Exception {
+    void testXmlJson_18_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_18.xml",
@@ -2003,7 +2006,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_18_TFFFFF() throws Exception {
+    void testXmlJson_18_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_18.xml",
@@ -2012,7 +2015,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_18_TFFFFT() throws Exception {
+    void testXmlJson_18_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_18.xml",
@@ -2021,7 +2024,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_18_TTFTFT() throws Exception {
+    void testXmlJson_18_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_18.xml",
@@ -2030,7 +2033,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_18_TTFTTF() throws Exception {
+    void testXmlJson_18_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_18.xml",
@@ -2043,7 +2046,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_19_FFFFFF() throws Exception {
+    void testXmlJson_19_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_19.xml",
@@ -2052,7 +2055,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_19_FFFFFT() throws Exception {
+    void testXmlJson_19_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_19.xml",
@@ -2061,7 +2064,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_19_FFFFTF() throws Exception {
+    void testXmlJson_19_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_19.xml",
@@ -2070,7 +2073,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_19_FFFFTT() throws Exception {
+    void testXmlJson_19_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_19.xml",
@@ -2079,7 +2082,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_19_FFFTFT() throws Exception {
+    void testXmlJson_19_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_19.xml",
@@ -2088,7 +2091,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_19_FFFTTT() throws Exception {
+    void testXmlJson_19_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_19.xml",
@@ -2097,7 +2100,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_19_FFTFFT() throws Exception {
+    void testXmlJson_19_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_19.xml",
@@ -2106,7 +2109,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_19_FTFFFF() throws Exception {
+    void testXmlJson_19_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_19.xml",
@@ -2115,7 +2118,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_19_TFFFFF() throws Exception {
+    void testXmlJson_19_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_19.xml",
@@ -2124,7 +2127,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_19_TFFFFT() throws Exception {
+    void testXmlJson_19_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_19.xml",
@@ -2133,7 +2136,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_19_TTFTFT() throws Exception {
+    void testXmlJson_19_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_19.xml",
@@ -2142,7 +2145,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_19_TTFTTF() throws Exception {
+    void testXmlJson_19_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_19.xml",
@@ -2155,7 +2158,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_20_FFFFFF() throws Exception {
+    void testXmlJson_20_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_20.xml",
@@ -2164,7 +2167,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_20_FFFFFT() throws Exception {
+    void testXmlJson_20_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_20.xml",
@@ -2173,7 +2176,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_20_FFFFTF() throws Exception {
+    void testXmlJson_20_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_20.xml",
@@ -2182,7 +2185,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_20_FFFFTT() throws Exception {
+    void testXmlJson_20_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_20.xml",
@@ -2191,7 +2194,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_20_FFFTFT() throws Exception {
+    void testXmlJson_20_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_20.xml",
@@ -2200,7 +2203,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_20_FFFTTT() throws Exception {
+    void testXmlJson_20_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_20.xml",
@@ -2209,7 +2212,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_20_FFTFFT() throws Exception {
+    void testXmlJson_20_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_20.xml",
@@ -2218,7 +2221,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_20_FTFFFF() throws Exception {
+    void testXmlJson_20_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_20.xml",
@@ -2227,7 +2230,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_20_TFFFFF() throws Exception {
+    void testXmlJson_20_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_20.xml",
@@ -2236,7 +2239,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_20_TFFFFT() throws Exception {
+    void testXmlJson_20_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_20.xml",
@@ -2245,7 +2248,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_20_TTFTFT() throws Exception {
+    void testXmlJson_20_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_20.xml",
@@ -2254,7 +2257,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_20_TTFTTF() throws Exception {
+    void testXmlJson_20_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_20.xml",
@@ -2267,7 +2270,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_21_FFFFFF() throws Exception {
+    void testXmlJson_21_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_21.xml",
@@ -2276,7 +2279,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_21_FFFFFT() throws Exception {
+    void testXmlJson_21_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_21.xml",
@@ -2285,7 +2288,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_21_FFFFTF() throws Exception {
+    void testXmlJson_21_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_21.xml",
@@ -2294,7 +2297,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_21_FFFFTT() throws Exception {
+    void testXmlJson_21_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_21.xml",
@@ -2303,7 +2306,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_21_FFFTFT() throws Exception {
+    void testXmlJson_21_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_21.xml",
@@ -2312,7 +2315,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_21_FFFTTT() throws Exception {
+    void testXmlJson_21_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_21.xml",
@@ -2321,7 +2324,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_21_FFTFFT() throws Exception {
+    void testXmlJson_21_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_21.xml",
@@ -2330,7 +2333,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_21_FTFFFF() throws Exception {
+    void testXmlJson_21_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_21.xml",
@@ -2339,7 +2342,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_21_TFFFFF() throws Exception {
+    void testXmlJson_21_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_21.xml",
@@ -2348,7 +2351,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_21_TFFFFT() throws Exception {
+    void testXmlJson_21_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_21.xml",
@@ -2357,7 +2360,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_21_TTFTFT() throws Exception {
+    void testXmlJson_21_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_21.xml",
@@ -2366,7 +2369,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_21_TTFTTF() throws Exception {
+    void testXmlJson_21_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_21.xml",
@@ -2379,7 +2382,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_22_FFFFFF() throws Exception {
+    void testXmlJson_22_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_22.xml",
@@ -2388,7 +2391,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_22_FFFFFT() throws Exception {
+    void testXmlJson_22_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_22.xml",
@@ -2397,7 +2400,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_22_FFFFTF() throws Exception {
+    void testXmlJson_22_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_22.xml",
@@ -2406,7 +2409,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_22_FFFFTT() throws Exception {
+    void testXmlJson_22_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_22.xml",
@@ -2415,7 +2418,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_22_FFFTFT() throws Exception {
+    void testXmlJson_22_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_22.xml",
@@ -2424,7 +2427,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_22_FFFTTT() throws Exception {
+    void testXmlJson_22_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_22.xml",
@@ -2433,7 +2436,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_22_FFTFFT() throws Exception {
+    void testXmlJson_22_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_22.xml",
@@ -2442,7 +2445,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_22_FTFFFF() throws Exception {
+    void testXmlJson_22_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_22.xml",
@@ -2451,7 +2454,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_22_FTTTTF() throws Exception {
+    void testXmlJson_22_FTTTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_TrimSpaces_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_22.xml",
@@ -2460,7 +2463,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_22_TFFFFF() throws Exception {
+    void testXmlJson_22_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_22.xml",
@@ -2469,7 +2472,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_22_TFFFFT() throws Exception {
+    void testXmlJson_22_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_22.xml",
@@ -2478,7 +2481,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_22_TTFTFT() throws Exception {
+    void testXmlJson_22_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_22.xml",
@@ -2487,7 +2490,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_22_TTFTTF() throws Exception {
+    void testXmlJson_22_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_22.xml",
@@ -2500,7 +2503,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_23_FFFFFF() throws Exception {
+    void testXmlJson_23_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_23.xml",
@@ -2509,7 +2512,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_23_FFFFFT() throws Exception {
+    void testXmlJson_23_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_23.xml",
@@ -2518,7 +2521,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_23_FFFFTF() throws Exception {
+    void testXmlJson_23_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_23.xml",
@@ -2527,7 +2530,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_23_FFFFTT() throws Exception {
+    void testXmlJson_23_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_23.xml",
@@ -2536,7 +2539,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_23_FFFTFT() throws Exception {
+    void testXmlJson_23_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_23.xml",
@@ -2545,7 +2548,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_23_FFFTTT() throws Exception {
+    void testXmlJson_23_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_23.xml",
@@ -2554,7 +2557,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_23_FFTFFT() throws Exception {
+    void testXmlJson_23_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_23.xml",
@@ -2563,7 +2566,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_23_FTFFFF() throws Exception {
+    void testXmlJson_23_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_23.xml",
@@ -2572,7 +2575,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_23_TFFFFF() throws Exception {
+    void testXmlJson_23_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_23.xml",
@@ -2581,7 +2584,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_23_TFFFFT() throws Exception {
+    void testXmlJson_23_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_23.xml",
@@ -2590,7 +2593,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_23_TTFTFT() throws Exception {
+    void testXmlJson_23_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_23.xml",
@@ -2599,7 +2602,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_23_TTFTTF() throws Exception {
+    void testXmlJson_23_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_23.xml",
@@ -2612,7 +2615,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_24_FFFFFF() throws Exception {
+    void testXmlJson_24_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_24.xml",
@@ -2621,7 +2624,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_24_FFFFFT() throws Exception {
+    void testXmlJson_24_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_24.xml",
@@ -2630,7 +2633,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_24_FFFFTF() throws Exception {
+    void testXmlJson_24_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_24.xml",
@@ -2639,7 +2642,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_24_FFFFTT() throws Exception {
+    void testXmlJson_24_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_24.xml",
@@ -2648,7 +2651,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_24_FFFTFT() throws Exception {
+    void testXmlJson_24_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_24.xml",
@@ -2657,7 +2660,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_24_FFFTTT() throws Exception {
+    void testXmlJson_24_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_24.xml",
@@ -2666,7 +2669,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_24_FFTFFT() throws Exception {
+    void testXmlJson_24_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_24.xml",
@@ -2675,7 +2678,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_24_FTFFFF() throws Exception {
+    void testXmlJson_24_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_24.xml",
@@ -2684,7 +2687,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_24_TFFFFF() throws Exception {
+    void testXmlJson_24_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_24.xml",
@@ -2693,7 +2696,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_24_TFFFFT() throws Exception {
+    void testXmlJson_24_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_24.xml",
@@ -2702,7 +2705,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_24_TFFTTT() throws Exception {
+    void testXmlJson_24_TFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_24.xml",
@@ -2711,7 +2714,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_24_TTFTFT() throws Exception {
+    void testXmlJson_24_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_24.xml",
@@ -2720,7 +2723,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_24_TTFTTF() throws Exception {
+    void testXmlJson_24_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_24.xml",
@@ -2733,7 +2736,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_25_FFFFFF() throws Exception {
+    void testXmlJson_25_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_25.xml",
@@ -2742,7 +2745,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_25_FFFFFT() throws Exception {
+    void testXmlJson_25_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_25.xml",
@@ -2751,7 +2754,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_25_FFFFTF() throws Exception {
+    void testXmlJson_25_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_25.xml",
@@ -2760,7 +2763,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_25_FFFFTT() throws Exception {
+    void testXmlJson_25_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_25.xml",
@@ -2769,7 +2772,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_25_FFFTFT() throws Exception {
+    void testXmlJson_25_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_25.xml",
@@ -2778,7 +2781,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_25_FFFTTT() throws Exception {
+    void testXmlJson_25_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_25.xml",
@@ -2787,7 +2790,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_25_FFTFFT() throws Exception {
+    void testXmlJson_25_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_25.xml",
@@ -2796,7 +2799,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_25_FTFFFF() throws Exception {
+    void testXmlJson_25_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_25.xml",
@@ -2805,7 +2808,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_25_TFFFFF() throws Exception {
+    void testXmlJson_25_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_25.xml",
@@ -2814,7 +2817,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_25_TFFFFT() throws Exception {
+    void testXmlJson_25_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_25.xml",
@@ -2823,7 +2826,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_25_TFFTTT() throws Exception {
+    void testXmlJson_25_TFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_25.xml",
@@ -2832,7 +2835,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_25_TTFTFT() throws Exception {
+    void testXmlJson_25_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_25.xml",
@@ -2841,7 +2844,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_25_TTFTTF() throws Exception {
+    void testXmlJson_25_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_25.xml",
@@ -2850,7 +2853,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_25_TTTFFT() throws Exception {
+    void testXmlJson_25_TTTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_TypeHints",
                 "xml-to-json/example_25.xml",
@@ -2863,7 +2866,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_26_FFFFFF() throws Exception {
+    void testXmlJson_26_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_26.xml",
@@ -2872,7 +2875,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_26_FFFFFT() throws Exception {
+    void testXmlJson_26_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_26.xml",
@@ -2881,7 +2884,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_26_FFFFTF() throws Exception {
+    void testXmlJson_26_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_26.xml",
@@ -2890,7 +2893,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_26_FFFFTT() throws Exception {
+    void testXmlJson_26_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_26.xml",
@@ -2899,7 +2902,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_26_FFFTFT() throws Exception {
+    void testXmlJson_26_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_26.xml",
@@ -2908,7 +2911,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_26_FFFTTT() throws Exception {
+    void testXmlJson_26_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_26.xml",
@@ -2917,7 +2920,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_26_FFTFFT() throws Exception {
+    void testXmlJson_26_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_26.xml",
@@ -2926,7 +2929,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_26_FTFFFF() throws Exception {
+    void testXmlJson_26_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_26.xml",
@@ -2935,7 +2938,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_26_FTFFFT() throws Exception {
+    void testXmlJson_26_FTFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_TypeHints",
                 "xml-to-json/example_26.xml",
@@ -2944,7 +2947,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_26_FTFTTF() throws Exception {
+    void testXmlJson_26_FTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_26.xml",
@@ -2953,7 +2956,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_26_FTFFTF() throws Exception {
+    void testXmlJson_26_FTFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes",
                 "xml-to-json/example_26.xml",
@@ -2962,7 +2965,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_26_FTFFTT() throws Exception {
+    void testXmlJson_26_FTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_26.xml",
@@ -2971,7 +2974,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_26_FTFTFT() throws Exception {
+    void testXmlJson_26_FTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_26.xml",
@@ -2980,7 +2983,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_26_FTFTTT() throws Exception {
+    void testXmlJson_26_FTFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_26.xml",
@@ -2989,7 +2992,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_26_TFFFFF() throws Exception {
+    void testXmlJson_26_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_26.xml",
@@ -2998,7 +3001,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_26_TFFFFT() throws Exception {
+    void testXmlJson_26_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_26.xml",
@@ -3007,7 +3010,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_26_TFFTTT() throws Exception {
+    void testXmlJson_26_TFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_26.xml",
@@ -3016,7 +3019,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_26_TTFFTF() throws Exception {
+    void testXmlJson_26_TTFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes",
                 "xml-to-json/example_26.xml",
@@ -3025,7 +3028,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_26_TTFFTT() throws Exception {
+    void testXmlJson_26_TTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_26.xml",
@@ -3034,7 +3037,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_26_TTFTFF() throws Exception {
+    void testXmlJson_26_TTFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces",
                 "xml-to-json/example_26.xml",
@@ -3043,7 +3046,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_26_TTFTFT() throws Exception {
+    void testXmlJson_26_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_26.xml",
@@ -3052,7 +3055,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_26_TTFTTF() throws Exception {
+    void testXmlJson_26_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_26.xml",
@@ -3061,7 +3064,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_26_TTTFFT() throws Exception {
+    void testXmlJson_26_TTTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_TypeHints",
                 "xml-to-json/example_26.xml",
@@ -3074,7 +3077,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_27_FFFFFF() throws Exception {
+    void testXmlJson_27_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_27.xml",
@@ -3083,7 +3086,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_27_FFFFFT() throws Exception {
+    void testXmlJson_27_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_27.xml",
@@ -3092,7 +3095,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_27_FFFFTF() throws Exception {
+    void testXmlJson_27_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_27.xml",
@@ -3101,7 +3104,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_27_FFFFTT() throws Exception {
+    void testXmlJson_27_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_27.xml",
@@ -3110,7 +3113,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_27_FFFTFT() throws Exception {
+    void testXmlJson_27_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_27.xml",
@@ -3119,7 +3122,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_27_FFFTTT() throws Exception {
+    void testXmlJson_27_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_27.xml",
@@ -3128,7 +3131,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_27_FFTFFT() throws Exception {
+    void testXmlJson_27_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_27.xml",
@@ -3137,7 +3140,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_27_FTFFFF() throws Exception {
+    void testXmlJson_27_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_27.xml",
@@ -3146,7 +3149,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_27_TFFFFF() throws Exception {
+    void testXmlJson_27_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_27.xml",
@@ -3155,7 +3158,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_27_TFFFFT() throws Exception {
+    void testXmlJson_27_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_27.xml",
@@ -3164,7 +3167,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_27_TFFTTT() throws Exception {
+    void testXmlJson_27_TFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_27.xml",
@@ -3173,7 +3176,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_27_TTFTFT() throws Exception {
+    void testXmlJson_27_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_27.xml",
@@ -3182,7 +3185,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_27_TTFTTF() throws Exception {
+    void testXmlJson_27_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_27.xml",
@@ -3195,7 +3198,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_28_FFFFFF() throws Exception {
+    void testXmlJson_28_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_28.xml",
@@ -3204,7 +3207,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_28_FFFFFT() throws Exception {
+    void testXmlJson_28_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_28.xml",
@@ -3213,7 +3216,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_28_FFFFTF() throws Exception {
+    void testXmlJson_28_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_28.xml",
@@ -3222,7 +3225,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_28_FFFFTT() throws Exception {
+    void testXmlJson_28_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_28.xml",
@@ -3231,7 +3234,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_28_FFFTFT() throws Exception {
+    void testXmlJson_28_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_28.xml",
@@ -3240,7 +3243,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_28_FFFTTT() throws Exception {
+    void testXmlJson_28_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_28.xml",
@@ -3249,7 +3252,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_28_FFTFFT() throws Exception {
+    void testXmlJson_28_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_28.xml",
@@ -3258,7 +3261,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_28_FTFFFF() throws Exception {
+    void testXmlJson_28_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_28.xml",
@@ -3267,7 +3270,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_28_TFFFFF() throws Exception {
+    void testXmlJson_28_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_28.xml",
@@ -3276,7 +3279,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_28_TFFFFT() throws Exception {
+    void testXmlJson_28_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_28.xml",
@@ -3285,7 +3288,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_28_TFFTTT() throws Exception {
+    void testXmlJson_28_TFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_28.xml",
@@ -3294,7 +3297,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_28_TTFTFT() throws Exception {
+    void testXmlJson_28_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_28.xml",
@@ -3303,7 +3306,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_28_TTFTTF() throws Exception {
+    void testXmlJson_28_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_28.xml",
@@ -3316,7 +3319,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_29_FFFFFF() throws Exception {
+    void testXmlJson_29_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_29.xml",
@@ -3325,7 +3328,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_29_FFFFFT() throws Exception {
+    void testXmlJson_29_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_29.xml",
@@ -3334,7 +3337,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_29_FFFFTF() throws Exception {
+    void testXmlJson_29_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_29.xml",
@@ -3343,7 +3346,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_29_FFFFTT() throws Exception {
+    void testXmlJson_29_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_29.xml",
@@ -3352,7 +3355,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_29_FFFTFT() throws Exception {
+    void testXmlJson_29_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_29.xml",
@@ -3361,7 +3364,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_29_FFFTTT() throws Exception {
+    void testXmlJson_29_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_29.xml",
@@ -3370,7 +3373,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_29_FFTFFT() throws Exception {
+    void testXmlJson_29_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_29.xml",
@@ -3379,7 +3382,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_29_FTFFFF() throws Exception {
+    void testXmlJson_29_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_29.xml",
@@ -3388,7 +3391,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_29_FTFFFT() throws Exception {
+    void testXmlJson_29_FTFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_TypeHints",
                 "xml-to-json/example_29.xml",
@@ -3397,7 +3400,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_29_FTFFTF() throws Exception {
+    void testXmlJson_29_FTFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes",
                 "xml-to-json/example_29.xml",
@@ -3406,7 +3409,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_29_FTFFTT() throws Exception {
+    void testXmlJson_29_FTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_29.xml",
@@ -3415,7 +3418,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_29_FTFTFT() throws Exception {
+    void testXmlJson_29_FTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_29.xml",
@@ -3424,7 +3427,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_29_FTFTTF() throws Exception {
+    void testXmlJson_29_FTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_29.xml",
@@ -3433,7 +3436,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_29_FTFTTT() throws Exception {
+    void testXmlJson_29_FTFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_29.xml",
@@ -3442,7 +3445,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_29_TFFFFF() throws Exception {
+    void testXmlJson_29_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_29.xml",
@@ -3451,7 +3454,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_29_TFFFFT() throws Exception {
+    void testXmlJson_29_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_29.xml",
@@ -3460,7 +3463,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_29_TFFFTT() throws Exception {
+    void testXmlJson_29_TFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_29.xml",
@@ -3469,7 +3472,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_29_TFFTFT() throws Exception {
+    void testXmlJson_29_TFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_TypeHints",
                 "xml-to-json/example_29.xml",
@@ -3478,7 +3481,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_29_TFFTTT() throws Exception {
+    void testXmlJson_29_TFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_29.xml",
@@ -3487,7 +3490,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_29_TTFFTF() throws Exception {
+    void testXmlJson_29_TTFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes",
                 "xml-to-json/example_29.xml",
@@ -3496,7 +3499,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_29_TTFFTT() throws Exception {
+    void testXmlJson_29_TTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_29.xml",
@@ -3505,7 +3508,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_29_TTFTFF() throws Exception {
+    void testXmlJson_29_TTFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces",
                 "xml-to-json/example_29.xml",
@@ -3514,7 +3517,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_29_TTFTFT() throws Exception {
+    void testXmlJson_29_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_29.xml",
@@ -3523,7 +3526,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_29_TTFTTF() throws Exception {
+    void testXmlJson_29_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_29.xml",
@@ -3532,7 +3535,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_29_TTTFFT() throws Exception {
+    void testXmlJson_29_TTTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_TypeHints",
                 "xml-to-json/example_29.xml",
@@ -3545,7 +3548,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_30_FFFFFF() throws Exception {
+    void testXmlJson_30_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_30.xml",
@@ -3554,7 +3557,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_FFFFFT() throws Exception {
+    void testXmlJson_30_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_30.xml",
@@ -3563,7 +3566,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_FFFFTF() throws Exception {
+    void testXmlJson_30_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_30.xml",
@@ -3572,7 +3575,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_FFFFTT() throws Exception {
+    void testXmlJson_30_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_30.xml",
@@ -3581,7 +3584,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_FFFTFF() throws Exception {
+    void testXmlJson_30_FFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces",
                 "xml-to-json/example_30.xml",
@@ -3590,7 +3593,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_FFFTFT() throws Exception {
+    void testXmlJson_30_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_30.xml",
@@ -3599,7 +3602,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_FFFTTF() throws Exception {
+    void testXmlJson_30_FFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_30.xml",
@@ -3608,7 +3611,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_FFFTTT() throws Exception {
+    void testXmlJson_30_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_30.xml",
@@ -3617,7 +3620,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_FFTFFF() throws Exception {
+    void testXmlJson_30_FFTFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces",
                 "xml-to-json/example_30.xml",
@@ -3626,7 +3629,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_FFTFFT() throws Exception {
+    void testXmlJson_30_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_30.xml",
@@ -3635,7 +3638,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_FTFFFF() throws Exception {
+    void testXmlJson_30_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_30.xml",
@@ -3644,7 +3647,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_FTFFFT() throws Exception {
+    void testXmlJson_30_FTFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_TypeHints",
                 "xml-to-json/example_30.xml",
@@ -3653,7 +3656,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_FTFFTF() throws Exception {
+    void testXmlJson_30_FTFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes",
                 "xml-to-json/example_30.xml",
@@ -3662,7 +3665,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_FTFFTT() throws Exception {
+    void testXmlJson_30_FTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_30.xml",
@@ -3671,7 +3674,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_FTFTFT() throws Exception {
+    void testXmlJson_30_FTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_30.xml",
@@ -3680,7 +3683,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_FTFTTF() throws Exception {
+    void testXmlJson_30_FTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_30.xml",
@@ -3689,7 +3692,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_FTFTTT() throws Exception {
+    void testXmlJson_30_FTFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_30.xml",
@@ -3698,7 +3701,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_TFFFFF() throws Exception {
+    void testXmlJson_30_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_30.xml",
@@ -3707,7 +3710,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_TFFFFT() throws Exception {
+    void testXmlJson_30_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_30.xml",
@@ -3716,7 +3719,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_TFFFTF() throws Exception {
+    void testXmlJson_30_TFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes",
                 "xml-to-json/example_30.xml",
@@ -3725,7 +3728,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_TFFFTT() throws Exception {
+    void testXmlJson_30_TFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_30.xml",
@@ -3734,7 +3737,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_TFFTFF() throws Exception {
+    void testXmlJson_30_TFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces",
                 "xml-to-json/example_30.xml",
@@ -3743,7 +3746,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_TFFTFT() throws Exception {
+    void testXmlJson_30_TFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_TypeHints",
                 "xml-to-json/example_30.xml",
@@ -3752,7 +3755,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_TFFTTF() throws Exception {
+    void testXmlJson_30_TFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_30.xml",
@@ -3761,7 +3764,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_TFFTTT() throws Exception {
+    void testXmlJson_30_TFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_30.xml",
@@ -3770,7 +3773,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_TTFFTF() throws Exception {
+    void testXmlJson_30_TTFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes",
                 "xml-to-json/example_30.xml",
@@ -3779,7 +3782,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_TTFFTT() throws Exception {
+    void testXmlJson_30_TTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_30.xml",
@@ -3788,7 +3791,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_TTFTFF() throws Exception {
+    void testXmlJson_30_TTFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces",
                 "xml-to-json/example_30.xml",
@@ -3797,7 +3800,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_TTFTFT() throws Exception {
+    void testXmlJson_30_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_30.xml",
@@ -3806,7 +3809,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_TTFTTF() throws Exception {
+    void testXmlJson_30_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_30.xml",
@@ -3815,7 +3818,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_30_TTTFFT() throws Exception {
+    void testXmlJson_30_TTTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_TypeHints",
                 "xml-to-json/example_30.xml",
@@ -3828,7 +3831,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_31_FFFFFF() throws Exception {
+    void testXmlJson_31_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_31.xml",
@@ -3837,7 +3840,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_31_FFFFFT() throws Exception {
+    void testXmlJson_31_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_31.xml",
@@ -3846,7 +3849,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_31_FFFFTF() throws Exception {
+    void testXmlJson_31_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_31.xml",
@@ -3855,7 +3858,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_31_FFFFTT() throws Exception {
+    void testXmlJson_31_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_31.xml",
@@ -3864,7 +3867,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_31_FFFTFF() throws Exception {
+    void testXmlJson_31_FFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces",
                 "xml-to-json/example_31.xml",
@@ -3873,7 +3876,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_31_FFFTFT() throws Exception {
+    void testXmlJson_31_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_31.xml",
@@ -3882,7 +3885,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_31_FFFTTF() throws Exception {
+    void testXmlJson_31_FFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_31.xml",
@@ -3891,7 +3894,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_31_FFFTTT() throws Exception {
+    void testXmlJson_31_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_31.xml",
@@ -3900,7 +3903,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_31_FFTFFF() throws Exception {
+    void testXmlJson_31_FFTFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces",
                 "xml-to-json/example_31.xml",
@@ -3909,7 +3912,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_31_FFTFFT() throws Exception {
+    void testXmlJson_31_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_31.xml",
@@ -3918,7 +3921,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_31_FTFFFF() throws Exception {
+    void testXmlJson_31_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_31.xml",
@@ -3927,7 +3930,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_31_TFFFFF() throws Exception {
+    void testXmlJson_31_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_31.xml",
@@ -3936,7 +3939,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_31_TFFFFT() throws Exception {
+    void testXmlJson_31_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_31.xml",
@@ -3945,7 +3948,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_31_TFFFTF() throws Exception {
+    void testXmlJson_31_TFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes",
                 "xml-to-json/example_31.xml",
@@ -3954,7 +3957,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_31_TFFFTT() throws Exception {
+    void testXmlJson_31_TFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_31.xml",
@@ -3963,7 +3966,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_31_TFFTFF() throws Exception {
+    void testXmlJson_31_TFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces",
                 "xml-to-json/example_31.xml",
@@ -3972,7 +3975,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_31_TFFTFT() throws Exception {
+    void testXmlJson_31_TFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_TypeHints",
                 "xml-to-json/example_31.xml",
@@ -3981,7 +3984,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_31_TFFTTF() throws Exception {
+    void testXmlJson_31_TFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_31.xml",
@@ -3990,7 +3993,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_31_TFFTTT() throws Exception {
+    void testXmlJson_31_TFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_31.xml",
@@ -3999,7 +4002,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_31_TTFTFT() throws Exception {
+    void testXmlJson_31_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_31.xml",
@@ -4008,7 +4011,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_31_TTFTTF() throws Exception {
+    void testXmlJson_31_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_31.xml",
@@ -4021,7 +4024,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_32_FFFFFF() throws Exception {
+    void testXmlJson_32_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_32.xml",
@@ -4030,7 +4033,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_32_FFFFFT() throws Exception {
+    void testXmlJson_32_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_32.xml",
@@ -4039,7 +4042,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_32_FFFFTF() throws Exception {
+    void testXmlJson_32_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_32.xml",
@@ -4048,7 +4051,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_32_FFFFTT() throws Exception {
+    void testXmlJson_32_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_32.xml",
@@ -4057,7 +4060,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_32_FFFTFF() throws Exception {
+    void testXmlJson_32_FFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces",
                 "xml-to-json/example_32.xml",
@@ -4066,7 +4069,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_32_FFFTFT() throws Exception {
+    void testXmlJson_32_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_32.xml",
@@ -4075,7 +4078,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_32_FFFTTF() throws Exception {
+    void testXmlJson_32_FFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_32.xml",
@@ -4084,7 +4087,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_32_FFFTTT() throws Exception {
+    void testXmlJson_32_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_32.xml",
@@ -4093,7 +4096,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_32_FFTFFF() throws Exception {
+    void testXmlJson_32_FFTFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces",
                 "xml-to-json/example_32.xml",
@@ -4102,7 +4105,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_32_FFTFFT() throws Exception {
+    void testXmlJson_32_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_32.xml",
@@ -4111,7 +4114,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_32_FTFFFF() throws Exception {
+    void testXmlJson_32_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_32.xml",
@@ -4120,7 +4123,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_32_TFFFFF() throws Exception {
+    void testXmlJson_32_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_32.xml",
@@ -4129,7 +4132,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_32_TFFFFT() throws Exception {
+    void testXmlJson_32_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_32.xml",
@@ -4138,7 +4141,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_32_TFFFTF() throws Exception {
+    void testXmlJson_32_TFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes",
                 "xml-to-json/example_32.xml",
@@ -4147,7 +4150,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_32_TFFFTT() throws Exception {
+    void testXmlJson_32_TFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_32.xml",
@@ -4156,7 +4159,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_32_TFFTFF() throws Exception {
+    void testXmlJson_32_TFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces",
                 "xml-to-json/example_32.xml",
@@ -4165,7 +4168,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_32_TFFTFT() throws Exception {
+    void testXmlJson_32_TFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_TypeHints",
                 "xml-to-json/example_32.xml",
@@ -4174,7 +4177,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_32_TFFTTF() throws Exception {
+    void testXmlJson_32_TFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_32.xml",
@@ -4183,7 +4186,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_32_TFFTTT() throws Exception {
+    void testXmlJson_32_TFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_32.xml",
@@ -4192,7 +4195,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_32_TTFTFT() throws Exception {
+    void testXmlJson_32_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_32.xml",
@@ -4201,7 +4204,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_32_TTFTTF() throws Exception {
+    void testXmlJson_32_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_32.xml",
@@ -4214,7 +4217,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_33_FFFFFF() throws Exception {
+    void testXmlJson_33_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_33.xml",
@@ -4223,7 +4226,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_33_FFFFFT() throws Exception {
+    void testXmlJson_33_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_33.xml",
@@ -4232,7 +4235,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_33_FFFFTF() throws Exception {
+    void testXmlJson_33_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_33.xml",
@@ -4241,7 +4244,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_33_FFFFTT() throws Exception {
+    void testXmlJson_33_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_33.xml",
@@ -4250,7 +4253,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_33_FFFTFF() throws Exception {
+    void testXmlJson_33_FFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces",
                 "xml-to-json/example_33.xml",
@@ -4259,7 +4262,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_33_FFFTFT() throws Exception {
+    void testXmlJson_33_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_33.xml",
@@ -4268,7 +4271,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_33_FFFTTF() throws Exception {
+    void testXmlJson_33_FFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_33.xml",
@@ -4277,7 +4280,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_33_FFFTTT() throws Exception {
+    void testXmlJson_33_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_33.xml",
@@ -4286,7 +4289,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_33_FFTFFF() throws Exception {
+    void testXmlJson_33_FFTFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces",
                 "xml-to-json/example_33.xml",
@@ -4295,7 +4298,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_33_FFTFFT() throws Exception {
+    void testXmlJson_33_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_33.xml",
@@ -4304,7 +4307,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_33_FTFFFF() throws Exception {
+    void testXmlJson_33_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_33.xml",
@@ -4313,7 +4316,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_33_TFFFFF() throws Exception {
+    void testXmlJson_33_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_33.xml",
@@ -4322,7 +4325,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_33_TFFFFT() throws Exception {
+    void testXmlJson_33_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_33.xml",
@@ -4331,7 +4334,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_33_TFFFTF() throws Exception {
+    void testXmlJson_33_TFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes",
                 "xml-to-json/example_33.xml",
@@ -4340,7 +4343,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_33_TFFFTT() throws Exception {
+    void testXmlJson_33_TFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_33.xml",
@@ -4349,7 +4352,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_33_TFFTFF() throws Exception {
+    void testXmlJson_33_TFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces",
                 "xml-to-json/example_33.xml",
@@ -4358,7 +4361,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_33_TFFTFT() throws Exception {
+    void testXmlJson_33_TFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_TypeHints",
                 "xml-to-json/example_33.xml",
@@ -4367,7 +4370,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_33_TFFTTF() throws Exception {
+    void testXmlJson_33_TFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_33.xml",
@@ -4376,7 +4379,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_33_TFFTTT() throws Exception {
+    void testXmlJson_33_TFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_33.xml",
@@ -4385,7 +4388,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_33_TTFTFT() throws Exception {
+    void testXmlJson_33_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_33.xml",
@@ -4394,7 +4397,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_33_TTFTTF() throws Exception {
+    void testXmlJson_33_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_33.xml",
@@ -4407,7 +4410,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_34_FFFFFF() throws Exception {
+    void testXmlJson_34_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_34.xml",
@@ -4416,7 +4419,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_34_FFFFFT() throws Exception {
+    void testXmlJson_34_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_34.xml",
@@ -4425,7 +4428,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_34_FFFFTF() throws Exception {
+    void testXmlJson_34_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_34.xml",
@@ -4434,7 +4437,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_34_FFFFTT() throws Exception {
+    void testXmlJson_34_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_34.xml",
@@ -4443,7 +4446,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_34_FFFTFF() throws Exception {
+    void testXmlJson_34_FFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces",
                 "xml-to-json/example_34.xml",
@@ -4452,7 +4455,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_34_FFFTFT() throws Exception {
+    void testXmlJson_34_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_34.xml",
@@ -4461,7 +4464,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_34_FFFTTF() throws Exception {
+    void testXmlJson_34_FFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_34.xml",
@@ -4470,7 +4473,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_34_FFFTTT() throws Exception {
+    void testXmlJson_34_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_34.xml",
@@ -4479,7 +4482,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_34_FFTFFF() throws Exception {
+    void testXmlJson_34_FFTFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces",
                 "xml-to-json/example_34.xml",
@@ -4488,7 +4491,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_34_FFTFFT() throws Exception {
+    void testXmlJson_34_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_34.xml",
@@ -4497,7 +4500,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_34_FTFFFF() throws Exception {
+    void testXmlJson_34_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_34.xml",
@@ -4506,7 +4509,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_34_TFFFFF() throws Exception {
+    void testXmlJson_34_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_34.xml",
@@ -4515,7 +4518,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_34_TFFFFT() throws Exception {
+    void testXmlJson_34_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_34.xml",
@@ -4524,7 +4527,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_34_TFFFTF() throws Exception {
+    void testXmlJson_34_TFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes",
                 "xml-to-json/example_34.xml",
@@ -4533,7 +4536,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_34_TFFFTT() throws Exception {
+    void testXmlJson_34_TFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_34.xml",
@@ -4542,7 +4545,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_34_TFFTFF() throws Exception {
+    void testXmlJson_34_TFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces",
                 "xml-to-json/example_34.xml",
@@ -4551,7 +4554,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_34_TFFTFT() throws Exception {
+    void testXmlJson_34_TFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_TypeHints",
                 "xml-to-json/example_34.xml",
@@ -4560,7 +4563,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_34_TFFTTF() throws Exception {
+    void testXmlJson_34_TFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_34.xml",
@@ -4569,7 +4572,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_34_TFFTTT() throws Exception {
+    void testXmlJson_34_TFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_34.xml",
@@ -4578,7 +4581,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_34_TTFTFT() throws Exception {
+    void testXmlJson_34_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_34.xml",
@@ -4587,7 +4590,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_34_TTFTTF() throws Exception {
+    void testXmlJson_34_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_34.xml",
@@ -4600,7 +4603,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_35_FFFFFF() throws Exception {
+    void testXmlJson_35_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_35.xml",
@@ -4609,7 +4612,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_35_FFFFFT() throws Exception {
+    void testXmlJson_35_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_35.xml",
@@ -4618,7 +4621,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_35_FFFFTF() throws Exception {
+    void testXmlJson_35_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_35.xml",
@@ -4627,7 +4630,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_35_FFFFTT() throws Exception {
+    void testXmlJson_35_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_35.xml",
@@ -4636,7 +4639,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_35_FFFTFF() throws Exception {
+    void testXmlJson_35_FFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces",
                 "xml-to-json/example_35.xml",
@@ -4645,7 +4648,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_35_FFFTFT() throws Exception {
+    void testXmlJson_35_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_35.xml",
@@ -4654,7 +4657,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_35_FFFTTF() throws Exception {
+    void testXmlJson_35_FFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_35.xml",
@@ -4663,7 +4666,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_35_FFFTTT() throws Exception {
+    void testXmlJson_35_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_35.xml",
@@ -4672,7 +4675,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_35_FFTFFF() throws Exception {
+    void testXmlJson_35_FFTFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces",
                 "xml-to-json/example_35.xml",
@@ -4681,7 +4684,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_35_FFTFFT() throws Exception {
+    void testXmlJson_35_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_35.xml",
@@ -4690,7 +4693,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_35_FTFFFF() throws Exception {
+    void testXmlJson_35_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_35.xml",
@@ -4699,7 +4702,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_35_TFFFFF() throws Exception {
+    void testXmlJson_35_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_35.xml",
@@ -4708,7 +4711,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_35_TFFFFT() throws Exception {
+    void testXmlJson_35_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_35.xml",
@@ -4717,7 +4720,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_35_TFFFTF() throws Exception {
+    void testXmlJson_35_TFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes",
                 "xml-to-json/example_35.xml",
@@ -4726,7 +4729,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_35_TFFFTT() throws Exception {
+    void testXmlJson_35_TFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_35.xml",
@@ -4735,7 +4738,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_35_TFFTFF() throws Exception {
+    void testXmlJson_35_TFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces",
                 "xml-to-json/example_35.xml",
@@ -4744,7 +4747,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_35_TFFTFT() throws Exception {
+    void testXmlJson_35_TFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_TypeHints",
                 "xml-to-json/example_35.xml",
@@ -4753,7 +4756,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_35_TFFTTF() throws Exception {
+    void testXmlJson_35_TFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_35.xml",
@@ -4762,7 +4765,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_35_TFFTTT() throws Exception {
+    void testXmlJson_35_TFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_35.xml",
@@ -4771,7 +4774,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_35_TTFTFT() throws Exception {
+    void testXmlJson_35_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_35.xml",
@@ -4780,7 +4783,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_35_TTFTTF() throws Exception {
+    void testXmlJson_35_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_35.xml",
@@ -4793,7 +4796,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_36_FFFFFF() throws Exception {
+    void testXmlJson_36_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_36.xml",
@@ -4802,7 +4805,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_36_FFFFFT() throws Exception {
+    void testXmlJson_36_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_36.xml",
@@ -4811,7 +4814,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_36_FFFFTF() throws Exception {
+    void testXmlJson_36_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_36.xml",
@@ -4820,7 +4823,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_36_FFFFTT() throws Exception {
+    void testXmlJson_36_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_36.xml",
@@ -4829,7 +4832,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_36_FFFTFF() throws Exception {
+    void testXmlJson_36_FFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces",
                 "xml-to-json/example_36.xml",
@@ -4838,7 +4841,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_36_FFFTFT() throws Exception {
+    void testXmlJson_36_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_36.xml",
@@ -4847,7 +4850,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_36_FFFTTF() throws Exception {
+    void testXmlJson_36_FFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_36.xml",
@@ -4856,7 +4859,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_36_FFFTTT() throws Exception {
+    void testXmlJson_36_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_36.xml",
@@ -4865,7 +4868,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_36_FFTFFF() throws Exception {
+    void testXmlJson_36_FFTFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces",
                 "xml-to-json/example_36.xml",
@@ -4874,7 +4877,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_36_FFTFFT() throws Exception {
+    void testXmlJson_36_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_36.xml",
@@ -4883,7 +4886,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_36_FTFFFF() throws Exception {
+    void testXmlJson_36_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_36.xml",
@@ -4892,7 +4895,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_36_TFFFFF() throws Exception {
+    void testXmlJson_36_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_36.xml",
@@ -4901,7 +4904,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_36_TFFFFT() throws Exception {
+    void testXmlJson_36_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_36.xml",
@@ -4910,7 +4913,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_36_TFFFTF() throws Exception {
+    void testXmlJson_36_TFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes",
                 "xml-to-json/example_36.xml",
@@ -4919,7 +4922,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_36_TFFFTT() throws Exception {
+    void testXmlJson_36_TFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_36.xml",
@@ -4928,7 +4931,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_36_TFFTFF() throws Exception {
+    void testXmlJson_36_TFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces",
                 "xml-to-json/example_36.xml",
@@ -4937,7 +4940,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_36_TFFTFT() throws Exception {
+    void testXmlJson_36_TFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_TypeHints",
                 "xml-to-json/example_36.xml",
@@ -4946,7 +4949,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_36_TFFTTF() throws Exception {
+    void testXmlJson_36_TFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_36.xml",
@@ -4955,7 +4958,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_36_TFFTTT() throws Exception {
+    void testXmlJson_36_TFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_36.xml",
@@ -4964,7 +4967,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_36_TTFTFT() throws Exception {
+    void testXmlJson_36_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_36.xml",
@@ -4973,7 +4976,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_36_TTFTTF() throws Exception {
+    void testXmlJson_36_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_36.xml",
@@ -4986,7 +4989,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_37_FFFFFF() throws Exception {
+    void testXmlJson_37_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_37.xml",
@@ -4995,7 +4998,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_37_FFFFFT() throws Exception {
+    void testXmlJson_37_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_37.xml",
@@ -5004,7 +5007,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_37_FFFFTF() throws Exception {
+    void testXmlJson_37_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_37.xml",
@@ -5013,7 +5016,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_37_FFFFTT() throws Exception {
+    void testXmlJson_37_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_37.xml",
@@ -5022,7 +5025,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_37_FFFTFF() throws Exception {
+    void testXmlJson_37_FFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces",
                 "xml-to-json/example_37.xml",
@@ -5031,7 +5034,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_37_FFFTFT() throws Exception {
+    void testXmlJson_37_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_37.xml",
@@ -5040,7 +5043,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_37_FFFTTF() throws Exception {
+    void testXmlJson_37_FFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_37.xml",
@@ -5049,7 +5052,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_37_FFFTTT() throws Exception {
+    void testXmlJson_37_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_37.xml",
@@ -5058,7 +5061,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_37_FFTFFF() throws Exception {
+    void testXmlJson_37_FFTFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces",
                 "xml-to-json/example_37.xml",
@@ -5067,7 +5070,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_37_FFTFFT() throws Exception {
+    void testXmlJson_37_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_37.xml",
@@ -5076,7 +5079,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_37_FTFFFF() throws Exception {
+    void testXmlJson_37_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_37.xml",
@@ -5085,7 +5088,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_37_TFFFFF() throws Exception {
+    void testXmlJson_37_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_37.xml",
@@ -5094,7 +5097,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_37_TFFFFT() throws Exception {
+    void testXmlJson_37_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_37.xml",
@@ -5103,7 +5106,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_37_TFFFTF() throws Exception {
+    void testXmlJson_37_TFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes",
                 "xml-to-json/example_37.xml",
@@ -5112,7 +5115,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_37_TFFFTT() throws Exception {
+    void testXmlJson_37_TFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_37.xml",
@@ -5121,7 +5124,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_37_TFFTFF() throws Exception {
+    void testXmlJson_37_TFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces",
                 "xml-to-json/example_37.xml",
@@ -5130,7 +5133,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_37_TFFTFT() throws Exception {
+    void testXmlJson_37_TFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_TypeHints",
                 "xml-to-json/example_37.xml",
@@ -5139,7 +5142,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_37_TFFTTF() throws Exception {
+    void testXmlJson_37_TFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_37.xml",
@@ -5148,7 +5151,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_37_TFFTTT() throws Exception {
+    void testXmlJson_37_TFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_37.xml",
@@ -5157,7 +5160,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_37_TTFTFT() throws Exception {
+    void testXmlJson_37_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_37.xml",
@@ -5166,7 +5169,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_37_TTFTTF() throws Exception {
+    void testXmlJson_37_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_37.xml",
@@ -5179,7 +5182,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_38_FFFFFF() throws Exception {
+    void testXmlJson_38_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_38.xml",
@@ -5188,7 +5191,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_38_FFFFFT() throws Exception {
+    void testXmlJson_38_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_38.xml",
@@ -5197,7 +5200,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_38_FFFFTF() throws Exception {
+    void testXmlJson_38_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_38.xml",
@@ -5206,7 +5209,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_38_FFFFTT() throws Exception {
+    void testXmlJson_38_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_38.xml",
@@ -5215,7 +5218,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_38_FFFTFF() throws Exception {
+    void testXmlJson_38_FFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces",
                 "xml-to-json/example_38.xml",
@@ -5224,7 +5227,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_38_FFFTFT() throws Exception {
+    void testXmlJson_38_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_38.xml",
@@ -5233,7 +5236,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_38_FFFTTF() throws Exception {
+    void testXmlJson_38_FFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_38.xml",
@@ -5242,7 +5245,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_38_FFFTTT() throws Exception {
+    void testXmlJson_38_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_38.xml",
@@ -5251,7 +5254,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_38_FFTFFF() throws Exception {
+    void testXmlJson_38_FFTFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces",
                 "xml-to-json/example_38.xml",
@@ -5260,7 +5263,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_38_FFTFFT() throws Exception {
+    void testXmlJson_38_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_38.xml",
@@ -5269,7 +5272,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_38_FTFFFF() throws Exception {
+    void testXmlJson_38_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_38.xml",
@@ -5278,7 +5281,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_38_TFFFFF() throws Exception {
+    void testXmlJson_38_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_38.xml",
@@ -5287,7 +5290,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_38_TFFFFT() throws Exception {
+    void testXmlJson_38_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_38.xml",
@@ -5296,7 +5299,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_38_TFFFTF() throws Exception {
+    void testXmlJson_38_TFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes",
                 "xml-to-json/example_38.xml",
@@ -5305,7 +5308,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_38_TFFFTT() throws Exception {
+    void testXmlJson_38_TFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_38.xml",
@@ -5314,7 +5317,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_38_TFFTFF() throws Exception {
+    void testXmlJson_38_TFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces",
                 "xml-to-json/example_38.xml",
@@ -5323,7 +5326,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_38_TFFTFT() throws Exception {
+    void testXmlJson_38_TFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_TypeHints",
                 "xml-to-json/example_38.xml",
@@ -5332,7 +5335,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_38_TFFTTF() throws Exception {
+    void testXmlJson_38_TFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_38.xml",
@@ -5341,7 +5344,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_38_TFFTTT() throws Exception {
+    void testXmlJson_38_TFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_38.xml",
@@ -5350,7 +5353,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_38_TTFTFT() throws Exception {
+    void testXmlJson_38_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_38.xml",
@@ -5359,7 +5362,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_38_TTFTTF() throws Exception {
+    void testXmlJson_38_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_38.xml",
@@ -5372,7 +5375,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_39_FFFFFF() throws Exception {
+    void testXmlJson_39_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_39.xml",
@@ -5381,7 +5384,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_39_FFFFFT() throws Exception {
+    void testXmlJson_39_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_39.xml",
@@ -5390,7 +5393,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_39_FFFFTF() throws Exception {
+    void testXmlJson_39_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_39.xml",
@@ -5399,7 +5402,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_39_FFFFTT() throws Exception {
+    void testXmlJson_39_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_39.xml",
@@ -5408,7 +5411,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_39_FFFTFF() throws Exception {
+    void testXmlJson_39_FFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces",
                 "xml-to-json/example_39.xml",
@@ -5417,7 +5420,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_39_FFFTFT() throws Exception {
+    void testXmlJson_39_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_39.xml",
@@ -5426,7 +5429,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_39_FFFTTF() throws Exception {
+    void testXmlJson_39_FFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_39.xml",
@@ -5435,7 +5438,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_39_FFFTTT() throws Exception {
+    void testXmlJson_39_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_39.xml",
@@ -5444,7 +5447,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_39_FFTFFF() throws Exception {
+    void testXmlJson_39_FFTFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces",
                 "xml-to-json/example_39.xml",
@@ -5453,7 +5456,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_39_FFTFFT() throws Exception {
+    void testXmlJson_39_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_39.xml",
@@ -5462,7 +5465,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_39_FTFFFF() throws Exception {
+    void testXmlJson_39_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_39.xml",
@@ -5471,7 +5474,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_39_TFFFFF() throws Exception {
+    void testXmlJson_39_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_39.xml",
@@ -5480,7 +5483,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_39_TFFFFT() throws Exception {
+    void testXmlJson_39_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_39.xml",
@@ -5489,7 +5492,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_39_TFFFTF() throws Exception {
+    void testXmlJson_39_TFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes",
                 "xml-to-json/example_39.xml",
@@ -5498,7 +5501,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_39_TFFFTT() throws Exception {
+    void testXmlJson_39_TFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_39.xml",
@@ -5507,7 +5510,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_39_TFFTFF() throws Exception {
+    void testXmlJson_39_TFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces",
                 "xml-to-json/example_39.xml",
@@ -5516,7 +5519,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_39_TFFTFT() throws Exception {
+    void testXmlJson_39_TFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_TypeHints",
                 "xml-to-json/example_39.xml",
@@ -5525,7 +5528,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_39_TFFTTF() throws Exception {
+    void testXmlJson_39_TFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_39.xml",
@@ -5534,7 +5537,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_39_TFFTTT() throws Exception {
+    void testXmlJson_39_TFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_39.xml",
@@ -5543,7 +5546,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_39_TTFTFT() throws Exception {
+    void testXmlJson_39_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_39.xml",
@@ -5552,7 +5555,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_39_TTFTTF() throws Exception {
+    void testXmlJson_39_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_39.xml",
@@ -5565,7 +5568,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_40_FFFFFF() throws Exception {
+    void testXmlJson_40_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_40.xml",
@@ -5574,7 +5577,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_40_FFFFFT() throws Exception {
+    void testXmlJson_40_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_40.xml",
@@ -5583,7 +5586,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_40_FFFFTF() throws Exception {
+    void testXmlJson_40_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_40.xml",
@@ -5592,7 +5595,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_40_FFFFTT() throws Exception {
+    void testXmlJson_40_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_40.xml",
@@ -5601,7 +5604,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_40_FFFTFF() throws Exception {
+    void testXmlJson_40_FFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces",
                 "xml-to-json/example_40.xml",
@@ -5610,7 +5613,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_40_FFFTFT() throws Exception {
+    void testXmlJson_40_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_40.xml",
@@ -5619,7 +5622,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_40_FFFTTF() throws Exception {
+    void testXmlJson_40_FFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_40.xml",
@@ -5628,7 +5631,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_40_FFFTTT() throws Exception {
+    void testXmlJson_40_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_40.xml",
@@ -5641,7 +5644,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_41_FFFFFF() throws Exception {
+    void testXmlJson_41_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_41.xml",
@@ -5650,7 +5653,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_41_FFFFFT() throws Exception {
+    void testXmlJson_41_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_41.xml",
@@ -5659,7 +5662,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_41_FFFFTF() throws Exception {
+    void testXmlJson_41_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_41.xml",
@@ -5668,7 +5671,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_41_FFFFTT() throws Exception {
+    void testXmlJson_41_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_41.xml",
@@ -5677,7 +5680,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_41_FFFTFF() throws Exception {
+    void testXmlJson_41_FFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces",
                 "xml-to-json/example_41.xml",
@@ -5686,7 +5689,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_41_FFFTFT() throws Exception {
+    void testXmlJson_41_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_41.xml",
@@ -5695,7 +5698,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_41_FFFTTF() throws Exception {
+    void testXmlJson_41_FFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_41.xml",
@@ -5704,7 +5707,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_41_FFFTTT() throws Exception {
+    void testXmlJson_41_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_41.xml",
@@ -5717,7 +5720,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_42_FFFFFF() throws Exception {
+    void testXmlJson_42_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_42.xml",
@@ -5726,7 +5729,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_42_FFFFFT() throws Exception {
+    void testXmlJson_42_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_42.xml",
@@ -5735,7 +5738,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_42_FFFFTF() throws Exception {
+    void testXmlJson_42_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_42.xml",
@@ -5744,7 +5747,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_42_FFFFTT() throws Exception {
+    void testXmlJson_42_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_42.xml",
@@ -5753,7 +5756,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_42_FFFTFF() throws Exception {
+    void testXmlJson_42_FFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces",
                 "xml-to-json/example_42.xml",
@@ -5762,7 +5765,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_42_FFFTFT() throws Exception {
+    void testXmlJson_42_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_42.xml",
@@ -5771,7 +5774,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_42_FFFTTF() throws Exception {
+    void testXmlJson_42_FFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_42.xml",
@@ -5780,7 +5783,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_42_FFFTTT() throws Exception {
+    void testXmlJson_42_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_42.xml",
@@ -5793,7 +5796,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_43_FFFFFF() throws Exception {
+    void testXmlJson_43_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_43.xml",
@@ -5802,7 +5805,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_43_FFFFFT() throws Exception {
+    void testXmlJson_43_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_43.xml",
@@ -5811,7 +5814,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_43_FFFFTF() throws Exception {
+    void testXmlJson_43_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_43.xml",
@@ -5820,7 +5823,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_43_FFFFTT() throws Exception {
+    void testXmlJson_43_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_43.xml",
@@ -5829,7 +5832,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_43_FFFTFF() throws Exception {
+    void testXmlJson_43_FFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces",
                 "xml-to-json/example_43.xml",
@@ -5838,7 +5841,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_43_FFFTFT() throws Exception {
+    void testXmlJson_43_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_43.xml",
@@ -5847,7 +5850,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_43_FFFTTF() throws Exception {
+    void testXmlJson_43_FFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_43.xml",
@@ -5856,7 +5859,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_43_FFFTTT() throws Exception {
+    void testXmlJson_43_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_43.xml",
@@ -5869,7 +5872,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_44_FFFFFF() throws Exception {
+    void testXmlJson_44_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_44.xml",
@@ -5878,7 +5881,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_44_FFFFFT() throws Exception {
+    void testXmlJson_44_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_44.xml",
@@ -5887,7 +5890,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_44_FFFFTF() throws Exception {
+    void testXmlJson_44_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_44.xml",
@@ -5896,7 +5899,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_44_FFFFTT() throws Exception {
+    void testXmlJson_44_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_44.xml",
@@ -5905,7 +5908,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_44_FFFTFF() throws Exception {
+    void testXmlJson_44_FFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces",
                 "xml-to-json/example_44.xml",
@@ -5914,7 +5917,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_44_FFFTFT() throws Exception {
+    void testXmlJson_44_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_44.xml",
@@ -5923,7 +5926,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_44_FFFTTF() throws Exception {
+    void testXmlJson_44_FFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_44.xml",
@@ -5932,7 +5935,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_44_FFFTTT() throws Exception {
+    void testXmlJson_44_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_44.xml",
@@ -5945,7 +5948,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_45_FFFFFF() throws Exception {
+    void testXmlJson_45_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_45.xml",
@@ -5954,7 +5957,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_45_FFFFFT() throws Exception {
+    void testXmlJson_45_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_45.xml",
@@ -5963,7 +5966,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_45_FFFFTF() throws Exception {
+    void testXmlJson_45_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_45.xml",
@@ -5972,7 +5975,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_45_FFFFTT() throws Exception {
+    void testXmlJson_45_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_45.xml",
@@ -5981,7 +5984,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_45_FFFTFF() throws Exception {
+    void testXmlJson_45_FFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces",
                 "xml-to-json/example_45.xml",
@@ -5990,7 +5993,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_45_FFFTFT() throws Exception {
+    void testXmlJson_45_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_45.xml",
@@ -5999,7 +6002,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_45_FFFTTF() throws Exception {
+    void testXmlJson_45_FFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_45.xml",
@@ -6008,7 +6011,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_45_FFFTTT() throws Exception {
+    void testXmlJson_45_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_45.xml",
@@ -6017,7 +6020,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_45_FFTFFF() throws Exception {
+    void testXmlJson_45_FFTFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces",
                 "xml-to-json/example_45.xml",
@@ -6026,7 +6029,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_45_FFTFFT() throws Exception {
+    void testXmlJson_45_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_45.xml",
@@ -6035,7 +6038,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_45_FTFFFF() throws Exception {
+    void testXmlJson_45_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_45.xml",
@@ -6044,7 +6047,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_45_FTFFFT() throws Exception {
+    void testXmlJson_45_FTFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_TypeHints",
                 "xml-to-json/example_45.xml",
@@ -6053,7 +6056,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_45_FTFFTT() throws Exception {
+    void testXmlJson_45_FTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_45.xml",
@@ -6062,7 +6065,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_45_FTFTFT() throws Exception {
+    void testXmlJson_45_FTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_45.xml",
@@ -6071,7 +6074,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_45_FTFTTT() throws Exception {
+    void testXmlJson_45_FTFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_45.xml",
@@ -6080,7 +6083,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_45_TFFFFF() throws Exception {
+    void testXmlJson_45_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_45.xml",
@@ -6089,7 +6092,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_45_TFFFFT() throws Exception {
+    void testXmlJson_45_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_45.xml",
@@ -6098,7 +6101,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_45_TFFFTF() throws Exception {
+    void testXmlJson_45_TFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes",
                 "xml-to-json/example_45.xml",
@@ -6107,7 +6110,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_45_TFFFTT() throws Exception {
+    void testXmlJson_45_TFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_45.xml",
@@ -6116,7 +6119,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_45_TFFTFF() throws Exception {
+    void testXmlJson_45_TFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces",
                 "xml-to-json/example_45.xml",
@@ -6125,7 +6128,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_45_TFFTFT() throws Exception {
+    void testXmlJson_45_TFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_TypeHints",
                 "xml-to-json/example_45.xml",
@@ -6134,7 +6137,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_45_TFFTTF() throws Exception {
+    void testXmlJson_45_TFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_45.xml",
@@ -6143,7 +6146,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_45_TFFTTT() throws Exception {
+    void testXmlJson_45_TFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_45.xml",
@@ -6152,7 +6155,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_45_TTFFTT() throws Exception {
+    void testXmlJson_45_TTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_45.xml",
@@ -6161,7 +6164,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_45_TTFTFT() throws Exception {
+    void testXmlJson_45_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_45.xml",
@@ -6170,7 +6173,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_45_TTFTTF() throws Exception {
+    void testXmlJson_45_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_45.xml",
@@ -6179,7 +6182,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_45_TTTFFT() throws Exception {
+    void testXmlJson_45_TTTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_TypeHints",
                 "xml-to-json/example_45.xml",
@@ -6192,7 +6195,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_46_FFFFFF() throws Exception {
+    void testXmlJson_46_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_46.xml",
@@ -6201,7 +6204,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_46_FFFFFT() throws Exception {
+    void testXmlJson_46_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_46.xml",
@@ -6210,7 +6213,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_46_FFFFTF() throws Exception {
+    void testXmlJson_46_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_46.xml",
@@ -6219,7 +6222,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_46_FFFFTT() throws Exception {
+    void testXmlJson_46_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_46.xml",
@@ -6228,7 +6231,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_46_FFFTFF() throws Exception {
+    void testXmlJson_46_FFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces",
                 "xml-to-json/example_46.xml",
@@ -6237,7 +6240,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_46_FFFTFT() throws Exception {
+    void testXmlJson_46_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_46.xml",
@@ -6246,7 +6249,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_46_FFFTTF() throws Exception {
+    void testXmlJson_46_FFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_46.xml",
@@ -6255,7 +6258,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_46_FFFTTT() throws Exception {
+    void testXmlJson_46_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_46.xml",
@@ -6264,7 +6267,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_46_FFTFFF() throws Exception {
+    void testXmlJson_46_FFTFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces",
                 "xml-to-json/example_46.xml",
@@ -6273,7 +6276,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_46_FFTFFT() throws Exception {
+    void testXmlJson_46_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_46.xml",
@@ -6282,7 +6285,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_46_FTFFFF() throws Exception {
+    void testXmlJson_46_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_46.xml",
@@ -6291,7 +6294,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_46_FTFFFT() throws Exception {
+    void testXmlJson_46_FTFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_TypeHints",
                 "xml-to-json/example_46.xml",
@@ -6300,7 +6303,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_46_FTFFTT() throws Exception {
+    void testXmlJson_46_FTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_46.xml",
@@ -6309,7 +6312,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_46_FTFTFT() throws Exception {
+    void testXmlJson_46_FTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_46.xml",
@@ -6318,7 +6321,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_46_FTFTTT() throws Exception {
+    void testXmlJson_46_FTFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_46.xml",
@@ -6327,7 +6330,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_46_TFFFFF() throws Exception {
+    void testXmlJson_46_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_46.xml",
@@ -6336,7 +6339,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_46_TFFFFT() throws Exception {
+    void testXmlJson_46_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_46.xml",
@@ -6345,7 +6348,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_46_TFFFTF() throws Exception {
+    void testXmlJson_46_TFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes",
                 "xml-to-json/example_46.xml",
@@ -6354,7 +6357,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_46_TFFFTT() throws Exception {
+    void testXmlJson_46_TFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_46.xml",
@@ -6363,7 +6366,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_46_TFFTFF() throws Exception {
+    void testXmlJson_46_TFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces",
                 "xml-to-json/example_46.xml",
@@ -6372,7 +6375,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_46_TFFTFT() throws Exception {
+    void testXmlJson_46_TFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_TypeHints",
                 "xml-to-json/example_46.xml",
@@ -6381,7 +6384,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_46_TFFTTF() throws Exception {
+    void testXmlJson_46_TFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_46.xml",
@@ -6390,7 +6393,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_46_TFFTTT() throws Exception {
+    void testXmlJson_46_TFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_46.xml",
@@ -6399,7 +6402,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_46_TTFFTT() throws Exception {
+    void testXmlJson_46_TTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_46.xml",
@@ -6408,7 +6411,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_46_TTFTFT() throws Exception {
+    void testXmlJson_46_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_46.xml",
@@ -6417,7 +6420,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_46_TTFTTF() throws Exception {
+    void testXmlJson_46_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_46.xml",
@@ -6426,7 +6429,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_46_TTTFFT() throws Exception {
+    void testXmlJson_46_TTTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_TypeHints",
                 "xml-to-json/example_46.xml",
@@ -6439,7 +6442,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_47_FFFFFF() throws Exception {
+    void testXmlJson_47_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_47.xml",
@@ -6448,7 +6451,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_47_FFFFFT() throws Exception {
+    void testXmlJson_47_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_47.xml",
@@ -6457,7 +6460,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_47_FFFFTF() throws Exception {
+    void testXmlJson_47_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_47.xml",
@@ -6466,7 +6469,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_47_FFFFTT() throws Exception {
+    void testXmlJson_47_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_47.xml",
@@ -6475,7 +6478,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_47_FFFTFF() throws Exception {
+    void testXmlJson_47_FFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces",
                 "xml-to-json/example_47.xml",
@@ -6484,7 +6487,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_47_FFFTFT() throws Exception {
+    void testXmlJson_47_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_47.xml",
@@ -6493,7 +6496,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_47_FFFTTF() throws Exception {
+    void testXmlJson_47_FFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_47.xml",
@@ -6502,7 +6505,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_47_FFFTTT() throws Exception {
+    void testXmlJson_47_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_47.xml",
@@ -6511,7 +6514,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_47_FFTFFF() throws Exception {
+    void testXmlJson_47_FFTFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces",
                 "xml-to-json/example_47.xml",
@@ -6520,7 +6523,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_47_FFTFFT() throws Exception {
+    void testXmlJson_47_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_47.xml",
@@ -6529,7 +6532,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_47_FTFFFF() throws Exception {
+    void testXmlJson_47_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_47.xml",
@@ -6538,7 +6541,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_47_FTFFFT() throws Exception {
+    void testXmlJson_47_FTFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_TypeHints",
                 "xml-to-json/example_47.xml",
@@ -6547,7 +6550,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_47_FTFFTT() throws Exception {
+    void testXmlJson_47_FTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_47.xml",
@@ -6556,7 +6559,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_47_FTFTFT() throws Exception {
+    void testXmlJson_47_FTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_47.xml",
@@ -6565,7 +6568,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_47_FTFTTT() throws Exception {
+    void testXmlJson_47_FTFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_47.xml",
@@ -6574,7 +6577,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_47_TFFFFF() throws Exception {
+    void testXmlJson_47_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_47.xml",
@@ -6583,7 +6586,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_47_TFFFFT() throws Exception {
+    void testXmlJson_47_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_47.xml",
@@ -6592,7 +6595,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_47_TFFFTF() throws Exception {
+    void testXmlJson_47_TFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes",
                 "xml-to-json/example_47.xml",
@@ -6601,7 +6604,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_47_TFFFTT() throws Exception {
+    void testXmlJson_47_TFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_47.xml",
@@ -6610,7 +6613,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_47_TFFTFF() throws Exception {
+    void testXmlJson_47_TFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces",
                 "xml-to-json/example_47.xml",
@@ -6619,7 +6622,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_47_TFFTFT() throws Exception {
+    void testXmlJson_47_TFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_TypeHints",
                 "xml-to-json/example_47.xml",
@@ -6628,7 +6631,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_47_TFFTTF() throws Exception {
+    void testXmlJson_47_TFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_47.xml",
@@ -6637,7 +6640,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_47_TFFTTT() throws Exception {
+    void testXmlJson_47_TFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_47.xml",
@@ -6646,7 +6649,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_47_TTFFTT() throws Exception {
+    void testXmlJson_47_TTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_47.xml",
@@ -6655,7 +6658,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_47_TTFTFT() throws Exception {
+    void testXmlJson_47_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_47.xml",
@@ -6664,7 +6667,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_47_TTFTTF() throws Exception {
+    void testXmlJson_47_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_47.xml",
@@ -6673,7 +6676,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_47_TTTFFT() throws Exception {
+    void testXmlJson_47_TTTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_TypeHints",
                 "xml-to-json/example_47.xml",
@@ -6686,7 +6689,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_48_FFFFFF() throws Exception {
+    void testXmlJson_48_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_48.xml",
@@ -6695,7 +6698,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_48_FFFFFT() throws Exception {
+    void testXmlJson_48_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_48.xml",
@@ -6704,7 +6707,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_48_FFFFTF() throws Exception {
+    void testXmlJson_48_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_48.xml",
@@ -6713,7 +6716,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_48_FFFFTT() throws Exception {
+    void testXmlJson_48_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_48.xml",
@@ -6722,7 +6725,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_48_FFFTFF() throws Exception {
+    void testXmlJson_48_FFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces",
                 "xml-to-json/example_48.xml",
@@ -6731,7 +6734,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_48_FFFTFT() throws Exception {
+    void testXmlJson_48_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_48.xml",
@@ -6740,7 +6743,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_48_FFFTTF() throws Exception {
+    void testXmlJson_48_FFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_48.xml",
@@ -6749,7 +6752,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_48_FFFTTT() throws Exception {
+    void testXmlJson_48_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_48.xml",
@@ -6758,7 +6761,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_48_FFTFFF() throws Exception {
+    void testXmlJson_48_FFTFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces",
                 "xml-to-json/example_48.xml",
@@ -6767,7 +6770,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_48_FFTFFT() throws Exception {
+    void testXmlJson_48_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_48.xml",
@@ -6776,7 +6779,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_48_FTFFFF() throws Exception {
+    void testXmlJson_48_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_48.xml",
@@ -6785,7 +6788,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_48_FTFFFT() throws Exception {
+    void testXmlJson_48_FTFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_TypeHints",
                 "xml-to-json/example_48.xml",
@@ -6794,7 +6797,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_48_FTFFTT() throws Exception {
+    void testXmlJson_48_FTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_48.xml",
@@ -6803,7 +6806,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_48_FTFTFT() throws Exception {
+    void testXmlJson_48_FTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_48.xml",
@@ -6812,7 +6815,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_48_FTFTTT() throws Exception {
+    void testXmlJson_48_FTFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_48.xml",
@@ -6821,7 +6824,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_48_TFFFFF() throws Exception {
+    void testXmlJson_48_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_48.xml",
@@ -6830,7 +6833,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_48_TFFFFT() throws Exception {
+    void testXmlJson_48_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_48.xml",
@@ -6839,7 +6842,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_48_TFFFTF() throws Exception {
+    void testXmlJson_48_TFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes",
                 "xml-to-json/example_48.xml",
@@ -6848,7 +6851,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_48_TFFFTT() throws Exception {
+    void testXmlJson_48_TFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_48.xml",
@@ -6857,7 +6860,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_48_TFFTFF() throws Exception {
+    void testXmlJson_48_TFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces",
                 "xml-to-json/example_48.xml",
@@ -6866,7 +6869,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_48_TFFTFT() throws Exception {
+    void testXmlJson_48_TFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_TypeHints",
                 "xml-to-json/example_48.xml",
@@ -6875,7 +6878,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_48_TFFTTF() throws Exception {
+    void testXmlJson_48_TFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_48.xml",
@@ -6884,7 +6887,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_48_TFFTTT() throws Exception {
+    void testXmlJson_48_TFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_48.xml",
@@ -6893,7 +6896,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_48_TTFFTT() throws Exception {
+    void testXmlJson_48_TTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_48.xml",
@@ -6902,7 +6905,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_48_TTFTFT() throws Exception {
+    void testXmlJson_48_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_48.xml",
@@ -6911,7 +6914,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_48_TTFTTF() throws Exception {
+    void testXmlJson_48_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_48.xml",
@@ -6920,7 +6923,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_48_TTTFFT() throws Exception {
+    void testXmlJson_48_TTTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_TypeHints",
                 "xml-to-json/example_48.xml",
@@ -6933,7 +6936,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_49_FFFFFF() throws Exception {
+    void testXmlJson_49_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_49.xml",
@@ -6942,7 +6945,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_49_FFFFFT() throws Exception {
+    void testXmlJson_49_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_49.xml",
@@ -6951,7 +6954,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_49_FFFFTF() throws Exception {
+    void testXmlJson_49_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_49.xml",
@@ -6960,7 +6963,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_49_FFFFTT() throws Exception {
+    void testXmlJson_49_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_49.xml",
@@ -6969,7 +6972,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_49_FFFTFF() throws Exception {
+    void testXmlJson_49_FFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces",
                 "xml-to-json/example_49.xml",
@@ -6978,7 +6981,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_49_FFFTFT() throws Exception {
+    void testXmlJson_49_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_49.xml",
@@ -6987,7 +6990,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_49_FFFTTF() throws Exception {
+    void testXmlJson_49_FFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_49.xml",
@@ -6996,7 +6999,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_49_FFFTTT() throws Exception {
+    void testXmlJson_49_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_49.xml",
@@ -7005,7 +7008,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_49_FFTFFF() throws Exception {
+    void testXmlJson_49_FFTFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces",
                 "xml-to-json/example_49.xml",
@@ -7014,7 +7017,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_49_FFTFFT() throws Exception {
+    void testXmlJson_49_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_49.xml",
@@ -7023,7 +7026,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_49_FTFFFF() throws Exception {
+    void testXmlJson_49_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_49.xml",
@@ -7032,7 +7035,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_49_FTFFFT() throws Exception {
+    void testXmlJson_49_FTFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_TypeHints",
                 "xml-to-json/example_49.xml",
@@ -7041,7 +7044,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_49_FTFFTT() throws Exception {
+    void testXmlJson_49_FTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_49.xml",
@@ -7050,7 +7053,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_49_FTFTFT() throws Exception {
+    void testXmlJson_49_FTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_49.xml",
@@ -7059,7 +7062,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_49_FTFTTT() throws Exception {
+    void testXmlJson_49_FTFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_49.xml",
@@ -7068,7 +7071,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_49_TFFFFF() throws Exception {
+    void testXmlJson_49_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_49.xml",
@@ -7077,7 +7080,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_49_TFFFFT() throws Exception {
+    void testXmlJson_49_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_49.xml",
@@ -7086,7 +7089,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_49_TFFFTF() throws Exception {
+    void testXmlJson_49_TFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes",
                 "xml-to-json/example_49.xml",
@@ -7095,7 +7098,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_49_TFFFTT() throws Exception {
+    void testXmlJson_49_TFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_49.xml",
@@ -7104,7 +7107,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_49_TFFTFF() throws Exception {
+    void testXmlJson_49_TFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces",
                 "xml-to-json/example_49.xml",
@@ -7113,7 +7116,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_49_TFFTFT() throws Exception {
+    void testXmlJson_49_TFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_TypeHints",
                 "xml-to-json/example_49.xml",
@@ -7122,7 +7125,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_49_TFFTTF() throws Exception {
+    void testXmlJson_49_TFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_49.xml",
@@ -7131,7 +7134,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_49_TFFTTT() throws Exception {
+    void testXmlJson_49_TFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_49.xml",
@@ -7140,7 +7143,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_49_TTFFTT() throws Exception {
+    void testXmlJson_49_TTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_49.xml",
@@ -7149,7 +7152,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_49_TTFTFT() throws Exception {
+    void testXmlJson_49_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_49.xml",
@@ -7158,7 +7161,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_49_TTFTTF() throws Exception {
+    void testXmlJson_49_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_49.xml",
@@ -7167,7 +7170,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_49_TTTFFT() throws Exception {
+    void testXmlJson_49_TTTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_TypeHints",
                 "xml-to-json/example_49.xml",
@@ -7180,7 +7183,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_50_FFFFFF() throws Exception {
+    void testXmlJson_50_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_50.xml",
@@ -7189,7 +7192,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_50_FFFFFT() throws Exception {
+    void testXmlJson_50_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_50.xml",
@@ -7198,7 +7201,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_50_FFFFTF() throws Exception {
+    void testXmlJson_50_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_50.xml",
@@ -7207,7 +7210,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_50_FFFFTT() throws Exception {
+    void testXmlJson_50_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_50.xml",
@@ -7216,7 +7219,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_50_FFFTFF() throws Exception {
+    void testXmlJson_50_FFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces",
                 "xml-to-json/example_50.xml",
@@ -7225,7 +7228,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_50_FFFTFT() throws Exception {
+    void testXmlJson_50_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_50.xml",
@@ -7234,7 +7237,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_50_FFFTTF() throws Exception {
+    void testXmlJson_50_FFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_50.xml",
@@ -7243,7 +7246,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_50_FFFTTT() throws Exception {
+    void testXmlJson_50_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_50.xml",
@@ -7252,7 +7255,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_50_FFTFFF() throws Exception {
+    void testXmlJson_50_FFTFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces",
                 "xml-to-json/example_50.xml",
@@ -7261,7 +7264,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_50_FFTFFT() throws Exception {
+    void testXmlJson_50_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_50.xml",
@@ -7270,7 +7273,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_50_FTFFFF() throws Exception {
+    void testXmlJson_50_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_50.xml",
@@ -7279,7 +7282,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_50_FTFFFT() throws Exception {
+    void testXmlJson_50_FTFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_TypeHints",
                 "xml-to-json/example_50.xml",
@@ -7288,7 +7291,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_50_FTFFTT() throws Exception {
+    void testXmlJson_50_FTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_50.xml",
@@ -7297,7 +7300,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_50_FTFTFT() throws Exception {
+    void testXmlJson_50_FTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_50.xml",
@@ -7306,7 +7309,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_50_FTFTTT() throws Exception {
+    void testXmlJson_50_FTFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_50.xml",
@@ -7315,7 +7318,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_50_TFFFFF() throws Exception {
+    void testXmlJson_50_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_50.xml",
@@ -7324,7 +7327,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_50_TFFFFT() throws Exception {
+    void testXmlJson_50_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_50.xml",
@@ -7333,7 +7336,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_50_TFFFTF() throws Exception {
+    void testXmlJson_50_TFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes",
                 "xml-to-json/example_50.xml",
@@ -7342,7 +7345,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_50_TFFFTT() throws Exception {
+    void testXmlJson_50_TFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_50.xml",
@@ -7351,7 +7354,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_50_TFFTFF() throws Exception {
+    void testXmlJson_50_TFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces",
                 "xml-to-json/example_50.xml",
@@ -7360,7 +7363,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_50_TFFTFT() throws Exception {
+    void testXmlJson_50_TFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_TypeHints",
                 "xml-to-json/example_50.xml",
@@ -7369,7 +7372,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_50_TFFTTF() throws Exception {
+    void testXmlJson_50_TFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_50.xml",
@@ -7378,7 +7381,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_50_TFFTTT() throws Exception {
+    void testXmlJson_50_TFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_50.xml",
@@ -7387,7 +7390,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_50_TTFFTT() throws Exception {
+    void testXmlJson_50_TTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_50.xml",
@@ -7396,7 +7399,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_50_TTFTFT() throws Exception {
+    void testXmlJson_50_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_50.xml",
@@ -7405,7 +7408,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_50_TTFTTF() throws Exception {
+    void testXmlJson_50_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_50.xml",
@@ -7414,7 +7417,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_50_TTTFFT() throws Exception {
+    void testXmlJson_50_TTTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_TypeHints",
                 "xml-to-json/example_50.xml",
@@ -7427,7 +7430,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_51_FFFFFF() throws Exception {
+    void testXmlJson_51_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_51.xml",
@@ -7436,7 +7439,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_51_FFFFFT() throws Exception {
+    void testXmlJson_51_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_51.xml",
@@ -7445,7 +7448,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_51_FFFFTF() throws Exception {
+    void testXmlJson_51_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_51.xml",
@@ -7454,7 +7457,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_51_FFFFTT() throws Exception {
+    void testXmlJson_51_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_51.xml",
@@ -7463,7 +7466,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_51_FFFTFF() throws Exception {
+    void testXmlJson_51_FFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces",
                 "xml-to-json/example_51.xml",
@@ -7472,7 +7475,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_51_FFFTFT() throws Exception {
+    void testXmlJson_51_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_51.xml",
@@ -7481,7 +7484,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_51_FFFTTF() throws Exception {
+    void testXmlJson_51_FFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_51.xml",
@@ -7490,7 +7493,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_51_FFFTTT() throws Exception {
+    void testXmlJson_51_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_51.xml",
@@ -7499,7 +7502,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_51_FFTFFF() throws Exception {
+    void testXmlJson_51_FFTFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces",
                 "xml-to-json/example_51.xml",
@@ -7508,7 +7511,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_51_FFTFFT() throws Exception {
+    void testXmlJson_51_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_51.xml",
@@ -7517,7 +7520,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_51_FTFFFF() throws Exception {
+    void testXmlJson_51_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_51.xml",
@@ -7526,7 +7529,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_51_FTFFFT() throws Exception {
+    void testXmlJson_51_FTFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_TypeHints",
                 "xml-to-json/example_51.xml",
@@ -7535,7 +7538,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_51_FTFFTT() throws Exception {
+    void testXmlJson_51_FTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_51.xml",
@@ -7544,7 +7547,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_51_FTFTFT() throws Exception {
+    void testXmlJson_51_FTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_51.xml",
@@ -7553,7 +7556,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_51_FTFTTT() throws Exception {
+    void testXmlJson_51_FTFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_51.xml",
@@ -7562,7 +7565,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_51_TFFFFF() throws Exception {
+    void testXmlJson_51_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_51.xml",
@@ -7571,7 +7574,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_51_TFFFFT() throws Exception {
+    void testXmlJson_51_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_51.xml",
@@ -7580,7 +7583,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_51_TFFFTF() throws Exception {
+    void testXmlJson_51_TFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes",
                 "xml-to-json/example_51.xml",
@@ -7589,7 +7592,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_51_TFFFTT() throws Exception {
+    void testXmlJson_51_TFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_51.xml",
@@ -7598,7 +7601,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_51_TFFTFF() throws Exception {
+    void testXmlJson_51_TFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces",
                 "xml-to-json/example_51.xml",
@@ -7607,7 +7610,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_51_TFFTFT() throws Exception {
+    void testXmlJson_51_TFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_TypeHints",
                 "xml-to-json/example_51.xml",
@@ -7616,7 +7619,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_51_TFFTTF() throws Exception {
+    void testXmlJson_51_TFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_51.xml",
@@ -7625,7 +7628,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_51_TFFTTT() throws Exception {
+    void testXmlJson_51_TFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_51.xml",
@@ -7634,7 +7637,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_51_TTFFTT() throws Exception {
+    void testXmlJson_51_TTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_51.xml",
@@ -7643,7 +7646,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_51_TTFTFT() throws Exception {
+    void testXmlJson_51_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_51.xml",
@@ -7652,7 +7655,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_51_TTFTTF() throws Exception {
+    void testXmlJson_51_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_51.xml",
@@ -7661,7 +7664,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_51_TTTFFT() throws Exception {
+    void testXmlJson_51_TTTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_TypeHints",
                 "xml-to-json/example_51.xml",
@@ -7674,7 +7677,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_52_FFFFFF() throws Exception {
+    void testXmlJson_52_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_52.xml",
@@ -7683,7 +7686,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_52_FFFFFT() throws Exception {
+    void testXmlJson_52_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_52.xml",
@@ -7692,7 +7695,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_52_FFFFTF() throws Exception {
+    void testXmlJson_52_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_52.xml",
@@ -7701,7 +7704,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_52_FFFFTT() throws Exception {
+    void testXmlJson_52_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_52.xml",
@@ -7710,7 +7713,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_52_FFFTFF() throws Exception {
+    void testXmlJson_52_FFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces",
                 "xml-to-json/example_52.xml",
@@ -7719,7 +7722,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_52_FFFTFT() throws Exception {
+    void testXmlJson_52_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_52.xml",
@@ -7728,7 +7731,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_52_FFFTTF() throws Exception {
+    void testXmlJson_52_FFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_52.xml",
@@ -7737,7 +7740,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_52_FFFTTT() throws Exception {
+    void testXmlJson_52_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_52.xml",
@@ -7746,7 +7749,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_52_FFTFFF() throws Exception {
+    void testXmlJson_52_FFTFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces",
                 "xml-to-json/example_52.xml",
@@ -7755,7 +7758,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_52_FFTFFT() throws Exception {
+    void testXmlJson_52_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_52.xml",
@@ -7764,7 +7767,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_52_FTFFFF() throws Exception {
+    void testXmlJson_52_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_52.xml",
@@ -7773,7 +7776,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_52_FTFFFT() throws Exception {
+    void testXmlJson_52_FTFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_TypeHints",
                 "xml-to-json/example_52.xml",
@@ -7782,7 +7785,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_52_FTFFTT() throws Exception {
+    void testXmlJson_52_FTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_52.xml",
@@ -7791,7 +7794,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_52_FTFTFT() throws Exception {
+    void testXmlJson_52_FTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_52.xml",
@@ -7800,7 +7803,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_52_FTFTTT() throws Exception {
+    void testXmlJson_52_FTFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_52.xml",
@@ -7809,7 +7812,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_52_TFFFFF() throws Exception {
+    void testXmlJson_52_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_52.xml",
@@ -7818,7 +7821,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_52_TFFFFT() throws Exception {
+    void testXmlJson_52_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_52.xml",
@@ -7827,7 +7830,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_52_TFFFTF() throws Exception {
+    void testXmlJson_52_TFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes",
                 "xml-to-json/example_52.xml",
@@ -7836,7 +7839,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_52_TFFFTT() throws Exception {
+    void testXmlJson_52_TFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_52.xml",
@@ -7845,7 +7848,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_52_TFFTFF() throws Exception {
+    void testXmlJson_52_TFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces",
                 "xml-to-json/example_52.xml",
@@ -7854,7 +7857,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_52_TFFTFT() throws Exception {
+    void testXmlJson_52_TFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_TypeHints",
                 "xml-to-json/example_52.xml",
@@ -7863,7 +7866,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_52_TFFTTF() throws Exception {
+    void testXmlJson_52_TFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_52.xml",
@@ -7872,7 +7875,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_52_TFFTTT() throws Exception {
+    void testXmlJson_52_TFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_52.xml",
@@ -7881,7 +7884,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_52_TTFFTT() throws Exception {
+    void testXmlJson_52_TTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_52.xml",
@@ -7890,7 +7893,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_52_TTFTFT() throws Exception {
+    void testXmlJson_52_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_52.xml",
@@ -7899,7 +7902,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_52_TTFTTF() throws Exception {
+    void testXmlJson_52_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_52.xml",
@@ -7908,7 +7911,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_52_TTTFFT() throws Exception {
+    void testXmlJson_52_TTTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_TypeHints",
                 "xml-to-json/example_52.xml",
@@ -7921,7 +7924,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testXmlJson_53_FFFFFF() throws Exception {
+    void testXmlJson_53_FFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy",
                 "xml-to-json/example_53.xml",
@@ -7930,7 +7933,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_53_FFFFFT() throws Exception {
+    void testXmlJson_53_FFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TypeHints",
                 "xml-to-json/example_53.xml",
@@ -7939,7 +7942,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_53_FFFFTF() throws Exception {
+    void testXmlJson_53_FFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes",
                 "xml-to-json/example_53.xml",
@@ -7948,7 +7951,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_53_FFFFTT() throws Exception {
+    void testXmlJson_53_FFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_53.xml",
@@ -7957,7 +7960,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_53_FFFTFF() throws Exception {
+    void testXmlJson_53_FFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces",
                 "xml-to-json/example_53.xml",
@@ -7966,7 +7969,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_53_FFFTFT() throws Exception {
+    void testXmlJson_53_FFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_TypeHints",
                 "xml-to-json/example_53.xml",
@@ -7975,7 +7978,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_53_FFFTTF() throws Exception {
+    void testXmlJson_53_FFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_53.xml",
@@ -7984,7 +7987,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_53_FFFTTT() throws Exception {
+    void testXmlJson_53_FFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_53.xml",
@@ -7993,7 +7996,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_53_FFTFFF() throws Exception {
+    void testXmlJson_53_FFTFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces",
                 "xml-to-json/example_53.xml",
@@ -8002,7 +8005,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_53_FFTFFT() throws Exception {
+    void testXmlJson_53_FFTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_TrimSpaces_TypeHints",
                 "xml-to-json/example_53.xml",
@@ -8011,7 +8014,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_53_FTFFFF() throws Exception {
+    void testXmlJson_53_FTFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace",
                 "xml-to-json/example_53.xml",
@@ -8020,7 +8023,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_53_FTFFFT() throws Exception {
+    void testXmlJson_53_FTFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_TypeHints",
                 "xml-to-json/example_53.xml",
@@ -8029,7 +8032,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_53_FTFFTT() throws Exception {
+    void testXmlJson_53_FTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_53.xml",
@@ -8038,7 +8041,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_53_FTFTFT() throws Exception {
+    void testXmlJson_53_FTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_53.xml",
@@ -8047,7 +8050,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_53_FTFTTT() throws Exception {
+    void testXmlJson_53_FTFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_53.xml",
@@ -8056,7 +8059,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_53_TFFFFF() throws Exception {
+    void testXmlJson_53_TFFFFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop",
                 "xml-to-json/example_53.xml",
@@ -8065,7 +8068,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_53_TFFFFT() throws Exception {
+    void testXmlJson_53_TFFFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_TypeHints",
                 "xml-to-json/example_53.xml",
@@ -8074,7 +8077,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_53_TFFFTF() throws Exception {
+    void testXmlJson_53_TFFFTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes",
                 "xml-to-json/example_53.xml",
@@ -8083,7 +8086,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_53_TFFFTT() throws Exception {
+    void testXmlJson_53_TFFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_53.xml",
@@ -8092,7 +8095,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_53_TFFTFF() throws Exception {
+    void testXmlJson_53_TFFTFF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces",
                 "xml-to-json/example_53.xml",
@@ -8101,7 +8104,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_53_TFFTFT() throws Exception {
+    void testXmlJson_53_TFFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_TypeHints",
                 "xml-to-json/example_53.xml",
@@ -8110,7 +8113,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_53_TFFTTF() throws Exception {
+    void testXmlJson_53_TFFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_53.xml",
@@ -8119,7 +8122,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_53_TFFTTT() throws Exception {
+    void testXmlJson_53_TFFTTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_53.xml",
@@ -8128,7 +8131,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_53_TTFFTT() throws Exception {
+    void testXmlJson_53_TTFFTT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes_TypeHints",
                 "xml-to-json/example_53.xml",
@@ -8137,7 +8140,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_53_TTFTFT() throws Exception {
+    void testXmlJson_53_TTFTFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints",
                 "xml-to-json/example_53.xml",
@@ -8146,7 +8149,7 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_53_TTFTTF() throws Exception {
+    void testXmlJson_53_TTFTTF() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes",
                 "xml-to-json/example_53.xml",
@@ -8155,11 +8158,343 @@ public class XmlToJsonLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testXmlJson_53_TTTFFT() throws Exception {
+    void testXmlJson_53_TTTFFT() throws Exception {
         compareInputXmlFileWithOutputJsonFile(
                 "xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_TypeHints",
                 "xml-to-json/example_53.xml",
                 "xml-to-json/example_53_TTTFFT.json"
+        );
+    }
+
+    /*****************************************
+     ** Example 54
+     *****************************************/
+
+    @Test
+    void testXmlJson_54_FFFFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy",
+                "xml-to-json/example_54.xml",
+                "xml-to-json/example_54_FFFFFF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_54_FFFFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_TypeHints",
+                "xml-to-json/example_54.xml",
+                "xml-to-json/example_54_FFFFFT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_54_FFFFTF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_RemoveNamespacePrefixes",
+                "xml-to-json/example_54.xml",
+                "xml-to-json/example_54_FFFFTF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_54_FFFFTT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
+                "xml-to-json/example_54.xml",
+                "xml-to-json/example_54_FFFFTT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_54_FFFTFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_SkipNamespaces",
+                "xml-to-json/example_54.xml",
+                "xml-to-json/example_54_FFFTFF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_54_FFFTFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_SkipNamespaces_TypeHints",
+                "xml-to-json/example_54.xml",
+                "xml-to-json/example_54_FFFTFT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_54_FFFTTF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
+                "xml-to-json/example_54.xml",
+                "xml-to-json/example_54_FFFTTF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_54_FFFTTT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
+                "xml-to-json/example_54.xml",
+                "xml-to-json/example_54_FFFTTT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_54_FFTFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_TrimSpaces",
+                "xml-to-json/example_54.xml",
+                "xml-to-json/example_54_FFTFFF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_54_FFTFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_TrimSpaces_TypeHints",
+                "xml-to-json/example_54.xml",
+                "xml-to-json/example_54_FFTFFT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_54_TFFFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop",
+                "xml-to-json/example_54.xml",
+                "xml-to-json/example_54_TFFFFF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_54_TFFFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_TypeHints",
+                "xml-to-json/example_54.xml",
+                "xml-to-json/example_54_TFFFFT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_54_TFFFTF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes",
+                "xml-to-json/example_54.xml",
+                "xml-to-json/example_54_TFFFTF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_54_TFFFTT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes_TypeHints",
+                "xml-to-json/example_54.xml",
+                "xml-to-json/example_54_TFFFTT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_54_TFFTFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_SkipNamespaces",
+                "xml-to-json/example_54.xml",
+                "xml-to-json/example_54_TFFTFF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_54_TFFTFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_SkipNamespaces_TypeHints",
+                "xml-to-json/example_54.xml",
+                "xml-to-json/example_54_TFFTFT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_54_TFFTTF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes",
+                "xml-to-json/example_54.xml",
+                "xml-to-json/example_54_TFFTTF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_54_TFFTTT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
+                "xml-to-json/example_54.xml",
+                "xml-to-json/example_54_TFFTTT.json"
+        );
+    }
+
+    /*****************************************
+     ** Example 55
+     *****************************************/
+
+    @Test
+    void testXmlJson_55_FFFFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy",
+                "xml-to-json/example_55.xml",
+                "xml-to-json/example_55_FFFFFF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_55_FFFFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_TypeHints",
+                "xml-to-json/example_55.xml",
+                "xml-to-json/example_55_FFFFFT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_55_FFFFTF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_RemoveNamespacePrefixes",
+                "xml-to-json/example_55.xml",
+                "xml-to-json/example_55_FFFFTF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_55_FFFFTT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
+                "xml-to-json/example_55.xml",
+                "xml-to-json/example_55_FFFFTT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_55_FFFTFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_SkipNamespaces",
+                "xml-to-json/example_55.xml",
+                "xml-to-json/example_55_FFFTFF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_55_FFFTFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_SkipNamespaces_TypeHints",
+                "xml-to-json/example_55.xml",
+                "xml-to-json/example_55_FFFTFT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_55_FFFTTF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
+                "xml-to-json/example_55.xml",
+                "xml-to-json/example_55_FFFTTF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_55_FFFTTT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
+                "xml-to-json/example_55.xml",
+                "xml-to-json/example_55_FFFTTT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_55_FFTFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_TrimSpaces",
+                "xml-to-json/example_55.xml",
+                "xml-to-json/example_55_FFTFFF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_55_FFTFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_TrimSpaces_TypeHints",
+                "xml-to-json/example_55.xml",
+                "xml-to-json/example_55_FFTFFT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_55_TFFFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop",
+                "xml-to-json/example_55.xml",
+                "xml-to-json/example_55_TFFFFF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_55_TFFFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_TypeHints",
+                "xml-to-json/example_55.xml",
+                "xml-to-json/example_55_TFFFFT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_55_TFFFTF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes",
+                "xml-to-json/example_55.xml",
+                "xml-to-json/example_55_TFFFTF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_55_TFFFTT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes_TypeHints",
+                "xml-to-json/example_55.xml",
+                "xml-to-json/example_55_TFFFTT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_55_TFFTFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_SkipNamespaces",
+                "xml-to-json/example_55.xml",
+                "xml-to-json/example_55_TFFTFF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_55_TFFTFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_SkipNamespaces_TypeHints",
+                "xml-to-json/example_55.xml",
+                "xml-to-json/example_55_TFFTFT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_55_TFFTTF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes",
+                "xml-to-json/example_55.xml",
+                "xml-to-json/example_55_TFFTTF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_55_TFFTTT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
+                "xml-to-json/example_55.xml",
+                "xml-to-json/example_55_TFFTTT.json"
         );
     }
 
