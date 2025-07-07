@@ -23,15 +23,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class XmlMetadataExtractor {
 
-    private static Map<String, ElementMetadata> metadataMap = new ConcurrentHashMap<>();
-
     private XmlMetadataExtractor() {}
 
     // extracts metadata from the xml
     public static Map<String, ElementMetadata> extractMetadata(InputStream xmlInputStream, XmlToJsonConfiguration config) throws XMLStreamException {
         XMLInputFactory factory = XMLInputFactory.newInstance();
         XMLEventReader reader = factory.createXMLEventReader(xmlInputStream);
-        metadataMap = new LinkedHashMap<>();
+        Map<String, ElementMetadata> metadataMap = new LinkedHashMap<>();
 
         Deque<String> pathStack = new ArrayDeque<>();
         Map<String, Integer> elementCounter = new HashMap<>();
@@ -59,11 +57,11 @@ public class XmlMetadataExtractor {
                 // set index
                 setIndex(siblingIndexMap, parentPath, metadata);
                 // add children at parent level
-                addChildrenAtParentLevel(path, parentPath, childrenCountMap);
+                addChildrenAtParentLevel(metadataMap, path, parentPath, childrenCountMap);
                 // set hasAttributes
                 setHasAttributes(config, startElement, metadata);
                 // set namespaces
-                setNamespaces(startElement, metadata, parentPath);
+                setNamespaces(metadataMap, startElement, metadata, parentPath);
                 // set attributes
                 setAttributes(startElement, metadata);
 
@@ -75,7 +73,7 @@ public class XmlMetadataExtractor {
                 pathStack.push(currentSegment);
 
                 // set deepest depth
-                propagateDeepestDepth(path);
+                propagateDeepestDepth(metadataMap, path);
 
             } else if (event.isCharacters()) {
                 Characters characters = event.asCharacters();
@@ -165,7 +163,7 @@ public class XmlMetadataExtractor {
     }
 
     // add children at parent level
-    private static void addChildrenAtParentLevel(String path, String parentPath, Map<String, Integer> childrenCountMap) {
+    private static void addChildrenAtParentLevel(Map<String, ElementMetadata> metadataMap, String path, String parentPath, Map<String, Integer> childrenCountMap) {
 
         int childrenIndex = childrenCountMap.getOrDefault(parentPath, 0) + 1;
         childrenCountMap.put(parentPath, childrenIndex);
@@ -215,6 +213,7 @@ public class XmlMetadataExtractor {
 
     // set namespaces
     private static void setNamespaces(
+            Map<String, ElementMetadata> metadataMap,
             StartElement startElement,
             ElementMetadata metadata,
             String parentPath
@@ -253,7 +252,7 @@ public class XmlMetadataExtractor {
     }
 
     // propagate deepest depth
-    private static void propagateDeepestDepth(String path) {
+    private static void propagateDeepestDepth(Map<String, ElementMetadata> metadataMap, String path) {
         String childPath = path;
         int currentDepth = 0;
 
