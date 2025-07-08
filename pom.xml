@@ -13,7 +13,6 @@
 
     <modules>
         <module>aggregate</module>
-        <module>amazon</module>
         <module>auth</module>
         <module>cookies</module>
         <module>csvtoxml</module>
@@ -21,7 +20,6 @@
         <module>edi</module>
         <module>edifact</module>
         <module>edifactcommon</module>
-        <module>edifactdotweb</module>
         <module>edifactstandards</module>
         <module>encoder</module>
         <module>enrich</module>
