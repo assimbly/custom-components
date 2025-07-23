@@ -3,8 +3,6 @@ package org.assimbly.xmltocsv;
 import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
-import org.apache.commons.text.StringEscapeUtils;
-import org.assimbly.util.helper.Base64Helper;
 import org.assimbly.xmltocsv.domain.OrderHeaders;
 import org.assimbly.xmltocsv.domain.QuoteFields;
 
@@ -42,8 +40,6 @@ public class XmlToCsvConfiguration {
     @UriParam
     private String xPathExpression;
 
-    public XmlToCsvConfiguration() {}
-
     public boolean hasHeader() {
         return includeHeader;
     }
@@ -73,7 +69,7 @@ public class XmlToCsvConfiguration {
     }
 
     public void setDelimiter(String encodedDelimiter) {
-        this.delimiter = Decode(encodedDelimiter);
+        this.delimiter = encodedDelimiter;
     }
 
     public String getLineSeparator() {
@@ -81,7 +77,7 @@ public class XmlToCsvConfiguration {
     }
 
     public void setLineSeparator(String encodedLineSeparator) {
-        this.lineSeparator = Decode(encodedLineSeparator);
+        this.lineSeparator = convertLineSeparator(encodedLineSeparator);
     }
 
     public OrderHeaders getOrderHeaders() {
@@ -108,9 +104,16 @@ public class XmlToCsvConfiguration {
         this.xPathExpression = xPathExpression;
     }
 
-    private String Decode(String encoded) {
-        byte[] decoded = Base64Helper.unmarshal(encoded);
-        String decodedString = new String(decoded);
-        return StringEscapeUtils.unescapeJava(decodedString);
+    public String convertLineSeparator(String lineSeparator) {
+
+        // Handle unknown input, e.g., throw an IllegalArgumentException
+        return switch (lineSeparator.toLowerCase()) {
+            case "linefeed" -> "\n";
+            case "carriagereturn" -> "\r";
+            case "endofline" -> "\r\n";
+            case null, default -> throw new IllegalArgumentException("Unknown line separator: " + lineSeparator);
+        };
+
     }
+
 }
