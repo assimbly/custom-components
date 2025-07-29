@@ -27,7 +27,22 @@
 		  <groupId>org.codelibs</groupId>
 		  <artifactId>jcifs</artifactId>
 		  <version>${jcifs.version}</version>
+		  <exclusions>
+			  <exclusion>
+				  <groupId>org.bouncycastle</groupId>
+				  <artifactId>bcprov-jdk18on</artifactId>
+			  </exclusion>
+			  <exclusion>
+				  <groupId>org.bouncycastle</groupId>
+				  <artifactId>bcpkix-jdk18on</artifactId>
+			  </exclusion>
+			  <exclusion>
+				  <groupId>org.bouncycastle</groupId>
+				  <artifactId>bcutil-jdk18on</artifactId>
+			  </exclusion>
+		  </exclusions>
 	  </dependency>
+
   </dependencies>
 
 	<build>
