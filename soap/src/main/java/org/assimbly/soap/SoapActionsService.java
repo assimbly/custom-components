@@ -31,7 +31,6 @@ public class SoapActionsService {
 
     public String getSoapActions(String url) throws WSDLException, IOException, URISyntaxException {
 
-        System.out.println("x");
         List<SoapAction> list = getSoapActionsList(url);
         // add elements to the list
 
