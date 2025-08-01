@@ -69,7 +69,7 @@
         <config-admin.version>1.9.26</config-admin.version>
         <cxf.version>4.1.2</cxf.version>
         <camel.version>4.13.0</camel.version>
-        <docconverter.version>1.14.4</docconverter.version>
+        <docconverter.version>1.15.0</docconverter.version>
         <google.api.version>v3-rev20250723-2.0.0</google.api.version>
         <google.auth.version>1.5.0</google.auth.version>
         <google.oauth.version>1.39.0</google.oauth.version>
@@ -165,6 +165,23 @@
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.14.0</version>
+                    <configuration>
+                        <encoding>UTF-8</encoding>
+                        <compilerArgs>
+                            <arg>-XDcompilePolicy=simple</arg>
+                            <arg>--should-stop=ifError=FLOW</arg>
+                            <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
+                            <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>
+                            <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED</arg>
+                            <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED</arg>
+                            <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED</arg>
+                            <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED</arg>
+                            <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED</arg>
+                            <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED</arg>
+                            <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED</arg>
+                            <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</arg>
+                        </compilerArgs>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
