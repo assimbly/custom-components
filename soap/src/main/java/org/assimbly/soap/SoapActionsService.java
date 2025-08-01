@@ -31,7 +31,6 @@ public class SoapActionsService {
 
     public String getSoapActions(String url) throws WSDLException, IOException, URISyntaxException {
 
-        System.out.println("x");
         List<SoapAction> list = getSoapActionsList(url);
         // add elements to the list
 
@@ -44,6 +43,7 @@ public class SoapActionsService {
         return jsonArray.toString(4);
     }
     public List<SoapAction> getSoapActionsList(String wsdl) throws WSDLException, IOException, URISyntaxException {
+
         List<SoapAction> results = new ArrayList<>();
         List<String> added = new ArrayList<>();
         List<SoapHttpHeader> httpHeaders = new ArrayList<>();
@@ -53,6 +53,16 @@ public class SoapActionsService {
         if(jsonWsdl.has("token")) {
             httpHeaders.add(
                     new SoapHttpHeader("ApiToken", jsonWsdl.getString("token"))
+            );
+        }
+
+        if(jsonWsdl.has("username") && jsonWsdl.has("password")) {
+            String username = jsonWsdl.getString("username");
+            String password = jsonWsdl.getString("password");
+            String authString = username + ":" + password;
+            String encodedAuthString = Base64.getEncoder().encodeToString(authString.getBytes());
+            httpHeaders.add(
+                    new SoapHttpHeader("Authorization", "Basic " + encodedAuthString)
             );
         }
 

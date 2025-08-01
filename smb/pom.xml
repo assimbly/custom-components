@@ -27,7 +27,7 @@
 		  <groupId>org.codelibs</groupId>
 		  <artifactId>jcifs</artifactId>
 		  <version>${jcifs.version}</version>
-		  <exclusions>
+		  <!--<exclusions>
 			  <exclusion>
 				  <groupId>org.bouncycastle</groupId>
 				  <artifactId>bcprov-jdk18on</artifactId>
@@ -40,7 +40,7 @@
 				  <groupId>org.bouncycastle</groupId>
 				  <artifactId>bcutil-jdk18on</artifactId>
 			  </exclusion>
-		  </exclusions>
+		  </exclusions>-->
 	  </dependency>
 
   </dependencies>
