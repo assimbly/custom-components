@@ -30,6 +30,7 @@ public class ElementMetadata {
     private boolean definesNamespaces = false;
 
     private boolean hasEmptyTextContent = true;
+    private boolean hasTypeNumberOrBoolean = false;
     private boolean elementMustBeNull;
 
     private boolean isRootArray;
@@ -163,6 +164,14 @@ public class ElementMetadata {
 
     public void setHasEmptyTextContent(boolean hasEmptyTextContent) {
         this.hasEmptyTextContent = hasEmptyTextContent;
+    }
+
+    public boolean isHasTypeNumberOrBoolean() {
+        return hasTypeNumberOrBoolean;
+    }
+
+    public void setHasTypeNumberOrBoolean(boolean hasTypeNumberOrBoolean) {
+        this.hasTypeNumberOrBoolean = hasTypeNumberOrBoolean;
     }
 
     public boolean isHasAttributes() {

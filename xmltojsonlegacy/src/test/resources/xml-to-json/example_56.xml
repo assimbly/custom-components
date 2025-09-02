@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rmessage test="abc">
+    <active type="boolean">false</active>
+</rmessage>
