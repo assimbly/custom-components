@@ -3,6 +3,7 @@ package org.assimbly.xmltojsonlegacy.transaction.textnode.types;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.assimbly.xmltojsonlegacy.XmlToJsonConfiguration;
 import org.assimbly.xmltojsonlegacy.model.ElementMetadata;
+import org.assimbly.xmltojsonlegacy.service.MetadataAnalyzer;
 import org.assimbly.xmltojsonlegacy.transaction.textnode.TextNodeTransaction;
 import org.assimbly.xmltojsonlegacy.utils.Constants;
 import org.assimbly.xmltojsonlegacy.utils.ElementMetadataUtils;
@@ -25,12 +26,23 @@ public class OneValueType implements TextNodeTransaction {
     }
 
     private static JsonNode processWithTypeHints(ElementMetadata metadata, XmlToJsonConfiguration config) {
-        if(ExtractUtils.rootObjectNodeContainsAttributes(metadata.getObjectNode())) {
+        String type = ExtractUtils.getAttributeTypeFromElement(metadata);
+        if(type.isEmpty() && ExtractUtils.rootObjectNodeContainsAttributes(metadata.getObjectNode())) {
             metadata.getObjectNode().put(Constants.JSON_XML_TEXT_FIELD, ElementMetadataUtils.getNodeValue(metadata, config.isTrimSpaces()));
             return metadata.getObjectNode();
         } else {
-            ExtractUtils.addValueOnRootArrayNode(metadata, config);
-            return metadata.getArrayNode();
+            String value = ElementMetadataUtils.getNodeValue(metadata, config.isTrimSpaces());
+            String trimmedValue = ElementMetadataUtils.getNodeValue(metadata, true);
+            if(MetadataAnalyzer.isNumberOrBoolean(type) && value != null && !trimmedValue.isEmpty()) {
+                ExtractUtils.setValueUsingAttributeType(metadata, config, metadata.getObjectNode(), null,
+                        ElementMetadataUtils.getElementName(metadata, config.isRemoveNamespacePrefixes()),
+                        value,
+                        ExtractUtils.getAttributeTypeFromElement(metadata));
+                return metadata.getObjectNode();
+            } else {
+                ExtractUtils.addValueOnRootArrayNode(metadata, config);
+                return metadata.getArrayNode();
+            }
         }
     }
 

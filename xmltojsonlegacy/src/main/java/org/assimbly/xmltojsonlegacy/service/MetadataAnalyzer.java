@@ -231,6 +231,10 @@ public class MetadataAnalyzer {
         return attribute != null && attribute.getValue().equalsIgnoreCase(attrValue);
     }
 
+    public static boolean isNumberOrBoolean(String type) {
+        return type != null && (type.equals(Constants.JSON_XML_ATTR_TYPE_NUMBER) || type.equals(Constants.JSON_XML_ATTR_TYPE_BOOLEAN));
+    }
+
     // check if it's the last element
     public static boolean isLastElement(ElementMetadata metadata) {
         return metadata.getChildrenCount() == 0;
