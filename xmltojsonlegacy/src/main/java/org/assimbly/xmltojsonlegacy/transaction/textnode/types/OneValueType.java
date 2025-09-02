@@ -26,14 +26,13 @@ public class OneValueType implements TextNodeTransaction {
     }
 
     private static JsonNode processWithTypeHints(ElementMetadata metadata, XmlToJsonConfiguration config) {
-        String type = ExtractUtils.getAttributeTypeFromElement(metadata);
-        if(type.isEmpty() && ExtractUtils.rootObjectNodeContainsAttributes(metadata.getObjectNode())) {
+        if(!metadata.isHasTypeNumberOrBoolean() && ExtractUtils.rootObjectNodeContainsAttributes(metadata.getObjectNode())) {
             metadata.getObjectNode().put(Constants.JSON_XML_TEXT_FIELD, ElementMetadataUtils.getNodeValue(metadata, config.isTrimSpaces()));
             return metadata.getObjectNode();
         } else {
             String value = ElementMetadataUtils.getNodeValue(metadata, config.isTrimSpaces());
             String trimmedValue = ElementMetadataUtils.getNodeValue(metadata, true);
-            if(MetadataAnalyzer.isNumberOrBoolean(type) && value != null && !trimmedValue.isEmpty()) {
+            if(metadata.isHasTypeNumberOrBoolean() && value != null && !trimmedValue.isEmpty()) {
                 ExtractUtils.setValueUsingAttributeType(metadata, config, metadata.getObjectNode(), null,
                         ElementMetadataUtils.getElementName(metadata, config.isRemoveNamespacePrefixes()),
                         value,
