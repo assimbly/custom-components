@@ -94,7 +94,7 @@ public class XmlToJsonProcessor implements Processor {
         initMetadataVars(metadataMap, metadata, config);
 
         // add attributes in the object node
-        ExtractUtils.addAttributesInObjectNode(metadata, config);
+        ExtractUtils.addAttributesInObjectNode(metadata, parentMetadata, config);
 
         String parentNamespacePrefix = parentMetadata != null ? parentMetadata.getNamespacePrefix() : null;
         // add namespace attribute
