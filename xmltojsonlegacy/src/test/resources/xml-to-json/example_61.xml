@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rmessage>
+    <code>36A</code>
+    <dummy test="abc">
+        <dummyB type="number">123</dummyB>
+        <dummyB type="number">456</dummyB>
+    </dummy>
+</rmessage>

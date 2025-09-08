@@ -1,0 +1,15 @@
+{
+    "rmessage": {
+        "@test": "abc",
+        "active": {
+            "@type": "boolean",
+            "#text": "false"
+        },
+        "subLevel": [
+            {
+                "@type": "number",
+                "#text": "12"
+            }
+        ]
+    }
+}

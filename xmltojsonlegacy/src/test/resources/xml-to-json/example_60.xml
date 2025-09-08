@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rmessage>
+    <quantity type="number">36</quantity>
+    <dummy test="abc">
+        <dummyB type="boolean">false</dummyB>
+    </dummy>
+</rmessage>
