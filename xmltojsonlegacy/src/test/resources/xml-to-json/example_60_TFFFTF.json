@@ -1,0 +1,15 @@
+{
+    "rmessage": {
+        "quantity": {
+            "@type": "number",
+            "#text": "36"
+        },
+        "dummy": {
+            "@test": "abc",
+            "dummyB": {
+                "@type": "boolean",
+                "#text": "false"
+            }
+        }
+    }
+}
