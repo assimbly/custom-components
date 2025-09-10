@@ -3,6 +3,7 @@ package org.assimbly.xmltojsonlegacy.transaction.textnode.types;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.assimbly.xmltojsonlegacy.XmlToJsonConfiguration;
 import org.assimbly.xmltojsonlegacy.model.ElementMetadata;
+import org.assimbly.xmltojsonlegacy.service.MetadataAnalyzer;
 import org.assimbly.xmltojsonlegacy.transaction.textnode.TextNodeTransaction;
 import org.assimbly.xmltojsonlegacy.utils.Constants;
 import org.assimbly.xmltojsonlegacy.utils.ElementMetadataUtils;
@@ -16,21 +17,32 @@ public class OneValueType implements TextNodeTransaction {
     public JsonNode process(Map<String, ElementMetadata> metadataMap, ElementMetadata metadata, XmlToJsonConfiguration config) {
         //process text node identified as one value
         JsonNode resp;
+        ElementMetadata parentMetadata = ElementMetadataUtils.getParentMetadata(metadataMap, metadata);
         if(config.isTypeHints()) {
-            resp = processWithTypeHints(metadata, config);
+            resp = processWithTypeHints(metadata, parentMetadata, config);
         } else {
             resp = processWithoutTypeHints(metadata, config);
         }
-        return metadata.getLevel() == 1 ? resp : null;
+        return parentMetadata.isHasAttributes() ? resp : null;
     }
 
-    private static JsonNode processWithTypeHints(ElementMetadata metadata, XmlToJsonConfiguration config) {
-        if(ExtractUtils.rootObjectNodeContainsAttributes(metadata.getObjectNode())) {
+    private static JsonNode processWithTypeHints(ElementMetadata metadata, ElementMetadata parentMetadata, XmlToJsonConfiguration config) {
+        if(!metadata.isHasTypeNumberOrBoolean() && ExtractUtils.rootObjectNodeContainsAttributes(metadata.getObjectNode())) {
             metadata.getObjectNode().put(Constants.JSON_XML_TEXT_FIELD, ElementMetadataUtils.getNodeValue(metadata, config.isTrimSpaces()));
             return metadata.getObjectNode();
         } else {
-            ExtractUtils.addValueOnRootArrayNode(metadata, config);
-            return metadata.getArrayNode();
+            String value = ElementMetadataUtils.getNodeValue(metadata, config.isTrimSpaces());
+            String trimmedValue = ElementMetadataUtils.getNodeValue(metadata, true);
+            if(parentMetadata.isHasAttributes() && metadata.isHasTypeNumberOrBoolean() && value != null && !trimmedValue.isEmpty()) {
+                ExtractUtils.setValueUsingAttributeType(metadata, config, metadata.getObjectNode(), null,
+                        ElementMetadataUtils.getElementName(metadata, config.isRemoveNamespacePrefixes()),
+                        value,
+                        ExtractUtils.getAttributeTypeFromElement(metadata));
+                return metadata.getObjectNode();
+            } else {
+                ExtractUtils.addValueOnRootArrayNode(metadata, config);
+                return metadata.getArrayNode();
+            }
         }
     }
 

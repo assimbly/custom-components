@@ -63,7 +63,14 @@ public class ExtractUtils {
                     }
                 } else {
                     if(childNode.get(propertyName) != null) {
-                        metadata.getObjectNode().set(propertyName, !metadata.isElementMustBeNull() ? childNode.get(propertyName) : null);
+                        if(metadata.getObjectNode().has(propertyName)) {
+                            ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode();
+                            arrayNode.add(metadata.getObjectNode().get(propertyName));
+                            arrayNode.add(childNode.get(propertyName));
+                            metadata.getObjectNode().set(propertyName, arrayNode);
+                        } else {
+                            metadata.getObjectNode().set(propertyName, !metadata.isElementMustBeNull() ? childNode.get(propertyName) : null);
+                        }
                     } else {
                         metadata.getObjectNode().set(propertyName, childNode);
                     }
@@ -483,9 +490,11 @@ public class ExtractUtils {
     }
 
     // add attributes in the object node
-    public static void addAttributesInObjectNode(ElementMetadata metadata, XmlToJsonConfiguration config) {
+    public static void addAttributesInObjectNode(ElementMetadata metadata, ElementMetadata parentMetadata, XmlToJsonConfiguration config) {
 
-        if(metadata.getAttributes().isEmpty() && !metadata.isDefinesNamespaces()){
+        if(metadata.getAttributes().isEmpty() && !metadata.isDefinesNamespaces() ||
+                config.isTypeHints() && parentMetadata.isHasAttributes() && metadata.isOneValue() && metadata.isHasTypeNumberOrBoolean()
+        ){
             return;
         }
 
