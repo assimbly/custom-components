@@ -57,11 +57,11 @@ public class ReplaceConfiguration {
     }
 
     public String getRegex() {
-        return Base64Helper.unmarshal(regex, StandardCharsets.UTF_8);
+        return regex;
     }
 
     public String getReplaceWith() {
-        return Base64Helper.unmarshal(replaceWith, StandardCharsets.UTF_8);
+        return replaceWith;
     }
 
     public int getGroup() {
@@ -72,7 +72,13 @@ public class ReplaceConfiguration {
         String[] flagsArray = new String[]{};
 
         if(flags != null) {
-            flagsArray = flags.split(",");
+            if(flags.startsWith("[") && flags.endsWith("]")){
+                String flagsCommaSeparatedList = flags.trim().substring(1, flags.length() - 1);
+                flagsArray = flagsCommaSeparatedList.split(",");
+            }else{
+                flagsArray = flags.split(",");
+            }
+
         }
 
         return Arrays.asList(flagsArray);
@@ -97,4 +103,5 @@ public class ReplaceConfiguration {
             put("s", Pattern.DOTALL);
         }};
     }
+
 }
