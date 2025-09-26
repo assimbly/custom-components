@@ -31,11 +31,11 @@
         <module>mail</module>
         <module>multipart</module>
         <module>oauth2token</module>
-        <module>oriflame</module>
+        <!--<module>oriflame</module>-->
         <module>pdf</module>
         <module>pdftotext</module>
         <module>replace</module>
-        <module>sandbox</module>
+        <!--<module>sandbox</module>-->
         <module>simplereplace</module>
         <module>smb</module>
         <module>smooksnoxml</module>

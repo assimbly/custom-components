@@ -54,7 +54,7 @@ public class ExcelToXmlProcessor implements Processor {
 
         for (List<SheetCell> cells : list) {
 
-            if (allBlank(cells) && rule.getDiscardEmpty())
+            if (allBlank(cells) && Boolean.TRUE.equals(rule.getDiscardEmpty()))
                 continue;
 
             Element excelEntry = doc.createElement(xmlEntryName);

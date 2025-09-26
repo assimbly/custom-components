@@ -1,6 +1,8 @@
 package org.assimbly.exceltoxml;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.UriParam;
@@ -9,6 +11,7 @@ import org.assimbly.exceltoxml.domain.ExcelRule;
 import org.assimbly.exceltoxml.exception.Excel2XmlException;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,8 +54,32 @@ public class ExcelToXmlConfiguration {
     /**
      * Deserialized rules
      */
+    public List<ExcelRule> getReadRules() throws JsonProcessingException {
+
+        ObjectMapper mapper = new ObjectMapper();
+        TypeReference<List<ExcelRule>> typeRef = new TypeReference<List<ExcelRule>>() {};
+
+
+        System.out.println("rules: " + rules);
+        List<ExcelRule> excelRules = mapper.readValue(rules, typeRef);
+
+        // Now you have the list of objects directly, no need for the inner loop and second deserialization
+        for (ExcelRule rule : excelRules) {
+            System.out.println("Rule Name: " + rule.getName()); // Example of accessing a property
+        }
+
+        return excelRules;
+
+    }
+
+    /*
     public List<ExcelRule> getReadRules() {
         byte[] json = Base64Helper.unmarshal(rules);
+
+        System.out.println("getReadRules");
+        String jsonString = new String(json, StandardCharsets.UTF_8);
+        System.out.println(jsonString);
+
         return deserializeRules(json);
     }
 
@@ -62,17 +89,9 @@ public class ExcelToXmlConfiguration {
         ObjectMapper mapper = new ObjectMapper();
         List<ExcelRule> rules = new ArrayList<>();
 
-        try {
-            @SuppressWarnings("unchecked")
-            List<String> rulesJson = mapper.readValue(json, List.class);
 
-            for (String rule : rulesJson) {
-                rules.add(mapper.readValue(rule, ExcelRule.class));
-            }
-        } catch (IOException e) {
-            throw new Excel2XmlException("Unable to deserialize rules: " + e.getMessage());
-        }
-
-        return rules;
     }
+
+     */
+
 }
