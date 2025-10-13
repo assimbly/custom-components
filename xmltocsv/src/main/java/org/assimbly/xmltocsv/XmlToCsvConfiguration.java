@@ -84,16 +84,16 @@ public class XmlToCsvConfiguration {
         return orderHeaders;
     }
 
-    public void setOrderHeaders(String id) {
-        this.orderHeaders = OrderHeaders.valueOf(id.trim().toUpperCase());
+    public void setOrderHeaders(String orderHeaders) {
+        this.orderHeaders = OrderHeaders.fromString(orderHeaders);
     }
 
     public QuoteFields getQuoteFields() {
         return quoteFields;
     }
 
-    public void setQuoteFields(String id) {
-        this.quoteFields = QuoteFields.valueOf(id.trim().toUpperCase());
+    public void setQuoteFields(String quoteFields) {
+        this.quoteFields = QuoteFields.fromString(quoteFields);
     }
 
     public String getXPathExpression() {

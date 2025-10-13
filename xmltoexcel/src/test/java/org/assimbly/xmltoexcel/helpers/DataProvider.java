@@ -47,25 +47,25 @@ public class DataProvider {
 
     public static XmlToExcelConfiguration getOrderingAscendingConfig() {
         XmlToExcelConfiguration config = getStandardConfig();
-        config.setOrderHeaders(OrderHeaders.ASCENDING);
+        config.setOrderHeaders("ascending");
         return config;
     }
 
     public static XmlToExcelConfiguration getOrderingDescendingConfig() {
         XmlToExcelConfiguration config = getStandardConfig();
-        config.setOrderHeaders(OrderHeaders.DESCENDING);
+        config.setOrderHeaders("descending");
         return config;
     }
 
     public static XmlToExcelConfiguration getOrderingUnorderedConfig() {
         XmlToExcelConfiguration config = getStandardConfig();
-        config.setOrderHeaders(OrderHeaders.UNORDERED);
+        config.setOrderHeaders("unordered");
         return config;
     }
 
     public static XmlToExcelConfiguration getXLSFormatConfig() {
         XmlToExcelConfiguration config = getStandardConfig();
-        config.setExcelFormat(ExcelFormat.XLS);
+        config.setExcelFormat("xls");
         return config;
     }
 

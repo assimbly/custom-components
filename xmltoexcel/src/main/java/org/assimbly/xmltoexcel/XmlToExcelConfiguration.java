@@ -79,24 +79,16 @@ public class XmlToExcelConfiguration {
         return orderHeaders;
     }
 
-    public void setOrderHeaders(String id) {
-        this.orderHeaders = OrderHeaders.valueOf(id.trim().toUpperCase());
-    }
-
-    public void setOrderHeaders(OrderHeaders orderHeaders) {
-        this.orderHeaders = orderHeaders;
+    public void setOrderHeaders(String orderHeaders) {
+        this.orderHeaders = OrderHeaders.fromString(orderHeaders);
     }
 
     public ExcelFormat getExcelFormat() {
         return excelFormat;
     }
 
-    public void setExcelFormat(String id) {
-        this.excelFormat = ExcelFormat.valueOf(id.trim().toUpperCase());
-    }
-
-    public void setExcelFormat(ExcelFormat excelFormat) {
-        this.excelFormat = excelFormat;
+    public void setExcelFormat(String excelFormat) {
+        this.excelFormat = ExcelFormat.fromString(excelFormat);
     }
 
     public List<CustomWorksheet> getWorksheets() {

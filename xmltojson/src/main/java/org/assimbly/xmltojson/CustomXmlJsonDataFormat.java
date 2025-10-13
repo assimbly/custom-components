@@ -142,7 +142,7 @@ public class CustomXmlJsonDataFormat implements DataFormat {
     }
 
     public void setTypeValueMismatch(String typeValueMismatch) {
-        this.typeValueMismatch = Enum.valueOf(TypeValueMismatch.class, typeValueMismatch);
+        this.typeValueMismatch = TypeValueMismatch.fromString(typeValueMismatch);
     }
 
     public void setRemoveNamespaces(boolean removeNamespaces) {
