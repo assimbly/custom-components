@@ -1,6 +1,7 @@
 package org.assimbly.xmltoexcel;
 
-import com.google.gson.Gson;
+//import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
@@ -203,14 +204,16 @@ public class XmlToExcelComponentTest extends CamelTestSupport {
     }
 
     private String worksheetsToEncodedJson(List<CustomWorksheet> worksheets) {
-        List<String> jsonWorksheets = new ArrayList<>();
-        Gson gson = new Gson();
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        for (CustomWorksheet worksheet : worksheets) {
-            jsonWorksheets.add('"' + StringEscapeUtils.escapeJava(gson.toJson(worksheet)) + '"');
+        try {
+            String jsonArrayString = objectMapper.writeValueAsString(worksheets);
+
+            return Base64Helper.marshal(jsonArrayString);
+
+        } catch (com.fasterxml.jackson.core.JsonProcessingException e) {
+               throw new RuntimeException("Failed to serialize worksheets to JSON.", e);
         }
-
-        return Base64Helper.marshal(jsonWorksheets.toString());
     }
 
     private Exchange getLastExchange(MockEndpoint endpoint) {

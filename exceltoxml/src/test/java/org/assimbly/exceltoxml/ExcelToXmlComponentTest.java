@@ -1,9 +1,9 @@
 package org.assimbly.exceltoxml;
 
-import com.google.gson.GsonBuilder;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.commons.text.StringEscapeUtils;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,7 +61,7 @@ public class ExcelToXmlComponentTest extends CamelTestSupport {
         for (String route : allRoutes.keySet()) {
             routeBuilders.add(
                 new RouteBuilder() {
-                    public void configure() {
+                    public void configure() throws JsonProcessingException {
                         from("direct:" + route)
                             .to(createUri(allRoutes.get(route)))
                             .to("mock:result");
@@ -145,13 +145,16 @@ public class ExcelToXmlComponentTest extends CamelTestSupport {
     }
 
     private String rulesToJson(List<ExcelRule> rules) {
-        List<String> jsonRules = new ArrayList<>();
 
-        for (ExcelRule rule : rules)
-            jsonRules.add("\"" + StringEscapeUtils.escapeJava(new GsonBuilder().create().toJson(rule)) + "\"");
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        return Base64.getEncoder().encodeToString(jsonRules.toString().getBytes());
+        try {
+            String jsonArrayString = objectMapper.writeValueAsString(rules);
+            return Base64.getEncoder().encodeToString(jsonArrayString.getBytes());
+        } catch (com.fasterxml.jackson.core.JsonProcessingException e) {
+            throw new RuntimeException("Error serializing rules to JSON", e);
+        }
+
     }
-
 
 }
