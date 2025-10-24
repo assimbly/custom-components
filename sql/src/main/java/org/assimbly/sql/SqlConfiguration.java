@@ -6,15 +6,11 @@ import org.apache.camel.model.language.SimpleExpression;
 import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
-import org.apache.camel.spi.UriPath;
 import org.apache.commons.lang3.StringUtils;
-import org.assimbly.util.helper.Base64Helper;
 import org.assimbly.sql.domain.ConnectionType;
-import org.assimbly.util.helper.ExchangeHelper;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 
 @UriParams
 public class SqlConfiguration {
@@ -171,7 +167,6 @@ public class SqlConfiguration {
     }
 
     public String getPassword(Exchange exchange) {
-        String password = Base64Helper.unmarshal(this.password, StandardCharsets.UTF_8);
         return interpolateVar(password, exchange);
     }
 
@@ -179,9 +174,7 @@ public class SqlConfiguration {
         return interpolateVar(database, exchange);
     }
 
-    public String getQuery() {
-        return Base64Helper.unmarshal(this.query, StandardCharsets.UTF_8);
-    }
+    public String getQuery() {return this.query; }
 
     public ConnectionType getConnectionType() {
         return ConnectionType.valueOf(connectionType.toUpperCase());

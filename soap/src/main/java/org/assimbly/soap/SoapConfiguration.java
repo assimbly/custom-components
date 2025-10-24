@@ -7,14 +7,12 @@ import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
 import org.apache.camel.spi.UriPath;
 
-import org.assimbly.util.helper.Base64Helper;
 import org.assimbly.soap.domain.SoapHeader;
 import org.assimbly.soap.domain.SoapHttpHeader;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -152,22 +150,22 @@ public class SoapConfiguration {
     }
 
     public List<SoapHeader> getHeaders() throws IOException {
+
         List<SoapHeader> list = new ArrayList<>();
 
         if(headers != null) {
-            String json = Base64Helper.unmarshal(headers, StandardCharsets.UTF_8);
-            list = new ObjectMapper().readValue(json, new TypeReference<List<SoapHeader>>() {});
+            list = new ObjectMapper().readValue(headers, new TypeReference<List<SoapHeader>>() {});
         }
 
         return list;
     }
 
     public List<SoapHttpHeader> getHttpHeaders() throws IOException {
+
         List<SoapHttpHeader> list = new ArrayList<>();
 
         if(httpHeaders != null) {
-            String json = Base64Helper.unmarshal(httpHeaders, StandardCharsets.UTF_8);
-            list = new ObjectMapper().readValue(json, new TypeReference<List<SoapHttpHeader>>() {});
+            list = new ObjectMapper().readValue(httpHeaders, new TypeReference<List<SoapHttpHeader>>() {});
         }
 
         return list;
