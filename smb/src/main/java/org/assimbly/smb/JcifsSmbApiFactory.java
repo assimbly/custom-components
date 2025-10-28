@@ -20,12 +20,14 @@
  http://www.gnu.org/licenses/lgpl-3.0-standalone.html
  ***************************************************************************************/
 package org.assimbly.smb;
+
+import org.codelibs.jcifs.smb.context.SingletonContext;
+import org.codelibs.jcifs.smb.impl.NtlmPasswordAuthentication;
+import org.codelibs.jcifs.smb.impl.SmbFile;
+import org.codelibs.jcifs.smb.impl.SmbFileOutputStream;
+
 import java.io.IOException;
 
-import jcifs.context.SingletonContext;
-import jcifs.smb.NtlmPasswordAuthentication;
-import jcifs.smb.SmbFile;
-import jcifs.smb.SmbFileOutputStream;
 
 /**
  * Default implementation of the the {@link SmbApiFactory} uses the JCIFS API.

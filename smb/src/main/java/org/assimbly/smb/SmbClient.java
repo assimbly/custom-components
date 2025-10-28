@@ -21,7 +21,7 @@
  ***************************************************************************************/
 package org.assimbly.smb;
 
-import jcifs.smb.SmbFile;
+import org.codelibs.jcifs.smb.impl.SmbFile;
 
 import java.io.IOException;
 import java.io.InputStream;

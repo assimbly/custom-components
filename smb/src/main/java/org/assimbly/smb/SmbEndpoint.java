@@ -21,7 +21,6 @@
  ***************************************************************************************/
 package org.assimbly.smb;
 
-import jcifs.smb.SmbFile;
 import org.apache.camel.Exchange;
 import org.apache.camel.PollingConsumer;
 import org.apache.camel.Processor;
@@ -30,6 +29,7 @@ import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.support.DefaultExchange;
 import org.apache.camel.support.processor.idempotent.MemoryIdempotentRepository;
 import org.assimbly.smb.strategy.SmbProcessStrategyFactory;
+import org.codelibs.jcifs.smb.impl.SmbFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

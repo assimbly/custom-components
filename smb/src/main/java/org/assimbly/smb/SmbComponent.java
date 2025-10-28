@@ -24,11 +24,10 @@ package org.assimbly.smb;
 import java.net.URI;
 import java.util.Map;
 
-import jcifs.smb.SmbFile;
-
 import org.apache.camel.CamelContext;
 import org.apache.camel.component.file.GenericFileComponent;
 import org.apache.camel.component.file.GenericFileEndpoint;
+import org.codelibs.jcifs.smb.impl.SmbFile;
 
 public class SmbComponent extends GenericFileComponent<SmbFile> {
 

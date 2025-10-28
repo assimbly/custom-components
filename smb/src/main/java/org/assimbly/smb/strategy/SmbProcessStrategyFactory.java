@@ -34,8 +34,7 @@ import org.apache.camel.component.file.strategy.GenericFileNoOpProcessStrategy;
 import org.apache.camel.component.file.strategy.GenericFileRenameExclusiveReadLockStrategy;
 import org.apache.camel.component.file.strategy.GenericFileRenameProcessStrategy;
 import org.apache.camel.util.ObjectHelper;
-
-import jcifs.smb.SmbFile;
+import org.codelibs.jcifs.smb.impl.SmbFile;
 
 /**
  * see org.apache.camel.component.file.remote.strategy.SftpProcessStrategyFactory

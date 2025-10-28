@@ -33,10 +33,9 @@ import org.apache.camel.component.file.GenericFileExclusiveReadLockStrategy;
 import org.apache.camel.component.file.GenericFileOperations;
 import org.apache.camel.spi.CamelLogger;
 import org.apache.camel.util.StopWatch;
+import org.codelibs.jcifs.smb.impl.SmbFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import jcifs.smb.SmbFile;
 
 /**
  * see org.apache.camel.component.file.remote.strategy.SftpChangedExclusiveReadLockStrategy

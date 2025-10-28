@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
 public class SmbOperations<SmbFile> implements GenericFileOperations<SmbFile> {
     private static final Logger LOGGER = LoggerFactory.getLogger(SmbOperations.class);
 
-    private static final jcifs.smb.SmbFile[] EMPTY = {};
+    private static final org.codelibs.jcifs.smb.impl.SmbFile[] EMPTY = {};
 
     private GenericFileEndpoint<SmbFile> endpoint;
     private SmbClient client;

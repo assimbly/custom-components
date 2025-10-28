@@ -21,11 +21,12 @@
  ***************************************************************************************/
 package org.assimbly.smb;
 
+import org.codelibs.jcifs.smb.impl.NtlmPasswordAuthentication;
+import org.codelibs.jcifs.smb.impl.SmbFile;
+import org.codelibs.jcifs.smb.impl.SmbFileOutputStream;
+
 import java.io.IOException;
 
-import jcifs.smb.NtlmPasswordAuthentication;
-import jcifs.smb.SmbFile;
-import jcifs.smb.SmbFileOutputStream;
 
 /**
  * Factory interface for creating jcifs API objects.

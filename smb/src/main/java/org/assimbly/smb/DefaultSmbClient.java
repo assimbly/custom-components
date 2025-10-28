@@ -27,17 +27,15 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import org.apache.camel.util.IOHelper;
+import org.codelibs.jcifs.smb.context.SingletonContext;
+import org.codelibs.jcifs.smb.impl.SmbException;
+import org.codelibs.jcifs.smb.impl.SmbFile;
+import org.codelibs.jcifs.smb.impl.NtlmPasswordAuthentication;
+import org.codelibs.jcifs.smb.impl.SmbFileOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import jcifs.context.SingletonContext;
-import jcifs.smb.NtlmPasswordAuthentication;
-import jcifs.smb.SmbException;
-import jcifs.smb.SmbFile;
-import jcifs.smb.SmbFileOutputStream;
 
 /**
  *
@@ -148,8 +146,8 @@ public class DefaultSmbClient implements SmbClient {
   }
 
   @Override
-  public List<SmbFile> listFiles(final String url) throws IOException {
-    final List<SmbFile> fileList = new ArrayList<>();
+  public java.util.List<SmbFile> listFiles(final String url) throws IOException {
+    final java.util.List<SmbFile> fileList = new ArrayList<>();
     final SmbFile dir = smbApiFactory.createSmbFile(url, authentication);
     // Catch NPE for empty folders - see the following discussion for
     // details:

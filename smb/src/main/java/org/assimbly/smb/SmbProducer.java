@@ -31,10 +31,10 @@ import org.apache.camel.support.ExchangeHelper;
 import org.apache.camel.util.FileUtil;
 import org.apache.camel.util.ObjectHelper;
 import org.apache.camel.util.StringHelper;
+import org.codelibs.jcifs.smb.impl.SmbFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jcifs.smb.SmbFile;
 
 public class SmbProducer extends GenericFileProducer<SmbFile> {
     private static final Logger LOGGER = LoggerFactory.getLogger(SmbProducer.class);
