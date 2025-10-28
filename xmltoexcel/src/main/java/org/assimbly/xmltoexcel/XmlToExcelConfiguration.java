@@ -1,5 +1,7 @@
 package org.assimbly.xmltoexcel;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.UriParam;
@@ -100,25 +102,24 @@ public class XmlToExcelConfiguration {
     }
 
     public void setWorksheets(String worksheets) {
-        String json = new String(Base64Helper.unmarshal(worksheets));
-        this.worksheets = JsonToWorksheets(json);
+        this.worksheets = jsonToWorksheets(worksheets);
     }
 
-    public List<CustomWorksheet> JsonToWorksheets(String json) {
+    public List<CustomWorksheet> jsonToWorksheets(String json) {
+
         ObjectMapper mapper = new ObjectMapper();
-        List<CustomWorksheet> worksheets = new ArrayList<>();
+        List<CustomWorksheet> worksheetsList = new ArrayList<>();
 
         try {
-            @SuppressWarnings("unchecked")
-            List<String> worksheetsJson = mapper.readValue(json, List.class);
-
-            for (String rule : worksheetsJson) {
-                worksheets.add(mapper.readValue(rule, CustomWorksheet.class));
-            }
-        } catch (IOException e) {
+            worksheetsList = mapper.readValue(
+                    json,
+                    new TypeReference<List<CustomWorksheet>>() {}
+            );
+        } catch (JsonProcessingException e) {
             throw new XmlToExcelException("Unable to deserialize worksheets: " + e.getMessage());
         }
 
-        return worksheets;
+        return worksheetsList;
     }
+
 }
