@@ -56,10 +56,10 @@ import org.apache.hc.core5.http.ContentType;
  * Transfer data securely and reliably using the AS2 protocol (RFC4130).
  */
 @UriEndpoint(scheme = "as2", firstVersion = "2.22.0", title = "AS2", syntax = "as2:apiName/methodName",
-             apiSyntax = "apiName/methodName",
-             category = { Category.FILE })
+        apiSyntax = "apiName/methodName",
+        category = { Category.FILE })
 @Metadata(excludeProperties = "startScheduler,initialDelay,delay,timeUnit,useFixedDelay,pollStrategy,runLoggingLevel,sendEmptyMessageWhenIdle"
-                              + ",greedy,scheduler,schedulerProperties,scheduledExecutorService,backoffMultiplier,backoffIdleThreshold,backoffErrorThreshold,repeatCount,bridgeErrorHandler")
+        + ",greedy,scheduler,schedulerProperties,scheduledExecutorService,backoffMultiplier,backoffIdleThreshold,backoffErrorThreshold,repeatCount,bridgeErrorHandler")
 public class AS2Endpoint extends AbstractApiEndpoint<AS2ApiName, AS2Configuration> {
 
     @UriParam
@@ -196,6 +196,22 @@ public class AS2Endpoint extends AbstractApiEndpoint<AS2ApiName, AS2Configuratio
 
     public void setSigningCertificateChain(Certificate[] signingCertificateChain) {
         configuration.setSigningCertificateChain(signingCertificateChain);
+    }
+
+    public Certificate[] getValidateSigningCertificateChain() {
+        return configuration.getValidateSigningCertificateChain();
+    }
+
+    public void setValidateSigningCertificateChain(Certificate[] validateSigningCertificateChain) {
+        configuration.setValidateSigningCertificateChain(validateSigningCertificateChain);
+    }
+
+    public PrivateKey getDecryptingPrivateKey() {
+        return configuration.getDecryptingPrivateKey();
+    }
+
+    public void setDecryptingPrivateKey(PrivateKey decryptingPrivateKey) {
+        configuration.setDecryptingPrivateKey(decryptingPrivateKey);
     }
 
     public PrivateKey getSigningPrivateKey() {
