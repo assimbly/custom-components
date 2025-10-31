@@ -124,7 +124,7 @@ public class SqlProcessor implements Processor {
 
                         result = doc.createElement("Result");
                         primaryKey = doc.createElement("generatedKey");
-                        primaryKey.setTextContent(String.valueOf(resultSet.getInt(1)));
+                        primaryKey.setTextContent(resultSet.getString(1));
 
                         result.appendChild(primaryKey);
 
