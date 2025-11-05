@@ -5,7 +5,7 @@
 	<parent>
 		<artifactId>custom-components</artifactId>
 		<groupId>org.assimbly</groupId>
-		<version>5.0.7</version>
+		<version>5.0.8</version>
 	</parent>
 
 	<artifactId>edifact</artifactId>
