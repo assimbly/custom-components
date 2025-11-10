@@ -51,6 +51,8 @@ public class MailConfiguration implements Cloneable {
     // protocol is implied by component name so it should not be in UriPath
     private transient String protocol;
 
+    private boolean consumerMode = false;
+
     @UriPath
     @Metadata(required = true)
     private String host;
@@ -456,7 +458,8 @@ public class MailConfiguration implements Cloneable {
      * The accessToken for login
      */
     public String getAccessToken() {
-        return MongoDao.interpolatePossibleTenantVariable(accessToken, getTenant(), TenantVariable.TenantVarType.StaticTenantVariable);
+        TenantVariable.TenantVarType tenantVarType = consumerMode ? TenantVariable.TenantVarType.TenantVariable : TenantVariable.TenantVarType.StaticTenantVariable;
+        return MongoDao.interpolatePossibleTenantVariable(accessToken, getTenant(), tenantVarType);
     }
 
     public void setAccessToken(String accessToken) {
@@ -940,5 +943,13 @@ public class MailConfiguration implements Cloneable {
      */
     public void setHandleDuplicateAttachmentNames(String handleDuplicateAttachmentNames) {
         this.handleDuplicateAttachmentNames = handleDuplicateAttachmentNames;
+    }
+
+    public boolean isConsumerMode() {
+        return consumerMode;
+    }
+
+    public void setConsumerMode(boolean consumerMode) {
+        this.consumerMode = consumerMode;
     }
 }

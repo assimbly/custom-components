@@ -106,6 +106,7 @@ public class MailEndpoint extends ScheduledPollEndpoint implements HeaderFilterS
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
+        configuration.setConsumerMode(true);
         if (configuration.getProtocol().startsWith("smtp")) {
             throw new IllegalArgumentException(
                     "Protocol " + configuration.getProtocol()
