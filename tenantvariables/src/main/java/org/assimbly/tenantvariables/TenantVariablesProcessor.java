@@ -79,16 +79,16 @@ public class TenantVariablesProcessor implements Processor {
 
     private void getTenantVariable(Exchange exchange) {
         String name = endpoint.getConfiguration().getName();
-        String tenant = (endpoint.getConfiguration().getTenant()!=null ? endpoint.getConfiguration().getTenant() : DEFAULT_TENANT_NAME);
+        String tenantDbName = (endpoint.getConfiguration().getTenantDbName()!=null ? endpoint.getConfiguration().getTenantDbName() : DEFAULT_TENANT_NAME);
         String environment = (endpoint.getConfiguration().getEnvironment()!=null ? endpoint.getConfiguration().getEnvironment() : getEnvironment());
 
         name = interpolateVar(name, exchange, false);
 
-        TenantVariable gVariable = MongoDao.findTenantVariableByName(name, tenant);
+        TenantVariable gVariable = MongoDao.findTenantVariableByName(name, tenantDbName);
 
         if(gVariable == null) {
             throw new TenantVariableNotFoundException(
-                    String.format("The Tenant Variable \"%1$s\" for tenant \"%2$s\" was not found in the database.", name, tenant)
+                    String.format("The Tenant Variable \"%1$s\" for tenant \"%2$s\" was not found in the database.", name, tenantDbName)
             );
         }
 
@@ -99,17 +99,18 @@ public class TenantVariablesProcessor implements Processor {
 
         String value = (variable.isEncrypted() ? decrypt(variable.getValue()) : variable.getValue());
 
-        String header = interpolateVar(endpoint.getConfiguration().getHeader(), exchange, false);
+        String header = interpolateVar(endpoint.getConfiguration().getHeaderName(), exchange, false);
 
         exchange.getIn().setHeader(header, value);
     }
 
     private void setTenantVariable(Exchange exchange) {
-        String expressionType = endpoint.getConfiguration().getExpressionType();
+        String expressionType = endpoint.getConfiguration().getLanguage();
         String value = endpoint.getConfiguration().getValue();
         String name = endpoint.getConfiguration().getName();
-        String modifier = endpoint.getConfiguration().getModifier();
-        String tenant = (endpoint.getConfiguration().getTenant()!=null ? endpoint.getConfiguration().getTenant() : DEFAULT_TENANT_NAME);
+        String groupName = endpoint.getConfiguration().getGroupName();
+        String flowName = endpoint.getConfiguration().getFlowName();
+        String tenantDbName = (endpoint.getConfiguration().getTenantDbName()!=null ? endpoint.getConfiguration().getTenantDbName() : DEFAULT_TENANT_NAME);
         String environment = (endpoint.getConfiguration().getEnvironment()!=null ? endpoint.getConfiguration().getEnvironment() : getEnvironment());
         long modifyDate = System.currentTimeMillis();
 
@@ -117,8 +118,10 @@ public class TenantVariablesProcessor implements Processor {
 
         value = interpolateVar(Base64Helper.unmarshal(value, UTF_8), exchange, expressionType);
 
-        TenantVariable gVariable = MongoDao.findTenantVariableByName(name, tenant);
+        TenantVariable gVariable = MongoDao.findTenantVariableByName(name, tenantDbName);
         boolean gVariableExist = !Objects.isNull(gVariable);
+
+        String modifier = groupName.equalsIgnoreCase("groupless") ? flowName : groupName + "/" + flowName;
 
         if(!gVariableExist) {
             gVariable = new TenantVariable(name);
@@ -149,22 +152,22 @@ public class TenantVariablesProcessor implements Processor {
         variable.setLastUpdate(modifyDate);
         variable.setUpdatedBy(modifier);
 
-        MongoDao.updateTenantVariable(gVariable, tenant, gVariableExist);
+        MongoDao.updateTenantVariable(gVariable, tenantDbName, gVariableExist);
     }
 
     private void deleteTenantVariable(Exchange exchange) {
         String name = endpoint.getConfiguration().getName();
-        String tenant = (endpoint.getConfiguration().getTenant()!=null ? endpoint.getConfiguration().getTenant() : DEFAULT_TENANT_NAME);
+        String tenantDbName = (endpoint.getConfiguration().getTenantDbName()!=null ? endpoint.getConfiguration().getTenantDbName() : DEFAULT_TENANT_NAME);
 
         if(ExchangeHelper.hasVariables(name))
             name = ExchangeHelper.interpolate(name, exchange);
 
-        TenantVariable variable = MongoDao.findTenantVariableByName(name, tenant);
+        TenantVariable variable = MongoDao.findTenantVariableByName(name, tenantDbName);
 
         if(variable == null)
             throw new TenantVariableNotFoundException("The Tenant Variable \"" + name + "\" was not found in the database.");
 
-        MongoDao.deleteTenantVariable(variable, tenant);
+        MongoDao.deleteTenantVariable(variable, tenantDbName);
     }
 
     private String interpolateVar(String varValue, Exchange exchange, boolean bodyFlag) {

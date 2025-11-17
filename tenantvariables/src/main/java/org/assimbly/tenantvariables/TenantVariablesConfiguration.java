@@ -19,11 +19,11 @@ public class TenantVariablesConfiguration implements Cloneable {
     private Operation operation;
 
     @UriParam
-    private String expressionType;
+    private String language;
 
     @UriParam
     @Metadata(required = true, defaultValue = "default")
-    private String tenant;
+    private String tenantDbName;
 
     @UriParam
     @Metadata(required = true)
@@ -33,13 +33,16 @@ public class TenantVariablesConfiguration implements Cloneable {
     private String value;
 
     @UriParam
-    private String header;
+    private String headerName;
 
     @UriParam
     private boolean encrypt;
 
     @UriParam
-    private String modifier;
+    private String groupName;
+
+    @UriParam
+    private String flowName;
 
     public TenantVariablesConfiguration() { }
 
@@ -53,8 +56,8 @@ public class TenantVariablesConfiguration implements Cloneable {
     /**
      * The name of the variable to use.
      */
-    public void setTenant(String tenant) {
-        this.tenant = tenant;
+    public void setTenantDbName(String tenantDbName) {
+        this.tenantDbName = tenantDbName;
     }
 
     /**
@@ -82,8 +85,8 @@ public class TenantVariablesConfiguration implements Cloneable {
     /**
      * Header name on which the value of the given variable should be put.
      */
-    public void setHeader(String header) {
-        this.header = header;
+    public void setHeaderName(String headerName) {
+        this.headerName = headerName;
     }
 
     /**
@@ -93,14 +96,14 @@ public class TenantVariablesConfiguration implements Cloneable {
         this.encrypt = encrypt;
     }
 
-    public void setModifier(String modifier) { this.modifier = modifier; }
+    public void setGroupName(String groupName) { this.groupName = groupName; }
 
     public Operation getOperation() {
         return operation;
     }
 
-    public String getTenant() {
-        return tenant;
+    public String getTenantDbName() {
+        return tenantDbName;
     }
 
     public String getEnvironment() {
@@ -115,21 +118,29 @@ public class TenantVariablesConfiguration implements Cloneable {
         return value;
     }
 
-    public String getHeader() {
-        return header;
+    public String getHeaderName() {
+        return headerName;
     }
 
-    public String getModifier() { return modifier; }
+    public String getGroupName() { return groupName; }
 
     public boolean isEncrypt() {
         return encrypt;
     }
 
-    public String getExpressionType() {
-        return expressionType;
+    public String getLanguage() {
+        return language;
     }
 
-    public void setExpressionType(String expressionType) {
-        this.expressionType = expressionType;
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getFlowName() {
+        return flowName;
+    }
+
+    public void setFlowName(String flowName) {
+        this.flowName = flowName;
     }
 }
