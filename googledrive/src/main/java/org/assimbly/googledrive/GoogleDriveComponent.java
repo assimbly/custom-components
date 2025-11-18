@@ -12,6 +12,8 @@ public class GoogleDriveComponent extends DefaultComponent {
 
         GoogleDriveConfiguration configuration = new GoogleDriveConfiguration();
 
+        configuration.setDirectoryId(context);
+
         GoogleDriveEndpoint googleDriveEndpoint = new GoogleDriveEndpoint(uri, this, configuration);
 
         setProperties(googleDriveEndpoint.getConfiguration(), parameters);

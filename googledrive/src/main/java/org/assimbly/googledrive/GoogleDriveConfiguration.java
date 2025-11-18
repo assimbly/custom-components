@@ -2,12 +2,16 @@ package org.assimbly.googledrive;
 
 import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.UriParam;
+import org.apache.camel.spi.UriPath;
 import org.assimbly.tenantvariables.mongo.MongoDao;
 
 public class GoogleDriveConfiguration {
 
     public GoogleDriveConfiguration() {
     }
+
+    @UriPath
+    protected String directoryId;
 
     // common options
 
@@ -18,9 +22,6 @@ public class GoogleDriveConfiguration {
     @UriParam
     @Metadata(required = true)
     protected String tenant;
-
-    @UriParam
-    protected String directoryId;
 
     @UriParam
     protected String flowId;
