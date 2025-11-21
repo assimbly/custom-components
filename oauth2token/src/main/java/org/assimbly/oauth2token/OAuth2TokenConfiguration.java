@@ -8,13 +8,10 @@ import org.apache.camel.spi.UriPath;
 public class OAuth2TokenConfiguration implements Cloneable {
 
     @UriPath
-    private String name;
-
-    @UriParam
     private String id;
 
     @UriParam
-    private String tenant;
+    private String tenantDbName;
 
     @UriParam
     private String expiryDelay;
@@ -25,14 +22,6 @@ public class OAuth2TokenConfiguration implements Cloneable {
 
     public OAuth2TokenConfiguration() { }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getId() {
         return id;
     }
@@ -41,12 +30,12 @@ public class OAuth2TokenConfiguration implements Cloneable {
         this.id = id;
     }
 
-    public String getTenant() {
-        return tenant;
+    public String getTenantDbName() {
+        return tenantDbName;
     }
 
-    public void setTenant(String tenant) {
-        this.tenant = tenant;
+    public void setTenantDbName(String tenantDbName) {
+        this.tenantDbName = tenantDbName;
     }
 
     public String getExpiryDelay() {

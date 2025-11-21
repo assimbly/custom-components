@@ -30,7 +30,7 @@ public class OAuth2TokenProcessor implements Processor {
         String environment = TenantVariablesProcessor.getEnvironment();
 
         String id = endpoint.getConfiguration().getId();
-        String tenant = endpoint.getConfiguration().getTenant();
+        String tenant = endpoint.getConfiguration().getTenantDbName();
         String expiryDelay = endpoint.getConfiguration().getExpiryDelay();
         String tokenName = endpoint.getConfiguration().getTokenName();
 

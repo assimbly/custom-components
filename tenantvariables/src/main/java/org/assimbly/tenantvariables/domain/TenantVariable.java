@@ -65,7 +65,9 @@ public class TenantVariable {
 
     public Optional<EnvironmentValue> find(String environment) {
         return values.stream()
-                .filter(v -> v.getEnvironment().equals(environment))
+                .filter(v -> Optional.ofNullable(v.getEnvironment())
+                        .map(env -> env.equals(environment))
+                        .orElse(false))
                 .findFirst();
     }
 

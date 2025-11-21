@@ -12,7 +12,7 @@ public class OAuth2TokenComponent extends DefaultComponent {
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
         OAuth2TokenConfiguration configuration = new OAuth2TokenConfiguration();
 
-        configuration.setName(remaining);
+        configuration.setId(remaining);
 
         OAuth2TokenEndpoint endpoint = new OAuth2TokenEndpoint(uri, this, configuration);
 
