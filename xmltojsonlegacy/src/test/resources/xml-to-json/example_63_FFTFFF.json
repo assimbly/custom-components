@@ -1,0 +1,13 @@
+{
+    "@RESTmessage": "origin/drabbe/product/201300186_stuk/stock",
+    "@action": "POST",
+    "@class": "array",
+    "@key": "201300186_stuk",
+    "@sequence": "1",
+    "e": {
+        "identification": "201300186_stuk",
+        "quantity": "40",
+        "next_date": "9999-12-31",
+        "next_quantity": "1104"
+    }
+}

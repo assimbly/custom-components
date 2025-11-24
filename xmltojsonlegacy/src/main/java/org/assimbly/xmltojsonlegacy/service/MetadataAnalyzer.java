@@ -33,9 +33,10 @@ public class MetadataAnalyzer {
         ElementMetadata grandParentElementMetadata = metadataMap.getOrDefault(ElementMetadataUtils.getParentPath(parentElementMetadata.getPath()), new ElementMetadata());
         ElementMetadata greatGrandParentElementMetadata = metadataMap.getOrDefault(ElementMetadataUtils.getParentPath(grandParentElementMetadata.getPath()), new ElementMetadata());
 
-        if (metadata.getLevel() == 0 &&
-                ((metadata.getChildrenCount() == 1 && !metadata.isDefinesNamespaces() && !metadata.isHasAttributes()) || (metadata.getChildrenCount() == 0 && !metadata.isHasEmptyTextContent()))
-        ) {
+        if (metadata.getLevel() == 0 && (
+                (metadata.getChildrenCount() == 1 && !metadata.isDefinesNamespaces() && (metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY) || !metadata.isHasAttributes())) ||
+                (metadata.getChildrenCount() == 0 && !metadata.isHasEmptyTextContent())
+        )) {
             return true;
         }
         if (metadata.getDeepestDepth() > 2 && !metadata.isDefinesNamespaces() && metadata.areChildrenNamesEqual()) {
