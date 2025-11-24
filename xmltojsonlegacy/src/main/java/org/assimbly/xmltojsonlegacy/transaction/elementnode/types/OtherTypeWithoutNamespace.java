@@ -22,7 +22,11 @@ public class OtherTypeWithoutNamespace implements ElementNodeTransaction {
             boolean classAttrOnChildElementIsNUll = MetadataAnalyzer.isElementAttributeNull(childMetadata, Constants.JSON_XML_ATTR_CLASS);
             if(childrenHasEmptyTextContent ||
                     (metadata.getLevel() == 0 && metadata.getChildrenCount() > 1) ||
-                    (metadata.getChildrenCount() == 1 && (children == 0 || children >= 1 && (!classAttrOnChildElementIsNUll || !childMetadata.getAttributes().isEmpty()))) ||
+                    (metadata.getChildrenCount() == 1 && (
+                            !childMetadata.areChildrenNamesEqual() ||
+                            children == 0 ||
+                            children >= 1 && (!classAttrOnChildElementIsNUll || !childMetadata.getAttributes().isEmpty())
+                    )) ||
                     !metadata.areChildrenNamesEqual() ||
                     ElementMetadataUtils.isElementOnNamespace(metadata)
             ) {
