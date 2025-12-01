@@ -60,9 +60,10 @@ public class XmlToExcelProcessor implements Processor {
     private byte[] convertXmlToExcel(Document document) throws Exception {
 
         Node root = document.getDocumentElement();
-        List<CustomWorksheet> worksheets = config.getWorksheets();
+        boolean useCustomWorksheets = config.getUseCustomWorksheets();
 
-        if (worksheets != null && !worksheets.isEmpty()) {
+        if (useCustomWorksheets) {
+            List<CustomWorksheet> worksheets = config.getWorksheets();
             runCustomSheetProcessing(root, worksheets);
         }else {
             runStandardProcessing(root);

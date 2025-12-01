@@ -37,6 +37,10 @@ public class XmlToExcelConfiguration {
 
     @UriParam
     @Metadata(required = true)
+    private boolean useCustomWorksheets;
+
+    @UriParam
+    @Metadata(required = true)
     private ExcelFormat excelFormat;
 
     @UriParam
@@ -44,8 +48,7 @@ public class XmlToExcelConfiguration {
 
     public XmlToExcelConfiguration() { }
 
-    public XmlToExcelConfiguration(boolean includeHeader, boolean includeIndexColumn, String indexColumnName,
-                                   OrderHeaders orderHeaders, ExcelFormat excelFormat) {
+    public XmlToExcelConfiguration(boolean includeHeader, boolean includeIndexColumn, String indexColumnName, OrderHeaders orderHeaders, ExcelFormat excelFormat) {
         this.includeHeader = includeHeader;
         this.includeIndexColumn = includeIndexColumn;
         this.indexColumnName = indexColumnName;
@@ -91,6 +94,14 @@ public class XmlToExcelConfiguration {
 
     public void setExcelFormat(String excelFormat) {
         this.excelFormat = ExcelFormat.fromString(excelFormat);
+    }
+
+    public void setUseCustomWorksheets(boolean useCustomWorksheets) {
+        this.useCustomWorksheets = useCustomWorksheets;
+    }
+
+    public boolean getUseCustomWorksheets() {
+        return useCustomWorksheets;
     }
 
     public List<CustomWorksheet> getWorksheets() {

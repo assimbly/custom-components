@@ -25,14 +25,11 @@ import java.util.Scanner;
 )
 public class PdfEndpoint extends ResourceEndpoint {
 
-    private String uri;
     public PdfEndpoint() {
     }
 
     public PdfEndpoint(String uri, PdfComponent component, String resourceUri) {
         super(uri, component, resourceUri);
-
-        this.uri = uri;
     }
 
     public byte[] getPdfTemplate() throws IOException {
