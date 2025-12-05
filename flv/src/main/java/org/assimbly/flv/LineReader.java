@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 public class LineReader {
 
     // inbound meta
-    private static final String GROUP_PREFIX = "$group$";
+    private static final String GROUP_PREFIX = "_group_";
 
     // outbound meta
     private static final String RULE_TAG = "rule";

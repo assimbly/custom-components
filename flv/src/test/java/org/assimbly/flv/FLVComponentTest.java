@@ -48,7 +48,7 @@ public class FLVComponentTest extends CamelTestSupport {
         return new RouteBuilder() {
             public void configure() {
                 from("direct:start").to("flv:test" +
-                        "?$group$HDR=segmentTag[3]" +
+                        "?_group_HDR=segmentTag[3]" +
                             "customerNumber[10]" +
                             "customerReference[10]" +
                             "extraReference[10]" +
