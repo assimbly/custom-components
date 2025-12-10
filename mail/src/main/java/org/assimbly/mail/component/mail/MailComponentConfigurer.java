@@ -96,7 +96,7 @@ public class MailComponentConfigurer extends PropertyConfigurerSupport implement
             case "sslcontextparameters":
             case "sslContextParameters": getOrCreateConfiguration(target).setSslContextParameters(property(camelContext, org.apache.camel.support.jsse.SSLContextParameters.class, value)); return true;
             case "subject": getOrCreateConfiguration(target).setSubject(property(camelContext, java.lang.String.class, value)); return true;
-            case "tenant": getOrCreateConfiguration(target).setTenant(property(camelContext, java.lang.String.class, value)); return true;
+            case "tenantDbName": getOrCreateConfiguration(target).setTenantDbName(property(camelContext, java.lang.String.class, value)); return true;
             case "to": getOrCreateConfiguration(target).setTo(property(camelContext, java.lang.String.class, value)); return true;
             case "unseen": getOrCreateConfiguration(target).setUnseen(property(camelContext, boolean.class, value)); return true;
             case "useglobalsslcontextparameters":
@@ -184,7 +184,7 @@ public class MailComponentConfigurer extends PropertyConfigurerSupport implement
             case "sslcontextparameters":
             case "sslContextParameters": return org.apache.camel.support.jsse.SSLContextParameters.class;
             case "subject": return java.lang.String.class;
-            case "tenant": return java.lang.String.class;
+            case "tenantDbName": return java.lang.String.class;
             case "to": return java.lang.String.class;
             case "unseen": return boolean.class;
             case "useglobalsslcontextparameters":

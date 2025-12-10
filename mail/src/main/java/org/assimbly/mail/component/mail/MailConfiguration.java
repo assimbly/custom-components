@@ -67,7 +67,7 @@ public class MailConfiguration implements Cloneable {
     @UriParam(label = "security", secret = true)
     private String accessToken;
     @UriParam(label = "producer")
-    private String tenant;
+    private String tenantDbName;
     @UriParam(label = "producer")
     private String environment;
     @UriParam
@@ -459,19 +459,19 @@ public class MailConfiguration implements Cloneable {
      */
     public String getAccessToken() {
         TenantVariable.TenantVarType tenantVarType = consumerMode ? TenantVariable.TenantVarType.TenantVariable : TenantVariable.TenantVarType.StaticTenantVariable;
-        return MongoDao.interpolatePossibleTenantVariable(accessToken, getTenant(), tenantVarType);
+        return MongoDao.interpolatePossibleTenantVariable(accessToken, getTenantDbName(), tenantVarType);
     }
 
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
     }
 
-    public String getTenant() {
-        return tenant;
+    public String getTenantDbName() {
+        return tenantDbName;
     }
 
-    public void setTenant(String tenant) {
-        this.tenant = tenant;
+    public void setTenantDbName(String tenantDbName) {
+        this.tenantDbName = tenantDbName;
     }
 
     public String getEnvironment() {
