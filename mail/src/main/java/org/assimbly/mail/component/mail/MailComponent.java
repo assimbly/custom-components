@@ -59,6 +59,12 @@ public class MailComponent extends HeaderFilterStrategyComponent implements SSLC
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
+
+        // Since the runtime's metadata is stale,
+        // manually extract the tenantDbName parameter from the parameters map in createEndpoint() before calling the parent logic,
+        // and then set the value directly.
+        Object tenantDbNameValue = parameters.remove("tenantDbName");
+
         URI url = new URI(uri);
 
         // must use copy as each endpoint can have different options
@@ -111,6 +117,11 @@ public class MailComponent extends HeaderFilterStrategyComponent implements SSLC
         endpoint.setContentTypeResolver(contentTypeResolver);
         setEndpointHeaderFilterStrategy(endpoint);
         setProperties(endpoint, parameters);
+
+        if (tenantDbNameValue != null) {
+            // set tenantDbName value directly
+            config.setTenantDbName(tenantDbNameValue.toString());
+        }
 
         // sanity check that we know the mail server
         StringHelper.notEmpty(config.getHost(), "host");
