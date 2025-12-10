@@ -392,7 +392,7 @@ public class MailEndpointConfigurer extends PropertyConfigurerSupport implements
         case "startscheduler":
         case "startScheduler": return target.isStartScheduler();
         case "subject": return target.getConfiguration().getSubject();
-        case "tenantDbName": return java.lang.String.class;
+        case "tenantDbName": return target.getConfiguration().getTenantDbName();
         case "timeunit":
         case "timeUnit": return target.getTimeUnit();
         case "to": return target.getConfiguration().getTo();

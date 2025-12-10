@@ -66,7 +66,7 @@ public class MailConfiguration implements Cloneable {
     private String password;
     @UriParam(label = "security", secret = true)
     private String accessToken;
-    @UriParam(label = "producer")
+    @UriParam
     private String tenantDbName;
     @UriParam(label = "producer")
     private String environment;
