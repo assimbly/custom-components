@@ -65,27 +65,27 @@
 
         <angus.mail.version>2.0.5</angus.mail.version>
         <assimbly.version>5.1.0</assimbly.version>
-        <bouncycastle.version>1.82</bouncycastle.version>
+        <bouncycastle.version>1.83</bouncycastle.version>
         <config-admin.version>1.9.26</config-admin.version>
         <cxf.version>4.1.4</cxf.version>
         <camel.version>4.16.0</camel.version>
         <docconverter.version>1.15.0</docconverter.version>
-        <google.api.version>v3-rev20251114-2.0.0</google.api.version>
+        <google.api.version>v3-rev20251210-2.0.0</google.api.version>
         <google.auth.version>1.5.0</google.auth.version>
         <google.oauth.version>1.39.0</google.oauth.version>
-        <hibernate-core.version>6.6.36.Final</hibernate-core.version>
+        <hibernate-core.version>6.6.40.Final</hibernate-core.version>
         <httpcomponents.version>4.5.14</httpcomponents.version>
         <jakarta.activation.version>2.1.4</jakarta.activation.version>
         <jaxen.version>2.0.0</jaxen.version>
-        <jcifs.version>3.0.0</jcifs.version>
+        <jcifs.version>3.0.1</jcifs.version>
         <libsodium-jna.version>1.0.5</libsodium-jna.version>
         <mime4j.version>0.8.13</mime4j.version>
-        <mockito-core.version>5.20.0</mockito-core.version>
+        <mockito-core.version>5.21.0</mockito-core.version>
         <mockito-inline.version>5.2.0</mockito-inline.version>
         <mongo.version>4.7.2</mongo.version>
         <mvel.version>2.5.2.Final</mvel.version>
         <pdfbox.version>3.0.6</pdfbox.version>
-        <poi.version>5.5.0</poi.version>
+        <poi.version>5.5.1</poi.version>
         <saaj-impl.version>3.0.4</saaj-impl.version>
         <skyscreamer.version>1.5.3</skyscreamer.version>
         <smooks.version>1.7.1</smooks.version>
