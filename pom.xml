@@ -15,8 +15,6 @@
         <module>aggregate</module>
         <module>amazon</module>
         <module>auth</module>
-        <module>camel-as2-api</module>
-        <module>camel-as2-component</module>
         <module>cookies</module>
         <module>csvtoxml</module>
         <module>docconverter</module>
@@ -69,7 +67,6 @@
 
         <httpclient-version>5.4.4</httpclient-version>
         <velocity-version>2.4.1</velocity-version>
-        <as2-lib-version>5.1.5</as2-lib-version>
         <commons-codec-version>1.20.0</commons-codec-version>
         <commons-io-version>2.18.0</commons-io-version>
 
