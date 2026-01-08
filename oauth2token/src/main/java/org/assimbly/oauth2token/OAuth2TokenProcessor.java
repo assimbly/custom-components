@@ -9,7 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.assimbly.tenantvariables.TenantVariablesProcessor;
 import org.assimbly.oauth2token.service.TokenService;
 
-import java.util.Calendar;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class OAuth2TokenProcessor implements Processor {
 
@@ -42,7 +43,11 @@ public class OAuth2TokenProcessor implements Processor {
         String expireDate = TenantVariableManager.getTenantVariableValue(expireDateVarName, tenant, environment);
         String accessToken = TenantVariableManager.getTenantVariableValue(accessTokenVarName, tenant, environment);
         String refreshFlag = TenantVariableManager.getTenantVariableValue(refreshFlagVarName, tenant, environment);
-        String tokenTenantVarValue = TenantVariableManager.discoverAndGetTenantVariableValue(tokenName, tenant, environment);
+
+        List<String> tokenNames = parseTokenNames(tokenName);
+        boolean anyTokenMissing = tokenNames.stream()
+                .map(name -> TenantVariableManager.discoverAndGetTenantVariableValue(name, tenant, environment))
+                .anyMatch(StringUtils::isEmpty);
 
         Calendar expireCal = Calendar.getInstance();
         Calendar expireDelayCal = Calendar.getInstance();
@@ -64,23 +69,44 @@ public class OAuth2TokenProcessor implements Processor {
             logger.error("ERROR to calculate/set expire date vars", e);
         }
 
-        if(StringUtils.isEmpty(tokenTenantVarValue) ||
+        if(anyTokenMissing ||
                 nowCal.after(expireCal) || (
-                nowCal.before(expireCal) && nowCal.after(expireDelayCal) && refreshFlag.equals("0"))
+                nowCal.before(expireCal) && nowCal.after(expireDelayCal) && "0".equals(refreshFlag))
         ) {
-            // get new access token from service
-            String accessTokenOld = accessToken;
-            accessToken = TokenService.refreshTokenInfo(id, environment, tenant);
-            if(accessToken!=null && (!accessToken.equals(accessTokenOld) || StringUtils.isEmpty(tokenTenantVarValue))) {
-                // add token to tenant variable
-                TenantVariableManager.discoverAndSaveTenantVariable(tokenName, accessToken, tenant, environment);
-            }
+            accessToken = getAccessTokenFromService(accessToken, id, environment, tenant, anyTokenMissing, tokenNames);
         }
 
-        if(!TenantVariableManager.isStaticTenantVariable(tokenName)) {
-            // add token to the header
-            exchange.getOut().setHeader(tokenName, accessToken);
+        setHeaderWithToken(exchange, tokenNames, accessToken);
+    }
+
+    private static String getAccessTokenFromService(
+            String accessToken, String id, String environment, String tenant, boolean anyTokenMissing, List<String> tokenNames
+    ) {
+        // get new access token from service
+        String accessTokenOld = accessToken;
+        accessToken = TokenService.refreshTokenInfo(id, environment, tenant);
+        if(accessToken !=null && (!accessToken.equals(accessTokenOld) || anyTokenMissing)) {
+            for (String name : tokenNames) {
+                // add token to tenant variable
+                TenantVariableManager.discoverAndSaveTenantVariable(name, accessToken, tenant, environment);
+            }
         }
+        return accessToken;
+    }
+
+    private static void setHeaderWithToken(Exchange exchange, List<String> tokenNames, String accessToken) {
+        for (String name : tokenNames) {
+            if (!TenantVariableManager.isStaticTenantVariable(name)) {
+                exchange.getOut().setHeader(name, accessToken);
+            }
+        }
+    }
+
+    private List<String> parseTokenNames(String tokenName) {
+        return Arrays.stream(tokenName.split(","))
+                .map(String::trim)
+                .filter(StringUtils::isNotEmpty)
+                .collect(Collectors.toList());
     }
 
 }
