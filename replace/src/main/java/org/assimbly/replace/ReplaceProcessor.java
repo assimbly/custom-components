@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.assimbly.util.helper.ExchangeHelper;
 
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,7 +26,8 @@ public class ReplaceProcessor implements Processor {
         ReplaceConfiguration config = endpoint.getConfiguration();
 
         String regex = config.getRegex();
-        String replaceWith = ExchangeHelper.unescapeExceptionalCharacters(config.getReplaceWith());
+        String replaceWith = Optional.ofNullable(config.getReplaceWith()).orElse("");
+        replaceWith = ExchangeHelper.unescapeExceptionalCharacters(replaceWith);
 
         if(regex.contains("${header.")) {
             String[] headerNames = StringUtils.substringsBetween(regex, "${header.", "}");
