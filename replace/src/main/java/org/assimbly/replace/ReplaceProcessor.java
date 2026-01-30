@@ -3,7 +3,6 @@ package org.assimbly.replace;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.text.StringEscapeUtils;
 import org.assimbly.util.helper.ExchangeHelper;
 
 import java.util.Optional;

@@ -83,11 +83,18 @@ public class FLVReader extends BaseXmlReader {
      * Favors line readers with longer headers, which provide more specific matches
      * Example: header ARTDUMMY is more specific than ART
       */
-    private class HeaderLengthComparator implements Comparator<LineReader> {
-
+    private static class HeaderLengthComparator implements Comparator<LineReader> {
         @Override
-        public int compare(LineReader lineReader, LineReader otherLineReader) {
-            return lineReader.getHeader().length() - otherLineReader.getHeader().length();
+        public int compare(LineReader a, LineReader b) {
+            int lengthDiff = a.getHeader().length() - b.getHeader().length();
+
+            if (lengthDiff != 0) {
+                return lengthDiff;
+            }
+
+            // If lengths are the same, sort alphabetically to ensure
+            // deterministic behavior across different JDKs
+            return a.getHeader().compareTo(b.getHeader());
         }
     }
 
