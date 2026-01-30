@@ -16,34 +16,11 @@
  */
 package org.assimbly.mail.dataformat.mime.multipart;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.regex.Pattern;
-
 import jakarta.activation.DataHandler;
 import jakarta.activation.DataSource;
-import jakarta.mail.BodyPart;
-import jakarta.mail.Header;
-import jakarta.mail.MessagingException;
-import jakarta.mail.Part;
-import jakarta.mail.Session;
-import jakarta.mail.internet.ContentType;
-import jakarta.mail.internet.InternetHeaders;
-import jakarta.mail.internet.MimeBodyPart;
-import jakarta.mail.internet.MimeMessage;
-import jakarta.mail.internet.MimeMultipart;
-import jakarta.mail.internet.MimeUtility;
-import jakarta.mail.internet.ParseException;
+import jakarta.mail.*;
+import jakarta.mail.internet.*;
 import jakarta.mail.util.ByteArrayDataSource;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.NoTypeConversionAvailableException;
@@ -57,6 +34,10 @@ import org.apache.camel.support.MessageHelper;
 import org.apache.camel.util.IOHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.*;
+import java.util.*;
+import java.util.regex.Pattern;
 
 @Dataformat("mimeMultipart")
 public class MimeMultipartDataFormat extends DefaultDataFormat {

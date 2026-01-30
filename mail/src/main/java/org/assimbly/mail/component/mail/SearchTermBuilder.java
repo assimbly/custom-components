@@ -16,23 +16,11 @@
  */
 package org.assimbly.mail.component.mail;
 
-import java.util.Date;
-
 import jakarta.mail.Flags;
 import jakarta.mail.Message;
-import jakarta.mail.search.AndTerm;
-import jakarta.mail.search.BodyTerm;
-import jakarta.mail.search.ComparisonTerm;
-import jakarta.mail.search.FlagTerm;
-import jakarta.mail.search.FromStringTerm;
-import jakarta.mail.search.HeaderTerm;
-import jakarta.mail.search.NotTerm;
-import jakarta.mail.search.OrTerm;
-import jakarta.mail.search.ReceivedDateTerm;
-import jakarta.mail.search.RecipientStringTerm;
-import jakarta.mail.search.SearchTerm;
-import jakarta.mail.search.SentDateTerm;
-import jakarta.mail.search.SubjectTerm;
+import jakarta.mail.search.*;
+
+import java.util.Date;
 
 /**
  * A builder to build compound {@link SearchTerm}s.
