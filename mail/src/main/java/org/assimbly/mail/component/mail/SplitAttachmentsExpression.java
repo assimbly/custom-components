@@ -16,10 +16,6 @@
  */
 package org.assimbly.mail.component.mail;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.util.*;
-
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
@@ -29,10 +25,12 @@ import org.apache.camel.attachment.AttachmentMessage;
 import org.apache.camel.support.DefaultMessage;
 import org.apache.camel.support.ExpressionAdapter;
 import org.apache.camel.util.IOHelper;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A {@link org.apache.camel.Expression} which can be used to split a {@link MailMessage} per attachment. For example if
@@ -51,11 +49,10 @@ import org.slf4j.LoggerFactory;
  */
 public class SplitAttachmentsExpression extends ExpressionAdapter {
 
-    final static Logger LOG = LoggerFactory.getLogger(SplitAttachmentsExpression.class);
-
     public static final String HEADER_NAME = "CamelSplitAttachmentId";
 
-    public SplitAttachmentsExpression() { }
+    public SplitAttachmentsExpression() {
+    }
 
     @Override
     public Object evaluate(Exchange exchange) {
@@ -66,26 +63,16 @@ public class SplitAttachmentsExpression extends ExpressionAdapter {
 
         try {
             List<Message> answer = new ArrayList<>();
-            AttachmentMessage inAttachMessage = exchange.getIn(AttachmentMessage.class);
-            for (Map.Entry<String, Attachment> entry : inAttachMessage.getAttachmentObjects().entrySet()) {
+            AttachmentMessage inMessage = exchange.getIn(AttachmentMessage.class);
+            for (Map.Entry<String, Attachment> entry : inMessage.getAttachmentObjects().entrySet()) {
                 Message attachmentMessage = extractAttachment(entry.getValue(), entry.getKey(), exchange.getContext());
                 if (attachmentMessage != null) {
                     answer.add(attachmentMessage);
                 }
             }
 
-            for(Message m : answer){
-                for(String hKey : exchange.getIn().getHeaders().keySet()) {
-                    Object header = exchange.getIn().getHeader(hKey);
-                    if(m.getHeader(hKey) == null)
-                        m.setHeader(hKey, header);
-                }
-
-                if(m.getHeader("From") != null) {
-                    String email = m.getHeader("From").toString();
-                    m.setHeader("Source-Email", StringUtils.substringBetween(email, "<", ">"));
-                }
-            }
+            // clear attachments on original message after we have split them
+            inMessage.clearAttachments();
 
             return answer;
         } catch (Exception e) {

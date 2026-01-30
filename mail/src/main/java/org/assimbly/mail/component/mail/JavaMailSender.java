@@ -16,11 +16,11 @@
  */
 package org.assimbly.mail.component.mail;
 
-import java.util.Properties;
-
 import jakarta.mail.MessagingException;
 import jakarta.mail.Session;
 import jakarta.mail.internet.MimeMessage;
+
+import java.util.Properties;
 
 /**
  * The JavaMailSender interface contains all the methods of a JavaMailSender implementation currently used by the mail
@@ -31,8 +31,8 @@ public interface JavaMailSender {
     /**
      * Send the mail
      *
-     * @param  mimeMessage                   the message to send
-     * @throws jakarta.mail.MessagingException is thrown if error sending the mail.
+     * @param  mimeMessage                     the message to send
+     * @throws MessagingException is thrown if error sending the mail.
      */
     void send(MimeMessage mimeMessage) throws MessagingException;
 

@@ -16,11 +16,11 @@
  */
 package org.assimbly.mail.component.mail;
 
-import java.util.Date;
-
 import jakarta.mail.Message;
 import jakarta.mail.search.ComparisonTerm;
 import jakarta.mail.search.DateTerm;
+
+import java.util.Date;
 
 /**
  * A {@link jakarta.mail.search.SearchTerm} that is based on {@link DateTerm} that compares with current date (eg now).

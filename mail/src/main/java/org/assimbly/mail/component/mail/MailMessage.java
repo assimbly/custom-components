@@ -16,17 +16,16 @@
  */
 package org.assimbly.mail.component.mail;
 
-import java.io.IOException;
-import java.util.Map;
-
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.RuntimeCamelException;
 import org.apache.camel.support.DefaultMessage;
 import org.apache.camel.support.ExchangeHelper;
 import org.apache.camel.util.ObjectHelper;
+
+import java.io.IOException;
+import java.util.Map;
 
 /**
  * Represents a {@link org.apache.camel.Message} for working with Mail
