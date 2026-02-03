@@ -39,7 +39,7 @@ public class MetadataAnalyzer {
         )) {
             return true;
         }
-        if (metadata.getDeepestDepth() > 2 && !metadata.isDefinesNamespaces() && metadata.areChildrenNamesEqual()) {
+        if (metadata.getDeepestDepth() > 2 && !metadata.isDefinesNamespaces() && metadata.areChildrenNamesEqual() && !metadata.isHasAttributes()) {
             return true;
         }
         if (metadata.getDeepestDepth() == 2 && !metadata.isDefinesNamespaces() && metadata.areChildrenNamesEqual() &&
