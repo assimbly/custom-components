@@ -4,98 +4,50 @@ import org.apache.camel.Exchange;
 import org.apache.camel.RuntimeCamelException;
 import org.apache.camel.component.language.LanguageEndpoint;
 import org.apache.camel.component.language.LanguageProducer;
-import org.codehaus.groovy.ast.expr.MethodCallExpression;
-import org.codehaus.groovy.control.CompilerConfiguration;
-import org.codehaus.groovy.control.customizers.SecureASTCustomizer;
-import groovy.lang.GroovyShell;
 
-import java.net.URI;
-import java.util.Arrays;
+import java.util.UUID;
 
+/**
+ * Extends the LanguageProducer to enable the stricter SecurityManager.
+ */
 public class SandboxProducer extends LanguageProducer {
 
     public SandboxProducer(LanguageEndpoint endpoint) {
         super(endpoint);
     }
 
+    /**
+     * Overrides the process method to enable and disable the custom SecurityManager.
+     */
     @Override
     public void process(Exchange exchange) throws Exception {
-        // Use the URI to determine the language (sandbox://groovy?...)
-        String uriString = getEndpoint().getEndpointUri();
-        URI javaUri = new URI(uriString);
-        String language = javaUri.getHost();
+        UUID uuid = UUID.randomUUID();
 
-        if ("groovy".equalsIgnoreCase(language)) {
-            executeGroovy(exchange);
-        } else {
-            super.process(exchange);
-        }
-    }
+        SandboxSecurityManager.getInstance().secure(uuid);
 
-    private void executeGroovy(Exchange exchange) {
-        LanguageEndpoint endpoint = getEndpoint();
+        /*
+         * Comment out setting the security manager as it causes the whole JVM to be in a Sandbox
+         * and since we run asynchronous flows we do not want that.
+         *
+         * if(System.getSecurityManager() == null)
+         *   System.setSecurityManager(SandboxSecurityManager.getInstance());
+         *
+         */
 
-        // 1. Get the script from the URI (as defined in your XML)
-        String script = endpoint.getScript();
-
-        // If URI didn't have a script, fall back to the Body
-        if (script == null || script.isEmpty()) {
-            script = exchange.getIn().getBody(String.class);
-        }
-
-        // 2. Setup the "Guard" (Customizer)
-        SecureASTCustomizer customizer = new SecureASTCustomizer();
-
-        // This blocks TimeZone.setDefault() at the compiler level
-        customizer.setDisallowedReceivers(Arrays.asList(
-                "java.lang.System",
-                "java.lang.Runtime",
-                "java.util.TimeZone",
-                "java.util.Locale",
-                "java.lang.Class",               // Prevents class-loading attacks
-                "java.lang.ClassLoader",         // Prevents loading external jars
-                "java.lang.Thread",              // Prevents thread manipulation
-                "java.lang.ThreadGroup",
-                "java.lang.reflect.Method",      // Prevents Reflection escapes
-                "java.lang.reflect.Field",
-                "java.lang.reflect.Constructor"
-        ));
-
-        customizer.addExpressionCheckers(expression -> {
-            if (expression instanceof MethodCallExpression) {
-                String method = ((MethodCallExpression) expression).getMethodAsString();
-                if (Arrays.asList("exit", "halt").contains(method)) {
-                    throw new SecurityException("Method call forbidden: " + method);
-                }
-            }
-            return true;
-        });
-
-        CompilerConfiguration config = new CompilerConfiguration();
-        config.addCompilationCustomizers(customizer);
-
-        // 3. Bind variables so your script works
-        GroovyShell shell = new GroovyShell(config);
-
-        // This maps your script's 'request' to the Camel Message
-        shell.setProperty("request", exchange.getIn());
-        shell.setProperty("exchange", exchange);
-        shell.setProperty("headers", exchange.getIn().getHeaders());
-        shell.setProperty("body", exchange.getIn().getBody());
+        boolean failed = false;
 
         try {
-            Object result = shell.evaluate(script);
+            super.process(exchange);
+        } catch (SecurityException e) {
+            failed = true;
+        } finally {
+            SandboxSecurityManager.getInstance().unsecure(uuid);
 
-            // 4. Handle results
-            // If script uses 'result = ...', grab it. Otherwise use evaluation result.
-            Object scriptResult = shell.getVariable("result");
-            if (scriptResult != null) {
-                exchange.getIn().setBody(scriptResult);
-            } else if (result != null) {
-                exchange.getIn().setBody(result);
+            System.setSecurityManager(null);
+
+            if (failed) {
+                throw new RuntimeCamelException("Security breach");
             }
-        } catch (Exception e) {
-            throw new RuntimeCamelException("Groovy Sandbox Error: " + e.getMessage(), e);
         }
     }
 }
