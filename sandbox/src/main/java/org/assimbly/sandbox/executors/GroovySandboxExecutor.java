@@ -1,64 +1,62 @@
 package org.assimbly.sandbox.executors;
 
 import groovy.lang.Binding;
-import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyShell;
 import org.apache.camel.Exchange;
 import org.apache.camel.RuntimeCamelException;
-import org.assimbly.sandbox.SandboxSecurityManager;
-
-import java.util.UUID;
-import java.util.regex.Pattern;
+import org.codehaus.groovy.control.CompilerConfiguration;
+import org.kohsuke.groovy.sandbox.GroovyInterceptor;
+import org.kohsuke.groovy.sandbox.SandboxTransformer;
 
 public class GroovySandboxExecutor {
 
-    private static final Pattern BLACKLIST_PATTERN = Pattern.compile(
-            "(?:System|TimeZone|Locale|Authenticator|CookieHandler|ProxySelector)\\.setDefault\\s*\\(" +
-                    "|System\\.exit" +
-                    "|System\\.set(?:Property|Out|Err|In|SecurityManager)"
-    );
+    public static void execute(String script, Exchange exchange) {
 
-    public static void execute(String script, Exchange exchange) throws Exception {
+        CompilerConfiguration config = new CompilerConfiguration();
+        config.addCompilationCustomizers(new SandboxTransformer());
 
-        // 1. Fail fast check
-        if (script != null && BLACKLIST_PATTERN.matcher(script).find()) {
-            throw new RuntimeCamelException("Security Violation: Script contains forbidden global state changes.");
-        }
-
-        // 2. Setup Isolated ClassLoader
-        ClassLoader currentLoader = Thread.currentThread().getContextClassLoader();
-        ClassLoader filteredParent = new ClassLoader(ClassLoader.getPlatformClassLoader()) {
+        // In Crafter 4.5.0, GroovyInterceptor uses Invoker as the first parameter
+        GroovyInterceptor interceptor = new GroovyInterceptor() {
             @Override
-            protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
-                if (name.startsWith("java.") || name.startsWith("javax.") ||
-                        name.startsWith("groovy.") || name.startsWith("org.codehaus.groovy.")) {
-                    return currentLoader.loadClass(name);
+            public Object onStaticCall(Invoker invoker, Class receiver, String method, Object[] args) throws Throwable {
+                if (receiver == System.class && method.equals("exit")) {
+                    throw new SecurityException("Sandbox Denial: System.exit() is not allowed.");
                 }
-                throw new ClassNotFoundException("Sandbox Access Denied: " + name);
+                if (receiver == java.util.TimeZone.class && method.equals("setDefault")) {
+                    throw new SecurityException("Sandbox Denial: Cannot change global TimeZone.");
+                }
+                // Use invoker.call instead of next.call
+                return invoker.call(receiver, method, args);
+            }
+
+            @Override
+            public Object onMethodCall(Invoker invoker, Object receiver, String method, Object[] args) throws Throwable {
+                if (method.equals("getClass") || method.equals("class")) {
+                    throw new SecurityException("Sandbox Denial: Reflection is forbidden.");
+                }
+                return invoker.call(receiver, method, args);
             }
         };
 
-        try (GroovyClassLoader isolatedLoader = new GroovyClassLoader(filteredParent)) {
+        interceptor.register();
+        try {
             Binding binding = new Binding();
-            binding.setVariable("request", exchange.getIn());
             binding.setVariable("exchange", exchange);
+            binding.setVariable("body", exchange.getIn().getBody());
+            binding.setVariable("headers", exchange.getIn().getHeaders());
+            binding.setVariable("request", exchange.getIn());
+            binding.setVariable("message", exchange.getIn());
 
-            GroovyShell shell = new GroovyShell(isolatedLoader, binding);
-            UUID uuid = UUID.randomUUID();
-            SandboxSecurityManager.getInstance().secure(uuid);
+            GroovyShell shell = new GroovyShell(binding, config);
+            Object result = shell.evaluate(script);
 
-            try {
-                // Execute and handle result with your validated logic
-                Object result = shell.evaluate(script);
-
-                if (result != null) {
-                    exchange.getIn().setBody(result);
-                } else if (binding.hasVariable("result")) {
-                    exchange.getIn().setBody(binding.getVariable("result"));
-                }
-            } finally {
-                SandboxSecurityManager.getInstance().unsecure(uuid);
+            if (result != null) {
+                exchange.getIn().setBody(result);
             }
+        } catch (Throwable e) {
+            throw new RuntimeCamelException("Groovy Sandbox violation: " + e.getMessage(), e);
+        } finally {
+            interceptor.unregister();
         }
     }
 }
