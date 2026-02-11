@@ -12,12 +12,22 @@ import org.apache.camel.spi.Language;
  */
 public class SandboxEndpoint extends LanguageEndpoint {
 
+    private boolean strictSecureMode = true;
+
     public SandboxEndpoint() {
         super();
     }
 
     public SandboxEndpoint(String endpointUri, Component component, Language language, Expression expression, String resourceUri) {
         super(endpointUri, component, language, expression, resourceUri);
+    }
+
+    public boolean isStrictSecureMode() {
+        return strictSecureMode;
+    }
+
+    public void setStrictSecureMode(boolean strictSecureMode) {
+        this.strictSecureMode = strictSecureMode;
     }
 
     /**

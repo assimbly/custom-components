@@ -15,7 +15,6 @@ public class GroovySandboxExecutor {
         CompilerConfiguration config = new CompilerConfiguration();
         config.addCompilationCustomizers(new SandboxTransformer());
 
-        // In Crafter 4.5.0, GroovyInterceptor uses Invoker as the first parameter
         GroovyInterceptor interceptor = new GroovyInterceptor() {
             @Override
             public Object onStaticCall(Invoker invoker, Class receiver, String method, Object[] args) throws Throwable {
