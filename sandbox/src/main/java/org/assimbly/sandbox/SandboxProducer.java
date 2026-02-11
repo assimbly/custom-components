@@ -18,9 +18,10 @@ public class SandboxProducer extends LanguageProducer {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        String language = getEndpoint().getLanguage().toString();
+        SandboxEndpoint endpoint = (SandboxEndpoint) getEndpoint();
+        String language = endpoint.getLanguage().toString();
 
-        if (language.toLowerCase().contains("groovy")) {
+        if (endpoint.isStrictSecureMode() && language.toLowerCase().contains("groovy")) {
             String script = getEndpoint().getScript();
             if (script == null) {
                 script = exchange.getIn().getBody(String.class);
