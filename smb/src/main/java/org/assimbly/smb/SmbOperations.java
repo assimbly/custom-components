@@ -336,10 +336,17 @@ public class SmbOperations<SmbFile> implements GenericFileOperations<SmbFile> {
 
     @Override
     public void changeCurrentDirectory(final String path) {
+        throw new UnsupportedOperationException("changeCurrentDirectory is not supported by SmbOperations");
     }
 
     @Override
     public void changeToParentDirectory() {
+        throw new UnsupportedOperationException("changeToParentDirectory is not supported by SmbOperations");
+    }
+
+    @Override
+    public boolean storeFileDirectly(String name, String resourceName) throws GenericFileOperationFailedException {
+        throw new UnsupportedOperationException("storeFileDirectly is not supported by SmbOperations");
     }
 
     @Override

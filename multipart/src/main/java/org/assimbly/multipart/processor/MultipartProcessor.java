@@ -19,7 +19,7 @@ public class MultipartProcessor implements Processor {
 
         // Read the incoming message…
         byte[] file = exchange.getIn().getBody(byte[].class);
-        String fname = exchange.getIn().getHeader(Exchange.FILE_NAME, String.class);
+        String fileName = exchange.getIn().getHeader(Exchange.FILE_NAME, String.class);
         String ftype = exchange.getIn().getHeader(Exchange.CONTENT_TYPE, String.class);
         String field = exchange.getIn().getHeader("MultipartFieldName", String.class);
 
@@ -35,14 +35,14 @@ public class MultipartProcessor implements Processor {
         if (field == null)
             throw new NullPointerException("There was no field name set.");
 
-        if (fname == null) {
-            fname = "UndefinedFileName";
+        if (fileName == null) {
+            fileName = "UndefinedFileName";
             logger.error("Multipart Processor Error: No file name found for binary body we gave it a static file name.");
         }
 
         // Encode the file as a multipart entity…
         MultipartEntityBuilder entity = MultipartEntityBuilder.create();
-        entity.addPart(field, new ByteArrayBody(file, ContentType.create(ftype), fname));
+        entity.addPart(field, new ByteArrayBody(file, ContentType.create(ftype), fileName));
         entity.setBoundary("--------------------------Assimbly");
 
         if (entity.build() == null)
