@@ -9,7 +9,7 @@
     <packaging>pom</packaging>
     <name>custom-components</name>
     <url>https://www.org.assimbly</url>
-    <version>5.0.9-SNAPSHOT</version>
+    <version>5.0.9</version>
 
     <modules>
         <module>aggregate</module>
@@ -73,7 +73,7 @@
         <assertj-core.version>3.27.3</assertj-core.version>
         <awaitility.version>4.3.0</awaitility.version>
         <axiom.version>1.2.20</axiom.version>
-        <assimbly.version>5.0.9-SNAPSHOT</assimbly.version>
+        <assimbly.version>5.0.9</assimbly.version>
         <bouncycastle.version>1.79</bouncycastle.version>
         <config-admin.version>1.9.26</config-admin.version>
         <cxf.version>4.1.4</cxf.version>
