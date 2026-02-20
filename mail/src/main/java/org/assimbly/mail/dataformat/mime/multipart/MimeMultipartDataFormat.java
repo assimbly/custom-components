@@ -122,7 +122,7 @@ public class MimeMultipartDataFormat extends DefaultDataFormat {
                     if (!contentType.match("text/*") && binaryContent) {
                         part.setHeader(CONTENT_TRANSFER_ENCODING, "binary");
                     } else {
-                        //Comment code to keep it consistent with camel2/Dovetail
+                        //Comment code to keep it consistent with camel2
                         //setContentTransferEncoding(part, contentType);
                     }
                     // Set headers to the attachment
