@@ -16,23 +16,8 @@
  */
 package org.assimbly.mail.component.mail;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-
-import jakarta.mail.Flags;
-import jakarta.mail.Folder;
-import jakarta.mail.FolderNotFoundException;
-import jakarta.mail.Message;
-import jakarta.mail.MessagingException;
-import jakarta.mail.PasswordAuthentication;
-import jakarta.mail.Store;
+import jakarta.mail.*;
 import jakarta.mail.search.SearchTerm;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePropertyKey;
 import org.apache.camel.Processor;
@@ -51,6 +36,9 @@ import org.eclipse.angus.mail.imap.IMAPStore;
 import org.eclipse.angus.mail.imap.SortTerm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.*;
 
 /**
  * A {@link org.apache.camel.Consumer Consumer} which consumes messages from JavaMail using a
@@ -158,6 +146,9 @@ public class MailConsumer extends ScheduledBatchPollingConsumer {
             return 0; // return since we cannot poll mail messages, but will re-connect on next poll.
         }
 
+        // okay consumer is connected to the mail server
+        forceConsumerAsReady();
+
         try {
             int count = folder.getMessageCount();
             if (count > 0) {
@@ -230,8 +221,9 @@ public class MailConsumer extends ScheduledBatchPollingConsumer {
             // update pending number of exchanges
             pendingExchanges = total - index - 1;
 
-            // must use the original message in case we need to workaround a charset issue when extracting mail content
-            final Message mail = exchange.getIn(MailMessage.class).getOriginalMessage();
+            // must use the original message in case we need to work around a charset issue when extracting mail content
+            var msg = exchange.getIn();
+            final Message mail = ((MailMessage) msg).getOriginalMessage();
 
             // add on completion to handle after work when the exchange is done
             exchange.getExchangeExtension().addOnCompletion(new SynchronizationAdapter() {
@@ -270,8 +262,8 @@ public class MailConsumer extends ScheduledBatchPollingConsumer {
         if (mail.getClass().getSimpleName().startsWith("IMAP")) {
             try {
                 LOG.trace("Calling setPeek(true) on mail message {}", mail);
-                BeanIntrospection beanIntrospection = PluginHelper.getBeanIntrospection(getEndpoint().getCamelContext());
-
+                BeanIntrospection beanIntrospection
+                        = PluginHelper.getBeanIntrospection(getEndpoint().getCamelContext());
                 beanIntrospection.setProperty(getEndpoint().getCamelContext(), mail, "peek", true);
             } catch (Exception e) {
                 // ignore
@@ -358,7 +350,7 @@ public class MailConsumer extends ScheduledBatchPollingConsumer {
                 }
             }
         }
-        return msgs.toArray(new Message[msgs.size()]);
+        return msgs.toArray(new Message[0]);
     }
 
     private boolean isValidMessage(String key, Message msg) {
@@ -447,8 +439,10 @@ public class MailConsumer extends ScheduledBatchPollingConsumer {
      */
     protected void processExchange(Exchange exchange) throws Exception {
         if (LOG.isDebugEnabled()) {
-            MailMessage msg = (MailMessage) exchange.getIn();
-            LOG.debug("Processing message: {}", MailUtils.dumpMessage(msg.getMessage()));
+            var msg = exchange.getIn();
+            if (msg instanceof MailMessage mm) {
+                LOG.debug("Processing message: {}", MailUtils.dumpMessage(mm.getMessage()));
+            }
         }
         getProcessor().process(exchange);
     }

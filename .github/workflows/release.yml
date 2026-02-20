@@ -78,8 +78,6 @@ jobs:
             org.assimbly.edifactstandards
             org.assimbly.jsontoxmllegacy
             org.assimbly.xmltojsonlegacy
-            org.assimbly.camel-as2-api
-            org.assimbly.camel-as2-component
             org.assimbly.custom-components
 
   release-jars:

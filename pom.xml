@@ -9,14 +9,12 @@
     <packaging>pom</packaging>
     <name>custom-components</name>
     <url>https://www.org.assimbly</url>
-    <version>5.0.8</version>
+    <version>5.0.9</version>
 
     <modules>
         <module>aggregate</module>
         <module>amazon</module>
         <module>auth</module>
-        <module>camel-as2-api</module>
-        <module>camel-as2-component</module>
         <module>cookies</module>
         <module>csvtoxml</module>
         <module>docconverter</module>
@@ -69,40 +67,44 @@
 
         <httpclient-version>5.4.4</httpclient-version>
         <velocity-version>2.4.1</velocity-version>
-        <as2-lib-version>5.1.3</as2-lib-version>
-        <commons-codec-version>1.18.0</commons-codec-version>
+        <commons-codec-version>1.20.0</commons-codec-version>
         <commons-io-version>2.18.0</commons-io-version>
 
+        <assertj-core.version>3.27.3</assertj-core.version>
+        <awaitility.version>4.3.0</awaitility.version>
         <axiom.version>1.2.20</axiom.version>
-        <assimbly.version>5.0.8</assimbly.version>
+        <assimbly.version>5.0.9</assimbly.version>
         <bouncycastle.version>1.79</bouncycastle.version>
         <config-admin.version>1.9.26</config-admin.version>
-        <cxf.version>4.1.3</cxf.version>
-        <camel.version>4.10.6</camel.version>
+        <cxf.version>4.1.4</cxf.version>
+        <camel.version>4.10.9</camel.version>
         <docconverter.version>1.15.0</docconverter.version>
         <google.api.version>v3-rev20250819-2.0.0</google.api.version>
         <google.auth.version>1.5.0</google.auth.version>
         <google.oauth.version>1.39.0</google.oauth.version>
+        <greenmail.version>2.1.3</greenmail.version>
+        <groovy-sandbox.version>4.3.2</groovy-sandbox.version>
         <hapi.version>2.5.1</hapi.version>
-        <hibernate-core.version>6.6.28.Final</hibernate-core.version>
+        <hibernate-core.version>6.6.40.Final</hibernate-core.version>
         <httpclient.version>4.5.14</httpclient.version>
         <httpcomponents.version>4.5.14</httpcomponents.version>
         <java-assist.version>3.29.2-GA</java-assist.version>
         <jaxen.version>2.0.0</jaxen.version>
-        <angus.mail.version>2.0.3</angus.mail.version>
+        <angus.mail.version>2.0.5</angus.mail.version>
         <jakarta.activation.version>2.1.3</jakarta.activation.version>
         <jakarta.mail.version>2.1.3</jakarta.mail.version>
         <jcifs.version>2.1.40</jcifs.version>
         <libsodium-jna.version>1.0.5</libsodium-jna.version>
         <mvel.version>2.5.2.Final</mvel.version>
         <mime4j.version>0.8.13</mime4j.version>
+        <mock-javamail_1.7.version>3.22.4</mock-javamail_1.7.version>
         <mockito.version>3.3.3</mockito.version>
         <mockito-core.version>5.15.2</mockito-core.version>
         <mockito-inline.version>5.2.0</mockito-inline.version>
         <mongo.version>4.7.2</mongo.version>
         <osgi.version>6.0.0</osgi.version>
-        <pdfbox.version>3.0.5</pdfbox.version>
-        <poi.version>5.4.1</poi.version>
+        <pdfbox.version>3.0.6</pdfbox.version>
+        <poi.version>5.5.1</poi.version>
         <saaj-impl.version>3.0.4</saaj-impl.version>
         <saxon.version>9.7.0-21</saxon.version>
         <smooks.version>1.7.1</smooks.version>

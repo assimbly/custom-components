@@ -1,12 +1,11 @@
 package org.assimbly.mail.component.mail;
 
+import jakarta.activation.DataHandler;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.attachment.AttachmentMessage;
 import org.apache.commons.io.IOUtils;
 import org.assimbly.util.helper.MimeTypeHelper;
-
-import jakarta.activation.DataHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

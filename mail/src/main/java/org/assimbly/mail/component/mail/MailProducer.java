@@ -16,18 +16,17 @@
  */
 package org.assimbly.mail.component.mail;
 
-import java.io.IOException;
-import java.util.Map;
-
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-
 import org.apache.camel.AsyncCallback;
 import org.apache.camel.Exchange;
 import org.apache.camel.support.DefaultAsyncProducer;
 import org.apache.camel.util.URISupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.Map;
 
 /**
  * A Producer to send messages using JavaMail.
