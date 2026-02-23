@@ -1,0 +1,24 @@
+{
+    "rmessage": {
+        "@RESTgroupId": "70003",
+        "@action": "POST",
+        "@additionalInfo": "Uitvoering_presentatie_92",
+        "@applicationId": "CLOUDSUITE",
+        "@comment": "Vertalen attribuutwaardes (translations)",
+        "@id": "translations_003",
+        "@message": "origin/bijou/attributelist",
+        "@messageId": "7000301010",
+        "@parameters": "/Uitvoering_presentatie_92/translations",
+        "@step": "01",
+        "list_value": [
+            {
+                "lang": "nl_NL",
+                "value": "TZ 541"
+            },
+            {
+                "lang": "fr_FR",
+                "value": "TZ 541"
+            }
+        ]
+    }
+}

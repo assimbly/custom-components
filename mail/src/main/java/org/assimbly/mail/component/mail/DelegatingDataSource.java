@@ -16,14 +16,13 @@
  */
 package org.assimbly.mail.component.mail;
 
+import jakarta.activation.DataSource;
+import org.apache.camel.util.ObjectHelper;
+import org.apache.camel.util.StringHelper;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import jakarta.activation.DataSource;
-
-import org.apache.camel.util.ObjectHelper;
-import org.apache.camel.util.StringHelper;
 
 final class DelegatingDataSource implements DataSource {
 

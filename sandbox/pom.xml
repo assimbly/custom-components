@@ -24,12 +24,11 @@
   </distributionManagement>
 
   <dependencies>
-      <!--<dependency>
-          <groupId>org.apache.camel</groupId>
-          <artifactId>camel-language</artifactId>
-          <version>3.18.0</version>
-          <scope>compile</scope>
-      </dependency>-->
+	  <dependency>
+		  <groupId>org.craftercms</groupId>
+		  <artifactId>groovy-sandbox</artifactId>
+		  <version>${groovy-sandbox.version}</version>
+	  </dependency>
   </dependencies>
 
 	<build>

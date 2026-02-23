@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<message RESTmessage="origin/drabbe/product/201300186_stuk/stock" action="POST" class="array" key="201300186_stuk" sequence="1">
+    <e>
+        <identification>201300186_stuk</identification>
+        <quantity>40</quantity>
+        <next_date>9999-12-31</next_date>
+        <next_quantity>1104</next_quantity>
+    </e>
+</message>
