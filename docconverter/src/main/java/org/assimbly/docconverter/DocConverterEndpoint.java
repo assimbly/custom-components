@@ -23,7 +23,7 @@ public class DocConverterEndpoint extends ProcessorEndpoint {
     @Metadata(required = true)
     private String uri;
 
-    private DocConverterComponent component;
+    private final DocConverterComponent component;
 
     public DocConverterEndpoint(DocConverterComponent component, String uri) {
         super(uri,component);
@@ -39,7 +39,7 @@ public class DocConverterEndpoint extends ProcessorEndpoint {
 
     @Override
     public Component getComponent(){
-        return (Component) component;
+        return component;
     }
 
     @ManagedAttribute(description = "Type of conversion")

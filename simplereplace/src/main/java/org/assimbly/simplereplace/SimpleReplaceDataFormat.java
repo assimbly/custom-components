@@ -12,6 +12,7 @@ public class SimpleReplaceDataFormat implements DataFormat {
 
     @Override
     public void marshal(Exchange exchange, Object graph, OutputStream stream) throws Exception {
+        //Only unmarshall is needed
     }
 
     @Override

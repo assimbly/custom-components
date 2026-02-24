@@ -9,9 +9,7 @@ public class DocConverterComponent extends DefaultComponent {
 
     @Override
     protected Endpoint createEndpoint(String uri, String context, Map<String, Object> parameters) {
-
-        DocConverterEndpoint endpoint = new DocConverterEndpoint(this, uri);
-
-        return endpoint;
+        return new DocConverterEndpoint(this, uri);
     }
+
 }

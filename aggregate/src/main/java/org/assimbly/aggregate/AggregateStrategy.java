@@ -8,9 +8,7 @@ import org.apache.camel.Exchange;
 
 public class AggregateStrategy implements AggregationStrategy {
 
-    final static Logger logger = Logger.getLogger(AggregateStrategy.class);
-
-    private AggregationStrategy AggregateStrategy;
+    private AggregationStrategy aggregationStrategy;
 
     @Override
     public Exchange aggregate(Exchange firstExchange, Exchange newExchange) {
@@ -20,15 +18,13 @@ public class AggregateStrategy implements AggregationStrategy {
         if (firstExchange != null)
             aggregateType = firstExchange.getProperty("Aggregate-Type", String.class);
 
-        switch(aggregateType) {
-            case "text/xml":
-                AggregateStrategy = new XmlAggregateStrategy();
-                break;
-            case "application/json":
-                AggregateStrategy = new JsonAggregateStrategy();
+        if(aggregateType.equalsIgnoreCase("text/xml")){
+            aggregationStrategy = new XmlAggregateStrategy();
+        }else if(aggregateType.equalsIgnoreCase("application/json")){
+            aggregationStrategy = new JsonAggregateStrategy();
         }
 
-        return AggregateStrategy.aggregate(firstExchange, newExchange);
+        return aggregationStrategy.aggregate(firstExchange, newExchange);
     }
 
 }
