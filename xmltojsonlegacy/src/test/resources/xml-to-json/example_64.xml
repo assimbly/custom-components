@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rmessage RESTgroupId="70003" action="POST" additionalInfo="Uitvoering_presentatie_92" applicationId="CLOUDSUITE" comment="Vertalen attribuutwaardes (translations)" id="translations_003" message="origin/bijou/attributelist" messageId="7000301010" parameters="/Uitvoering_presentatie_92/translations" step="01">
+    <list_value>
+        <e>
+            <lang>nl_NL</lang>
+            <value>TZ 541</value>
+        </e>
+        <e>
+            <lang>fr_FR</lang>
+            <value>TZ 541</value>
+        </e>
+    </list_value>
+</rmessage>

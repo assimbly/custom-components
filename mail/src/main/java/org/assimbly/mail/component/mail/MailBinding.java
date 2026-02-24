@@ -16,36 +16,11 @@
  */
 package org.assimbly.mail.component.mail;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
-import java.nio.charset.IllegalCharsetNameException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.UUID;
-
 import jakarta.activation.DataHandler;
 import jakarta.activation.DataSource;
-import jakarta.mail.Address;
-import jakarta.mail.BodyPart;
-import jakarta.mail.Header;
-import jakarta.mail.Message;
-import jakarta.mail.MessagingException;
-import jakarta.mail.Multipart;
-import jakarta.mail.Part;
-import jakarta.mail.internet.AddressException;
-import jakarta.mail.internet.InternetAddress;
-import jakarta.mail.internet.MimeBodyPart;
-import jakarta.mail.internet.MimeMessage;
-import jakarta.mail.internet.MimeMultipart;
-import jakarta.mail.internet.MimeUtility;
+import jakarta.mail.*;
+import jakarta.mail.internet.*;
 import jakarta.mail.util.ByteArrayDataSource;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.RuntimeCamelException;
 import org.apache.camel.attachment.Attachment;
@@ -62,9 +37,13 @@ import org.apache.camel.util.StringHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.assimbly.mail.component.mail.MailConstants.MAIL_GENERATE_MISSING_ATTACHMENT_NAMES_NEVER;
-import static org.assimbly.mail.component.mail.MailConstants.MAIL_GENERATE_MISSING_ATTACHMENT_NAMES_UUID;
-import static org.assimbly.mail.component.mail.MailConstants.MAIL_HANDLE_DUPLICATE_ATTACHMENT_NAMES_NEVER;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.IllegalCharsetNameException;
+import java.util.*;
+
+import static org.assimbly.mail.component.mail.MailConstants.*;
 
 /**
  * A Strategy used to convert between a Camel {@link Exchange} and {@link Message} to and from a Mail
@@ -862,7 +841,7 @@ public class MailBinding {
 
     protected static String getAlternativeBody(MailConfiguration configuration, Exchange exchange) {
         String alternativeBodyHeader = configuration.getAlternativeBodyHeader();
-        return exchange.getIn().getHeader(alternativeBodyHeader, java.lang.String.class);
+        return exchange.getIn().getHeader(alternativeBodyHeader, String.class);
     }
 
     /**

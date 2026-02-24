@@ -44,7 +44,12 @@ public class JsonToXmlProcessor implements Processor {
 
         Element element = convertJsonToXml(config);
 
-        document.appendChild(element);
+        if (element != null) {
+            // Ensure the element is owned by 'document' before appending.
+            // This prevents WRONG_DOCUMENT_ERR if 'element' was created by a different Document instance.
+            document.adoptNode(element);
+            document.appendChild(element);
+        }
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance(
                 "net.sf.saxon.TransformerFactoryImpl",

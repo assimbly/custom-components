@@ -16,16 +16,15 @@
  */
 package org.assimbly.mail.component.mail;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import org.eclipse.angus.mail.imap.SortTerm;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Utility class for sorting of mail messages
@@ -107,10 +106,10 @@ public final class MailSorter {
     /**
      * Compare the value of the property of the two messages.
      *
-     * @param  msg1                          Message 1
-     * @param  msg2                          Message 2
-     * @param  property                      Property to compare
-     * @return                               msg1.property.compareTo(msg2.property)
+     * @param  msg1                            Message 1
+     * @param  msg2                            Message 2
+     * @param  property                        Property to compare
+     * @return                                 msg1.property.compareTo(msg2.property)
      * @throws MessagingException If message data could not be read.
      */
     private static int compareMessageProperty(Message msg1, Message msg2, SortTerm property) throws MessagingException {

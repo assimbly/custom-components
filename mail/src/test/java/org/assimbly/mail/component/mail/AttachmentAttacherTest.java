@@ -7,11 +7,9 @@ import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.support.DefaultExchange;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.apache.camel.test.junit5.TestSupport;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
