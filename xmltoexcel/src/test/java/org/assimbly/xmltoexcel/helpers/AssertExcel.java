@@ -44,7 +44,7 @@ public class AssertExcel {
             return;
         }
 
-        assertEquals(expected.getCellType(), actual.getCellType(), String.format("Expected the cell type of cell %s to be equal in sheet: %s",
+        assertEquals(expected.getCellType(), actual.getCellType(), "Expected the cell type of cell %s to be equal in sheet: %s".formatted(
                 expected.getAddress(), sheetName));
 
         assertCellValuesAreEqual(sheetName, actual, expected);
@@ -63,7 +63,7 @@ public class AssertExcel {
             expectedValue = expected.getStringCellValue();
         }
 
-        assertEquals(expectedValue, actualValue, String.format("Expected the values of cell %s to be equal in sheet: %s",
+        assertEquals(expectedValue, actualValue, "Expected the values of cell %s to be equal in sheet: %s".formatted(
                 expected.getAddress(), sheetName));
     }
 }

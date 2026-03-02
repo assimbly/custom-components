@@ -118,8 +118,7 @@ public class MailMessage extends DefaultMessage {
             // no deep copy needed, but copy message id
             setMessageId(that.getMessageId());
         }
-        if (that instanceof MailMessage) {
-            MailMessage tmpMailMessage = (MailMessage) that;
+        if (that instanceof MailMessage tmpMailMessage) {
             this.originalMailMessage = tmpMailMessage.originalMailMessage;
             this.mailMessage = tmpMailMessage.mailMessage;
             this.mapMailMessage = tmpMailMessage.mapMailMessage;

@@ -31,9 +31,9 @@ public class XmlTreeOperations
 	
     public static Document loadDocument(Input input) throws Exception
     {
-        if (input instanceof FileInput)
+        if (input instanceof FileInput fileInput)
         {
-            return loadDocument(((FileInput)input).getFilename());
+            return loadDocument(fileInput.getFilename());
         }
         switch (input.getType())
         {
@@ -602,8 +602,8 @@ public class XmlTreeOperations
     
     public static Element appendElement(Node parent, String nsURI, String localName)
     {
-        if (parent instanceof Document)
-            return (Element) parent.appendChild(((Document) parent).createElementNS(nsURI, localName));
+        if (parent instanceof Document document)
+            return (Element) parent.appendChild(document.createElementNS(nsURI, localName));
         return (Element) parent.appendChild(parent.getOwnerDocument().createElementNS(nsURI, localName));
     }
 

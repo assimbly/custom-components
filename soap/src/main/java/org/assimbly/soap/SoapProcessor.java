@@ -60,7 +60,7 @@ public class SoapProcessor implements Processor {
 
         if (definition == null) {
             throw new WSDLException("002",
-                    String.format("Could not fetch WSDL Definition from specified WSDL: %s?%s",
+                    "Could not fetch WSDL Definition from specified WSDL: %s?%s".formatted(
                             config.getWsdl(), config.getParameters()
                     )
             );

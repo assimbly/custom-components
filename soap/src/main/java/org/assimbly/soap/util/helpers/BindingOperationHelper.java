@@ -11,11 +11,11 @@ public final class BindingOperationHelper {
         List<?> exElem = operation.getExtensibilityElements();
 
         for (Object el : exElem) {
-            if (el instanceof SOAPOperation)
-                return ((SOAPOperation) el).getSoapActionURI();
+            if (el instanceof SOAPOperation pOperation)
+                return pOperation.getSoapActionURI();
 
-            if (el instanceof SOAP12Operation)
-                return ((SOAP12Operation) el).getSoapActionURI();
+            if (el instanceof SOAP12Operation p12Operation)
+                return p12Operation.getSoapActionURI();
         }
 
         return null;

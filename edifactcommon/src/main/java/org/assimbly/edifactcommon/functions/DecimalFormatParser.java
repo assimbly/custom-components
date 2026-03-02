@@ -564,7 +564,7 @@ public class DecimalFormatParser {
 		if ( mDecimalFormat == null )
 			return sbFormat.toString();
 
-		Double nCheck = new Double(nNumber.doubleValue() );
+		Double nCheck = Double.valueOf(nNumber.doubleValue());
 		if( nCheck.isInfinite() )
 		{
 			if( Double.POSITIVE_INFINITY == nCheck)

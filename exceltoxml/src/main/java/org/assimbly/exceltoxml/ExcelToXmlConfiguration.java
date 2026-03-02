@@ -1,12 +1,12 @@
 package org.assimbly.exceltoxml;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.UriParam;
 import org.assimbly.util.helper.Base64Helper;
+import tools.jackson.core.JacksonException;
 import org.assimbly.exceltoxml.domain.ExcelRule;
 import org.assimbly.exceltoxml.exception.Excel2XmlException;
 
@@ -54,7 +54,7 @@ public class ExcelToXmlConfiguration {
     /**
      * Deserialized rules
      */
-    public List<ExcelRule> getReadRules() throws JsonProcessingException {
+    public List<ExcelRule> getReadRules() throws JacksonException {
 
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<List<ExcelRule>> typeRef = new TypeReference<List<ExcelRule>>() {};

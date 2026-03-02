@@ -1,6 +1,6 @@
 package org.assimbly.jsontoxmllegacy;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.assimbly.jsontoxmllegacy.transaction.NodeTransaction;
@@ -91,7 +91,7 @@ public class JsonToXmlProcessor implements Processor {
 
         String[] nameInfo = name.split(":");
         if(nameInfo.length > 1) {
-            nameSpace = String.format("%s:%s", XMLConstants.XMLNS_ATTRIBUTE, nameInfo[0]);
+            nameSpace = "%s:%s".formatted(XMLConstants.XMLNS_ATTRIBUTE, nameInfo[0]);
         } else {
             nameSpace = XMLConstants.XMLNS_ATTRIBUTE;
         }

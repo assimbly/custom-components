@@ -2,11 +2,12 @@ package org.assimbly.soap.util.helpers;
 
 import org.apache.camel.Exchange;
 import org.apache.commons.io.FileUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.core5.http.ClassicHttpResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.assimbly.soap.cache.WSDLCache;
@@ -24,7 +25,7 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -32,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 public final class WSDLHelper {
 
@@ -65,7 +67,7 @@ public final class WSDLHelper {
 
         file = WSDLCache.INSTANCE.register(url);
 
-        Files.createDirectories(Paths.get(file.getParent()));
+        Files.createDirectories(Path.of(file.getParent()));
 
         Definition definition;
 
@@ -89,13 +91,13 @@ public final class WSDLHelper {
         if (params == null || params.isEmpty())
             return wsdl;
 
-        return String.format("%s?%s", wsdl, params);
+        return "%s?%s".formatted(wsdl, params);
     }
 
     protected static void fetchWSDL(File file, String location, List<SoapHttpHeader> httpHeaders) throws URISyntaxException, IOException {
         RequestConfig config = RequestConfig.custom()
-                .setConnectTimeout(20000)
-                .setSocketTimeout(20000)
+                .setConnectTimeout(20000, TimeUnit.MILLISECONDS)
+                .setResponseTimeout(20000, TimeUnit.MILLISECONDS)
                 .build();
 
         HttpClient client = HttpClientBuilder.create()
@@ -106,7 +108,7 @@ public final class WSDLHelper {
 
         httpHeaders.forEach(httpHeader -> request.setHeader(httpHeader.getName(), httpHeader.getValue()));
 
-        HttpResponse response = client.execute(request);
+        ClassicHttpResponse response = client.execute(request);
 
         BufferedInputStream wsdl = new BufferedInputStream(response.getEntity().getContent());
 

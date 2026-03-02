@@ -108,10 +108,10 @@ public class MFAttribute implements IMFNode
 		for (IEnumerator v = select(IMFNode.MFQueryKind_AllChildren, null).enumerator(); v.moveNext();)
 		{
 			Object o = v.current();
-			if (o instanceof IMFNode)
-				s += ((IMFNode) o ).value();
-			else if (o instanceof QName)
-				s += CoreTypes.castToString((QName) o);
+			if (o instanceof IMFNode node)
+				s += node.value();
+			else if (o instanceof QName name)
+				s += CoreTypes.castToString(name);
 			else
 				s += o.toString();
 		}

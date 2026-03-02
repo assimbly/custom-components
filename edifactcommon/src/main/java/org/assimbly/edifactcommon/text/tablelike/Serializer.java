@@ -1,6 +1,7 @@
 package org.assimbly.edifactcommon.text.tablelike;
 
 import org.assimbly.edifactcommon.text.FileIO;
+import org.assimbly.edifactcommon.text.tablelike.Record;
 
 import java.io.IOException;
 import java.io.Writer;

@@ -52,11 +52,11 @@ public final class DefinitionHelper {
             if(port != null){
                 ExtensibilityElement el = PortHelper.address(port);
 
-                if(el instanceof SOAP12Address)
-                    return ((SOAP12Address) el).getLocationURI();
+                if(el instanceof SOAP12Address address)
+                    return address.getLocationURI();
 
-                if(el instanceof SOAPAddress)
-                    return ((SOAPAddress) el).getLocationURI();
+                if(el instanceof SOAPAddress address)
+                    return address.getLocationURI();
             }
         }
 

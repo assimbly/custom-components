@@ -14,6 +14,8 @@
 
 package org.assimbly.edifactcommon.text.tablelike;
 
+import org.assimbly.edifactcommon.text.tablelike.Record;
+
 public class Record {
     private String[] m_Fields = null;
 

@@ -150,12 +150,11 @@ public class Writer {
 			parent = parent.getParent();
 		}
 		
-		String lineLoc = String.format(
-			"Line %d column %d (offset 0x%x): ",
-			getLine(),
-			getColumn(),
-			getPosition()
-		);
+		String lineLoc = "Line %d column %d (offset 0x%x): ".formatted(
+                getLine(),
+                getColumn(),
+                getPosition()
+        );
 		location = lineLoc + location;
 		
 		switch ( mErrorSettings[error.ordinal()] )
@@ -183,12 +182,11 @@ public class Writer {
 			parent = parent.getParent();
 		}
 		
-		String lineLoc = String.format(
-			"Line %d column %d (offset 0x%x): ",
-			getLine(),
-			getColumn(),
-			getPosition()
-		);
+		String lineLoc = "Line %d column %d (offset 0x%x): ".formatted(
+                getLine(),
+                getColumn(),
+                getPosition()
+        );
 		location = lineLoc + location;
 		
 		LOG.warn("Warning: " + location + ": " + message);

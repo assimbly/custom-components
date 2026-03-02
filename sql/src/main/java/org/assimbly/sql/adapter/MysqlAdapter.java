@@ -1,8 +1,7 @@
 package org.assimbly.sql.adapter;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.message.BasicNameValuePair;
+import org.apache.hc.core5.net.URLEncodedUtils;
+import org.apache.hc.core5.http.NameValuePair;
+import org.apache.hc.core5.http.message.BasicNameValuePair;
 import org.assimbly.sql.domain.JDBCConnection;
 
 import java.nio.charset.StandardCharsets;
@@ -48,7 +47,7 @@ public class MysqlAdapter implements DatabaseAdapter {
 
         String query = URLEncodedUtils.format(parameters, StandardCharsets.UTF_8);
 
-        String url = String.format("jdbc:mysql://%s:%s/%s?%s",
+        String url = "jdbc:mysql://%s:%s/%s?%s".formatted(
                 connection.getHost(), connection.getPort(), connection.getDatabase(), query);
 
         DriverManager.setLoginTimeout(5);

@@ -45,7 +45,7 @@ public class FormToXmlProcessor implements Processor {
         try(ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             Writer writer = new OutputStreamWriter(outputStream, configuration.getEncoding())) {
 
-            String xmlProlog = String.format("<?xml version=\"1.0\" encoding=\"%s\"?>\n", configuration.getEncoding());
+            String xmlProlog = "<?xml version=\"1.0\" encoding=\"%s\"?>\n".formatted(configuration.getEncoding());
             writer.write(xmlProlog);
             xStream.toXML(items, writer);
 

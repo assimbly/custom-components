@@ -16,6 +16,8 @@ package org.assimbly.edifactcommon.text.edi;
 
 import org.assimbly.edifactcommon.text.ITextNode;
 
+import java.math.RoundingMode;
+
 public class  DataTypeValidatorDecimal extends DataTypeValidator {
 
 	int mImplicitDecimals;
@@ -108,7 +110,7 @@ public class  DataTypeValidatorDecimal extends DataTypeValidator {
 		if (mImplicitDecimals > 0)
 		{
 			java.math.BigDecimal d = new java.math.BigDecimal(s.toString());
-			d = d.setScale(mImplicitDecimals, java.math.BigDecimal.ROUND_HALF_UP);
+			d = d.setScale(mImplicitDecimals, RoundingMode.HALF_UP);
 			s.setLength(0);
 			s.append(d.toString());
 			s.deleteCharAt(s.indexOf("."));
@@ -122,7 +124,7 @@ public class  DataTypeValidatorDecimal extends DataTypeValidator {
 				{
 					java.math.BigDecimal d = new java.math.BigDecimal(s.toString());
 					int newScale = d.scale() - (effLen - getMaxLength());
-					d = d.setScale(newScale, java.math.BigDecimal.ROUND_HALF_UP);
+					d = d.setScale(newScale, RoundingMode.HALF_UP);
 					s.setLength(0);
 					s.append(d.toString());
 				}

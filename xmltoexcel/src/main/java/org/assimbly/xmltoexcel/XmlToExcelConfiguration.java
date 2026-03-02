@@ -1,8 +1,7 @@
 package org.assimbly.xmltoexcel;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
@@ -11,6 +10,7 @@ import org.assimbly.xmltoexcel.domain.CustomWorksheet;
 import org.assimbly.xmltoexcel.domain.ExcelFormat;
 import org.assimbly.xmltoexcel.domain.OrderHeaders;
 import org.assimbly.xmltoexcel.exception.XmlToExcelException;
+import tools.jackson.core.JacksonException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -126,7 +126,7 @@ public class XmlToExcelConfiguration {
                     json,
                     new TypeReference<List<CustomWorksheet>>() {}
             );
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             throw new XmlToExcelException("Unable to deserialize worksheets: " + e.getMessage());
         }
 

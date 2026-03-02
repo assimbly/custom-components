@@ -1,8 +1,8 @@
 package org.assimbly.xmltojsonlegacy.model;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.ObjectNode;
 import org.assimbly.xmltojsonlegacy.utils.Constants;
 
 import java.util.ArrayList;

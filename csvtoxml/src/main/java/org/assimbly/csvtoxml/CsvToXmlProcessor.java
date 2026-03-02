@@ -47,7 +47,7 @@ public class CsvToXmlProcessor implements Processor {
                 items = createItems(csv);
             }
 
-            String xmlProlog = String.format("<?xml version=\"1.0\" encoding=\"%s\"?>\n", configuration.getEncoding());
+            String xmlProlog = "<?xml version=\"1.0\" encoding=\"%s\"?>\n".formatted(configuration.getEncoding());
             writer.write(xmlProlog);
 
             xStream.aliasSystemAttribute(null, "class");

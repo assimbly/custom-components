@@ -62,10 +62,10 @@ public class XmlToJsonJsonProcessor {
     }
 
     private String stringifyJsonWithoutRoot(Object jsonWithoutRoot) {
-        if (jsonWithoutRoot instanceof JSONObject) {
-            return ((JSONObject)jsonWithoutRoot).toString(2);
-        } else if (jsonWithoutRoot instanceof JSONArray) {
-            return ((JSONArray)jsonWithoutRoot).toString(2);
+        if (jsonWithoutRoot instanceof JSONObject object) {
+            return object.toString(2);
+        } else if (jsonWithoutRoot instanceof JSONArray array) {
+            return array.toString(2);
         } else {
             return jsonWithoutRoot.toString();
         }
@@ -131,8 +131,8 @@ public class XmlToJsonJsonProcessor {
             if (!isEmptyTypedObject)
                 content = getContentOfTypedJsonObject(typedJsonObject);
 
-            if (isTypedJsonObjectWithArrayType && content instanceof JSONArray)
-                processJsonArray((JSONArray) content);
+            if (isTypedJsonObjectWithArrayType && content instanceof JSONArray array)
+                processJsonArray(array);
 
             if (typedJsonObjectHasOtherPrefixedKeys(typedJsonObject) && !(content instanceof JSONArray)) {
                 typedJsonObject.remove("type");
@@ -178,8 +178,7 @@ public class XmlToJsonJsonProcessor {
                 break;
             case ERROR:
                 Object value = typedJsonObject.opt(this.contentKey);
-                throw new JsonTypeException(String.format(
-                        "There was a mismatch between a specified type and the value. Type is '%s' and the value is '%s'.",
+                throw new JsonTypeException("There was a mismatch between a specified type and the value. Type is '%s' and the value is '%s'.".formatted(
                         specifiedType, value));
             }
         }
@@ -218,8 +217,8 @@ public class XmlToJsonJsonProcessor {
 
     private void replaceTypedJsonObjectWithContentInJson(Object parent, Object keyOrIndexOfParent,
             JSONObject typedJsonObject, Object content) {
-        if (parent instanceof JSONObject) {
-            ((JSONObject) parent).put((String) keyOrIndexOfParent, content);
+        if (parent instanceof JSONObject object) {
+            object.put((String) keyOrIndexOfParent, content);
         } else {
             ((JSONArray) parent).put((int) keyOrIndexOfParent, content);
         }

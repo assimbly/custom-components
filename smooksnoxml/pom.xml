@@ -25,7 +25,7 @@
 
   <dependencies>
 	  <dependency>
-		  <groupId>org.hibernate</groupId>
+		  <groupId>org.hibernate.orm</groupId>
 		  <artifactId>hibernate-core</artifactId>
 		  <version>${hibernate-core.version}</version>
 	  </dependency>
@@ -47,6 +47,18 @@
 				  <groupId>org.codehaus.groovy</groupId>
 				  <artifactId>groovy-all</artifactId>
 			  </exclusion>
+    <exclusion>
+     <groupId>javax.servlet</groupId>
+     <artifactId>javax.servlet-api</artifactId>
+    </exclusion>
+    <exclusion>
+     <groupId>jakarta.servlet</groupId>
+     <artifactId>jakarta.servlet-api</artifactId>
+    </exclusion>
+    <exclusion>
+     <groupId>org.hibernate.orm</groupId>
+     <artifactId>hibernate-core</artifactId>
+    </exclusion>
           </exclusions>
       </dependency>
 

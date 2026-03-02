@@ -88,11 +88,11 @@ public class TenantVariablesProcessor implements Processor {
 
         if(gVariable == null) {
             throw new TenantVariableNotFoundException(
-                    String.format("The Tenant Variable \"%1$s\" for tenant \"%2$s\" was not found in the database.", name, tenantDbName)
+                    "The Tenant Variable \"%1$s\" for tenant \"%2$s\" was not found in the database.".formatted(name, tenantDbName)
             );
         }
 
-        if(!gVariable.find(environment).isPresent())
+        if(gVariable.find(environment).isEmpty())
             throw new TenantVariableNotFoundException("The Tenant Variable \"" + name + "\" has no values for the "+ environment +" environment.");
 
         EnvironmentValue variable = gVariable.find(environment).get();
@@ -129,7 +129,7 @@ public class TenantVariablesProcessor implements Processor {
             gVariable.setCreatedBy(modifier);
         }
 
-        if(environment != null && !gVariable.find(environment).isPresent()){
+        if(environment != null && gVariable.find(environment).isEmpty()){
             gVariable.put(new EnvironmentValue(environment));
         }else if(environment==null){
             throw new TenantVariableNotFoundException("The Tenant Variable environment is not set.");

@@ -12,14 +12,15 @@ import java.io.IOException;
 
 public class DocConverterTest extends CamelTestSupport {
 
-    private final String xml = "<persons>\n" +
-            "\t\t\t  <person>\n" +
-            "\t\t\t\t<name>John Doe</name>\n" +
-            "\t\t\t  </person>\n" +
-            "\t\t\t  <person>\n" +
-            "\t\t\t\t<name>Jane Doe</name>\n" +
-            "\t\t\t  </person>\n" +
-            "\t\t\t</persons>";
+    private final String xml = """
+            <persons>
+            			  <person>
+            				<name>John Doe</name>
+            			  </person>
+            			  <person>
+            				<name>Jane Doe</name>
+            			  </person>
+            			</persons>""";
 
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
@@ -52,10 +53,12 @@ public class DocConverterTest extends CamelTestSupport {
 
 
     private String getExpected() {
-        return "{\"persons\": {\"person\": [\n" +
-                "    {\"name\": \"John Doe\"},\n" +
-                "    {\"name\": \"Jane Doe\"}\n" +
-                "]}}";
+        return """
+                {"persons": {"person": [
+                    {"name": "John Doe"},
+                    {"name": "Jane Doe"}
+                ]}}\
+                """;
     }
 
 

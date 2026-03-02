@@ -87,46 +87,49 @@ public class CsvToXmlComponentTest extends CamelTestSupport {
      */
 
     private String getExpectedXml() {
-        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<items>\n" +
-                "  <item>\n" +
-                "    <Leeftijd>21</Leeftijd>\n" +
-                "    <Voornaam>Koen</Voornaam>\n" +
-                "    <Achternaam>Castermans</Achternaam>\n" +
-                "  </item>\n" +
-                "  <item>\n" +
-                "    <Leeftijd>30</Leeftijd>\n" +
-                "    <Voornaam>Jaap</Voornaam>\n" +
-                "    <Achternaam>Aap</Achternaam>\n" +
-                "  </item>\n" +
-                "</items>";
+        return """
+                <?xml version="1.0" encoding="UTF-8"?>
+                <items>
+                  <item>
+                    <Leeftijd>21</Leeftijd>
+                    <Voornaam>Koen</Voornaam>
+                    <Achternaam>Castermans</Achternaam>
+                  </item>
+                  <item>
+                    <Leeftijd>30</Leeftijd>
+                    <Voornaam>Jaap</Voornaam>
+                    <Achternaam>Aap</Achternaam>
+                  </item>
+                </items>""";
     }
 
     private String getExpectedXmlWithoutHeaders() {
-        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<items>\n" +
-                "  <item>\n" +
-                "    <string>Koen</string>\n" +
-                "    <string>Castermans</string>\n" +
-                "    <string>21</string>\n" +
-                "  </item>\n" +
-                "  <item>\n" +
-                "    <string>Jaap</string>\n" +
-                "    <string>Aap</string>\n" +
-                "    <string>30</string>\n" +
-                "  </item>\n" +
-                "</items>";
+        return """
+                <?xml version="1.0" encoding="UTF-8"?>
+                <items>
+                  <item>
+                    <string>Koen</string>
+                    <string>Castermans</string>
+                    <string>21</string>
+                  </item>
+                  <item>
+                    <string>Jaap</string>
+                    <string>Aap</string>
+                    <string>30</string>
+                  </item>
+                </items>""";
     }
 
     private String getExpectedXmlHeadersWithInvalidCharacters(){
-        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<items>\n" +
-                "  <item>\n" +
-                "    <naam>iPhone</naam>\n" +
-                "    <order1nummer>1</order1nummer>\n" +
-                "    <prijs>800</prijs>\n" +
-                "  </item>\n" +
-                "</items>";
+        return """
+                <?xml version="1.0" encoding="UTF-8"?>
+                <items>
+                  <item>
+                    <naam>iPhone</naam>
+                    <order1nummer>1</order1nummer>
+                    <prijs>800</prijs>
+                  </item>
+                </items>""";
     }
 
 

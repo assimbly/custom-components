@@ -299,7 +299,7 @@ public class SqlComponentTest extends CamelTestSupport {
         String resultBody = result.getIn().getBody(String.class);
 
         assertTrue(resultBody.contains("<HasErrors>true</HasErrors>"));
-        assertTrue(resultBody.contains(String.format("<ErrorMessage>Table '%s.product' doesn't exist</ErrorMessage>", database)));
+        assertTrue(resultBody.contains("<ErrorMessage>Table '%s.product' doesn't exist</ErrorMessage>".formatted(database)));
     }
 
     @Test

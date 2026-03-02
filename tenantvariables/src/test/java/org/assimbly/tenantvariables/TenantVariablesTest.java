@@ -61,9 +61,10 @@ public class TenantVariablesTest extends CamelTestSupport {
             "]" +
             "}";
 
-    private final String BODY_MULTILINE_VALUE = "Multiline\n" +
-            "Body\n" +
-            "Test";
+    private final String BODY_MULTILINE_VALUE = """
+            Multiline
+            Body
+            Test""";
 
     private final String BASE64_HEADER_ONLY = "JHtoZWFkZXIuSGVhZGVyTmFtZX0=";
     private final String BASE64_BODY_ONLY = "JHtib2R5fQ==";

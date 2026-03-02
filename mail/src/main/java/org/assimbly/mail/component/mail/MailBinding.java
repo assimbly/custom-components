@@ -326,8 +326,8 @@ public class MailBinding {
         LOG.trace("Extracting attachments +++ start +++");
 
         Object content = message.getContent();
-        if (content instanceof Multipart) {
-            extractAttachmentsFromMultipart((Multipart) content, map);
+        if (content instanceof Multipart multipart) {
+            extractAttachmentsFromMultipart(multipart, map);
         } else if (content != null) {
             LOG.trace("No attachments to extract as content is not Multipart: {}", content.getClass().getName());
         }
@@ -769,8 +769,7 @@ public class MailBinding {
         // if the message is a multipart message, do not set the content type to multipart/*
         if (mapMailMessage) {
             Object content = mailMessage.getContent();
-            if (content instanceof MimeMultipart) {
-                MimeMultipart multipart = (MimeMultipart) content;
+            if (content instanceof MimeMultipart multipart) {
                 int size = multipart.getCount();
                 for (int i = 0; i < size; i++) {
                     BodyPart part = multipart.getBodyPart(i);
@@ -780,7 +779,7 @@ public class MailBinding {
                         if (multipart.getCount() < 1) {
                             break;
                         }
-                        part = ((MimeMultipart) content).getBodyPart(0);
+                        part = multipart.getBodyPart(0);
                         content = part.getContent();
                     }
                     // Perform a case insensitive "startsWith" check that works for different locales

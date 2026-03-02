@@ -55,10 +55,10 @@ public class AttachmentEnrichStrategy implements AggregationStrategy {
             data = IOUtils.toByteArray(body);
         } catch (IOException e) { logger.error(e.getMessage()); }
 
-        logger.info(String.format("Adding attachment '%s' with mime type: '%s'", attachmentName, mimeType));
+        logger.info("Adding attachment '%s' with mime type: '%s'".formatted(attachmentName, mimeType));
 
         logger.info("Attachment details");
-        logger.info(String.format("\tsize: %s", data.length));
+        logger.info("\tsize: %s".formatted(data.length));
 
         dataHandler = new DataHandler(data, mimeType);
 

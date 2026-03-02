@@ -69,7 +69,7 @@ public class MFNodeByKindFilter implements IEnumerable
 			public IEnumerable select(int mfQueryKind, Object query) {return new MFSingletonSequence(o);}
 			public String value() throws Exception 
 			{ 
-				return (o instanceof javax.xml.namespace.QName) ? CoreTypes.castToString((javax.xml.namespace.QName) o) : o.toString();
+				return (o instanceof javax.xml.namespace.QName qn) ? CoreTypes.castToString(qn) : o.toString();
 			}	
 			public javax.xml.namespace.QName qnameValue() {return (javax.xml.namespace.QName) o;}
 			public Object typedValue() throws Exception 

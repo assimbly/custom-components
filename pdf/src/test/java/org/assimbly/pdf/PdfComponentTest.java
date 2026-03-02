@@ -7,8 +7,8 @@ import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.model.language.ConstantExpression;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.http.impl.bootstrap.HttpServer;
-import org.apache.http.impl.bootstrap.ServerBootstrap;
+import org.apache.hc.core5.http.impl.bootstrap.HttpServer;
+import org.apache.hc.core5.http.impl.bootstrap.ServerBootstrap;
 import org.junit.jupiter.api.AfterEach;
 import org.assimbly.pdf.handler.BasicValidationHandler;
 

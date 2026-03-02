@@ -1,13 +1,13 @@
 package org.assimbly.exceltoxml;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.JacksonException;
 import org.assimbly.exceltoxml.domain.ExcelRule;
 
 import java.io.FileInputStream;
@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.*;
 
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
@@ -61,7 +61,7 @@ public class ExcelToXmlComponentTest extends CamelTestSupport {
         for (String route : allRoutes.keySet()) {
             routeBuilders.add(
                 new RouteBuilder() {
-                    public void configure() throws JsonProcessingException {
+                    public void configure() throws JacksonException {
                         from("direct:" + route)
                             .to(createUri(allRoutes.get(route)))
                             .to("mock:result");
@@ -136,7 +136,7 @@ public class ExcelToXmlComponentTest extends CamelTestSupport {
     }
 
     private String readFile(String path, Charset encoding) throws IOException {
-        byte[] encoded = Files.readAllBytes(Paths.get(path));
+        byte[] encoded = Files.readAllBytes(Path.of(path));
         return new String(encoded, encoding);
     }
 
@@ -151,7 +151,7 @@ public class ExcelToXmlComponentTest extends CamelTestSupport {
         try {
             String jsonArrayString = objectMapper.writeValueAsString(rules);
             return Base64.getEncoder().encodeToString(jsonArrayString.getBytes());
-        } catch (com.fasterxml.jackson.core.JsonProcessingException e) {
+        } catch (JacksonException e) {
             throw new RuntimeException("Error serializing rules to JSON", e);
         }
 

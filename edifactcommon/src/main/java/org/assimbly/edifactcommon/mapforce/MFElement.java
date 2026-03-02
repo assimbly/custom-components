@@ -156,13 +156,12 @@ public class MFElement implements IMFNode
 		for (IEnumerator v = select(IMFNode.MFQueryKind_AllChildren, null).enumerator(); v.moveNext();)
 		{
 			Object o = v.current();
-			if (o instanceof IMFNode) {
-				IMFNode n = (IMFNode) o;
+			if (o instanceof IMFNode n) {
 				if (n.getNodeKind() != IMFNode.MFNodeKind_Comment && n.getNodeKind() != IMFNode.MFNodeKind_ProcessingInstruction)
 					s += n.value();
 			}
-			else if (o instanceof QName)
-				s += CoreTypes.castToString((QName) o);
+			else if (o instanceof QName name)
+				s += CoreTypes.castToString(name);
 			else
 				s += o.toString();
 		}

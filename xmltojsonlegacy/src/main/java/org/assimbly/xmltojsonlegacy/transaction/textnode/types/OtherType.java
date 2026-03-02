@@ -1,6 +1,6 @@
 package org.assimbly.xmltojsonlegacy.transaction.textnode.types;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JsonNode;
 import org.assimbly.xmltojsonlegacy.XmlToJsonConfiguration;
 import org.assimbly.xmltojsonlegacy.model.ElementMetadata;
 import org.assimbly.xmltojsonlegacy.service.MetadataAnalyzer;

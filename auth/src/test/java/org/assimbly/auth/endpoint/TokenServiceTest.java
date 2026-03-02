@@ -15,7 +15,6 @@ import org.assimbly.auth.domain.User;
 import org.assimbly.auth.util.helper.ConfigHelper;
 
 import jakarta.ws.rs.core.Response;
-import org.mockito.Mockito;
 
 import java.io.IOException;
 

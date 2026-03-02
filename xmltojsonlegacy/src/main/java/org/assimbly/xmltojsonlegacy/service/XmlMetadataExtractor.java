@@ -198,7 +198,7 @@ public class XmlMetadataExtractor {
         int index = counter.getOrDefault(fullPath, 0) + 1;
         counter.put(fullPath, index);
 
-        return basePath.isEmpty() ? String.format("%s[%d]", name, index) : String.format("%s/%s[%d]", basePath, name, index);
+        return basePath.isEmpty() ? "%s[%d]".formatted(name, index) : "%s/%s[%d]".formatted(basePath, name, index);
     }
 
     // get path index

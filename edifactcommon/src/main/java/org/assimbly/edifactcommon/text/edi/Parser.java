@@ -187,7 +187,7 @@ public class Parser {
 				parent = parent.getParent();
 			}
 
-			String lineLoc = String.format( "Line %d column %d (offset 0x%x): ", position.getLine(), position.getColumn() + 1, position.getPosition() );
+			String lineLoc = "Line %d column %d (offset 0x%x): ".formatted(position.getLine(), position.getColumn() + 1, position.getPosition());
 			location = lineLoc + location;
 			
 			switch ( mParser.getErrorSettings()[error.ordinal()] )
@@ -340,7 +340,7 @@ public class Parser {
 				parent = parent.getParent();
 			}
 
-			String lineLoc = String.format( "Line %d column %d (offset 0x%x): ", position.getLine(), position.getColumn() + 1, position.getPosition() );
+			String lineLoc = "Line %d column %d (offset 0x%x): ".formatted(position.getLine(), position.getColumn() + 1, position.getPosition());
 			location = lineLoc + location;
 
 			LOG.warn("Warning: " + location + ": " + message);

@@ -6,6 +6,8 @@ import org.assimbly.edifactcommon.types.NotANumberException;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.assimbly.edifactcommon.CoreTypes.castToBigDecimal;
 
@@ -42,7 +44,7 @@ public class Lang
 	public static long divideInteger(long a, long b) { return a / b; }
 	public static double divideInteger(double a, double b) { return Math.floor(a / b); }
 	public static BigInteger divideInteger(BigInteger a, BigInteger b) { return a.divide(b); }
-	public static BigDecimal divideInteger(BigDecimal a, BigDecimal b) { return a.divide(b, BigDecimal.ROUND_FLOOR); }
+	public static BigDecimal divideInteger(BigDecimal a, BigDecimal b) { return a.divide(b, RoundingMode.FLOOR); }
 
 	// UnaryMinus
 	public static int unaryMinus(int a) { return -a; }
@@ -524,7 +526,7 @@ public class Lang
 		return dt0;
 	}
 
-	public static double random() { return Math.random(); }
+	public static double random() { return ThreadLocalRandom.current().nextDouble(); }
 
 	// ---- generator functions --------------
 

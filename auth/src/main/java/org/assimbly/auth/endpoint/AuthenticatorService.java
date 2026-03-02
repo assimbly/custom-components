@@ -44,7 +44,7 @@ public class AuthenticatorService {
 
             String domainName = ui.getQueryParameters().getFirst("domain_name");
 
-            String issuer = String.format("Assimbly - %s",
+            String issuer = "Assimbly - %s".formatted(
                     CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, domainName));
 
             String qrLocation = GoogleAuthenticatorQRGenerator.getOtpAuthURL(issuer, user.getEmail(), key);

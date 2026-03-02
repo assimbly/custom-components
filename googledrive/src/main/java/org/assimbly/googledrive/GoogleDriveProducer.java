@@ -34,7 +34,7 @@ public class GoogleDriveProducer extends DefaultProducer {
         Object body = exchange.getIn().getBody();
 
         @SuppressWarnings("unchecked")
-        GenericFile<File> genericFile = (body instanceof GenericFile) ? (GenericFile) body : prepareCamelFile(exchange);
+        GenericFile<File> genericFile = (body instanceof GenericFile gf) ? gf : prepareCamelFile(exchange);
 
         prepareGoogleDriveClient();
 

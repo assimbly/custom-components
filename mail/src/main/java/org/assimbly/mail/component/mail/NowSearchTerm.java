@@ -20,6 +20,7 @@ import jakarta.mail.Message;
 import jakarta.mail.search.ComparisonTerm;
 import jakarta.mail.search.DateTerm;
 
+import java.io.Serial;
 import java.util.Date;
 
 /**
@@ -29,6 +30,7 @@ import java.util.Date;
  */
 public class NowSearchTerm extends ComparisonTerm {
 
+    @Serial
     private static final long serialVersionUID = 1L;
     private final int comparison;
     private final boolean sentDate;

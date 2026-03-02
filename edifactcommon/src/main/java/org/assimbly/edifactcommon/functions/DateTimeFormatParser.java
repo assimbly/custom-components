@@ -301,7 +301,7 @@ public class DateTimeFormatParser {
 				short nSecs = (short)(dtData.getPartSecond());
 				double nMilSecs = dtData.getPartSecond();
 				nMilSecs -= nSecs;
-				sValue.append( String.format("%5.3f", nMilSecs).substring(2) );
+				sValue.append( "%5.3f".formatted(nMilSecs).substring(2) );
 			}
 			break;
 			case 'z': if( dtData.hasTimezone() != DateTime.TZ_MISSING) sValue.append( "GMT" );

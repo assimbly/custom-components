@@ -102,8 +102,7 @@ public class GoogleDriveConsumer extends ScheduledPollConsumer implements Consum
         } catch (GoogleJsonResponseException e) {
             if(connectionAttempts <= connectionAttemptsMax) {
                 long seconds = this.getDelay() / 1000L;
-                LOG.warn(String.format(
-                        "Could not connect to Google Drive directory. Try again after %s seconds (attempt %s of %s)",
+                LOG.warn("Could not connect to Google Drive directory. Try again after %s seconds (attempt %s of %s)".formatted(
                         seconds,
                         connectionAttempts,
                         connectionAttemptsMax

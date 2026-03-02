@@ -7,32 +7,38 @@ import org.junit.jupiter.api.Test;
 
 
 import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+//import static org.xmlunit.assertj3.XmlAssert.assertThat;
 
+// Use the fluent API
+//assertThat(actualXml).and(expectedXml).areIdentical();
 
 public class FormToXmlComponentTest extends CamelTestSupport {
 
     private final String encoding = "utf-8";
 
     private final String expectedXml =
-            "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-            "<items>\n" +
-            "  <surname>Catalão</surname>\n" +
-            "  <name>Pedro</name>\n" +
-            "  <myage>36</myage>\n" +
-            "</items>";
+            """
+            <?xml version="1.0" encoding="utf-8"?>
+            <items>
+              <surname>Catalão</surname>
+              <name>Pedro</name>
+              <myage>36</myage>
+            </items>""";
 
     private final String expectedXmlWithInvalidKeyNames =
-            "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-            "<items>\n" +
-            "  <city>Lisbon</city>\n" +
-            "</items>";
+            """
+            <?xml version="1.0" encoding="utf-8"?>
+            <items>
+              <city>Lisbon</city>
+            </items>""";
 
     private final String expectedXmlWithEmptyKeyValues =
-            "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-                    "<items>\n" +
-                    "  <surname>catalao</surname>\n" +
-                    "  <name></name>\n" +
-                    "</items>";
+            """
+            <?xml version="1.0" encoding="utf-8"?>
+            <items>
+              <surname>catalao</surname>
+              <name></name>
+            </items>""";
 
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
