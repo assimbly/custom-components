@@ -77,7 +77,7 @@
         <google.oauth.version>1.39.0</google.oauth.version>
         <greenmail.version>2.1.8</greenmail.version>
         <groovy-sandbox.version>4.3.2</groovy-sandbox.version>
-        <hibernate-core.version>6.6.43.Final</hibernate-core.version>
+        <hibernate-core.version>7.1.18.Final</hibernate-core.version>
         <httpcomponents.version>4.5.14</httpcomponents.version>
         <jakarta.activation.version>2.1.4</jakarta.activation.version>
         <jaxen.version>2.0.0</jaxen.version>
