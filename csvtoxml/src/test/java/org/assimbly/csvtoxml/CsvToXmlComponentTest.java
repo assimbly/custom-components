@@ -11,7 +11,7 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.xmlunit.assertj3.XmlAssert.assertThat;
 
 public class CsvToXmlComponentTest extends CamelTestSupport {
 
@@ -38,7 +38,6 @@ public class CsvToXmlComponentTest extends CamelTestSupport {
         };
     }
 
-
     @Test
     public void testCsvWithHeaders() throws IOException, SAXException {
         template.sendBody("direct:testWithHeaders", csvWithHeader);
@@ -49,42 +48,10 @@ public class CsvToXmlComponentTest extends CamelTestSupport {
         String actual = result.getIn().getBody(String.class);
 
         XMLUnit.setIgnoreWhitespace(true);
-        assertXMLEqual(expected,actual);
+
+        assertThat(actual).and(expected).areIdentical();
 
     }
-
-
-
-    /*
-    @Test
-    public void testCsvWithoutHeaders() throws IOException, SAXException {
-        template.sendBody("direct:testWithoutHeader", csvWithoutHeader);
-
-        Exchange result = getMockEndpoint("mock:testWithoutHeader").getExchanges().get(0);
-
-        String expected = getExpectedXmlWithoutHeaders();
-        String actual = result.getIn().getBody(String.class);
-
-        XMLUnit.setIgnoreWhitespace(true);
-        assertXMLEqual(expected,actual);
-
-    }
-
-    @Test
-    public void testCsvWithHeadersIncludingInvalidCharacters() throws IOException, SAXException {
-        template.sendBody("direct:testWithHeaders", csvWithHeaderIncludingInvalidCharacters);
-
-        Exchange result = getMockEndpoint("mock:outWithHeaders").getExchanges().get(0);
-
-        String expected = getExpectedXmlHeadersWithInvalidCharacters();
-        String actual = result.getIn().getBody(String.class);
-
-        XMLUnit.setIgnoreWhitespace(true);
-        assertXMLEqual(expected,actual);
-
-    }
-
-     */
 
     private String getExpectedXml() {
         return """

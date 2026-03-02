@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import java.nio.charset.Charset;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.xmlunit.assertj3.XmlAssert.assertThat;
 
 public class FLVComponentTest extends CamelTestSupport {
 
@@ -24,7 +24,7 @@ public class FLVComponentTest extends CamelTestSupport {
 
     @Test
     public void convertsFixedLengthValuesToXmlWithinCamelRoute() throws Exception {
-        String expectedXml = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("flv.xml"), Charset.forName("UTF-8"));
+        String expected = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("flv.xml"), Charset.forName("UTF-8"));
 
         // one exchange is expected
         resultEndpoint.expectedMessageCount(1);
@@ -37,11 +37,13 @@ public class FLVComponentTest extends CamelTestSupport {
         resultEndpoint.assertIsSatisfied();
 
         // verify exchange contents
-        String exchangeBody = resultEndpoint.getExchanges().get(0).getIn().getBody(String.class);
+        String actual = resultEndpoint.getExchanges().get(0).getIn().getBody(String.class);
 
         XMLUnit.setIgnoreWhitespace(true);
-        assertXMLEqual(expectedXml, exchangeBody);
-    }
+
+		assertThat(actual).and(expected).areIdentical();
+    
+	}
 
     @Override
     protected RouteBuilder createRouteBuilder() {

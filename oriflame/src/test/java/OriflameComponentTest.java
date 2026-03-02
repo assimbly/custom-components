@@ -13,7 +13,7 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.TimeZone;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.xmlunit.assertj3.XmlAssert.assertThat;
 
 public class OriflameComponentTest extends CamelTestSupport {
 
@@ -79,7 +79,7 @@ public class OriflameComponentTest extends CamelTestSupport {
     }
 
     private void runGenericTest(String type, String filename) throws Exception {
-        String expectedXml = retrieveFileContent(filename + ".xml");
+        String expected = retrieveFileContent(filename + ".xml");
 
         // one exchange is expected
         resultEndpoint.expectedMessageCount(1);
@@ -93,10 +93,12 @@ public class OriflameComponentTest extends CamelTestSupport {
         resultEndpoint.assertIsSatisfied();
 
         // verify exchange contents
-        String exchangeBody = resultEndpoint.getExchanges().get(0).getIn().getBody(String.class);
+        String actual = resultEndpoint.getExchanges().get(0).getIn().getBody(String.class);
 
         XMLUnit.setIgnoreWhitespace(true);
-        assertXMLEqual(expectedXml, exchangeBody);
+		
+		assertThat(actual).and(expected).areIdentical();
+		
     }
 
     private String retrieveFileContent(String filename) throws IOException {

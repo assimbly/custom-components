@@ -5,18 +5,13 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.junit.jupiter.api.Test;
 
-
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
-//import static org.xmlunit.assertj3.XmlAssert.assertThat;
-
-// Use the fluent API
-//assertThat(actualXml).and(expectedXml).areIdentical();
+import static org.xmlunit.assertj3.XmlAssert.assertThat;
 
 public class FormToXmlComponentTest extends CamelTestSupport {
 
     private final String encoding = "utf-8";
 
-    private final String expectedXml =
+    private final String expected =
             """
             <?xml version="1.0" encoding="utf-8"?>
             <items>
@@ -58,9 +53,10 @@ public class FormToXmlComponentTest extends CamelTestSupport {
         template.sendBody("direct:testRoute", validFormData);
 
         Exchange result = getMockEndpoint("mock:testFormToXml").getExchanges().get(0);
-        String body = result.getIn().getBody(String.class);
+        String actual = result.getIn().getBody(String.class);
 
-        assertXMLEqual(expectedXml, body);
+        assertThat(actual).and(expected).areIdentical();
+
     }
 
     @Test
@@ -70,9 +66,10 @@ public class FormToXmlComponentTest extends CamelTestSupport {
 
         Exchange result = getMockEndpoint("mock:testFormToXml").getExchanges().get(0);
 
-        String body = result.getIn().getBody(String.class);
+        String actual = result.getIn().getBody(String.class);
 
-        assertXMLEqual(expectedXml, body);
+        assertThat(actual).and(expected).areIdentical();
+
     }
 
     @Test
@@ -82,9 +79,10 @@ public class FormToXmlComponentTest extends CamelTestSupport {
 
         Exchange result = getMockEndpoint("mock:testFormToXml").getExchanges().get(0);
 
-        String body = result.getIn().getBody(String.class);
+        String actual = result.getIn().getBody(String.class);
 
-        assertXMLEqual(expectedXmlWithInvalidKeyNames, body);
+        assertThat(actual).and(expectedXmlWithInvalidKeyNames).areIdentical();
+
     }
 
     @Test
@@ -94,8 +92,10 @@ public class FormToXmlComponentTest extends CamelTestSupport {
 
         Exchange result = getMockEndpoint("mock:testFormToXml").getExchanges().get(0);
 
-        String body = result.getIn().getBody(String.class);
+        String actual = result.getIn().getBody(String.class);
 
-        assertXMLEqual(expectedXmlWithEmptyKeyValues, body);
+        assertThat(actual).and(expectedXmlWithEmptyKeyValues).areIdentical();
+
     }
+
 }

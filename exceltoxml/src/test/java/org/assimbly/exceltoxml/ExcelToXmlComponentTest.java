@@ -18,7 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.xmlunit.assertj3.XmlAssert.assertThat;
 
 public class ExcelToXmlComponentTest extends CamelTestSupport {
 
@@ -131,7 +131,8 @@ public class ExcelToXmlComponentTest extends CamelTestSupport {
         String expected = readFile("src/test/resources/" + rule + ".xml", Charset.defaultCharset());
 
         XMLUnit.setIgnoreWhitespace(true);
-        assertXMLEqual(expected,actual);
+		
+		assertThat(actual).and(expected).areIdentical();
 
     }
 

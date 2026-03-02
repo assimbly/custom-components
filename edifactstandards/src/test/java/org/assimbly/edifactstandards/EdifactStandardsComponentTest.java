@@ -11,7 +11,7 @@ import org.assimbly.edifactstandards.domain.Type;
 
 import java.io.File;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.xmlunit.assertj3.XmlAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class EdifactStandardsComponentTest extends CamelTestSupport {
@@ -47,7 +47,7 @@ public class EdifactStandardsComponentTest extends CamelTestSupport {
 
         XMLUnit.setIgnoreWhitespace(true);
 
-        assertXMLEqual(expected, actual);
+        		assertThat(actual).and(expected).areIdentical();
     }
 
     @Test
@@ -69,7 +69,7 @@ public class EdifactStandardsComponentTest extends CamelTestSupport {
 
         XMLUnit.setIgnoreWhitespace(true);
 
-        assertXMLEqual(expected, actual);
+        		assertThat(actual).and(expected).areIdentical();
     }
 
     @Test
@@ -90,7 +90,8 @@ public class EdifactStandardsComponentTest extends CamelTestSupport {
 
         XMLUnit.setIgnoreWhitespace(true);
 
-        assertXMLEqual(expected, actual);
+    	assertThat(actual).and(expected).areIdentical();
+ 
     }
 
     @Test
@@ -111,7 +112,8 @@ public class EdifactStandardsComponentTest extends CamelTestSupport {
 
         XMLUnit.setIgnoreWhitespace(true);
 
-        assertXMLEqual(expected, actual);
+		assertThat(actual).and(expected).areIdentical();
+		
     }
 
     @Test
@@ -132,7 +134,8 @@ public class EdifactStandardsComponentTest extends CamelTestSupport {
 
         XMLUnit.setIgnoreWhitespace(true);
 
-        assertXMLEqual(expected, actual);
+		assertThat(actual).and(expected).areIdentical();
+		
     }
 
     @Test
@@ -153,7 +156,8 @@ public class EdifactStandardsComponentTest extends CamelTestSupport {
 
         XMLUnit.setIgnoreWhitespace(true);
 
-        assertXMLEqual(expected, actual);
+		assertThat(actual).and(expected).areIdentical();
+		
     }
 
     @Test
@@ -174,8 +178,9 @@ public class EdifactStandardsComponentTest extends CamelTestSupport {
 
         XMLUnit.setIgnoreWhitespace(true);
 
-        assertXMLEqual(expected, actual);
-    }
+		assertThat(actual).and(expected).areIdentical();
+    
+	}
 
     @Test
     public void XML_TO_IFTMIND99B_TEST() throws Exception {
