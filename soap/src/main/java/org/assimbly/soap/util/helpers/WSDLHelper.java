@@ -5,9 +5,12 @@ import org.apache.commons.io.FileUtils;
 import org.apache.hc.client5.http.classic.HttpClient;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.ClassicHttpResponse;
 
+import org.apache.hc.core5.util.Timeout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.assimbly.soap.cache.WSDLCache;
@@ -95,24 +98,35 @@ public final class WSDLHelper {
     }
 
     protected static void fetchWSDL(File file, String location, List<SoapHttpHeader> httpHeaders) throws URISyntaxException, IOException {
+
+        // 1. Use Timeout.ofMilliseconds for configuration
         RequestConfig config = RequestConfig.custom()
-                .setConnectTimeout(20000, TimeUnit.MILLISECONDS)
-                .setResponseTimeout(20000, TimeUnit.MILLISECONDS)
+                .setConnectTimeout(Timeout.ofMilliseconds(20000))
+                .setResponseTimeout(Timeout.ofMilliseconds(20000))
                 .build();
 
-        HttpClient client = HttpClientBuilder.create()
+        // 2. Use HttpClients.custom() or .createDefault()
+        // It is best practice to use try-with-resources for the client
+        try (CloseableHttpClient client = HttpClients.custom()
                 .setDefaultRequestConfig(config)
-                .build();
+                .build()) {
 
-        HttpGet request = new HttpGet(new URI(location));
+            HttpGet request = new HttpGet(new URI(location));
 
-        httpHeaders.forEach(httpHeader -> request.setHeader(httpHeader.getName(), httpHeader.getValue()));
+            if (httpHeaders != null) {
+                httpHeaders.forEach(httpHeader -> request.setHeader(httpHeader.getName(), httpHeader.getValue()));
+            }
 
-        ClassicHttpResponse response = client.execute(request);
-
-        BufferedInputStream wsdl = new BufferedInputStream(response.getEntity().getContent());
-
-        FileUtils.copyInputStreamToFile(wsdl, file);
+            // 3. execute() now requires a ResponseHandler or careful handling.
+            // For a direct migration of your logic:
+            client.execute(request, response -> {
+                // This lambda handles the ClassicHttpResponse safely
+                try (BufferedInputStream wsdl = new BufferedInputStream(response.getEntity().getContent())) {
+                    FileUtils.copyInputStreamToFile(wsdl, file);
+                }
+                return null; // The handler requires a return value
+            });
+        }
     }
 
     public static Map<String, Object> execute(String destination, SOAPMessage request, Exchange exchange) throws SOAPException, IOException {

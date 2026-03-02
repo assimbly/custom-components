@@ -72,7 +72,7 @@
         <cxf.version>4.2.0</cxf.version>
         <camel.version>4.18.0</camel.version>
         <docconverter.version>1.16.0</docconverter.version>
-        <google.api.version>v3-rev20260128-2.0.0</google.api.version>
+        <google.api.version>v3-rev20260220-2.0.0</google.api.version>
         <google.auth.version>1.5.0</google.auth.version>
         <google.oauth.version>1.39.0</google.oauth.version>
         <greenmail.version>2.1.8</greenmail.version>
@@ -122,12 +122,12 @@
             <artifactId>test-base</artifactId>
             <version>${assimbly.version}</version>
             <scope>test</scope>
-  <!-- <exclusions>
+  <exclusions>
     <exclusion>
      <groupId>junit</groupId>
      <artifactId>junit</artifactId>
     </exclusion>
-   </exclusions>-->
+   </exclusions>
         </dependency>
 
        <dependency>

@@ -5,10 +5,11 @@ import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.model.language.ConstantExpression;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.hc.core5.http.impl.bootstrap.HttpServer;
 import org.apache.hc.core5.http.impl.bootstrap.ServerBootstrap;
+import org.apache.hc.core5.http.io.SocketConfig;
+import org.apache.hc.core5.util.Timeout;
 import org.junit.jupiter.api.AfterEach;
 import org.assimbly.pdf.handler.BasicValidationHandler;
 
@@ -17,10 +18,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.File;
 import java.util.Objects;
 
-public class PdfComponentTest extends CamelTestSupport {
+class PdfComponentTest extends CamelTestSupport {
 
     private final ClassLoader classLoader = getClass().getClassLoader();
 
@@ -30,19 +30,22 @@ public class PdfComponentTest extends CamelTestSupport {
     private HttpServer localServer;
 
     public void startServer() throws Exception {
-        localServer = ServerBootstrap.bootstrap().
-                setHttpProcessor(null).
-                setConnectionReuseStrategy(null).
-                setResponseFactory(null).
-                setExpectationVerifier(null).
-                setSslContext(null).
-                registerHandler("/pdfs/flowid", new BasicValidationHandler("GET", "tenant=tenant&uuid=12345", IOUtils.toByteArray(classLoader.getResourceAsStream("template.pdf"))))
+        byte[] pdfContent = IOUtils.toByteArray(classLoader.getResourceAsStream("template.pdf"));
+        BasicValidationHandler handler = new BasicValidationHandler("GET", "tenant=tenant&uuid=12345", pdfContent);
+
+        localServer = ServerBootstrap.bootstrap()
+                .setListenerPort(8080)
+                .setSocketConfig(SocketConfig.custom()
+                        .setSoTimeout(Timeout.ofSeconds(5))
+                        .build())
+                .register("/pdfs/flowid", handler)
                 .create();
+
         localServer.start();
     }
 
     @AfterEach
-    public void stopServer() throws Exception {
+    void stopServer() {
 
         if (localServer != null) {
             localServer.stop();
@@ -67,10 +70,10 @@ public class PdfComponentTest extends CamelTestSupport {
     }
 
     @Test
-    public void loadFile() throws Exception {
+    void loadFile() throws Exception {
         template.sendBody("direct:in", "");
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         assertArrayEquals(IOUtils.toByteArray(Objects.requireNonNull(classLoader.getResource("expected/output.pdf"))), result.getIn().getBody(byte[].class));
     }
