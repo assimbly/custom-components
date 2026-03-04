@@ -58,7 +58,7 @@ public class GoogleDriveProducer extends DefaultProducer {
 
         try {
             file = File.createTempFile("temp", "");
-        } catch (IOException e) {
+        } catch (IOException _) {
             throw new GoogleDriveException("upload", existing);
         }
 
@@ -69,7 +69,7 @@ public class GoogleDriveProducer extends DefaultProducer {
             genericFile.setFileName(existing);
             genericFile.setFile(file);
 
-        } catch (IOException e) {
+        } catch (IOException _) {
             throw new GoogleDriveException("upload", existing);
         }
 

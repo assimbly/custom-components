@@ -15,7 +15,7 @@ public class TextNodeTransactionFactory {
         ROOT_NODE,
         ONE_VALUE,
         OBJECT,
-        OTHER;
+        OTHER
     }
 
     private static final Map<TextNodeType, TextNodeTransaction> processTextNodeMap = new EnumMap<>(TextNodeType.class);

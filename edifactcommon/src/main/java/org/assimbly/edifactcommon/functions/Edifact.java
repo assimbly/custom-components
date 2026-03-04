@@ -1426,7 +1426,7 @@ public class Edifact
 	{
 		public static final int Year( int nYear )					{ return nYear > 50 ? 1900 + nYear : 2000 + nYear; }
 		public static final int Year( int nCentury, int nYear )		{ return (nCentury * 100) + nYear; }
-	};
+	}
 
 	static class TZConvert
 	{
@@ -1529,7 +1529,7 @@ public class Edifact
 					int offset = Integer.parseInt(sTimezone);
 					return offset * 60;
 				}
-				catch( NumberFormatException ex )
+				catch( NumberFormatException _ )
 				{
 					System.err.println("ERROR: cannot convert the given value (" + sTimezone + ") to a timezone offset");
 				}

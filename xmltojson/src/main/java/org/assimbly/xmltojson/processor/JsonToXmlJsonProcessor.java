@@ -51,7 +51,7 @@ public class JsonToXmlJsonProcessor {
 
         try {
             tryParseDataStringToJsonObject(dataString);
-        } catch (Exception e) {
+        } catch (Exception _) {
             tryParseDataStringToJsonArray(dataString);
         }
     }
@@ -63,7 +63,7 @@ public class JsonToXmlJsonProcessor {
     private void tryParseDataStringToJsonArray(String dataString) throws JSONException {
         try {
             this.mainJsonArray = new JSONArray(dataString);
-        } catch (JSONException noJSONArrayException) {
+        } catch (JSONException _) {
             throw new JSONException(
                 "The provided JSON could not be parsed to either a JSON object or a JSON array."
             );

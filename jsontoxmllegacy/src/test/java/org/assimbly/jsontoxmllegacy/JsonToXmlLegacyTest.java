@@ -507,7 +507,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
 
             assertFalse(xmlDiff.hasDifferences());
 
-        } catch (Exception e) {
+        } catch (Exception _) {
             assertFalse(true);
         }
 

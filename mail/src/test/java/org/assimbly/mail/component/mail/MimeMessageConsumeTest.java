@@ -62,7 +62,7 @@ public class MimeMessageConsumeTest extends CamelTestSupport {
         // lets test the receive worked
         resultEndpoint.assertIsSatisfied();
 
-        Exchange exchange = resultEndpoint.getReceivedExchanges().get(0);
+        Exchange exchange = resultEndpoint.getReceivedExchanges().getFirst();
 
         String text = exchange.getIn().getBody(String.class);
         assertEquals(body, text, "mail body");
@@ -102,7 +102,7 @@ public class MimeMessageConsumeTest extends CamelTestSupport {
         try {
             File f = new File(getClass().getResource("/log4j2.properties").toURI());
             ds = new FileDataSource(f);
-        } catch (URISyntaxException ex) {
+        } catch (URISyntaxException _) {
             ds = new URLDataSource(getClass().getResource("/log4j2.properties"));
         }
         DataHandler dh = new DataHandler(ds);

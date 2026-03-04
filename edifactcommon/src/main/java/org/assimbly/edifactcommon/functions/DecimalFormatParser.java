@@ -130,7 +130,7 @@ public class DecimalFormatParser {
 		protected char				mcZeroDigit;			// = char 
 		protected char				mcDigit;				// = char 
 		protected char				mcPatternSeparator;		// = char
-	};
+	}
 	
 	protected class Format
 	{
@@ -177,7 +177,7 @@ public class DecimalFormatParser {
 		mDecimalFormat = null;
 		mbNegativePattern = false;
 		mbHasMinusSign = false;
-	};
+	}
 
 	public boolean setPattern ( final String sExpr, DecimalFormat format)
 	{
@@ -808,7 +808,7 @@ public class DecimalFormatParser {
 		try {
 			decimal = new BigDecimal(sInput);
 		}
-		catch (NumberFormatException e)
+		catch (NumberFormatException _)
 		{
 			throw new IllegalArgumentException(
 				"Value is not a number: '" + sInput + "'"

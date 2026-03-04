@@ -32,7 +32,7 @@ public class EdifactComponentTest extends CamelTestSupport {
         template.sendBody("direct:ediToXml", edifact);
 
         // verify exchange contents
-        String actual = resultEndpoint.getExchanges().get(0).getIn().getBody(String.class);
+        String actual = resultEndpoint.getExchanges().getFirst().getIn().getBody(String.class);
 
 		assertThat(actual).and(expected).areIdentical();
 

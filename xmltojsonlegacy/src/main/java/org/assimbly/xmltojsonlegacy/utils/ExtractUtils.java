@@ -464,7 +464,7 @@ public class ExtractUtils {
         try {
             Integer.parseInt(str);
             return true;
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             return false;
         }
     }
@@ -476,7 +476,7 @@ public class ExtractUtils {
         try {
             Double.parseDouble(str);
             return true;
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             return false;
         }
     }

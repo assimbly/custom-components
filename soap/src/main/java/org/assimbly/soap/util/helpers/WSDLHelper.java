@@ -80,7 +80,7 @@ public final class WSDLHelper {
             definition = reader.readWSDL(file.getAbsolutePath());
             LOG.info("WSDL has been fetched and cached successfully.");
 
-        } catch(Exception e) {
+        } catch(Exception _) {
             WSDLCache.INSTANCE.remove(url);
 
             WSDLException exp = new WSDLException("500", "Invalid WSDL or WSDL not found at: "+url);

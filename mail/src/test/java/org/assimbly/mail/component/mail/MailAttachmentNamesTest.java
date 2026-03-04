@@ -96,7 +96,7 @@ public class MailAttachmentNamesTest extends CamelTestSupport {
         sendTestMessage("filename_empty.txt", james);
 
         resultEndpoint.assertIsSatisfied();
-        Exchange exchange = resultEndpoint.getReceivedExchanges().get(0);
+        Exchange exchange = resultEndpoint.getReceivedExchanges().getFirst();
         assertNotNull(exchange.getIn(AttachmentMessage.class));
         assertNotNull(exchange.getIn(AttachmentMessage.class).getAttachmentObjects());
         assertEquals(1, exchange.getIn(AttachmentMessage.class).getAttachmentObjects().entrySet().size());
@@ -112,7 +112,7 @@ public class MailAttachmentNamesTest extends CamelTestSupport {
         sendTestMessage("filename_none.txt", james);
 
         resultEndpoint.assertIsSatisfied();
-        Exchange exchange = resultEndpoint.getReceivedExchanges().get(0);
+        Exchange exchange = resultEndpoint.getReceivedExchanges().getFirst();
         assertEquals(1, exchange.getIn(AttachmentMessage.class).getAttachmentObjects().entrySet().size());
 
         Map.Entry<String, Attachment> entry
@@ -126,7 +126,7 @@ public class MailAttachmentNamesTest extends CamelTestSupport {
         sendTestMessage("filename_duplicate.txt", james);
 
         resultEndpoint.assertIsSatisfied();
-        Exchange exchange = resultEndpoint.getReceivedExchanges().get(0);
+        Exchange exchange = resultEndpoint.getReceivedExchanges().getFirst();
         assertEquals(2, exchange.getIn(AttachmentMessage.class).getAttachmentObjects().entrySet().size());
 
         Map<String, Attachment> attachments = exchange.getIn(AttachmentMessage.class).getAttachmentObjects();
@@ -147,7 +147,7 @@ public class MailAttachmentNamesTest extends CamelTestSupport {
         sendTestMessage("filename_duplicate.txt", default_);
 
         resultDefaultEndpoint.assertIsSatisfied();
-        Exchange exchange = resultDefaultEndpoint.getReceivedExchanges().get(0);
+        Exchange exchange = resultDefaultEndpoint.getReceivedExchanges().getFirst();
         assertEquals(1, exchange.getIn(AttachmentMessage.class).getAttachmentObjects().entrySet().size());
         Map<String, Attachment> attachments = exchange.getIn(AttachmentMessage.class).getAttachmentObjects();
 
@@ -164,7 +164,7 @@ public class MailAttachmentNamesTest extends CamelTestSupport {
         sendTestMessage("filename_empty.txt", default_);
 
         resultDefaultEndpoint.assertIsSatisfied();
-        Exchange exchange = resultDefaultEndpoint.getReceivedExchanges().get(0);
+        Exchange exchange = resultDefaultEndpoint.getReceivedExchanges().getFirst();
         assertNotNull(exchange.getIn(AttachmentMessage.class));
         assertEquals(0, exchange.getIn(AttachmentMessage.class).getAttachmentObjects().size());
     }
@@ -179,7 +179,7 @@ public class MailAttachmentNamesTest extends CamelTestSupport {
         sendTestMessage("filename_none.txt", default_);
 
         resultDefaultEndpoint.assertIsSatisfied();
-        Exchange exchange = resultDefaultEndpoint.getReceivedExchanges().get(0);
+        Exchange exchange = resultDefaultEndpoint.getReceivedExchanges().getFirst();
         assertNotNull(exchange.getIn(AttachmentMessage.class));
         assertEquals(0, exchange.getIn(AttachmentMessage.class).getAttachmentObjects().size());
     }
@@ -189,7 +189,7 @@ public class MailAttachmentNamesTest extends CamelTestSupport {
         sendTestMessage("filename_duplicate.txt", suffix);
 
         resultEndpoint.assertIsSatisfied();
-        Exchange exchange = resultEndpoint.getReceivedExchanges().get(0);
+        Exchange exchange = resultEndpoint.getReceivedExchanges().getFirst();
         assertEquals(2, exchange.getIn(AttachmentMessage.class).getAttachmentObjects().entrySet().size());
 
         Map<String, Attachment> attachments = exchange.getIn(AttachmentMessage.class).getAttachmentObjects();
@@ -204,7 +204,7 @@ public class MailAttachmentNamesTest extends CamelTestSupport {
         sendTestMessage("filename_duplicate_multiple_dots.txt", suffix);
 
         resultEndpoint.assertIsSatisfied();
-        Exchange exchange = resultEndpoint.getReceivedExchanges().get(0);
+        Exchange exchange = resultEndpoint.getReceivedExchanges().getFirst();
         assertEquals(2, exchange.getIn(AttachmentMessage.class).getAttachmentObjects().entrySet().size());
 
         Map<String, Attachment> attachments = exchange.getIn(AttachmentMessage.class).getAttachmentObjects();
@@ -219,7 +219,7 @@ public class MailAttachmentNamesTest extends CamelTestSupport {
         sendTestMessage("filename_duplicate_no_extension.txt", suffix);
 
         resultEndpoint.assertIsSatisfied();
-        Exchange exchange = resultEndpoint.getReceivedExchanges().get(0);
+        Exchange exchange = resultEndpoint.getReceivedExchanges().getFirst();
         assertEquals(2, exchange.getIn(AttachmentMessage.class).getAttachmentObjects().entrySet().size());
 
         Map<String, Attachment> attachments = exchange.getIn(AttachmentMessage.class).getAttachmentObjects();
@@ -234,7 +234,7 @@ public class MailAttachmentNamesTest extends CamelTestSupport {
         sendTestMessage("filename_duplicate_single_dot_at_beginning.txt", suffix);
 
         resultEndpoint.assertIsSatisfied();
-        Exchange exchange = resultEndpoint.getReceivedExchanges().get(0);
+        Exchange exchange = resultEndpoint.getReceivedExchanges().getFirst();
         assertEquals(2, exchange.getIn(AttachmentMessage.class).getAttachmentObjects().entrySet().size());
 
         Map<String, Attachment> attachments = exchange.getIn(AttachmentMessage.class).getAttachmentObjects();
@@ -249,7 +249,7 @@ public class MailAttachmentNamesTest extends CamelTestSupport {
         sendTestMessage("disposition_none.txt", default_);
 
         resultDefaultEndpoint.assertIsSatisfied();
-        Exchange exchange = resultDefaultEndpoint.getReceivedExchanges().get(0);
+        Exchange exchange = resultDefaultEndpoint.getReceivedExchanges().getFirst();
         assertEquals(1, exchange.getIn(AttachmentMessage.class).getAttachmentObjects().entrySet().size());
 
         Map<String, Attachment> attachments = exchange.getIn(AttachmentMessage.class).getAttachmentObjects();

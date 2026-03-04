@@ -57,7 +57,7 @@ public class AuthenticatorTest extends CamelTestSupport {
 
         resultEndpoint.assertIsSatisfied();
 
-        Exchange exchange = resultEndpoint.getReceivedExchanges().get(0);
+        Exchange exchange = resultEndpoint.getReceivedExchanges().getFirst();
         String text = exchange.getIn().getBody(String.class);
         assertEquals(body, text, "mail body");
         return body;

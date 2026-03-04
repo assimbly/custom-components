@@ -37,7 +37,7 @@ public class FLVComponentTest extends CamelTestSupport {
         resultEndpoint.assertIsSatisfied();
 
         // verify exchange contents
-        String actual = resultEndpoint.getExchanges().get(0).getIn().getBody(String.class);
+        String actual = resultEndpoint.getExchanges().getFirst().getIn().getBody(String.class);
 
         XMLUnit.setIgnoreWhitespace(true);
 

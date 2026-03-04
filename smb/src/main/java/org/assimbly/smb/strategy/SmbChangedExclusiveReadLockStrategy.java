@@ -121,7 +121,7 @@ public class SmbChangedExclusiveReadLockStrategy implements GenericFileExclusive
         try {
             Thread.sleep(checkInterval);
             return false;
-        } catch (InterruptedException e) {
+        } catch (InterruptedException _) {
             LOG.debug("Sleep interrupted while waiting for exclusive read lock, so breaking out");
             return true;
         }

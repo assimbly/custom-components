@@ -50,7 +50,7 @@ public class AuthenticatorService {
             String qrLocation = GoogleAuthenticatorQRGenerator.getOtpAuthURL(issuer, user.getEmail(), key);
 
             return Response.seeOther(new URI(qrLocation)).build();
-        } catch (UnsupportedEncodingException | JwtException e) {
+        } catch (UnsupportedEncodingException | JwtException _) {
             return Response
                     .status(Response.Status.UNAUTHORIZED)
                     .entity("The session token is invalid.")
@@ -68,7 +68,7 @@ public class AuthenticatorService {
             mongoDao.removeAuthenticatorSettings(user);
 
             return Response.ok().build();
-        } catch (UnsupportedEncodingException | JwtException e) {
+        } catch (UnsupportedEncodingException | JwtException _) {
             return Response
                     .status(Response.Status.UNAUTHORIZED)
                     .entity("The session token is invalid.")

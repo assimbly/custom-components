@@ -52,7 +52,7 @@ public class FormToXmlComponentTest extends CamelTestSupport {
         String validFormData = "name=Pedro&surname=Catalão&myage=36";
         template.sendBody("direct:testRoute", validFormData);
 
-        Exchange result = getMockEndpoint("mock:testFormToXml").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:testFormToXml").getExchanges().getFirst();
         String actual = result.getIn().getBody(String.class);
 
         assertThat(actual).and(expected).areIdentical();
@@ -64,7 +64,7 @@ public class FormToXmlComponentTest extends CamelTestSupport {
         String formDataInvalidCharacters = "name=Pedro&sur$naãme=Catalão&my age=36";
         template.sendBody("direct:testRoute", formDataInvalidCharacters);
 
-        Exchange result = getMockEndpoint("mock:testFormToXml").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:testFormToXml").getExchanges().getFirst();
 
         String actual = result.getIn().getBody(String.class);
 
@@ -77,7 +77,7 @@ public class FormToXmlComponentTest extends CamelTestSupport {
         String formDataWithInvalidKeyNames = "38=Pedro&city=Lisbon";
         template.sendBody("direct:testRoute", formDataWithInvalidKeyNames);
 
-        Exchange result = getMockEndpoint("mock:testFormToXml").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:testFormToXml").getExchanges().getFirst();
 
         String actual = result.getIn().getBody(String.class);
 
@@ -90,7 +90,7 @@ public class FormToXmlComponentTest extends CamelTestSupport {
         String formDataEmptyKeyValues = "name=&surname=catalao=age&=";
         template.sendBody("direct:testRoute", formDataEmptyKeyValues);
 
-        Exchange result = getMockEndpoint("mock:testFormToXml").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:testFormToXml").getExchanges().getFirst();
 
         String actual = result.getIn().getBody(String.class);
 

@@ -213,7 +213,7 @@ public class TenantVariablesProcessor implements Processor {
                 default:
                     // do nothing
             }
-        } catch (Exception e){
+        } catch (Exception _){
             throw new EnvironmentException("Error to interpolate variable.");
         }
 

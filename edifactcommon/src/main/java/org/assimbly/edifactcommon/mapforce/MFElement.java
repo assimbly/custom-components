@@ -49,7 +49,7 @@ public class MFElement implements IMFNode
 			}
 			children = new ArrayListAsEnumerable(childrenCache);
 		}
-		} catch(Exception e) {}
+		} catch(Exception _) {}
 	}
 		
 	public MFElement(String localName, String namespaceURI, String prefix, IEnumerable children)

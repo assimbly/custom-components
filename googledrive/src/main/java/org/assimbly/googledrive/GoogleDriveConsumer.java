@@ -123,7 +123,7 @@ public class GoogleDriveConsumer extends ScheduledPollConsumer implements Consum
 
         try {
             file = java.io.File.createTempFile("temp", "");
-        } catch (IOException e) {
+        } catch (IOException _) {
             throw new GoogleDriveException("download", fileModel.getId());
         }
 
@@ -138,7 +138,7 @@ public class GoogleDriveConsumer extends ScheduledPollConsumer implements Consum
                     .get(fileModel.getId())
                     .executeMediaAndDownloadTo(outputStream);
 
-        } catch (IOException e) {
+        } catch (IOException _) {
             throw new GoogleDriveException("download", fileModel.getId());
         }
 
@@ -190,7 +190,7 @@ public class GoogleDriveConsumer extends ScheduledPollConsumer implements Consum
                 .execute();
 
         if (result.getFiles().size() > 0)
-            return result.getFiles().get(0).getId();
+            return result.getFiles().getFirst().getId();
 
         return null;
     }

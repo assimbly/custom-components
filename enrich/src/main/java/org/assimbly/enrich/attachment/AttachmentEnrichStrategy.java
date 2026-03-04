@@ -28,7 +28,7 @@ public class AttachmentEnrichStrategy implements AggregationStrategy {
         // In this case the main flow can keep going, but the error is logged to the log tab in Assimbly.
         try {
             resourceMessage = resource.getIn();
-        } catch (NullPointerException e){
+        } catch (NullPointerException _){
             NullPointerException exception = new NullPointerException("Assimbly could not get a response from your requested resource.");
             logger.error(exception.getMessage());
 

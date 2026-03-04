@@ -2,8 +2,8 @@ package org.assimbly.xmltojsonlegacy.model;
 
 public class Namespace {
 
-    private String namespace;
-    private int level;
+    private final String namespace;
+    private final int level;
 
     public Namespace(String namespace, int level) {
         this.namespace = namespace;

@@ -202,7 +202,7 @@ public class Lang
 		{
 			return str.substring(0, number);
 		} 
-		catch( IndexOutOfBoundsException e ) 
+		catch( IndexOutOfBoundsException _ ) 
 		{
 			return str;
 		}
@@ -220,7 +220,7 @@ public class Lang
 		{
 			return str.substring(nPosition, str.length());
 		} 
-		catch( IndexOutOfBoundsException e ) 
+		catch( IndexOutOfBoundsException _ ) 
 		{
 			return str;
 		}
@@ -233,7 +233,7 @@ public class Lang
 		{
 			return s.substring(s.length() - number, s.length());
 		} 
-		catch( IndexOutOfBoundsException e ) 
+		catch( IndexOutOfBoundsException _ ) 
 		{
 			return str;
 		}
@@ -250,7 +250,7 @@ public class Lang
 		{
 			return str.substring(0, nPosition);
 		} 
-		catch( IndexOutOfBoundsException e ) 
+		catch( IndexOutOfBoundsException _ ) 
 		{
 			return str;
 		}

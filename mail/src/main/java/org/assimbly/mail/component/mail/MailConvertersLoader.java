@@ -42,13 +42,13 @@ public final class MailConvertersLoader implements TypeConverterLoader, CamelCon
 
     private void registerConverters(TypeConverterRegistry registry) {
         addTypeConverter(registry, java.io.InputStream.class, jakarta.mail.Message.class, false,
-            (type, exchange, value) -> MailConverters.toInputStream((jakarta.mail.Message) value));
+            (_, _, value) -> MailConverters.toInputStream((jakarta.mail.Message) value));
         addTypeConverter(registry, java.io.InputStream.class, jakarta.mail.Multipart.class, false,
-            (type, exchange, value) -> MailConverters.toInputStream((jakarta.mail.Multipart) value, exchange));
+            (_, exchange, value) -> MailConverters.toInputStream((jakarta.mail.Multipart) value, exchange));
         addTypeConverter(registry, String.class, jakarta.mail.Message.class, false,
-            (type, exchange, value) -> MailConverters.toString((jakarta.mail.Message) value));
+            (_, _, value) -> MailConverters.toString((jakarta.mail.Message) value));
         addTypeConverter(registry, String.class, jakarta.mail.Multipart.class, false,
-            (type, exchange, value) -> MailConverters.toString((jakarta.mail.Multipart) value));
+            (_, _, value) -> MailConverters.toString((jakarta.mail.Multipart) value));
     }
 
     private static void addTypeConverter(TypeConverterRegistry registry, Class<?> toType, Class<?> fromType, boolean allowNull, SimpleTypeConverter.ConversionMethod method) {

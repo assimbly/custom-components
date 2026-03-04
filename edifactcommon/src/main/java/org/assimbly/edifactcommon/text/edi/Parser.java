@@ -48,7 +48,7 @@ public class Parser {
 			try {
 				ret = (ParseInfo) super.clone();
 			}
-			catch (CloneNotSupportedException e) {
+			catch (CloneNotSupportedException _) {
 				//won't happen
 			}
 			return ret;
@@ -369,21 +369,21 @@ public class Parser {
 
 		String getX12DataElementErrorCode( ErrorType error )
 		{
-			switch( error )
+			return switch( error )
 			{
-				case MissingFieldOrComposite : return "1";
-				case ExtraData : return "3";
-				case ExtraRepeat : return "3";
-				case DataElementTooShort : return "4";
-				case DataElementTooLong : return "5";
-				case FieldValueInvalid : return "6";
-				case CodeListValueWrong : return "7";
-				case InvalidDate: return "8";
-				case InvalidTime: return "9";
-				case SemanticWrong: return "10";
-				case UsingNotUsed: return "I10";
-				default : return "1";
-			}
+				case MissingFieldOrComposite  -> "1";
+				case ExtraData  -> "3";
+				case ExtraRepeat  -> "3";
+				case DataElementTooShort  -> "4";
+				case DataElementTooLong  -> "5";
+				case FieldValueInvalid  -> "6";
+				case CodeListValueWrong  -> "7";
+				case InvalidDate -> "8";
+				case InvalidTime -> "9";
+				case SemanticWrong -> "10";
+				case UsingNotUsed -> "I10";
+				default  -> "1";
+			};
 		}
 
 		public EDISemanticValidator getValidator()

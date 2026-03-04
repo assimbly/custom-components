@@ -52,7 +52,7 @@ public class MailHeaderOverrulePreConfigurationRecipientsTest extends CamelTestS
 
         mock.assertIsSatisfied();
         /* Bcc should be stripped by specs compliant SMTP servers */
-        Assertions.assertThat(mock.getReceivedExchanges().get(0).getMessage().getHeader("bcc")).isNull();
+        Assertions.assertThat(mock.getReceivedExchanges().getFirst().getMessage().getHeader("bcc")).isNull();
     }
 
     @Override

@@ -50,7 +50,6 @@ public class AuthorizationFilter implements ContainerRequestFilter {
         String baseDatabaseName = ConfigHelper.get("baseDatabaseName");
         MongoClient mongoClient = MongoClientProvider.getClient();
         this.mongoDao = new MongoDao(mongoClient, baseDatabaseName);
-        //this.mongoDao = new MongoDao(ConfigHelper.get("baseDatabaseName"));
     }
 
     public AuthorizationFilter(String baseDatabaseName){
@@ -162,7 +161,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
                     || extractTenant(resourceInfo.getResourceMethod());
 
             if (hasToCheck) {
-                checkTenant(user, pathParams.get(TENANT_NAME_PATH_PARAM).get(0));
+                checkTenant(user, pathParams.get(TENANT_NAME_PATH_PARAM).getFirst());
             }
         }
     }

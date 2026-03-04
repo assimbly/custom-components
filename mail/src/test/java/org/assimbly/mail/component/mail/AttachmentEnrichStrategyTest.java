@@ -63,7 +63,7 @@ public class AttachmentEnrichStrategyTest extends CamelTestSupport {
 
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
-        System.out.println(" > createRouteBuilder ");
+        IO.println(" > createRouteBuilder ");
         return new RouteBuilder() {
             @Override
             public void configure() throws Exception {

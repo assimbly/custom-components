@@ -13,7 +13,7 @@ public final class DefinitionHelper {
 
     public static Definition getImport(Definition definition, QName toImport){
         // Get First
-        Import imp = (Import) definition.getImports(toImport.getNamespaceURI()).get(0);
+        Import imp = (Import) definition.getImports(toImport.getNamespaceURI()).getFirst();
 
         return imp.getDefinition();
     }

@@ -59,7 +59,7 @@ public class MailRouteTest extends CamelTestSupport {
         resultEndpoint.assertIsSatisfied();
 
         // Validate that the headers were preserved.
-        Exchange exchange = resultEndpoint.getReceivedExchanges().get(0);
+        Exchange exchange = resultEndpoint.getReceivedExchanges().getFirst();
         String replyTo = (String) exchange.getIn().getHeader(MailConstants.MAIL_REPLY_TO);
         assertEquals("route-test-reply@localhost", replyTo);
 
@@ -91,7 +91,7 @@ public class MailRouteTest extends CamelTestSupport {
 
         mock.assertIsSatisfied();
 
-        assertFalse(mock.getExchanges().get(0).getIn(AttachmentMessage.class).hasAttachments(), "Should not have attachements");
+        assertFalse(mock.getExchanges().getFirst().getIn(AttachmentMessage.class).hasAttachments(), "Should not have attachements");
 
     }
 

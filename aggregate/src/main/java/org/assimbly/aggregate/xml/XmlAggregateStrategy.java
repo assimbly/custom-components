@@ -11,10 +11,6 @@ public class XmlAggregateStrategy implements AggregationStrategy {
 
     protected Logger log = LoggerFactory.getLogger(getClass());
 
-    private static String XML_DECLARATION_UTF_8 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-    private static String AGGREGATE_INIT_TAG = "<Aggregated>";
-    private static String AGGREGATE_END_TAG = "</Aggregated>";
-
     @Override
     public Exchange aggregate(Exchange newExchange, Exchange splitExchange) {
 
@@ -54,10 +50,13 @@ public class XmlAggregateStrategy implements AggregationStrategy {
             splitXml = splitXml.substring(declarationEndPos + 2);
         }
 
-        if(newXml.endsWith(AGGREGATE_END_TAG)) {
-            result = StringUtils.substring(newXml, 0, newXml.length() - AGGREGATE_END_TAG.length()) + splitXml + AGGREGATE_END_TAG;
+        String aggregateEndTag = "</Aggregated>";
+        if(newXml.endsWith(aggregateEndTag)) {
+            result = StringUtils.substring(newXml, 0, newXml.length() - aggregateEndTag.length()) + splitXml + aggregateEndTag;
         } else {
-            result = XML_DECLARATION_UTF_8 + AGGREGATE_INIT_TAG + splitXml + AGGREGATE_END_TAG;
+            String xmlDeclaration = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+            String aggregateStartTag = "<Aggregated>";
+            result = xmlDeclaration + aggregateStartTag + splitXml + aggregateEndTag;
         }
         return result;
     }
@@ -70,7 +69,7 @@ public class XmlAggregateStrategy implements AggregationStrategy {
 
         try {
             return exchange.getIn().getBody(String.class);
-        } catch (Exception e) {
+        } catch (Exception _) {
             if (log.isDebugEnabled()) {
                 log.debug("Unable to get data from the route to the Aggregate component.");
             }

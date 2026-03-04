@@ -232,7 +232,7 @@ public class MimeMultipartDataFormat extends DefaultDataFormat {
                 if (!ct.match("multipart/*")) {
                     return stream;
                 }
-            } catch (ParseException e) {
+            } catch (ParseException _) {
                 LOG.warn("Invalid Content-Type {} ignored", contentType);
                 return stream;
             }
@@ -252,7 +252,7 @@ public class MimeMultipartDataFormat extends DefaultDataFormat {
             if (dh != null) {
                 content = dh.getContent();
             }
-        } catch (MessagingException e) {
+        } catch (MessagingException _) {
             LOG.warn("cannot parse message, no unmarshalling done");
         }
         if (content instanceof MimeMultipart mp) {

@@ -40,7 +40,7 @@ public class DocConverterTest extends CamelTestSupport {
     public void testCsvWithHeaders() throws IOException, SAXException {
         template.sendBody("direct:in", xml);
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         String expected = getExpected();
         String actual = result.getIn().getBody(String.class);

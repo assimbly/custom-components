@@ -208,7 +208,7 @@ public class MailBinding {
                 boolean supported;
                 try {
                     supported = Charset.isSupported(charset);
-                } catch (IllegalCharsetNameException e) {
+                } catch (IllegalCharsetNameException _) {
                     supported = false;
                 }
                 if (supported) {
@@ -302,7 +302,7 @@ public class MailBinding {
                         mailMessage.setMessage(messageCopy);
                         return body;
                     }
-                } catch (Exception e2) {
+                } catch (Exception _) {
                     // fall through and let original exception be thrown
                 }
             }

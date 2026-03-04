@@ -205,13 +205,13 @@ public class Writer {
 	}
 
 	public String getLineEnd() {
-		switch(mLineEnd)
+		return switch(mLineEnd)
 		{
-			case 0: return System.getProperty("line.separator");
-			case 1: return "\r\n";
-			case 2: return "\n";
-			case 3: return "\r";
-			default: return "\r\n";
-		}
+			case 0 -> System.getProperty("line.separator");
+			case 1 -> "\r\n";
+			case 2 -> "\n";
+			case 3 -> "\r";
+			default -> "\r\n";
+		};
 	}
 }

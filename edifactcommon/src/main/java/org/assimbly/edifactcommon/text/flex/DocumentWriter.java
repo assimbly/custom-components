@@ -44,15 +44,14 @@ public class DocumentWriter implements Appender {
 	}
 
 	public void appendLineEnd() {
-		String s;
-		switch(lineEnd)
+		String s = switch(lineEnd)
 		{
-			case 0: s = System.getProperty("line.separator"); break;
-			case 1: s = "\r\n"; break;
-			case 2: s = "\n"; break;
-			case 3: s = "\r"; break;
-			default: s = "\r\n"; break;
-		}
+			case 0 -> System.getProperty("line.separator");
+			case 1 -> "\r\n";
+			case 2 -> "\n";
+			case 3 -> "\r";
+			default -> "\r\n";
+		};
 		
 		content.append(s);
 	}

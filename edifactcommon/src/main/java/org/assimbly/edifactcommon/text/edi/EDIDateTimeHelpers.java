@@ -33,7 +33,7 @@ public class EDIDateTimeHelpers
 			if ( ( 1 > nMonth ) || ( 12 < nMonth ) ) return false;
 				return true;
 		}
-		catch (Exception e)
+		catch (Exception _)
 		{
 			return false;
 		}
@@ -47,7 +47,7 @@ public class EDIDateTimeHelpers
 			if ( ( 1 > nDay ) || ( 31 < nDay ) ) return false;
 				return true;
 		}
-		catch (Exception e)
+		catch (Exception _)
 		{
 			return false;
 		}
@@ -61,7 +61,7 @@ public class EDIDateTimeHelpers
 			if ( ( 0 > nHour ) || ( 23 < nHour ) ) return false;
 				return true;
 		}
-		catch (Exception e)
+		catch (Exception _)
 		{
 			return false;
 		}
@@ -75,7 +75,7 @@ public class EDIDateTimeHelpers
 			if ( ( 0 > nMinute ) || ( 59 < nMinute ) ) return false;
 				return true;
 		}
-		catch (Exception e)
+		catch (Exception _)
 		{
 			return false;
 		}

@@ -66,7 +66,7 @@ public class NowSearchTerm extends ComparisonTerm {
             } else {
                 d = msg.getReceivedDate();
             }
-        } catch (Exception e) {
+        } catch (Exception _) {
             return false;
         }
 
@@ -78,22 +78,15 @@ public class NowSearchTerm extends ComparisonTerm {
     }
 
     private static boolean match(Date d1, Date d2, int comparison) {
-        switch (comparison) {
-            case LE:
-                return d1.before(d2) || d1.equals(d2);
-            case LT:
-                return d1.before(d2);
-            case EQ:
-                return d1.equals(d2);
-            case NE:
-                return !d1.equals(d2);
-            case GT:
-                return d1.after(d2);
-            case GE:
-                return d1.after(d2) || d1.equals(d2);
-            default:
-                return false;
-        }
+        return switch (comparison) {
+            case LE -> d1.before(d2) || d1.equals(d2);
+            case LT -> d1.before(d2);
+            case EQ -> d1.equals(d2);
+            case NE -> !d1.equals(d2);
+            case GT -> d1.after(d2);
+            case GE -> d1.after(d2) || d1.equals(d2);
+            default -> false;
+        };
     }
 
     @Override

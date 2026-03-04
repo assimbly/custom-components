@@ -63,7 +63,7 @@ public class OAuth2TokenProcessor implements Processor {
             int expiryDelayInt = EXPIRY_DELAY_DEFAULT;
             try {
                 expiryDelayInt = - Integer.parseInt(expiryDelay);
-            } catch (Exception e) {
+            } catch (Exception _) {
                 logger.warn("Failed to parse expiryDelay value. Default value is "+expiryDelayInt);
             }
             expireDelayCal.add(Calendar.SECOND, expiryDelayInt);

@@ -10,7 +10,6 @@ import org.apache.camel.spi.UriPath;
 import org.assimbly.soap.domain.SoapHeader;
 import org.assimbly.soap.domain.SoapHttpHeader;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -149,7 +148,7 @@ public class SoapConfiguration {
         return auth;
     }
 
-    public List<SoapHeader> getHeaders() throws IOException {
+    public List<SoapHeader> getHeaders() {
 
         List<SoapHeader> list = new ArrayList<>();
 
@@ -160,7 +159,7 @@ public class SoapConfiguration {
         return list;
     }
 
-    public List<SoapHttpHeader> getHttpHeaders() throws IOException {
+    public List<SoapHttpHeader> getHttpHeaders() {
 
         List<SoapHttpHeader> list = new ArrayList<>();
 

@@ -37,7 +37,7 @@ public class MailConsumerIdleMessageTest extends CamelTestSupport {
         MockEndpoint mock = getMockEndpoint("mock:result");
         mock.expectedMinimumMessageCount(2);
         MockEndpoint.assertIsSatisfied(context);
-        assertNull(mock.getExchanges().get(0).getIn().getBody());
+        assertNull(mock.getExchanges().getFirst().getIn().getBody());
         assertNull(mock.getExchanges().get(1).getIn().getBody());
     }
 

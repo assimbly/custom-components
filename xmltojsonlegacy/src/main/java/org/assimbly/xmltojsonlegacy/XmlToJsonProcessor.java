@@ -164,7 +164,7 @@ public class XmlToJsonProcessor implements Processor {
         Map<Integer, List<String>> depthMap = new HashMap<>();
         for (Map.Entry<String, ElementMetadata> entry : metadataMap.entrySet()) {
             int depth = entry.getValue().getLevel();
-            depthMap.computeIfAbsent(depth, k -> new ArrayList<>()).add(entry.getKey());
+            depthMap.computeIfAbsent(depth, _ -> new ArrayList<>()).add(entry.getKey());
         }
         return depthMap;
     }

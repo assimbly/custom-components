@@ -23,7 +23,7 @@ public class TokenService {
 
     private static final Logger LOG = LoggerFactory.getLogger(TokenService.class);
 
-    private MongoDao mongoDao;
+    private final MongoDao mongoDao;
 
     public TokenService(MongoDatabase database){
         mongoDao = new MongoDao(database);

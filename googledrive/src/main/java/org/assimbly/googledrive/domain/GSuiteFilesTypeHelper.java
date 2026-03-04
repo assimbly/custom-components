@@ -45,7 +45,7 @@ public class GSuiteFilesTypeHelper {
     public static String findFileExtension(String mimeType) {
         try {
             return MimeTypes.getDefaultMimeTypes().forName(mimeType).getExtension();
-        } catch (MimeTypeException e) {
+        } catch (MimeTypeException _) {
             return null;
         }
     }

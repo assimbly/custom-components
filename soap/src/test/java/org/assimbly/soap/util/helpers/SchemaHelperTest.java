@@ -48,9 +48,9 @@ public class SchemaHelperTest {
         @SuppressWarnings("unchecked")
         Vector<SchemaImport> expected = (Vector<SchemaImport>) schema.getImports().get("http://www.assimbly.world/wsdl/local/import");
 
-        SchemaImport actual = SchemaHelper.findImport(schema, expected.get(0).getNamespaceURI());
+        SchemaImport actual = SchemaHelper.findImport(schema, expected.getFirst().getNamespaceURI());
 
-        assertEquals(expected.get(0), actual);
+        assertEquals(expected.getFirst(), actual);
     }
 
 }

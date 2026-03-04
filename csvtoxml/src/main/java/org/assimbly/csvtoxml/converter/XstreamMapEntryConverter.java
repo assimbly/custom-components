@@ -23,10 +23,6 @@ public class XstreamMapEntryConverter implements Converter {
         for (Map.Entry<String, String> entry : map.entrySet()) {
             String xmlNode = entry.getKey().replaceAll("[^A-z0-9_.\\-]|^(xml|[\\-0-9\\.])+", "");
 
-            System.out.println("----------------------");
-            System.out.println("xmlNode=" + xmlNode);
-            System.out.println("value=" + entry.getValue());
-
             writer.startNode(xmlNode);
             writer.setValue(entry.getValue());
             writer.endNode();

@@ -64,7 +64,7 @@ public class MultipleDestinationConsumeTest extends CamelTestSupport {
         // lets test the receive worked
         resultEndpoint.assertIsSatisfied(100000);
 
-        Exchange exchange = resultEndpoint.getReceivedExchanges().get(0);
+        Exchange exchange = resultEndpoint.getReceivedExchanges().getFirst();
 
         org.apache.camel.Message in = exchange.getIn();
         assertNotNull(in.getHeaders(), "Should have headers");

@@ -92,8 +92,7 @@ public class XmlToJsonConfiguration {
                 "FTTTFT", "FTTTTT", "TFTFFF", "TFTFFT", "TFTFTF", "TFTFTT", "TFTTFF", "TFTTFT", "TFTTTF", "TFTTTT", "TTFTTT",
                 "TTTFFF", "TTTFTF", "TTTFTT", "TTTTFF", "TTTTFT", "TTTTTF"
         );
-        String optionCode = "" +
-                (config.isForceTopLevelObject() ? "T" : "F") +
+        String optionCode = (config.isForceTopLevelObject() ? "T" : "F") +
                 (config.isSkipWhitespace() ? "T" : "F") +
                 (config.isTrimSpaces() ? "T" : "F") +
                 (config.isSkipNamespaces() ? "T" : "F") +

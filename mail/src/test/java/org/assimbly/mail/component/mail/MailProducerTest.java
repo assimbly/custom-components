@@ -45,7 +45,7 @@ public class MailProducerTest extends CamelTestSupport {
         template.sendBodyAndHeader("direct:start", "Message ", "To", "someone@localhost");
         MockEndpoint.assertIsSatisfied(context);
         // need to check the message header
-        Exchange exchange = getMockEndpoint("mock:result").getExchanges().get(0);
+        Exchange exchange = getMockEndpoint("mock:result").getExchanges().getFirst();
         assertNotNull(exchange.getIn().getHeader(MailConstants.MAIL_MESSAGE_ID), "The message id should not be null");
 
         Mailbox box = someone.getInbox();
@@ -69,7 +69,7 @@ public class MailProducerTest extends CamelTestSupport {
         template.sendBodyAndHeader("direct:start", mimeMessage, "To", "someone@localhost");
         MockEndpoint.assertIsSatisfied(context);
         // need to check the message header
-        Exchange exchange = getMockEndpoint("mock:result").getExchanges().get(0);
+        Exchange exchange = getMockEndpoint("mock:result").getExchanges().getFirst();
         assertNotNull(exchange.getIn().getHeader(MailConstants.MAIL_MESSAGE_ID), "The message id should not be null");
 
         Mailbox box = someone.getInbox();

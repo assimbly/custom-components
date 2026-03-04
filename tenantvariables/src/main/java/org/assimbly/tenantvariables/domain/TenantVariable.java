@@ -20,7 +20,7 @@ public class TenantVariable {
 
     public enum TenantVarType {
         TenantVariable,
-        StaticTenantVariable;
+        StaticTenantVariable
     }
 
     private ObjectId _id;

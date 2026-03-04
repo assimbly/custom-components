@@ -1,7 +1,6 @@
 package org.assimbly.aggregate;
 
 import org.apache.camel.AggregationStrategy;
-import org.apache.log4j.Logger;
 import org.assimbly.aggregate.json.JsonAggregateStrategy;
 import org.assimbly.aggregate.xml.XmlAggregateStrategy;
 import org.apache.camel.Exchange;

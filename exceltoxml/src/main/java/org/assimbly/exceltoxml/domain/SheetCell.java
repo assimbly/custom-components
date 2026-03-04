@@ -28,14 +28,11 @@ public class SheetCell {
     }
 
     private String evaluateFormula(Cell cell) {
-        switch(cell.getCachedFormulaResultType()) {
-            case NUMERIC:
-                return String.valueOf(cell.getNumericCellValue());
-            case STRING:
-                return String.valueOf(cell.getRichStringCellValue());
-            default:
-                return cell.getStringCellValue();
-        }
+        return switch(cell.getCachedFormulaResultType()) {
+            case NUMERIC -> String.valueOf(cell.getNumericCellValue());
+            case STRING -> String.valueOf(cell.getRichStringCellValue());
+            default -> cell.getStringCellValue();
+        };
     }
 
     public String getCellValue() {

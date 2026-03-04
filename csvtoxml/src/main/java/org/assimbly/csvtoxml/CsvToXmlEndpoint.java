@@ -19,7 +19,7 @@ public class CsvToXmlEndpoint extends ProcessorEndpoint {
     private CsvToXmlComponent component;
 
     public CsvToXmlEndpoint(String uri, CsvToXmlComponent component, CsvToXmlConfiguration configuration) {
-        super(uri, (Component) component);
+        super(uri, component);
 
         this.component = component;
         this.configuration = configuration;

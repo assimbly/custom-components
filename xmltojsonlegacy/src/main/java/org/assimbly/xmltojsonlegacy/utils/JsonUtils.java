@@ -44,7 +44,7 @@ public class JsonUtils {
             } else {
                 return null; // Not a valid JSON object or array
             }
-        } catch (Exception e) {
+        } catch (Exception _) {
             return null;
         }
     }

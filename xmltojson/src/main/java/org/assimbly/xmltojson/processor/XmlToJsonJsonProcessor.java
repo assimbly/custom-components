@@ -151,22 +151,12 @@ public class XmlToJsonJsonProcessor {
     private Object getContentOfTypedJsonObject(JSONObject typedJsonObject) {
         String specifiedType = typedJsonObject.getString("type");
         JsonType type = getTypeFromTypedObject(specifiedType);
-        Object content = null;
-
-        switch (type) {
-        case STRING:
-            content = typedJsonObject.optString(this.contentKey);
-            break;
-        case NUMBER:
-            content = typedJsonObject.optNumber(this.contentKey);
-            break;
-        case BOOLEAN:
-            content = typedJsonObject.optBoolean(this.contentKey);
-            break;
-        case ARRAY:
-            content = convertObjectWithArrayTypeToArray(typedJsonObject);
-            break;
-        }
+        Object content = switch (type) {
+        case STRING -> typedJsonObject.optString(this.contentKey);
+        case NUMBER -> typedJsonObject.optNumber(this.contentKey);
+        case BOOLEAN -> typedJsonObject.optBoolean(this.contentKey);
+        case ARRAY -> convertObjectWithArrayTypeToArray(typedJsonObject);
+        };
 
         if (content == null) {
             switch (xmlJsonDataFormat.getTypeValueMismatch()) {
@@ -189,7 +179,7 @@ public class XmlToJsonJsonProcessor {
     private JsonType getTypeFromTypedObject(String type) {
         try {
             return Enum.valueOf(JsonType.class, type.toUpperCase());
-        } catch (Exception e) {
+        } catch (Exception _) {
             return JsonType.STRING;
         }
     }

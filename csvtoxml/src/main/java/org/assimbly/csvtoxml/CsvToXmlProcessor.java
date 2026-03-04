@@ -39,7 +39,7 @@ public class CsvToXmlProcessor implements Processor {
         try(ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             Writer writer = new OutputStreamWriter(outputStream, configuration.getEncoding())) {
 
-            if (input.get(0).getClass() == ArrayList.class){
+            if (input.getFirst().getClass() == ArrayList.class){
                 List<ArrayList<String>> csv = (List<ArrayList<String>>) input;
                 items = createAnonymousItems(csv);
             }else{

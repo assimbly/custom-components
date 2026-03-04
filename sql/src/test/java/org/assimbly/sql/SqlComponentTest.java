@@ -103,7 +103,7 @@ public class SqlComponentTest extends CamelTestSupport {
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         Document resultSet = builder.parse(
                 new InputSource(new StringReader(result.getIn().getBody(String.class)))
@@ -157,7 +157,7 @@ public class SqlComponentTest extends CamelTestSupport {
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         Document resultSet = builder.parse(
                 new InputSource(new StringReader(result.getIn().getBody(String.class)))
@@ -199,7 +199,7 @@ public class SqlComponentTest extends CamelTestSupport {
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         Document resultSet = builder.parse(
                 new InputSource(new StringReader(result.getIn().getBody(String.class)))
@@ -222,7 +222,7 @@ public class SqlComponentTest extends CamelTestSupport {
 
         template.sendBody("direct:executeWithJsonHeader", "");
         getMockEndpoint("mock:out").expectedMessageCount(1);
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         Document resultSet = builder.parse(
                 new InputSource(new StringReader(result.getIn().getBody(String.class)))
@@ -249,7 +249,7 @@ public class SqlComponentTest extends CamelTestSupport {
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         Document resultSet = builder.parse(
                 new InputSource(new StringReader(result.getIn().getBody(String.class)))
@@ -271,7 +271,7 @@ public class SqlComponentTest extends CamelTestSupport {
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         Document resultSet = builder.parse(
                 new InputSource(new StringReader(result.getIn().getBody(String.class)))
@@ -294,7 +294,7 @@ public class SqlComponentTest extends CamelTestSupport {
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         String resultBody = result.getIn().getBody(String.class);
 
@@ -312,7 +312,7 @@ public class SqlComponentTest extends CamelTestSupport {
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         Document resultSet = builder.parse(
                 new InputSource(new StringReader(result.getIn().getBody(String.class)))
@@ -338,7 +338,7 @@ public class SqlComponentTest extends CamelTestSupport {
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         Document resultSet = builder.parse(
                 new InputSource(new StringReader(result.getIn().getBody(String.class)))
@@ -361,7 +361,7 @@ public class SqlComponentTest extends CamelTestSupport {
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         Document resultSet = builder.parse(
                 new InputSource(new StringReader(result.getIn().getBody(String.class)))
@@ -384,7 +384,7 @@ public class SqlComponentTest extends CamelTestSupport {
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         Document resultSet = builder.parse(
                 new InputSource(new StringReader(result.getIn().getBody(String.class)))

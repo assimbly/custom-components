@@ -229,7 +229,7 @@ public class TenantVariablesTest extends CamelTestSupport {
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         assertNotNull(result.getIn().getHeader(HEADER_NAME_WITH_SPACE));
         assertEquals(VARIABLE_DEFAULT_VALUE, result.getIn().getHeader(HEADER_NAME_WITH_SPACE));
@@ -443,7 +443,7 @@ public class TenantVariablesTest extends CamelTestSupport {
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         assertEquals(VARIABLE_VALUE, result.getIn().getHeader(HEADER_NAME_WITH_SPACE));
     }

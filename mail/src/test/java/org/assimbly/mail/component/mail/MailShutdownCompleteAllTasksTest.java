@@ -67,7 +67,7 @@ public class MailShutdownCompleteAllTasksTest extends CamelTestSupport {
 
         MockEndpoint.assertIsSatisfied(context);
 
-        int batch = bar.getReceivedExchanges().get(0).getProperty(Exchange.BATCH_SIZE, int.class);
+        int batch = bar.getReceivedExchanges().getFirst().getProperty(Exchange.BATCH_SIZE, int.class);
 
         // shutdown during processing
         context.stop();

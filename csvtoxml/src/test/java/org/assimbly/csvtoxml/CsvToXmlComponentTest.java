@@ -42,7 +42,7 @@ public class CsvToXmlComponentTest extends CamelTestSupport {
     public void testCsvWithHeaders() throws IOException, SAXException {
         template.sendBody("direct:testWithHeaders", csvWithHeader);
 
-        Exchange result = getMockEndpoint("mock:outWithHeaders").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:outWithHeaders").getExchanges().getFirst();
 
         String expected = getExpectedXml();
         String actual = result.getIn().getBody(String.class);

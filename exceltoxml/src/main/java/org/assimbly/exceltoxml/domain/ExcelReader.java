@@ -30,7 +30,7 @@ public class ExcelReader {
                 List<SheetCell> rowCells = processRow(row, range);
                 rows.add(rowCells);
             }
-        } catch (Exception e) {
+        } catch (Exception _) {
             throw new Excel2XmlException("Unable to process rule named " + rule.getName() + ". Unreadable range " + rule.getCellRange() + " in sheet " + rule.getWorksheet());
         }
 
@@ -77,8 +77,8 @@ public class ExcelReader {
         if (rows.isEmpty())
             return;
 
-        List<String> cellNames = rows.get(0).stream().map(SheetCell::getCellValue).collect(Collectors.toList());
-        rows.remove(0);
+        List<String> cellNames = rows.getFirst().stream().map(SheetCell::getCellValue).collect(Collectors.toList());
+        rows.removeFirst();
         for (List<SheetCell> row : rows) {
             for (int i = 0; i < row.size(); i++) {
                 if (!cellNames.isEmpty() && !cellNames.get(i).isEmpty())

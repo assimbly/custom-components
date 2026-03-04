@@ -73,7 +73,7 @@ public class JsonToXmlProcessor implements Processor {
                     config.getJsonNode().isArray(), config.getJsonNode().isObject()
             );
             return transactionProcessor.process(config);
-        } catch (Exception e) {
+        } catch (Exception _) {
             return null;
         }
     }
@@ -81,7 +81,9 @@ public class JsonToXmlProcessor implements Processor {
     // create new element
     private static Element createElement(JsonToXmlConfiguration config) {
         Element element;
-        String nameSpaceURI, nameSpace, name = "";
+        String nameSpaceURI = "";
+        String nameSpace = "";
+        String name = "";
 
         if(config.getLevel()==0) {
             name = JsonUtils.getRootTagName(config.getJsonNode().getNodeType(), config.getRootName(), config.getArrayName());
@@ -89,6 +91,7 @@ public class JsonToXmlProcessor implements Processor {
             name = (config.getName() !=null ? config.getName() : config.getElementName());
         }
 
+        assert name != null;
         String[] nameInfo = name.split(":");
         if(nameInfo.length > 1) {
             nameSpace = "%s:%s".formatted(XMLConstants.XMLNS_ATTRIBUTE, nameInfo[0]);
@@ -108,11 +111,7 @@ public class JsonToXmlProcessor implements Processor {
     }
 
     private void setContentTypeHeader(Exchange exchange) {
-        if (exchange.hasOut()) {
-            exchange.getOut().setHeader(Exchange.CONTENT_TYPE, MediaType.APPLICATION_XML_VALUE);
-        } else {
-            exchange.getIn().setHeader(Exchange.CONTENT_TYPE, MediaType.APPLICATION_XML_VALUE);
-        }
+        exchange.getIn().setHeader(Exchange.CONTENT_TYPE, MediaType.APPLICATION_XML_VALUE);
     }
 
 }

@@ -30,6 +30,6 @@ public class SoapIntegrationTest extends CamelTestSupport {
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
     }
 }

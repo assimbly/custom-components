@@ -71,7 +71,7 @@ public final class Mailbox {
     public static void clearAll() {
         try {
             GREEN_MAIL.purgeEmailFromAllMailboxes();
-        } catch (FolderException e) {
+        } catch (FolderException _) {
             throw new RuntimeException();
         }
     }
@@ -144,7 +144,7 @@ public final class Mailbox {
         }
         try {
             return new MailboxUser(GREEN_MAIL, userManager.createUser(email, login, password));
-        } catch (UserException e) {
+        } catch (UserException _) {
             throw new RuntimeException();
         }
     }

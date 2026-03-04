@@ -57,7 +57,7 @@ public class NestedMimeMessageConsumeTest extends CamelTestSupport {
 
         resultEndpoint.assertIsSatisfied();
 
-        Exchange exchange = resultEndpoint.getReceivedExchanges().get(0);
+        Exchange exchange = resultEndpoint.getReceivedExchanges().getFirst();
         String text = exchange.getIn().getBody(String.class);
         assertThat(text, containsString("Test with bold face, pictures and attachments"));
         assertEquals("text/plain; charset=us-ascii", exchange.getIn().getHeader("Content-Type"));

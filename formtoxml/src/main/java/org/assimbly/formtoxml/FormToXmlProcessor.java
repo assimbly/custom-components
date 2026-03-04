@@ -14,14 +14,13 @@ import java.util.Map;
 
 public class FormToXmlProcessor implements Processor {
 
-    private FormToXmlEndpoint endpoint;
+    private final FormToXmlEndpoint endpoint;
 
     public FormToXmlProcessor(FormToXmlEndpoint endpoint) {
         this.endpoint = endpoint;
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void process(Exchange exchange) throws Exception {
         FormToXmlConfiguration configuration = endpoint.getConfiguration();
 

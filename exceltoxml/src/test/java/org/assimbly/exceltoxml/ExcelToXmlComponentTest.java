@@ -125,7 +125,7 @@ public class ExcelToXmlComponentTest extends CamelTestSupport {
 
     private void runTest(String rule) throws Exception {
         template.sendBody("direct:" + rule, input);
-        Exchange result = getMockEndpoint("mock:result").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:result").getExchanges().getFirst();
         String actual = result.getIn().getBody(String.class);
 
         String expected = readFile("src/test/resources/" + rule + ".xml", Charset.defaultCharset());
