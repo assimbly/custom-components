@@ -9,12 +9,14 @@ import java.util.Map;
 
 public class GSuiteFilesTypeHelper {
 
-    private static final Map<String, String> mimeTypesMap  = new HashMap<String, String>() {{
-        put("application/vnd.google-apps.spreadsheet", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        put("application/vnd.google-apps.document", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-        put("application/vnd.google-apps.drawing", "image/jpeg");
-        put("application/vnd.google-apps.presentation", "application/vnd.openxmlformats-officedocument.presentationml.presentation");
-    }};
+    private static final Map<String, String> mimeTypesMap = new HashMap<>();
+
+    static {
+        mimeTypesMap.put("application/vnd.google-apps.spreadsheet", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        mimeTypesMap.put("application/vnd.google-apps.document", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+        mimeTypesMap.put("application/vnd.google-apps.drawing", "image/jpeg");
+        mimeTypesMap.put("application/vnd.google-apps.presentation", "application/vnd.openxmlformats-officedocument.presentationml.presentation");
+    }
 
     public static String getConversionMimeType(String gSuiteMimeType) {
 
@@ -45,7 +47,7 @@ public class GSuiteFilesTypeHelper {
     public static String findFileExtension(String mimeType) {
         try {
             return MimeTypes.getDefaultMimeTypes().forName(mimeType).getExtension();
-        } catch (MimeTypeException e) {
+        } catch (MimeTypeException _) {
             return null;
         }
     }

@@ -4,8 +4,6 @@ import com.ibm.wsdl.extensions.soap.SOAPHeaderImpl;
 import com.ibm.wsdl.extensions.soap12.SOAP12HeaderImpl;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.assimbly.auth.endpoint.annotation.Secured;
@@ -27,11 +25,8 @@ import java.util.*;
 @Consumes(MediaType.APPLICATION_JSON)
 public class SoapActionsService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SoapActionsService.class);
-
     public String getSoapActions(String url) throws WSDLException, IOException, URISyntaxException {
 
-        System.out.println("x");
         List<SoapAction> list = getSoapActionsList(url);
         // add elements to the list
 

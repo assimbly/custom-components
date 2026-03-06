@@ -21,11 +21,11 @@
  ***************************************************************************************/
 package org.assimbly.smb;
 
+import org.apache.camel.component.file.*;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.Processor;
 import org.apache.camel.RuntimeCamelException;
-import org.apache.camel.component.file.*;
 import org.apache.camel.util.FileUtil;
 import org.codelibs.jcifs.smb.impl.SmbException;
 import org.codelibs.jcifs.smb.impl.SmbFile;

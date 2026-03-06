@@ -29,7 +29,10 @@ import java.util.Iterator;
 public class XmlToJsonJsonProcessor {
     private final CustomXmlJsonDataFormat xmlJsonDataFormat;
     private final JSONObject json;
-    private final String contentKey, xmlAttrPrefix, xmlTypeNodePrefix, jsonXmlAttrPrefix;
+    private final String contentKey;
+    private final String xmlAttrPrefix;
+    private final String xmlTypeNodePrefix;
+    private final String jsonXmlAttrPrefix;
     private final Boolean removeRoot;
 
     public XmlToJsonJsonProcessor(CustomXmlJsonDataFormat xmlJsonDataFormat, JSONObject json) {
@@ -45,11 +48,12 @@ public class XmlToJsonJsonProcessor {
     public String processJson() {
         processJsonObject(null, null, this.json);
 
-        if (!this.removeRoot)
+        if (Boolean.FALSE.equals(this.removeRoot))
             return this.json.toString(2);
 
         Object jsonWithoutRoot = removeRootFromJson();
         return stringifyJsonWithoutRoot(jsonWithoutRoot);
+
     }
 
     private Object removeRootFromJson() {
@@ -62,13 +66,11 @@ public class XmlToJsonJsonProcessor {
     }
 
     private String stringifyJsonWithoutRoot(Object jsonWithoutRoot) {
-        if (jsonWithoutRoot instanceof JSONObject) {
-            return ((JSONObject)jsonWithoutRoot).toString(2);
-        } else if (jsonWithoutRoot instanceof JSONArray) {
-            return ((JSONArray)jsonWithoutRoot).toString(2);
-        } else {
-            return jsonWithoutRoot.toString();
-        }
+        return switch (jsonWithoutRoot) {
+            case JSONObject object -> object.toString(2);
+            case JSONArray array -> array.toString(2);
+            default -> jsonWithoutRoot.toString();
+        };
     }
 
     private void processJsonObject(Object parentOfCurrentJsonObject, Object keyOrIndexOfParent,
@@ -131,14 +133,14 @@ public class XmlToJsonJsonProcessor {
             if (!isEmptyTypedObject)
                 content = getContentOfTypedJsonObject(typedJsonObject);
 
-            if (isTypedJsonObjectWithArrayType && content instanceof JSONArray)
-                processJsonArray((JSONArray) content);
+            if (isTypedJsonObjectWithArrayType && content instanceof JSONArray array)
+                processJsonArray(array);
 
             if (typedJsonObjectHasOtherPrefixedKeys(typedJsonObject) && !(content instanceof JSONArray)) {
                 typedJsonObject.remove("type");
                 typedJsonObject.put(this.contentKey, content);
             } else {
-                replaceTypedJsonObjectWithContentInJson(parentOfCurrentJsonObject, keyOrIndexOfParent, typedJsonObject,
+                replaceTypedJsonObjectWithContentInJson(parentOfCurrentJsonObject, keyOrIndexOfParent,
                         content);
             }
         });
@@ -151,22 +153,12 @@ public class XmlToJsonJsonProcessor {
     private Object getContentOfTypedJsonObject(JSONObject typedJsonObject) {
         String specifiedType = typedJsonObject.getString("type");
         JsonType type = getTypeFromTypedObject(specifiedType);
-        Object content = null;
-
-        switch (type) {
-        case STRING:
-            content = typedJsonObject.optString(this.contentKey);
-            break;
-        case NUMBER:
-            content = typedJsonObject.optNumber(this.contentKey);
-            break;
-        case BOOLEAN:
-            content = typedJsonObject.optBoolean(this.contentKey);
-            break;
-        case ARRAY:
-            content = convertObjectWithArrayTypeToArray(typedJsonObject);
-            break;
-        }
+        Object content = switch (type) {
+        case STRING -> typedJsonObject.optString(this.contentKey);
+        case NUMBER -> typedJsonObject.optNumber(this.contentKey);
+        case BOOLEAN -> typedJsonObject.optBoolean(this.contentKey);
+        case ARRAY -> convertObjectWithArrayTypeToArray(typedJsonObject);
+        };
 
         if (content == null) {
             switch (xmlJsonDataFormat.getTypeValueMismatch()) {
@@ -178,8 +170,7 @@ public class XmlToJsonJsonProcessor {
                 break;
             case ERROR:
                 Object value = typedJsonObject.opt(this.contentKey);
-                throw new JsonTypeException(String.format(
-                        "There was a mismatch between a specified type and the value. Type is '%s' and the value is '%s'.",
+                throw new JsonTypeException("There was a mismatch between a specified type and the value. Type is '%s' and the value is '%s'.".formatted(
                         specifiedType, value));
             }
         }
@@ -190,7 +181,7 @@ public class XmlToJsonJsonProcessor {
     private JsonType getTypeFromTypedObject(String type) {
         try {
             return Enum.valueOf(JsonType.class, type.toUpperCase());
-        } catch (Exception e) {
+        } catch (Exception _) {
             return JsonType.STRING;
         }
     }
@@ -216,10 +207,9 @@ public class XmlToJsonJsonProcessor {
         return index;
     }
 
-    private void replaceTypedJsonObjectWithContentInJson(Object parent, Object keyOrIndexOfParent,
-            JSONObject typedJsonObject, Object content) {
-        if (parent instanceof JSONObject) {
-            ((JSONObject) parent).put((String) keyOrIndexOfParent, content);
+    private void replaceTypedJsonObjectWithContentInJson(Object parent, Object keyOrIndexOfParent, Object content) {
+        if (parent instanceof JSONObject object) {
+            object.put((String) keyOrIndexOfParent, content);
         } else {
             ((JSONArray) parent).put((int) keyOrIndexOfParent, content);
         }

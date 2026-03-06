@@ -9,7 +9,7 @@ import org.assimbly.util.helper.XmlHelper;
 
 public class XmlEnrichStrategy implements AggregationStrategy {
 
-    private final static Logger logger = Logger.getLogger(XmlEnrichStrategy.class);
+    private static final Logger logger = Logger.getLogger(XmlEnrichStrategy.class);
 
     @Override
     public Exchange aggregate(Exchange original, Exchange resource) {
@@ -75,7 +75,7 @@ public class XmlEnrichStrategy implements AggregationStrategy {
 
             return document;
 
-        } catch (Exception e) {
+        } catch (Exception _) {
             logger.warn("Unable to get data from the " + route + " route to the Enrich component.");
         }
 

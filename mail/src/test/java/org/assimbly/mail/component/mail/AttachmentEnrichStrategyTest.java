@@ -18,18 +18,20 @@ public class AttachmentEnrichStrategyTest extends CamelTestSupport {
     private MockEndpoint unmarshalResult;
 
     private static String xmlFirstInput =
-            "<TestNode>\n" +
-            "\t<Node>Content 1</Node>\n" +
-            "\t<Node>Content 2</Node>\n" +
-            "\t<Node>Content 3</Node>\n" +
-            "</TestNode>";
+            """
+            <TestNode>
+            	<Node>Content 1</Node>
+            	<Node>Content 2</Node>
+            	<Node>Content 3</Node>
+            </TestNode>""";
 
     private static String xmlSecondInput =
-            "<TestNode>\n" +
-            "\t<Node>Content 4</Node>\n" +
-            "\t<Node>Content 5</Node>\n" +
-            "\t<Node>Content 6</Node>\n" +
-            "</TestNode>";
+            """
+            <TestNode>
+            	<Node>Content 4</Node>
+            	<Node>Content 5</Node>
+            	<Node>Content 6</Node>
+            </TestNode>""";
 
     /*
     @Test
@@ -61,7 +63,7 @@ public class AttachmentEnrichStrategyTest extends CamelTestSupport {
 
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
-        System.out.println(" > createRouteBuilder ");
+        IO.println(" > createRouteBuilder ");
         return new RouteBuilder() {
             @Override
             public void configure() throws Exception {

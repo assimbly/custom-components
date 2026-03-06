@@ -1,7 +1,7 @@
 package org.assimbly.xmltojsonlegacy.utils;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 import javax.xml.XMLConstants;
 import java.util.Iterator;
@@ -15,7 +15,7 @@ public class JsonUtils {
         boolean isNamespacePresent = false;
         int numDataContent = 0;
         if (jsonNode.isObject()) {
-            Iterator<String> fieldNames = jsonNode.fieldNames();
+            Iterator<String> fieldNames = jsonNode.propertyNames().iterator();
             while (fieldNames.hasNext()) {
                 String fieldName = fieldNames.next();
                 if(!fieldName.startsWith(Constants.JSON_XML_ATTR_PREFIX)) {
@@ -44,7 +44,7 @@ public class JsonUtils {
             } else {
                 return null; // Not a valid JSON object or array
             }
-        } catch (Exception e) {
+        } catch (Exception _) {
             return null;
         }
     }

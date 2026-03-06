@@ -75,7 +75,7 @@ public class MailDisconnectTest extends CamelTestSupport {
             public void configure() {
                 from(jones.uriPrefix(Protocol.imap) + "&disconnect=true&initialDelay=100&delay=500")
                         .routeId("mail-disconnect")
-                        .process(e -> latch.countDown())
+                        .process(_ -> latch.countDown())
                         .to("mock:result");
             }
         };

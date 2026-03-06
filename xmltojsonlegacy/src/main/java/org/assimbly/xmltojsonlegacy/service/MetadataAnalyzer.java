@@ -1,6 +1,6 @@
 package org.assimbly.xmltojsonlegacy.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JsonNode;
 import org.assimbly.xmltojsonlegacy.XmlToJsonConfiguration;
 import org.assimbly.xmltojsonlegacy.model.AttributeEntry;
 import org.assimbly.xmltojsonlegacy.model.ElementMetadata;
@@ -34,24 +34,24 @@ public class MetadataAnalyzer {
         ElementMetadata greatGrandParentElementMetadata = metadataMap.getOrDefault(ElementMetadataUtils.getParentPath(grandParentElementMetadata.getPath()), new ElementMetadata());
 
         if (metadata.getLevel() == 0 && (
-                (metadata.getChildrenCount() == 1 && !metadata.isDefinesNamespaces() && (metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY) || !metadata.isHasAttributes())) ||
+                (metadata.getChildrenCount() == 1 && !metadata.isDefinesNamespaces() && (metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY) || metadata.isHasAttributes())) ||
                         (metadata.getChildrenCount() == 0 && !metadata.isHasEmptyTextContent())
         )) {
             return true;
         }
-        if (metadata.getDeepestDepth() > 2 && !metadata.isDefinesNamespaces() && metadata.areChildrenNamesEqual() && !metadata.isHasAttributes()) {
+        if (metadata.getDeepestDepth() > 2 && !metadata.isDefinesNamespaces() && metadata.areChildrenNamesEqual() && metadata.isHasAttributes()) {
             return true;
         }
         if (metadata.getDeepestDepth() == 2 && !metadata.isDefinesNamespaces() && metadata.areChildrenNamesEqual() &&
                 (parentElementMetadata.areChildrenNamesEqual() || !metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT)) &&
-                !metadata.isHasAttributes()
+                metadata.isHasAttributes()
         ) {
             return true;
         }
         if (metadata.getDeepestDepth() == 1 && !ElementMetadataUtils.isElementOnNamespace(metadata) && // && parentElementMetadata.containsClassAttribute()
                 (parentElementMetadata.containsClassAttributeValue("") || parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY) ||
                         parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT)) &&
-                !metadata.isHasAttributes()
+                metadata.isHasAttributes()
         ) {
             return true;
         }
@@ -62,7 +62,7 @@ public class MetadataAnalyzer {
             return true;
         }
 
-        return (metadata.getDeepestDepth() == 0 && !parentElementMetadata.isHasEmptyTextContent() && !metadata.isHasAttributes() &&
+        return (metadata.getDeepestDepth() == 0 && !parentElementMetadata.isHasEmptyTextContent() && metadata.isHasAttributes() &&
                 (parentElementMetadata.getChildrenCount() == 1 || parentElementMetadata.getChildrenCount() > 1 && parentElementMetadata.areChildrenNamesEqual()) &&
                 (!parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT) ||
                         parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
@@ -81,17 +81,17 @@ public class MetadataAnalyzer {
         ElementMetadata grandParentElementMetadata = metadataMap.getOrDefault(ElementMetadataUtils.getParentPath(parentElementMetadata.getPath()), new ElementMetadata());
 
         if(metadata.getLevel() == 0 &&
-                ((metadata.getChildrenCount() == 1 && !metadata.isDefinesNamespaces() && !metadata.isHasAttributes()) || (metadata.getChildrenCount() == 0 && !metadata.isHasEmptyTextContent()))
+                ((metadata.getChildrenCount() == 1 && !metadata.isDefinesNamespaces() && metadata.isHasAttributes()) || (metadata.getChildrenCount() == 0 && !metadata.isHasEmptyTextContent()))
         ) {
             isRootArray = true;
         }
-        if (metadata.getDeepestDepth() > 2 && !metadata.isDefinesNamespaces() && metadata.areChildrenNamesEqual() && !metadata.isHasAttributes()) {
+        if (metadata.getDeepestDepth() > 2 && !metadata.isDefinesNamespaces() && metadata.areChildrenNamesEqual() && metadata.isHasAttributes()) {
             isRootArray = true;
         }
-        if (metadata.getDeepestDepth() == 2 && !metadata.isDefinesNamespaces() && metadata.areChildrenNamesEqual() && !metadata.isHasAttributes()) {
+        if (metadata.getDeepestDepth() == 2 && !metadata.isDefinesNamespaces() && metadata.areChildrenNamesEqual() && metadata.isHasAttributes()) {
             isRootArray = true;
         }
-        if(metadata.getDeepestDepth() == 1 && !metadata.isDefinesNamespaces() && metadata.areChildrenNamesEqual() && !metadata.isHasAttributes() &&
+        if(metadata.getDeepestDepth() == 1 && !metadata.isDefinesNamespaces() && metadata.areChildrenNamesEqual() && metadata.isHasAttributes() &&
                 !ElementMetadataUtils.isElementOnNamespace(metadata)
         ) {
             isRootArray = true;
@@ -101,7 +101,7 @@ public class MetadataAnalyzer {
         ) {
             isRootArray = grandParentElementMetadata.getChildrenCount() > 1;
         }
-        if (metadata.getDeepestDepth() == 0 && !parentElementMetadata.isHasEmptyTextContent() && !metadata.isHasAttributes() && (
+        if (metadata.getDeepestDepth() == 0 && !parentElementMetadata.isHasEmptyTextContent() && metadata.isHasAttributes() && (
                 parentElementMetadata.getChildrenCount() == 1 || parentElementMetadata.getChildrenCount() > 1 && parentElementMetadata.areChildrenNamesEqual()
         )) {
             isRootArray = true;
@@ -124,7 +124,7 @@ public class MetadataAnalyzer {
                                                 !parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY) ||
                                         config.isTypeHints() &&
                                                 metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
-                                                (!parentElementMetadata.isHasAttributes() && !grandParentElementMetadata.areChildrenNamesEqual())
+                                                (parentElementMetadata.isHasAttributes() && !grandParentElementMetadata.areChildrenNamesEqual())
                                 )
                 )
         );

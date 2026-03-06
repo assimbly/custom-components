@@ -22,9 +22,10 @@
 package org.assimbly.smb;
 import java.io.File;
 
+import org.apache.camel.component.file.*;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.Expression;
-import org.apache.camel.component.file.*;
 import org.apache.camel.spi.Language;
 import org.apache.camel.support.DefaultExchange;
 import org.apache.camel.support.ExchangeHelper;
@@ -222,7 +223,7 @@ public class SmbProducer extends GenericFileProducer<SmbFile> {
         // If the path isn't empty, we need to add a trailing / if it isn't
         // already there
         String baseDir = "";
-        if (aEndpointPath.length() > 0) {
+        if (!aEndpointPath.isEmpty()) {
             baseDir = aEndpointPath + (aEndpointPath.endsWith(getFileSeparator()) ? "" : getFileSeparator());
         }
         if (name != null) {

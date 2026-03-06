@@ -16,7 +16,7 @@ public class SoapComponent extends DefaultComponent {
 
         setProperties(endpoint.getConfiguration(), parameters);
 
-        return (Endpoint) endpoint;
+        return endpoint;
     }
 
 }

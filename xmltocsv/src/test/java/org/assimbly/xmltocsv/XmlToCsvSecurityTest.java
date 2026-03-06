@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -26,7 +26,7 @@ public class XmlToCsvSecurityTest extends CamelTestSupport {
 
     private void testAttack(String attack) throws Exception {
         String attackPath = "src/test/resources/input/security/" + attack;
-        String input = new String(Files.readAllBytes(Paths.get(attackPath)));
+        String input = new String(Files.readAllBytes(Path.of(attackPath)));
 
         template.sendBody("direct:in", input);
     }

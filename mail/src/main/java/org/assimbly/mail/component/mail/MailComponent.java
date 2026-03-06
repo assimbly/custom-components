@@ -78,9 +78,9 @@ public class MailComponent extends HealthCheckComponent implements HeaderFilterS
         Object searchTerm = getAndRemoveOrResolveReferenceParameter(parameters, "searchTerm", Object.class);
         if (searchTerm != null) {
             SearchTerm st;
-            if (searchTerm instanceof SimpleSearchTerm) {
+            if (searchTerm instanceof SimpleSearchTerm term) {
                 // okay its a SimpleSearchTerm then lets convert that to SearchTerm
-                st = MailConverters.toSearchTerm((SimpleSearchTerm) searchTerm);
+                st = MailConverters.toSearchTerm(term);
             } else {
                 st = getCamelContext().getTypeConverter().mandatoryConvertTo(SearchTerm.class, searchTerm);
             }
@@ -91,11 +91,11 @@ public class MailComponent extends HealthCheckComponent implements HeaderFilterS
         Object sortTerm = getAndRemoveOrResolveReferenceParameter(parameters, "sortTerm", Object.class);
         if (sortTerm != null) {
             SortTerm[] st;
-            if (sortTerm instanceof String) {
+            if (sortTerm instanceof String string) {
                 // okay its a String then lets convert that to SortTerm
-                st = MailConverters.toSortTerm((String) sortTerm);
-            } else if (sortTerm instanceof SortTerm[]) {
-                st = (SortTerm[]) sortTerm;
+                st = MailConverters.toSortTerm(string);
+            } else if (sortTerm instanceof SortTerm[] terms) {
+                st = terms;
             } else {
                 throw new IllegalArgumentException("SortTerm must either be SortTerm[] or a String value");
             }
@@ -202,8 +202,8 @@ public class MailComponent extends HealthCheckComponent implements HeaderFilterS
      * {@link HeaderFilterStrategyAware} type.
      */
     public void setEndpointHeaderFilterStrategy(Endpoint endpoint) {
-        if (headerFilterStrategy != null && endpoint instanceof HeaderFilterStrategyAware) {
-            ((HeaderFilterStrategyAware) endpoint).setHeaderFilterStrategy(headerFilterStrategy);
+        if (headerFilterStrategy != null && endpoint instanceof HeaderFilterStrategyAware aware) {
+            aware.setHeaderFilterStrategy(headerFilterStrategy);
         }
     }
 

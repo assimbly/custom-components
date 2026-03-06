@@ -158,8 +158,7 @@ public class MimeMultipartDataFormat extends DefaultDataFormat {
             if (!headersInline) {
                 while (hl.hasMoreElements()) {
                     Object ho = hl.nextElement();
-                    if (ho instanceof Header) {
-                        Header h = (Header) ho;
+                    if (ho instanceof Header h) {
                         exchange.getMessage().setHeader(h.getName(), h.getValue());
                         headers.add(h.getName());
                     }
@@ -218,8 +217,7 @@ public class MimeMultipartDataFormat extends DefaultDataFormat {
             Enumeration<?> headersEnum = mimeMessage.getNonMatchingHeaders(STANDARD_HEADERS);
             while (headersEnum.hasMoreElements()) {
                 Object ho = headersEnum.nextElement();
-                if (ho instanceof Header) {
-                    Header header = (Header) ho;
+                if (ho instanceof Header header) {
                     camelMessage.setHeader(header.getName(), header.getValue());
                 }
             }
@@ -234,7 +232,7 @@ public class MimeMultipartDataFormat extends DefaultDataFormat {
                 if (!ct.match("multipart/*")) {
                     return stream;
                 }
-            } catch (ParseException e) {
+            } catch (ParseException _) {
                 LOG.warn("Invalid Content-Type {} ignored", contentType);
                 return stream;
             }
@@ -254,11 +252,10 @@ public class MimeMultipartDataFormat extends DefaultDataFormat {
             if (dh != null) {
                 content = dh.getContent();
             }
-        } catch (MessagingException e) {
+        } catch (MessagingException _) {
             LOG.warn("cannot parse message, no unmarshalling done");
         }
-        if (content instanceof MimeMultipart) {
-            MimeMultipart mp = (MimeMultipart) content;
+        if (content instanceof MimeMultipart mp) {
             content = mp.getBodyPart(0);
             for (int i = 1; i < mp.getCount(); i++) {
                 BodyPart bp = mp.getBodyPart(i);
@@ -273,8 +270,7 @@ public class MimeMultipartDataFormat extends DefaultDataFormat {
                         camelAttachment);
             }
         }
-        if (content instanceof BodyPart) {
-            BodyPart bp = (BodyPart) content;
+        if (content instanceof BodyPart bp) {
             camelMessage.setBody(bp.getInputStream());
             contentType = bp.getContentType();
             if (contentType != null && !DEFAULT_CONTENT_TYPE.equals(contentType)) {
@@ -304,8 +300,8 @@ public class MimeMultipartDataFormat extends DefaultDataFormat {
         // use the filename as key for the map
         String key = bp.getFileName();
         // if there is no file name we use the Content-ID header
-        if (key == null && bp instanceof MimeBodyPart) {
-            key = ((MimeBodyPart) bp).getContentID();
+        if (key == null && bp instanceof MimeBodyPart part) {
+            key = part.getContentID();
             if (key != null && key.startsWith("<") && key.length() > 2) {
                 // strip <>
                 key = key.substring(1, key.length() - 1);

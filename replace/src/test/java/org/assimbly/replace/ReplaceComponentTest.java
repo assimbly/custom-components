@@ -80,7 +80,7 @@ public class ReplaceComponentTest extends CamelTestSupport {
     public void testReplace() {
         template.sendBody("direct:executeSingleGroup", "Hello #{Joe}!");
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         String actual = result.getIn().getBody(String.class);
 
@@ -93,7 +93,7 @@ public class ReplaceComponentTest extends CamelTestSupport {
     public void testMultipleReplace() {
         template.sendBody("direct:executeSingleGroup", "Hello #{Joe} and #{Bob}!");
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         String actual = result.getIn().getBody(String.class);
 
@@ -105,7 +105,7 @@ public class ReplaceComponentTest extends CamelTestSupport {
     public void testMultipleGroupReplaceWithFlag() {
         template.sendBody("direct:executeMultipleGroupsWithFlag", "Hello #{joe} and #{joe}!");
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         String actual = result.getIn().getBody(String.class);
 
@@ -117,7 +117,7 @@ public class ReplaceComponentTest extends CamelTestSupport {
     public void testMultipleGroupReplace() {
         template.sendBody("direct:executeMultipleGroups", "Hello #{Joe.Gmail} and #{Joe.Hotmail}!");
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         String actual = result.getIn().getBody(String.class);
 
@@ -129,7 +129,7 @@ public class ReplaceComponentTest extends CamelTestSupport {
     public void testHeaderReplace() {
         template.sendBody("direct:executeWithHeader", "Hello #{Joe.Gmail} and #{Joe.Hotmail}!");
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         String actual = result.getIn().getBody(String.class);
 
@@ -143,7 +143,7 @@ public class ReplaceComponentTest extends CamelTestSupport {
     public void testUnescapingOfExceptionalCharacters() { //We want to unescape \n \r \t
         template.sendBody("direct:executeWithExceptionalCharacters", "This is a line EOL This is another line");
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         String actual = result.getIn().getBody(String.class);
 
@@ -155,7 +155,7 @@ public class ReplaceComponentTest extends CamelTestSupport {
     public void testUnescapingOfExceptionalCharactersInHeader() {
         template.sendBody("direct:executeWithExceptionalCharacterInHeader", "This is a line EOL This is another line");
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         String actual = result.getIn().getBody(String.class);
 
@@ -168,7 +168,7 @@ public class ReplaceComponentTest extends CamelTestSupport {
     public void testReplaceWhiteSpaceChar() {
         template.sendBody("direct:executeWithWhiteSpaceCharacter", "This is a\nmultiline body\tfor testing\fpurposes");
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         String actual = result.getIn().getBody(String.class);
 
@@ -181,7 +181,7 @@ public class ReplaceComponentTest extends CamelTestSupport {
     public void testMultiTypeLineEndings() {
         template.sendBody("direct:executeWithMultiTypeLineEndings", "Welcome\n This is Kabisa\r\n This is another line\r Yet another line!");
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         String actual = result.getIn().getBody(String.class);
 
@@ -196,7 +196,7 @@ public class ReplaceComponentTest extends CamelTestSupport {
     public void testReplaceWithDotall() {
         template.sendBody("direct:executeWithDotall", "My name is Pedro\nThank you");
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         String actual = result.getIn().getBody(String.class);
 
@@ -208,7 +208,7 @@ public class ReplaceComponentTest extends CamelTestSupport {
     public void testReplaceWithoutDotall() {
         template.sendBody("direct:executeWithoutDotall", "My name is Pedro\nThank you");
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         String actual = result.getIn().getBody(String.class);
 

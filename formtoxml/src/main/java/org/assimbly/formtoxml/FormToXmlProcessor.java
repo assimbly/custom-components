@@ -14,14 +14,13 @@ import java.util.Map;
 
 public class FormToXmlProcessor implements Processor {
 
-    private FormToXmlEndpoint endpoint;
+    private final FormToXmlEndpoint endpoint;
 
     public FormToXmlProcessor(FormToXmlEndpoint endpoint) {
         this.endpoint = endpoint;
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void process(Exchange exchange) throws Exception {
         FormToXmlConfiguration configuration = endpoint.getConfiguration();
 
@@ -45,7 +44,7 @@ public class FormToXmlProcessor implements Processor {
         try(ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             Writer writer = new OutputStreamWriter(outputStream, configuration.getEncoding())) {
 
-            String xmlProlog = String.format("<?xml version=\"1.0\" encoding=\"%s\"?>\n", configuration.getEncoding());
+            String xmlProlog = "<?xml version=\"1.0\" encoding=\"%s\"?>\n".formatted(configuration.getEncoding());
             writer.write(xmlProlog);
             xStream.toXML(items, writer);
 

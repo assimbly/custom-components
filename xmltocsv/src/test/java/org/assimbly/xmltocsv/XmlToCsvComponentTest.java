@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 
 public class XmlToCsvComponentTest extends CamelTestSupport {
 
@@ -241,7 +241,7 @@ public class XmlToCsvComponentTest extends CamelTestSupport {
     }
 
     private String readFileToString(String path) throws IOException {
-        return new String(Files.readAllBytes(Paths.get(path)));
+        return new String(Files.readAllBytes(Path.of(path)));
     }
 
     private Exchange getLastExchange(MockEndpoint endpoint) {

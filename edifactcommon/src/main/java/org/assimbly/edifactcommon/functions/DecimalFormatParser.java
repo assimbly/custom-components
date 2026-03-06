@@ -130,7 +130,7 @@ public class DecimalFormatParser {
 		protected char				mcZeroDigit;			// = char 
 		protected char				mcDigit;				// = char 
 		protected char				mcPatternSeparator;		// = char
-	};
+	}
 	
 	protected class Format
 	{
@@ -177,7 +177,7 @@ public class DecimalFormatParser {
 		mDecimalFormat = null;
 		mbNegativePattern = false;
 		mbHasMinusSign = false;
-	};
+	}
 
 	public boolean setPattern ( final String sExpr, DecimalFormat format)
 	{
@@ -564,7 +564,7 @@ public class DecimalFormatParser {
 		if ( mDecimalFormat == null )
 			return sbFormat.toString();
 
-		Double nCheck = new Double(nNumber.doubleValue() );
+		Double nCheck = Double.valueOf(nNumber.doubleValue());
 		if( nCheck.isInfinite() )
 		{
 			if( Double.POSITIVE_INFINITY == nCheck)
@@ -808,7 +808,7 @@ public class DecimalFormatParser {
 		try {
 			decimal = new BigDecimal(sInput);
 		}
-		catch (NumberFormatException e)
+		catch (NumberFormatException _)
 		{
 			throw new IllegalArgumentException(
 				"Value is not a number: '" + sInput + "'"

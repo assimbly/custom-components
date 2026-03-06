@@ -1,10 +1,9 @@
 package org.assimbly.sql;
 
+import java.sql.*;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.commons.text.StringEscapeUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -15,13 +14,10 @@ import org.assimbly.sql.domain.JDBCConnection;
 import org.assimbly.sql.exception.SQLException;
 
 import javax.xml.parsers.ParserConfigurationException;
-import java.sql.*;
 
 public class SqlProcessor implements Processor {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SqlProcessor.class);
-
-    private SqlEndpoint endpoint;
+    private final SqlEndpoint endpoint;
 
     public SqlProcessor(SqlEndpoint endpoint) {
         this.endpoint = endpoint;
@@ -58,8 +54,12 @@ public class SqlProcessor implements Processor {
     private Document executeQuery(Exchange exchange, Connection connection, String sqlQuery) throws java.sql.SQLException, ParserConfigurationException {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-        ResultSetMetaData resultSetMetaData = null;
-        Node results = null, result = null, primaryKey = null, resultSize = null, hasErrors = null;
+        ResultSetMetaData resultSetMetaData;
+        Node result;
+        Node results = null;
+        Node resultSize = null;
+        Node primaryKey;
+        Node hasErrors;
         int rowCount = 0;
 
         Document doc = XmlHelper.newDocument();

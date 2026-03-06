@@ -36,7 +36,7 @@ public class GoogleDriveConsumer extends ScheduledPollConsumer implements Consum
     private Drive service;
 
     private int connectionAttempts = 1;
-    private final int connectionAttemptsMax = 60;
+    private static final int connectionAttemptsMax = 60;
 
     GoogleDriveConsumer(GoogleDriveEndpoint endpoint, Processor processor) {
         super(endpoint, processor);
@@ -102,8 +102,7 @@ public class GoogleDriveConsumer extends ScheduledPollConsumer implements Consum
         } catch (GoogleJsonResponseException e) {
             if(connectionAttempts <= connectionAttemptsMax) {
                 long seconds = this.getDelay() / 1000L;
-                LOG.warn(String.format(
-                        "Could not connect to Google Drive directory. Try again after %s seconds (attempt %s of %s)",
+                LOG.warn("Could not connect to Google Drive directory. Try again after %s seconds (attempt %s of %s)".formatted(
                         seconds,
                         connectionAttempts,
                         connectionAttemptsMax
@@ -124,7 +123,7 @@ public class GoogleDriveConsumer extends ScheduledPollConsumer implements Consum
 
         try {
             file = java.io.File.createTempFile("temp", "");
-        } catch (IOException e) {
+        } catch (IOException _) {
             throw new GoogleDriveException("download", fileModel.getId());
         }
 
@@ -139,7 +138,7 @@ public class GoogleDriveConsumer extends ScheduledPollConsumer implements Consum
                     .get(fileModel.getId())
                     .executeMediaAndDownloadTo(outputStream);
 
-        } catch (IOException e) {
+        } catch (IOException _) {
             throw new GoogleDriveException("download", fileModel.getId());
         }
 
@@ -190,8 +189,8 @@ public class GoogleDriveConsumer extends ScheduledPollConsumer implements Consum
                         " and name = '"+ configuration.getMoveTo() + "'")
                 .execute();
 
-        if (result.getFiles().size() > 0)
-            return result.getFiles().get(0).getId();
+        if (!result.getFiles().isEmpty())
+            return result.getFiles().getFirst().getId();
 
         return null;
     }

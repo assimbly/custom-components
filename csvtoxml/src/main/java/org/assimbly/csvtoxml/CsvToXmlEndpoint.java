@@ -16,10 +16,10 @@ public class CsvToXmlEndpoint extends ProcessorEndpoint {
 
     @UriParam
     private CsvToXmlConfiguration configuration;
-    private CsvToXmlComponent component;
+    private final CsvToXmlComponent component;
 
     public CsvToXmlEndpoint(String uri, CsvToXmlComponent component, CsvToXmlConfiguration configuration) {
-        super(uri, (Component) component);
+        super(uri, component);
 
         this.component = component;
         this.configuration = configuration;
@@ -36,6 +36,6 @@ public class CsvToXmlEndpoint extends ProcessorEndpoint {
 
     @Override
     public Component getComponent(){
-        return (Component) component;
+        return component;
     }
 }

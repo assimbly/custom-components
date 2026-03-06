@@ -1,5 +1,9 @@
 package org.assimbly.auth.endpoint;
 
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Response;
+import java.io.UnsupportedEncodingException;
+
 import com.mongodb.client.MongoDatabase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,9 +16,6 @@ import org.assimbly.auth.domain.User;
 import org.assimbly.auth.mongo.MongoDao;
 import org.assimbly.util.helper.Base64Helper;
 
-import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.Response;
-import java.io.UnsupportedEncodingException;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -23,7 +24,7 @@ public class TokenService {
 
     private static final Logger LOG = LoggerFactory.getLogger(TokenService.class);
 
-    private MongoDao mongoDao;
+    private final MongoDao mongoDao;
 
     public TokenService(MongoDatabase database){
         mongoDao = new MongoDao(database);

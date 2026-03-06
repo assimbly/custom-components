@@ -1,5 +1,7 @@
 package org.assimbly.xmltojsonlegacy.service;
 
+import java.util.*;
+
 import org.assimbly.xmltojsonlegacy.XmlToJsonConfiguration;
 import org.assimbly.xmltojsonlegacy.model.AttributeEntry;
 import org.assimbly.xmltojsonlegacy.model.ElementMetadata;
@@ -18,8 +20,6 @@ import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.InputStream;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class XmlMetadataExtractor {
 
@@ -198,7 +198,7 @@ public class XmlMetadataExtractor {
         int index = counter.getOrDefault(fullPath, 0) + 1;
         counter.put(fullPath, index);
 
-        return basePath.isEmpty() ? String.format("%s[%d]", name, index) : String.format("%s/%s[%d]", basePath, name, index);
+        return basePath.isEmpty() ? "%s[%d]".formatted(name, index) : "%s/%s[%d]".formatted(basePath, name, index);
     }
 
     // get path index

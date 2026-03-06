@@ -18,6 +18,7 @@ package org.assimbly.mail.component.mail;
 
 import jakarta.mail.Message;
 import jakarta.mail.search.SearchTerm;
+import java.util.Collections;
 import org.apache.camel.*;
 import org.apache.camel.spi.*;
 import org.apache.camel.support.ScheduledPollEndpoint;
@@ -101,7 +102,7 @@ public class MailEndpoint extends ScheduledPollEndpoint implements HeaderFilterS
         if (configuration != null && configuration.getUsername() != null) {
             return Map.of("username", configuration.getUsername());
         }
-        return null;
+        return Collections.emptyMap();
     }
 
     @Override

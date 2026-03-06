@@ -33,7 +33,7 @@ public class PortHelperTest {
 
         Service service = definition.getService(name);
         Port port = service.getPort("TestSoap12");
-        ExtensibilityElement expected = (ExtensibilityElement) port.getExtensibilityElements().get(0);
+        ExtensibilityElement expected = (ExtensibilityElement) port.getExtensibilityElements().getFirst();
 
         ExtensibilityElement actual = PortHelper.address(port);
 

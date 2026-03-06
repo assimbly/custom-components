@@ -2,11 +2,15 @@ package org.assimbly.soap.util.helpers;
 
 import org.apache.camel.Exchange;
 import org.apache.commons.io.FileUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.core5.http.ClassicHttpResponse;
+
+import org.apache.hc.core5.util.Timeout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.assimbly.soap.cache.WSDLCache;
@@ -24,7 +28,7 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -32,6 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 public final class WSDLHelper {
 
@@ -65,7 +70,7 @@ public final class WSDLHelper {
 
         file = WSDLCache.INSTANCE.register(url);
 
-        Files.createDirectories(Paths.get(file.getParent()));
+        Files.createDirectories(Path.of(file.getParent()));
 
         Definition definition;
 
@@ -75,7 +80,7 @@ public final class WSDLHelper {
             definition = reader.readWSDL(file.getAbsolutePath());
             LOG.info("WSDL has been fetched and cached successfully.");
 
-        } catch(Exception e) {
+        } catch(Exception _) {
             WSDLCache.INSTANCE.remove(url);
 
             WSDLException exp = new WSDLException("500", "Invalid WSDL or WSDL not found at: "+url);
@@ -89,28 +94,39 @@ public final class WSDLHelper {
         if (params == null || params.isEmpty())
             return wsdl;
 
-        return String.format("%s?%s", wsdl, params);
+        return "%s?%s".formatted(wsdl, params);
     }
 
     protected static void fetchWSDL(File file, String location, List<SoapHttpHeader> httpHeaders) throws URISyntaxException, IOException {
+
+        // 1. Use Timeout.ofMilliseconds for configuration
         RequestConfig config = RequestConfig.custom()
-                .setConnectTimeout(20000)
-                .setSocketTimeout(20000)
+                .setConnectTimeout(Timeout.ofMilliseconds(20000))
+                .setResponseTimeout(Timeout.ofMilliseconds(20000))
                 .build();
 
-        HttpClient client = HttpClientBuilder.create()
+        // 2. Use HttpClients.custom() or .createDefault()
+        // It is best practice to use try-with-resources for the client
+        try (CloseableHttpClient client = HttpClients.custom()
                 .setDefaultRequestConfig(config)
-                .build();
+                .build()) {
 
-        HttpGet request = new HttpGet(new URI(location));
+            HttpGet request = new HttpGet(new URI(location));
 
-        httpHeaders.forEach(httpHeader -> request.setHeader(httpHeader.getName(), httpHeader.getValue()));
+            if (httpHeaders != null) {
+                httpHeaders.forEach(httpHeader -> request.setHeader(httpHeader.getName(), httpHeader.getValue()));
+            }
 
-        HttpResponse response = client.execute(request);
-
-        BufferedInputStream wsdl = new BufferedInputStream(response.getEntity().getContent());
-
-        FileUtils.copyInputStreamToFile(wsdl, file);
+            // 3. execute() now requires a ResponseHandler or careful handling.
+            // For a direct migration of your logic:
+            client.execute(request, response -> {
+                // This lambda handles the ClassicHttpResponse safely
+                try (BufferedInputStream wsdl = new BufferedInputStream(response.getEntity().getContent())) {
+                    FileUtils.copyInputStreamToFile(wsdl, file);
+                }
+                return null; // The handler requires a return value
+            });
+        }
     }
 
     public static Map<String, Object> execute(String destination, SOAPMessage request, Exchange exchange) throws SOAPException, IOException {

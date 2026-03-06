@@ -11,13 +11,14 @@ public enum ConnectionType {
     ORACLE("OracleAdapter"),
     POSTGRES("PostgresAdapter");
 
-    String adapterName;
+    private final String adapterName;
 
     ConnectionType(String adapterName) {
         this.adapterName = adapterName;
     }
 
-    public DatabaseAdapter getAdapter() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        return (DatabaseAdapter) Class.forName("org.assimbly.sql.adapter." + adapterName).newInstance();
+    public DatabaseAdapter getAdapter() throws ReflectiveOperationException {
+        Class<?> adapterClass = Class.forName("org.assimbly.sql.adapter." + adapterName);
+        return (DatabaseAdapter) adapterClass.getDeclaredConstructor().newInstance();
     }
 }

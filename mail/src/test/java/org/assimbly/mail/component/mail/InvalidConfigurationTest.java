@@ -35,7 +35,7 @@ public class InvalidConfigurationTest extends CamelTestSupport {
         try {
             consumer.start();
             fail("Should have thrown NoSuchProviderException as smtp protocol cannot be used for consuming mails");
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException _) {
             // expected
         }
     }
@@ -47,7 +47,7 @@ public class InvalidConfigurationTest extends CamelTestSupport {
         try {
             consumer.start();
             fail("Should have thrown NoSuchProviderException as smtp protocol cannot be used for consuming mails");
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException _) {
             // expected
         }
     }

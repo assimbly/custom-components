@@ -3,8 +3,8 @@ package org.assimbly.auth.domain;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.bson.types.Symbol;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.util.Objects;
 
 public class User {
 
@@ -25,8 +25,6 @@ public class User {
     private ObjectId tenantId;
     private Boolean usesTwoFactor;
     private String secretKey;
-
-    protected static Logger log = LoggerFactory.getLogger(User.class);
 
     public User() {
         this.id = new ObjectId();
@@ -117,8 +115,8 @@ public class User {
 
         User user = (User) o;
 
-        if (email != null ? !email.equals(user.email) : user.email != null) return false;
-        if (passwordDigest != null ? !passwordDigest.equals(user.passwordDigest) : user.passwordDigest != null)
+        if (!Objects.equals(email, user.email)) return false;
+        if (!Objects.equals(passwordDigest, user.passwordDigest))
             return false;
         return role == user.role;
     }
@@ -163,20 +161,18 @@ public class User {
     }
 
     private static <T extends Enum<T>> T getEnumFromDocument(Document document, String fieldName, Class<T> enumClass) {
-        try {
-            Object fieldObj = document.get(fieldName);
-            if (fieldObj instanceof Symbol) {
-                String symbolValue = ((Symbol) fieldObj).getSymbol();
+
+        Object fieldObj = document.get(fieldName);
+        switch (fieldObj) {
+            case Symbol symbol -> {
+                String symbolValue = symbol.getSymbol();
                 return Enum.valueOf(enumClass, symbolValue.toUpperCase());
-            } else if (fieldObj instanceof String) {
-                String stringValue = (String) fieldObj;
-                return Enum.valueOf(enumClass, stringValue.toUpperCase());
-            } else {
-                throw new IllegalArgumentException("Unsupported type for field: " + fieldName + ", class: " + fieldObj.getClass().getName());
             }
-        } catch (ClassCastException e) {
-            log.error("Failed to get enum from document for field: {}, document: {}", fieldName, document.toJson(), e);
-            throw e;
+            case String stringValue -> {
+                return Enum.valueOf(enumClass, stringValue.toUpperCase());
+            }
+            default -> throw new IllegalArgumentException("Unsupported type for field: " + fieldName + ", class: " + fieldObj.getClass().getName());
+
         }
     }
 }

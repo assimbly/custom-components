@@ -9,7 +9,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -19,12 +18,14 @@ import java.util.zip.ZipOutputStream;
 
 public class ZipFileEnrichStrategy implements AggregationStrategy {
 
-    private final static Logger logger = Logger.getLogger(ZipFileEnrichStrategy.class);
-    private List<String> element_names;
+    private static final Logger logger = Logger.getLogger(ZipFileEnrichStrategy.class);
+
+    private List<String> elementNames;
 
     @Override
     public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
-        element_names = new ArrayList<>();
+
+        elementNames = new ArrayList<>();
 
         if (newExchange == null) {
             // there’s no remote file to consume
@@ -57,7 +58,7 @@ public class ZipFileEnrichStrategy implements AggregationStrategy {
     }
 
     private void writeZipEntry(ZipOutputStream zos, byte[] data, String filepath) throws IOException {
-        Iterator<Path> elements = Paths.get(filepath).iterator();
+        Iterator<Path> elements = Path.of(filepath).iterator();
 
         StringBuilder sb = new StringBuilder();
 
@@ -71,7 +72,7 @@ public class ZipFileEnrichStrategy implements AggregationStrategy {
                 element += "/";
             }
 
-            element_names.add(sb + element);
+            elementNames.add(sb + element);
 
             // Each entry needs the complete path, including previous created folders.
             zos.putNextEntry(new ZipEntry(sb + element));
@@ -96,7 +97,7 @@ public class ZipFileEnrichStrategy implements AggregationStrategy {
             while ((existingEntry = zis.getNextEntry()) != null) {
                 String entryName = existingEntry.getName();
 
-                if (element_names.contains(entryName))
+                if (elementNames.contains(entryName))
                     continue;
 
                 zos.putNextEntry(new ZipEntry(entryName));

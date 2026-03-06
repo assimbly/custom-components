@@ -9171,7 +9171,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
         template.sendBody("direct:"+routeName, defaultXml);
         String exchangeBody = getLastExchange(resultEndpoint).getIn().getBody(String.class);
 
-        System.out.println("exchangeBody >>> "+exchangeBody);
+        IO.println("exchangeBody >>> " + exchangeBody);
 
         JSONAssert.assertEquals(
                 "Expected the exchange body to equal the given json", defaultJson, exchangeBody, true

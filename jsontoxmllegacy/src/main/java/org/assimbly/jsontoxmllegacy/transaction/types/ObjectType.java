@@ -1,6 +1,6 @@
 package org.assimbly.jsontoxmllegacy.transaction.types;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JsonNode;
 import org.assimbly.jsontoxmllegacy.Constants;
 import org.assimbly.jsontoxmllegacy.JsonToXmlConfiguration;
 import org.assimbly.jsontoxmllegacy.JsonToXmlProcessor;
@@ -15,7 +15,7 @@ public class ObjectType implements NodeTransaction {
     @Override
     public Element process(JsonToXmlConfiguration config) {
         // extract child as an object
-        config.getJsonNode().fields().forEachRemaining(entry -> {
+        config.getJsonNode().properties().iterator().forEachRemaining(entry -> {
             String key = entry.getKey();
             JsonNode value = entry.getValue();
 
@@ -23,7 +23,7 @@ public class ObjectType implements NodeTransaction {
                 key = key.substring(1);
                 if(key.equals(XMLConstants.XMLNS_ATTRIBUTE) || key.indexOf(XMLConstants.XMLNS_ATTRIBUTE+":")==0) {
                     // namespace
-                    String namespace = JsonUtils.getAndSetNamespace(config.getXmlnsMap(), key, value.asText());
+                    String namespace = JsonUtils.getAndSetNamespace(config.getXmlnsMap(), key, value.asString());
                     if(namespace != null) {
                         config.getElement().setAttribute(key, namespace);
                     }
@@ -33,11 +33,11 @@ public class ObjectType implements NodeTransaction {
                             config.getElement().setAttribute(Constants.JSON_XML_ATTR_CONTEXT, value.toString());
                             break;
                         default:
-                            config.getElement().setAttribute(key, value.asText());
+                            config.getElement().setAttribute(key, value.asString());
                     }
                 }
             } else if(key.equals(Constants.JSON_XML_TEXT_FIELD)){
-                config.getElement().setTextContent(value.asText());
+                config.getElement().setTextContent(value.asString());
             } else {
                 config.getElement().appendChild(JsonToXmlProcessor.convertJsonToXml(config.createSubLevelConfig(value, key)));
             }

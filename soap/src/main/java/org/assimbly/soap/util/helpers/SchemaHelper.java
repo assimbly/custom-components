@@ -12,7 +12,7 @@ public final class SchemaHelper {
     public static SchemaImport findImport(Schema schema, String namespace){
         for (Object key : schema.getImports().keySet()) {
             @SuppressWarnings("unchecked")
-            SchemaImport im = ((List<SchemaImport>) schema.getImports().get(key)).get(0);
+            SchemaImport im = ((List<SchemaImport>) schema.getImports().get(key)).getFirst();
 
             if (im.getNamespaceURI() != null && im.getNamespaceURI().equals(namespace)) {
                 return im;

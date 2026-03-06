@@ -32,7 +32,7 @@ public class EncoderComponentTest extends CamelTestSupport {
 
         template.sendBody("direct:transform", new File("src/test/resources/IFTMIN_D96A_CP850.edi"));
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         String actual = result.getIn().getBody(String.class);
         String expected = IOUtils.toString(this.getClass().getResourceAsStream("/expected/IFTMIN_D96A_UTF_8.edi"),"UTF-8").replace("\n", "\r\n");

@@ -1,15 +1,15 @@
 package org.assimbly.xmltojsonlegacy.utils;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.TextNode;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.JsonNodeFactory;
+import tools.jackson.databind.node.ObjectNode;
 import org.assimbly.xmltojsonlegacy.XmlToJsonConfiguration;
 import org.assimbly.xmltojsonlegacy.model.AttributeEntry;
 import org.assimbly.xmltojsonlegacy.model.ElementMetadata;
 import org.assimbly.xmltojsonlegacy.model.Namespace;
 import org.assimbly.xmltojsonlegacy.service.MetadataAnalyzer;
+import tools.jackson.databind.node.StringNode;
 
 import javax.xml.XMLConstants;
 import java.util.Iterator;
@@ -85,7 +85,7 @@ public class ExtractUtils {
     public static void extractChildAsArray(ElementMetadata metadata, ElementMetadata childMetadata, JsonNode childNode) {
         if(childNode.isArray() && MetadataAnalyzer.isLastElement(childMetadata)) {
             for (JsonNode subElement : childNode) {
-                metadata.getArrayNode().add(!metadata.isElementMustBeNull() ? subElement.asText() : null);
+                metadata.getArrayNode().add(!metadata.isElementMustBeNull() ? subElement.asString() : null);
             }
         } else {
             metadata.getArrayNode().add(!metadata.isElementMustBeNull() ? childNode : null);
@@ -112,8 +112,8 @@ public class ExtractUtils {
                 transformJsonNodeWithNamespace(metadata, config, childNode, true);
             } else {
                 for (JsonNode subElement : childNode) {
-                    if(childNode.fields().hasNext()) {
-                        childNode.fields().forEachRemaining(entry -> {
+                    if(childNode.properties().iterator().hasNext()) {
+                        childNode.properties().iterator().forEachRemaining(entry -> {
                             String label = entry.getKey();
                             String childTypeAttr = childMetadata.getTypeAttributeValue();
                             setValueUsingAttributeType(metadata, config, metadata.getObjectNode(), subElement, label, null, childTypeAttr);
@@ -196,7 +196,7 @@ public class ExtractUtils {
     private static ObjectNode transformJsonNodeWithNamespace(ElementMetadata metadata, XmlToJsonConfiguration config, JsonNode node, boolean useRootObjectNode) {
         AtomicReference<String> name = new AtomicReference<>("");
         ObjectNode objectNode = JsonNodeFactory.instance.objectNode();
-        node.fields().forEachRemaining(entry -> {
+        node.properties().iterator().forEachRemaining(entry -> {
             String label = entry.getKey();
             if(label.startsWith(Constants.JSON_XML_ATTR_PREFIX)) {
                 objectNode.set(label, entry.getValue());
@@ -280,9 +280,9 @@ public class ExtractUtils {
                     }
                     break;
                 }
-                if(isInteger(subElement.asText())) {
+                if(isInteger(subElement.asString())) {
                     objectNode.put(label, subElement.asInt());
-                } else if(isDouble(subElement.asText())) {
+                } else if(isDouble(subElement.asString())) {
                     objectNode.put(label, subElement.asDouble());
                 } else {
                     objectNode.putNull(label);
@@ -301,7 +301,7 @@ public class ExtractUtils {
                 // do nothing
                 break;
             default:
-                value = (subElement!=null ? subElement.asText() : value);
+                value = (subElement!=null ? subElement.asString() : value);
                 if(config.isTrimSpaces()){
                     value = (value.trim().equalsIgnoreCase(Constants.NULL_VALUE) ? null : value.trim());
                 } else {
@@ -335,9 +335,9 @@ public class ExtractUtils {
                     }
                     break;
                 }
-                if(isInteger(subElement.asText())) {
+                if(isInteger(subElement.asString())) {
                     arrayNode.add(subElement.asInt());
-                } else if(isDouble(subElement.asText())) {
+                } else if(isDouble(subElement.asString())) {
                     arrayNode.add(subElement.asDouble());
                 } else {
                     arrayNode.addNull();
@@ -356,7 +356,7 @@ public class ExtractUtils {
                 // do nothing
                 break;
             default:
-                value = (subElement!=null ? subElement.asText() : value);
+                value = (subElement!=null ? subElement.asString() : value);
                 if(config.isTrimSpaces()){
                     value = (value.trim().equalsIgnoreCase(Constants.NULL_VALUE) ? null : value.trim());
                 } else {
@@ -383,9 +383,8 @@ public class ExtractUtils {
 
     // check if rootObjectNode contains attributes
     public static boolean rootObjectNodeContainsAttributes(ObjectNode rootObjectNode) {
-        Iterator<String> fieldNamesIterator = rootObjectNode.fieldNames();
-        while (fieldNamesIterator.hasNext()) {
-            String fieldName = fieldNamesIterator.next();
+        // propertyNames() returns a Collection<String> in Jackson 3
+        for (String fieldName : rootObjectNode.propertyNames()) {
             if (fieldName.startsWith(Constants.JSON_XML_ATTR_PREFIX)) {
                 return true;
             }
@@ -400,12 +399,12 @@ public class ExtractUtils {
 
     // create a JsonNode with internal null value
     public static JsonNode createInternalNullObjectNode() {
-        return new TextNode(Constants.INTERNAL_NULL_OBJECT_NODE_VALUE);
+        return new StringNode(Constants.INTERNAL_NULL_OBJECT_NODE_VALUE);
     }
 
     // checks if node contains an internal null value
     public static boolean isInternalNullObjectNodePresent(JsonNode node) {
-        return node.isTextual() && node.asText().equals(Constants.INTERNAL_NULL_OBJECT_NODE_VALUE);
+        return node.isString() && node.asString().equals(Constants.INTERNAL_NULL_OBJECT_NODE_VALUE);
     }
 
     // add object to existing field on rootObjectNode
@@ -465,7 +464,7 @@ public class ExtractUtils {
         try {
             Integer.parseInt(str);
             return true;
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             return false;
         }
     }
@@ -477,7 +476,7 @@ public class ExtractUtils {
         try {
             Double.parseDouble(str);
             return true;
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             return false;
         }
     }

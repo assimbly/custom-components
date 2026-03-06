@@ -132,7 +132,7 @@ public final class MailUtils {
             }
 
             return sb.toString();
-        } catch (MessagingException e) {
+        } catch (MessagingException _) {
             // ignore the error and just return tostring
             return message.toString();
         }

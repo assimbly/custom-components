@@ -24,19 +24,25 @@ public class CustomXmlJsonDataFormat implements DataFormat {
     private static final String DEFAULT_ROOT_TAG = "root";
 
     // XML to JSON options
-    private boolean hasTypes, keepStrings, removeNamespaces, removeRoot;
+    private boolean hasTypes;
+    private boolean keepStrings;
+    private boolean removeNamespaces;
+    private boolean removeRoot;
     private TypeValueMismatch typeValueMismatch;
-    private final String contentKey = "jsonContent";
+    private static final String contentKey = "jsonContent";
 
-    private final String xmlAttrPrefix = "ASSIMBLY_ATTR_PREFIX";
-    private final String jsonXmlAttrPrefix = "@";
+    private static final String xmlAttrPrefix = "ASSIMBLY_ATTR_PREFIX";
+    private static final String jsonXmlAttrPrefix = "@";
 
-    private final String xmlTypeNodePrefix = "ASSIMBLY_TYPE_PREFIX";
+    private static final String xmlTypeNodePrefix = "ASSIMBLY_TYPE_PREFIX";
 
     // JSON to XML options
-    private boolean addRoot, checkJsonKeys, changeArrayElements;
-    private String rootTag, arrayElementName;
-    private final String validXmlRegex = "[^A-z0-9_.\\-]|^(xml|[\\-0-9\\.])+";
+    private boolean addRoot;
+    private boolean checkJsonKeys;
+    private boolean changeArrayElements;
+    private String rootTag;
+    private String arrayElementName;
+    private static final String validXmlRegex = "[^A-z0-9_.\\-]|^(xml|[\\-0-9\\.])+";
 
     // XML to JSON
     @Override
@@ -78,11 +84,7 @@ public class CustomXmlJsonDataFormat implements DataFormat {
     }
 
     private void setContentTypeHeader(Exchange exchange, String contentType) {
-        if (exchange.hasOut()) {
-            exchange.getOut().setHeader(Exchange.CONTENT_TYPE, contentType);
-        } else {
-            exchange.getIn().setHeader(Exchange.CONTENT_TYPE, contentType);
-        }
+       exchange.getMessage().setHeader(Exchange.CONTENT_TYPE, contentType);
     }
 
     public String getRootTag(Exchange exchange) {
@@ -94,10 +96,10 @@ public class CustomXmlJsonDataFormat implements DataFormat {
 
         String interpolatedRootTag = ExchangeHelper.interpolate(rootTag, exchange);
 
-        if (interpolatedRootTag == null || "".equals(interpolatedRootTag.trim()))
+        if (interpolatedRootTag == null || interpolatedRootTag.trim().isEmpty())
             throw new XmlRootException("The header in the root tag has an empty value. A XML root tag can't be empty.");
 
-        if (hasInvalidXMLCharacters(interpolatedRootTag))
+        if (Boolean.TRUE.equals(hasInvalidXMLCharacters(interpolatedRootTag)))
             throw new XmlRootException("The value of the header in the root tag has invalid XML characters. It can't be used as an XML root tag.");
 
         return interpolatedRootTag;
@@ -116,7 +118,7 @@ public class CustomXmlJsonDataFormat implements DataFormat {
 
         String interpolatedArrayElementName = ExchangeHelper.interpolate(this.arrayElementName, exchange);
 
-        if (interpolatedArrayElementName == null || "".equals(interpolatedArrayElementName.trim()))
+        if (interpolatedArrayElementName == null || interpolatedArrayElementName.trim().isEmpty())
             throw new XmlRootException("The header in the array element name has an empty value. A XML tag can't be empty.");
 
         if (hasInvalidXMLCharacters(interpolatedArrayElementName))

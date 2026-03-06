@@ -150,12 +150,11 @@ public class Writer {
 			parent = parent.getParent();
 		}
 		
-		String lineLoc = String.format(
-			"Line %d column %d (offset 0x%x): ",
-			getLine(),
-			getColumn(),
-			getPosition()
-		);
+		String lineLoc = "Line %d column %d (offset 0x%x): ".formatted(
+                getLine(),
+                getColumn(),
+                getPosition()
+        );
 		location = lineLoc + location;
 		
 		switch ( mErrorSettings[error.ordinal()] )
@@ -183,12 +182,11 @@ public class Writer {
 			parent = parent.getParent();
 		}
 		
-		String lineLoc = String.format(
-			"Line %d column %d (offset 0x%x): ",
-			getLine(),
-			getColumn(),
-			getPosition()
-		);
+		String lineLoc = "Line %d column %d (offset 0x%x): ".formatted(
+                getLine(),
+                getColumn(),
+                getPosition()
+        );
 		location = lineLoc + location;
 		
 		LOG.warn("Warning: " + location + ": " + message);
@@ -207,13 +205,13 @@ public class Writer {
 	}
 
 	public String getLineEnd() {
-		switch(mLineEnd)
+		return switch(mLineEnd)
 		{
-			case 0: return System.getProperty("line.separator");
-			case 1: return "\r\n";
-			case 2: return "\n";
-			case 3: return "\r";
-			default: return "\r\n";
-		}
+			case 0 -> System.getProperty("line.separator");
+			case 1 -> "\r\n";
+			case 2 -> "\n";
+			case 3 -> "\r";
+			default -> "\r\n";
+		};
 	}
 }

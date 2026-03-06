@@ -14,7 +14,7 @@ import org.apache.camel.support.ProcessorEndpoint;
 public class FormToXmlEndpoint extends ProcessorEndpoint {
     @UriParam
     private FormToXmlConfiguration configuration;
-    private FormToXmlComponent component;
+    private final FormToXmlComponent component;
 
     public FormToXmlEndpoint(String uri, FormToXmlComponent component, FormToXmlConfiguration configuration) {
         super(uri, component);

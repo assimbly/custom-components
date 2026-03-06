@@ -10,7 +10,6 @@ import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.Provider;
-import java.io.IOException;
 
 /**
  * Class acting as a filter for authentication.
@@ -27,10 +26,9 @@ public class AuthenticationFilter implements ContainerRequestFilter {
      * Return a 401: Unauthorized response when the token is not valid.
      *
      * @param requestContext to get all the request data from.
-     * @throws IOException when something goes wrong while reading the request.
      */
     @Override
-    public void filter(ContainerRequestContext requestContext) throws IOException {
+    public void filter(ContainerRequestContext requestContext) {
         String token = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
 
         if (token == null || token.isEmpty()) {

@@ -10,7 +10,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.junit.jupiter.api.Test;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.xmlunit.assertj3.XmlAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class EdifactComponentTest extends CamelTestSupport {
@@ -25,15 +25,16 @@ public class EdifactComponentTest extends CamelTestSupport {
     public void convertsEdiToXmlWithinCamelRoute() throws Exception {
         resultEndpoint.expectedMessageCount(1);
 
-        String expectedXml = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("iftmin.xml"));
+        String expected = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("iftmin.xml"));
 
         // trigger exchange
         String edifact = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("iftmin.edi"));
         template.sendBody("direct:ediToXml", edifact);
 
         // verify exchange contents
-        String exchangeBody = resultEndpoint.getExchanges().get(0).getIn().getBody(String.class);
-        assertXMLEqual(expectedXml, exchangeBody);
+        String actual = resultEndpoint.getExchanges().getFirst().getIn().getBody(String.class);
+
+		assertThat(actual).and(expected).areIdentical();
 
         // wait for the expected exchange to conclude
         resultEndpoint.assertIsSatisfied();

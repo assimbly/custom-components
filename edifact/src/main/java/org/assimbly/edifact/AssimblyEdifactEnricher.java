@@ -4,17 +4,17 @@ import org.apache.commons.lang3.StringUtils;
 
 public class AssimblyEdifactEnricher {
 
-    private final static String UNA = "UNA:+.? '\r\n";
-    private final static String UNH = "UNH";
-    private final static String UNT = "UNT";
-    private final static String SEGMENT_SEPARATOR = "'";
-    private final static String DATA_ELEMENT_SEPARATOR = "+";
+    private static final String UNA = "UNA:+.? '\r\n";
+    private static final String UNH = "UNH";
+    private static final String UNT = "UNT";
+    private static final String SEGMENT_SEPARATOR = "'";
+    private static final String DATA_ELEMENT_SEPARATOR = "+";
 
     /**
      * Adds the missing UNA field and calculates the total
      * number of components and fills in the correct UNT value
      */
-    public static void enrich(StringBuilder builder) throws Exception {
+    public static void enrich(StringBuilder builder) {
         builder.insert(0, UNA);
         insertSegmentCount(builder);
     }

@@ -1,12 +1,11 @@
 package org.assimbly.replace;
 
+import java.util.*;
+
 import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
-import org.assimbly.util.helper.Base64Helper;
 
-import java.nio.charset.StandardCharsets;
-import java.util.*;
 import java.util.regex.Pattern;
 
 @UriParams
@@ -97,11 +96,14 @@ public class ReplaceConfiguration {
 
     private static Map<String, Integer> getFlagBits() {
 
-        return new HashMap<String, Integer>() {{
-            put("i", Pattern.CASE_INSENSITIVE);
-            put("m", Pattern.MULTILINE);
-            put("s", Pattern.DOTALL);
-        }};
+        Map<String, Integer> flags = new HashMap<>();
+
+        flags.put("i", Pattern.CASE_INSENSITIVE);
+        flags.put("m", Pattern.MULTILINE);
+        flags.put("s", Pattern.DOTALL);
+
+        return flags;
+
     }
 
 }

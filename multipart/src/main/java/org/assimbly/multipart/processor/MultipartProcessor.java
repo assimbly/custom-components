@@ -1,18 +1,18 @@
 package org.assimbly.multipart.processor;
 
-import org.apache.http.entity.ContentType;
 import org.assimbly.util.exception.InvalidFileException;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.ByteArrayBody;
+import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.client5.http.entity.mime.ByteArrayBody;
 import org.apache.log4j.Logger;
 
 import java.io.ByteArrayOutputStream;
 
 public class MultipartProcessor implements Processor {
 
-    final static Logger logger = Logger.getLogger(MultipartProcessor.class);
+    private static final Logger logger = Logger.getLogger(MultipartProcessor.class);
 
     @Override
     public void process(Exchange exchange) throws Exception {

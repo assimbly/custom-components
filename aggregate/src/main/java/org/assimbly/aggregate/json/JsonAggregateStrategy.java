@@ -33,7 +33,7 @@ public class JsonAggregateStrategy implements AggregationStrategy {
     }
 
     private JSONArray wrapInArray(JSONArray array, String json){
-        if(json.substring(0, 1).equals("[")) {
+        if(json.charAt(0) == '[') {
             return array.put(new JSONArray(json));
         } else {
             return array.put(new JSONObject(json));

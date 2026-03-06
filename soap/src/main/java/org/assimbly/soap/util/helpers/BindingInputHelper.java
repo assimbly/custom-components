@@ -22,8 +22,8 @@ public final class BindingInputHelper {
         List<?> exElem = input.getExtensibilityElements();
 
         for (Object el : exElem) {
-            if (el instanceof SOAPBodyImpl) {
-                return (SOAPBodyImpl) el;
+            if (el instanceof SOAPBodyImpl impl) {
+                return impl;
             }
         }
 
@@ -34,8 +34,8 @@ public final class BindingInputHelper {
         List<?> exElem = input.getExtensibilityElements();
 
         for (Object el : exElem) {
-            if (el instanceof SOAP12BodyImpl) {
-                return (SOAP12BodyImpl) el;
+            if (el instanceof SOAP12BodyImpl impl) {
+                return impl;
             }
         }
 
@@ -46,8 +46,7 @@ public final class BindingInputHelper {
         List<?> exElem = bindingInput.getExtensibilityElements();
 
         for (Object el : exElem) {
-            if (el instanceof SOAPHeader) {
-                SOAPHeader header = (SOAPHeader) el;
+            if (el instanceof SOAPHeader header) {
                 Message message = (Message) messages.get(header.getMessage());
                 Part part = message.getPart(header.getPart());
 
@@ -55,8 +54,7 @@ public final class BindingInputHelper {
                     return part;
             }
 
-            if (el instanceof SOAP12Header) {
-                SOAP12Header header = (SOAP12Header) el;
+            if (el instanceof SOAP12Header header) {
                 Message message = (Message) messages.get(header.getMessage());
                 Part part = message.getPart(header.getPart());
 
@@ -74,8 +72,8 @@ public final class BindingInputHelper {
         List<?> exElem = bindingInput.getExtensibilityElements();
 
         for (Object el : exElem) {
-            if (el instanceof SOAPHeaderImpl) {
-                result.add((SOAPHeaderImpl) el);
+            if (el instanceof SOAPHeaderImpl impl) {
+                result.add(impl);
             }
         }
 
@@ -88,8 +86,8 @@ public final class BindingInputHelper {
         List<?> exElem = bindingInput.getExtensibilityElements();
 
         for (Object el : exElem) {
-            if (el instanceof SOAP12HeaderImpl) {
-                result.add((SOAP12HeaderImpl) el);
+            if (el instanceof SOAP12HeaderImpl impl) {
+                result.add(impl);
             }
         }
 

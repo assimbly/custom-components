@@ -1,16 +1,11 @@
 package org.assimbly.soap.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class SoapAction {
 
-    @JsonIgnore
-    private String _id;
-
-    private String name;
+    private final String name;
     private List<SoapHeader> headers;
 
     public SoapAction(String name) {

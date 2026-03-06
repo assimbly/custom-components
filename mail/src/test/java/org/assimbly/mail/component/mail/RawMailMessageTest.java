@@ -72,7 +72,7 @@ public class RawMailMessageTest extends CamelTestSupport {
                 map);
         MockEndpoint.assertIsSatisfied(context);
 
-        Exchange exchange = getMockEndpoint("mock:mail").getReceivedExchanges().get(0);
+        Exchange exchange = getMockEndpoint("mock:mail").getReceivedExchanges().getFirst();
 
         // START SNIPPET: e1
         // get access to the raw jakarta.mail.Message as shown below
@@ -103,11 +103,11 @@ public class RawMailMessageTest extends CamelTestSupport {
 
         MockEndpoint.assertIsSatisfied(context);
 
-        Message mailMessage = mock.getExchanges().get(0).getIn().getBody(Message.class);
+        Message mailMessage = mock.getExchanges().getFirst().getIn().getBody(Message.class);
         assertNotNull("mail subject should not be null", mailMessage.getSubject());
         assertEquals("hurz", mailMessage.getSubject(), "mail subject should be hurz");
 
-        Map<String, Object> headers = mock.getExchanges().get(0).getIn().getHeaders();
+        Map<String, Object> headers = mock.getExchanges().getFirst().getIn().getHeaders();
         assertNotNull(headers, "headers should not be null");
         assertFalse(headers.isEmpty(), "headers should not be empty");
     }
@@ -132,12 +132,12 @@ public class RawMailMessageTest extends CamelTestSupport {
 
         MockEndpoint.assertIsSatisfied(context);
 
-        String body = mock.getExchanges().get(0).getIn().getBody(String.class);
+        String body = mock.getExchanges().getFirst().getIn().getBody(String.class);
         MimeMessage mm = new MimeMessage(null, new ByteArrayInputStream(body.getBytes()));
         String subject = mm.getSubject();
         assertNull(subject, "mail subject should not be available");
 
-        Map<String, Object> headers = mock.getExchanges().get(0).getIn().getHeaders();
+        Map<String, Object> headers = mock.getExchanges().getFirst().getIn().getHeaders();
         assertNotNull(headers, "headers should not be null");
         assertFalse(headers.isEmpty(), "headers should not be empty");
     }

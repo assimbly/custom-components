@@ -1,7 +1,7 @@
 package org.assimbly.xmltoexcel;
 
 //import com.google.gson.Gson;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
@@ -14,6 +14,7 @@ import org.assimbly.util.helper.Base64Helper;
 import org.junit.jupiter.api.BeforeAll;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.JacksonException;
 import org.assimbly.xmltoexcel.domain.CustomWorksheet;
 import org.assimbly.xmltoexcel.helpers.AssertExcel;
 import org.assimbly.xmltoexcel.helpers.DataProvider;
@@ -21,7 +22,7 @@ import org.assimbly.xmltoexcel.helpers.DataProvider;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.*;
 
 public class XmlToExcelComponentTest extends CamelTestSupport {
@@ -168,10 +169,10 @@ public class XmlToExcelComponentTest extends CamelTestSupport {
         String expectedOutputPath = "src/test/resources/expected-output/" + expectedOutputFileName;
         String actualOutputPath = "src/test/resources/actual-output/" + expectedOutputFileName;
 
-        String input = new String(Files.readAllBytes(Paths.get(inputPath)));
+        String input = new String(Files.readAllBytes(Path.of(inputPath)));
         template.sendBody("direct:" + route, input);
         byte[] actualOutputBytes = getLastExchange(resultEndpoint).getIn().getBody(byte[].class);
-        Files.write(Paths.get(actualOutputPath), actualOutputBytes);
+        Files.write(Path.of(actualOutputPath), actualOutputBytes);
 
         Workbook actualOutput = getWorkbook(expectedOutputFileName, actualOutputPath);
         Workbook expectedOutput = getWorkbook(expectedOutputFileName, expectedOutputPath);
@@ -211,7 +212,7 @@ public class XmlToExcelComponentTest extends CamelTestSupport {
 
             return Base64Helper.marshal(jsonArrayString);
 
-        } catch (com.fasterxml.jackson.core.JsonProcessingException e) {
+        } catch (JacksonException e) {
                throw new RuntimeException("Failed to serialize worksheets to JSON.", e);
         }
     }

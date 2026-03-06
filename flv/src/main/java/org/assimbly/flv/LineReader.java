@@ -47,9 +47,7 @@ public class LineReader {
         int pos = 0;
 
         for(MappedField mappedField: mappedFields) {
-            int rightBound = pos + mappedField.nrCharacters > line.length()
-                    ? line.length()
-                    : pos + mappedField.nrCharacters;
+            int rightBound = Math.min(pos + mappedField.nrCharacters, line.length());
 
             String fieldValue = line.substring(pos, rightBound);
 
@@ -85,7 +83,7 @@ public class LineReader {
         Pattern pattern = Pattern.compile("(\\w+)\\[(\\d+)]");
         Matcher matcher = pattern.matcher(mappings);
 
-        List<MappedField> mappedFields = new LinkedList<MappedField>();
+        List<MappedField> mappedFields = new LinkedList<>();
 
         while (matcher.find()) {
             String fieldName = matcher.group(1);
@@ -97,14 +95,7 @@ public class LineReader {
         return mappedFields;
     }
 
-    private static class MappedField {
+    private record MappedField(String fieldName, int nrCharacters) {
 
-        private final String fieldName;
-        private final int nrCharacters;
-
-        private MappedField(String fieldName, int nrCharacters) {
-            this.fieldName = fieldName;
-            this.nrCharacters = nrCharacters;
-        }
     }
 }

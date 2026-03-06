@@ -109,7 +109,7 @@ public class MailSorterTest extends CamelTestSupport {
             for (SortTerm term2 : POSSIBLE_TERMS) {
                 Message[] actual = MESSAGES.clone();
                 MailSorter.sortMessages(actual, new SortTerm[] { term1, SortTerm.REVERSE, term2 });
-                assertArrayEquals(actual, expected, String.format("Terms: %s, %s", term1.toString(), term2.toString()));
+                assertArrayEquals(actual, expected, "Terms: %s, %s".formatted(term1.toString(), term2.toString()));
             }
 
         }

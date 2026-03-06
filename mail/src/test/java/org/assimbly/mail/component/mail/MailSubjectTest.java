@@ -48,7 +48,7 @@ public class MailSubjectTest extends CamelTestSupport {
 
         mock.assertIsSatisfied();
 
-        assertFalse(mock.getExchanges().get(0).getIn(AttachmentMessage.class).hasAttachments(), "Should not have attachements");
+        assertFalse(mock.getExchanges().getFirst().getIn(AttachmentMessage.class).hasAttachments(), "Should not have attachements");
     }
 
     @Override

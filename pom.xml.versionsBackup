@@ -63,7 +63,7 @@
 
         <angus.mail.version>2.0.5</angus.mail.version>
         <assertj-core.version>3.27.7</assertj-core.version>
-        <assimbly.version>6.0.0</assimbly.version>
+        <assimbly.version>5.1.0</assimbly.version>
         <awaitility.version>4.3.0</awaitility.version>
         <bouncycastle.version>1.83</bouncycastle.version>
         <config-admin.version>1.9.26</config-admin.version>

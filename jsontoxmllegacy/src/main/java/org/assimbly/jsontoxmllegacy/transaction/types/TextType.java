@@ -23,7 +23,7 @@ public class TextType implements NodeTransaction {
             return config.getElement();
         }
 
-        Text textNode = config.getDocument().createTextNode(config.getJsonNode().asText());
+        Text textNode = config.getDocument().createTextNode(config.getJsonNode().asString());
         config.getElement().appendChild(textNode);
         if(config.getElement().hasAttribute(Constants.JSON_XML_ATTR_TYPE) || !config.isTypeHints()) {
             return config.getElement();

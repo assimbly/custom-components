@@ -5,17 +5,12 @@ import org.apache.camel.Exchange;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.assimbly.aggregate.json.JsonAggregateStrategy;
 
 
 public class JsonEnrichStrategy implements AggregationStrategy {
 
-    final static Logger logger = Logger.getLogger(JsonAggregateStrategy.class);
-
     @Override
     public Exchange aggregate(Exchange original, Exchange resource) {
-
-        System.out.println("1");
 
         if(resource == null) {
             return original;
@@ -39,7 +34,7 @@ public class JsonEnrichStrategy implements AggregationStrategy {
     }
 
     private JSONArray wrapInArray(JSONArray array, String json){
-        if(json.substring(0, 1).equals("[")) {
+        if(json.charAt(0) == '[') {
             return new JSONArray(json);
         } else {
             return array.put(new JSONObject(json));

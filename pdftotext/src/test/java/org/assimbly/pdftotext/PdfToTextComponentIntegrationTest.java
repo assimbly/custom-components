@@ -33,7 +33,7 @@ public class PdfToTextComponentIntegrationTest extends CamelTestSupport {
         resultEndpoint.assertIsSatisfied();
 
         String expected = "Test";
-        String actual = resultEndpoint.getExchanges().get(0).getIn().getBody(String.class);
+        String actual = resultEndpoint.getExchanges().getFirst().getIn().getBody(String.class);
         actual = actual.replace("\n", "").replace("\r", "");
         assertEquals(expected, actual);
     }

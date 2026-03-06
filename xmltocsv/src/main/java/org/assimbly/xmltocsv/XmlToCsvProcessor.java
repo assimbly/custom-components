@@ -174,21 +174,12 @@ public class XmlToCsvProcessor implements Processor {
     }
 
     private String applyQuotationOption(String content, QuoteFields quoteFields) {
-        String result;
-        switch(quoteFields) {
-            case ALL_FIELDS:
-                result = '"' + content + '"';
-                break;
-            case NON_INTEGER_FIELDS:
-                result = (content.matches("-?\\d+")) ? content : '"' + content + '"';
-                break;
-            case NO_FIELDS:
-                result = content;
-                break;
-            default:
-                result = '"' + content + '"';
-        }
-        return result;
+        return switch(quoteFields) {
+            case ALL_FIELDS -> '"' + content + '"';
+            case NON_INTEGER_FIELDS -> (content.matches("-?\\d+")) ? content : '"' + content + '"';
+            case NO_FIELDS -> content;
+            default -> '"' + content + '"';
+        };
     }
 
     private Document parseXmlToDocument(String xml) throws Exception {

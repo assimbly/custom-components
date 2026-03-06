@@ -28,10 +28,11 @@ public class SimpleReplaceDataFormatTest extends CamelTestSupport {
     @Test
     public void replacesSimpleExpressionsValueFound() throws InterruptedException {
 
-        String body = "Contrary to popular belief,\n" +
-                "${header.title} is not simply random text.\n" +
-                "It has roots in a piece of classical Latin literature from ${header.century} BC,\n" +
-                "making it over ${header.age} years old.";
+        String body = """
+                Contrary to popular belief,
+                ${header.title} is not simply random text.
+                It has roots in a piece of classical Latin literature from ${header.century} BC,
+                making it over ${header.age} years old.""";
 
         String expected = "Contrary to popular belief,\n" +
                 title + " is not simply random text.\n" +
@@ -43,22 +44,26 @@ public class SimpleReplaceDataFormatTest extends CamelTestSupport {
 
     @Test
     public void ignoresSimpleExpressionsValueNotFound() throws InterruptedException {
-        String body = "Contrary to popular belief,\n" +
-                "this ${header.variable} is simply not found.";
+        String body = """
+                Contrary to popular belief,
+                this ${header.variable} is simply not found.""";
 
-        String expected = "Contrary to popular belief,\n" +
-                "this  is simply not found.";
+        String expected = """
+                Contrary to popular belief,
+                this  is simply not found.""";
 
         runTest(expected, body);
     }
 
     @Test
     public void newLinesRemainsUnchangedAfterSimpleExpressionEvaluation() throws InterruptedException {
-        String body = "Contrary to popular belief,\n" +
-                "\n" +
-                "\n" +
-                "there is a two line break above.\n" +
-                "and a new line in the end\n";
+        String body = """
+                Contrary to popular belief,
+                
+                
+                there is a two line break above.
+                and a new line in the end
+                """;
 
         runTest(body, body);
     }

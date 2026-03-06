@@ -32,7 +32,7 @@ public class SearchTermBuilder {
     public enum Op {
         and,
         or,
-        not;
+        not
     }
 
     public enum Comparison {

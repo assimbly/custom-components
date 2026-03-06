@@ -47,7 +47,7 @@ public class PartHelperTest {
 
         QName expected = new QName("http://www.assimbly.world/wsdl/local/import", "imp-element");
 
-        assertEquals(expected, parts.get(0).getElementName());
+        assertEquals(expected, parts.getFirst().getElementName());
     }
 
     @Test
@@ -60,7 +60,7 @@ public class PartHelperTest {
 
         QName expected = new QName("http://www.w3.org/2001/XMLSchema", "string");
 
-        assertEquals(expected, parts.get(0).getTypeName());
+        assertEquals(expected, parts.getFirst().getTypeName());
 
         expected = new QName("http://www.assimbly.world", "element");
 

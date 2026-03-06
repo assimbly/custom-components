@@ -4,21 +4,17 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpEntityEnclosingRequest;
-import org.apache.http.HttpException;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.protocol.HttpContext;
-import org.apache.http.protocol.HttpRequestHandler;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.core5.http.ClassicHttpRequest;
+import org.apache.hc.core5.http.ClassicHttpResponse;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.HttpException;
+import org.apache.hc.core5.http.HttpStatus;
+import org.apache.hc.core5.http.io.HttpRequestHandler;
+import org.apache.hc.core5.http.io.entity.ByteArrayEntity;
+import org.apache.hc.core5.http.protocol.HttpContext;
 
 /**
- *
- * @version
+ * BasicValidationHandler updated for HttpClient 5
  */
 public class BasicValidationHandler implements HttpRequestHandler {
 
@@ -32,28 +28,33 @@ public class BasicValidationHandler implements HttpRequestHandler {
         this.responseContent = responseContent;
     }
 
-    public void handle(final HttpRequest request, final HttpResponse response,
+    @Override
+    public void handle(final ClassicHttpRequest request, final ClassicHttpResponse response,
                        final HttpContext context) throws HttpException, IOException {
 
-        if (expectedMethod != null && !expectedMethod.equals(request.getRequestLine().getMethod())) {
-            response.setStatusCode(HttpStatus.SC_METHOD_FAILURE);
+        // 1. request.getRequestLine().getMethod() -> request.getMethod()
+        if (expectedMethod != null && !expectedMethod.equals(request.getMethod())) {
+            // 2. setStatusCode(int) -> setCode(int)
+            response.setCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
             return;
         }
 
         if (!validateQuery(request)) {
-            response.setStatusCode(HttpStatus.SC_BAD_REQUEST);
+            response.setCode(HttpStatus.SC_BAD_REQUEST);
             return;
         }
 
-        response.setStatusCode(HttpStatus.SC_OK);
+        response.setCode(HttpStatus.SC_OK);
         if (responseContent != null) {
-            response.setEntity(new ByteArrayEntity(responseContent));
+            // 3. ByteArrayEntity now requires a ContentType (usually APPLICATION_OCTET_STREAM for raw bytes)
+            response.setEntity(new ByteArrayEntity(responseContent, ContentType.APPLICATION_OCTET_STREAM));
         }
     }
 
-    protected boolean validateQuery(HttpRequest request) throws IOException {
+    protected boolean validateQuery(ClassicHttpRequest request) throws IOException {
         try {
-            String query = new URI(request.getRequestLine().getUri()).getQuery();
+            // 4. request.getRequestLine().getUri() -> request.getPath() or request.getRequestUri()
+            String query = new URI(request.getPath()).getQuery();
             if (expectedQuery != null && !expectedQuery.equals(query)) {
                 return false;
             }

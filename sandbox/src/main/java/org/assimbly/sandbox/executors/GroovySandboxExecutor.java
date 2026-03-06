@@ -53,7 +53,7 @@ public class GroovySandboxExecutor {
             if (result != null) {
                 exchange.getIn().setBody(result);
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             throw new RuntimeCamelException("Groovy Sandbox violation: " + e.getMessage(), e);
         } finally {
             interceptor.unregister();

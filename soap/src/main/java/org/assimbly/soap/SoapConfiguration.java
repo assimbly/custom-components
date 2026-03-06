@@ -1,7 +1,7 @@
 package org.assimbly.soap;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
@@ -10,7 +10,6 @@ import org.apache.camel.spi.UriPath;
 import org.assimbly.soap.domain.SoapHeader;
 import org.assimbly.soap.domain.SoapHttpHeader;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -51,15 +50,15 @@ public class SoapConfiguration {
 
     public void dynamicApply(String prop, Object value) throws URISyntaxException {
         if("wsdl".equals(prop)) {
-            URI wsdl = new URI((String) value);
+            URI wsdlURI = new URI((String) value);
 
-            setParams(wsdl.getQuery());
+            setParams(wsdlURI.getQuery());
 
-            String queryless = new URI(wsdl.getScheme(),
-                    wsdl.getAuthority(),
-                    wsdl.getPath(),
+            String queryless = new URI(wsdlURI.getScheme(),
+                    wsdlURI.getAuthority(),
+                    wsdlURI.getPath(),
                     null, // Ignore the query part of the input url
-                    wsdl.getFragment()).toString();
+                    wsdlURI.getFragment()).toString();
 
             setWsdl(queryless);
         }else if("action".equals(prop)) {
@@ -149,7 +148,7 @@ public class SoapConfiguration {
         return auth;
     }
 
-    public List<SoapHeader> getHeaders() throws IOException {
+    public List<SoapHeader> getHeaders() {
 
         List<SoapHeader> list = new ArrayList<>();
 
@@ -160,7 +159,7 @@ public class SoapConfiguration {
         return list;
     }
 
-    public List<SoapHttpHeader> getHttpHeaders() throws IOException {
+    public List<SoapHttpHeader> getHttpHeaders() {
 
         List<SoapHttpHeader> list = new ArrayList<>();
 

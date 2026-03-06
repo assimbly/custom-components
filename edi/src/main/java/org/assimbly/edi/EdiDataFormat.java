@@ -12,7 +12,10 @@ import java.io.OutputStream;
 
 public class EdiDataFormat implements DataFormat {
 
-    private String segment, field, component, subComponent;
+    private String segment;
+    private String field;
+    private String component;
+    private String subComponent;
 
     @Override
     public void marshal(Exchange exchange, Object graph, OutputStream stream) throws Exception {
@@ -50,11 +53,11 @@ public class EdiDataFormat implements DataFormat {
 
     @Override
     public void start() {
-
+        // TODO document why this method is empty
     }
 
     @Override
     public void stop() {
-
+        // TODO document why this method is empty
     }
 }

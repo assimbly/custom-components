@@ -70,7 +70,7 @@ public class MongoDao {
 
         TenantVariable tenantVar = MongoDao.findTenantVariableByName(tenantVarName, tenant, tenantVarType);
         if(tenantVar==null) {
-            LOG.info(String.format("tenantVar %s of type %s is NULL", tenantVarType.name(), tenantVarName));
+            LOG.info("tenantVar %s of type %s is NULL".formatted(tenantVarType.name(), tenantVarName));
             return null;
         }
 
@@ -175,7 +175,7 @@ public class MongoDao {
         if(tenantVariable.getCreatedAt() == 0) {
             tenantVariable.setCreatedAt(new Date().getTime());
         }
-        if(!tenantVariable.find(environment).isPresent()) {
+        if(tenantVariable.find(environment).isEmpty()) {
             tenantVariable.put(new EnvironmentValue(environment));
         }
 
