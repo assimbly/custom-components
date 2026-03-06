@@ -50,15 +50,15 @@ public class SoapConfiguration {
 
     public void dynamicApply(String prop, Object value) throws URISyntaxException {
         if("wsdl".equals(prop)) {
-            URI wsdl = new URI((String) value);
+            URI wsdlURI = new URI((String) value);
 
-            setParams(wsdl.getQuery());
+            setParams(wsdlURI.getQuery());
 
-            String queryless = new URI(wsdl.getScheme(),
-                    wsdl.getAuthority(),
-                    wsdl.getPath(),
+            String queryless = new URI(wsdlURI.getScheme(),
+                    wsdlURI.getAuthority(),
+                    wsdlURI.getPath(),
                     null, // Ignore the query part of the input url
-                    wsdl.getFragment()).toString();
+                    wsdlURI.getFragment()).toString();
 
             setWsdl(queryless);
         }else if("action".equals(prop)) {

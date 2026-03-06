@@ -21,7 +21,6 @@ import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.Provider;
-import java.io.IOException;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -41,7 +40,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 
     private static final String TENANT_NAME_PATH_PARAM = "tenantName";
 
-    private MongoDao mongoDao;
+    private final MongoDao mongoDao;
 
     @Context
     private ResourceInfo resourceInfo;
@@ -62,10 +61,9 @@ public class AuthorizationFilter implements ContainerRequestFilter {
      * Return a 403: Forbidden response when the user is not authorized to access.
      *
      * @param requestContext to get all the request data from.
-     * @throws IOException when something goes wrong while reading the request.
      */
     @Override
-    public void filter(ContainerRequestContext requestContext) throws IOException {
+    public void filter(ContainerRequestContext requestContext) {
         try {
             String token = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
             String userEmail = JwtValidator.decode(token).get("name", String.class);

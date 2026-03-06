@@ -1,9 +1,9 @@
 package org.assimbly.sql.adapter;
 
 import com.ibm.db2.jcc.DB2Driver;
-import org.apache.hc.core5.net.URLEncodedUtils;
 import org.apache.hc.core5.http.NameValuePair;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
+import org.apache.hc.core5.net.WWWFormCodec;
 import org.assimbly.sql.domain.JDBCConnection;
 
 import java.nio.charset.StandardCharsets;
@@ -28,7 +28,7 @@ public class DB2Adapter implements DatabaseAdapter {
             );
         }
 
-        String query = URLEncodedUtils.format(parameters, ';', StandardCharsets.UTF_8);
+        String query = WWWFormCodec.format(parameters, StandardCharsets.UTF_8);
 
         String url = "jdbc:db2://%s:%s/%s:%s".formatted(
                 connection.getHost(), connection.getPort(), connection.getDatabase(), query);

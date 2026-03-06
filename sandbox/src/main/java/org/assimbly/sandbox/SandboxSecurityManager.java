@@ -62,7 +62,7 @@ public class SandboxSecurityManager extends SecurityManager {
         if (uuids.contains(uuid)){
             uuids.remove(uuid);
 
-            if (uuids.size() == 0) {
+            if (uuids.isEmpty()) {
                 blacklist = new ArrayList<>();
                 sandbox = false;
             }

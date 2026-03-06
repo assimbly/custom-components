@@ -1,8 +1,9 @@
 package org.assimbly.smooksnoxml;
 
+import org.xml.sax.*;
 import org.milyn.container.ExecutionContext;
 import org.milyn.xml.SmooksXMLReader;
-import org.xml.sax.*;
+
 
 import java.io.IOException;
 import java.io.StringReader;

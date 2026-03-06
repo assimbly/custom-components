@@ -1,15 +1,15 @@
 package org.assimbly.sql.adapter;
-import org.apache.hc.core5.net.URLEncodedUtils;
+
+import java.util.*;
 import org.apache.hc.core5.http.NameValuePair;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
+import org.apache.hc.core5.net.WWWFormCodec;
 import org.assimbly.sql.domain.JDBCConnection;
 
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.*;
-import java.util.stream.Collectors;
 
 public class MysqlAdapter implements DatabaseAdapter {
 
@@ -45,7 +45,7 @@ public class MysqlAdapter implements DatabaseAdapter {
                 parameters.add(new BasicNameValuePair("allowPublicKeyRetrieval", "true"));
         }
 
-        String query = URLEncodedUtils.format(parameters, StandardCharsets.UTF_8);
+        String query = WWWFormCodec.format(parameters, StandardCharsets.UTF_8);
 
         String url = "jdbc:mysql://%s:%s/%s?%s".formatted(
                 connection.getHost(), connection.getPort(), connection.getDatabase(), query);
@@ -61,6 +61,6 @@ public class MysqlAdapter implements DatabaseAdapter {
 
     private List<NameValuePair> putParameters(NameValuePair ... pairs) {
         return Arrays.stream(pairs)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

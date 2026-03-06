@@ -15,7 +15,7 @@ public class ReplaceEndpoint extends ProcessorEndpoint {
 
     @UriParam
     private ReplaceConfiguration configuration;
-    private ReplaceComponent component;
+    private final ReplaceComponent component;
 
     public ReplaceEndpoint(String uri, ReplaceComponent component, ReplaceConfiguration configuration) {
         super(uri, component);

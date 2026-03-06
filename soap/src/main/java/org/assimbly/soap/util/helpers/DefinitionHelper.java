@@ -1,13 +1,13 @@
 package org.assimbly.soap.util.helpers;
 
-import org.assimbly.util.Pair;
-
+import java.util.*;
 import javax.wsdl.*;
 import javax.wsdl.extensions.ExtensibilityElement;
 import javax.wsdl.extensions.soap.SOAPAddress;
 import javax.wsdl.extensions.soap12.SOAP12Address;
 import javax.xml.namespace.QName;
-import java.util.*;
+
+import org.assimbly.util.Pair;
 
 public final class DefinitionHelper {
 

@@ -2,9 +2,6 @@ package org.assimbly.csvtoxml.domain;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlList;
 
 import java.util.ArrayList;
 import java.util.HashMap;

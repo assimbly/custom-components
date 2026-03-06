@@ -4,7 +4,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.assimbly.auth.util.helper.ConfigHelper;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.Random;
 
 public final class JwtBuilder {
+
+    static Random random = new Random();
 
     private JwtBuilder() {
         //Static class cannot be instantiated.
@@ -23,9 +25,8 @@ public final class JwtBuilder {
      * @param name    claim of the token.
      * @param scope   claim of the token.
      * @return a valid signed JSON Web Token.
-     * @throws UnsupportedEncodingException when the encoding used to sign the token is not supported.
      */
-    public static String build(String name, String scope) throws UnsupportedEncodingException {
+    public static String build(String name, String scope) {
         String key = ConfigHelper.get("secretKey");
         int expiration = Integer.parseInt(ConfigHelper.get("expiration"));
 
@@ -36,7 +37,7 @@ public final class JwtBuilder {
                 .claim("scope", scope)
                 .signWith(
                         SignatureAlgorithm.HS256,
-                        key.getBytes("UTF-8")
+                        key.getBytes(StandardCharsets.UTF_8)
                 )
                 .compact();
     }
@@ -61,7 +62,7 @@ public final class JwtBuilder {
      * @return the created String.
      */
     private static String createRandomString() {
-        Random random = new Random();
+
         String characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
         char[] s = new char[10];

@@ -37,11 +37,11 @@ public class SimpleReplaceDataFormat implements DataFormat {
 
     @Override
     public void start() {
-
+        throw new UnsupportedOperationException("SimpleReplaceDataFormat start method not supported");
     }
 
     @Override
     public void stop() {
-
+        throw new UnsupportedOperationException("SimpleReplaceDataFormat stop method not supported");
     }
 }

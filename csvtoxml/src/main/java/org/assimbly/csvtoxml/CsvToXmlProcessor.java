@@ -17,7 +17,7 @@ import java.util.List;
 
 public class CsvToXmlProcessor implements Processor {
 
-    private CsvToXmlEndpoint endpoint;
+    private final CsvToXmlEndpoint endpoint;
 
     public CsvToXmlProcessor(CsvToXmlEndpoint endpoint) {
         this.endpoint = endpoint;

@@ -29,7 +29,10 @@ import java.util.Iterator;
 public class XmlToJsonJsonProcessor {
     private final CustomXmlJsonDataFormat xmlJsonDataFormat;
     private final JSONObject json;
-    private final String contentKey, xmlAttrPrefix, xmlTypeNodePrefix, jsonXmlAttrPrefix;
+    private final String contentKey;
+    private final String xmlAttrPrefix;
+    private final String xmlTypeNodePrefix;
+    private final String jsonXmlAttrPrefix;
     private final Boolean removeRoot;
 
     public XmlToJsonJsonProcessor(CustomXmlJsonDataFormat xmlJsonDataFormat, JSONObject json) {
@@ -45,11 +48,12 @@ public class XmlToJsonJsonProcessor {
     public String processJson() {
         processJsonObject(null, null, this.json);
 
-        if (!this.removeRoot)
+        if (Boolean.FALSE.equals(this.removeRoot))
             return this.json.toString(2);
 
         Object jsonWithoutRoot = removeRootFromJson();
         return stringifyJsonWithoutRoot(jsonWithoutRoot);
+
     }
 
     private Object removeRootFromJson() {
@@ -62,13 +66,11 @@ public class XmlToJsonJsonProcessor {
     }
 
     private String stringifyJsonWithoutRoot(Object jsonWithoutRoot) {
-        if (jsonWithoutRoot instanceof JSONObject object) {
-            return object.toString(2);
-        } else if (jsonWithoutRoot instanceof JSONArray array) {
-            return array.toString(2);
-        } else {
-            return jsonWithoutRoot.toString();
-        }
+        return switch (jsonWithoutRoot) {
+            case JSONObject object -> object.toString(2);
+            case JSONArray array -> array.toString(2);
+            default -> jsonWithoutRoot.toString();
+        };
     }
 
     private void processJsonObject(Object parentOfCurrentJsonObject, Object keyOrIndexOfParent,
@@ -138,7 +140,7 @@ public class XmlToJsonJsonProcessor {
                 typedJsonObject.remove("type");
                 typedJsonObject.put(this.contentKey, content);
             } else {
-                replaceTypedJsonObjectWithContentInJson(parentOfCurrentJsonObject, keyOrIndexOfParent, typedJsonObject,
+                replaceTypedJsonObjectWithContentInJson(parentOfCurrentJsonObject, keyOrIndexOfParent,
                         content);
             }
         });
@@ -205,8 +207,7 @@ public class XmlToJsonJsonProcessor {
         return index;
     }
 
-    private void replaceTypedJsonObjectWithContentInJson(Object parent, Object keyOrIndexOfParent,
-            JSONObject typedJsonObject, Object content) {
+    private void replaceTypedJsonObjectWithContentInJson(Object parent, Object keyOrIndexOfParent, Object content) {
         if (parent instanceof JSONObject object) {
             object.put((String) keyOrIndexOfParent, content);
         } else {

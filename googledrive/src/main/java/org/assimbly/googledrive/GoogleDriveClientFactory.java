@@ -43,7 +43,7 @@ public class GoogleDriveClientFactory {
         }
     }
 
-    private Credential authorize(String clientId, String clientSecret) throws Exception {
+    private Credential authorize(String clientId, String clientSecret) {
         return new GoogleCredential.Builder()
                 .setJsonFactory(jsonFactory)
                 .setTransport(transport)

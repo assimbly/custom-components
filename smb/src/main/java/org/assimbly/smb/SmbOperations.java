@@ -162,11 +162,9 @@ public class SmbOperations<SmbFile> implements GenericFileOperations<SmbFile> {
             file.setBody(local);
             login();
             result = client.retrieveFile(getPath(name), os);
-        } catch (IOException e) {
-            throw new GenericFileOperationFailedException("Cannot retrieve file: " + name, e);
         } catch (Exception e) {
             throw new GenericFileOperationFailedException("Cannot retrieve file: " + name, e);
-        } finally {
+        }  finally {
             IOHelper.close(os, "retrieve: " + name);
         }
 

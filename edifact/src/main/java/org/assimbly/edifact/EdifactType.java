@@ -353,6 +353,7 @@ public enum EdifactType {
 
     public abstract UNEdifactInterchangeFactory interchangeFactory() throws IOException, SAXException;
 
+    @Override
     public String toString() {
         return name().toLowerCase();
     }

@@ -14,7 +14,7 @@ import java.io.InputStream;
 
 public class AttachmentEnrichStrategy implements AggregationStrategy {
 
-    final static Logger logger = Logger.getLogger(AttachmentEnrichStrategy.class);
+    private static final Logger logger = Logger.getLogger(AttachmentEnrichStrategy.class);
 
     @Override
     public Exchange aggregate(Exchange original, Exchange resource) {

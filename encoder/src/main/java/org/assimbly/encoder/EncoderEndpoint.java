@@ -15,7 +15,7 @@ public class EncoderEndpoint extends ProcessorEndpoint {
 
     @UriParam
     private EncoderConfiguration configuration;
-    private EncoderComponent component;
+    private final EncoderComponent component;
 
     public EncoderEndpoint(String uri, EncoderComponent component, EncoderConfiguration configuration) {
         super(uri, component);

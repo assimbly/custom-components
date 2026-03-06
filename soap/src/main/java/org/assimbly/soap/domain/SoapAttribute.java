@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class SoapAttribute {
 
     @JsonIgnore
-    private String _id;
+    private String id;
 
     private String name;
     private String value;
@@ -28,11 +28,11 @@ public class SoapAttribute {
     }
     public String getValue() { return value; }
 
-    public String get_id() {
-        return _id;
+    public String getId() {
+        return id;
     }
 
-    public void set_id(String _id) {
-        this._id = _id;
+    public void setId(String id) {
+        this.id = id;
     }
 }

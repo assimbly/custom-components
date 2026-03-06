@@ -9,8 +9,6 @@ import org.json.JSONObject;
 
 public class JsonEnrichStrategy implements AggregationStrategy {
 
-    static final Logger logger = Logger.getLogger(JsonEnrichStrategy.class);
-
     @Override
     public Exchange aggregate(Exchange original, Exchange resource) {
 

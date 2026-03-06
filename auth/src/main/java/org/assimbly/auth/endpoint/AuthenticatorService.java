@@ -1,5 +1,7 @@
 package org.assimbly.auth.endpoint;
 
+import jakarta.ws.rs.*;
+
 import com.google.common.base.CaseFormat;
 import com.mongodb.client.MongoClient;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
@@ -12,7 +14,7 @@ import org.assimbly.auth.endpoint.annotation.Secured;
 import org.assimbly.auth.jwt.JwtValidator;
 import org.assimbly.auth.mongo.GoogleCredentialsRepository;
 import org.assimbly.auth.mongo.MongoDao;
-import jakarta.ws.rs.*;
+
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
@@ -25,7 +27,7 @@ public class AuthenticatorService {
 
     private static final GoogleAuthenticator authenticator = new GoogleAuthenticator();
 
-    private MongoDao mongoDao;
+    private final MongoDao mongoDao;
 
     public AuthenticatorService(MongoClient mongoClient, String databaseName){
         authenticator.setCredentialRepository(new GoogleCredentialsRepository(mongoClient, databaseName));
@@ -50,7 +52,7 @@ public class AuthenticatorService {
             String qrLocation = GoogleAuthenticatorQRGenerator.getOtpAuthURL(issuer, user.getEmail(), key);
 
             return Response.seeOther(new URI(qrLocation)).build();
-        } catch (UnsupportedEncodingException | JwtException _) {
+        } catch (JwtException _) {
             return Response
                     .status(Response.Status.UNAUTHORIZED)
                     .entity("The session token is invalid.")
@@ -68,7 +70,7 @@ public class AuthenticatorService {
             mongoDao.removeAuthenticatorSettings(user);
 
             return Response.ok().build();
-        } catch (UnsupportedEncodingException | JwtException _) {
+        } catch (JwtException _) {
             return Response
                     .status(Response.Status.UNAUTHORIZED)
                     .entity("The session token is invalid.")

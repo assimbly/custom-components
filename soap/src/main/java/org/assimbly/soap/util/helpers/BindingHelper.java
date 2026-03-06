@@ -2,7 +2,6 @@ package org.assimbly.soap.util.helpers;
 
 import javax.wsdl.Binding;
 import javax.wsdl.BindingOperation;
-import java.util.Map;
 
 public final class BindingHelper {
 

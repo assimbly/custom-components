@@ -19,7 +19,6 @@ public class OAuth2TokenConfiguration implements Cloneable {
     @UriParam
     private String tokenName;
 
-
     public OAuth2TokenConfiguration() { }
 
     public String getId() {

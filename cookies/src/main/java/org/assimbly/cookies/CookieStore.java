@@ -58,7 +58,7 @@ public class CookieStore extends BasicCookieStore {
 
         super.clear();
 
-        super.addCookies(cookies.toArray(new Cookie[cookies.size()]));
+        super.addCookies(cookies.toArray(new Cookie[0]));
     }
 
     public void removeStringAsCookie(Exchange exchange, String key, String domain){

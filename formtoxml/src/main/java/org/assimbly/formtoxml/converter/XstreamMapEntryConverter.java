@@ -12,12 +12,11 @@ import java.util.Map;
 
 public class XstreamMapEntryConverter implements Converter {
 
-    @SuppressWarnings("rawtypes")
     public boolean canConvert(Class clazz) {
         return AbstractMap.class.isAssignableFrom(clazz);
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({"unchecked"})
     public void marshal(Object value, HierarchicalStreamWriter writer, MarshallingContext context) {
 
         AbstractMap<String, String> map = (AbstractMap<String, String>) value;
@@ -25,7 +24,7 @@ public class XstreamMapEntryConverter implements Converter {
 
             String key = entry.getKey().replaceAll("[^A-z0-9_.\\-]|^(xml|[\\-0-9\\.])+", "");
 
-            if(key.length()==0) {
+            if(key.isEmpty()) {
                 continue;
             }
 
@@ -35,7 +34,6 @@ public class XstreamMapEntryConverter implements Converter {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
 
         Map<String, String> map = new HashMap<>();

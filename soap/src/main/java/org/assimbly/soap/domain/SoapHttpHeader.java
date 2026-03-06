@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class SoapHttpHeader {
 
     @JsonIgnore
-    private String _id;
+    private String id;
 
     private String name;
     private String value;
@@ -34,11 +34,12 @@ public class SoapHttpHeader {
         this.value = value;
     }
 
-    public String get_id() {
-        return _id;
+    public String getId() {
+        return id;
     }
 
-    public void set_id(String _id) {
-        this._id = _id;
+    public void setId(String id) {
+        this.id = id;
     }
+
 }

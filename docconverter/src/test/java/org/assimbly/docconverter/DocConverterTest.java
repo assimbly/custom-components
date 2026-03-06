@@ -10,7 +10,7 @@ import org.xml.sax.SAXException;
 import java.io.IOException;
 
 
-public class DocConverterTest extends CamelTestSupport {
+class DocConverterTest extends CamelTestSupport {
 
     private final String xml = """
             <persons>
@@ -37,7 +37,7 @@ public class DocConverterTest extends CamelTestSupport {
 
 
     @Test
-    public void testCsvWithHeaders() throws IOException, SAXException {
+    void testCsvWithHeaders() throws SAXException {
         template.sendBody("direct:in", xml);
 
         Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();

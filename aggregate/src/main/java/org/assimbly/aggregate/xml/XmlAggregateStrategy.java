@@ -42,7 +42,8 @@ public class XmlAggregateStrategy implements AggregationStrategy {
     }
 
     private String buildAggregateBody(String newXml, String splitXml) {
-        String result = "";
+
+        String result;
 
         if(containsXmlDeclaration(splitXml)) {
             // removes xml declaration from splitXml

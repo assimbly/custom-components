@@ -14,7 +14,7 @@ public class OAuth2TokenEndpoint extends ProcessorEndpoint {
 
     @UriParam
     private OAuth2TokenConfiguration configuration;
-    private OAuth2TokenComponent component;
+    private final OAuth2TokenComponent component;
 
     public OAuth2TokenEndpoint(String uri, OAuth2TokenComponent component, OAuth2TokenConfiguration configuration) {
         super(uri, component);

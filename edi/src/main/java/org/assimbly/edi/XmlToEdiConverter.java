@@ -1,7 +1,6 @@
 package org.assimbly.edi;
 
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.parsers.SAXParser;
@@ -48,13 +47,13 @@ public class XmlToEdiConverter extends DefaultHandler {
     }
 
     @Override
-    public void startDocument () throws SAXException {
+    public void startDocument () {
         parsedSegments = new ArrayList<>();
     }
 
     @Override
     public void startElement(String uri, String localName,
-                             String qName, Attributes attributes) throws SAXException {
+                             String qName, Attributes attributes) {
         if (localName.equals(ELEMENT_TYPE_ROOT)) {
             return;
         }
@@ -98,7 +97,7 @@ public class XmlToEdiConverter extends DefaultHandler {
     }
 
     @Override
-    public void characters(char[] ch, int start, int length) throws SAXException {
+    public void characters(char[] ch, int start, int length) {
         if (Objects.equals(currentElement, ELEMENT_TYPE_FIELD) && currentField.data == null) {
             currentField.data = Arrays.copyOfRange(ch, start, start + length);
             return;

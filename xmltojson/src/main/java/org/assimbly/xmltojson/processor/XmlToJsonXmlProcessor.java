@@ -32,15 +32,16 @@ import java.util.ArrayList;
               the XML has types.
 */
 public class XmlToJsonXmlProcessor {
-    private final CustomXmlJsonDataFormat xmlJsonDataFormat;
+
     private final Document xmlDoc;
     private final Exchange exchange;
-    private final boolean hasTypes, removeNamespaces;
-    private final String xmlAttrPrefix, xmlTypeNodePrefix;
+    private final boolean hasTypes;
+    private final boolean removeNamespaces;
+    private final String xmlAttrPrefix;
+    private final String xmlTypeNodePrefix;
 
     public XmlToJsonXmlProcessor(Exchange exchange, CustomXmlJsonDataFormat xmlJsonDataFormat,
         Object xmlData) throws Exception {
-        this.xmlJsonDataFormat = xmlJsonDataFormat;
         this.exchange = exchange;
         this.hasTypes = xmlJsonDataFormat.getHasTypes();
         this.removeNamespaces = xmlJsonDataFormat.getRemoveNamespaces();
@@ -102,7 +103,7 @@ public class XmlToJsonXmlProcessor {
                 namespaceAttrsInNode.add(attributeName);
         }
 
-        namespaceAttrsInNode.forEach(namespaceAttr -> nodeAttributes.removeNamedItem(namespaceAttr));
+        namespaceAttrsInNode.forEach(nodeAttributes::removeNamedItem);
 
         if (nodeAttributes.getLength() == 0)
             return;

@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -31,8 +33,9 @@ public enum WSDLCache {
         return new File(BASE_PATH + ASSIMBLY_PATH + CACHE_SOAP_PATH + uuid + ".wsdl");
     }
 
-    public void remove(String url) {
+    public void remove(String url) throws IOException {
         File file = getPath(url);
+
         boolean isDeleted = file.delete();
 
         if (isDeleted)

@@ -95,14 +95,7 @@ public class LineReader {
         return mappedFields;
     }
 
-    private static class MappedField {
+    private record MappedField(String fieldName, int nrCharacters) {
 
-        private final String fieldName;
-        private final int nrCharacters;
-
-        private MappedField(String fieldName, int nrCharacters) {
-            this.fieldName = fieldName;
-            this.nrCharacters = nrCharacters;
-        }
     }
 }

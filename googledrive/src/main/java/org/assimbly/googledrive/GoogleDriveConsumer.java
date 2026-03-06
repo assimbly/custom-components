@@ -36,7 +36,7 @@ public class GoogleDriveConsumer extends ScheduledPollConsumer implements Consum
     private Drive service;
 
     private int connectionAttempts = 1;
-    private final int connectionAttemptsMax = 60;
+    private static final int connectionAttemptsMax = 60;
 
     GoogleDriveConsumer(GoogleDriveEndpoint endpoint, Processor processor) {
         super(endpoint, processor);
@@ -189,7 +189,7 @@ public class GoogleDriveConsumer extends ScheduledPollConsumer implements Consum
                         " and name = '"+ configuration.getMoveTo() + "'")
                 .execute();
 
-        if (result.getFiles().size() > 0)
+        if (!result.getFiles().isEmpty())
             return result.getFiles().getFirst().getId();
 
         return null;

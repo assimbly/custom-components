@@ -29,20 +29,17 @@ import static org.assimbly.util.helper.XmlHelper.hasInvalidXml;
               elements.
 */
 public class JsonToXmlJsonProcessor {
-    private final Exchange exchange;
-    private final CustomXmlJsonDataFormat xmlJsonDataFormat;
     private JSONObject mainJsonObject;
     private JSONArray mainJsonArray;
-    private final boolean checkJsonKeys, changeArrayElements;
+    private final boolean checkJsonKeys;
+    private final boolean changeArrayElements;
     private final String arrayElementName;
 
     public JsonToXmlJsonProcessor(Exchange exchange, CustomXmlJsonDataFormat xmlJsonDataFormat,
         InputStream dataStream) throws IOException {
-        this.exchange = exchange;
-        this.xmlJsonDataFormat = xmlJsonDataFormat;
-        this.checkJsonKeys = this.xmlJsonDataFormat.getCheckJsonKeys();
-        this.changeArrayElements = this.xmlJsonDataFormat.getChangeArrayElements();
-        this.arrayElementName = this.xmlJsonDataFormat.getArrayElementName(this.exchange);
+        this.checkJsonKeys = xmlJsonDataFormat.getCheckJsonKeys();
+        this.changeArrayElements = xmlJsonDataFormat.getChangeArrayElements();
+        this.arrayElementName = xmlJsonDataFormat.getArrayElementName(exchange);
         parseDataStreamToJson(dataStream);
     }
 

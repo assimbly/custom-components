@@ -9,8 +9,6 @@ import java.util.Map;
 
 public class OverrideEnrichStrategy implements AggregationStrategy {
 
-    final static Logger logger = Logger.getLogger(OverrideEnrichStrategy.class);
-
     @Override
     public Exchange aggregate(Exchange original, Exchange resource) {
         Exchange result = null;

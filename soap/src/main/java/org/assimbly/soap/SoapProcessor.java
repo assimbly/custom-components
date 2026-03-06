@@ -1,5 +1,9 @@
 package org.assimbly.soap;
 
+import org.assimbly.soap.util.helpers.*;
+import jakarta.xml.soap.*;
+import javax.wsdl.*;
+
 import com.ibm.wsdl.extensions.soap.SOAPBodyImpl;
 import com.ibm.wsdl.extensions.soap12.SOAP12BodyImpl;
 import org.apache.camel.CamelContext;
@@ -17,15 +21,12 @@ import org.assimbly.util.helper.ExchangeHelper;
 import org.assimbly.util.helper.XmlHelper;
 import org.assimbly.soap.domain.SoapAttribute;
 import org.assimbly.soap.domain.SoapHeader;
-import org.assimbly.soap.util.helpers.*;
 
-import javax.wsdl.*;
 import javax.wsdl.extensions.schema.Schema;
 import javax.wsdl.extensions.schema.SchemaImport;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import jakarta.xml.soap.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -148,7 +149,7 @@ public class SoapProcessor implements Processor {
         exchange.getIn().setBody(responseBytes);
     }
 
-    private Map<String, String> mimeHeaders(Binding binding, SoapConfiguration config) throws IOException {
+    private Map<String, String> mimeHeaders(Binding binding, SoapConfiguration config) {
         Map<String, String> headers = new HashMap<>();
 
         BindingOperation operation = BindingHelper.operation(binding, config.getAction());

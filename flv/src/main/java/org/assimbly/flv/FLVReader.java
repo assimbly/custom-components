@@ -1,10 +1,11 @@
 package org.assimbly.flv;
 
+
+import java.util.*;
+
 import org.milyn.cdr.SmooksResourceConfiguration;
 import org.xml.sax.InputSource;
 import org.assimbly.smooksnoxml.BaseXmlReader;
-
-import java.util.*;
 
 public class FLVReader extends BaseXmlReader {
 

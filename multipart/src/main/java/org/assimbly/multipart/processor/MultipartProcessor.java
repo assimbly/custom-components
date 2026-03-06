@@ -12,7 +12,7 @@ import java.io.ByteArrayOutputStream;
 
 public class MultipartProcessor implements Processor {
 
-    final static Logger logger = Logger.getLogger(MultipartProcessor.class);
+    private static final Logger logger = Logger.getLogger(MultipartProcessor.class);
 
     @Override
     public void process(Exchange exchange) throws Exception {
