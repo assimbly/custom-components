@@ -16,7 +16,9 @@ public class EncoderConfiguration {
     @Metadata(required = true)
     private String targetCharset;
 
-    public EncoderConfiguration() { }
+    public EncoderConfiguration() {
+        //used for serialization
+    }
 
     /**
      * Charset of the origin file.

@@ -22,7 +22,7 @@ public class XstreamMapEntryConverter implements Converter {
         AbstractMap<String, String> map = (AbstractMap<String, String>) value;
         for (Map.Entry<String, String> entry : map.entrySet()) {
 
-            String key = entry.getKey().replaceAll("[^A-z0-9_.\\-]|^(xml|[\\-0-9\\.])+", "");
+            String key = entry.getKey().replaceAll("[^A-Za-z0-9_.\\-]|^(xml|[-0-9.])++" , "");
 
             if(key.isEmpty()) {
                 continue;

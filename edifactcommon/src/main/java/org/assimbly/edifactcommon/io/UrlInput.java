@@ -8,10 +8,16 @@ public class UrlInput extends StreamInput
 	String url;
 	UrlInput(String url) throws Exception
 	{
-		super(new java.net.URL(url).openStream());
+		java.net.URI uri = java.net.URI.create(url);
+		java.net.URL urlObject = uri.toURL();
+
+		super(urlObject.openStream());
 		this.url = url;
 	}
-	
+
+	@Override
 	public String getFilename() {return url;}
+
+	@Override
 	public void close() throws Exception {getStream().close();}
 }

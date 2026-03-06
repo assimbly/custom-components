@@ -32,14 +32,13 @@ import org.codelibs.jcifs.smb.impl.SmbFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.function.Supplier;
 
 public class SmbConsumer extends GenericFileConsumer<SmbFile> {
     private static final Logger LOGGER = LoggerFactory.getLogger(SmbConsumer.class);
 
-    private String endpointPath;
+    private final String endpointPath;
     private String currentRelativePath = "";
 
     public SmbConsumer(final GenericFileEndpoint<SmbFile> endpoint, final Processor processor, final GenericFileOperations<SmbFile> operations, final GenericFileProcessStrategy<SmbFile> strategy) {
@@ -51,8 +50,8 @@ public class SmbConsumer extends GenericFileConsumer<SmbFile> {
     protected boolean pollDirectory(Exchange exchange, String fileName, final List<GenericFile<SmbFile>> fileList, int depth) {
 
         if (LOGGER.isTraceEnabled()) {
-            LOGGER.trace("pollDirectory() running. My delay is [" + this.getDelay() + "] and my strategy is [" + this.getPollStrategy().getClass().toString() + "]");
-            LOGGER.trace("pollDirectory() fileName[" + fileName + "]");
+            LOGGER.trace("pollDirectory() running. My delay is [{}] and my strategy is [{}]", this.getDelay(), this.getPollStrategy().getClass());
+            LOGGER.trace("pollDirectory() fileName[{}]", fileName);
         }
 
 
@@ -63,11 +62,7 @@ public class SmbConsumer extends GenericFileConsumer<SmbFile> {
                 return false;
             }
             try {
-                if (smbFile.isDirectory()) {
-                    currentFileIsDir = true;
-                } else {
-                    currentFileIsDir = false;
-                }
+                currentFileIsDir = smbFile.isDirectory();
             } catch (SmbException e1) {
                 throw RuntimeCamelException.wrapRuntimeCamelException(e1);
             }
@@ -80,27 +75,23 @@ public class SmbConsumer extends GenericFileConsumer<SmbFile> {
                     currentRelativePath = "";
                 }
             } else {
-                try {
-                    GenericFile<SmbFile> genericFile = asGenericFile(fileName, smbFile);
-                    SmbFile[] singleFileArray = new SmbFile[] { smbFile };
+                GenericFile<SmbFile> genericFile = asGenericFile(fileName, smbFile);
+                SmbFile[] singleFileArray = new SmbFile[] { smbFile };
 
-                    boolean valid = isMatched(
-                            exchange,
-                            () -> genericFile,
-                            smbFile.getName(),
-                            smbFile.getCanonicalPath(),
-                            () -> currentRelativePath + smbFile.getName(),
-                            false,
-                            singleFileArray
-                    );
+                boolean valid = isMatched(
+                        exchange,
+                        () -> genericFile,
+                        smbFile.getName(),
+                        smbFile.getCanonicalPath(),
+                        () -> currentRelativePath + smbFile.getName(),
+                        false,
+                        singleFileArray
+                );
 
-                    //Exchange,Supplier<GenericFile<SmbFile>>,String,String,Supplier<String>,boolean,SmbFile[]
+                //Exchange,Supplier<GenericFile<SmbFile>>,String,String,Supplier<String>,boolean,SmbFile[]
 
-                    if (valid) {
-                        fileList.add(asGenericFile(fileName, smbFile));
-                    }
-                } catch (IOException e) {
-                    throw RuntimeCamelException.wrapRuntimeCamelException(e);
+                if (valid) {
+                    fileList.add(asGenericFile(fileName, smbFile));
                 }
             }
         }
@@ -123,13 +114,13 @@ public class SmbConsumer extends GenericFileConsumer<SmbFile> {
     }
 
     // TODO: this needs some checking!
-    private GenericFile<SmbFile> asGenericFile(final String path, final SmbFile file) throws IOException {
+    private GenericFile<SmbFile> asGenericFile(final String path, final SmbFile file) {
         SmbGenericFile<SmbFile> answer = new SmbGenericFile<>();
         answer.setAbsoluteFilePath(path + answer.getFileSeparator() + file.getName());
         answer.setAbsolute(true);
         answer.setEndpointPath(endpointPath);
         answer.setFileNameOnly(file.getName());
-        answer.setFileLength(file.getContentLength());
+        answer.setFileLength(file.getContentLengthLong());
         answer.setFile(file);
         answer.setLastModified(file.getLastModified());
         answer.setFileName(currentRelativePath + file.getName());
@@ -137,8 +128,7 @@ public class SmbConsumer extends GenericFileConsumer<SmbFile> {
 
         if (LOGGER.isTraceEnabled()) {
             LOGGER.trace("asGenericFile():");
-            LOGGER.trace("absoluteFilePath[" + answer.getAbsoluteFilePath() + "] endpointpath[" + answer.getEndpointPath() + "] filenameonly[" + answer.getFileNameOnly()
-                    + "] filename[" + answer.getFileName() + "] relativepath[" + answer.getRelativeFilePath() + "]");
+            LOGGER.trace("absoluteFilePath[{}] endpointpath[{}] filenameonly[{}] filename[{}] relativepath[{}]", answer.getAbsoluteFilePath(), answer.getEndpointPath(), answer.getFileNameOnly(), answer.getFileName(), answer.getRelativeFilePath());
         }
         return answer;
     }

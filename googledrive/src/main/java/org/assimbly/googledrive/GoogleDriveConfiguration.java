@@ -8,6 +8,7 @@ import org.assimbly.tenantvariables.mongo.MongoDao;
 public class GoogleDriveConfiguration {
 
     public GoogleDriveConfiguration() {
+        //Used for serialization or reflection
     }
 
     @UriPath

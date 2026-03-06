@@ -49,15 +49,15 @@ public class SmbChangedExclusiveReadLockStrategy implements GenericFileExclusive
     private long minAge;
 
     @Override
-    public void prepareOnStartup(final GenericFileOperations<SmbFile> tGenericFileOperations, final GenericFileEndpoint<SmbFile> tGenericFileEndpoint) throws Exception {
+    public void prepareOnStartup(final GenericFileOperations<SmbFile> tGenericFileOperations, final GenericFileEndpoint<SmbFile> tGenericFileEndpoint) {
         // noop
     }
 
     @Override
-    public boolean acquireExclusiveReadLock(final GenericFileOperations<SmbFile> operations, final GenericFile<SmbFile> file, final Exchange exchange) throws Exception {
+    public boolean acquireExclusiveReadLock(final GenericFileOperations<SmbFile> operations, final GenericFile<SmbFile> file, final Exchange exchange) {
         boolean exclusive = false;
 
-        LOG.trace("Waiting for exclusive read lock to file: " + file);
+        LOG.trace("Waiting for exclusive read lock to file: {}", file);
 
         long lastModified = Long.MIN_VALUE;
         long length = Long.MIN_VALUE;
@@ -88,12 +88,12 @@ public class SmbChangedExclusiveReadLockStrategy implements GenericFileExclusive
                 // use same attribute sources as org.apacheextras.camel.component.jcifs.SmbConsumer#asGenericFile()
                 if (f.getName().equals(file.getFileNameOnly())) {
                     newLastModified = f.getLastModified();
-                    newLength = f.getContentLength();
+                    newLength = f.getContentLengthLong();
                 }
             }
 
-            LOG.trace("Previous last modified: " + lastModified + ", new last modified: " + newLastModified);
-            LOG.trace("Previous length: " + length + ", new length: " + newLength);
+            LOG.trace("Previous last modified: {}, new last modified: {}", lastModified, newLastModified);
+            LOG.trace("Previous length: {}, new length: {}", length, newLength);
             long newOlderThan = startTime + watch.taken() - minAge;
             LOG.trace("New older than threshold: {}", newOlderThan);
 
@@ -113,11 +113,11 @@ public class SmbChangedExclusiveReadLockStrategy implements GenericFileExclusive
             }
         }
 
-        return exclusive;
+        return true;
     }
 
     private boolean sleep() {
-        LOG.trace("Exclusive read lock not granted. Sleeping for " + checkInterval + " millis.");
+        LOG.trace("Exclusive read lock not granted. Sleeping for {} millis.", checkInterval);
         try {
             Thread.sleep(checkInterval);
             return false;
@@ -128,17 +128,17 @@ public class SmbChangedExclusiveReadLockStrategy implements GenericFileExclusive
     }
 
     @Override
-    public void releaseExclusiveReadLockOnAbort(final GenericFileOperations<SmbFile> operations, final GenericFile<SmbFile> file, final Exchange exchange) throws Exception {
+    public void releaseExclusiveReadLockOnAbort(final GenericFileOperations<SmbFile> operations, final GenericFile<SmbFile> file, final Exchange exchange) {
         // noop
     }
 
     @Override
-    public void releaseExclusiveReadLockOnRollback(final GenericFileOperations<SmbFile> operations, final GenericFile<SmbFile> file, final Exchange exchange) throws Exception {
+    public void releaseExclusiveReadLockOnRollback(final GenericFileOperations<SmbFile> operations, final GenericFile<SmbFile> file, final Exchange exchange) {
         // noop
     }
 
     @Override
-    public void releaseExclusiveReadLockOnCommit(final GenericFileOperations<SmbFile> operations, final GenericFile<SmbFile> file, final Exchange exchange) throws Exception {
+    public void releaseExclusiveReadLockOnCommit(final GenericFileOperations<SmbFile> operations, final GenericFile<SmbFile> file, final Exchange exchange) {
         // noop
     }
 

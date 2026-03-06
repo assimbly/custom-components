@@ -43,7 +43,9 @@ public class JsonToXmlConfiguration implements Cloneable{
     private int level = 0;
     private HashMap<String, String> xmlnsMap = new HashMap<>();
 
-    public JsonToXmlConfiguration() {}
+    public JsonToXmlConfiguration() {
+        // Used for serialization or reflection
+    }
 
     public String getElementName() {
         return elementName;

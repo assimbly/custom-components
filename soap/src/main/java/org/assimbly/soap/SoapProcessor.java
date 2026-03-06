@@ -28,7 +28,6 @@ import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -372,7 +371,7 @@ public class SoapProcessor implements Processor {
         if (name != null && (!XmlHelper.getChildrenByTagName(context, name.getNodeValue()).isEmpty() || context.getNodeName().equals(name.getNodeValue()))) {
             List<Element> nodesToReplace = new ArrayList<>();
 
-            if(XmlHelper.getChildrenByTagName(context, name.getNodeValue()).size() > 0)
+            if(!XmlHelper.getChildrenByTagName(context, name.getNodeValue()).isEmpty())
                 nodesToReplace.addAll(XmlHelper.getChildrenByTagName(context, name.getNodeValue()));
 
             if(context.getNodeName().equals(name.getNodeValue()))
@@ -450,11 +449,7 @@ public class SoapProcessor implements Processor {
 
         Schema referredSchema;
 
-        if(NodeHelper.hasInlineNamespace(node))
-            referredSchema = getReferredSchema(definition, node, attr, originSchema);
-
-        else
-            referredSchema = getReferredSchema(definition, node, attr, originSchema);
+        referredSchema = getReferredSchema(definition, node, attr, originSchema);
 
         if (referredSchema != null) {
             Node match;
@@ -472,7 +467,7 @@ public class SoapProcessor implements Processor {
 
                 String namespace = referredSchema.getElement().getAttribute("targetNamespace");
 
-                if (matches.size() > 0)
+                if (!matches.isEmpty())
                     matches.forEach(m -> addRecursiveNamespaces(match, document, m, namespace, referredSchema));
                 else
                     addRecursiveNamespaces(match, document, context, namespace, referredSchema);

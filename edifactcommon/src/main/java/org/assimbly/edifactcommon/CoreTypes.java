@@ -66,7 +66,7 @@ public class CoreTypes
 				mantissa = "0" + mantissa;
 			if (mantissa.endsWith("."))
 				mantissa = mantissa + "0";
-			if (mantissa.length() == 0)
+			if (mantissa.isEmpty())
 				mantissa = "0";
 			if (exponent.endsWith("+") || exponent.endsWith("-"))
 				exponent = exponent + "0";
@@ -74,7 +74,7 @@ public class CoreTypes
 
 		public String toString()
 		{
-			if (exponent.length() > 0)
+			if (!exponent.isEmpty())
 				return sign + mantissa + "E" + exponent;
 			else
 				return sign + mantissa;
@@ -895,7 +895,7 @@ public class CoreTypes
 			scale = 14 - nStartDigit;
 			if( scale < 0 ) scale = 0;
 		}
-		return new BigDecimal( d ).setScale(scale, RoundingMode.HALF_UP);
+		return BigDecimal.valueOf( d ).setScale(scale, RoundingMode.HALF_UP);
 	}
 	
 	public static BigDecimal castToBigDecimal(Double d)
@@ -1049,7 +1049,7 @@ public class CoreTypes
 		// 1.234E567 => 1.234E+567
 		int e = s.indexOf("E");
 		if (e > 0 && s.charAt(e+1) != '-' )
-		s = s.substring(0, e) + "E+" + s.substring(e+1);
+			s = s.substring(0, e) + "E+" + s.substring(e+1);
 		return s;
 	}
 	
@@ -1394,7 +1394,7 @@ public class CoreTypes
 		if (v instanceof Double double1)
 			return castToString(double1.doubleValue());
 		if (v instanceof Float float1)
-			return castToString((double) (float1.floatValue()));
+			return castToString((float1.floatValue()));
 		if (v instanceof javax.xml.namespace.QName name)
 			return castToString(name);
 		if (v instanceof Boolean boolean1)

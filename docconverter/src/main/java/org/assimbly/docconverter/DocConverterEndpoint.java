@@ -9,6 +9,8 @@ import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriPath;
 import org.apache.camel.support.ProcessorEndpoint;
 
+import java.util.Objects;
+
 @UriEndpoint(
         firstVersion = "4.12.1",
         scheme = "docconverter",
@@ -56,6 +58,19 @@ public class DocConverterEndpoint extends ProcessorEndpoint {
      */
     public void setUriPath(String uri) {
         this.uri = uri;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DocConverterEndpoint that)) return false;
+        if (!super.equals(o)) return false;
+        return Objects.equals(component, that.component);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), component);
     }
 
 }

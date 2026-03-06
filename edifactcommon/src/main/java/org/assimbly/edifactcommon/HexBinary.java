@@ -38,7 +38,7 @@ public class HexBinary
 	{
 		if( s == null ) return null;
 		String newvalue = s.trim();
-		if( newvalue.length() == 0 ) return new byte[0];
+		if( newvalue.isEmpty() ) return new byte[0];
 
 		char[] cSrc = newvalue.toCharArray();
 		byte[] value = new byte[ cSrc.length >> 1 ];

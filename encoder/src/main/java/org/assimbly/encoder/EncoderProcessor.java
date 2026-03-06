@@ -5,7 +5,7 @@ import org.apache.camel.Processor;
 
 public class EncoderProcessor implements Processor {
 
-    private EncoderEndpoint endpoint;
+    private final EncoderEndpoint endpoint;
 
     public EncoderProcessor(EncoderEndpoint endpoint) {
         this.endpoint = endpoint;

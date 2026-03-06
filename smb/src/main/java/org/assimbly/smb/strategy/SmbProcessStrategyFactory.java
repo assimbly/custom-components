@@ -23,7 +23,6 @@ package org.assimbly.smb.strategy;
 
 import java.util.Map;
 
-import org.apache.camel.CamelContext;
 import org.apache.camel.Expression;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.component.file.GenericFileExclusiveReadLockStrategy;
@@ -44,7 +43,7 @@ public final class SmbProcessStrategyFactory {
     private SmbProcessStrategyFactory() {
     }
 
-    public static GenericFileProcessStrategy<SmbFile> createGenericFileProcessStrategy(final CamelContext context, final Map<String, Object> params) {
+    public static GenericFileProcessStrategy<SmbFile> createGenericFileProcessStrategy(final Map<String, Object> params) {
 
         // We assume a value is present only if its value not null for String and 'true' for boolean
         Expression moveExpression = (Expression) params.get("move");
@@ -108,45 +107,50 @@ public final class SmbProcessStrategyFactory {
         // no explicit strategy set then fallback to readLock option
         String readLock = (String) params.get("readLock");
         if (ObjectHelper.isNotEmpty(readLock)) {
-            if ("none".equals(readLock) || "false".equals(readLock)) {
-            } else if ("rename".equals(readLock)) {
-                GenericFileRenameExclusiveReadLockStrategy<SmbFile> readLockStrategy = new GenericFileRenameExclusiveReadLockStrategy<>();
-                Long timeout = (Long) params.get("readLockTimeout");
-                if (timeout != null) {
-                    readLockStrategy.setTimeout(timeout);
+            switch (readLock) {
+                case "none", "false" -> {
                 }
-                Long checkInterval = (Long) params.get("readLockCheckInterval");
-                if (checkInterval != null) {
-                    readLockStrategy.setCheckInterval(checkInterval);
+                case "rename" -> {
+                    GenericFileRenameExclusiveReadLockStrategy<SmbFile> readLockStrategy = new GenericFileRenameExclusiveReadLockStrategy<>();
+                    Long timeout = (Long) params.get("readLockTimeout");
+                    if (timeout != null) {
+                        readLockStrategy.setTimeout(timeout);
+                    }
+                    Long checkInterval = (Long) params.get("readLockCheckInterval");
+                    if (checkInterval != null) {
+                        readLockStrategy.setCheckInterval(checkInterval);
+                    }
+                    LoggingLevel logLevel = (LoggingLevel) params.get("readLockLoggingLevel");
+                    if (null != logLevel) {
+                        readLockStrategy.setReadLockLoggingLevel(logLevel);
+                    }
+                    return readLockStrategy;
                 }
-                LoggingLevel logLevel = (LoggingLevel) params.get("readLockLoggingLevel");
-                if (null != logLevel) {
-                    readLockStrategy.setReadLockLoggingLevel(logLevel);
+                case "changed" -> {
+                    SmbChangedExclusiveReadLockStrategy readLockStrategy = new SmbChangedExclusiveReadLockStrategy();
+                    Long timeout = (Long) params.get("readLockTimeout");
+                    if (timeout != null) {
+                        readLockStrategy.setTimeout(timeout);
+                    }
+                    Long checkInterval = (Long) params.get("readLockCheckInterval");
+                    if (checkInterval != null) {
+                        readLockStrategy.setCheckInterval(checkInterval);
+                    }
+                    Long minLength = (Long) params.get("readLockMinLength");
+                    if (minLength != null) {
+                        readLockStrategy.setMinLength(minLength);
+                    }
+                    Long minAge = (Long) params.get("readLockMinAge");
+                    if (null != minAge) {
+                        readLockStrategy.setMinAge(minAge);
+                    }
+                    LoggingLevel logLevel = (LoggingLevel) params.get("readLockLoggingLevel");
+                    if (null != logLevel) {
+                        readLockStrategy.setReadLockLoggingLevel(logLevel);
+                    }
+                    return readLockStrategy;
                 }
-                return readLockStrategy;
-            } else if ("changed".equals(readLock)) {
-                SmbChangedExclusiveReadLockStrategy readLockStrategy = new SmbChangedExclusiveReadLockStrategy();
-                Long timeout = (Long) params.get("readLockTimeout");
-                if (timeout != null) {
-                    readLockStrategy.setTimeout(timeout);
-                }
-                Long checkInterval = (Long) params.get("readLockCheckInterval");
-                if (checkInterval != null) {
-                    readLockStrategy.setCheckInterval(checkInterval);
-                }
-                Long minLength = (Long) params.get("readLockMinLength");
-                if (minLength != null) {
-                    readLockStrategy.setMinLength(minLength);
-                }
-                Long minAge = (Long) params.get("readLockMinAge");
-                if (null != minAge) {
-                    readLockStrategy.setMinAge(minAge);
-                }
-                LoggingLevel logLevel = (LoggingLevel) params.get("readLockLoggingLevel");
-                if (null != logLevel) {
-                    readLockStrategy.setReadLockLoggingLevel(logLevel);
-                }
-                return readLockStrategy;
+                default -> throw new IllegalStateException("Unexpected value: " + readLock);
             }
         }
 

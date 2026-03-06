@@ -11,18 +11,9 @@ import static javax.xml.XMLConstants.NULL_NS_URI;
  * Proxy to the Sax content handler that assumes some defaults and replaces
  * annoying checked exceptions with unchecked ones
  */
-public class XmlDocumentHandler {
+public record XmlDocumentHandler(ContentHandler contentHandler) {
 
-    private final ContentHandler contentHandler;
     private static final AttributesImpl EMPTY_ATTR = new AttributesImpl();
-
-    public XmlDocumentHandler(ContentHandler contentHandler) {
-        this.contentHandler = contentHandler;
-    }
-
-    public ContentHandler getContentHandler() {
-        return contentHandler;
-    }
 
     public void startElement(String name, Attributes attributes) {
         try {

@@ -14,6 +14,7 @@ public class WriterOutput extends Output
 		super(Output.IO_WRITER);
 		this.writer = writer;
 	}
-	
+
+	@Override
 	public Writer getWriter() {return writer;}
 }

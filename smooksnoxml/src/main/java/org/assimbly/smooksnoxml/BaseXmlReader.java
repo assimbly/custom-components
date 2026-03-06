@@ -28,7 +28,7 @@ public abstract class BaseXmlReader implements SmooksXMLReader {
     }
 
     public ContentHandler getContentHandler() {
-        return documentHandler.getContentHandler();
+        return documentHandler.contentHandler();
     }
 
     /****************************************************************************
@@ -40,18 +40,18 @@ public abstract class BaseXmlReader implements SmooksXMLReader {
     public void setExecutionContext(ExecutionContext executionContext) {
     }
 
-    public boolean getFeature(String s) throws SAXNotRecognizedException, SAXNotSupportedException {
+    public boolean getFeature(String s) {
         return false;
     }
 
-    public void setFeature(String s, boolean b) throws SAXNotRecognizedException, SAXNotSupportedException {
+    public void setFeature(String s, boolean b) {
     }
 
-    public Object getProperty(String s) throws SAXNotRecognizedException, SAXNotSupportedException {
+    public Object getProperty(String s) {
         return null;
     }
 
-    public void setProperty(String s, Object o) throws SAXNotRecognizedException, SAXNotSupportedException {
+    public void setProperty(String s, Object o) {
     }
 
     public void setEntityResolver(EntityResolver entityResolver) {

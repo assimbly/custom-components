@@ -1,14 +1,24 @@
 package org.assimbly.soap.util.helpers;
 
+import java.io.*;
+import java.net.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
 import org.apache.camel.Exchange;
 import org.apache.commons.io.FileUtils;
-import org.apache.hc.client5.http.classic.HttpClient;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
-import org.apache.hc.core5.http.ClassicHttpResponse;
 
 import org.apache.hc.core5.util.Timeout;
 import org.slf4j.Logger;
@@ -24,19 +34,7 @@ import jakarta.xml.soap.SOAPConnection;
 import jakarta.xml.soap.SOAPConnectionFactory;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
-import java.io.*;
-import java.net.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.concurrent.TimeUnit;
+
 
 public final class WSDLHelper {
 
@@ -82,9 +80,7 @@ public final class WSDLHelper {
 
         } catch(Exception _) {
             WSDLCache.INSTANCE.remove(url);
-
-            WSDLException exp = new WSDLException("500", "Invalid WSDL or WSDL not found at: "+url);
-            throw exp;
+            throw new WSDLException("500", "Invalid WSDL or WSDL not found at: "+url);
         }
 
         return definition;
@@ -101,7 +97,7 @@ public final class WSDLHelper {
 
         // 1. Use Timeout.ofMilliseconds for configuration
         RequestConfig config = RequestConfig.custom()
-                .setConnectTimeout(Timeout.ofMilliseconds(20000))
+                .setConnectionRequestTimeout(Timeout.ofMilliseconds(20000))
                 .setResponseTimeout(Timeout.ofMilliseconds(20000))
                 .build();
 
@@ -131,26 +127,27 @@ public final class WSDLHelper {
 
     public static Map<String, Object> execute(String destination, SOAPMessage request, Exchange exchange) throws SOAPException, IOException {
         SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
-        SOAPConnection soapConnection = soapConnectionFactory.createConnection();
+        SOAPMessage soapResponse;
+        try (SOAPConnection soapConnection = soapConnectionFactory.createConnection()) {
 
-        /*
-         * Write the request message to a string so we can put in the header.
-         * The header "Generated-Request" will have the generated request which
-         * can be use as a debug.
-         */
+            /*
+             * Write the request message to a string so we can put in the header.
+             * The header "Generated-Request" will have the generated request which
+             * can be use as a debug.
+             */
 
-        ByteArrayOutputStream requestStream = new ByteArrayOutputStream();
-        request.writeTo(requestStream);
-        String requestMessage = new String(requestStream.toByteArray(), StandardCharsets.UTF_8);
+            ByteArrayOutputStream requestStream = new ByteArrayOutputStream();
+            request.writeTo(requestStream);
+            String requestMessage = new String(requestStream.toByteArray(), StandardCharsets.UTF_8);
 
-        URL endpoint = new URL(null, destination, new URLTimeoutHandler());
+            URL endpoint = new URL(null, destination, new URLTimeoutHandler());
 
-        exchange.getIn().setHeader("Generated-Request", requestMessage);
+            exchange.getIn().setHeader("Generated-Request", requestMessage);
 
-        // Call the webservice with the specified URL in the WSDL.
-        SOAPMessage soapResponse = soapConnection.call(request, endpoint);
+            // Call the webservice with the specified URL in the WSDL.
+            soapResponse = soapConnection.call(request, endpoint);
 
-        soapConnection.close();
+        }
 
         // Write the SOAP Response to the out body.
 
@@ -174,9 +171,9 @@ public final class WSDLHelper {
             properties.load(inputStream);
         } catch (Exception e) {
             LOG.error("Error to load properties file", e);
-        } finally {
-            return properties;
         }
+
+        return properties;
     }
 
     public static class URLTimeoutHandler extends URLStreamHandler {

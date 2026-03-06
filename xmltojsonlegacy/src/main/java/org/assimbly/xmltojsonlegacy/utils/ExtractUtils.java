@@ -12,7 +12,6 @@ import org.assimbly.xmltojsonlegacy.service.MetadataAnalyzer;
 import tools.jackson.databind.node.StringNode;
 
 import javax.xml.XMLConstants;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
@@ -52,7 +51,7 @@ public class ExtractUtils {
                 if(childNode.isArray() || (childCount > 0 && (metadata.getClassAttributeValue() !=null && metadata.getClassAttributeValue().isEmpty()))) {
                     if(ElementMetadataUtils.isElementOnNamespace(metadata) && childNode.isArray()) {
                         if(metadata.getObjectNode().has(propertyName)) {
-                            addObjectToExistingFieldOnRootObjectNode(metadata, propertyName, childNode.get(0), JsonNode.class);
+                            addObjectToExistingFieldOnRootObjectNode(metadata, propertyName, childNode.get(0));
                         } else {
                             metadata.getObjectNode().set(propertyName, !metadata.isElementMustBeNull() ? childNode.get(0) : null);
                         }
@@ -122,7 +121,7 @@ public class ExtractUtils {
                         String fieldName = ElementMetadataUtils.getElementName(childMetadata, config.isRemoveNamespacePrefixes());
                         String fieldValue = ElementMetadataUtils.getNodeValue(childMetadata, config.isTrimSpaces());
                         if(metadata.getObjectNode().has(fieldName)) {
-                            addObjectToExistingFieldOnRootObjectNode(metadata, fieldName, fieldValue, String.class);
+                            addObjectToExistingFieldOnRootObjectNode(metadata, fieldName, fieldValue);
                         } else {
                             if(fieldValue.equalsIgnoreCase("")) {
                                 metadata.getObjectNode().set(fieldName, JsonNodeFactory.instance.arrayNode());
@@ -211,7 +210,7 @@ public class ExtractUtils {
         }
 
         if(metadata.getObjectNode().has(name.get())) {
-            addObjectToExistingFieldOnRootObjectNode(metadata, name.get(), objectNode, ObjectNode.class);
+            addObjectToExistingFieldOnRootObjectNode(metadata, name.get(), objectNode);
         } else {
             metadata.getObjectNode().set(name.get(), !metadata.isElementMustBeNull() ? objectNode : null);
         }
@@ -227,7 +226,7 @@ public class ExtractUtils {
             for (Map.Entry<String, AttributeEntry> entry : metadata.getAttributes().entrySet()) {
                 String attrName = entry.getKey();
                 AttributeEntry attribute = entry.getValue();
-                attrInfoObjectNode.put(Constants.JSON_XML_ATTR_PREFIX + attrName, attribute.getValue());
+                attrInfoObjectNode.put(Constants.JSON_XML_ATTR_PREFIX + attrName, attribute.value());
             }
         }
         attrInfoObjectNode.put(Constants.JSON_XML_TEXT_FIELD, value.equalsIgnoreCase(Constants.NULL_VALUE) ? null : value);
@@ -409,15 +408,13 @@ public class ExtractUtils {
 
     // add object to existing field on rootObjectNode
     private static void addObjectToExistingFieldOnRootObjectNode(
-            ElementMetadata metadata, String field, Object value, Class<?> valueType
+            ElementMetadata metadata, String field, Object value
     ) {
-        JsonNode newValue = null;
-        if(valueType == ObjectNode.class || valueType == JsonNode.class) {
-            newValue = (JsonNode) value;
-        } else if (valueType == String.class) {
-            newValue = JsonNodeFactory.instance.textNode((String) value);
-        } else {
-            throw new IllegalArgumentException("Unsupported value type: " + valueType);
+        JsonNode newValue;
+        switch (value) {
+            case JsonNode jsonNode -> newValue = jsonNode;
+            case String string -> newValue = JsonNodeFactory.instance.textNode(string);
+            default -> throw new IllegalArgumentException("Unsupported value type: " + value.getClass());
         }
 
         JsonNode nodeValues = metadata.getObjectNode().get(field);
@@ -509,7 +506,7 @@ public class ExtractUtils {
             AttributeEntry attribute = entry.getValue();
 
             if(!config.isTypeHints() || config.isTypeHints() && !ElementMetadataUtils.isAnSpecialAttribute(attrName)) {
-                metadata.getObjectNode().put(Constants.JSON_XML_ATTR_PREFIX+attrName, attribute.getValue());
+                metadata.getObjectNode().put(Constants.JSON_XML_ATTR_PREFIX+attrName, attribute.value());
             }
         }
     }

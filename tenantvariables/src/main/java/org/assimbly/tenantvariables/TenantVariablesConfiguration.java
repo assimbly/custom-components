@@ -44,7 +44,9 @@ public class TenantVariablesConfiguration implements Cloneable {
     @UriParam
     private String flowName;
 
-    public TenantVariablesConfiguration() { }
+    public TenantVariablesConfiguration() {
+        // used for serialization or reflection
+    }
 
     /**
      * Operation to preform on the given variable.

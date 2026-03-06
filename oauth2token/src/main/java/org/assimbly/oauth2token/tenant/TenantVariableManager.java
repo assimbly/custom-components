@@ -5,18 +5,18 @@ import org.assimbly.tenantvariables.mongo.MongoDao;
 
 public class TenantVariableManager {
 
-    private static final String STATIC_TENANT_VARIABLE_SUFFIX = "_"+ TenantVariable.TenantVarType.StaticTenantVariable.name();
+    private static final String STATIC_TENANT_VARIABLE_SUFFIX = "_"+ TenantVariable.TenantVarType.STATIC_TENANT_VARIABLE.name();
 
     public static String getTenantVariableValue(String tokenName, String tenant, String environment) {
         return MongoDao.getTenantVariableValue(tokenName, tenant, environment);
     }
 
     public static String discoverAndGetTenantVariableValue(String tokenName, String tenant, String environment) {
-        TenantVariable.TenantVarType tenantVarType = TenantVariable.TenantVarType.TenantVariable;
+        TenantVariable.TenantVarType tenantVarType = TenantVariable.TenantVarType.TENANT_VARIABLE;
 
         if(isStaticTenantVariable(tokenName)) {
             tokenName = getStaticTenantVariableName(tokenName);
-            tenantVarType = TenantVariable.TenantVarType.StaticTenantVariable;
+            tenantVarType = TenantVariable.TenantVarType.STATIC_TENANT_VARIABLE;
         }
 
         return MongoDao.getTenantVariableValue(tokenName, tenant, environment, tenantVarType);
@@ -27,11 +27,11 @@ public class TenantVariableManager {
     }
 
     public static void discoverAndSaveTenantVariable(String tokenName, String accessToken, String tenant, String environment) {
-        TenantVariable.TenantVarType tenantVarType = TenantVariable.TenantVarType.TenantVariable;
+        TenantVariable.TenantVarType tenantVarType = TenantVariable.TenantVarType.TENANT_VARIABLE;
 
         if(TenantVariableManager.isStaticTenantVariable(tokenName)) {
             tokenName = getStaticTenantVariableName(tokenName);
-            tenantVarType = TenantVariable.TenantVarType.StaticTenantVariable;
+            tenantVarType = TenantVariable.TenantVarType.STATIC_TENANT_VARIABLE;
         }
 
         MongoDao.saveTenantVariable(tokenName, accessToken, tenant, environment, tenantVarType);

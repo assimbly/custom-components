@@ -36,7 +36,7 @@ public class GoogleDriveConsumer extends ScheduledPollConsumer implements Consum
     private Drive service;
 
     private int connectionAttempts = 1;
-    private static final int connectionAttemptsMax = 60;
+    private static final int CONNECTION_ATTEMPS_MAX = 60;
 
     GoogleDriveConsumer(GoogleDriveEndpoint endpoint, Processor processor) {
         super(endpoint, processor);
@@ -100,12 +100,12 @@ public class GoogleDriveConsumer extends ScheduledPollConsumer implements Consum
             connectionAttempts = 1;
 
         } catch (GoogleJsonResponseException e) {
-            if(connectionAttempts <= connectionAttemptsMax) {
+            if(connectionAttempts <= CONNECTION_ATTEMPS_MAX) {
                 long seconds = this.getDelay() / 1000L;
                 LOG.warn("Could not connect to Google Drive directory. Try again after %s seconds (attempt %s of %s)".formatted(
                         seconds,
                         connectionAttempts,
-                        connectionAttemptsMax
+                        CONNECTION_ATTEMPS_MAX
                 ));
                 connectionAttempts += 1;
                 service = this.endpoint.getClient(true);

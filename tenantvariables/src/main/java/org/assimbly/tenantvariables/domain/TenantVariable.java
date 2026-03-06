@@ -1,5 +1,6 @@
 package org.assimbly.tenantvariables.domain;
 
+import org.assimbly.tenantvariables.domain.EnvironmentValue;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -9,53 +10,53 @@ import java.util.Optional;
 
 public class TenantVariable {
 
-    public static final String ID_FIELD = "_id";
-    public static final String TYPE_FIELD = "_type";
+    public static final String ID_FIELD = "id";
+    public static final String TYPE_FIELD = "type";
     public static final String NAME_FIELD = "name";
-    public static final String STATIC_TENANT_VARIABLE_GROUP_ID_FIELD = "static_tenant_variable_group_id";
+    public static final String STATIC_TENANT_VARIABLE_GROUPID_FIELD = "static_tenant_variable_groupid";
     public static final String CREATED_AT_FIELD = "createdAt";
     public static final String CREATED_BY_FIELD = "createdBy";
     public static final String VALUES_FIELD = "values";
-    public static final String TAG_IDS_FIELD = "tag_ids";
+    public static final String TAGIDS_FIELD = "tagids";
 
     public enum TenantVarType {
-        TenantVariable,
-        StaticTenantVariable
+        TENANT_VARIABLE,
+        STATIC_TENANT_VARIABLE
     }
 
-    private ObjectId _id;
-    private String _type;
+    private ObjectId id;
+    private String type;
     private String name;
-    private ObjectId staticTenantVariableGroupId;
+    private ObjectId statictenantVariableGroupId;
     private long createdAt;
     private String createdBy;
 
-    private List<EnvironmentValue> values;
+    private final List<EnvironmentValue> values;
 
     private List<ObjectId> tagIds;
 
     public TenantVariable(){
-        this._id = new ObjectId();
-        this._type = TenantVarType.TenantVariable.name();
-        this.staticTenantVariableGroupId = new ObjectId();
+        this.id = new ObjectId();
+        this.type = TenantVarType.TENANT_VARIABLE.name();
+        this.statictenantVariableGroupId = new ObjectId();
         this.values = new ArrayList<>();
         this.tagIds = new ArrayList<>();
     }
 
     public TenantVariable(String name){
-        this._id = new ObjectId();
-        this._type = TenantVarType.TenantVariable.name();
+        this.id = new ObjectId();
+        this.type = TenantVarType.TENANT_VARIABLE.name();
         this.name = name;
-        this.staticTenantVariableGroupId = new ObjectId();
+        this.statictenantVariableGroupId = new ObjectId();
         this.values = new ArrayList<>();
         this.tagIds = new ArrayList<>();
     }
 
     public TenantVariable(String name, TenantVarType tenantVarType){
-        this._id = new ObjectId();
-        this._type = tenantVarType.name();
+        this.id = new ObjectId();
+        this.type = tenantVarType.name();
         this.name = name;
-        this.staticTenantVariableGroupId = new ObjectId();
+        this.statictenantVariableGroupId = new ObjectId();
         this.values = new ArrayList<>();
     }
 
@@ -77,12 +78,12 @@ public class TenantVariable {
 
     public static TenantVariable fromDocument(Document document) {
         TenantVariable tenantVariable = new TenantVariable();
-        tenantVariable.set_id(document.getObjectId(ID_FIELD));
+        tenantVariable.setId(document.getObjectId(ID_FIELD));
         if(document.getString(TYPE_FIELD) != null) {
-            tenantVariable.set_type(document.getString(TYPE_FIELD));
+            tenantVariable.setType(document.getString(TYPE_FIELD));
         }
         tenantVariable.setName(document.getString(NAME_FIELD));
-        tenantVariable.setStaticTenantVariableGroupId(document.getObjectId(STATIC_TENANT_VARIABLE_GROUP_ID_FIELD));
+        tenantVariable.setstatictenantVariableGroupId(document.getObjectId(STATIC_TENANT_VARIABLE_GROUPID_FIELD));
 
         Object createdAtField = document.get(CREATED_AT_FIELD);
         if (createdAtField != null) {
@@ -99,7 +100,7 @@ public class TenantVariable {
         List<Document> valuesList = (List<Document>) document.get(VALUES_FIELD);
         for (Document valueDoc : valuesList) {
             EnvironmentValue environmentValue = new EnvironmentValue();
-            environmentValue.set_id(valueDoc.getObjectId(EnvironmentValue.ID_FIELD));
+            environmentValue.setId(valueDoc.getObjectId(EnvironmentValue.ID_FIELD));
             environmentValue.setEnvironment(valueDoc.getString(EnvironmentValue.ENVIRONMENT_FIELD));
             environmentValue.setValue(valueDoc.getString(EnvironmentValue.VALUE_FIELD));
             environmentValue.setEncrypted(valueDoc.getBoolean(EnvironmentValue.ENCRYPTED_FIELD));
@@ -112,24 +113,24 @@ public class TenantVariable {
             tenantVariable.put(environmentValue);
         }
 
-        tenantVariable.setTagIds(document.getList(TAG_IDS_FIELD, ObjectId.class));
+        tenantVariable.setTagIds(document.getList(TAGIDS_FIELD, ObjectId.class));
 
         return tenantVariable;
     }
 
     public Document toDocument() {
         Document document = new Document();
-        document.append(ID_FIELD, this.get_id());
-        document.append(TYPE_FIELD, this.get_type());
+        document.append(ID_FIELD, this.getId());
+        document.append(TYPE_FIELD, this.getType());
         document.append(NAME_FIELD, this.getName());
-        document.append(STATIC_TENANT_VARIABLE_GROUP_ID_FIELD, this.getStaticTenantVariableGroupId());
+        document.append(STATIC_TENANT_VARIABLE_GROUPID_FIELD, this.getstatictenantVariableGroupId());
         document.append(CREATED_AT_FIELD, this.getCreatedAt());
         document.append(CREATED_BY_FIELD, this.getCreatedBy());
 
         List<Document> valuesList = new ArrayList<>();
         for (EnvironmentValue environmentValue : this.getValues()) {
             Document valueDoc = new Document();
-            valueDoc.append(EnvironmentValue.ID_FIELD, environmentValue.get_id());
+            valueDoc.append(EnvironmentValue.ID_FIELD, environmentValue.getId());
             valueDoc.append(EnvironmentValue.ENVIRONMENT_FIELD, environmentValue.getEnvironment());
             valueDoc.append(EnvironmentValue.VALUE_FIELD, environmentValue.getValue());
             valueDoc.append(EnvironmentValue.ENCRYPTED_FIELD, environmentValue.isEncrypted());
@@ -140,25 +141,25 @@ public class TenantVariable {
         }
         document.append(VALUES_FIELD, valuesList);
 
-        document.append(TAG_IDS_FIELD, this.getTagIds());
+        document.append(TAGIDS_FIELD, this.getTagIds());
 
         return document;
     }
 
-    public ObjectId get_id() {
-        return _id;
+    public ObjectId getId() {
+        return id;
     }
 
-    public void set_id(ObjectId _id) {
-        this._id = _id;
+    public void setId(ObjectId id) {
+        this.id = id;
     }
 
-    public String get_type() {
-        return _type;
+    public String getType() {
+        return type;
     }
 
-    public void set_type(String _type) {
-        this._type = _type;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getName() {
@@ -169,12 +170,12 @@ public class TenantVariable {
         this.name = name;
     }
 
-    public ObjectId getStaticTenantVariableGroupId() {
-        return staticTenantVariableGroupId;
+    public ObjectId getstatictenantVariableGroupId() {
+        return statictenantVariableGroupId;
     }
 
-    public void setStaticTenantVariableGroupId(ObjectId staticTenantVariableGroupId) {
-        this.staticTenantVariableGroupId = staticTenantVariableGroupId;
+    public void setstatictenantVariableGroupId(ObjectId statictenantVariableGroupId) {
+        this.statictenantVariableGroupId = statictenantVariableGroupId;
     }
 
     public long getCreatedAt() {

@@ -170,7 +170,7 @@ public class MetadataAnalyzer {
 
         AttributeEntry attribute = childMetadata.getAttributes().get(Constants.JSON_XML_ATTR_TYPE);
         if (config.isTypeHints() && attribute != null) {
-            String attrValue = attribute.getValue();
+            String attrValue = attribute.value();
             if (attrValue.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_NUMBER) ||
                     attrValue.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_BOOLEAN)) {
                 return false;
@@ -229,7 +229,7 @@ public class MetadataAnalyzer {
             return false;
         }
         AttributeEntry attribute = metadata.getAttributes().get(attrName);
-        return attribute != null && attribute.getValue().equalsIgnoreCase(attrValue);
+        return attribute != null && attribute.value().equalsIgnoreCase(attrValue);
     }
 
     // check if it's the last element

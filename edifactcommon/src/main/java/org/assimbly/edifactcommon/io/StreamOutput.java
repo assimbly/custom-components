@@ -22,7 +22,8 @@ public class StreamOutput extends Output
 		super(Output.IO_STREAM);
 		this.filename = filename;
 	}
-	
+
+	@Override
 	public OutputStream getStream() throws Exception
 	{
 		if (stream == null)
@@ -30,5 +31,7 @@ public class StreamOutput extends Output
 			
 		return stream;
 	}
+
+	@Override
 	public void close() throws Exception {stream.close();}
 }

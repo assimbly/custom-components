@@ -5,15 +5,13 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.language.groovy.GroovyExpression;
 import org.apache.camel.language.xpath.XPathBuilder;
-import org.apache.camel.language.simple.SimpleLanguage;
 import org.apache.camel.model.language.SimpleExpression;
+import org.apache.camel.support.LanguageSupport;
 import org.assimbly.util.EncryptionUtil;
 import org.assimbly.util.exception.EnvironmentException;
 import org.assimbly.util.exception.TenantVariableNotFoundException;
 import org.assimbly.util.helper.Base64Helper;
 import org.assimbly.util.helper.ExchangeHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.assimbly.tenantvariables.domain.EnvironmentValue;
 import org.assimbly.tenantvariables.domain.TenantVariable;
 import org.assimbly.tenantvariables.mongo.MongoDao;
@@ -27,16 +25,14 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class TenantVariablesProcessor implements Processor {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TenantVariablesProcessor.class);
-
     private static final String ALGORITHM = "PBEWithHMACSHA512AndAES_256";
     private static final String ASSIMBLY_ENCRYPTION_SECRET = System.getenv("ASSIMBLY_ENCRYPTION_SECRET");
 
-    private EncryptionUtil encryptionUtil = new EncryptionUtil(ASSIMBLY_ENCRYPTION_SECRET, ALGORITHM);
+    private final EncryptionUtil encryptionUtil = new EncryptionUtil(ASSIMBLY_ENCRYPTION_SECRET, ALGORITHM);
 
-    private final String DEFAULT_TENANT_NAME = "default";
+    private static final String DEFAULT_TENANT_NAME = "default";
     private static final String ASSIMBLY_ENV = "ASSIMBLY_ENV";
-    private final String BODY_VARIABLE_REGEX = "\\$\\{body(?:As\\(.*\\))?}";
+    private static final String BODY_VARIABLE_REGEX = "\\$\\{body(?:As\\(.*\\))?}";
 
     private TenantVariablesEndpoint endpoint;
 
@@ -64,13 +60,11 @@ public class TenantVariablesProcessor implements Processor {
     }
 
     public String decrypt(String encryptedValue) {
-        String value = encryptionUtil.decrypt(encryptedValue);
-        return value;
+        return encryptionUtil.decrypt(encryptedValue);
     }
 
     public String encrypt(String value) {
-        String encryptedValue = encryptionUtil.encrypt(value);
-        return encryptedValue;
+        return encryptionUtil.encrypt(value);
     }
 
     public String getValueByEnvironmentValue(EnvironmentValue environmentVar) {
@@ -174,11 +168,10 @@ public class TenantVariablesProcessor implements Processor {
         if(ExchangeHelper.hasVariables(varValue))
             varValue = ExchangeHelper.interpolate(varValue, exchange);
 
-        if(bodyFlag)
-            if (isBodyVariable(varValue))
+        if(bodyFlag && isBodyVariable(varValue))
                 varValue = interpolateBody(varValue, exchange);
 
-        if(SimpleLanguage.hasSimpleFunction(varValue)) {
+        if(LanguageSupport.hasSimpleFunction(varValue)) {
             SimpleExpression simpleExpression = new SimpleExpression(varValue);
             varValue = simpleExpression.evaluate(exchange, String.class);
         }

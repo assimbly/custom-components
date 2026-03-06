@@ -52,6 +52,7 @@ public class SqlProcessor implements Processor {
     }
 
     private Document executeQuery(Exchange exchange, Connection connection, String sqlQuery) throws java.sql.SQLException, ParserConfigurationException {
+
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         ResultSetMetaData resultSetMetaData;

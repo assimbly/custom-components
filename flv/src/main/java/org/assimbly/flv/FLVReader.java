@@ -13,8 +13,8 @@ public class FLVReader extends BaseXmlReader {
 
     private List<LineReader> lineReaders;
 
-    // 0-arg constructor needs to be available for reflective instantiation
     public FLVReader() {
+        // 0-arg constructor needs to be available for reflective instantiation
     }
 
     // setter needs to be here for instance configuration through reflection

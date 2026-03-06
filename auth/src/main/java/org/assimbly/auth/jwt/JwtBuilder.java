@@ -1,9 +1,10 @@
 package org.assimbly.auth.jwt;
 
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.assimbly.auth.util.helper.ConfigHelper;
 
+import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -27,18 +28,17 @@ public final class JwtBuilder {
      * @return a valid signed JSON Web Token.
      */
     public static String build(String name, String scope) {
-        String key = ConfigHelper.get("secretKey");
+        String keyString = ConfigHelper.get("secretKey");
         int expiration = Integer.parseInt(ConfigHelper.get("expiration"));
 
+        SecretKey key = Keys.hmacShaKeyFor(keyString.getBytes(StandardCharsets.UTF_8));
+
         return Jwts.builder()
-                .setSubject(createRandomString())
-                .setExpiration(creatExpiration(expiration))
+                .subject(createRandomString())
+                .expiration(createExpiration(expiration))
                 .claim("name", name)
                 .claim("scope", scope)
-                .signWith(
-                        SignatureAlgorithm.HS256,
-                        key.getBytes(StandardCharsets.UTF_8)
-                )
+                .signWith(key)
                 .compact();
     }
 
@@ -48,7 +48,7 @@ public final class JwtBuilder {
      * @param seconds the time to add to the current date in seconds.
      * @return a date represented as a Date object.
      */
-    private static Date creatExpiration(int seconds) {
+    private static Date createExpiration(int seconds) {
         LocalDateTime date = LocalDateTime.now();
         date = date.plusSeconds(seconds);
 

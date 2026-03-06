@@ -11,7 +11,11 @@ public class FileInput extends StreamInput
 		super(new java.io.FileInputStream(filename));
 		this.filename = filename;
 	}
-	
+
+	@Override
 	public String getFilename() {return filename;}
+
+	@Override
 	public void close() throws Exception {getStream().close();}
+
 }

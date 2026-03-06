@@ -17,14 +17,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class EdifactDataFormat implements DataFormat {
 
     private EdifactType edifactType;
-    private static final Map<EdifactType, Smooks> smooksMarshalCache = new HashMap<>();
-    private static final Map<EdifactType, Smooks> smooksUnmarshalCache = new HashMap<>();
+    private static final Map<EdifactType, Smooks> smooksMarshalCache = new EnumMap<>(EdifactType.class);
+    private static final Map<EdifactType, Smooks> smooksUnmarshalCache = new EnumMap<>(EdifactType.class);
 
     @Override
     public void marshal(Exchange exchange, Object graph, OutputStream stream) throws Exception {
@@ -33,7 +33,6 @@ public class EdifactDataFormat implements DataFormat {
         byte[] bytes = exchange.getContext().getTypeConverter().mandatoryConvertTo(byte[].class, graph);
         ByteArrayInputStream edifact = new ByteArrayInputStream(bytes);
 
-        // stream source must be backed by a byte stream
         smooks.filterSource(new StreamSource(edifact), new StreamResult(stream));
     }
 
@@ -63,29 +62,27 @@ public class EdifactDataFormat implements DataFormat {
      * These instances are cached because it's _very_ expensive to create Smooks instances (order of ~5 seconds).
      */
     private Smooks getMarshalSmooks(EdifactType edifactType) {
-        Smooks smooks = smooksMarshalCache.get(edifactType);
-        if (smooks == null) {
-            smooks = new Smooks();
-
-            ReaderConfigurator configurator = new UNEdifactReaderConfigurator(edifactType.urn());
+        return smooksMarshalCache.computeIfAbsent(edifactType, type -> {
+            Smooks smooks = new Smooks();
+            ReaderConfigurator configurator = new UNEdifactReaderConfigurator(type.urn());
             smooks.setReaderConfig(configurator);
-
-            smooksMarshalCache.put(edifactType, smooks);
-        }
-
-        return smooks;
+            return smooks;
+        });
     }
 
-    private Smooks getUnmarshalSmooks(EdifactType edifactType) throws IOException, SAXException {
-        Smooks smooks = smooksUnmarshalCache.get(edifactType);
-        if (smooks == null) {
-            smooks = new Smooks();
-            smooks.addConfigurations(edifactType.bindingConfigUri());
-
-            smooksUnmarshalCache.put(edifactType, smooks);
+    private Smooks getUnmarshalSmooks(EdifactType edifactType) throws SAXException {
+        if (!smooksUnmarshalCache.containsKey(edifactType)) {
+            smooksUnmarshalCache.computeIfAbsent(edifactType, type -> {
+                try {
+                    Smooks smooks = new Smooks();
+                    smooks.addConfigurations(type.bindingConfigUri());
+                    return smooks;
+                } catch (IOException | SAXException e) {
+                    throw new IllegalStateException("Failed to configure Smooks for EdifactType: " + type, e);
+                }
+            });
         }
-
-        return smooks;
+        return smooksUnmarshalCache.get(edifactType);
     }
 
     public void setEdifactType(String edifactType) {
@@ -94,11 +91,11 @@ public class EdifactDataFormat implements DataFormat {
 
     @Override
     public void start() {
-        // TODO document why this method is empty
+        // No startup logic required for this data format
     }
 
     @Override
     public void stop() {
-        // TODO document why this method is empty
+        // No shutdown logic required for this data format
     }
 }

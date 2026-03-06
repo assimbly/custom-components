@@ -46,7 +46,9 @@ public class SoapConfiguration {
     @UriParam(name = "parameters")
     private String params;
 
-    public SoapConfiguration() {}
+    public SoapConfiguration() {
+        //Used for serialization or reflection
+    }
 
     public void dynamicApply(String prop, Object value) throws URISyntaxException {
         if("wsdl".equals(prop)) {

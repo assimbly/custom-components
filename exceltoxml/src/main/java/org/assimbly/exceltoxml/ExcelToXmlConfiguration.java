@@ -18,7 +18,9 @@ public class ExcelToXmlConfiguration {
     @Metadata(required = true)
     private String rules;
 
-    public ExcelToXmlConfiguration() {}
+    public ExcelToXmlConfiguration() {
+        //Used for serialization
+    }
 
     /**
      * Charset to use when converting Excel contents to XML

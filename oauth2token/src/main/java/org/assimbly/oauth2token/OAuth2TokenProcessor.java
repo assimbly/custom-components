@@ -17,11 +17,9 @@ public class OAuth2TokenProcessor implements Processor {
 
     private static final Logger logger = LoggerFactory.getLogger(OAuth2TokenProcessor.class);
 
-    private OAuth2TokenEndpoint endpoint;
+    private final OAuth2TokenEndpoint endpoint;
 
     public static final int EXPIRY_DELAY_DEFAULT = -25;
-
-    public OAuth2TokenProcessor() {}
 
     public OAuth2TokenProcessor(OAuth2TokenEndpoint endpoint) {
         this.endpoint = endpoint;

@@ -2,7 +2,6 @@ package org.assimbly.enrich.override;
 
 import org.apache.camel.AggregationStrategy;
 import org.apache.camel.Exchange;
-import org.apache.log4j.Logger;
 import org.assimbly.util.exception.EnrichException;
 
 import java.util.Map;

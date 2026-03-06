@@ -14,6 +14,7 @@ public class DocumentOutput extends Output
 		super(Output.IO_DOM);
 		this.document = document;
 	}
-	
+
+	@Override
 	public Document getDocument() {return document;}
 }

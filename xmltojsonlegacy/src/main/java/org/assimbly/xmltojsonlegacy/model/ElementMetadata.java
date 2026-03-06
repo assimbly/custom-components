@@ -88,12 +88,12 @@ public class ElementMetadata {
 
     public String getTypeAttributeValue() {
         AttributeEntry attr = attributes.get(Constants.JSON_XML_ATTR_TYPE);
-        return attr != null ? attr.getValue() : "";
+        return attr != null ? attr.value() : "";
     }
 
     public String getClassAttributeValue() {
         AttributeEntry attr = attributes.get(Constants.JSON_XML_ATTR_CLASS);
-        return attr != null ? attr.getValue() : "";
+        return attr != null ? attr.value() : "";
     }
 
     public boolean containsClassAttribute() {
@@ -102,7 +102,7 @@ public class ElementMetadata {
 
     public boolean containsClassAttributeValue(String value) {
         AttributeEntry attribute = attributes.get(Constants.JSON_XML_ATTR_CLASS);
-        return attribute != null && attribute.getValue().equals(value) || attribute == null && value.isEmpty();
+        return attribute != null && attribute.value().equals(value) || attribute == null && value.isEmpty();
     }
 
     public void setAttributes(Map<String, AttributeEntry> attributes) {

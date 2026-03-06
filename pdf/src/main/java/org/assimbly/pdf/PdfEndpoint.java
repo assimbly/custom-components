@@ -25,9 +25,6 @@ import java.util.Scanner;
 )
 public class PdfEndpoint extends ResourceEndpoint {
 
-    public PdfEndpoint() {
-    }
-
     public PdfEndpoint(String uri, PdfComponent component, String resourceUri) {
         super(uri, component, resourceUri);
     }
@@ -74,7 +71,7 @@ public class PdfEndpoint extends ResourceEndpoint {
                             pdfField.setValue(in.getHeader(pdfField.getFullyQualifiedName(), String.class));
                             pdfField.setReadOnly(true);
                         } catch (IOException e) {
-                            e.printStackTrace();
+                           log.error("Set pdfField {} failed.", pdfField.getMappingName(), e);
                         }
                     });
 

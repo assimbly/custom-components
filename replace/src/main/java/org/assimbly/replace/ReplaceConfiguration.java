@@ -25,7 +25,9 @@ public class ReplaceConfiguration {
     @UriParam
     private String flags;
 
-    public ReplaceConfiguration() {}
+    public ReplaceConfiguration() {
+        // Used for serialization or reflection
+    }
 
     /**
      * Regex pattern to match what you want to be replaced.

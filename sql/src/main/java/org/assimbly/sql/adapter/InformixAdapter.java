@@ -1,7 +1,6 @@
 package org.assimbly.sql.adapter;
 
 import com.informix.jdbc.IfxDriver;
-import org.apache.hc.core5.net.URLEncodedUtils;
 import org.apache.hc.core5.http.NameValuePair;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
 import org.apache.hc.core5.net.WWWFormCodec;

@@ -28,12 +28,10 @@ public class ObjectType implements NodeTransaction {
                         config.getElement().setAttribute(key, namespace);
                     }
                 } else {
-                    switch (key) {
-                        case Constants.JSON_XML_ATTR_CONTEXT:
-                            config.getElement().setAttribute(Constants.JSON_XML_ATTR_CONTEXT, value.toString());
-                            break;
-                        default:
-                            config.getElement().setAttribute(key, value.asString());
+                    if (key.equals(Constants.JSON_XML_ATTR_CONTEXT)) {
+                        config.getElement().setAttribute(Constants.JSON_XML_ATTR_CONTEXT, value.toString());
+                    } else {
+                        config.getElement().setAttribute(key, value.asString());
                     }
                 }
             } else if(key.equals(Constants.JSON_XML_TEXT_FIELD)){

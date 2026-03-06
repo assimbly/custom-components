@@ -6,7 +6,6 @@ import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.support.ProcessorEndpoint;
 
 @UriEndpoint(
-        firstVersion = "",
         scheme = "pdftotext",
         title = "PDF To Text Component",
         syntax = "pdftotext:"

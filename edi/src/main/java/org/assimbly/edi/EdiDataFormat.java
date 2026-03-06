@@ -53,11 +53,11 @@ public class EdiDataFormat implements DataFormat {
 
     @Override
     public void start() {
-        // TODO document why this method is empty
+        // No startup logic required for this data format
     }
 
     @Override
     public void stop() {
-        // TODO document why this method is empty
+        // No shutdown logic required for this data format
     }
 }

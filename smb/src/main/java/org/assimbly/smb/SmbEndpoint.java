@@ -141,7 +141,7 @@ public class SmbEndpoint extends GenericFileEndpoint<SmbFile> {
 
     @Override
     protected GenericFileProcessStrategy<SmbFile> createGenericFileStrategy() {
-        return SmbProcessStrategyFactory.createGenericFileProcessStrategy(getCamelContext(), getParamsAsMap());
+        return SmbProcessStrategyFactory.createGenericFileProcessStrategy(getParamsAsMap());
     }
 
 }

@@ -18,7 +18,7 @@ public class ReplaceProcessor implements Processor {
     }
 
     @Override
-    public void process(Exchange exchange) throws Exception {
+    public void process(Exchange exchange) {
 
         String body = exchange.getIn().getBody(String.class);
 
@@ -28,34 +28,33 @@ public class ReplaceProcessor implements Processor {
         String replaceWith = Optional.ofNullable(config.getReplaceWith()).orElse("");
         replaceWith = ExchangeHelper.unescapeExceptionalCharacters(replaceWith);
 
-        if(regex.contains("${header.")) {
+        if (regex.contains("${header.")) {
             String[] headerNames = StringUtils.substringsBetween(regex, "${header.", "}");
-            for(String headerName: headerNames){
+            for (String headerName : headerNames) {
                 String headerValue = exchange.getIn().getHeader(headerName, String.class);
-                regex = StringUtils.replaceOnce(regex,"${header." + headerName + "}",headerValue);
+                regex = regex.replaceFirst(Pattern.quote("${header." + headerName + "}"), Matcher.quoteReplacement(headerValue));
             }
         }
 
-        if(replaceWith.contains("${header.")) {
+        if (replaceWith.contains("${header.")) {
             String[] headerNames = StringUtils.substringsBetween(replaceWith, "${header.", "}");
-            for(String headerName: headerNames){
+            for (String headerName : headerNames) {
                 String headerValue = exchange.getIn().getHeader(headerName, String.class);
-                replaceWith = StringUtils.replaceOnce(replaceWith,"${header." + headerName + "}",headerValue);
+                replaceWith = replaceWith.replaceFirst(Pattern.quote("${header." + headerName + "}"), Matcher.quoteReplacement(headerValue));
             }
         }
 
         replaceWith = Matcher.quoteReplacement(replaceWith);
         String result;
 
-        if(config.getGroup() > 0){
+        if (config.getGroup() > 0) {
             result = replaceGroup(regex, body, config.getGroup(), replaceWith);
-        }else{
+        } else {
             Pattern pattern = Pattern.compile(regex, config.getFlagsMagicConstant());
             result = pattern.matcher(body).replaceAll(replaceWith);
         }
 
         exchange.getIn().setBody(result);
-
     }
 
     public static String replaceGroup(String regex, String source, int groupToReplace, String replacement) {
@@ -78,7 +77,6 @@ public class ReplaceProcessor implements Processor {
         m.appendTail(result);
 
         return result.toString();
-
     }
 
 }

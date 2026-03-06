@@ -5,6 +5,8 @@ import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.support.ProcessorEndpoint;
 
+import java.util.Objects;
+
 @UriEndpoint(
         firstVersion = "2.4.0",
         scheme = "soap",
@@ -15,7 +17,7 @@ public class SoapEndpoint extends ProcessorEndpoint {
 
     @UriParam
     private SoapConfiguration configuration;
-    private SoapComponent component;
+    private final SoapComponent component;
 
     public SoapEndpoint(String uri, SoapComponent component, SoapConfiguration configuration) {
         super(uri, component);
@@ -25,7 +27,7 @@ public class SoapEndpoint extends ProcessorEndpoint {
     }
 
     @Override
-    protected Processor createProcessor() throws Exception {
+    protected Processor createProcessor() {
         return new SoapProcessor(this);
     }
 
@@ -37,4 +39,18 @@ public class SoapEndpoint extends ProcessorEndpoint {
     public SoapComponent getComponent() {
         return component;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SoapEndpoint that)) return false;
+        if (!super.equals(o)) return false;
+        return Objects.equals(component, that.component);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), component);
+    }
+
 }

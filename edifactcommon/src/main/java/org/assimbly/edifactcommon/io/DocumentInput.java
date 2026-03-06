@@ -15,5 +15,6 @@ public class DocumentInput extends Input
 		this.document = document;
 	}
 
+	@Override
 	public Document getDocument() {return document;}
 }
