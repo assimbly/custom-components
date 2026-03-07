@@ -52,8 +52,11 @@ public class XmlToJsonJsonProcessor {
             return this.json.toString(2);
 
         Object jsonWithoutRoot = removeRootFromJson();
-        return stringifyJsonWithoutRoot(jsonWithoutRoot);
 
+        if (jsonWithoutRoot == null)
+            return "{}";
+
+        return stringifyJsonWithoutRoot(jsonWithoutRoot);
     }
 
     private Object removeRootFromJson() {

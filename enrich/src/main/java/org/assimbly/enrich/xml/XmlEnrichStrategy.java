@@ -49,13 +49,13 @@ public class XmlEnrichStrategy implements AggregationStrategy {
                     </Enriched>
                 </Enriched>
              */
+            assert originalXml != null;
             if(originalXml.getDocumentElement().getTagName().equals("Enriched")){
                 enriched = originalXml;
-                enriched = XmlHelper.mergeIn(enriched, resourceXml);
             }else{
                 enriched = XmlHelper.mergeIn(enriched, originalXml);
-                enriched = XmlHelper.mergeIn(enriched, resourceXml);
             }
+            enriched = XmlHelper.mergeIn(enriched, resourceXml);
 
             original.getIn().setBody(XmlHelper.prettyPrint(enriched));
         } catch (Exception e) {

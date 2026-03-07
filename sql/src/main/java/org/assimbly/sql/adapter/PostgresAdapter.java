@@ -11,10 +11,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PostgresAdapter implements DatabaseAdapter {
 
-    private static volatile boolean registered;
+    private static final AtomicBoolean registered = new AtomicBoolean(false);
 
     @Override
     public Connection connect(JDBCConnection connection) throws SQLException {
@@ -36,9 +37,8 @@ public class PostgresAdapter implements DatabaseAdapter {
         String url = "jdbc:postgresql://%s:%s/%s?%s".formatted(connection.getHost(), connection.getPort(), connection.getDatabase(), query);
 
         DriverManager.setLoginTimeout(5);
-        if(!registered) {
+        if(registered.compareAndSet(false, true)) {
             DriverManager.registerDriver(driver);
-            registered = true;
         }
 
         return DriverManager.getConnection(url, connection.getUsername(), connection.getPassword());

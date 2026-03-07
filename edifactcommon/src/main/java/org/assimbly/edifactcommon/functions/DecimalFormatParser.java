@@ -539,7 +539,7 @@ public class DecimalFormatParser {
 				{
 					if( result.charAt(i) != '.' )
 					{
-						if( bCarry = ( result.charAt(i) == '9' ) )
+						if(bCarry == (result.charAt(i) == '9'))
 							result.setCharAt(i, '0');
 						else
 							result.setCharAt(i, (char)(result.charAt(i) + 1));
@@ -579,11 +579,6 @@ public class DecimalFormatParser {
 		if( nCheck.isNaN() )
 			return mDecimalFormat.GetNaN();
 
-		//if ( ICUnicode::IsLetter( m_pDecimalFormat->GetZeroDigit() ) )
-		//{
-		//	m_nDigitTranslation = m_pDecimalFormat->GetZeroDigit() - _T('0');
-		//}
-		//else
 		{
 			mnDigitTranslation = 0;
 		}
@@ -729,7 +724,7 @@ public class DecimalFormatParser {
 		// add the left side
 		sbFormat.append( sbLeft );
 		
-		if ( mFormat.mbDecimalSeperator && sbRight.length() > 0 )
+		if ( mFormat.mbDecimalSeperator && !sbRight.isEmpty() )
 		{
 			sbFormat.append( mDecimalFormat.GetDecimalSeparator() );
 			sbFormat.append( sbRight );
@@ -760,22 +755,20 @@ public class DecimalFormatParser {
 		StringBuffer sReadInput = new StringBuffer(sNumber);
 		String sUsedPrefixText = msPrefixText;
 		String sUsedSuffixText = msSuffixText;
-		boolean bIsNegative;
+		boolean bIsNegative = false;
 		Lang.trimLeft(sReadInput, " \t");
 		Lang.trimRight(sReadInput, " \t");
 
 		mFormat = mPositiveFormat;
-		if( bIsNegative = isNegativeNumber(sReadInput.toString()) )
-		{
-			if( mbNegativePattern )
+		if(bIsNegative == isNegativeNumber(sReadInput.toString()) && mbNegativePattern )
 			{
 				sUsedPrefixText = msNegPrefixText;
 				sUsedSuffixText = msNegSuffixText;
 				mFormat = mNegativeFormat;
 			}
-		}
 
-		if( sUsedPrefixText.length() > 0 )
+
+		if( !sUsedPrefixText.isEmpty() )
 		{
 			if( sReadInput.toString().startsWith( sUsedPrefixText ) )
 				sReadInput.delete(0, sUsedPrefixText.length() );
@@ -785,7 +778,7 @@ public class DecimalFormatParser {
 				);
 		}
 
-		if( sUsedSuffixText.length() > 0 )
+		if( !sUsedSuffixText.isEmpty() )
 		{
 			if( sReadInput.toString().endsWith( sUsedSuffixText ) )
 			{
@@ -815,29 +808,19 @@ public class DecimalFormatParser {
 			);
 		}
 
-		if( bIsNegative && decimal.signum() >= 0 )
-			decimal = decimal.negate();
-		return decimal;
+        return decimal;
 	}
 
 	private boolean isNegativeNumber(String sNumber) {
-		if( msNegPrefixText.length() > 0 && sNumber.startsWith( msNegPrefixText) )
-		{
-			if( msNegSuffixText.length() > 0 && sNumber.endsWith( msNegSuffixText) )
-				return true;
+		if( !msNegPrefixText.isEmpty() && sNumber.startsWith( msNegPrefixText) ){
+            return !msNegSuffixText.isEmpty() && sNumber.endsWith(msNegSuffixText);
+		}else if( !msPrefixText.isEmpty() && sNumber.startsWith(msPrefixText) ){
+            return sNumber.indexOf(mDecimalFormat.GetMinusSign(), msPrefixText.length()) != -1;
 		}
-		else if( msPrefixText.length() > 0 && sNumber.startsWith(msPrefixText) )
-		{
-			if( sNumber.indexOf( mDecimalFormat.GetMinusSign(), msPrefixText.length() ) != -1 )
-				return true;
-			else
-				return false;
+		else{
+			return sNumber.indexOf(mDecimalFormat.GetMinusSign()) != -1;
 		}
-		else if( sNumber.indexOf( mDecimalFormat.GetMinusSign() ) != -1 )
-			return true;
-
-		return false;
-	}
+    }
 
 	protected Format				mPositiveFormat;
 	protected Format				mNegativeFormat;

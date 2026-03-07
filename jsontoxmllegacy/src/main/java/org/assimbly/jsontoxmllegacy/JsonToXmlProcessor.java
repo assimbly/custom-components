@@ -81,9 +81,9 @@ public class JsonToXmlProcessor implements Processor {
     // create new element
     private static Element createElement(JsonToXmlConfiguration config) {
         Element element;
-        String nameSpaceURI = "";
-        String nameSpace = "";
-        String name = "";
+        String nameSpaceURI;
+        String nameSpace;
+        String name;
 
         if(config.getLevel()==0) {
             name = JsonUtils.getRootTagName(config.getJsonNode().getNodeType(), config.getRootName(), config.getArrayName());

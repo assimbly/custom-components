@@ -86,16 +86,19 @@ public class TenantVariablesProcessor implements Processor {
             );
         }
 
-        if(gVariable.find(environment).isEmpty())
-            throw new TenantVariableNotFoundException("The Tenant Variable \"" + name + "\" has no values for the "+ environment +" environment.");
+        Optional<EnvironmentValue> gVariableOptional = gVariable.find(environment);
 
-        EnvironmentValue variable = gVariable.find(environment).get();
+        if(gVariableOptional.isEmpty()) {
+            throw new TenantVariableNotFoundException("The Tenant Variable \"" + name + "\" has no values for the " + environment + " environment.");
+        }else {
+            EnvironmentValue variable = gVariableOptional.get();
 
-        String value = (variable.isEncrypted() ? decrypt(variable.getValue()) : variable.getValue());
+            String value = (variable.isEncrypted() ? decrypt(variable.getValue()) : variable.getValue());
 
-        String header = interpolateVar(endpoint.getConfiguration().getHeaderName(), exchange, false);
+            String header = interpolateVar(endpoint.getConfiguration().getHeaderName(), exchange, false);
 
-        exchange.getIn().setHeader(header, value);
+            exchange.getIn().setHeader(header, value);
+        }
     }
 
     private void setTenantVariable(Exchange exchange) {
@@ -112,10 +115,10 @@ public class TenantVariablesProcessor implements Processor {
 
         value = interpolateVar(Base64Helper.unmarshal(value, UTF_8), exchange, expressionType);
 
+        String modifier = groupName.equalsIgnoreCase("groupless") ? flowName : groupName + "/" + flowName;
+
         TenantVariable gVariable = MongoDao.findTenantVariableByName(name, tenantDbName);
         boolean gVariableExist = !Objects.isNull(gVariable);
-
-        String modifier = groupName.equalsIgnoreCase("groupless") ? flowName : groupName + "/" + flowName;
 
         if(!gVariableExist) {
             gVariable = new TenantVariable(name);
@@ -123,7 +126,9 @@ public class TenantVariablesProcessor implements Processor {
             gVariable.setCreatedBy(modifier);
         }
 
-        if(environment != null && gVariable.find(environment).isEmpty()){
+        Optional<EnvironmentValue> gVariableOptional = gVariable.find(environment);
+
+        if(environment != null && gVariableOptional.isEmpty()){
             gVariable.put(new EnvironmentValue(environment));
         }else if(environment==null){
             throw new TenantVariableNotFoundException("The Tenant Variable environment is not set.");
@@ -131,7 +136,8 @@ public class TenantVariablesProcessor implements Processor {
 
         Optional<EnvironmentValue> optional = gVariable.find(environment);
 
-        EnvironmentValue variable = optional.get();
+        if(optional.isPresent()) {
+            EnvironmentValue variable = optional.get();
 
         boolean encrypt = endpoint.getConfiguration().isEncrypt();
 
@@ -147,6 +153,7 @@ public class TenantVariablesProcessor implements Processor {
         variable.setUpdatedBy(modifier);
 
         MongoDao.updateTenantVariable(gVariable, tenantDbName, gVariableExist);
+        }
     }
 
     private void deleteTenantVariable(Exchange exchange) {

@@ -188,28 +188,18 @@ public class CoreTypes
 			state = PNfollow[state][cls];
 		}
 
-		switch (state)
-		{
-		case 0:
-		case 1:
-		case 3:
-		case 6:
-		case 7:
-			return 0;		
+        return switch (state) {
+            case 2 -> 1;    // integer
+            case 4 -> 2;
+            case 5 -> {
+                buffer.append('0');
+                yield 2;
+            }
+            case 8 -> 3;    // float
+            default -> 0;
+        };
 
-		case 2:
-			return 1;	// integer
-		case 4:
-			return 2;
-		case 5:
-			buffer.append('0');
-			return 2;
-		case 8:
-			return 3;	// float
-		}
-
-		return 0;
-	}
+    }
 
 
 

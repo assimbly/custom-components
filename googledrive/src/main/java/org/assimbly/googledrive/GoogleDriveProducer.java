@@ -21,7 +21,7 @@ import java.util.Collections;
 public class GoogleDriveProducer extends DefaultProducer {
 
     private Drive service;
-    private GoogleDriveConfiguration configuration;
+    private final GoogleDriveConfiguration configuration;
 
     public GoogleDriveProducer(GoogleDriveEndpoint endpoint) {
         super(endpoint);
@@ -32,8 +32,13 @@ public class GoogleDriveProducer extends DefaultProducer {
     public void process(Exchange exchange) throws Exception {
         Object body = exchange.getIn().getBody();
 
-        @SuppressWarnings("unchecked")
-        GenericFile<File> genericFile = (body instanceof GenericFile gf) ? gf : prepareCamelFile(exchange);
+        GenericFile<File> genericFile;
+        if (body instanceof GenericFile<?> gf) {
+            //noinspection unchecked
+            genericFile = (GenericFile<File>) gf;
+        } else {
+            genericFile = prepareCamelFile(exchange);
+        }
 
         prepareGoogleDriveClient();
 

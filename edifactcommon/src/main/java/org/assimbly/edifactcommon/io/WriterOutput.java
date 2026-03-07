@@ -7,7 +7,7 @@ import java.io.Writer;
 
 public class WriterOutput extends Output
 {
-	private Writer writer;
+	private final Writer writer;
 	
 	public WriterOutput(Writer writer)
 	{

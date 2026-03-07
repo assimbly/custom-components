@@ -36,7 +36,7 @@ public class HexBinary
 
 	public static byte[] decode( String s)
 	{
-		if( s == null ) return null;
+		if( s == null ) return new byte[0];
 		String newvalue = s.trim();
 		if( newvalue.isEmpty() ) return new byte[0];
 

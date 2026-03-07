@@ -49,7 +49,7 @@ public class SmbOperations<SmbFile> implements GenericFileOperations<SmbFile> {
     private static final org.codelibs.jcifs.smb.impl.SmbFile[] EMPTY = {};
 
     private GenericFileEndpoint<SmbFile> endpoint;
-    private SmbClient client;
+    private final SmbClient client;
 
     public SmbOperations(final SmbClient smbClient) {
         this.client = smbClient;
@@ -183,10 +183,10 @@ public class SmbOperations<SmbFile> implements GenericFileOperations<SmbFile> {
 
     @SuppressWarnings("unchecked")
     private boolean retrieveFileToStreamInBody(final String name, final Exchange exchange) {
-        OutputStream os = null;
+
         boolean result;
-        try {
-            os = new ByteArrayOutputStream();
+
+        try(OutputStream os = new ByteArrayOutputStream()){
             GenericFile<SmbFile> target = (GenericFile<SmbFile>) exchange
                     .getProperty(FileComponent.FILE_EXCHANGE_FILE);
             ObjectHelper.notNull(target,
@@ -197,12 +197,8 @@ public class SmbOperations<SmbFile> implements GenericFileOperations<SmbFile> {
             login();
             result = client.retrieveFile(getPath(name), os);
 
-        } catch (IOException e) {
-            throw new GenericFileOperationFailedException("Cannot retrieve file: " + name, e);
         } catch (Exception e) {
             throw new GenericFileOperationFailedException("Cannot retrieve file: " + name, e);
-        } finally {
-            IOHelper.close(os, "retrieve: " + name);
         }
 
         return result;
@@ -268,8 +264,7 @@ public class SmbOperations<SmbFile> implements GenericFileOperations<SmbFile> {
             if (endpoint.getFileExist() == GenericFileExist.Ignore) {
                 // ignore but indicate that the file was written
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug(
-                            "An existing file already exists: " + name + ". Ignore and do not override it.");
+                    LOGGER.debug("An existing file already exists: {}. Ignore and do not override it.", name);
                 }
                 return true;
             } else if (endpoint.getFileExist() == GenericFileExist.Fail) {

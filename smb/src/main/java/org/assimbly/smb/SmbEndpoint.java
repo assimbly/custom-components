@@ -21,10 +21,11 @@
  ***************************************************************************************/
 package org.assimbly.smb;
 
+import org.apache.camel.component.file.*;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.PollingConsumer;
 import org.apache.camel.Processor;
-import org.apache.camel.component.file.*;
 import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.support.DefaultExchange;
 import org.apache.camel.support.processor.idempotent.MemoryIdempotentRepository;
@@ -135,13 +136,27 @@ public class SmbEndpoint extends GenericFileEndpoint<SmbFile> {
     }
 
     @Override
+    protected GenericFileProcessStrategy<SmbFile> createGenericFileStrategy() {
+        return SmbProcessStrategyFactory.createGenericFileProcessStrategy(getParamsAsMap());
+    }
+
+    @Override
     protected String createDoneFileName(final String afileName) {
         return super.createDoneFileName(afileName);
     }
 
     @Override
-    protected GenericFileProcessStrategy<SmbFile> createGenericFileStrategy() {
-        return SmbProcessStrategyFactory.createGenericFileProcessStrategy(getParamsAsMap());
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SmbEndpoint that)) return false;
+        if (!super.equals(o)) return false;
+
+        return download == that.download;
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(super.hashCode(), download);
     }
 
 }

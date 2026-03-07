@@ -21,7 +21,6 @@ import static org.assimbly.googledrive.domain.GSuiteFilesTypeHelper.isGSuiteFile
         scheme = "google-drive",
         title = "Google Drive Component",
         syntax = "google-drive:")
-@SuppressWarnings("PackageAccessibility")
 public class GoogleDriveEndpoint extends ProcessorEndpoint {
 
     private static final String APPLICATION_NAME = "Assimbly";
@@ -31,7 +30,7 @@ public class GoogleDriveEndpoint extends ProcessorEndpoint {
     private GoogleDriveClientFactory clientFactory;
     private Drive client;
 
-    private GoogleDriveComponent component;
+    private final GoogleDriveComponent component;
 
     @UriParam
     private GoogleDriveConfiguration configuration;

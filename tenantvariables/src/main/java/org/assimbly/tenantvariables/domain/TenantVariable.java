@@ -1,6 +1,5 @@
 package org.assimbly.tenantvariables.domain;
 
-import org.assimbly.tenantvariables.domain.EnvironmentValue;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 

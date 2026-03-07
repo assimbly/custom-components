@@ -71,7 +71,7 @@ public class DefaultSmbClient implements SmbClient {
       LOGGER.debug("login() domain[" + domain + "] username[" + username + "] password[***]");
     }
     setAuthentication(new NtlmPasswordAuthentication(SingletonContext.getInstance(), domain, username,
-        password));
+            password));
   }
 
   /**
@@ -83,12 +83,13 @@ public class DefaultSmbClient implements SmbClient {
    */
   @Override
   public boolean retrieveFile(final String url, final OutputStream out)
-      throws IOException {
+          throws IOException {
     if (LOGGER.isDebugEnabled()) {
       LOGGER.debug("retrieveFile() path[" + url + "]");
     }
-    SmbFile smbFile = smbApiFactory.createSmbFile(url, authentication);
-    IOHelper.copyAndCloseInput(smbFile.getInputStream(), out);
+    try (SmbFile smbFile = smbApiFactory.createSmbFile(url, authentication)) {
+      IOHelper.copyAndCloseInput(smbFile.getInputStream(), out);
+    }
     return true;
   }
 
@@ -97,20 +98,17 @@ public class DefaultSmbClient implements SmbClient {
     if (LOGGER.isDebugEnabled()) {
       LOGGER.debug("createDirs() path[" + url + "]");
     }
-    SmbFile smbFile;
-    try {
-      smbFile = smbApiFactory.createSmbFile(url, authentication);
+    try (SmbFile smbFile = smbApiFactory.createSmbFile(url, authentication)) {
       if (!smbFile.exists()) {
         smbFile.mkdirs();
       }
     } catch (IOException e) {
       LOGGER.error(
-          "Could not locate or create directory '{}' due to '{}'",
-          url, e.getMessage(), e);
+              "Could not locate or create directory '{}' due to '{}'",
+              url, e.getMessage(), e);
       return false;
     }
     return true;
-
   }
 
   @Override
@@ -118,53 +116,49 @@ public class DefaultSmbClient implements SmbClient {
     if (LOGGER.isDebugEnabled()) {
       LOGGER.debug("getInputStream() path[" + url + "]");
     }
-    SmbFile smbFile = smbApiFactory.createSmbFile(url, authentication);
-    return smbFile.getInputStream();
+    try (SmbFile smbFile = smbApiFactory.createSmbFile(url, authentication)) {
+      return smbFile.getInputStream();
+    }
   }
 
   @Override
   public boolean storeFile(final String url, final InputStream inputStream, final boolean append, final Long lastModified)
-      throws IOException {
+          throws IOException {
     if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug("storeFile() path[" + url + "]");
+      LOGGER.debug("storeFile() path[{}]", url);
     }
-    SmbFile smbFile = smbApiFactory.createSmbFile(url, authentication);
-    SmbFileOutputStream smbout = smbApiFactory.createSmbFileOutputStream(smbFile, append);
-    byte[] buf = new byte[512 * 1024];
-    int numRead;
-    while ((numRead = inputStream.read(buf)) >= 0) {
-      smbout.write(buf, 0, numRead);
-    }
-    smbout.close();
-      if (lastModified != null) {
-          smbFile.setLastModified(lastModified);
-          if (LOGGER.isTraceEnabled()) {
-              LOGGER.trace("Keeping last modified timestamp: {} on file: {}", new Object[]{lastModified, smbFile});
-          }
+    try (SmbFile smbFile = smbApiFactory.createSmbFile(url, authentication);
+         SmbFileOutputStream smbout = smbApiFactory.createSmbFileOutputStream(smbFile, append)) {
+      byte[] buf = new byte[512 * 1024];
+      int numRead;
+      while ((numRead = inputStream.read(buf)) >= 0) {
+        smbout.write(buf, 0, numRead);
       }
+      if (lastModified != null) {
+        smbFile.setLastModified(lastModified);
+        if (LOGGER.isTraceEnabled()) {
+          LOGGER.trace("Keeping last modified timestamp: {} on file: {}", lastModified, smbFile);
+        }
+      }
+    }
     return true;
   }
 
   @Override
   public java.util.List<SmbFile> listFiles(final String url) throws IOException {
     final java.util.List<SmbFile> fileList = new ArrayList<>();
-    final SmbFile dir = smbApiFactory.createSmbFile(url, authentication);
-    // Catch NPE for empty folders - see the following discussion for
-    // details:
-    // http://camel-extra.1091541.n5.nabble.com/NPE-on-SmbOperations-td256.html
-    // Catch NPE for empty folders - see the following discussion for details:
-    // http://camel-extra.1091541.n5.nabble.com/NPE-on-SmbOperations-td256.html
-    try {
-      if(dir.exists() && dir.isDirectory()) {
+
+    try (SmbFile dir = smbApiFactory.createSmbFile(url, authentication)) {
+      if (dir.exists() && dir.isDirectory()) {
         fileList.addAll(Arrays.asList(dir.listFiles()));
       }
     } catch (NullPointerException ex) {
       StackTraceElement[] elements = ex.getStackTrace();
       if (elements != null && elements.length > 0 && elements[0] != null
-          && "jcifs.smb.Dfs".equals(elements[0].getClassName())
-          && "resolve".equals(elements[0].getMethodName())) {
+              && "jcifs.smb.Dfs".equals(elements[0].getClassName())
+              && "resolve".equals(elements[0].getMethodName())) {
         LOGGER.warn("Ignoring NPE in jcifs.smb.Dfs.resolve: {}",
-            ex.getMessage());
+                ex.getMessage());
       } else {
         throw ex;
       }
@@ -174,20 +168,19 @@ public class DefaultSmbClient implements SmbClient {
 
   @Override
   public boolean isExist(final String url) throws Exception {
-    SmbFile sFile = smbApiFactory.createSmbFile(url, authentication);
-    return sFile.exists();
+    try (SmbFile sFile = smbApiFactory.createSmbFile(url, authentication)) {
+      return sFile.exists();
+    }
   }
 
   @Override
   public boolean delete(final String url) throws Exception {
-    SmbFile sFile = smbApiFactory.createSmbFile(url, authentication);
-    try {
-      // Only try to delete if the file do exists to avoid error message
-      if ( sFile.exists() ) {
+    try (SmbFile sFile = smbApiFactory.createSmbFile(url, authentication)) {
+      if (sFile.exists()) {
         sFile.delete();
       } else if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug("File '{}' did not exist, skipped delete", url);
-    }
+        LOGGER.debug("File '{}' did not exist, skipped delete", url);
+      }
     } catch (SmbException e) {
       LOGGER.error("Could not delete '{}' due to '{}'", url, e.getMessage(), e);
       return false;
@@ -197,14 +190,12 @@ public class DefaultSmbClient implements SmbClient {
 
   @Override
   public boolean rename(final String fromUrl, final String toUrl) throws Exception {
-    final SmbFile sFile = smbApiFactory.createSmbFile(fromUrl, authentication);
-    final SmbFile renamedFile = smbApiFactory.createSmbFile(toUrl, authentication);
-
-    try {
+    try (SmbFile sFile = smbApiFactory.createSmbFile(fromUrl, authentication);
+         SmbFile renamedFile = smbApiFactory.createSmbFile(toUrl, authentication)) {
       if (sFile.exists()) {
         if (renamedFile.exists()) {
           throw new IOException("Could not rename source file '" + sFile.getName() + "' since target name '"
-              + renamedFile.getName() + "' already exists.");
+                  + renamedFile.getName() + "' already exists.");
         }
         sFile.renameTo(renamedFile);
       }
@@ -222,4 +213,5 @@ public class DefaultSmbClient implements SmbClient {
   public void setAuthentication(final NtlmPasswordAuthentication authentication) {
     this.authentication = authentication;
   }
+
 }

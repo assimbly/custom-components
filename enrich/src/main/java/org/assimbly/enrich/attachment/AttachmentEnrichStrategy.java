@@ -48,7 +48,7 @@ public class AttachmentEnrichStrategy implements AggregationStrategy {
         if (resourceMessage.getHeader(Exchange.CONTENT_TYPE) != null)
             mimeType = resourceMessage.getHeader(Exchange.CONTENT_TYPE, String.class);
 
-        DataHandler dataHandler = null;
+        DataHandler dataHandler;
         byte[] data = new byte[0];
 
         try {

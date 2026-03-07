@@ -255,29 +255,23 @@ public class XmlMetadataExtractor {
     private static void propagateDeepestDepth(Map<String, ElementMetadata> metadataMap, String path) {
         String childPath = path;
         int currentDepth = 0;
+        String parentPath = ElementMetadataUtils.getParentPath(childPath);
 
-        while (true) {
-            String parentPath = ElementMetadataUtils.getParentPath(childPath);
-            if (parentPath.isEmpty()) {
-                break;
-            }
-
+        while (!parentPath.isEmpty()) {
             ElementMetadata parentMeta = metadataMap.computeIfAbsent(parentPath, p -> {
                 ElementMetadata m = new ElementMetadata();
                 m.setPath(p);
                 return m;
             });
 
-            int parentDepth = parentMeta.getDeepestDepth();
-            if (parentDepth < currentDepth + 1) {
-                parentMeta.setDeepestDepth(currentDepth + 1);
-            } else {
-                // stop propagating if no deeper depth is added
+            if (parentMeta.getDeepestDepth() >= currentDepth + 1) {
                 break;
             }
 
+            parentMeta.setDeepestDepth(currentDepth + 1);
             childPath = parentPath;
             currentDepth++;
+            parentPath = ElementMetadataUtils.getParentPath(childPath);
         }
     }
 

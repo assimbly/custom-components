@@ -75,7 +75,7 @@ public class MongoDao {
             return null;
         }
 
-        StringBuffer output = new StringBuffer();
+        StringBuilder output = new StringBuilder();
         String tenantVariableValue = tenantVar.find(environment)
                 .orElseThrow(() -> new EnvironmentValueNotFoundException("Tenant variable (" + tenantVarName + ") value not found for environment: " + environment))
                 .getValue();
@@ -112,21 +112,21 @@ public class MongoDao {
     }
 
     public static String interpolatePossibleTenantVariable(String value, String tenant, TenantVariable.TenantVarType tenantVarType) {
-        StringBuffer valueBuf = new StringBuffer();
+
+        StringBuilder valueBuf = new StringBuilder();
         String environment = TenantVariablesProcessor.getEnvironment();
         Pattern pattern = Pattern.compile(TENANT_VARIABLE_EXPRESSION);
         Matcher matcher = pattern.matcher(value);
 
-        while(matcher.find()){
-            String varName = matcher.group(1);
-            TenantVariablesProcessor tenantVarProcessor = new TenantVariablesProcessor();
-            String environmentVarValue = "";
+        TenantVariablesProcessor tenantVarProcessor = new TenantVariablesProcessor();
 
-            TenantVariable tenantVar = MongoDao.findTenantVariableByName(varName, tenant, tenantVarType);
-            Optional<EnvironmentValue> environmentVar = tenantVar.find(environment);
-            if(environmentVar.isPresent()) {
-                environmentVarValue = tenantVarProcessor.getValueByEnvironmentValue(environmentVar.get());
-            }
+        while (matcher.find()) {
+            String varName = matcher.group(1);
+
+            String environmentVarValue = Optional.ofNullable(MongoDao.findTenantVariableByName(varName, tenant, tenantVarType))
+                    .flatMap(tv -> tv.find(environment))
+                    .map(tenantVarProcessor::getValueByEnvironmentValue)
+                    .orElse("");
 
             matcher.appendReplacement(valueBuf, Matcher.quoteReplacement(environmentVarValue));
         }
@@ -155,7 +155,9 @@ public class MongoDao {
 
         tenantVariable = initTenantVariable(tenantVariable, tenantVarType, tenantVarName, environment, tenantVariableExist);
 
-        EnvironmentValue variable = tenantVariable.find(environment).get();
+        EnvironmentValue variable = tenantVariable.find(environment)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Environment " + environment + " not found for variable " + tenantVarName));
 
         variable.setEncrypted(false);
         variable.setValue(tenantVarValue);

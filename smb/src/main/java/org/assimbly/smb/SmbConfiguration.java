@@ -145,7 +145,6 @@ public class SmbConfiguration extends GenericFileConfiguration {
         return path;
     }
 
-    // TODO: give this dirty handling some thinking.
     @Override
     public String getDirectory() {
         String s = super.getDirectory();

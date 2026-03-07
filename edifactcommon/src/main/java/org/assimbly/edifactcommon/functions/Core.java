@@ -78,7 +78,7 @@ public class Core
 		public SequenceCache(IEnumerable source) 
 		{
 			sourceSequence = source;
-			elements = new ArrayList<Object>();
+			elements = new ArrayList<>();
 		}
 
 		public IEnumerator enumerator() throws Exception 
@@ -117,7 +117,7 @@ public class Core
 				public Enumerator(IEnumerator x)
 				{
 					this.x = x; 
-					v = new HashSet<Object>();
+					v = new HashSet<>();
 				}
 				
 				public boolean moveNext() throws Exception
@@ -1106,7 +1106,7 @@ public class Core
 
 	public static double ceiling(double d) { return Math.ceil(d); }
 	public static double floor(double d) { return Math.floor(d); }
-	public static double round(double d) { return round(new BigDecimal(d)).doubleValue(); }
+	public static double round(double d) { return round(BigDecimal.valueOf(d)).doubleValue(); }
 
 	public static BigInteger ceiling(BigInteger n) { return n; }
 	public static BigDecimal ceiling(BigDecimal n) { return n.setScale(0, RoundingMode.CEILING); }
@@ -1333,11 +1333,11 @@ public class Core
 	
 	public static IEnumerable tokenize(String input, String delimiter)
 	{
-		ArrayList<String> tokens = new ArrayList<String>();
+		ArrayList<String> tokens = new ArrayList<>();
 		int i=0;
 		int j=0;
 		int dl = delimiter.length();
-		//int il = input.length();
+
 		while(true)
 		{
 			i = input.indexOf(delimiter, j);
@@ -1355,7 +1355,7 @@ public class Core
 	
 	public static IEnumerable tokenizeByLength(String input, double length)
 	{
-		ArrayList<String> tokens = new ArrayList<String>();
+		ArrayList<String> tokens = new ArrayList<>();
 		
 		int l = input.length();
 		int step = (int) length;
@@ -1384,7 +1384,7 @@ public class Core
 	{
 		if (val.length() == 0)
 			return BigInteger.valueOf(0);
-		return BigInteger.valueOf((long) val.charAt(0));
+		return BigInteger.valueOf(val.charAt(0));
 	}
 
 	public static String FormatNumber(BigDecimal bd, String sPattern)
@@ -1411,7 +1411,7 @@ public class Core
 
 	public static DateTime ParseDateTime(String sInput, String sPattern)
 	{
-		if( sPattern.length() == 0 )
+		if( sPattern.isEmpty() )
 			throw new IllegalArgumentException( "Empty pattern.");
 
 		DateTimeFormatParser dtfp = new DateTimeFormatParser( sPattern);
@@ -1531,7 +1531,7 @@ public class Core
 
 	public static IMFNode createNamespace(String prefix, String content)
 	{
-		if (prefix.length() == 0)
+		if (prefix.isEmpty())
 			return new MFAttribute("xmlns", "http://www.w3.org/2000/xmlns/", "", box(content));
 		else
 			return new MFAttribute(prefix, "http://www.w3.org/2000/xmlns/", "xmlns", box(content));
@@ -1711,15 +1711,17 @@ public class Core
 	private static class FilterSequenceByPositionRange implements IEnumerable
 	{
 		private IEnumerable sequence;
-		private BigInteger from, till;		// 1-based, both inclusive
+		private final BigInteger from;
+        private final BigInteger till;		// 1-based, both inclusive
 
 		class Enumerator implements IEnumerator
 		{
 			private int pos = 0;
 			private IEnumerator enumerator;
-			private BigInteger skip, take;
+			private BigInteger skip;
+			private BigInteger take;
 
-			public Enumerator( IEnumerator enumerator, BigInteger skip, BigInteger take ) throws Exception 
+			public Enumerator( IEnumerator enumerator, BigInteger skip, BigInteger take )
 			{
 				this.enumerator = enumerator;
 				this.skip = skip;

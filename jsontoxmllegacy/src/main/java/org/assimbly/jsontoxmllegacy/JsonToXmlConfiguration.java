@@ -4,17 +4,13 @@ import tools.jackson.databind.JsonNode;
 import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.util.HashMap;
 
 @UriParams
-public class JsonToXmlConfiguration implements Cloneable{
-
-    protected Logger log = LoggerFactory.getLogger(getClass());
+public class JsonToXmlConfiguration {
 
     @UriParam
     @Metadata(required = true)
@@ -45,6 +41,20 @@ public class JsonToXmlConfiguration implements Cloneable{
 
     public JsonToXmlConfiguration() {
         // Used for serialization or reflection
+    }
+
+    public JsonToXmlConfiguration(JsonToXmlConfiguration source) {
+        this.elementName      = source.elementName;
+        this.arrayName        = source.arrayName;
+        this.rootName         = source.rootName;
+        this.namespaceLenient = source.namespaceLenient;
+        this.typeHints        = source.typeHints;
+        this.document         = source.document;
+        this.element          = source.element;
+        this.jsonNode         = source.jsonNode;
+        this.name             = source.name;
+        this.level            = source.level;
+        this.xmlnsMap         = new HashMap<>(source.xmlnsMap);
     }
 
     public String getElementName() {
@@ -144,18 +154,11 @@ public class JsonToXmlConfiguration implements Cloneable{
 
     // create sub level configuration
     public JsonToXmlConfiguration createSubLevelConfig(JsonNode jsonNode, String name) {
-        try {
-            JsonToXmlConfiguration subLevelConfig = (JsonToXmlConfiguration)this.clone();
-
-            subLevelConfig.setLevel(this.getLevel() +1);
-            subLevelConfig.setName(name);
-            subLevelConfig.setJsonNode(jsonNode);
-
-            return subLevelConfig;
-        } catch (java.lang.CloneNotSupportedException e) {
-            log.error("Could not create config for sub level", e);
-            return null;
-        }
+        JsonToXmlConfiguration subLevelConfig = new JsonToXmlConfiguration(this);
+        subLevelConfig.setLevel(this.level + 1);
+        subLevelConfig.setName(name);
+        subLevelConfig.setJsonNode(jsonNode);
+        return subLevelConfig;
     }
 
 }

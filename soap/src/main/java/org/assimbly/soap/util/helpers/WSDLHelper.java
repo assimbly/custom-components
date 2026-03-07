@@ -17,9 +17,11 @@ import org.apache.camel.Exchange;
 import org.apache.commons.io.FileUtils;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
-
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.io.entity.ByteArrayEntity;
 import org.apache.hc.core5.util.Timeout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,8 +32,7 @@ import javax.wsdl.Definition;
 import javax.wsdl.WSDLException;
 import javax.wsdl.factory.WSDLFactory;
 import javax.wsdl.xml.WSDLReader;
-import jakarta.xml.soap.SOAPConnection;
-import jakarta.xml.soap.SOAPConnectionFactory;
+import jakarta.xml.soap.MessageFactory;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
 
@@ -40,9 +41,9 @@ public final class WSDLHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(WSDLHelper.class);
     private static final String CACHE_EXPIRATION_PROPERTY = "soap.cacheExpirationInHours";
-    private static final Properties prop = loadProperties("org.assimbly.soap.cfg");
+    private static final Properties prop = loadProperties();
 
-    public static Definition retrieve(String params, String wsdl, List<SoapHttpHeader> httpHeaders) throws WSDLException, IOException, URISyntaxException {
+    public static Definition retrieve(String params, String wsdl, List<SoapHttpHeader> httpHeaders) throws WSDLException, IOException {
         WSDLFactory factory = WSDLFactory.newInstance();
         WSDLReader reader = factory.newWSDLReader();
         reader.setFeature("javax.wsdl.verbose", false);
@@ -93,16 +94,13 @@ public final class WSDLHelper {
         return "%s?%s".formatted(wsdl, params);
     }
 
-    protected static void fetchWSDL(File file, String location, List<SoapHttpHeader> httpHeaders) throws URISyntaxException, IOException {
+    private static void fetchWSDL(File file, String location, List<SoapHttpHeader> httpHeaders) throws URISyntaxException, IOException {
 
-        // 1. Use Timeout.ofMilliseconds for configuration
         RequestConfig config = RequestConfig.custom()
                 .setConnectionRequestTimeout(Timeout.ofMilliseconds(20000))
                 .setResponseTimeout(Timeout.ofMilliseconds(20000))
                 .build();
 
-        // 2. Use HttpClients.custom() or .createDefault()
-        // It is best practice to use try-with-resources for the client
         try (CloseableHttpClient client = HttpClients.custom()
                 .setDefaultRequestConfig(config)
                 .build()) {
@@ -113,82 +111,78 @@ public final class WSDLHelper {
                 httpHeaders.forEach(httpHeader -> request.setHeader(httpHeader.getName(), httpHeader.getValue()));
             }
 
-            // 3. execute() now requires a ResponseHandler or careful handling.
-            // For a direct migration of your logic:
             client.execute(request, response -> {
-                // This lambda handles the ClassicHttpResponse safely
                 try (BufferedInputStream wsdl = new BufferedInputStream(response.getEntity().getContent())) {
                     FileUtils.copyInputStreamToFile(wsdl, file);
                 }
-                return null; // The handler requires a return value
+                return null;
             });
         }
     }
 
     public static Map<String, Object> execute(String destination, SOAPMessage request, Exchange exchange) throws SOAPException, IOException {
-        SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
-        SOAPMessage soapResponse;
-        try (SOAPConnection soapConnection = soapConnectionFactory.createConnection()) {
 
-            /*
-             * Write the request message to a string so we can put in the header.
-             * The header "Generated-Request" will have the generated request which
-             * can be use as a debug.
-             */
+        // Serialize the SOAP request to bytes once — used for both the HTTP body and the debug header.
+        ByteArrayOutputStream requestStream = new ByteArrayOutputStream();
+        request.writeTo(requestStream);
+        byte[] requestBytes = requestStream.toByteArray();
+        String requestMessage = new String(requestBytes, StandardCharsets.UTF_8);
 
-            ByteArrayOutputStream requestStream = new ByteArrayOutputStream();
-            request.writeTo(requestStream);
-            String requestMessage = new String(requestStream.toByteArray(), StandardCharsets.UTF_8);
+        exchange.getIn().setHeader("Generated-Request", requestMessage);
 
-            URL endpoint = new URL(null, destination, new URLTimeoutHandler());
-
-            exchange.getIn().setHeader("Generated-Request", requestMessage);
-
-            // Call the webservice with the specified URL in the WSDL.
-            soapResponse = soapConnection.call(request, endpoint);
-
+        // Resolve the SOAPAction header (may be blank but must be present for SOAP 1.1).
+        String soapAction = "";
+        String[] soapActionHeader = request.getMimeHeaders().getHeader("SOAPAction");
+        if (soapActionHeader != null && soapActionHeader.length > 0) {
+            soapAction = soapActionHeader[0];
         }
 
-        // Write the SOAP Response to the out body.
+        RequestConfig config = RequestConfig.custom()
+                .setConnectionRequestTimeout(Timeout.ofMilliseconds(10000))
+                .setResponseTimeout(Timeout.ofMilliseconds(30000))
+                .build();
 
-        ByteArrayOutputStream responseStream = new ByteArrayOutputStream();
-        soapResponse.writeTo(responseStream);
+        try (CloseableHttpClient client = HttpClients.custom()
+                .setDefaultRequestConfig(config)
+                .build()) {
 
-        ByteArrayInputStream inputStream =
-                new ByteArrayInputStream(responseStream.toByteArray());
+            HttpPost httpPost = new HttpPost(new URI(destination));
+            httpPost.setHeader("Content-Type", "text/xml; charset=UTF-8");
+            httpPost.setHeader("SOAPAction", soapAction);
+            httpPost.setEntity(new ByteArrayEntity(requestBytes, ContentType.TEXT_XML));
 
-        Map<String, Object> result = new HashMap<>();
-        result.put("ResponseBody", inputStream);
-        result.put("ResponseMessage", soapResponse);
+            byte[] responseBytes = client.execute(httpPost, response -> {
+                try (InputStream content = response.getEntity().getContent()) {
+                    return content.readAllBytes();
+                }
+            });
 
-        return result;
+            // Parse the raw HTTP response body back into a SOAPMessage.
+            SOAPMessage soapResponse = MessageFactory.newInstance()
+                    .createMessage(null, new ByteArrayInputStream(responseBytes));
+
+            Map<String, Object> result = new HashMap<>();
+            result.put("ResponseBody", new ByteArrayInputStream(responseBytes));
+            result.put("ResponseMessage", soapResponse);
+
+            return result;
+
+        } catch (URISyntaxException e) {
+            throw new IOException("Invalid SOAP endpoint URI: " + destination, e);
+        } catch (SOAPException e) {
+            throw new SOAPException("Failed to parse SOAP response from: " + destination, e);
+        }
     }
 
-    private static Properties loadProperties(String filename){
+    private static Properties loadProperties(){
         Properties properties = new Properties();
         try {
-            InputStream inputStream = WSDLHelper.class.getClassLoader().getResourceAsStream(filename);
+            InputStream inputStream = WSDLHelper.class.getClassLoader().getResourceAsStream("org.assimbly.soap.cfg");
             properties.load(inputStream);
         } catch (Exception e) {
             LOG.error("Error to load properties file", e);
         }
 
         return properties;
-    }
-
-    public static class URLTimeoutHandler extends URLStreamHandler {
-
-        @Override
-        protected URLConnection openConnection(URL url) throws IOException {
-            URL target = new URL(url.toString());
-
-            URLConnection connection = target.openConnection();
-
-            // Connection settings
-            connection.setConnectTimeout(10000); // 10 sec
-            connection.setReadTimeout(30000); // 1 min
-
-            return(connection);
-        }
     }
 }

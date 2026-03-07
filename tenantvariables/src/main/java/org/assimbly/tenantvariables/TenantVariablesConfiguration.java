@@ -8,7 +8,7 @@ import org.assimbly.tenantvariables.domain.Operation;
 
 
 @UriParams
-public class TenantVariablesConfiguration implements Cloneable {
+public class TenantVariablesConfiguration {
 
     @UriPath
     @Metadata(required = true)
@@ -48,6 +48,19 @@ public class TenantVariablesConfiguration implements Cloneable {
         // used for serialization or reflection
     }
 
+    public TenantVariablesConfiguration(TenantVariablesConfiguration source) {
+        this.name         = source.name;
+        this.operation    = source.operation;
+        this.language     = source.language;
+        this.tenantDbName = source.tenantDbName;
+        this.environment  = source.environment;
+        this.value        = source.value;
+        this.headerName   = source.headerName;
+        this.encrypt      = source.encrypt;
+        this.groupName    = source.groupName;
+        this.flowName     = source.flowName;
+    }
+
     /**
      * Operation to preform on the given variable.
      */
@@ -68,7 +81,6 @@ public class TenantVariablesConfiguration implements Cloneable {
     public void setEnvironment(String environment) {
         this.environment = environment;
     }
-
 
     /**
      * The name of the variable to use.
@@ -145,4 +157,5 @@ public class TenantVariablesConfiguration implements Cloneable {
     public void setFlowName(String flowName) {
         this.flowName = flowName;
     }
+
 }

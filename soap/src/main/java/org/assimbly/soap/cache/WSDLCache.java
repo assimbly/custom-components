@@ -4,6 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -32,17 +36,22 @@ public enum WSDLCache {
     }
 
     public void remove(String url) {
-        File file = getPath(url);
+        // Assuming getPath(url) returns a java.io.File or a java.nio.file.Path
+        Path path = getPath(url).toPath();
 
-        boolean isDeleted = file.delete();
-
-        if (isDeleted)
+        try {
+            // Explicitly delete; throws exception if file is missing or locked
+            Files.delete(path);
             LOG.info("Cached WSDL has been successfully deleted.");
-        else
-            LOG.warn("New WSDL could not be cached or already cached WSDL could not be deleted. " +
-                     "Check the error log for the possible cause.");
-
-        locations.remove(url);
+        } catch (NoSuchFileException _) {
+            LOG.warn("WSDL not found at {}; nothing to delete.", path);
+        } catch (IOException e) {
+            LOG.error("Failed to delete WSDL at {}. Reason: {}", path, e.getMessage());
+            LOG.warn("New WSDL could not be cached or already cached WSDL could not be deleted.");
+        } finally {
+            // Ensure the reference is removed from the map regardless of disk outcome
+            locations.remove(url);
+        }
     }
 
     public boolean contains(String url) {
