@@ -98,13 +98,12 @@ public class MySQLDatabase {
             //STEP 2: Open a connection
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
-            StringBuffer sql = new StringBuffer( "insert into products (id, name, description, price) values" );
-            sql.append( "(1, 'Product Name 1', 'Description 1', 19.99)," );
-            sql.append( "(2, 'Product Name 2', 'Description 2', 29.99)," );
-            sql.append( "(3, 'Product Name 3', 'Description 3', 39.99)" );
+            String sql = "insert into products (id, name, description, price) values" + "(1, 'Product Name 1', 'Description 1', 19.99)," +
+                    "(2, 'Product Name 2', 'Description 2', 29.99)," +
+                    "(3, 'Product Name 3', 'Description 3', 39.99)";
 
             //STEP 3: Create Database
-            stmt = conn.prepareStatement(sql.toString());
+            stmt = conn.prepareStatement(sql);
 
             stmt.executeUpdate();
         }catch(Exception e){
@@ -131,13 +130,14 @@ public class MySQLDatabase {
             //STEP 2: Open a connection
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
-            StringBuffer sql = new StringBuffer( "create procedure GetAllProducts() " );
-            sql.append( "BEGIN " );
-            sql.append( "select * from products; " );
-            sql.append( "END" );
+            String sql = """
+                    create procedure GetAllProducts()
+                    BEGIN
+                    select * from products;
+                    END""";
 
             //STEP 3: Create Database
-            stmt = conn.prepareStatement(sql.toString());
+            stmt = conn.prepareStatement(sql);
 
             stmt.executeUpdate();
         }catch(Exception e){

@@ -24,9 +24,9 @@ package org.assimbly.smb;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.camel.util.IOHelper;
 import org.codelibs.jcifs.smb.context.SingletonContext;
@@ -68,24 +68,17 @@ public class DefaultSmbClient implements SmbClient {
   @Override
   public void login(final String domain, final String username, final String password) {
     if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug("login() domain[" + domain + "] username[" + username + "] password[***]");
+        LOGGER.debug("login() domain[{}] username[{}] password[***]", domain, username);
     }
     setAuthentication(new NtlmPasswordAuthentication(SingletonContext.getInstance(), domain, username,
             password));
   }
 
-  /**
-   * @param url
-   * @param out
-   * @return
-   * @throws IOException
-   * @throws MalformedURLException
-   */
   @Override
   public boolean retrieveFile(final String url, final OutputStream out)
           throws IOException {
     if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug("retrieveFile() path[" + url + "]");
+        LOGGER.debug("retrieveFile() path[{}]", url);
     }
     try (SmbFile smbFile = smbApiFactory.createSmbFile(url, authentication)) {
       IOHelper.copyAndCloseInput(smbFile.getInputStream(), out);
@@ -96,7 +89,7 @@ public class DefaultSmbClient implements SmbClient {
   @Override
   public boolean createDirs(final String url) {
     if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug("createDirs() path[" + url + "]");
+        LOGGER.debug("createDirs() path[{}]", url);
     }
     try (SmbFile smbFile = smbApiFactory.createSmbFile(url, authentication)) {
       if (!smbFile.exists()) {
@@ -114,7 +107,7 @@ public class DefaultSmbClient implements SmbClient {
   @Override
   public InputStream getInputStream(final String url) throws IOException {
     if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug("getInputStream() path[" + url + "]");
+        LOGGER.debug("getInputStream() path[{}]", url);
     }
     try (SmbFile smbFile = smbApiFactory.createSmbFile(url, authentication)) {
       return smbFile.getInputStream();
@@ -122,7 +115,7 @@ public class DefaultSmbClient implements SmbClient {
   }
 
   @Override
-  public boolean storeFile(final String url, final InputStream inputStream, final boolean append, final Long lastModified)
+  public void storeFile(final String url, final InputStream inputStream, final boolean append, final Long lastModified)
           throws IOException {
     if (LOGGER.isDebugEnabled()) {
       LOGGER.debug("storeFile() path[{}]", url);
@@ -141,12 +134,11 @@ public class DefaultSmbClient implements SmbClient {
         }
       }
     }
-    return true;
   }
 
   @Override
-  public java.util.List<SmbFile> listFiles(final String url) throws IOException {
-    final java.util.List<SmbFile> fileList = new ArrayList<>();
+  public List<SmbFile> listFiles(final String url) throws IOException {
+    final List<SmbFile> fileList = new ArrayList<>();
 
     try (SmbFile dir = smbApiFactory.createSmbFile(url, authentication)) {
       if (dir.exists() && dir.isDirectory()) {

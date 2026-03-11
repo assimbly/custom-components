@@ -55,7 +55,7 @@ public class SmbConsumer extends GenericFileConsumer<SmbFile> {
         }
 
 
-        boolean currentFileIsDir = false;
+        boolean currentFileIsDir;
         SmbFile[] smbFiles = operations.listFiles(fileName);
         for (SmbFile smbFile : smbFiles) {
             if (!canPollMoreFiles(fileList)) {

@@ -7,12 +7,12 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 import java.util.AbstractMap;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class XstreamMapEntryConverter implements Converter {
 
-    @SuppressWarnings("rawtypes") // required via com.thoughtworks.xstream.converters.ConverterMatcher.canConvert()
+    // required via com.thoughtworks.xstream.converters.ConverterMatcher.canConvert()
     public boolean canConvert(Class clazz) {
         return AbstractMap.class.isAssignableFrom(clazz);
     }
@@ -30,7 +30,7 @@ public class XstreamMapEntryConverter implements Converter {
     }
 
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-        Map<String, String> map = new HashMap<>();
+        Map<String, String> map = new ConcurrentHashMap<>();
 
         while (reader.hasMoreChildren()) {
             reader.moveDown();

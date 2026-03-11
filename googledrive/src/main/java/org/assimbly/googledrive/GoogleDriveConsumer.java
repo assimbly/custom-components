@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.assimbly.googledrive.exception.GoogleDriveException;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -135,7 +134,7 @@ public class GoogleDriveConsumer extends ScheduledPollConsumer implements Consum
             throw new GoogleDriveException("download", fileModel.getId());
         }
 
-        try (OutputStream outputStream = new FileOutputStream(file)){
+        try (OutputStream outputStream = Files.newOutputStream(file.toPath())){
 
             if ( isGSuiteFile(fileModel) )
                 service.files()

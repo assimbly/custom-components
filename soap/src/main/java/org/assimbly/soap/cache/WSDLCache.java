@@ -22,12 +22,6 @@ public enum WSDLCache {
     // Key: URL, Value: UUID FileName
     private static final HashMap<String, UUID> locations = new HashMap<>();
 
-    /**
-     * Register wsdl file url to the locations map.
-     *
-     * @param url
-     * @return Path to where the file should be written.
-     */
     public File register(String url) {
         UUID uuid = UUID.randomUUID();
 

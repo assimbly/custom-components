@@ -23,11 +23,10 @@ package org.assimbly.smb;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.Date;
 
 import org.apache.camel.Exchange;
@@ -147,8 +146,8 @@ public class SmbOperations<SmbFile> implements GenericFileOperations<SmbFile> {
         // store content as a file in the local work directory in the temp
         // handle
         try {
-            os = new FileOutputStream(temp);
-        } catch (FileNotFoundException e1) {
+            os = Files.newOutputStream(temp.toPath());
+        } catch (IOException e1) {
             throw new GenericFileOperationFailedException("File not found: " + temp, e1);
         }
 
@@ -279,7 +278,7 @@ public class SmbOperations<SmbFile> implements GenericFileOperations<SmbFile> {
                 // temp file can be renamed later
                 // with success as the existing target file have been deleted
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Eagerly deleting existing file: " + name);
+                    LOGGER.debug("Eagerly deleting existing file: {}", name);
                 }
                 if (!deleteFile(name)) {
                     throw new GenericFileOperationFailedException("Cannot delete file: " + name);

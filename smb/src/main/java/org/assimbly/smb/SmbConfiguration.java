@@ -80,7 +80,7 @@ public class SmbConfiguration extends GenericFileConfiguration {
         buffer.append("smb://");
         buffer.append(getHost());
         if (getPort() > 0) {
-            buffer.append(":").append(getPort());
+            buffer.append(':').append(getPort());
         }
         buffer.append(getPath());
         return buffer.toString();
@@ -91,9 +91,9 @@ public class SmbConfiguration extends GenericFileConfiguration {
         buffer.append("smb://");
         buffer.append(getHost());
         if (getPort() > 0) {
-            buffer.append(":").append(getPort());
+            buffer.append(':').append(getPort());
         }
-        buffer.append("/");
+        buffer.append('/');
         return buffer.toString();
     }
 

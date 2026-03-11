@@ -20,6 +20,7 @@ import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.InputStream;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class XmlMetadataExtractor {
 
@@ -32,10 +33,10 @@ public class XmlMetadataExtractor {
         Map<String, ElementMetadata> metadataMap = new LinkedHashMap<>();
 
         Deque<String> pathStack = new ArrayDeque<>();
-        Map<String, Integer> elementCounter = new HashMap<>();
-        Map<String, Integer> childrenCountMap = new HashMap<>();
+        Map<String, Integer> elementCounter = new ConcurrentHashMap<>();
+        Map<String, Integer> childrenCountMap = new ConcurrentHashMap<>();
         Deque<String> textStack = new ArrayDeque<>();
-        Map<String, Integer> siblingIndexMap = new HashMap<>();
+        Map<String, Integer> siblingIndexMap = new ConcurrentHashMap<>();
 
         while (reader.hasNext()) {
             XMLEvent event = reader.nextEvent();
@@ -103,9 +104,9 @@ public class XmlMetadataExtractor {
     // set attributes
     private static void setAttributes(StartElement startElement, ElementMetadata metadata) {
         Iterator<Attribute> attrIterator = startElement.getAttributes();
-        Map<String, AttributeEntry> attributes = new HashMap<>();
+        Map<String, AttributeEntry> attributes = new ConcurrentHashMap<>();
         while (attrIterator.hasNext()) {
-            Attribute attr = (Attribute) attrIterator.next();
+            Attribute attr = attrIterator.next();
             QName qname = attr.getName();
             String attrName = qname.getPrefix().isEmpty()
                     ? qname.getLocalPart()
@@ -178,7 +179,7 @@ public class XmlMetadataExtractor {
         parentMetadata.setChildrenCount(childrenCountMap.get(parentPath));
 
         // add child name
-        String childName = path.substring(path.lastIndexOf("/") +1, path.lastIndexOf("["));
+        String childName = path.substring(path.lastIndexOf('/') +1, path.lastIndexOf('['));
         parentMetadata.addChildName(childName);
 
         // add child complete path
@@ -218,7 +219,7 @@ public class XmlMetadataExtractor {
             ElementMetadata metadata,
             String parentPath
     ) {
-        Map<String, Namespace> definedNamespacesMap = new HashMap<>();
+        Map<String, Namespace> definedNamespacesMap = new ConcurrentHashMap<>();
         Map<String, Namespace> parentNamespaces = Optional.ofNullable(metadataMap.get(parentPath))
                 .map(ElementMetadata::getNamespaces)
                 .map(HashMap::new) // create a copy to avoid mutating parent

@@ -31,7 +31,7 @@ public class EdiDataFormat implements DataFormat {
     }
 
     @Override
-    public Object unmarshal(Exchange exchange, InputStream stream) throws Exception {
+    public Object unmarshal(Exchange exchange, InputStream stream) {
         return new XmlToEdiConverter().convert(stream);
     }
 

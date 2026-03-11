@@ -12,17 +12,12 @@ public final class PortTypeHelper {
         if (action.contains("/")) {
             operation = portType.getOperation(action.split("/")[1], null, null);
 
-            if(operation == null)
-                return null;
-
-            return operation.getInput();
         } else {
             operation = portType.getOperation(action, null, null);
 
-            if(operation == null)
-                return null;
-
-            return operation.getInput();
         }
+        if(operation == null)
+            return null;
+        return operation.getInput();
     }
 }

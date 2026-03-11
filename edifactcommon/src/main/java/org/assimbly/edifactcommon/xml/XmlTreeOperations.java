@@ -16,6 +16,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import java.io.File;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class XmlTreeOperations
 {
@@ -183,7 +186,7 @@ public class XmlTreeOperations
     
     public static void saveDocument( Document doc, String filename, String encoding, boolean bBigEndian, boolean bBOM, boolean prettyPrint, boolean omitXmlDecl ) throws Exception
     {
-        java.io.FileOutputStream outStream = new java.io.FileOutputStream( filename, false );
+        OutputStream outStream = Files.newOutputStream(Paths.get(filename));
         saveDocument(doc, outStream, encoding, bBigEndian, bBOM, prettyPrint, omitXmlDecl);
         outStream.close();
     }
@@ -512,7 +515,7 @@ public class XmlTreeOperations
         int n = 1;
         while (true)
         {
-            String s = pp + String.valueOf(n);
+            String s = pp + n;
             if (lookupNamespaceURI(node, s) == null)
                 return s;
             ++n;

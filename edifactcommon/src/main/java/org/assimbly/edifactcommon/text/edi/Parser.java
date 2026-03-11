@@ -534,15 +534,13 @@ public class Parser {
 
 	public ArrayList<Message> filterMessages(String nameStartsWith)
 	{
-		ArrayList<Message> filteredMessages = new ArrayList<Message>();
+		ArrayList<Message> filteredMessages = new ArrayList<>();
 		java.util.Set<String> keyset = mMessages.keySet();
-		String[] keys = keyset.toArray( new String[keyset.size()] );
-		for( int i = 0 ; i < keys.length ; ++i )
-		{
-			String mk = keys[i];
-			if( mk.startsWith(nameStartsWith) )
-				filteredMessages.add(mMessages.get(mk));
-		}
+		String[] keys = keyset.toArray(new String[0]);
+        for (String mk : keys) {
+            if (mk.startsWith(nameStartsWith))
+                filteredMessages.add(mMessages.get(mk));
+        }
 		return filteredMessages;
 	}
 

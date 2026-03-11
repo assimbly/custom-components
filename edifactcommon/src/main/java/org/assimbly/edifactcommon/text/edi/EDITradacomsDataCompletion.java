@@ -102,8 +102,8 @@ public class EDITradacomsDataCompletion extends DataCompletion {
 			mWriteReconciliation = stds1.getValue() == "ANAA";
 			if (mWriteReconciliation)
 			{
-				mSenderReference = snrf != null ? snrf.getValue() : new String();
-				mRecieverCode = unto1 != null ? unto1.getValue() : new String();
+				mSenderReference = snrf != null ? snrf.getValue() : "";
+				mRecieverCode = unto1 != null ? unto1.getValue() : "";
 			}
 		}
 

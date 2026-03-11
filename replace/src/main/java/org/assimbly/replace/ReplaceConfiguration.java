@@ -6,6 +6,7 @@ import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 @UriParams
@@ -98,7 +99,7 @@ public class ReplaceConfiguration {
 
     private static Map<String, Integer> getFlagBits() {
 
-        Map<String, Integer> flags = new HashMap<>();
+        Map<String, Integer> flags = new ConcurrentHashMap<>();
 
         flags.put("i", Pattern.CASE_INSENSITIVE);
         flags.put("m", Pattern.MULTILINE);

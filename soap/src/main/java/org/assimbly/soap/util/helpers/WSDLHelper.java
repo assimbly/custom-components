@@ -8,10 +8,10 @@ import java.nio.file.Path;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.camel.Exchange;
 import org.apache.commons.io.FileUtils;
@@ -161,7 +161,7 @@ public final class WSDLHelper {
             SOAPMessage soapResponse = MessageFactory.newInstance()
                     .createMessage(null, new ByteArrayInputStream(responseBytes));
 
-            Map<String, Object> result = new HashMap<>();
+            Map<String, Object> result = new ConcurrentHashMap<>();
             result.put("ResponseBody", new ByteArrayInputStream(responseBytes));
             result.put("ResponseMessage", soapResponse);
 

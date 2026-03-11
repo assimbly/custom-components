@@ -49,7 +49,7 @@ public class GoogleDriveEndpoint extends ProcessorEndpoint {
     }
 
     @Override
-    public Producer createProducer() throws Exception {
+    public Producer createProducer() {
         return new GoogleDriveProducer(this);
     }
 

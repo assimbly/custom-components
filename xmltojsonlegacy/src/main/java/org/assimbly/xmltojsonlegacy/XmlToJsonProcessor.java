@@ -2,6 +2,8 @@ package org.assimbly.xmltojsonlegacy;
 
 import java.util.*;
 import java.io.InputStream;
+import java.util.concurrent.ConcurrentHashMap;
+
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.node.JsonNodeFactory;
@@ -99,18 +101,16 @@ public class XmlToJsonProcessor implements Processor {
         // add namespace attribute
         ExtractUtils.addNamespaceAttributeInObjectNode(metadata, null, config, metadata.getObjectNode(), parentNamespacePrefix);
 
+        JsonNode processTextResp;
         if(metadata.getChildrenCount() == 0) {
             // process node as leaf
-            JsonNode processTextResp = processNodeAsLeaf(metadataMap, metadata, config);
-            if (processTextResp != null) {
-                return processTextResp;
-            }
+            processTextResp = processNodeAsLeaf(metadataMap, metadata, config);
         } else {
             // process node with children
-            JsonNode processTextResp = processNodeWithChildren(metadataMap, metadata, config);
-            if (processTextResp != null) {
-                return processTextResp;
-            }
+            processTextResp = processNodeWithChildren(metadataMap, metadata, config);
+        }
+        if (processTextResp != null) {
+            return processTextResp;
         }
 
         // return json
@@ -154,7 +154,7 @@ public class XmlToJsonProcessor implements Processor {
 
     // group all paths by depth
     private static Map<Integer, List<String>> groupAllPathsByDepth(Map<String, ElementMetadata> metadataMap) {
-        Map<Integer, List<String>> depthMap = new HashMap<>();
+        Map<Integer, List<String>> depthMap = new ConcurrentHashMap<>();
         for (Map.Entry<String, ElementMetadata> entry : metadataMap.entrySet()) {
             int depth = entry.getValue().getLevel();
             depthMap.computeIfAbsent(depth, _ -> new ArrayList<>()).add(entry.getKey());

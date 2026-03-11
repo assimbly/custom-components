@@ -70,7 +70,7 @@ public class EdifactDataFormat implements DataFormat {
         });
     }
 
-    private Smooks getUnmarshalSmooks(EdifactType edifactType) throws SAXException {
+    private Smooks getUnmarshalSmooks(EdifactType edifactType) {
         if (!smooksUnmarshalCache.containsKey(edifactType)) {
             smooksUnmarshalCache.computeIfAbsent(edifactType, type -> {
                 try {

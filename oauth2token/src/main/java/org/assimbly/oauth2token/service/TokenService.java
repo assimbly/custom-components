@@ -17,8 +17,8 @@ import org.assimbly.tenantvariables.TenantVariablesProcessor;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Path("/")
@@ -60,7 +60,7 @@ public class TokenService {
             @QueryParam("tenant") String tenant,
             @QueryParam("code") String code
     ) {
-        Map<String, String> tokenInfoMap = new HashMap<>();
+        Map<String, String> tokenInfoMap = new ConcurrentHashMap<>();
 
         tenant = tenant.toLowerCase();
         String environment = TenantVariablesProcessor.getEnvironment();
@@ -125,7 +125,7 @@ public class TokenService {
 
     // call service to refresh token information
     public static String refreshTokenInfo(String id, String environment, String tenant) {
-        Map<String, String> tokenInfoMap = new HashMap<>();
+        Map<String, String> tokenInfoMap = new ConcurrentHashMap<>();
         String accessToken = null;
 
         // specific tenant variables names

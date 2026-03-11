@@ -87,7 +87,7 @@ public class TextFormatter implements ValueFormatter
 
 	public byte[] parseBinary(String s)	// default binary format is HexBinary
 	{
-		if( s == null ) return null;
+		if( s == null ) return new byte[0];
 		String newvalue = s.replaceAll("\\s{2,}", "").trim();	// collapse whitespace
 		if( newvalue.length() == 0 ) return new byte[0];
 

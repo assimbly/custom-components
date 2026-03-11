@@ -6,9 +6,9 @@ import tools.jackson.databind.node.ObjectNode;
 import org.assimbly.xmltojsonlegacy.utils.Constants;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ElementMetadata {
 
@@ -18,16 +18,16 @@ public class ElementMetadata {
     private int childrenCount;
     private int deepestDepth;
 
-    private final Map<String, Integer> childNameCounts = new HashMap<>();
+    private final Map<String, Integer> childNameCounts = new ConcurrentHashMap<>();
     private final List<String> childPaths = new ArrayList<>();
 
-    private Map<String, AttributeEntry> attributes = new HashMap<>();
+    private Map<String, AttributeEntry> attributes = new ConcurrentHashMap<>();
     private boolean hasAttributes;
 
     private String namespacePrefix;
     private Map<String, Namespace> namespaces;
     private Map<String, Namespace> definedNamespaces;
-    private boolean definesNamespaces = false;
+    private boolean definesNamespaces;
 
     private boolean hasEmptyTextContent = true;
     private boolean elementMustBeNull;
@@ -44,7 +44,7 @@ public class ElementMetadata {
     private ArrayNode arrayNode;
     private JsonNode valueAsJson;
 
-    private int index = 0;
+    private int index;
 
     public ElementMetadata() {
         // default constructor

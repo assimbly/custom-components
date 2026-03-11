@@ -20,7 +20,7 @@ public class TypesHelper {
                 }
 
                 // When the schema has imports, search in the imports as well
-                if(sc.getImports().size() > 0){
+                if(!sc.getImports().isEmpty()){
                     SchemaImport imp = SchemaHelper.findImport(sc, namespace);
 
                     if(imp != null && imp.getReferencedSchema() != null)

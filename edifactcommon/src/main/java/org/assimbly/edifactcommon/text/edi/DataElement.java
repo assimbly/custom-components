@@ -59,7 +59,7 @@ public class DataElement extends StructureItem {
 			&& isHL7SpecialField(context.getParticle().getName(), "-2"))
 		{
 			Scanner scanner = context.getScanner();
-			String s = new String();
+			String s = "";
 			char c = scanner.rawConsumeChar();
 			scanner.mServiceChars.setComponentSeparator( c);
 			s += c;
@@ -92,7 +92,7 @@ public class DataElement extends StructureItem {
 		if( context.getParser().getEDIKind() == EDISettings.EDIStandard.EDIX12 )
 		{
 			if( context.getParticle().getName().equals( "F447") && context.getCurrentSegmentName().equals("LS") )
-				context.getParser().setF447( new String( s) );
+				context.getParser().setF447(String.valueOf(s));
 		}
 
 		// codelist validate
@@ -140,7 +140,7 @@ public class DataElement extends StructureItem {
 	public void write (Writer writer, ITextNode node, Particle particle) throws IOException {
 
 		StringBuffer sbvalue = new StringBuffer();
-		String nodeName = new String();
+		String nodeName = "";
 		
 		if (node != null)
 		{

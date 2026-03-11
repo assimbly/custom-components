@@ -1,12 +1,12 @@
 package org.assimbly.xmltoexcel;
 
-//import com.google.gson.Gson;
+import java.util.*;
+
 import tools.jackson.databind.ObjectMapper;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.commons.text.StringEscapeUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -18,14 +18,13 @@ import tools.jackson.core.JacksonException;
 import org.assimbly.xmltoexcel.domain.CustomWorksheet;
 import org.assimbly.xmltoexcel.helpers.AssertExcel;
 import org.assimbly.xmltoexcel.helpers.DataProvider;
-
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.nio.file.Paths;
 
-public class XmlToExcelComponentTest extends CamelTestSupport {
+class XmlToExcelComponentTest extends CamelTestSupport {
 
     private static final String STANDARD_SETTINGS_ROUTE = "standardSettings";
     private static final String INDEX_COLUMN_ON_ROUTE = "indexColumnOn";
@@ -44,103 +43,90 @@ public class XmlToExcelComponentTest extends CamelTestSupport {
     private static Map<String, XmlToExcelConfiguration> routes;
 
     @BeforeAll
-    public static void setup() {
-        routes = Collections.unmodifiableMap(new HashMap<String, XmlToExcelConfiguration>() {{
-            put(STANDARD_SETTINGS_ROUTE, DataProvider.getStandardConfig());
-            put(INDEX_COLUMN_ON_ROUTE, DataProvider.getIndexColumnOnConfig());
-            put(INDEX_COLUMN_OFF_ROUTE, DataProvider.getIndexColumnOffConfig());
-            put(INCLUDE_HEADER_ON_ROUTE, DataProvider.getIncludeHeaderOnConfig());
-            put(INCLUDE_HEADER_OFF_ROUTE, DataProvider.getIncludeHeaderOffConfig());
-            put(CUSTOM_INDEX_COLUMN_NAME_ROUTE, DataProvider.getCustomIndexColumnNameConfig());
-            put(ORDERING_ASCENDING_ROUTE, DataProvider.getOrderingAscendingConfig());
-            put(ORDERING_DESCENDING_ROUTE, DataProvider.getOrderingDescendingConfig());
-            put(ORDERING_UNORDERED_ROUTE, DataProvider.getOrderingUnorderedConfig());
-            put(XLS_FORMAT_ROUTE, DataProvider.getXLSFormatConfig());
-            put(CUSTOM_SHEETS_FOR_STANDARD_SETTINGS_ROUTE, DataProvider.getCustomSheetsForStandardSettingsConfig());
-            put(CUSTOM_SHEETS_EXAMPLE_USE_CASE_ROUTE, DataProvider.getCustomSheetsExampleUseCaseConfig());
-        }});
+    static void setup() {
+        routes = Map.ofEntries(Map.entry(STANDARD_SETTINGS_ROUTE, DataProvider.getStandardConfig()), Map.entry(INDEX_COLUMN_ON_ROUTE, DataProvider.getIndexColumnOnConfig()), Map.entry(INDEX_COLUMN_OFF_ROUTE, DataProvider.getIndexColumnOffConfig()), Map.entry(INCLUDE_HEADER_ON_ROUTE, DataProvider.getIncludeHeaderOnConfig()), Map.entry(INCLUDE_HEADER_OFF_ROUTE, DataProvider.getIncludeHeaderOffConfig()), Map.entry(CUSTOM_INDEX_COLUMN_NAME_ROUTE, DataProvider.getCustomIndexColumnNameConfig()), Map.entry(ORDERING_ASCENDING_ROUTE, DataProvider.getOrderingAscendingConfig()), Map.entry(ORDERING_DESCENDING_ROUTE, DataProvider.getOrderingDescendingConfig()), Map.entry(ORDERING_UNORDERED_ROUTE, DataProvider.getOrderingUnorderedConfig()), Map.entry(XLS_FORMAT_ROUTE, DataProvider.getXLSFormatConfig()), Map.entry(CUSTOM_SHEETS_FOR_STANDARD_SETTINGS_ROUTE, DataProvider.getCustomSheetsForStandardSettingsConfig()), Map.entry(CUSTOM_SHEETS_EXAMPLE_USE_CASE_ROUTE, DataProvider.getCustomSheetsExampleUseCaseConfig()));
     }
 
     @EndpointInject("mock:result")
     protected MockEndpoint resultEndpoint;
 
     @Test
-    public void testStandardSettings() throws Exception {
+    void testStandardSettings() throws Exception {
         testTransformation(STANDARD_XML_FILE_NAME, "standardSettings.xlsx", STANDARD_SETTINGS_ROUTE);
     }
 
     @Test
-    public void testStandardDepth() throws Exception {
+    void testStandardDepth() throws Exception {
         testTransformation("depth.xml", "standardDepth.xlsx", STANDARD_SETTINGS_ROUTE);
     }
 
     @Test
-    public void testDepthWithDoubleTags() throws Exception {
+    void testDepthWithDoubleTags() throws Exception {
         testTransformation("depthWithDoubleTags.xml", "depthWithDoubleTags.xlsx", STANDARD_SETTINGS_ROUTE);
     }
 
     @Test
-    public void testDepthWithShuffledTags() throws Exception {
+    void testDepthWithShuffledTags() throws Exception {
         testTransformation("depthWithShuffledTags.xml", "depthWithShuffledTags.xlsx", STANDARD_SETTINGS_ROUTE);
     }
 
     @Test
-    public void testDepthWithSixLayers() throws Exception {
+    void testDepthWithSixLayers() throws Exception {
         testTransformation("depthWithSixLayers.xml", "depthWithSixLayers.xlsx", STANDARD_SETTINGS_ROUTE);
     }
 
     @Test
-    public void testIndexColumnOn() throws Exception {
+    void testIndexColumnOn() throws Exception {
         testTransformation(STANDARD_XML_FILE_NAME, "indexColumnOn.xlsx", INDEX_COLUMN_ON_ROUTE);
     }
 
     @Test
-    public void testIndexColumnOff() throws Exception {
+    void testIndexColumnOff() throws Exception {
         testTransformation(STANDARD_XML_FILE_NAME, "indexColumnOff.xlsx", INDEX_COLUMN_OFF_ROUTE);
     }
 
     @Test
-    public void testIncludeHeaderOn() throws Exception {
+    void testIncludeHeaderOn() throws Exception {
         testTransformation(STANDARD_XML_FILE_NAME, "includeHeaderOn.xlsx", INCLUDE_HEADER_ON_ROUTE);
     }
 
     @Test
-    public void testIncludeHeaderOff() throws Exception {
+    void testIncludeHeaderOff() throws Exception {
         testTransformation(STANDARD_XML_FILE_NAME, "includeHeaderOff.xlsx", INCLUDE_HEADER_OFF_ROUTE);
     }
 
     @Test
-    public void testCustomIndexColumnName() throws Exception {
+    void testCustomIndexColumnName() throws Exception {
         testTransformation(STANDARD_XML_FILE_NAME, "customIndexColumnName.xlsx", CUSTOM_INDEX_COLUMN_NAME_ROUTE);
     }
 
     @Test
-    public void testOrderingAscending() throws Exception {
+    void testOrderingAscending() throws Exception {
         testTransformation(STANDARD_XML_FILE_NAME, "orderingAscending.xlsx", ORDERING_ASCENDING_ROUTE);
     }
 
     @Test
-    public void testOrderingDescending() throws Exception {
+    void testOrderingDescending() throws Exception {
         testTransformation(STANDARD_XML_FILE_NAME, "orderingDescending.xlsx", ORDERING_DESCENDING_ROUTE);
     }
 
     @Test
-    public void testOrderingUnordered() throws Exception {
+    void testOrderingUnordered() throws Exception {
         testTransformation(STANDARD_XML_FILE_NAME, "orderingUnordered.xlsx", ORDERING_UNORDERED_ROUTE);
     }
 
     @Test
-    public void testXLSFormat() throws Exception {
+    void testXLSFormat() throws Exception {
         testTransformation(STANDARD_XML_FILE_NAME, "xlsFormatWithStandardSettings.xls", XLS_FORMAT_ROUTE);
     }
 
     @Test
-    public void testCustomWorksheetsForStandardSettings() throws Exception {
+    void testCustomWorksheetsForStandardSettings() throws Exception {
         testTransformation(STANDARD_XML_FILE_NAME, "customSheetsForStandardSettings.xlsx", CUSTOM_SHEETS_FOR_STANDARD_SETTINGS_ROUTE);
     }
 
     @Test
-    public void testCustomWorksheetsExampleUseCase() throws Exception {
+    void testCustomWorksheetsExampleUseCase() throws Exception {
         testTransformation("customWorksheets.xml", "customSheetsExampleUseCase.xlsx", CUSTOM_SHEETS_EXAMPLE_USE_CASE_ROUTE);
     }
 
@@ -195,7 +181,7 @@ public class XmlToExcelComponentTest extends CamelTestSupport {
     }
 
     private Workbook getWorkbook(String outputFileName, String outputPath) throws IOException {
-        FileInputStream outputFile = new FileInputStream(outputPath);
+        InputStream outputFile = Files.newInputStream(Paths.get(outputPath));
         if (outputFileName.endsWith(".xls")) {
             return new HSSFWorkbook(outputFile);
         }

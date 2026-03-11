@@ -1,8 +1,9 @@
 package org.assimbly.auth.util.helper;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,7 +46,7 @@ public final class ConfigHelper {
 
         Properties props = new Properties();
 
-        try(FileInputStream file = new FileInputStream("/opt/karaf/etc/" + FILE_NAME)) {
+        try(InputStream file = Files.newInputStream(Paths.get("/opt/karaf/etc/" + FILE_NAME))) {
             props.load(file);
         } catch (IOException _) {
             props.load(resourceStream);

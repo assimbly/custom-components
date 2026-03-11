@@ -3,17 +3,20 @@
 
 package org.assimbly.edifactcommon.io;
 
-public class FileInput extends StreamInput 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+public class FileInput extends StreamInput
 {
-	private String filename;
-	public FileInput(String filename) throws Exception
+	private final String fileName;
+	public FileInput(String fileName) throws Exception
 	{
-		super(new java.io.FileInputStream(filename));
-		this.filename = filename;
+		super(Files.newInputStream(Paths.get(fileName)));
+		this.fileName = fileName;
 	}
 
 	@Override
-	public String getFilename() {return filename;}
+	public String getFilename() {return fileName;}
 
 	@Override
 	public void close() throws Exception {getStream().close();}

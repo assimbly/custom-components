@@ -175,7 +175,6 @@ public class XmlToCsvProcessor implements Processor {
 
     private String applyQuotationOption(String content, QuoteFields quoteFields) {
         return switch(quoteFields) {
-            case ALL_FIELDS -> '"' + content + '"';
             case NON_INTEGER_FIELDS -> (content.matches("-?\\d+")) ? content : '"' + content + '"';
             case NO_FIELDS -> content;
             default -> '"' + content + '"';

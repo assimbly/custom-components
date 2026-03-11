@@ -78,12 +78,12 @@ public class SmbEndpoint extends GenericFileEndpoint<SmbFile> {
     }
 
     @Override
-    public PollingConsumer createPollingConsumer() throws Exception {
+    public PollingConsumer createPollingConsumer() {
         return new GenericFilePollingConsumer(this);
     }
 
     @Override
-    public GenericFileProducer<SmbFile> createProducer() throws Exception {
+    public GenericFileProducer<SmbFile> createProducer() {
         return new SmbProducer(this, createSmbOperations());
     }
 

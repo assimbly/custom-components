@@ -90,7 +90,7 @@ public class EDIFactDataCompletion extends DataCompletion {
 			conservativeSetValue(f0036, GetNumberOfFunctionGroupsOrMessages(unz.getParent()));
 			ITextNode unb = unz.getParent().getChildren().getFirstNodeByName("UNB");
 			ITextNodeList unbChildren = unb.getChildren().filterByName("F0020");
-			String ctrlRef = unbChildren.size() > 0 ? unbChildren.getAt(unbChildren.size()-1).getValue() : new String();
+			String ctrlRef = unbChildren.size() > 0 ? unbChildren.getAt(unbChildren.size()-1).getValue() : "";
 			conservativeSetValue(f0020, ctrlRef);
 		}
 

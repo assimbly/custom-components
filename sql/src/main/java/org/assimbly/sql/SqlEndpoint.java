@@ -10,7 +10,7 @@ public class SqlEndpoint extends ProcessorEndpoint {
 
     @UriParam
     private SqlConfiguration configuration;
-    private SqlComponent component;
+    private final SqlComponent component;
 
     public SqlEndpoint(String uri, SqlComponent component, SqlConfiguration configuration) {
         super(uri, component);
@@ -20,7 +20,7 @@ public class SqlEndpoint extends ProcessorEndpoint {
     }
 
     @Override
-    protected Processor createProcessor() throws Exception {
+    protected Processor createProcessor() {
         return new SqlProcessor(this);
     }
 

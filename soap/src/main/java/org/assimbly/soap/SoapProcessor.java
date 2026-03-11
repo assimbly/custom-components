@@ -33,9 +33,9 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SoapProcessor implements Processor {
 
@@ -170,7 +170,7 @@ public class SoapProcessor implements Processor {
     // -------------------------------------------------------------------------
 
     private Map<String, String> mimeHeaders(Binding binding, SoapConfiguration config) {
-        Map<String, String> headers = new HashMap<>();
+        Map<String, String> headers = new ConcurrentHashMap<>();
 
         addSoapActionHeader(headers, binding, config);
         addHttpHeaders(headers, config);
@@ -235,7 +235,7 @@ public class SoapProcessor implements Processor {
         copyNamespaceDeclarations(inputXml, envelope);
 
         if (PartHelper.containsTypes(input))
-            inputXml = applyTypeParts(inputXml, input, action, BindingHelper.operation(binding, action));
+            applyTypeParts(inputXml, input, action, BindingHelper.operation(binding, action));
 
         if (PartHelper.containsElements(input))
             applyElementParts(inputXml, input, definition, envelope);

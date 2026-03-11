@@ -164,18 +164,15 @@ public class XmlToJsonJsonProcessor {
         };
 
         if (content == null) {
-            switch (xmlJsonDataFormat.getTypeValueMismatch()) {
-            case ORIGINAL:
-                content = typedJsonObject.opt(this.contentKey);
-                break;
-            case NULL:
-                content = JSONObject.NULL;
-                break;
-            case ERROR:
-                Object value = typedJsonObject.opt(this.contentKey);
-                throw new JsonTypeException("There was a mismatch between a specified type and the value. Type is '%s' and the value is '%s'.".formatted(
-                        specifiedType, value));
-            }
+            content = switch (xmlJsonDataFormat.getTypeValueMismatch()) {
+                case ORIGINAL -> typedJsonObject.opt(this.contentKey);
+                case NULL -> JSONObject.NULL;
+                case ERROR -> {
+                    Object value = typedJsonObject.opt(this.contentKey);
+                    throw new JsonTypeException("There was a mismatch between a specified type and the value. Type is '%s' and the value is '%s'.".formatted(
+                            specifiedType, value));
+                }
+            };
         }
 
         return content;

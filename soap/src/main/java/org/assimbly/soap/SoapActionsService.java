@@ -20,13 +20,13 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.core.MediaType;
 import javax.wsdl.extensions.schema.Schema;
 import java.io.IOException;
-import java.net.URISyntaxException;
+
 
 @Secured
 @Consumes(MediaType.APPLICATION_JSON)
 public class SoapActionsService {
 
-    public String getSoapActions(String url) throws WSDLException, IOException, URISyntaxException {
+    public String getSoapActions(String url) throws WSDLException, IOException {
 
         List<SoapAction> list = getSoapActionsList(url);
         // add elements to the list
@@ -39,7 +39,7 @@ public class SoapActionsService {
 
         return jsonArray.toString(4);
     }
-    public List<SoapAction> getSoapActionsList(String wsdl) throws WSDLException, IOException, URISyntaxException {
+    public List<SoapAction> getSoapActionsList(String wsdl) throws WSDLException, IOException {
         List<SoapAction> results = new ArrayList<>();
         List<String> added = new ArrayList<>();
         List<SoapHttpHeader> httpHeaders = new ArrayList<>();

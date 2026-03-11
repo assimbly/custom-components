@@ -9,8 +9,8 @@ import org.springframework.http.MediaType;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class FormToXmlProcessor implements Processor {
 
@@ -28,7 +28,7 @@ public class FormToXmlProcessor implements Processor {
         String result = java.net.URLDecoder.decode(input, configuration.getEncoding());
         String[] pairs = result.split("&");
 
-        Map<String, String> items = new HashMap<>();
+        Map<String, String> items = new ConcurrentHashMap<>();
 
         for (String pair : pairs) {
             String[] keyValue = pair.split("=");

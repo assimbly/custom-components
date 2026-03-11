@@ -153,13 +153,12 @@ public class  DataTypeValidatorDecimal extends DataTypeValidator {
 
 		if (toPad >0)
 		{
-			String spad = new String();
-			for (int i=0; i< toPad; ++i)
-				spad += '0';
-			if (s.length() > 0 && s.charAt(0) == '-')
-				s.insert(1, spad);
+			StringBuilder spad = new StringBuilder();
+            spad.append("0".repeat(toPad));
+			if (!s.isEmpty() && s.charAt(0) == '-')
+				s.insert(1, spad.toString());
 			else
-				s.insert(0, spad);
+				s.insert(0, spad.toString());
 		}
 
 		if (s.indexOf(".") != -1)

@@ -1,7 +1,5 @@
 package org.assimbly.soap.util.helpers;
 
-import org.w3c.dom.Node;
-
 import javax.wsdl.Input;
 import javax.wsdl.Part;
 import java.util.ArrayList;

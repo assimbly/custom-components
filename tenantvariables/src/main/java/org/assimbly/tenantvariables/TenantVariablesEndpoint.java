@@ -16,7 +16,7 @@ public class TenantVariablesEndpoint extends ProcessorEndpoint {
 
     @UriParam
     private TenantVariablesConfiguration configuration;
-    private TenantVariablesComponent component;
+    private final TenantVariablesComponent component;
 
     public TenantVariablesEndpoint(String uri, TenantVariablesComponent component, TenantVariablesConfiguration configuration) {
         super(uri, component);
@@ -26,7 +26,7 @@ public class TenantVariablesEndpoint extends ProcessorEndpoint {
     }
 
     @Override
-    protected Processor createProcessor() throws Exception {
+    protected Processor createProcessor() {
         return new TenantVariablesProcessor(this);
     }
 

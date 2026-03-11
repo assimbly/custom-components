@@ -10,8 +10,8 @@ import org.assimbly.tenantvariables.mongo.MongoDao;
 import org.assimbly.googledrive.exception.GoogleDriveException;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -54,7 +54,7 @@ public class GoogleDriveProducer extends DefaultProducer {
         this.service = ((GoogleDriveEndpoint) getEndpoint()).getClient(forceClient);
     }
 
-    private GenericFile<File> prepareCamelFile(Exchange exchange) throws IOException {
+    private GenericFile<File> prepareCamelFile(Exchange exchange) {
 
         String existing = exchange.getIn().getHeader("CamelFileName", String.class);
         GenericFile<File> genericFile = new GenericFile<>();
@@ -66,7 +66,7 @@ public class GoogleDriveProducer extends DefaultProducer {
             throw new GoogleDriveException("upload", existing);
         }
 
-        try (FileOutputStream outputStream = new FileOutputStream(file)) {
+        try (OutputStream outputStream = Files.newOutputStream(file.toPath())) {
 
             outputStream.write(exchange.getIn().getBody(byte[].class));
 

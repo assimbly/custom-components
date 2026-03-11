@@ -37,7 +37,7 @@ public interface SmbClient {
 
     InputStream getInputStream(String url) throws IOException;
 
-    boolean storeFile(String url, InputStream inputStream, boolean append, Long lastModified) throws IOException;
+    void storeFile(String url, InputStream inputStream, boolean append, Long lastModified) throws IOException;
 
     List<SmbFile> listFiles(String url) throws IOException;
 

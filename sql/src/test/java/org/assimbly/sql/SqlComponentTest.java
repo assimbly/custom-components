@@ -178,10 +178,8 @@ public class SqlComponentTest extends CamelTestSupport {
 
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 index++;
-                switch(index){
-                    case 1:
-                        assertEquals("id", node.getNodeName());
-                        break;
+                if (index == 1) {
+                    assertEquals("id", node.getNodeName());
                 }
             }
         }

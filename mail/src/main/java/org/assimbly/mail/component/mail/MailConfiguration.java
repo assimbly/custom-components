@@ -52,7 +52,7 @@ public class MailConfiguration implements Cloneable {
     // protocol is implied by component name, so it should not be in UriPath
     private transient String protocol;
 
-    private boolean consumerMode = false;
+    private boolean consumerMode;
 
     @UriPath
     @Metadata(required = true)

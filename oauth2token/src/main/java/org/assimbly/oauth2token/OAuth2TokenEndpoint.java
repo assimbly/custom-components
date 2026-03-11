@@ -26,7 +26,7 @@ public class OAuth2TokenEndpoint extends ProcessorEndpoint {
     }
 
     @Override
-    protected Processor createProcessor() throws Exception {
+    protected Processor createProcessor() {
         return new OAuth2TokenProcessor(this);
     }
 

@@ -52,7 +52,7 @@ public class ExcelToXmlConfiguration {
     public List<ExcelRule> getReadRules() throws JacksonException {
 
         ObjectMapper mapper = new ObjectMapper();
-        TypeReference<List<ExcelRule>> typeRef = new TypeReference<List<ExcelRule>>() {};
+        TypeReference<List<ExcelRule>> typeRef = new TypeReference<>() {};
 
         return mapper.readValue(rules, typeRef);
 

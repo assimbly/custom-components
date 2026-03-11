@@ -13,10 +13,13 @@ import org.assimbly.exceltoxml.domain.ExcelRule;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.xmlunit.assertj3.XmlAssert.assertThat;
 
@@ -34,7 +37,7 @@ public class ExcelToXmlComponentTest extends CamelTestSupport {
     private static final ExcelRule emptySheet = new ExcelRule("EmptySheet", "A1:E13", false, false, false, "empty sheet");
     private static final ExcelRule invalidChars = new ExcelRule("InvalidChars", "A1:E13", false, false, true, "invalid chars");
 
-    private final Map<String, List<ExcelRule>> allRoutes = new HashMap<String, List<ExcelRule>>() {{
+    private final Map<String, List<ExcelRule>> allRoutes = new ConcurrentHashMap<>() {{
             put("simpleData", Collections.singletonList(simpleData));
             put("useHeaderRow", Collections.singletonList(useHeaderRow));
             put("transposesData", Collections.singletonList(transposesData));
@@ -47,11 +50,11 @@ public class ExcelToXmlComponentTest extends CamelTestSupport {
             put("invalidChars", Collections.singletonList(invalidChars));
         }};
 
-    private InputStream input;
+    private OutputStream input;
 
     @BeforeEach
     public void before() throws Exception {
-        input = new FileInputStream("src/test/resources/spreadsheet.xlsx");
+        input = Files.newOutputStream(Paths.get("src/test/resources/spreadsheet.xlsx"));
     }
 
     @Override

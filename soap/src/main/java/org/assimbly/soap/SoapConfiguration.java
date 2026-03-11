@@ -155,7 +155,7 @@ public class SoapConfiguration {
         List<SoapHeader> list = new ArrayList<>();
 
         if(headers != null) {
-            list = new ObjectMapper().readValue(headers, new TypeReference<List<SoapHeader>>() {});
+            list = new ObjectMapper().readValue(headers, new TypeReference<>() {});
         }
 
         return list;
@@ -166,7 +166,7 @@ public class SoapConfiguration {
         List<SoapHttpHeader> list = new ArrayList<>();
 
         if(httpHeaders != null) {
-            list = new ObjectMapper().readValue(httpHeaders, new TypeReference<List<SoapHttpHeader>>() {});
+            list = new ObjectMapper().readValue(httpHeaders, new TypeReference<>() {});
         }
 
         return list;

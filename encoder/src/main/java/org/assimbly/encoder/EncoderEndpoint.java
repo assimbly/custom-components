@@ -27,7 +27,7 @@ public class EncoderEndpoint extends ProcessorEndpoint {
     }
 
     @Override
-    protected Processor createProcessor() throws Exception {
+    protected Processor createProcessor() {
         return new EncoderProcessor(this);
     }
 

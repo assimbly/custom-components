@@ -78,7 +78,7 @@ public class XmlToJsonXmlProcessor {
             return;
 
         String originalName = node.getNodeName();
-        int indexOfColon = originalName.indexOf(":");
+        int indexOfColon = originalName.indexOf(':');
         boolean isNodeNamespaced = indexOfColon != -1;
 
         if (!isNodeNamespaced)

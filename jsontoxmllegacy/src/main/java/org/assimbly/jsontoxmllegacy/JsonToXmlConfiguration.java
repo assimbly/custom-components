@@ -32,11 +32,11 @@ public class JsonToXmlConfiguration {
     @Metadata(required = true)
     private boolean typeHints;
 
-    private JsonNode jsonNode = null;
-    private Document document = null;
-    private Element element = null;
-    private String name = null;
-    private int level = 0;
+    private JsonNode jsonNode;
+    private Document document;
+    private Element element;
+    private String name;
+    private int level;
     private HashMap<String, String> xmlnsMap = new HashMap<>();
 
     public JsonToXmlConfiguration() {

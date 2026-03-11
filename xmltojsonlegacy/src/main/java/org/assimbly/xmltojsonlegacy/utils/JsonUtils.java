@@ -4,7 +4,6 @@ import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
 import javax.xml.XMLConstants;
-import java.util.Iterator;
 
 public class JsonUtils {
 
@@ -15,17 +14,15 @@ public class JsonUtils {
         boolean isNamespacePresent = false;
         int numDataContent = 0;
         if (jsonNode.isObject()) {
-            Iterator<String> fieldNames = jsonNode.propertyNames().iterator();
-            while (fieldNames.hasNext()) {
-                String fieldName = fieldNames.next();
-                if(!fieldName.startsWith(Constants.JSON_XML_ATTR_PREFIX)) {
+            for (String fieldName : jsonNode.propertyNames()) {
+                if (!fieldName.startsWith(Constants.JSON_XML_ATTR_PREFIX)) {
                     numDataContent++;
                 }
                 JsonNode fieldNode = jsonNode.get(fieldName);
                 if (fieldNode.isObject() || fieldNode.isArray()) {
                     return false;
                 }
-                if(fieldName.startsWith(Constants.JSON_XML_ATTR_PREFIX + XMLConstants.XMLNS_ATTRIBUTE)){
+                if (fieldName.startsWith(Constants.JSON_XML_ATTR_PREFIX + XMLConstants.XMLNS_ATTRIBUTE)) {
                     isNamespacePresent = true;
                 }
             }

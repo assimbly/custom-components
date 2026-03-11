@@ -213,12 +213,12 @@ public class EDISemanticValidator
 		else if ( sField.equals("FI12") && ( msCurrentSegment.equals("ISA") || msCurrentSegment.equals("IEA") ) )
 		{
 			sExpectedValue = validateEquality( sField, sValue );
-			if ( !sExpectedValue.equals("") )
+			if (!sExpectedValue.isEmpty())
 			{
-				sError.append("Field does not contain the same value as Interchange/Group/Message/ISA/FI12 ('");
-				sError.append("' instead of '");
-				sError.append( sExpectedValue);
-				sError.append("').");
+				sError.append("Field does not contain the same value as Interchange/Group/Message/ISA/FI12 ('")
+				.append("' instead of '")
+				.append( sExpectedValue)
+				.append("').");
 			}
 		}
 

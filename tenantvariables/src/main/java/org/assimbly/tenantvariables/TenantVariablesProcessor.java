@@ -18,8 +18,6 @@ import org.assimbly.tenantvariables.mongo.MongoDao;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -32,7 +30,6 @@ public class TenantVariablesProcessor implements Processor {
 
     private static final String DEFAULT_TENANT_NAME = "default";
     private static final String ASSIMBLY_ENV = "ASSIMBLY_ENV";
-    private static final String BODY_VARIABLE_REGEX = "\\$\\{body(?:As\\(.*\\))?}";
 
     private TenantVariablesEndpoint endpoint;
 
@@ -76,7 +73,7 @@ public class TenantVariablesProcessor implements Processor {
         String tenantDbName = (endpoint.getConfiguration().getTenantDbName()!=null ? endpoint.getConfiguration().getTenantDbName() : DEFAULT_TENANT_NAME);
         String environment = (endpoint.getConfiguration().getEnvironment()!=null ? endpoint.getConfiguration().getEnvironment() : getEnvironment());
 
-        name = interpolateVar(name, exchange, false);
+        name = interpolateVar(name, exchange);
 
         TenantVariable gVariable = MongoDao.findTenantVariableByName(name, tenantDbName);
 
@@ -95,7 +92,7 @@ public class TenantVariablesProcessor implements Processor {
 
             String value = (variable.isEncrypted() ? decrypt(variable.getValue()) : variable.getValue());
 
-            String header = interpolateVar(endpoint.getConfiguration().getHeaderName(), exchange, false);
+            String header = interpolateVar(endpoint.getConfiguration().getHeaderName(), exchange);
 
             exchange.getIn().setHeader(header, value);
         }
@@ -111,7 +108,7 @@ public class TenantVariablesProcessor implements Processor {
         String environment = (endpoint.getConfiguration().getEnvironment()!=null ? endpoint.getConfiguration().getEnvironment() : getEnvironment());
         long modifyDate = System.currentTimeMillis();
 
-        name = interpolateVar(name, exchange, false);
+        name = interpolateVar(name, exchange);
 
         value = interpolateVar(Base64Helper.unmarshal(value, UTF_8), exchange, expressionType);
 
@@ -171,12 +168,9 @@ public class TenantVariablesProcessor implements Processor {
         MongoDao.deleteTenantVariable(variable, tenantDbName);
     }
 
-    private String interpolateVar(String varValue, Exchange exchange, boolean bodyFlag) {
+    private String interpolateVar(String varValue, Exchange exchange) {
         if(ExchangeHelper.hasVariables(varValue))
             varValue = ExchangeHelper.interpolate(varValue, exchange);
-
-        if(bodyFlag && isBodyVariable(varValue))
-                varValue = interpolateBody(varValue, exchange);
 
         if(LanguageSupport.hasSimpleFunction(varValue)) {
             SimpleExpression simpleExpression = new SimpleExpression(varValue);
@@ -200,8 +194,9 @@ public class TenantVariablesProcessor implements Processor {
                     // do nothing
                     break;
                 case "xpath":
-                    XPathBuilder builder = XPathBuilder.xpath(varValue).saxon();
-                    varValue = builder.evaluate(exchange.getContext(), bodyContent);
+                    try(XPathBuilder builder = XPathBuilder.xpath(varValue).saxon()) {
+                        varValue = builder.evaluate(exchange.getContext(), bodyContent);
+                    }
                     break;
                 case "jsonpath":
                     varValue = JsonPath.parse(bodyContent).read(varValue).toString();
@@ -220,31 +215,8 @@ public class TenantVariablesProcessor implements Processor {
         return varValue;
     }
 
-    private boolean isBodyVariable(String string) {
-        return Pattern.compile(BODY_VARIABLE_REGEX).matcher(string).find();
-    }
-
-    private String interpolateBody(String string, Exchange exchange) {
-        Matcher m = Pattern.compile(BODY_VARIABLE_REGEX).matcher(string);
-        StringBuffer stringBuffer = new StringBuffer();
-
-        while (m.find()) {
-            String bValue = exchange.getIn().getBody(String.class);
-
-            if (bValue != null)
-                m.appendReplacement(stringBuffer, escapeDollarSign(bValue));
-        }
-
-        m.appendTail(stringBuffer);
-
-        return stringBuffer.toString();
-    }
-
-    private String escapeDollarSign(String str) {
-        return str.replace("$", "\\$");
-    }
-
     public static String getEnvironment() {
         return System.getenv(ASSIMBLY_ENV);
     }
+
 }

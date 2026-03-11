@@ -100,7 +100,7 @@ public class CustomXmlJsonDataFormat implements DataFormat {
         if (interpolatedRootTag == null || interpolatedRootTag.trim().isEmpty())
             throw new XmlRootException("The header in the root tag has an empty value. A XML root tag can't be empty.");
 
-        if (Boolean.TRUE.equals(hasInvalidXMLCharacters(interpolatedRootTag)))
+        if (hasInvalidXMLCharacters(interpolatedRootTag))
             throw new XmlRootException("The value of the header in the root tag has invalid XML characters. It can't be used as an XML root tag.");
 
         return interpolatedRootTag;

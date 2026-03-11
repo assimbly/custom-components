@@ -4,12 +4,12 @@ package org.assimbly.googledrive.domain;
 import com.google.api.services.drive.model.File;
 import org.apache.tika.mime.MimeTypeException;
 import org.apache.tika.mime.MimeTypes;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class GSuiteFilesTypeHelper {
 
-    private static final Map<String, String> mimeTypesMap = new HashMap<>();
+    private static final Map<String, String> mimeTypesMap = new ConcurrentHashMap<>();
 
     static {
         mimeTypesMap.put("application/vnd.google-apps.spreadsheet", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
