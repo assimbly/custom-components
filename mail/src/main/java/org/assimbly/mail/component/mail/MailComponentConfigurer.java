@@ -26,7 +26,8 @@ public class MailComponentConfigurer extends PropertyConfigurerSupport implement
     public boolean configure(CamelContext camelContext, Object obj, String name, Object value, boolean ignoreCase) {
         MailComponent target = (MailComponent) obj;
         switch (ignoreCase ? name.toLowerCase() : name) {
-        case "accesstoken": getOrCreateConfiguration(target).setAccessToken(property(camelContext, java.lang.String.class, value)); return true;
+        case "accesstoken":
+        case "accessToken": getOrCreateConfiguration(target).setAccessToken(property(camelContext, java.lang.String.class, value)); return true;
         case "additionaljavamailproperties":
         case "additionalJavaMailProperties": getOrCreateConfiguration(target).setAdditionalJavaMailProperties(property(camelContext, java.util.Properties.class, value)); return true;
         case "alternativebodyheader":
@@ -34,7 +35,8 @@ public class MailComponentConfigurer extends PropertyConfigurerSupport implement
         case "attachmentscontenttransferencodingresolver":
         case "attachmentsContentTransferEncodingResolver": getOrCreateConfiguration(target).setAttachmentsContentTransferEncodingResolver(property(camelContext, AttachmentsContentTransferEncodingResolver.class, value)); return true;
         case "authenticator": getOrCreateConfiguration(target).setAuthenticator(property(camelContext, MailAuthenticator.class, value)); return true;
-        case "authenticationtype": getOrCreateConfiguration(target).setAuthenticationType(property(camelContext, java.lang.String.class, value)); return true;
+        case "authenticationtype":
+        case "authenticationType": getOrCreateConfiguration(target).setAuthenticationType(property(camelContext, java.lang.String.class, value)); return true;
         case "autowiredenabled":
         case "autowiredEnabled": target.setAutowiredEnabled(property(camelContext, boolean.class, value)); return true;
         case "bcc": getOrCreateConfiguration(target).setBcc(property(camelContext, String.class, value)); return true;
@@ -103,6 +105,7 @@ public class MailComponentConfigurer extends PropertyConfigurerSupport implement
         case "sslcontextparameters":
         case "sslContextParameters": getOrCreateConfiguration(target).setSslContextParameters(property(camelContext, org.apache.camel.support.jsse.SSLContextParameters.class, value)); return true;
         case "subject": getOrCreateConfiguration(target).setSubject(property(camelContext, String.class, value)); return true;
+        case "tenantdbname":
         case "tenantDbName": getOrCreateConfiguration(target).setTenantDbName(property(camelContext, java.lang.String.class, value)); return true;
         case "to": getOrCreateConfiguration(target).setTo(property(camelContext, String.class, value)); return true;
         case "unseen": getOrCreateConfiguration(target).setUnseen(property(camelContext, boolean.class, value)); return true;
@@ -118,7 +121,8 @@ public class MailComponentConfigurer extends PropertyConfigurerSupport implement
     @Override
     public Class<?> getOptionType(String name, boolean ignoreCase) {
         switch (ignoreCase ? name.toLowerCase() : name) {
-        case "accesstoken": return java.lang.String.class;
+        case "accesstoken":
+        case "accessToken": return java.lang.String.class;
         case "additionaljavamailproperties":
         case "additionalJavaMailProperties": return java.util.Properties.class;
         case "alternativebodyheader":
@@ -126,7 +130,8 @@ public class MailComponentConfigurer extends PropertyConfigurerSupport implement
         case "attachmentscontenttransferencodingresolver":
         case "attachmentsContentTransferEncodingResolver": return AttachmentsContentTransferEncodingResolver.class;
         case "authenticator": return MailAuthenticator.class;
-        case "authenticationtype": return java.lang.String.class;
+        case "authenticationtype":
+        case "authenticationType": return java.lang.String.class;
         case "autowiredenabled":
         case "autowiredEnabled": return boolean.class;
         case "bcc": return String.class;
@@ -195,6 +200,7 @@ public class MailComponentConfigurer extends PropertyConfigurerSupport implement
         case "sslcontextparameters":
         case "sslContextParameters": return org.apache.camel.support.jsse.SSLContextParameters.class;
         case "subject": return String.class;
+        case "tenantdbname":
         case "tenantDbName": return java.lang.String.class;
         case "to": return String.class;
         case "unseen": return boolean.class;

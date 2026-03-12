@@ -20,7 +20,8 @@ public class MailEndpointConfigurer extends PropertyConfigurerSupport implements
     public boolean configure(CamelContext camelContext, Object obj, String name, Object value, boolean ignoreCase) {
         MailEndpoint target = (MailEndpoint) obj;
         switch (ignoreCase ? name.toLowerCase() : name) {
-        case "accesstoken": target.getConfiguration().setAccessToken(property(camelContext, java.lang.String.class, value)); return true;
+        case "accesstoken":
+        case "accessToken": target.getConfiguration().setAccessToken(property(camelContext, java.lang.String.class, value)); return true;
         case "additionaljavamailproperties":
         case "additionalJavaMailProperties": target.getConfiguration().setAdditionalJavaMailProperties(property(camelContext, java.util.Properties.class, value)); return true;
         case "alternativebodyheader":
@@ -28,7 +29,8 @@ public class MailEndpointConfigurer extends PropertyConfigurerSupport implements
         case "attachmentscontenttransferencodingresolver":
         case "attachmentsContentTransferEncodingResolver": target.getConfiguration().setAttachmentsContentTransferEncodingResolver(property(camelContext, AttachmentsContentTransferEncodingResolver.class, value)); return true;
         case "authenticator": target.getConfiguration().setAuthenticator(property(camelContext, MailAuthenticator.class, value)); return true;
-        case "authenticationtype": target.getConfiguration().setAuthenticationType(property(camelContext, java.lang.String.class, value)); return true;
+        case "authenticationtype":
+        case "authenticationType": target.getConfiguration().setAuthenticationType(property(camelContext, java.lang.String.class, value)); return true;
         case "backofferrorthreshold":
         case "backoffErrorThreshold": target.setBackoffErrorThreshold(property(camelContext, int.class, value)); return true;
         case "backoffidlethreshold":
@@ -134,6 +136,7 @@ public class MailEndpointConfigurer extends PropertyConfigurerSupport implements
         case "startscheduler":
         case "startScheduler": target.setStartScheduler(property(camelContext, boolean.class, value)); return true;
         case "subject": target.getConfiguration().setSubject(property(camelContext, String.class, value)); return true;
+        case "tenantdbname":
         case "tenantDbName": target.getConfiguration().setTenantDbName(property(camelContext, java.lang.String.class, value)); return true;
         case "timeunit":
         case "timeUnit": target.setTimeUnit(property(camelContext, java.util.concurrent.TimeUnit.class, value)); return true;
@@ -151,7 +154,8 @@ public class MailEndpointConfigurer extends PropertyConfigurerSupport implements
     @Override
     public Class<?> getOptionType(String name, boolean ignoreCase) {
         switch (ignoreCase ? name.toLowerCase() : name) {
-        case "accesstoken": return java.lang.String.class;
+        case "accesstoken":
+        case "accessToken": return java.lang.String.class;
         case "additionaljavamailproperties":
         case "additionalJavaMailProperties": return java.util.Properties.class;
         case "alternativebodyheader":
@@ -159,7 +163,8 @@ public class MailEndpointConfigurer extends PropertyConfigurerSupport implements
         case "attachmentscontenttransferencodingresolver":
         case "attachmentsContentTransferEncodingResolver": return AttachmentsContentTransferEncodingResolver.class;
         case "authenticator": return MailAuthenticator.class;
-        case "authenticationtype": return java.lang.String.class;
+        case "authenticationtype":
+        case "authenticationType": return java.lang.String.class;
         case "backofferrorthreshold":
         case "backoffErrorThreshold": return int.class;
         case "backoffidlethreshold":
@@ -265,6 +270,7 @@ public class MailEndpointConfigurer extends PropertyConfigurerSupport implements
         case "startscheduler":
         case "startScheduler": return boolean.class;
         case "subject": return String.class;
+        case "tenantdbname":
         case "tenantDbName": return java.lang.String.class;
         case "timeunit":
         case "timeUnit": return java.util.concurrent.TimeUnit.class;
@@ -395,7 +401,6 @@ public class MailEndpointConfigurer extends PropertyConfigurerSupport implements
         case "startscheduler":
         case "startScheduler": return target.isStartScheduler();
         case "subject": return target.getConfiguration().getSubject();
-        case "tenantDbName": return java.lang.String.class;
         case "timeunit":
         case "timeUnit": return target.getTimeUnit();
         case "to": return target.getConfiguration().getTo();
