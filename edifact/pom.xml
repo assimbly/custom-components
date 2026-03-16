@@ -52,10 +52,10 @@
 					<groupId>org.codehaus.groovy</groupId>
 					<artifactId>groovy-all</artifactId>
 				</exclusion>
-    <exclusion>
-     <groupId>org.hibernate.orm</groupId>
-     <artifactId>hibernate-core</artifactId>
-    </exclusion>
+				<exclusion>
+				 <groupId>org.hibernate.orm</groupId>
+				 <artifactId>hibernate-core</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
