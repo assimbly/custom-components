@@ -1,6 +1,6 @@
 package org.assimbly.edi;
 
-import org.apache.camel.test.junit5.params.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.milyn.Smooks;
 
@@ -11,7 +11,7 @@ import java.io.StringWriter;
 
 import static org.xmlunit.assertj3.XmlAssert.assertThat;
 
-public class EdiReaderTest {
+class EdiReaderTest {
 
     public static final String SEGMENT = "LB";
     public static final String FIELD = "~";
@@ -22,14 +22,14 @@ public class EdiReaderTest {
     private EdiReaderConfigurator config;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         smooks = new Smooks();
         config = new EdiReaderConfigurator(SEGMENT, FIELD, COMPONENT, SUB_COMPONENT);
         smooks.setReaderConfig(config);
     }
 
     @Test
-    public void listsDelimitersUsed() throws Exception {
+    void listsDelimitersUsed() {
         String expected = "<edi-message>" +
                 "<delimiters segment=\"LB\" field=\"~\" component=\"^\" sub-component=\"!\"/>" +
                 "</edi-message>";
@@ -40,7 +40,7 @@ public class EdiReaderTest {
     }
 
     @Test
-    public void acceptsNewlineAsSegmentDelimiter() throws Exception {
+    void acceptsNewlineAsSegmentDelimiter() {
         String expected = "<edi-message>" +
                 "<delimiters segment=\"LB\" field=\"~\" component=\"^\" sub-component=\"!\"/>" +
                 "<A/>" +
@@ -53,7 +53,7 @@ public class EdiReaderTest {
     }
 
     @Test
-    public void acceptsOtherCharactersAsSegmentDelimiter() throws Exception {
+    void acceptsOtherCharactersAsSegmentDelimiter() {
         smooks = new Smooks();
         config = new EdiReaderConfigurator("$", FIELD, COMPONENT, SUB_COMPONENT);
         smooks.setReaderConfig(config);
@@ -72,7 +72,7 @@ public class EdiReaderTest {
     }
 
     @Test
-    public void breaksDownSegmentIntoFieldsAndUses1stFieldAsHeader() throws Exception {
+    void breaksDownSegmentIntoFieldsAndUses1stFieldAsHeader() {
         String expected = "<edi-message>" +
                 "<delimiters segment=\"LB\" field=\"~\" component=\"^\" sub-component=\"!\"/>" +
                 "<A>" +
@@ -87,7 +87,7 @@ public class EdiReaderTest {
     }
 
     @Test
-    public void supportsMultipleLinesWithSameHeader() throws Exception {
+    void supportsMultipleLinesWithSameHeader() {
         String expected = "<edi-message>" +
                 "<delimiters segment=\"LB\" field=\"~\" component=\"^\" sub-component=\"!\"/>" +
                 "<A/>" +
@@ -103,7 +103,7 @@ public class EdiReaderTest {
     }
 
     @Test
-    public void breaksDownFieldsIntoComponents() throws Exception {
+    void breaksDownFieldsIntoComponents() {
         String expected = "<edi-message>" +
                 "<delimiters segment=\"LB\" field=\"~\" component=\"^\" sub-component=\"!\"/>" +
                 "<A>" +
@@ -121,7 +121,7 @@ public class EdiReaderTest {
     }
 
     @Test
-    public void breaksDownComponentsIntoSubComponents() throws Exception {
+    void breaksDownComponentsIntoSubComponents() {
         String expected = "<edi-message>" +
                 "<delimiters segment=\"LB\" field=\"~\" component=\"^\" sub-component=\"!\"/>" +
                 "<A>" +

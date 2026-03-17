@@ -1,6 +1,8 @@
 package org.assimbly.xmltoexcel;
 
+import org.assimbly.util.helper.Base64Helper;
 import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.ObjectMapper;
 import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.UriParam;
@@ -10,8 +12,10 @@ import org.assimbly.xmltoexcel.domain.ExcelFormat;
 import org.assimbly.xmltoexcel.domain.OrderHeaders;
 import org.assimbly.xmltoexcel.exception.XmlToExcelException;
 import tools.jackson.core.JacksonException;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @UriParams
@@ -111,13 +115,36 @@ public class XmlToExcelConfiguration {
     }
 
     public void setWorksheets(String worksheets) {
-        this.worksheets = jsonToWorksheets(worksheets);
+        String json = new String(Base64Helper.unmarshal(worksheets));
+        this.worksheets = jsonToWorksheets(json);
     }
 
+    private static final ObjectMapper MAPPER = JsonMapper.builder()
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            .build();
+
+    public List<CustomWorksheet> jsonToWorksheets(String json) {
+        // Basic guard clause
+        if (json == null || json.isBlank()) {
+            return Collections.emptyList();
+        }
+
+        try {
+            return MAPPER.readValue(
+                    json,
+                    new TypeReference<List<CustomWorksheet>>() {}
+            );
+        } catch (JacksonException e) {
+            // JacksonException is the standard base for 3.x
+            throw new XmlToExcelException("Deserialization failed: " + e.getMessage());
+        }
+    }
+
+    /*
     public List<CustomWorksheet> jsonToWorksheets(String json) {
 
         ObjectMapper mapper = new ObjectMapper();
-        List<CustomWorksheet> worksheetsList = new ArrayList<>();
+        List<CustomWorksheet> worksheetsList;
 
         try {
             worksheetsList = mapper.readValue(
@@ -129,6 +156,6 @@ public class XmlToExcelConfiguration {
         }
 
         return worksheetsList;
-    }
+    }*/
 
 }

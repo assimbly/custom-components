@@ -7,8 +7,9 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 import java.util.AbstractMap;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+
 
 public class XstreamMapEntryConverter implements Converter {
 
@@ -36,7 +37,7 @@ public class XstreamMapEntryConverter implements Converter {
 
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
 
-        Map<String, String> map = new ConcurrentHashMap<>();
+        Map<String, String> map = new HashMap<>();
 
         while(reader.hasMoreChildren()) {
             reader.moveDown();

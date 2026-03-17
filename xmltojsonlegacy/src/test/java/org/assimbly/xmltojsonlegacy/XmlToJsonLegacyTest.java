@@ -7,11 +7,11 @@ import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit5.CamelTestSupport;
-import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 class XmlToJsonLegacyTest extends CamelTestSupport {
@@ -9162,22 +9162,40 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
         );
     }
 
-    private void compareInputXmlFileWithOutputJsonFile(String routeName, String inputXmlFile, String outputJsonFile)
-            throws IOException, InterruptedException {
-        String defaultXml = IOUtils.toString(classLoader.getResourceAsStream(inputXmlFile), StandardCharsets.UTF_8);
-        String defaultJson = IOUtils.toString(classLoader.getResourceAsStream(outputJsonFile), StandardCharsets.UTF_8);
+    private void compareInputXmlFileWithOutputJsonFile(String routeName, String inputXmlFile, String outputJsonFile) throws IOException, InterruptedException {
+
+        String defaultXml = loadFile(inputXmlFile);
+        String defaultJson = loadFile(outputJsonFile);
 
         resultEndpoint.expectedMessageCount(1);
-        template.sendBody("direct:"+routeName, defaultXml);
+        template.sendBody("direct:" + routeName, defaultXml);
         String exchangeBody = getLastExchange(resultEndpoint).getIn().getBody(String.class);
 
+        IO.println("default Json >>> " + defaultJson);
+
         IO.println("exchangeBody >>> " + exchangeBody);
+
+        if(defaultJson.equals(exchangeBody)){
+            IO.println("true");
+        }else{
+            IO.println("false");
+        }
 
         JSONAssert.assertEquals(
                 "Expected the exchange body to equal the given json", defaultJson, exchangeBody, true
         );
 
         resultEndpoint.assertIsSatisfied();
+    }
+
+    public String loadFile(String fileName) throws IOException {
+        ClassLoader classLoader = getClass().getClassLoader();
+        try (InputStream is = classLoader.getResourceAsStream(fileName)) {
+            if (is == null) {
+                throw new IllegalArgumentException("File not found: " + fileName);
+            }
+            return new String(is.readAllBytes(), StandardCharsets.UTF_8);
+        }
     }
 
     private Exchange getLastExchange(MockEndpoint endpoint) {
@@ -9192,7 +9210,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FFFFFF
                         from("direct:xmltojsonlegacy")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9200,7 +9218,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FFFFFT
                         from("direct:xmltojsonlegacy_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9208,7 +9226,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FFFFTF
                         from("direct:xmltojsonlegacy_RemoveNamespacePrefixes")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9216,7 +9234,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FFFFTT
                         from("direct:xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9224,7 +9242,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FFFTFF
                         from("direct:xmltojsonlegacy_SkipNamespaces")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9232,7 +9250,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FFFTFT
                         from("direct:xmltojsonlegacy_SkipNamespaces_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9240,7 +9258,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FFFTTF
                         from("direct:xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9248,7 +9266,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FFFTTT
                         from("direct:xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9256,7 +9274,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FFTFFF
                         from("direct:xmltojsonlegacy_TrimSpaces")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9264,7 +9282,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FFTFFT
                         from("direct:xmltojsonlegacy_TrimSpaces_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9272,7 +9290,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FFTFTF
                         from("direct:xmltojsonlegacy_TrimSpaces_RemoveNamespacePrefixes")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9280,7 +9298,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FFTFTT
                         from("direct:xmltojsonlegacy_TrimSpaces_RemoveNamespacePrefixes_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9288,7 +9306,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FFTTFF
                         from("direct:xmltojsonlegacy_TrimSpaces_SkipNamespaces")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9296,7 +9314,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FFTTFT
                         from("direct:xmltojsonlegacy_TrimSpaces_SkipNamespaces_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9304,7 +9322,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FFTTTF
                         from("direct:xmltojsonlegacy_TrimSpaces_SkipNamespaces_RemoveNamespacePrefixes")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9312,7 +9330,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FFTTTT
                         from("direct:xmltojsonlegacy_TrimSpaces_SkipNamespaces_RemoveNamespacePrefixes_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=false&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9320,7 +9338,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FTFFFF
                         from("direct:xmltojsonlegacy_SkipWhitespace")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9328,7 +9346,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FTFFFT
                         from("direct:xmltojsonlegacy_SkipWhitespace_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9336,7 +9354,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FTFFTF
                         from("direct:xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9344,7 +9362,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FTFFTT
                         from("direct:xmltojsonlegacy_SkipWhitespace_RemoveNamespacePrefixes_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9352,7 +9370,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FTFTFF
                         from("direct:xmltojsonlegacy_SkipWhitespace_SkipNamespaces")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9360,7 +9378,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FTFTFT
                         from("direct:xmltojsonlegacy_SkipWhitespace_SkipNamespaces_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9368,7 +9386,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FTFTTF
                         from("direct:xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9376,7 +9394,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FTFTTT
                         from("direct:xmltojsonlegacy_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9384,7 +9402,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FTTFFF
                         from("direct:xmltojsonlegacy_SkipWhitespace_TrimSpaces")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9392,7 +9410,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FTTFFT
                         from("direct:xmltojsonlegacy_SkipWhitespace_TrimSpaces_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9400,7 +9418,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FTTFTF
                         from("direct:xmltojsonlegacy_SkipWhitespace_TrimSpaces_RemoveNamespacePrefixes")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9408,7 +9426,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FTTFTT
                         from("direct:xmltojsonlegacy_SkipWhitespace_TrimSpaces_RemoveNamespacePrefixes_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9416,7 +9434,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FTTTFF
                         from("direct:xmltojsonlegacy_SkipWhitespace_TrimSpaces_SkipNamespaces")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9424,7 +9442,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FTTTFT
                         from("direct:xmltojsonlegacy_SkipWhitespace_TrimSpaces_SkipNamespaces_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9432,7 +9450,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FTTTTF
                         from("direct:xmltojsonlegacy_SkipWhitespace_TrimSpaces_SkipNamespaces_RemoveNamespacePrefixes")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9440,7 +9458,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // FTTTTT
                         from("direct:xmltojsonlegacy_SkipWhitespace_TrimSpaces_SkipNamespaces_RemoveNamespacePrefixes_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=false&skipWhitespace=true&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9448,7 +9466,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TFFFFF
                         from("direct:xmltojsonlegacy_ForceTop")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9456,7 +9474,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TFFFFT
                         from("direct:xmltojsonlegacy_ForceTop_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9464,7 +9482,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TFFFTF
                         from("direct:xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9472,7 +9490,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TFFFTT
                         from("direct:xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9480,7 +9498,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TFFTFF
                         from("direct:xmltojsonlegacy_ForceTop_SkipNamespaces")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9488,7 +9506,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TFFTFT
                         from("direct:xmltojsonlegacy_ForceTop_SkipNamespaces_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9496,7 +9514,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TFFTTF
                         from("direct:xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9504,7 +9522,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TFFTTT
                         from("direct:xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9512,7 +9530,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TFTFFF
                         from("direct:xmltojsonlegacy_ForceTop_TrimSpaces")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9520,7 +9538,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TFTFFT
                         from("direct:xmltojsonlegacy_ForceTop_TrimSpaces_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9528,7 +9546,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TFTFTF
                         from("direct:xmltojsonlegacy_ForceTop_TrimSpaces_RemoveNamespacePrefixes")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9536,7 +9554,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TFTFTT
                         from("direct:xmltojsonlegacy_ForceTop_TrimSpaces_RemoveNamespacePrefixes_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9544,7 +9562,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TFTTFF
                         from("direct:xmltojsonlegacy_ForceTop_TrimSpaces_SkipNamespaces")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9552,7 +9570,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TFTTFT
                         from("direct:xmltojsonlegacy_ForceTop_TrimSpaces_SkipNamespaces_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9560,7 +9578,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TFTTTF
                         from("direct:xmltojsonlegacy_ForceTop_TrimSpaces_SkipNamespaces_RemoveNamespacePrefixes")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9568,7 +9586,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TFTTTT
                         from("direct:xmltojsonlegacy_ForceTop_TrimSpaces_SkipNamespaces_RemoveNamespacePrefixes_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=false&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9576,7 +9594,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TTFFFF
                         from("direct:xmltojsonlegacy_ForceTop_SkipWhitespace")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9584,7 +9602,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TTFFFT
                         from("direct:xmltojsonlegacy_ForceTop_SkipWhitespace_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9592,7 +9610,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TTFFTF
                         from("direct:xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9600,7 +9618,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TTFFTT
                         from("direct:xmltojsonlegacy_ForceTop_SkipWhitespace_RemoveNamespacePrefixes_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=false&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9608,7 +9626,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TTFTFF
                         from("direct:xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9616,7 +9634,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TTFTFT
                         from("direct:xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9624,7 +9642,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TTFTTF
                         from("direct:xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9632,7 +9650,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TTFTTT
                         from("direct:xmltojsonlegacy_ForceTop_SkipWhitespace_SkipNamespaces_RemoveNamespacePrefixes_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=false&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9640,7 +9658,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TTTFFF
                         from("direct:xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9648,7 +9666,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TTTFFT
                         from("direct:xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=false&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9656,7 +9674,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TTTFTF
                         from("direct:xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_RemoveNamespacePrefixes")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9664,7 +9682,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TTTFTT
                         from("direct:xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_RemoveNamespacePrefixes_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=true&skipNamespaces=false&removeNamespacePrefixes=true&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9672,7 +9690,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TTTTFF
                         from("direct:xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_SkipNamespaces")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9680,7 +9698,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TTTTFT
                         from("direct:xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_SkipNamespaces_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=false&typeHints=true")
                                 .to("mock:result");
                     }
                 },
@@ -9688,7 +9706,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TTTTTF
                         from("direct:xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_SkipNamespaces_RemoveNamespacePrefixes")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=false")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=false")
                                 .to("mock:result");
                     }
                 },
@@ -9696,7 +9714,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
                     public void configure() {
                         // TTTTTT
                         from("direct:xmltojsonlegacy_ForceTop_SkipWhitespace_TrimSpaces_SkipNamespaces_RemoveNamespacePrefixes_TypeHints")
-                                .to("xmltojsonlegacy://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=true")
+                                .to("xmltojson://?forceTopLevelObject=true&skipWhitespace=true&trimSpaces=true&skipNamespaces=true&removeNamespacePrefixes=true&typeHints=true")
                                 .to("mock:result");
                     }
                 },

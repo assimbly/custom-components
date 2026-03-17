@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-public class SimpleReplaceDataFormatTest extends CamelTestSupport {
+class SimpleReplaceDataFormatTest extends CamelTestSupport {
 
     @EndpointInject("mock:result")
     protected MockEndpoint resultEndpoint;
@@ -21,29 +21,29 @@ public class SimpleReplaceDataFormatTest extends CamelTestSupport {
     @Produce
     protected ProducerTemplate template;
 
-    private static final String title = "Lorem Ipsum";
-    private static final String century = "45";
-    private static final String age = "2000";
+    private static final String TITLE = "Lorem Ipsum";
+    private static final String CENTURY = "45";
+    private static final String AGE = "2000";
 
     @Test
-    public void replacesSimpleExpressionsValueFound() throws InterruptedException {
+    void replacesSimpleExpressionsValueFound() throws InterruptedException {
 
         String body = """
                 Contrary to popular belief,
-                ${header.title} is not simply random text.
-                It has roots in a piece of classical Latin literature from ${header.century} BC,
+                ${header.TITLE} is not simply random text.
+                It has roots in a piece of classical Latin literature from ${header.CENTURY} BC,
                 making it over ${header.age} years old.""";
 
         String expected = "Contrary to popular belief,\n" +
-                title + " is not simply random text.\n" +
-                "It has roots in a piece of classical Latin literature from " + century + " BC,\n" +
-                "making it over " + age + " years old.";
+                TITLE + " is not simply random text.\n" +
+                "It has roots in a piece of classical Latin literature from " + CENTURY + " BC,\n" +
+                "making it over " + AGE + " years old.";
 
         runTest(expected, body);
     }
 
     @Test
-    public void ignoresSimpleExpressionsValueNotFound() throws InterruptedException {
+    void ignoresSimpleExpressionsValueNotFound() throws InterruptedException {
         String body = """
                 Contrary to popular belief,
                 this ${header.variable} is simply not found.""";
@@ -56,7 +56,7 @@ public class SimpleReplaceDataFormatTest extends CamelTestSupport {
     }
 
     @Test
-    public void newLinesRemainsUnchangedAfterSimpleExpressionEvaluation() throws InterruptedException {
+    void newLinesRemainsUnchangedAfterSimpleExpressionEvaluation() throws InterruptedException {
         String body = """
                 Contrary to popular belief,
                 
@@ -82,9 +82,9 @@ public class SimpleReplaceDataFormatTest extends CamelTestSupport {
                 new RouteBuilder() {
                     public void configure() {
                         from("direct:unmarshal")
-                                .setHeader("title", new ConstantExpression(title))
-                                .setHeader("century", new ConstantExpression(century))
-                                .setHeader("age", new ConstantExpression(age))
+                                .setHeader("title", new ConstantExpression(TITLE))
+                                .setHeader("century", new ConstantExpression(CENTURY))
+                                .setHeader("age", new ConstantExpression(AGE))
                                 .to("dataformat:simple-replace:unmarshal")
                                 .to("mock:result");
                     }

@@ -9,7 +9,8 @@ public enum ConnectionType {
     MYSQL8("Mysql8Adapter"),
     SQL_SERVER("SqlServerAdapter"),
     ORACLE("OracleAdapter"),
-    POSTGRES("PostgresAdapter");
+    POSTGRES("PostgresAdapter"),
+    H2("H2Adapter");
 
     private final String adapterName;
 

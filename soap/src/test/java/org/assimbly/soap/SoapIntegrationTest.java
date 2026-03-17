@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 
-public class SoapIntegrationTest extends CamelTestSupport {
+class SoapIntegrationTest extends CamelTestSupport {
 
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
@@ -23,7 +23,7 @@ public class SoapIntegrationTest extends CamelTestSupport {
 
     @Test
     @Disabled
-    public void reproduce() {
+    void reproduce() {
         template.sendBody(
                 "direct:reproduce",
                 "<Input/>");

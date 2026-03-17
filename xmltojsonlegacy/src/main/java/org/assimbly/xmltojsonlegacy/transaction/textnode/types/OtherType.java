@@ -27,13 +27,13 @@ public class OtherType implements TextNodeTransaction {
     private static void processWithTypeHints(Map<String, ElementMetadata> metadataMap, ElementMetadata metadata, XmlToJsonConfiguration config) {
         ElementMetadata parentMetada = ElementMetadataUtils.getParentMetadata(metadataMap, metadata);
         ElementMetadata grandParentMetada = ElementMetadataUtils.getGrandParentMetadata(metadataMap, metadata);
+
         if(!parentMetada.areChildrenNamesEqual() ||
                 ((!grandParentMetada.containsClassAttribute() || !grandParentMetada.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY)) &&
                         (!parentMetada.containsClassAttribute() || !parentMetada.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY)))
         ) {
             String value = ElementMetadataUtils.getNodeValue(metadata, config.isTrimSpaces());
-            String trimmedValue = ElementMetadataUtils.getNodeValue(metadata, true);
-            if(value != null && !trimmedValue.isEmpty()) {
+            if(value != null && !value.isBlank()){
                 ExtractUtils.setValueUsingAttributeType(metadata, config, metadata.getObjectNode(), null,
                         ElementMetadataUtils.getElementName(metadata, config.isRemoveNamespacePrefixes()),
                         value,
@@ -48,12 +48,14 @@ public class OtherType implements TextNodeTransaction {
             if(!MetadataAnalyzer.isElementAttributeNull(metadata, Constants.JSON_XML_ATTR_TYPE)) {
                 name = Constants.JSON_XML_TEXT_FIELD;
             }
-            if(!metadata.getObjectNode().isEmpty()) {
-                metadata.getObjectNode().put(Constants.JSON_XML_TEXT_FIELD, ElementMetadataUtils.getNodeValue(metadata, config.isTrimSpaces()));
-            } else {
-                metadata.getObjectNode().put(name, ElementMetadataUtils.getNodeValue(metadata, config.isTrimSpaces()));
+            String value = ElementMetadataUtils.getNodeValue(metadata, config.isTrimSpaces());
+            if (value != null && !value.isBlank()) {
+                if(!metadata.getObjectNode().isEmpty()) {
+                    metadata.getObjectNode().put(Constants.JSON_XML_TEXT_FIELD, value);
+                } else {
+                    metadata.getObjectNode().put(name, value);
+                }
             }
         }
     }
-
 }

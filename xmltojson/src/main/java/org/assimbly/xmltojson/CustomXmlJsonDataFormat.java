@@ -192,9 +192,7 @@ public class CustomXmlJsonDataFormat implements DataFormat {
         return CustomXmlJsonDataFormat.JSON_XML_ATTR_PEFIX;
     }
 
-    public String getContentKey() {
-        return CustomXmlJsonDataFormat.XML_ATTR_PREFIX;
-    }
+    public String getContentKey() { return CONTENT_KEY;}
 
     public TypeValueMismatch getTypeValueMismatch() {
         return this.typeValueMismatch;

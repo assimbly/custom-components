@@ -102,7 +102,9 @@ public class ElementMetadata {
 
     public boolean containsClassAttributeValue(String value) {
         AttributeEntry attribute = attributes.get(Constants.JSON_XML_ATTR_CLASS);
-        return attribute != null && attribute.value().equals(value) || attribute == null && value.isEmpty();
+        // Remove the null fallback entirely — if there's no class attribute,
+        // no value matches, including empty string
+        return attribute != null && attribute.value().equals(value);
     }
 
     public void setAttributes(Map<String, AttributeEntry> attributes) {

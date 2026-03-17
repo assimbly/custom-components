@@ -26,8 +26,8 @@
         <module>flv</module>
         <module>formtoxml</module>
         <module>googledrive</module>
-        <module>jsontoxmllegacy</module>
-        <module>mail</module>
+       <!-- <module>jsontoxmllegacy</module>-->
+        <!--<module>mail</module>-->
         <module>multipart</module>
         <module>oauth2token</module>
         <module>pdf</module>
@@ -96,15 +96,25 @@
         <slf4j.version>2.0.17</slf4j.version>
         <wsdl4j.version>1.6.3</wsdl4j.version>
 
+        <!-- test dependencies -->
+        <assertj.version>3.27.7</assertj.version>
+        <jsonassert.version>1.5.3</jsonassert.version>
+        <junit.version>6.0.3</junit.version>
+        <mockito.version>5.23.0</mockito.version>
+        <mockserver.version>5.15.0</mockserver.version>
+        <xmlunit.version>2.11.0</xmlunit.version>
+
     </properties>
 
     <dependencies>
 
         <dependency>
-            <groupId>org.assimbly</groupId>
-            <artifactId>camel-base</artifactId>
-            <version>${assimbly.version}</version>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>2.4.240</version>
+            <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.assimbly</groupId>
             <artifactId>common-base</artifactId>
@@ -114,18 +124,6 @@
             <groupId>org.assimbly</groupId>
             <artifactId>utils</artifactId>
             <version>${assimbly.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.assimbly</groupId>
-            <artifactId>test-base</artifactId>
-            <version>${assimbly.version}</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>junit</groupId>
-                    <artifactId>junit</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -140,7 +138,93 @@
             <version>${httpcomponents.version}</version>
         </dependency>
 
+        <!-- test dependencies -->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-test-junit5</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-legacy</artifactId>
+            <version>${xmlunit.version}</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-jakarta-jaxb-impl</artifactId>
+            <version>${xmlunit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-core</artifactId>
+            <version>${xmlunit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-assertj3</artifactId>
+            <version>${xmlunit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.skyscreamer</groupId>
+            <artifactId>jsonassert</artifactId>
+            <version>${jsonassert.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.vaadin.external.google</groupId>
+                    <artifactId>android-json</artifactId>
+                </exclusion>
+            </exclusions>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-bom</artifactId>
+                <version>${camel.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <reporting>
         <plugins>

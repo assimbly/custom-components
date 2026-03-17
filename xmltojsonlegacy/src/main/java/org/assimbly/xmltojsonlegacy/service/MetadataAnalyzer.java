@@ -16,7 +16,8 @@ public class MetadataAnalyzer {
     // check if it's a root array
     public static boolean isRootArray(Map<String, ElementMetadata> metadataMap, ElementMetadata metadata, XmlToJsonConfiguration config) {
         boolean isRootArray;
-        if(metadata.isHasEmptyTextContent() && !metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY)) {
+        if(metadata.isHasEmptyTextContent() && !metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY)
+                && (metadata.getNormalizedTextContent() == null || metadata.getNormalizedTextContent().isEmpty())) {
             return false;
         }
         if(config.isTypeHints()) {
@@ -48,10 +49,13 @@ public class MetadataAnalyzer {
         ) {
             return true;
         }
-        if (metadata.getDeepestDepth() == 1 && !ElementMetadataUtils.isElementOnNamespace(metadata) && // && parentElementMetadata.containsClassAttribute()
-                (parentElementMetadata.containsClassAttributeValue("") || parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY) ||
-                        parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT)) &&
-                metadata.isHasAttributes()
+
+        if (metadata.getDeepestDepth() == 1 && !ElementMetadataUtils.isElementOnNamespace(metadata) &&
+                metadata.isHasAttributes() &&
+                (parentElementMetadata.areChildrenNamesEqual() ||
+                        parentElementMetadata.containsClassAttributeValue("") ||
+                        parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY) ||
+                        parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT))
         ) {
             return true;
         }

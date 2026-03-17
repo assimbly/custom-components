@@ -6,14 +6,16 @@ import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.commons.io.IOUtils;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.junit.jupiter.api.Test;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 import static org.xmlunit.assertj3.XmlAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class EdifactComponentTest extends CamelTestSupport {
+class EdifactComponentTest extends CamelTestSupport {
 
     @EndpointInject("mock:result")
     protected MockEndpoint resultEndpoint;
@@ -22,13 +24,13 @@ public class EdifactComponentTest extends CamelTestSupport {
     protected ProducerTemplate template;
 
     @Test
-    public void convertsEdiToXmlWithinCamelRoute() throws Exception {
+    void convertsEdiToXmlWithinCamelRoute() throws Exception {
         resultEndpoint.expectedMessageCount(1);
 
-        String expected = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("iftmin.xml"));
+        String expected = new String(this.getClass().getClassLoader().getResourceAsStream("iftmin.xml").readAllBytes(), StandardCharsets.UTF_8);
 
         // trigger exchange
-        String edifact = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("iftmin.edi"));
+        String edifact = new String(this.getClass().getClassLoader().getResourceAsStream("iftmin.edi").readAllBytes(), StandardCharsets.UTF_8);
         template.sendBody("direct:ediToXml", edifact);
 
         // verify exchange contents
@@ -41,14 +43,15 @@ public class EdifactComponentTest extends CamelTestSupport {
     }
 
     @Test
-    public void convertsXmlToEdiWithinCamelRoute() throws Exception {
-        String expectedEdi = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("iftmin-with-correct-unt.edi")).replace("\n", "");
+    void convertsXmlToEdiWithinCamelRoute() throws Exception {
+
+        String expectedEdi = new String(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("iftmin-with-correct-unt.edi")).readAllBytes(), StandardCharsets.UTF_8).replace("\n", "");
 
         // one exchange is expected
         resultEndpoint.expectedMessageCount(1);
 
         // trigger exchange
-        String xml = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("iftmin.xml"));
+        String xml =  new String(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("iftmin.xml")).readAllBytes(), StandardCharsets.UTF_8);
         template.sendBody("direct:xmlToEdi", xml);
 
         // wait for the expected exchange to conclude

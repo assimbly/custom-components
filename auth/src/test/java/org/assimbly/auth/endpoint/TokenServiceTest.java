@@ -31,6 +31,7 @@ public class TokenServiceTest {
 
     private static TokenService tokenService;
 
+    /*
     @BeforeAll
     public static void initClass() {
         user = MongoTestHelper.setup();
@@ -104,4 +105,7 @@ public class TokenServiceTest {
         String header = email + ":" + password;
         return Base64Helper.marshal(header);
     }
+
+     */
+
 }

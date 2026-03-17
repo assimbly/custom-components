@@ -9,8 +9,10 @@ import org.springframework.http.MediaType;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+
 
 public class FormToXmlProcessor implements Processor {
 
@@ -28,7 +30,7 @@ public class FormToXmlProcessor implements Processor {
         String result = java.net.URLDecoder.decode(input, configuration.getEncoding());
         String[] pairs = result.split("&");
 
-        Map<String, String> items = new ConcurrentHashMap<>();
+        Map<String, String> items = new LinkedHashMap<>();
 
         for (String pair : pairs) {
             String[] keyValue = pair.split("=");
@@ -38,7 +40,7 @@ public class FormToXmlProcessor implements Processor {
         }
 
         XStream xStream = new XStream();
-        xStream.alias("items", java.util.Map.class);
+        xStream.alias("items", java.util.LinkedHashMap.class);
         xStream.registerConverter(new XstreamMapEntryConverter());
 
         try(ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -49,7 +51,7 @@ public class FormToXmlProcessor implements Processor {
             xStream.toXML(items, writer);
 
             String xml = outputStream.toString(configuration.getEncoding());
-            
+
             exchange.getIn().setHeader(Exchange.CONTENT_TYPE, MediaType.APPLICATION_XML_VALUE);
             exchange.getIn().setBody(xml);
         }

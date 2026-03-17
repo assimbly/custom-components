@@ -6,6 +6,9 @@ import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.UriParam;
 import tools.jackson.core.JacksonException;
 import org.assimbly.exceltoxml.domain.ExcelRule;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
 
 public class ExcelToXmlConfiguration {
@@ -49,6 +52,7 @@ public class ExcelToXmlConfiguration {
     /**
      * Deserialized rules
      */
+    /*
     public List<ExcelRule> getReadRules() throws JacksonException {
 
         ObjectMapper mapper = new ObjectMapper();
@@ -56,6 +60,17 @@ public class ExcelToXmlConfiguration {
 
         return mapper.readValue(rules, typeRef);
 
+    }*/
+
+    public List<ExcelRule> getReadRules() throws JacksonException {
+        ObjectMapper mapper = new ObjectMapper();
+        TypeReference<List<ExcelRule>> typeRef = new TypeReference<>() {};
+
+        // Decode Base64 back to raw JSON before deserializing
+        byte[] decodedBytes = Base64.getDecoder().decode(rules);
+        String json = new String(decodedBytes, StandardCharsets.UTF_8);
+
+        return mapper.readValue(json, typeRef);
     }
 
 }

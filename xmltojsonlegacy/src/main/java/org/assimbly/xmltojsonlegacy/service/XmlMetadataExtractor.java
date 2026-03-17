@@ -29,6 +29,9 @@ public class XmlMetadataExtractor {
     // extracts metadata from the xml
     public static Map<String, ElementMetadata> extractMetadata(InputStream xmlInputStream, XmlToJsonConfiguration config) throws XMLStreamException {
         XMLInputFactory factory = XMLInputFactory.newInstance();
+        factory.setProperty(XMLInputFactory.IS_COALESCING, true);           // merge split text nodes
+        factory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, true);
+
         XMLEventReader reader = factory.createXMLEventReader(xmlInputStream);
         Map<String, ElementMetadata> metadataMap = new LinkedHashMap<>();
 
@@ -150,13 +153,13 @@ public class XmlMetadataExtractor {
 
     // check if text content is considered empty
     private static boolean isTextConsideredEmpty(String text) {
-        return text == null || text.replace("\n", "").replace("\r", "").replace("\t", "").isEmpty();
+        return text == null || text.replace("\n","").replace("\r","").replace("\t","").isEmpty();
     }
 
     // set text content
     private static void setTextContent(String text, ElementMetadata metadata, boolean isSkipWhitespace) {
         metadata.setTextContent(text);
-        String normalizedTextContent = text.replace("\r\n","").replace("\n", "");
+        String normalizedTextContent = text.replace("\r\n", "").replace("\n", "");
         metadata.setNormalizedTextContent(normalizedTextContent);
         metadata.setNormalizedTrimmedTextContent(normalizedTextContent.trim());
         metadata.setValueAsJson(JsonUtils.getValidJson(text));

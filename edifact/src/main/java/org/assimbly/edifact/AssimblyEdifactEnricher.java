@@ -29,7 +29,7 @@ public class AssimblyEdifactEnricher {
     }
 
     /**
-     * See http://www.unece.org/fileadmin/DAM/trade/untdid/texts/d423.htm#p8.3
+     * See <a href="http://www.unece.org/fileadmin/DAM/trade/untdid/texts/d423.htm#p8.3">...</a>
      * section 8.3.10 for the correct definition of the UNT field
      */
     private static int calculateSegments(StringBuilder builder) {

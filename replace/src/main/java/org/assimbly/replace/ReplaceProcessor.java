@@ -26,7 +26,6 @@ public class ReplaceProcessor implements Processor {
 
         String regex = config.getRegex();
         String replaceWith = Optional.ofNullable(config.getReplaceWith()).orElse("");
-        replaceWith = ExchangeHelper.unescapeExceptionalCharacters(replaceWith);
 
         if (regex.contains("${header.")) {
             String[] headerNames = StringUtils.substringsBetween(regex, "${header.", "}");
@@ -44,6 +43,7 @@ public class ReplaceProcessor implements Processor {
             }
         }
 
+        replaceWith = ExchangeHelper.unescapeExceptionalCharacters(replaceWith);
         replaceWith = Matcher.quoteReplacement(replaceWith);
         String result;
 

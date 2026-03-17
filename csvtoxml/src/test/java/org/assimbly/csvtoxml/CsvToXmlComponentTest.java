@@ -13,11 +13,8 @@ import java.io.IOException;
 
 import static org.xmlunit.assertj3.XmlAssert.assertThat;
 
-public class CsvToXmlComponentTest extends CamelTestSupport {
+class CsvToXmlComponentTest extends CamelTestSupport {
 
-    private final String csvWithoutHeader = "Koen;Castermans;21\nJaap;Aap;30";
-    private final String csvWithHeader = "Voornaam;Achternaam;Leeftijd\nKoen;Castermans;21\nJaap;Aap;30";
-    private final String csvWithHeaderIncludingInvalidCharacters = "xml1-.order   1num&mer;naam;prijs\n1;iPhone;800";
     private final String encoding = "UTF-8";
 
     @Override
@@ -39,7 +36,9 @@ public class CsvToXmlComponentTest extends CamelTestSupport {
     }
 
     @Test
-    public void testCsvWithHeaders() throws IOException, SAXException {
+    void testCsvWithHeaders() throws SAXException {
+
+        String csvWithHeader = "Voornaam;Achternaam;Leeftijd\nKoen;Castermans;21\nJaap;Aap;30";
         template.sendBody("direct:testWithHeaders", csvWithHeader);
 
         Exchange result = getMockEndpoint("mock:outWithHeaders").getExchanges().getFirst();
@@ -58,46 +57,17 @@ public class CsvToXmlComponentTest extends CamelTestSupport {
                 <?xml version="1.0" encoding="UTF-8"?>
                 <items>
                   <item>
-                    <Leeftijd>21</Leeftijd>
                     <Voornaam>Koen</Voornaam>
                     <Achternaam>Castermans</Achternaam>
+                    <Leeftijd>21</Leeftijd>
                   </item>
                   <item>
-                    <Leeftijd>30</Leeftijd>
                     <Voornaam>Jaap</Voornaam>
                     <Achternaam>Aap</Achternaam>
+                    <Leeftijd>30</Leeftijd>
                   </item>
                 </items>""";
     }
-
-    private String getExpectedXmlWithoutHeaders() {
-        return """
-                <?xml version="1.0" encoding="UTF-8"?>
-                <items>
-                  <item>
-                    <string>Koen</string>
-                    <string>Castermans</string>
-                    <string>21</string>
-                  </item>
-                  <item>
-                    <string>Jaap</string>
-                    <string>Aap</string>
-                    <string>30</string>
-                  </item>
-                </items>""";
-    }
-
-    private String getExpectedXmlHeadersWithInvalidCharacters(){
-        return """
-                <?xml version="1.0" encoding="UTF-8"?>
-                <items>
-                  <item>
-                    <naam>iPhone</naam>
-                    <order1nummer>1</order1nummer>
-                    <prijs>800</prijs>
-                  </item>
-                </items>""";
-    }
-
 
 }
+

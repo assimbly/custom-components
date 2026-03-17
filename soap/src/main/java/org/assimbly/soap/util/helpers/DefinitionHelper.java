@@ -23,7 +23,7 @@ public final class DefinitionHelper {
         List<Definition> definitions = new ArrayList<>();
 
         for (Object o : imports.values()) {
-            ArrayList importDefs = (ArrayList) o;
+            Vector importDefs = (Vector) o;
 
             for (Object importDef1 : importDefs) {
                 Import importDef = (Import) importDef1;

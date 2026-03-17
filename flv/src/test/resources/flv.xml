@@ -1,8 +1,7 @@
 <flv-message>
     <rule matchOn="TXT" fields="segmentTag[3]textLineNumber[3]text[70]"/>
+    <rule matchOn="HDR" fields="segmentTag[3]customerNumber[10]customerReference[10]extraReference[10]date[8]time[4]searchNameDeliveryAdress[10]name[30]address1[30]address2[30]address3[30]address4[30]zipcode[9]town[30]countryCode[2]phone[20]instructions[50]searchName[10]name[30]address1[30]address2[30]address3[30]address4[30]zipcode[9]town[30]countryCode[2]phone[20]instructions[50]deliverynoteNr[15]transactiedate[8]batchnumber[15]branchPlant[12]hdrAttachment[1]latestDelDate[30]transport[30]freightHandlCode[30]faxCustomer[30]paymentTerms[30]dateBatch[30]timeBatch[30]"/>
     <rule matchOn="ART" fields="segmentTag[3]linenumber[6]sku[16]skuExtra[25]quantity[10]uom[5]eanKode[30]price[15]"/>
-    <rule matchOn="HDR"
-          fields="segmentTag[3]customerNumber[10]customerReference[10]extraReference[10]date[8]time[4]searchNameDeliveryAdress[10]name[30]address1[30]address2[30]address3[30]address4[30]zipcode[9]town[30]countryCode[2]phone[20]instructions[50]searchName[10]name[30]address1[30]address2[30]address3[30]address4[30]zipcode[9]town[30]countryCode[2]phone[20]instructions[50]deliverynoteNr[15]transactiedate[8]batchnumber[15]branchPlant[12]hdrAttachment[1]latestDelDate[30]transport[30]freightHandlCode[30]faxCustomer[30]paymentTerms[30]dateBatch[30]timeBatch[30]"/>
     <group>
         <segment>
             <segmentTag>HDR</segmentTag>
@@ -10,13 +9,13 @@
             <customerReference>563514</customerReference>
             <extraReference>544701</extraReference>
             <date>20130401</date>
-            <time></time>
+            <time/>
             <searchNameDeliveryAdress>77902</searchNameDeliveryAdress>
             <name>Kruidvat Retail BV</name>
             <address1>T.a.v. de Financiele administr</address1>
             <address2>Postbus 34</address2>
-            <address3></address3>
-            <address4></address4>
+            <address3/>
+            <address4/>
             <zipcode>3927 ZL</zipcode>
             <town>Renswoude</town>
             <countryCode>NL</countryCode>
@@ -25,15 +24,15 @@
             <searchName>78912</searchName>
             <name>A.S. Watson DC Heteren</name>
             <address1>Poort v Midden Gelderland Rood</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>6666 LT</zipcode>
             <town>Heteren</town>
             <countryCode>NL</countryCode>
             <phone>0318579111</phone>
             <instructions>max.hoogte 1,80  incl pallet</instructions>
-            <deliverynoteNr></deliverynoteNr>
+            <deliverynoteNr/>
             <transactiedate>20130115</transactiedate>
             <batchnumber>588721</batchnumber>
             <branchPlant>910</branchPlant>
@@ -50,11 +49,11 @@
             <segmentTag>ART</segmentTag>
             <linenumber>1.000</linenumber>
             <sku>07026</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>656</quantity>
             <uom>EA</uom>
             <eanKode>8710126070260</eanKode>
-            <price></price>
+            <price/>
         </segment>
     </group>
     <group>
@@ -64,30 +63,30 @@
             <customerReference>563515</customerReference>
             <extraReference>550303</extraReference>
             <date>20130311</date>
-            <time></time>
+            <time/>
             <searchNameDeliveryAdress>77825</searchNameDeliveryAdress>
             <name>Global Success Trading</name>
             <address1>Nachtwachtlaan 493</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>1058 ES</zipcode>
             <town>Amsterdam</town>
             <countryCode>NL</countryCode>
             <phone>+31(0)6 51799790</phone>
-            <instructions></instructions>
+            <instructions/>
             <searchName>79389</searchName>
             <name>Global Success Trading</name>
             <address1>Purmerweg 6-10</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>1311 XG</zipcode>
             <town>Almere</town>
             <countryCode>NL</countryCode>
-            <phone></phone>
-            <instructions></instructions>
-            <deliverynoteNr></deliverynoteNr>
+            <phone/>
+            <instructions/>
+            <deliverynoteNr/>
             <transactiedate>20130311</transactiedate>
             <batchnumber>588722</batchnumber>
             <branchPlant>910</branchPlant>
@@ -95,7 +94,7 @@
             <latestDelDate>20130409</latestDelDate>
             <transport>Seacon Logistics BV</transport>
             <freightHandlCode>Free House</freightHandlCode>
-            <faxCustomer></faxCustomer>
+            <faxCustomer/>
             <paymentTerms>30 Days nett. payment</paymentTerms>
             <dateBatch>20130402</dateBatch>
             <timeBatch>84526</timeBatch>
@@ -104,11 +103,11 @@
             <segmentTag>ART</segmentTag>
             <linenumber>1.000</linenumber>
             <sku>K04730</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>3600</quantity>
             <uom>EA</uom>
             <eanKode>8710125047300</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>TXT</segmentTag>
@@ -123,38 +122,38 @@
             <customerReference>563513</customerReference>
             <extraReference>551806</extraReference>
             <date>20130329</date>
-            <time></time>
+            <time/>
             <searchNameDeliveryAdress>170</searchNameDeliveryAdress>
             <name>Exportafdeling2</name>
             <address1>Westzijde 184</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>1506 EK</zipcode>
             <town>Zaandam</town>
             <countryCode>NL</countryCode>
-            <phone></phone>
-            <instructions></instructions>
+            <phone/>
+            <instructions/>
             <searchName>170</searchName>
             <name>Exportafdeling2 - Angelique</name>
             <address1>Westzijde 184</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>1506 EK</zipcode>
             <town>Zaandam</town>
             <countryCode>NL</countryCode>
-            <phone></phone>
-            <instructions></instructions>
-            <deliverynoteNr></deliverynoteNr>
+            <phone/>
+            <instructions/>
+            <deliverynoteNr/>
             <transactiedate>20130329</transactiedate>
             <batchnumber>588723</batchnumber>
             <branchPlant>170</branchPlant>
             <hdrAttachment>0</hdrAttachment>
             <latestDelDate>20130329</latestDelDate>
-            <transport></transport>
+            <transport/>
             <freightHandlCode>Blank</freightHandlCode>
-            <faxCustomer></faxCustomer>
+            <faxCustomer/>
             <paymentTerms>default</paymentTerms>
             <dateBatch>20130402</dateBatch>
             <timeBatch>84526</timeBatch>
@@ -163,11 +162,11 @@
             <segmentTag>ART</segmentTag>
             <linenumber>4.000</linenumber>
             <sku>12835</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>1</quantity>
             <uom>EA</uom>
             <eanKode>8710126128350</eanKode>
-            <price></price>
+            <price/>
         </segment>
     </group>
     <group>
@@ -177,13 +176,13 @@
             <customerReference>563490</customerReference>
             <extraReference>551807</extraReference>
             <date>20130329</date>
-            <time></time>
+            <time/>
             <searchNameDeliveryAdress>22246</searchNameDeliveryAdress>
             <name>Otto Simon B.V.</name>
             <address1>Postbus 18</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>7600 AA</zipcode>
             <town>Almelo</town>
             <countryCode>NL</countryCode>
@@ -192,15 +191,15 @@
             <searchName>27322</searchName>
             <name>Otto Simon B.V.</name>
             <address1>Schuilenburglaan 1</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>7604 BJ</zipcode>
             <town>Almelo</town>
             <countryCode>NL</countryCode>
-            <phone></phone>
-            <instructions></instructions>
-            <deliverynoteNr></deliverynoteNr>
+            <phone/>
+            <instructions/>
+            <deliverynoteNr/>
             <transactiedate>20130329</transactiedate>
             <batchnumber>588724</batchnumber>
             <branchPlant>310</branchPlant>
@@ -208,7 +207,7 @@
             <latestDelDate>20130329</latestDelDate>
             <transport>DHL vh vG&amp;L.</transport>
             <freightHandlCode>Free House</freightHandlCode>
-            <faxCustomer></faxCustomer>
+            <faxCustomer/>
             <paymentTerms>10 Days 2% -30 Days nett.paym.</paymentTerms>
             <dateBatch>20130402</dateBatch>
             <timeBatch>84527</timeBatch>
@@ -221,7 +220,7 @@
             <quantity>6</quantity>
             <uom>EA</uom>
             <eanKode>8710126178584</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
@@ -231,7 +230,7 @@
             <quantity>24</quantity>
             <uom>EA</uom>
             <eanKode>8410446551257</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
@@ -241,7 +240,7 @@
             <quantity>12</quantity>
             <uom>EA</uom>
             <eanKode>8710126122150</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
@@ -251,7 +250,7 @@
             <quantity>24</quantity>
             <uom>EA</uom>
             <eanKode>8710126173565</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
@@ -261,7 +260,7 @@
             <quantity>24</quantity>
             <uom>EA</uom>
             <eanKode>8710126173602</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
@@ -271,7 +270,7 @@
             <quantity>24</quantity>
             <uom>EA</uom>
             <eanKode>8710126176061</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
@@ -281,7 +280,7 @@
             <quantity>12</quantity>
             <uom>EA</uom>
             <eanKode>8710126176078</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
@@ -291,7 +290,7 @@
             <quantity>12</quantity>
             <uom>EA</uom>
             <eanKode>8710126176085</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
@@ -301,7 +300,7 @@
             <quantity>24</quantity>
             <uom>EA</uom>
             <eanKode>8710126178515</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
@@ -311,7 +310,7 @@
             <quantity>24</quantity>
             <uom>EA</uom>
             <eanKode>8710126179017</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
@@ -321,7 +320,7 @@
             <quantity>12</quantity>
             <uom>EA</uom>
             <eanKode>8710126179017</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
@@ -331,7 +330,7 @@
             <quantity>12</quantity>
             <uom>EA</uom>
             <eanKode>8710126007327</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
@@ -341,7 +340,7 @@
             <quantity>36</quantity>
             <uom>EA</uom>
             <eanKode>8710126170144</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
@@ -351,7 +350,7 @@
             <quantity>24</quantity>
             <uom>EA</uom>
             <eanKode>8710126171172</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
@@ -361,7 +360,7 @@
             <quantity>24</quantity>
             <uom>EA</uom>
             <eanKode>8710126172551</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
@@ -371,7 +370,7 @@
             <quantity>24</quantity>
             <uom>EA</uom>
             <eanKode>8710126173176</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
@@ -381,7 +380,7 @@
             <quantity>12</quantity>
             <uom>EA</uom>
             <eanKode>8710126173183</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
@@ -391,7 +390,7 @@
             <quantity>24</quantity>
             <uom>EA</uom>
             <eanKode>8710126174012</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
@@ -401,7 +400,7 @@
             <quantity>24</quantity>
             <uom>EA</uom>
             <eanKode>8710126174517</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
@@ -411,7 +410,7 @@
             <quantity>24</quantity>
             <uom>EA</uom>
             <eanKode>8710126174500</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>TXT</segmentTag>
@@ -426,30 +425,30 @@
             <customerReference>563491</customerReference>
             <extraReference>551810</extraReference>
             <date>20130330</date>
-            <time></time>
+            <time/>
             <searchNameDeliveryAdress>66059</searchNameDeliveryAdress>
             <name>Thalia Buch &amp; Medien GmbH</name>
             <address1>Landstr. 41</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>4020</zipcode>
             <town>Linz</town>
             <countryCode>AT</countryCode>
-            <phone></phone>
+            <phone/>
             <instructions>Warenannahme 7-14.00 Uhr</instructions>
             <searchName>66070</searchName>
             <name>Thalia W3 in Wien Mitte</name>
             <address1>Buch &amp; Medien GmbH</address1>
             <address2>Landstraße/ Hauptstr. 2a/ 2b</address2>
-            <address3></address3>
-            <address4></address4>
+            <address3/>
+            <address4/>
             <zipcode>1030</zipcode>
             <town>Wien</town>
             <countryCode>AT</countryCode>
-            <phone></phone>
-            <instructions></instructions>
-            <deliverynoteNr></deliverynoteNr>
+            <phone/>
+            <instructions/>
+            <deliverynoteNr/>
             <transactiedate>20130330</transactiedate>
             <batchnumber>588725</batchnumber>
             <branchPlant>JS</branchPlant>
@@ -457,7 +456,7 @@
             <latestDelDate>20130330</latestDelDate>
             <transport>DHL Express</transport>
             <freightHandlCode>Free House</freightHandlCode>
-            <faxCustomer></faxCustomer>
+            <faxCustomer/>
             <paymentTerms>30 Tg. 3% Sk., 45 Tg. netto</paymentTerms>
             <dateBatch>20130402</dateBatch>
             <timeBatch>84528</timeBatch>
@@ -466,151 +465,151 @@
             <segmentTag>ART</segmentTag>
             <linenumber>1.000</linenumber>
             <sku>00741</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>6</quantity>
             <uom>EA</uom>
             <eanKode>8710126007419</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>2.000</linenumber>
             <sku>12820</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>24</quantity>
             <uom>EA</uom>
             <eanKode>5414301513247</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>3.000</linenumber>
             <sku>17726</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>24</quantity>
             <uom>EA</uom>
             <eanKode>8710126177266</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>4.000</linenumber>
             <sku>00720</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>6</quantity>
             <uom>EA</uom>
             <eanKode>8710126007204</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>6.000</linenumber>
             <sku>17691</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>1</quantity>
             <uom>EA</uom>
             <eanKode>8710126176917</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>7.000</linenumber>
             <sku>17692</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>2</quantity>
             <uom>EA</uom>
             <eanKode>8710126176924</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>8.000</linenumber>
             <sku>17693</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>4</quantity>
             <uom>EA</uom>
             <eanKode>8710126176931</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>9.000</linenumber>
             <sku>D53116</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>2</quantity>
             <uom>EA</uom>
             <eanKode>8410446531167</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>10.000</linenumber>
             <sku>D53117</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>2</quantity>
             <uom>EA</uom>
             <eanKode>8410446531174</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>11.000</linenumber>
             <sku>00732</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>6</quantity>
             <uom>EA</uom>
             <eanKode>8710126007327</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>12.000</linenumber>
             <sku>D55125</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>2</quantity>
             <uom>EA</uom>
             <eanKode>8410446551257</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>13.000</linenumber>
             <sku>D53118</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>2</quantity>
             <uom>EA</uom>
             <eanKode>8410446531181</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>14.000</linenumber>
             <sku>17866</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>6</quantity>
             <uom>EA</uom>
             <eanKode>8710126178669</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>15.000</linenumber>
             <sku>D53120</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>2</quantity>
             <uom>EA</uom>
             <eanKode>8410446531204</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>16.000</linenumber>
             <sku>17869</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>2</quantity>
             <uom>EA</uom>
             <eanKode>8710126178690</eanKode>
-            <price></price>
+            <price/>
         </segment>
     </group>
     <group>
@@ -620,13 +619,13 @@
             <customerReference>563492</customerReference>
             <extraReference>551813</extraReference>
             <date>20130330</date>
-            <time></time>
+            <time/>
             <searchNameDeliveryAdress>77216</searchNameDeliveryAdress>
             <name>LIDL Schweiz DL GmbH Neckarsul</name>
             <address1>Zweigniederlassung Weinfelden</address1>
             <address2>Postfach 1</address2>
-            <address3></address3>
-            <address4></address4>
+            <address3/>
+            <address4/>
             <zipcode>CH - 8570</zipcode>
             <town>Weinfelden</town>
             <countryCode>CH</countryCode>
@@ -637,13 +636,13 @@
             <address1>Zweigniederlassung Weinfelden/</address1>
             <address2>Warenverteilzentrum</address2>
             <address3>Dunantstrasse 16</address3>
-            <address4></address4>
+            <address4/>
             <zipcode>CH - 8570</zipcode>
             <town>Weinfelden</town>
             <countryCode>CH</countryCode>
             <phone>0041713135880</phone>
-            <instructions></instructions>
-            <deliverynoteNr></deliverynoteNr>
+            <instructions/>
+            <deliverynoteNr/>
             <transactiedate>20130330</transactiedate>
             <batchnumber>588726</batchnumber>
             <branchPlant>JS</branchPlant>
@@ -651,7 +650,7 @@
             <latestDelDate>20130330</latestDelDate>
             <transport>DHL Express</transport>
             <freightHandlCode>Free House</freightHandlCode>
-            <faxCustomer></faxCustomer>
+            <faxCustomer/>
             <paymentTerms>120 Tage netto</paymentTerms>
             <dateBatch>20130402</dateBatch>
             <timeBatch>84528</timeBatch>
@@ -660,61 +659,61 @@
             <segmentTag>ART</segmentTag>
             <linenumber>1.000</linenumber>
             <sku>81142</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>550</quantity>
             <uom>EA</uom>
             <eanKode>8710126811429</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>2.000</linenumber>
             <sku>81141</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>550</quantity>
             <uom>EA</uom>
             <eanKode>81141</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>3.000</linenumber>
             <sku>81143</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>825</quantity>
             <uom>EA</uom>
             <eanKode>81143</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>4.000</linenumber>
             <sku>81144</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>275</quantity>
             <uom>EA</uom>
             <eanKode>81144</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>5.000</linenumber>
             <sku>81267</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>550</quantity>
             <uom>EA</uom>
             <eanKode>81267</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>6.000</linenumber>
             <sku>81268</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>550</quantity>
             <uom>EA</uom>
             <eanKode>81268</eanKode>
-            <price></price>
+            <price/>
         </segment>
     </group>
     <group>
@@ -724,30 +723,30 @@
             <customerReference>563493</customerReference>
             <extraReference>551821</extraReference>
             <date>20130330</date>
-            <time></time>
+            <time/>
             <searchNameDeliveryAdress>77087</searchNameDeliveryAdress>
             <name>LIDL Nederland GmbH</name>
             <address1>Huizermaatweg 45</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>NL-1273 N</zipcode>
             <town>Huizen</town>
             <countryCode>NL</countryCode>
-            <phone></phone>
+            <phone/>
             <instructions>LT fix im Land KW 16</instructions>
             <searchName>77088</searchName>
             <name>LIDL Nederland GmbH</name>
             <address1>Mercurius 14</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>NL-8448 G</zipcode>
             <town>Heerenveen</town>
             <countryCode>NL</countryCode>
-            <phone></phone>
-            <instructions></instructions>
-            <deliverynoteNr></deliverynoteNr>
+            <phone/>
+            <instructions/>
+            <deliverynoteNr/>
             <transactiedate>20130330</transactiedate>
             <batchnumber>588727</batchnumber>
             <branchPlant>JS</branchPlant>
@@ -755,7 +754,7 @@
             <latestDelDate>20130330</latestDelDate>
             <transport>DHL Express</transport>
             <freightHandlCode>Free House</freightHandlCode>
-            <faxCustomer></faxCustomer>
+            <faxCustomer/>
             <paymentTerms>120 Tage netto</paymentTerms>
             <dateBatch>20130402</dateBatch>
             <timeBatch>84529</timeBatch>
@@ -764,61 +763,61 @@
             <segmentTag>ART</segmentTag>
             <linenumber>1.000</linenumber>
             <sku>81142</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>412</quantity>
             <uom>EA</uom>
             <eanKode>8710126811429</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>2.000</linenumber>
             <sku>81141</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>412</quantity>
             <uom>EA</uom>
             <eanKode>81141</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>3.000</linenumber>
             <sku>81143</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>618</quantity>
             <uom>EA</uom>
             <eanKode>81143</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>4.000</linenumber>
             <sku>81144</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>206</quantity>
             <uom>EA</uom>
             <eanKode>81144</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>5.000</linenumber>
             <sku>81267</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>412</quantity>
             <uom>EA</uom>
             <eanKode>81267</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>6.000</linenumber>
             <sku>81268</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>412</quantity>
             <uom>EA</uom>
             <eanKode>81268</eanKode>
-            <price></price>
+            <price/>
         </segment>
     </group>
     <group>
@@ -828,30 +827,30 @@
             <customerReference>563494</customerReference>
             <extraReference>551822</extraReference>
             <date>20130330</date>
-            <time></time>
+            <time/>
             <searchNameDeliveryAdress>77087</searchNameDeliveryAdress>
             <name>LIDL Nederland GmbH</name>
             <address1>Huizermaatweg 45</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>NL-1273 N</zipcode>
             <town>Huizen</town>
             <countryCode>NL</countryCode>
-            <phone></phone>
+            <phone/>
             <instructions>LT fix im Land KW 16</instructions>
             <searchName>77091</searchName>
             <name>LIDL Nederland GmbH</name>
             <address1>Zwarthoofd 5</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>NL-4878 A</zipcode>
             <town>Elten Leur</town>
             <countryCode>NL</countryCode>
-            <phone></phone>
-            <instructions></instructions>
-            <deliverynoteNr></deliverynoteNr>
+            <phone/>
+            <instructions/>
+            <deliverynoteNr/>
             <transactiedate>20130330</transactiedate>
             <batchnumber>588728</batchnumber>
             <branchPlant>JS</branchPlant>
@@ -859,7 +858,7 @@
             <latestDelDate>20130330</latestDelDate>
             <transport>DHL Express</transport>
             <freightHandlCode>Free House</freightHandlCode>
-            <faxCustomer></faxCustomer>
+            <faxCustomer/>
             <paymentTerms>120 Tage netto</paymentTerms>
             <dateBatch>20130402</dateBatch>
             <timeBatch>84529</timeBatch>
@@ -868,61 +867,61 @@
             <segmentTag>ART</segmentTag>
             <linenumber>1.000</linenumber>
             <sku>81142</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>434</quantity>
             <uom>EA</uom>
             <eanKode>8710126811429</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>2.000</linenumber>
             <sku>81141</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>434</quantity>
             <uom>EA</uom>
             <eanKode>81141</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>3.000</linenumber>
             <sku>81143</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>651</quantity>
             <uom>EA</uom>
             <eanKode>81143</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>4.000</linenumber>
             <sku>81144</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>217</quantity>
             <uom>EA</uom>
             <eanKode>81144</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>5.000</linenumber>
             <sku>81267</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>434</quantity>
             <uom>EA</uom>
             <eanKode>81267</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>6.000</linenumber>
             <sku>81268</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>434</quantity>
             <uom>EA</uom>
             <eanKode>81268</eanKode>
-            <price></price>
+            <price/>
         </segment>
     </group>
     <group>
@@ -932,30 +931,30 @@
             <customerReference>563495</customerReference>
             <extraReference>551823</extraReference>
             <date>20130330</date>
-            <time></time>
+            <time/>
             <searchNameDeliveryAdress>77087</searchNameDeliveryAdress>
             <name>LIDL Nederland GmbH</name>
             <address1>Huizermaatweg 45</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>NL-1273 N</zipcode>
             <town>Huizen</town>
             <countryCode>NL</countryCode>
-            <phone></phone>
+            <phone/>
             <instructions>LT fix im Land KW 16</instructions>
             <searchName>77090</searchName>
             <name>LIDL Nederland GmbH</name>
             <address1>Meeslwei 3</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>NL-4004 L</zipcode>
             <town>Tiel</town>
             <countryCode>NL</countryCode>
-            <phone></phone>
-            <instructions></instructions>
-            <deliverynoteNr></deliverynoteNr>
+            <phone/>
+            <instructions/>
+            <deliverynoteNr/>
             <transactiedate>20130330</transactiedate>
             <batchnumber>588729</batchnumber>
             <branchPlant>JS</branchPlant>
@@ -963,7 +962,7 @@
             <latestDelDate>20130330</latestDelDate>
             <transport>DHL Express</transport>
             <freightHandlCode>Free House</freightHandlCode>
-            <faxCustomer></faxCustomer>
+            <faxCustomer/>
             <paymentTerms>120 Tage netto</paymentTerms>
             <dateBatch>20130402</dateBatch>
             <timeBatch>84530</timeBatch>
@@ -972,61 +971,61 @@
             <segmentTag>ART</segmentTag>
             <linenumber>1.000</linenumber>
             <sku>81142</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>440</quantity>
             <uom>EA</uom>
             <eanKode>8710126811429</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>2.000</linenumber>
             <sku>81141</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>440</quantity>
             <uom>EA</uom>
             <eanKode>81141</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>3.000</linenumber>
             <sku>81143</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>660</quantity>
             <uom>EA</uom>
             <eanKode>81143</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>4.000</linenumber>
             <sku>81144</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>220</quantity>
             <uom>EA</uom>
             <eanKode>81144</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>5.000</linenumber>
             <sku>81267</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>440</quantity>
             <uom>EA</uom>
             <eanKode>81267</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>6.000</linenumber>
             <sku>81268</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>440</quantity>
             <uom>EA</uom>
             <eanKode>81268</eanKode>
-            <price></price>
+            <price/>
         </segment>
     </group>
     <group>
@@ -1036,30 +1035,30 @@
             <customerReference>563496</customerReference>
             <extraReference>551824</extraReference>
             <date>20130330</date>
-            <time></time>
+            <time/>
             <searchNameDeliveryAdress>77087</searchNameDeliveryAdress>
             <name>LIDL Nederland GmbH</name>
             <address1>Huizermaatweg 45</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>NL-1273 N</zipcode>
             <town>Huizen</town>
             <countryCode>NL</countryCode>
-            <phone></phone>
+            <phone/>
             <instructions>LT fix im Land KW 16</instructions>
             <searchName>77089</searchName>
             <name>LIDL Nederland GmbH</name>
             <address1>De Marowijne 2</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>NL-1689 A</zipcode>
             <town>Zwaag</town>
             <countryCode>NL</countryCode>
-            <phone></phone>
-            <instructions></instructions>
-            <deliverynoteNr></deliverynoteNr>
+            <phone/>
+            <instructions/>
+            <deliverynoteNr/>
             <transactiedate>20130330</transactiedate>
             <batchnumber>588730</batchnumber>
             <branchPlant>JS</branchPlant>
@@ -1067,7 +1066,7 @@
             <latestDelDate>20130330</latestDelDate>
             <transport>DHL Express</transport>
             <freightHandlCode>Free House</freightHandlCode>
-            <faxCustomer></faxCustomer>
+            <faxCustomer/>
             <paymentTerms>120 Tage netto</paymentTerms>
             <dateBatch>20130402</dateBatch>
             <timeBatch>84531</timeBatch>
@@ -1076,61 +1075,61 @@
             <segmentTag>ART</segmentTag>
             <linenumber>1.000</linenumber>
             <sku>81142</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>386</quantity>
             <uom>EA</uom>
             <eanKode>8710126811429</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>2.000</linenumber>
             <sku>81141</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>386</quantity>
             <uom>EA</uom>
             <eanKode>81141</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>3.000</linenumber>
             <sku>81143</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>579</quantity>
             <uom>EA</uom>
             <eanKode>81143</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>4.000</linenumber>
             <sku>81144</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>193</quantity>
             <uom>EA</uom>
             <eanKode>81144</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>5.000</linenumber>
             <sku>81267</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>386</quantity>
             <uom>EA</uom>
             <eanKode>81267</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>6.000</linenumber>
             <sku>81268</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>386</quantity>
             <uom>EA</uom>
             <eanKode>81268</eanKode>
-            <price></price>
+            <price/>
         </segment>
     </group>
     <group>
@@ -1140,30 +1139,30 @@
             <customerReference>563497</customerReference>
             <extraReference>551825</extraReference>
             <date>20130330</date>
-            <time></time>
+            <time/>
             <searchNameDeliveryAdress>77087</searchNameDeliveryAdress>
             <name>LIDL Nederland GmbH</name>
             <address1>Huizermaatweg 45</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>NL-1273 N</zipcode>
             <town>Huizen</town>
             <countryCode>NL</countryCode>
-            <phone></phone>
+            <phone/>
             <instructions>LT fix im Land KW 16</instructions>
             <searchName>79356</searchName>
             <name>LIDL Nederland GmbH</name>
             <address1>Singelvenweg 1</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>NL-6002 S</zipcode>
             <town>SE Weert</town>
             <countryCode>NL</countryCode>
-            <phone></phone>
-            <instructions></instructions>
-            <deliverynoteNr></deliverynoteNr>
+            <phone/>
+            <instructions/>
+            <deliverynoteNr/>
             <transactiedate>20130330</transactiedate>
             <batchnumber>588731</batchnumber>
             <branchPlant>JS</branchPlant>
@@ -1171,7 +1170,7 @@
             <latestDelDate>20130330</latestDelDate>
             <transport>DHL Express</transport>
             <freightHandlCode>Free House</freightHandlCode>
-            <faxCustomer></faxCustomer>
+            <faxCustomer/>
             <paymentTerms>120 Tage netto</paymentTerms>
             <dateBatch>20130402</dateBatch>
             <timeBatch>84532</timeBatch>
@@ -1180,61 +1179,61 @@
             <segmentTag>ART</segmentTag>
             <linenumber>1.000</linenumber>
             <sku>81142</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>328</quantity>
             <uom>EA</uom>
             <eanKode>8710126811429</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>2.000</linenumber>
             <sku>81141</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>328</quantity>
             <uom>EA</uom>
             <eanKode>81141</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>3.000</linenumber>
             <sku>81143</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>492</quantity>
             <uom>EA</uom>
             <eanKode>81143</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>4.000</linenumber>
             <sku>81144</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>164</quantity>
             <uom>EA</uom>
             <eanKode>81144</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>5.000</linenumber>
             <sku>81267</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>328</quantity>
             <uom>EA</uom>
             <eanKode>81267</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>6.000</linenumber>
             <sku>81268</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>328</quantity>
             <uom>EA</uom>
             <eanKode>81268</eanKode>
-            <price></price>
+            <price/>
         </segment>
     </group>
     <group>
@@ -1244,30 +1243,30 @@
             <customerReference>563498</customerReference>
             <extraReference>551832</extraReference>
             <date>20130330</date>
-            <time></time>
+            <time/>
             <searchNameDeliveryAdress>77075</searchNameDeliveryAdress>
             <name>LIDL Italia s.r.l.</name>
             <address1>Via Augusto Ruffo 36</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>IT-37040</zipcode>
             <town>Arcole (VR)</town>
             <countryCode>IT</countryCode>
-            <phone></phone>
+            <phone/>
             <instructions>LT fix im Land KW 16</instructions>
             <searchName>77079</searchName>
             <name>LIDL Italia s.r.l.</name>
             <address1>Stradone Padovana, 8</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>IT-37040</zipcode>
             <town>Arcole (VR)</town>
             <countryCode>IT</countryCode>
-            <phone></phone>
-            <instructions></instructions>
-            <deliverynoteNr></deliverynoteNr>
+            <phone/>
+            <instructions/>
+            <deliverynoteNr/>
             <transactiedate>20130330</transactiedate>
             <batchnumber>588732</batchnumber>
             <branchPlant>JS</branchPlant>
@@ -1275,7 +1274,7 @@
             <latestDelDate>20130330</latestDelDate>
             <transport>DHL Express</transport>
             <freightHandlCode>Free House</freightHandlCode>
-            <faxCustomer></faxCustomer>
+            <faxCustomer/>
             <paymentTerms>120 Tage netto</paymentTerms>
             <dateBatch>20130402</dateBatch>
             <timeBatch>84532</timeBatch>
@@ -1284,61 +1283,61 @@
             <segmentTag>ART</segmentTag>
             <linenumber>1.000</linenumber>
             <sku>81147</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>220</quantity>
             <uom>EA</uom>
             <eanKode>8710126811474</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>2.000</linenumber>
             <sku>81146</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>220</quantity>
             <uom>EA</uom>
             <eanKode>8710126811467</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>3.000</linenumber>
             <sku>81148</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>330</quantity>
             <uom>EA</uom>
             <eanKode>8710126811481</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>4.000</linenumber>
             <sku>81149</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>110</quantity>
             <uom>EA</uom>
             <eanKode>8710126811498</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>5.000</linenumber>
             <sku>81269</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>220</quantity>
             <uom>EA</uom>
             <eanKode>8710126812693</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>6.000</linenumber>
             <sku>81270</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>220</quantity>
             <uom>EA</uom>
             <eanKode>8710126812709</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>TXT</segmentTag>
@@ -1358,30 +1357,30 @@
             <customerReference>563499</customerReference>
             <extraReference>551833</extraReference>
             <date>20130330</date>
-            <time></time>
+            <time/>
             <searchNameDeliveryAdress>77075</searchNameDeliveryAdress>
             <name>LIDL Italia s.r.l.</name>
             <address1>Via Augusto Ruffo 36</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>IT-37040</zipcode>
             <town>Arcole (VR)</town>
             <countryCode>IT</countryCode>
-            <phone></phone>
+            <phone/>
             <instructions>LT fix im Land KW 16</instructions>
             <searchName>77081</searchName>
             <name>LIDL Italia s.r.l.</name>
             <address1>Via Caduti del Lavoro, 5</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>IT-48024</zipcode>
             <town>Massa Lombarda (RA)</town>
             <countryCode>IT</countryCode>
-            <phone></phone>
-            <instructions></instructions>
-            <deliverynoteNr></deliverynoteNr>
+            <phone/>
+            <instructions/>
+            <deliverynoteNr/>
             <transactiedate>20130330</transactiedate>
             <batchnumber>588733</batchnumber>
             <branchPlant>JS</branchPlant>
@@ -1389,7 +1388,7 @@
             <latestDelDate>20130330</latestDelDate>
             <transport>DHL Express</transport>
             <freightHandlCode>Free House</freightHandlCode>
-            <faxCustomer></faxCustomer>
+            <faxCustomer/>
             <paymentTerms>120 Tage netto</paymentTerms>
             <dateBatch>20130402</dateBatch>
             <timeBatch>84532</timeBatch>
@@ -1398,61 +1397,61 @@
             <segmentTag>ART</segmentTag>
             <linenumber>1.000</linenumber>
             <sku>81147</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>246</quantity>
             <uom>EA</uom>
             <eanKode>8710126811474</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>2.000</linenumber>
             <sku>81146</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>246</quantity>
             <uom>EA</uom>
             <eanKode>8710126811467</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>3.000</linenumber>
             <sku>81148</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>369</quantity>
             <uom>EA</uom>
             <eanKode>8710126811481</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>4.000</linenumber>
             <sku>81149</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>123</quantity>
             <uom>EA</uom>
             <eanKode>8710126811498</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>5.000</linenumber>
             <sku>81269</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>246</quantity>
             <uom>EA</uom>
             <eanKode>8710126812693</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>6.000</linenumber>
             <sku>81270</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>246</quantity>
             <uom>EA</uom>
             <eanKode>8710126812709</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>TXT</segmentTag>
@@ -1472,30 +1471,30 @@
             <customerReference>563500</customerReference>
             <extraReference>551842</extraReference>
             <date>20130330</date>
-            <time></time>
+            <time/>
             <searchNameDeliveryAdress>77018</searchNameDeliveryAdress>
             <name>Lidl S.N.C.</name>
             <address1>35, Rue Charles Péguy</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>F-67200</zipcode>
             <town>Strassbourg</town>
             <countryCode>FR</countryCode>
-            <phone></phone>
+            <phone/>
             <instructions>LT fix im Land KW 16</instructions>
             <searchName>77024</searchName>
             <name>LIDL France S.N.C</name>
             <address1>Z.A. Du Platin / RD 916</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>F-62193</zipcode>
             <town>Lillers</town>
             <countryCode>FR</countryCode>
-            <phone></phone>
-            <instructions></instructions>
-            <deliverynoteNr></deliverynoteNr>
+            <phone/>
+            <instructions/>
+            <deliverynoteNr/>
             <transactiedate>20130330</transactiedate>
             <batchnumber>588734</batchnumber>
             <branchPlant>JS</branchPlant>
@@ -1503,7 +1502,7 @@
             <latestDelDate>20130330</latestDelDate>
             <transport>DHL Express</transport>
             <freightHandlCode>Free House</freightHandlCode>
-            <faxCustomer></faxCustomer>
+            <faxCustomer/>
             <paymentTerms>120 Tage netto</paymentTerms>
             <dateBatch>20130402</dateBatch>
             <timeBatch>84532</timeBatch>
@@ -1512,61 +1511,61 @@
             <segmentTag>ART</segmentTag>
             <linenumber>1.000</linenumber>
             <sku>81142</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>150</quantity>
             <uom>EA</uom>
             <eanKode>8710126811429</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>2.000</linenumber>
             <sku>81141</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>150</quantity>
             <uom>EA</uom>
             <eanKode>81141</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>3.000</linenumber>
             <sku>81143</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>225</quantity>
             <uom>EA</uom>
             <eanKode>81143</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>4.000</linenumber>
             <sku>81144</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>75</quantity>
             <uom>EA</uom>
             <eanKode>81144</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>5.000</linenumber>
             <sku>81267</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>150</quantity>
             <uom>EA</uom>
             <eanKode>81267</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>6.000</linenumber>
             <sku>81268</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>150</quantity>
             <uom>EA</uom>
             <eanKode>81268</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>TXT</segmentTag>
@@ -1586,30 +1585,30 @@
             <customerReference>563501</customerReference>
             <extraReference>551843</extraReference>
             <date>20130330</date>
-            <time></time>
+            <time/>
             <searchNameDeliveryAdress>77018</searchNameDeliveryAdress>
             <name>Lidl S.N.C.</name>
             <address1>35, Rue Charles Péguy</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>F-67200</zipcode>
             <town>Strassbourg</town>
             <countryCode>FR</countryCode>
-            <phone></phone>
+            <phone/>
             <instructions>LT fix im Land KW 16</instructions>
             <searchName>77026</searchName>
             <name>LIDL France S.N.C</name>
             <address1>Z.A. Actipôle 2</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>F-59554</zipcode>
             <town>Sailly-lez-Cambrai</town>
             <countryCode>FR</countryCode>
-            <phone></phone>
-            <instructions></instructions>
-            <deliverynoteNr></deliverynoteNr>
+            <phone/>
+            <instructions/>
+            <deliverynoteNr/>
             <transactiedate>20130330</transactiedate>
             <batchnumber>588735</batchnumber>
             <branchPlant>JS</branchPlant>
@@ -1617,7 +1616,7 @@
             <latestDelDate>20130330</latestDelDate>
             <transport>DHL Express</transport>
             <freightHandlCode>Free House</freightHandlCode>
-            <faxCustomer></faxCustomer>
+            <faxCustomer/>
             <paymentTerms>120 Tage netto</paymentTerms>
             <dateBatch>20130402</dateBatch>
             <timeBatch>84533</timeBatch>
@@ -1626,61 +1625,61 @@
             <segmentTag>ART</segmentTag>
             <linenumber>1.000</linenumber>
             <sku>81142</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>160</quantity>
             <uom>EA</uom>
             <eanKode>8710126811429</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>2.000</linenumber>
             <sku>81141</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>160</quantity>
             <uom>EA</uom>
             <eanKode>81141</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>3.000</linenumber>
             <sku>81143</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>240</quantity>
             <uom>EA</uom>
             <eanKode>81143</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>4.000</linenumber>
             <sku>81144</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>80</quantity>
             <uom>EA</uom>
             <eanKode>81144</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>5.000</linenumber>
             <sku>81267</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>160</quantity>
             <uom>EA</uom>
             <eanKode>81267</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>6.000</linenumber>
             <sku>81268</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>160</quantity>
             <uom>EA</uom>
             <eanKode>81268</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>TXT</segmentTag>
@@ -1700,30 +1699,30 @@
             <customerReference>563502</customerReference>
             <extraReference>551844</extraReference>
             <date>20130330</date>
-            <time></time>
+            <time/>
             <searchNameDeliveryAdress>77018</searchNameDeliveryAdress>
             <name>Lidl S.N.C.</name>
             <address1>35, Rue Charles Péguy</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>F-67200</zipcode>
             <town>Strassbourg</town>
             <countryCode>FR</countryCode>
-            <phone></phone>
+            <phone/>
             <instructions>LT fix im Land KW 16</instructions>
             <searchName>77028</searchName>
             <name>LIDL France S.N.C</name>
             <address1>Z.A. Le Fontenoy</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>F-54840</zipcode>
             <town>Gondreville</town>
             <countryCode>FR</countryCode>
-            <phone></phone>
-            <instructions></instructions>
-            <deliverynoteNr></deliverynoteNr>
+            <phone/>
+            <instructions/>
+            <deliverynoteNr/>
             <transactiedate>20130330</transactiedate>
             <batchnumber>588736</batchnumber>
             <branchPlant>JS</branchPlant>
@@ -1731,7 +1730,7 @@
             <latestDelDate>20130330</latestDelDate>
             <transport>DHL Express</transport>
             <freightHandlCode>Free House</freightHandlCode>
-            <faxCustomer></faxCustomer>
+            <faxCustomer/>
             <paymentTerms>120 Tage netto</paymentTerms>
             <dateBatch>20130402</dateBatch>
             <timeBatch>84533</timeBatch>
@@ -1740,61 +1739,61 @@
             <segmentTag>ART</segmentTag>
             <linenumber>1.000</linenumber>
             <sku>81142</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>150</quantity>
             <uom>EA</uom>
             <eanKode>8710126811429</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>2.000</linenumber>
             <sku>81141</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>150</quantity>
             <uom>EA</uom>
             <eanKode>81141</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>3.000</linenumber>
             <sku>81143</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>225</quantity>
             <uom>EA</uom>
             <eanKode>81143</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>4.000</linenumber>
             <sku>81144</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>75</quantity>
             <uom>EA</uom>
             <eanKode>81144</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>5.000</linenumber>
             <sku>81267</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>150</quantity>
             <uom>EA</uom>
             <eanKode>81267</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>6.000</linenumber>
             <sku>81268</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>150</quantity>
             <uom>EA</uom>
             <eanKode>81268</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>TXT</segmentTag>
@@ -1814,38 +1813,38 @@
             <customerReference>563503</customerReference>
             <extraReference>551845</extraReference>
             <date>20130330</date>
-            <time></time>
+            <time/>
             <searchNameDeliveryAdress>77018</searchNameDeliveryAdress>
             <name>Lidl S.N.C.</name>
             <address1>35, Rue Charles Péguy</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>F-67200</zipcode>
             <town>Strassbourg</town>
             <countryCode>FR</countryCode>
-            <phone></phone>
+            <phone/>
             <instructions>LT: 16.4. Fix zwischen 10.00 +</instructions>
             <searchName>77030</searchName>
             <name>LIDL France S.N.C</name>
             <address1>Parc d'Activités</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>F-59818</zipcode>
             <town>Lesquin</town>
             <countryCode>FR</countryCode>
-            <phone></phone>
+            <phone/>
             <instructions>12.oo Uhr</instructions>
-            <deliverynoteNr></deliverynoteNr>
+            <deliverynoteNr/>
             <transactiedate>20130330</transactiedate>
             <batchnumber>588737</batchnumber>
             <branchPlant>JS</branchPlant>
             <hdrAttachment>0</hdrAttachment>
             <latestDelDate>20130330</latestDelDate>
-            <transport></transport>
+            <transport/>
             <freightHandlCode>Blank</freightHandlCode>
-            <faxCustomer></faxCustomer>
+            <faxCustomer/>
             <paymentTerms>120 Tage netto</paymentTerms>
             <dateBatch>20130402</dateBatch>
             <timeBatch>84533</timeBatch>
@@ -1854,61 +1853,61 @@
             <segmentTag>ART</segmentTag>
             <linenumber>1.000</linenumber>
             <sku>81142</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>206</quantity>
             <uom>EA</uom>
             <eanKode>8710126811429</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>2.000</linenumber>
             <sku>81141</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>206</quantity>
             <uom>EA</uom>
             <eanKode>81141</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>3.000</linenumber>
             <sku>81143</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>309</quantity>
             <uom>EA</uom>
             <eanKode>81143</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>4.000</linenumber>
             <sku>81144</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>103</quantity>
             <uom>EA</uom>
             <eanKode>81144</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>5.000</linenumber>
             <sku>81267</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>206</quantity>
             <uom>EA</uom>
             <eanKode>81267</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>6.000</linenumber>
             <sku>81268</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>206</quantity>
             <uom>EA</uom>
             <eanKode>81268</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>TXT</segmentTag>
@@ -1928,30 +1927,30 @@
             <customerReference>563504</customerReference>
             <extraReference>551846</extraReference>
             <date>20130330</date>
-            <time></time>
+            <time/>
             <searchNameDeliveryAdress>77018</searchNameDeliveryAdress>
             <name>Lidl S.N.C.</name>
             <address1>35, Rue Charles Péguy</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>F-67200</zipcode>
             <town>Strassbourg</town>
             <countryCode>FR</countryCode>
-            <phone></phone>
+            <phone/>
             <instructions>LT: KW 16 im Land fix</instructions>
             <searchName>77032</searchName>
             <name>LIDL France S.N.C</name>
             <address1>Z.A.C. de Chaillouet</address1>
             <address2>Rue des Ricouardes</address2>
-            <address3></address3>
-            <address4></address4>
+            <address3/>
+            <address4/>
             <zipcode>F-77124</zipcode>
             <town>Crégy-les-Meaux</town>
             <countryCode>FR</countryCode>
-            <phone></phone>
-            <instructions></instructions>
-            <deliverynoteNr></deliverynoteNr>
+            <phone/>
+            <instructions/>
+            <deliverynoteNr/>
             <transactiedate>20130330</transactiedate>
             <batchnumber>588738</batchnumber>
             <branchPlant>JS</branchPlant>
@@ -1959,7 +1958,7 @@
             <latestDelDate>20130330</latestDelDate>
             <transport>DHL Express</transport>
             <freightHandlCode>Free House</freightHandlCode>
-            <faxCustomer></faxCustomer>
+            <faxCustomer/>
             <paymentTerms>120 Tage netto</paymentTerms>
             <dateBatch>20130402</dateBatch>
             <timeBatch>84533</timeBatch>
@@ -1968,61 +1967,61 @@
             <segmentTag>ART</segmentTag>
             <linenumber>1.000</linenumber>
             <sku>81142</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>326</quantity>
             <uom>EA</uom>
             <eanKode>8710126811429</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>2.000</linenumber>
             <sku>81141</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>326</quantity>
             <uom>EA</uom>
             <eanKode>81141</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>3.000</linenumber>
             <sku>81143</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>489</quantity>
             <uom>EA</uom>
             <eanKode>81143</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>4.000</linenumber>
             <sku>81144</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>163</quantity>
             <uom>EA</uom>
             <eanKode>81144</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>5.000</linenumber>
             <sku>81267</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>326</quantity>
             <uom>EA</uom>
             <eanKode>81267</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>6.000</linenumber>
             <sku>81268</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>326</quantity>
             <uom>EA</uom>
             <eanKode>81268</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>TXT</segmentTag>
@@ -2042,30 +2041,30 @@
             <customerReference>563505</customerReference>
             <extraReference>551847</extraReference>
             <date>20130330</date>
-            <time></time>
+            <time/>
             <searchNameDeliveryAdress>77018</searchNameDeliveryAdress>
             <name>Lidl S.N.C.</name>
             <address1>35, Rue Charles Péguy</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>F-67200</zipcode>
             <town>Strassbourg</town>
             <countryCode>FR</countryCode>
-            <phone></phone>
+            <phone/>
             <instructions>LT: 16.4. Fix zwischen 6.00 +</instructions>
             <searchName>77035</searchName>
             <name>LIDL France S.N.C</name>
             <address1>Parc d'Activités Beaugé II</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>F-35340</zipcode>
             <town>Liffré</town>
             <countryCode>FR</countryCode>
-            <phone></phone>
+            <phone/>
             <instructions>11.00 Uhr</instructions>
-            <deliverynoteNr></deliverynoteNr>
+            <deliverynoteNr/>
             <transactiedate>20130330</transactiedate>
             <batchnumber>588739</batchnumber>
             <branchPlant>JS</branchPlant>
@@ -2073,7 +2072,7 @@
             <latestDelDate>20130330</latestDelDate>
             <transport>DHL Express</transport>
             <freightHandlCode>Free House</freightHandlCode>
-            <faxCustomer></faxCustomer>
+            <faxCustomer/>
             <paymentTerms>120 Tage netto</paymentTerms>
             <dateBatch>20130402</dateBatch>
             <timeBatch>84533</timeBatch>
@@ -2082,61 +2081,61 @@
             <segmentTag>ART</segmentTag>
             <linenumber>1.000</linenumber>
             <sku>81142</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>346</quantity>
             <uom>EA</uom>
             <eanKode>8710126811429</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>2.000</linenumber>
             <sku>81141</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>346</quantity>
             <uom>EA</uom>
             <eanKode>81141</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>3.000</linenumber>
             <sku>81143</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>519</quantity>
             <uom>EA</uom>
             <eanKode>81143</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>4.000</linenumber>
             <sku>81144</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>173</quantity>
             <uom>EA</uom>
             <eanKode>81144</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>5.000</linenumber>
             <sku>81267</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>346</quantity>
             <uom>EA</uom>
             <eanKode>81267</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>6.000</linenumber>
             <sku>81268</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>346</quantity>
             <uom>EA</uom>
             <eanKode>81268</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>TXT</segmentTag>
@@ -2156,30 +2155,30 @@
             <customerReference>563506</customerReference>
             <extraReference>551848</extraReference>
             <date>20130330</date>
-            <time></time>
+            <time/>
             <searchNameDeliveryAdress>77018</searchNameDeliveryAdress>
             <name>Lidl S.N.C.</name>
             <address1>35, Rue Charles Péguy</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>F-67200</zipcode>
             <town>Strassbourg</town>
             <countryCode>FR</countryCode>
-            <phone></phone>
+            <phone/>
             <instructions>LT : KW 16 Fix im land</instructions>
             <searchName>77037</searchName>
             <name>LIDL France S.N.C</name>
             <address1>Z.A. Isoparc</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>F-37250</zipcode>
             <town>Sorigny</town>
             <countryCode>FR</countryCode>
-            <phone></phone>
-            <instructions></instructions>
-            <deliverynoteNr></deliverynoteNr>
+            <phone/>
+            <instructions/>
+            <deliverynoteNr/>
             <transactiedate>20130330</transactiedate>
             <batchnumber>588740</batchnumber>
             <branchPlant>JS</branchPlant>
@@ -2187,7 +2186,7 @@
             <latestDelDate>20130330</latestDelDate>
             <transport>DHL Express</transport>
             <freightHandlCode>Free House</freightHandlCode>
-            <faxCustomer></faxCustomer>
+            <faxCustomer/>
             <paymentTerms>120 Tage netto</paymentTerms>
             <dateBatch>20130402</dateBatch>
             <timeBatch>84533</timeBatch>
@@ -2196,61 +2195,61 @@
             <segmentTag>ART</segmentTag>
             <linenumber>1.000</linenumber>
             <sku>81142</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>180</quantity>
             <uom>EA</uom>
             <eanKode>8710126811429</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>2.000</linenumber>
             <sku>81141</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>180</quantity>
             <uom>EA</uom>
             <eanKode>81141</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>3.000</linenumber>
             <sku>81143</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>270</quantity>
             <uom>EA</uom>
             <eanKode>81143</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>4.000</linenumber>
             <sku>81144</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>90</quantity>
             <uom>EA</uom>
             <eanKode>81144</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>5.000</linenumber>
             <sku>81267</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>180</quantity>
             <uom>EA</uom>
             <eanKode>81267</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>6.000</linenumber>
             <sku>81268</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>180</quantity>
             <uom>EA</uom>
             <eanKode>81268</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>TXT</segmentTag>
@@ -2270,30 +2269,30 @@
             <customerReference>563507</customerReference>
             <extraReference>551849</extraReference>
             <date>20130330</date>
-            <time></time>
+            <time/>
             <searchNameDeliveryAdress>77018</searchNameDeliveryAdress>
             <name>Lidl S.N.C.</name>
             <address1>35, Rue Charles Péguy</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>F-67200</zipcode>
             <town>Strassbourg</town>
             <countryCode>FR</countryCode>
-            <phone></phone>
+            <phone/>
             <instructions>LT : KW 16 Fix im land</instructions>
             <searchName>77039</searchName>
             <name>LIDL France S.N.C</name>
             <address1>ZAC Les Marches du Rhône</address1>
             <address2>Avenue Maréchal Juin</address2>
-            <address3></address3>
-            <address4></address4>
+            <address3/>
+            <address4/>
             <zipcode>F-69720</zipcode>
             <town>Saint-Laurent de Mure</town>
             <countryCode>FR</countryCode>
-            <phone></phone>
-            <instructions></instructions>
-            <deliverynoteNr></deliverynoteNr>
+            <phone/>
+            <instructions/>
+            <deliverynoteNr/>
             <transactiedate>20130330</transactiedate>
             <batchnumber>588741</batchnumber>
             <branchPlant>JS</branchPlant>
@@ -2301,7 +2300,7 @@
             <latestDelDate>20130330</latestDelDate>
             <transport>DHL Express</transport>
             <freightHandlCode>Free House</freightHandlCode>
-            <faxCustomer></faxCustomer>
+            <faxCustomer/>
             <paymentTerms>120 Tage netto</paymentTerms>
             <dateBatch>20130402</dateBatch>
             <timeBatch>84534</timeBatch>
@@ -2310,61 +2309,61 @@
             <segmentTag>ART</segmentTag>
             <linenumber>1.000</linenumber>
             <sku>81142</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>296</quantity>
             <uom>EA</uom>
             <eanKode>8710126811429</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>2.000</linenumber>
             <sku>81141</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>296</quantity>
             <uom>EA</uom>
             <eanKode>81141</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>3.000</linenumber>
             <sku>81143</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>444</quantity>
             <uom>EA</uom>
             <eanKode>81143</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>4.000</linenumber>
             <sku>81144</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>148</quantity>
             <uom>EA</uom>
             <eanKode>81144</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>5.000</linenumber>
             <sku>81267</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>296</quantity>
             <uom>EA</uom>
             <eanKode>81267</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>6.000</linenumber>
             <sku>81268</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>296</quantity>
             <uom>EA</uom>
             <eanKode>81268</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>TXT</segmentTag>
@@ -2384,30 +2383,30 @@
             <customerReference>563508</customerReference>
             <extraReference>551850</extraReference>
             <date>20130330</date>
-            <time></time>
+            <time/>
             <searchNameDeliveryAdress>77018</searchNameDeliveryAdress>
             <name>Lidl S.N.C.</name>
             <address1>35, Rue Charles Péguy</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>F-67200</zipcode>
             <town>Strassbourg</town>
             <countryCode>FR</countryCode>
-            <phone></phone>
+            <phone/>
             <instructions>LT : KW 16 Fix im land</instructions>
             <searchName>77041</searchName>
             <name>LIDL France S.N.C</name>
             <address1>ZAC des Coteaux</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>F-16330</zipcode>
             <town>Vars</town>
             <countryCode>FR</countryCode>
-            <phone></phone>
-            <instructions></instructions>
-            <deliverynoteNr></deliverynoteNr>
+            <phone/>
+            <instructions/>
+            <deliverynoteNr/>
             <transactiedate>20130330</transactiedate>
             <batchnumber>588742</batchnumber>
             <branchPlant>JS</branchPlant>
@@ -2415,7 +2414,7 @@
             <latestDelDate>20130330</latestDelDate>
             <transport>DHL Express</transport>
             <freightHandlCode>Free House</freightHandlCode>
-            <faxCustomer></faxCustomer>
+            <faxCustomer/>
             <paymentTerms>120 Tage netto</paymentTerms>
             <dateBatch>20130402</dateBatch>
             <timeBatch>84534</timeBatch>
@@ -2424,61 +2423,61 @@
             <segmentTag>ART</segmentTag>
             <linenumber>1.000</linenumber>
             <sku>81142</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>160</quantity>
             <uom>EA</uom>
             <eanKode>8710126811429</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>2.000</linenumber>
             <sku>81141</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>160</quantity>
             <uom>EA</uom>
             <eanKode>81141</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>3.000</linenumber>
             <sku>81143</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>240</quantity>
             <uom>EA</uom>
             <eanKode>81143</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>4.000</linenumber>
             <sku>81144</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>80</quantity>
             <uom>EA</uom>
             <eanKode>81144</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>5.000</linenumber>
             <sku>81267</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>160</quantity>
             <uom>EA</uom>
             <eanKode>81267</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>6.000</linenumber>
             <sku>81268</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>160</quantity>
             <uom>EA</uom>
             <eanKode>81268</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>TXT</segmentTag>
@@ -2498,30 +2497,30 @@
             <customerReference>563509</customerReference>
             <extraReference>551851</extraReference>
             <date>20130330</date>
-            <time></time>
+            <time/>
             <searchNameDeliveryAdress>77018</searchNameDeliveryAdress>
             <name>Lidl S.N.C.</name>
             <address1>35, Rue Charles Péguy</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>F-67200</zipcode>
             <town>Strassbourg</town>
             <countryCode>FR</countryCode>
-            <phone></phone>
+            <phone/>
             <instructions>LT : KW 16 Fix im land</instructions>
             <searchName>77043</searchName>
             <name>LIDL France S.N.C</name>
             <address1>Z.I. du Vinzenc / RD 38</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>F-31450</zipcode>
             <town>Baziége</town>
             <countryCode>FR</countryCode>
-            <phone></phone>
-            <instructions></instructions>
-            <deliverynoteNr></deliverynoteNr>
+            <phone/>
+            <instructions/>
+            <deliverynoteNr/>
             <transactiedate>20130330</transactiedate>
             <batchnumber>588743</batchnumber>
             <branchPlant>JS</branchPlant>
@@ -2529,7 +2528,7 @@
             <latestDelDate>20130330</latestDelDate>
             <transport>DHL Express</transport>
             <freightHandlCode>Free House</freightHandlCode>
-            <faxCustomer></faxCustomer>
+            <faxCustomer/>
             <paymentTerms>120 Tage netto</paymentTerms>
             <dateBatch>20130402</dateBatch>
             <timeBatch>84534</timeBatch>
@@ -2538,61 +2537,61 @@
             <segmentTag>ART</segmentTag>
             <linenumber>1.000</linenumber>
             <sku>81142</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>230</quantity>
             <uom>EA</uom>
             <eanKode>8710126811429</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>2.000</linenumber>
             <sku>81141</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>230</quantity>
             <uom>EA</uom>
             <eanKode>81141</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>3.000</linenumber>
             <sku>81143</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>345</quantity>
             <uom>EA</uom>
             <eanKode>81143</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>4.000</linenumber>
             <sku>81144</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>115</quantity>
             <uom>EA</uom>
             <eanKode>81144</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>5.000</linenumber>
             <sku>81267</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>230</quantity>
             <uom>EA</uom>
             <eanKode>81267</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>6.000</linenumber>
             <sku>81268</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>230</quantity>
             <uom>EA</uom>
             <eanKode>81268</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>TXT</segmentTag>
@@ -2612,30 +2611,30 @@
             <customerReference>563510</customerReference>
             <extraReference>551852</extraReference>
             <date>20130330</date>
-            <time></time>
+            <time/>
             <searchNameDeliveryAdress>77018</searchNameDeliveryAdress>
             <name>Lidl S.N.C.</name>
             <address1>35, Rue Charles Péguy</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>F-67200</zipcode>
             <town>Strassbourg</town>
             <countryCode>FR</countryCode>
-            <phone></phone>
+            <phone/>
             <instructions>LT : KW 16 Fix im land</instructions>
             <searchName>77049</searchName>
             <name>LIDL France S.N.C</name>
             <address1>LIDL Entrepôt 2</address1>
             <address2>ZAC des Fournets</address2>
-            <address3></address3>
-            <address4></address4>
+            <address3/>
+            <address4/>
             <zipcode>F-34440</zipcode>
             <town>Lunel Viel</town>
             <countryCode>FR</countryCode>
-            <phone></phone>
-            <instructions></instructions>
-            <deliverynoteNr></deliverynoteNr>
+            <phone/>
+            <instructions/>
+            <deliverynoteNr/>
             <transactiedate>20130330</transactiedate>
             <batchnumber>588744</batchnumber>
             <branchPlant>JS</branchPlant>
@@ -2643,7 +2642,7 @@
             <latestDelDate>20130330</latestDelDate>
             <transport>DHL Express</transport>
             <freightHandlCode>Free House</freightHandlCode>
-            <faxCustomer></faxCustomer>
+            <faxCustomer/>
             <paymentTerms>120 Tage netto</paymentTerms>
             <dateBatch>20130402</dateBatch>
             <timeBatch>84534</timeBatch>
@@ -2652,61 +2651,61 @@
             <segmentTag>ART</segmentTag>
             <linenumber>1.000</linenumber>
             <sku>81142</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>210</quantity>
             <uom>EA</uom>
             <eanKode>8710126811429</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>2.000</linenumber>
             <sku>81141</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>210</quantity>
             <uom>EA</uom>
             <eanKode>81141</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>3.000</linenumber>
             <sku>81143</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>315</quantity>
             <uom>EA</uom>
             <eanKode>81143</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>4.000</linenumber>
             <sku>81144</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>105</quantity>
             <uom>EA</uom>
             <eanKode>81144</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>5.000</linenumber>
             <sku>81267</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>210</quantity>
             <uom>EA</uom>
             <eanKode>81267</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>6.000</linenumber>
             <sku>81268</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>210</quantity>
             <uom>EA</uom>
             <eanKode>81268</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>TXT</segmentTag>
@@ -2726,30 +2725,30 @@
             <customerReference>563511</customerReference>
             <extraReference>551853</extraReference>
             <date>20130330</date>
-            <time></time>
+            <time/>
             <searchNameDeliveryAdress>77018</searchNameDeliveryAdress>
             <name>Lidl S.N.C.</name>
             <address1>35, Rue Charles Péguy</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>F-67200</zipcode>
             <town>Strassbourg</town>
             <countryCode>FR</countryCode>
-            <phone></phone>
+            <phone/>
             <instructions>LT : KW 16 Fix im land</instructions>
             <searchName>77051</searchName>
             <name>LIDL France S.N.C</name>
             <address1>ZAC Les Breguières</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>F-83460</zipcode>
             <town>Les Arcs</town>
             <countryCode>FR</countryCode>
-            <phone></phone>
-            <instructions></instructions>
-            <deliverynoteNr></deliverynoteNr>
+            <phone/>
+            <instructions/>
+            <deliverynoteNr/>
             <transactiedate>20130330</transactiedate>
             <batchnumber>588745</batchnumber>
             <branchPlant>JS</branchPlant>
@@ -2757,7 +2756,7 @@
             <latestDelDate>20130330</latestDelDate>
             <transport>DHL Express</transport>
             <freightHandlCode>Free House</freightHandlCode>
-            <faxCustomer></faxCustomer>
+            <faxCustomer/>
             <paymentTerms>120 Tage netto</paymentTerms>
             <dateBatch>20130402</dateBatch>
             <timeBatch>84534</timeBatch>
@@ -2766,61 +2765,61 @@
             <segmentTag>ART</segmentTag>
             <linenumber>1.000</linenumber>
             <sku>81142</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>126</quantity>
             <uom>EA</uom>
             <eanKode>8710126811429</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>2.000</linenumber>
             <sku>81141</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>126</quantity>
             <uom>EA</uom>
             <eanKode>81141</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>3.000</linenumber>
             <sku>81143</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>189</quantity>
             <uom>EA</uom>
             <eanKode>81143</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>4.000</linenumber>
             <sku>81144</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>63</quantity>
             <uom>EA</uom>
             <eanKode>81144</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>5.000</linenumber>
             <sku>81267</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>126</quantity>
             <uom>EA</uom>
             <eanKode>81267</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>6.000</linenumber>
             <sku>81268</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>126</quantity>
             <uom>EA</uom>
             <eanKode>81268</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>TXT</segmentTag>
@@ -2840,30 +2839,30 @@
             <customerReference>563512</customerReference>
             <extraReference>551854</extraReference>
             <date>20130330</date>
-            <time></time>
+            <time/>
             <searchNameDeliveryAdress>77018</searchNameDeliveryAdress>
             <name>Lidl S.N.C.</name>
             <address1>35, Rue Charles Péguy</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>F-67200</zipcode>
             <town>Strassbourg</town>
             <countryCode>FR</countryCode>
-            <phone></phone>
+            <phone/>
             <instructions>LT : KW 16 Fix im land</instructions>
             <searchName>77025</searchName>
             <name>LIDL France S.N.C</name>
             <address1>20, Rue Anatole France</address1>
-            <address2></address2>
-            <address3></address3>
-            <address4></address4>
+            <address2/>
+            <address3/>
+            <address4/>
             <zipcode>F-59818</zipcode>
             <town>Lesquin</town>
             <countryCode>FR</countryCode>
-            <phone></phone>
-            <instructions></instructions>
-            <deliverynoteNr></deliverynoteNr>
+            <phone/>
+            <instructions/>
+            <deliverynoteNr/>
             <transactiedate>20130330</transactiedate>
             <batchnumber>588746</batchnumber>
             <branchPlant>JS</branchPlant>
@@ -2871,7 +2870,7 @@
             <latestDelDate>20130330</latestDelDate>
             <transport>DHL Express</transport>
             <freightHandlCode>Free House</freightHandlCode>
-            <faxCustomer></faxCustomer>
+            <faxCustomer/>
             <paymentTerms>120 Tage netto</paymentTerms>
             <dateBatch>20130402</dateBatch>
             <timeBatch>84534</timeBatch>
@@ -2880,61 +2879,61 @@
             <segmentTag>ART</segmentTag>
             <linenumber>1.000</linenumber>
             <sku>81142</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>176</quantity>
             <uom>EA</uom>
             <eanKode>8710126811429</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>2.000</linenumber>
             <sku>81141</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>176</quantity>
             <uom>EA</uom>
             <eanKode>81141</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>3.000</linenumber>
             <sku>81143</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>264</quantity>
             <uom>EA</uom>
             <eanKode>81143</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>4.000</linenumber>
             <sku>81144</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>88</quantity>
             <uom>EA</uom>
             <eanKode>81144</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>5.000</linenumber>
             <sku>81267</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>176</quantity>
             <uom>EA</uom>
             <eanKode>81267</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>ART</segmentTag>
             <linenumber>6.000</linenumber>
             <sku>81268</sku>
-            <skuExtra></skuExtra>
+            <skuExtra/>
             <quantity>176</quantity>
             <uom>EA</uom>
             <eanKode>81268</eanKode>
-            <price></price>
+            <price/>
         </segment>
         <segment>
             <segmentTag>TXT</segmentTag>

@@ -40,7 +40,7 @@ public class ReplaceConfiguration {
     /**
      * Text you want the match(es) to be replaced with.
      */
-    public void setReplaceWith(String replaceWith) {
+    public void setReplaceWith(String replaceWith){
         this.replaceWith = replaceWith;
     }
 

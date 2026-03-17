@@ -7,39 +7,39 @@ import org.junit.jupiter.api.Test;
 
 import static org.xmlunit.assertj3.XmlAssert.assertThat;
 
-public class FormToXmlComponentTest extends CamelTestSupport {
+class FormToXmlComponentTest extends CamelTestSupport {
 
     private final String encoding = "utf-8";
 
-    private final String expected =
+    private static final String EXPECTED =
             """
             <?xml version="1.0" encoding="utf-8"?>
             <items>
-              <surname>Catalão</surname>
               <name>Pedro</name>
+              <surname>Catalão</surname>
               <myage>36</myage>
             </items>""";
 
-    private final String expectedXmlWithInvalidKeyNames =
+    private static final String EXPECTED_XML_WITH_INVALID_KEY_VALUES =
             """
             <?xml version="1.0" encoding="utf-8"?>
             <items>
               <city>Lisbon</city>
             </items>""";
 
-    private final String expectedXmlWithEmptyKeyValues =
+    private static final String EXPECTED_XML_WITH_EMPTY_KEY_VALUES =
             """
             <?xml version="1.0" encoding="utf-8"?>
             <items>
-              <surname>catalao</surname>
               <name></name>
+              <surname>catalao</surname>
             </items>""";
 
     @Override
-    protected RouteBuilder createRouteBuilder() throws Exception {
+    protected RouteBuilder createRouteBuilder() {
         return new RouteBuilder() {
             @Override
-            public void configure() throws Exception {
+            public void configure() {
                 from("direct:testRoute")
                         .to("formtoxml://?encoding=" + encoding)
                         .to("mock:testFormToXml");
@@ -48,19 +48,19 @@ public class FormToXmlComponentTest extends CamelTestSupport {
     }
 
     @Test
-    public void testFormDataValid() throws Exception {
+    void testFormDataValid() {
         String validFormData = "name=Pedro&surname=Catalão&myage=36";
         template.sendBody("direct:testRoute", validFormData);
 
         Exchange result = getMockEndpoint("mock:testFormToXml").getExchanges().getFirst();
         String actual = result.getIn().getBody(String.class);
 
-        assertThat(actual).and(expected).areIdentical();
+        assertThat(actual).and(EXPECTED).areIdentical();
 
     }
 
     @Test
-    public void testFormDataWithInvalidCharacters() throws Exception {
+    void testFormDataWithInvalidCharacters() {
         String formDataInvalidCharacters = "name=Pedro&sur$naãme=Catalão&my age=36";
         template.sendBody("direct:testRoute", formDataInvalidCharacters);
 
@@ -68,12 +68,12 @@ public class FormToXmlComponentTest extends CamelTestSupport {
 
         String actual = result.getIn().getBody(String.class);
 
-        assertThat(actual).and(expected).areIdentical();
+        assertThat(actual).and(EXPECTED).areIdentical();
 
     }
 
     @Test
-    public void testFormDataWithInvalidKeyNames() throws Exception {
+    void testFormDataWithInvalidKeyNames() {
         String formDataWithInvalidKeyNames = "38=Pedro&city=Lisbon";
         template.sendBody("direct:testRoute", formDataWithInvalidKeyNames);
 
@@ -81,12 +81,12 @@ public class FormToXmlComponentTest extends CamelTestSupport {
 
         String actual = result.getIn().getBody(String.class);
 
-        assertThat(actual).and(expectedXmlWithInvalidKeyNames).areIdentical();
+        assertThat(actual).and(EXPECTED_XML_WITH_INVALID_KEY_VALUES).areIdentical();
 
     }
 
     @Test
-    public void testFormDataWithEmptyKeyValues() throws Exception {
+    void testFormDataWithEmptyKeyValues() {
         String formDataEmptyKeyValues = "name=&surname=catalao=age&=";
         template.sendBody("direct:testRoute", formDataEmptyKeyValues);
 
@@ -94,7 +94,7 @@ public class FormToXmlComponentTest extends CamelTestSupport {
 
         String actual = result.getIn().getBody(String.class);
 
-        assertThat(actual).and(expectedXmlWithEmptyKeyValues).areIdentical();
+        assertThat(actual).and(EXPECTED_XML_WITH_EMPTY_KEY_VALUES).areIdentical();
 
     }
 

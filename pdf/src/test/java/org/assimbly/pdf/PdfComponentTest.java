@@ -6,19 +6,18 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.model.language.ConstantExpression;
 import org.apache.commons.io.IOUtils;
-import org.apache.hc.core5.http.impl.bootstrap.HttpServer;
-import org.apache.hc.core5.http.impl.bootstrap.ServerBootstrap;
-import org.apache.hc.core5.http.io.SocketConfig;
-import org.apache.hc.core5.util.Timeout;
-import org.junit.jupiter.api.AfterEach;
-import org.assimbly.pdf.handler.BasicValidationHandler;
+import com.sun.net.httpserver.HttpServer;
+import java.net.InetSocketAddress;
 
 import org.apache.camel.test.junit5.CamelTestSupport;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+
+
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Objects;
 
 class PdfComponentTest extends CamelTestSupport {
 
@@ -30,39 +29,42 @@ class PdfComponentTest extends CamelTestSupport {
     private HttpServer localServer;
 
     public void startServer() throws Exception {
-        byte[] pdfContent = IOUtils.toByteArray(classLoader.getResourceAsStream("template.pdf"));
-        BasicValidationHandler handler = new BasicValidationHandler("GET", "tenant=tenant&uuid=12345", pdfContent);
+        byte[] pdfContent = IOUtils.toByteArray(
+                classLoader.getResourceAsStream("template.pdf")
+        );
 
-        localServer = ServerBootstrap.bootstrap()
-                .setListenerPort(8080)
-                .setSocketConfig(SocketConfig.custom()
-                        .setSoTimeout(Timeout.ofSeconds(5))
-                        .build())
-                .register("/pdfs/flowid", handler)
-                .create();
+        localServer = HttpServer.create(new InetSocketAddress(0), 0); // port 0 = random free port
+        localServer.createContext("/pdfs/flowid", exchange -> {
 
+            exchange.getResponseHeaders().set("Content-Type", "application/pdf");
+            exchange.sendResponseHeaders(200, pdfContent.length);
+            try (var os = exchange.getResponseBody()) {
+                os.write(pdfContent);
+            }
+        });
         localServer.start();
     }
 
     @AfterEach
     void stopServer() {
-
         if (localServer != null) {
-            localServer.stop();
+            localServer.stop(0);
         }
     }
 
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
         startServer();
+
         return new RouteBuilder() {
             @Override
-            public void configure() throws Exception {
+            public void configure() {
                 from("direct:in")
                         .setHeader("name",  new ConstantExpression("Joery Vreijen"))
                         .setHeader("address",  new ConstantExpression("Meemortel 16"))
                         .setHeader("zip",  new ConstantExpression("6021AE, Budel"))
-                        .to("pdf-transform://http://localhost:" + localServer.getLocalPort() + "/pdfs/flowid?tenant=tenant&uuid=12345")
+                        //.to("headerstopdf://http://localhost:" + localServer.getLocalPort() + "/pdfs/flowid?tenant=tenant&uuid=12345")
+                        .to("headerstopdf://http://localhost:" + localServer.getAddress().getPort() + "/pdfs/flowid?tenant=tenant&uuid=12345&connection=close")
                         .setHeader(Exchange.FILE_NAME, new ConstantExpression("output.pdf"))
                         .to("mock:out");
             }
@@ -71,10 +73,15 @@ class PdfComponentTest extends CamelTestSupport {
 
     @Test
     void loadFile() throws Exception {
+
+        byte[] expected = IOUtils.toByteArray(Objects.requireNonNull(classLoader.getResource("expected/output.pdf")));
+
         template.sendBody("direct:in", "");
-
         Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
+        byte[] actual = result.getIn().getBody(byte[].class);
 
-        assertArrayEquals(IOUtils.toByteArray(Objects.requireNonNull(classLoader.getResource("expected/output.pdf"))), result.getIn().getBody(byte[].class));
+        assertArrayEquals(expected, actual);
+
     }
+
 }

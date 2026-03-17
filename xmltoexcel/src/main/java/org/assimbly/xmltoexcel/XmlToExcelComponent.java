@@ -18,4 +18,5 @@ public class XmlToExcelComponent extends DefaultComponent {
 
         return endpoint;
     }
+
 }

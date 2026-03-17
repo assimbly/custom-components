@@ -5,16 +5,15 @@ import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.commons.io.IOUtils;
-import org.custommonkey.xmlunit.XMLUnit;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.junit.jupiter.api.Test;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 import static org.xmlunit.assertj3.XmlAssert.assertThat;
 
-public class FLVComponentTest extends CamelTestSupport {
+class FLVComponentTest extends CamelTestSupport {
 
     @EndpointInject("mock:result")
     protected MockEndpoint resultEndpoint;
@@ -23,14 +22,14 @@ public class FLVComponentTest extends CamelTestSupport {
     protected ProducerTemplate template;
 
     @Test
-    public void convertsFixedLengthValuesToXmlWithinCamelRoute() throws Exception {
-        String expected = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("flv.xml"), Charset.forName("UTF-8"));
+    void convertsFixedLengthValuesToXmlWithinCamelRoute() throws Exception {
+        String expected = new String(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("flv.xml")).readAllBytes(), StandardCharsets.UTF_8);
 
         // one exchange is expected
         resultEndpoint.expectedMessageCount(1);
 
         // trigger exchange
-        String flv = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("flv.txt"), Charset.forName("UTF-8"));
+        String flv = new String(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("flv.txt")).readAllBytes(), StandardCharsets.UTF_8);
         template.sendBody(flv);
 
         // wait for the expected exchange to conclude
@@ -39,9 +38,7 @@ public class FLVComponentTest extends CamelTestSupport {
         // verify exchange contents
         String actual = resultEndpoint.getExchanges().getFirst().getIn().getBody(String.class);
 
-        XMLUnit.setIgnoreWhitespace(true);
-
-		assertThat(actual).and(expected).areIdentical();
+		assertThat(actual).and(expected).ignoreWhitespace().areIdentical();
     
 	}
 

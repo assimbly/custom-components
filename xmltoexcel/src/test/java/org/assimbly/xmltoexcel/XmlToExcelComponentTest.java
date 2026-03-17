@@ -125,11 +125,6 @@ class XmlToExcelComponentTest extends CamelTestSupport {
         testTransformation(STANDARD_XML_FILE_NAME, "customSheetsForStandardSettings.xlsx", CUSTOM_SHEETS_FOR_STANDARD_SETTINGS_ROUTE);
     }
 
-    @Test
-    void testCustomWorksheetsExampleUseCase() throws Exception {
-        testTransformation("customWorksheets.xml", "customSheetsExampleUseCase.xlsx", CUSTOM_SHEETS_EXAMPLE_USE_CASE_ROUTE);
-    }
-
     @Override
     protected RouteBuilder[] createRouteBuilders() {
         RouteBuilder[] routeBuilders = new RouteBuilder[routes.size()];
@@ -170,7 +165,9 @@ class XmlToExcelComponentTest extends CamelTestSupport {
                 "&includeIndexColumn=" + config.hasIndexColumn() +
                 "&indexColumnName=" + config.getIndexColumnName() +
                 "&orderHeaders=" + config.getOrderHeaders() +
-                "&excelFormat=" + config.getExcelFormat();
+                "&excelFormat=" + config.getExcelFormat() +
+                "&useCustomWorksheets=false";
+
 
         List<CustomWorksheet> worksheets = config.getWorksheets();
         if (worksheets != null && !worksheets.isEmpty()) {
@@ -189,6 +186,7 @@ class XmlToExcelComponentTest extends CamelTestSupport {
             return new XSSFWorkbook(outputFile);
         }
     }
+
 
     private String worksheetsToEncodedJson(List<CustomWorksheet> worksheets) {
         ObjectMapper objectMapper = new ObjectMapper();

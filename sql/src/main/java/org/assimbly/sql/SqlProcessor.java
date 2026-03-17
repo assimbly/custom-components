@@ -52,27 +52,35 @@ public class SqlProcessor implements Processor {
         return jdbcConnection.connect(adapter);
     }
 
-    private Document executeQuery(Exchange exchange, Connection connection, String sqlQuery) throws java.sql.SQLException, ParserConfigurationException {
+    private Document executeQuery(Exchange exchange, Connection connection, String sqlQuery) throws ParserConfigurationException {
         Document doc = XmlHelper.newDocument();
-
-        if (doc == null)
-            throw new ParserConfigurationException();
+        if (doc == null) throw new ParserConfigurationException();
 
         Element rootElement = doc.createElement("ResultSet");
         doc.appendChild(rootElement);
 
-        PreparedStatement statement = createPreparedStatement(exchange, connection, sqlQuery);
+        // Initialize as null so we can close it in finally
+        PreparedStatement statement = null;
 
         try {
+            // MOVE THIS INSIDE THE TRY BLOCK
+            statement = createPreparedStatement(exchange, connection, sqlQuery);
+
             boolean hasResultSet = statement.execute();
             if (hasResultSet)
                 appendSelectResults(doc, rootElement, statement.getResultSet());
             else
                 appendUpdateResults(doc, rootElement, statement);
+
         } catch (Exception e) {
+            // Now preparation errors (like missing tables) will be caught here!
             appendErrorNodes(doc, rootElement, e);
         } finally {
-            closeResources(statement, connection);
+            try {
+                closeResources(statement, connection);
+            } catch (java.sql.SQLException _) {
+                // Log or ignore closing errors
+            }
         }
 
         return doc;
