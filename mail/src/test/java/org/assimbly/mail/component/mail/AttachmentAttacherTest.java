@@ -41,11 +41,11 @@ public class AttachmentAttacherTest extends CamelTestSupport  {
         exchange.getIn().setBody("this is my body");
         attacher.process(exchange);
 
-        String partialTimestamp = new SimpleDateFormat("-yyyy-MM-dd-HH-").format(new Date());
+        String partialTimestamp = new SimpleDateFormat("'Dovetail'-yyyy-MM-dd-HH-").format(new Date());
         String fileName = exchange.getIn().getHeader(Exchange.FILE_NAME, String.class);
 
         TestSupport.assertStringContains(fileName, partialTimestamp);
-        assertTrue(fileName.startsWith("Assimbly-"));
+        assertTrue(fileName.startsWith("Dovetail-"));
         assertTrue(fileName.endsWith(".txt"));
     }
 
