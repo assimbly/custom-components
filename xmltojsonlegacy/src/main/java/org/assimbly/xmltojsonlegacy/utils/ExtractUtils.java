@@ -1,15 +1,12 @@
 package org.assimbly.xmltojsonlegacy.utils;
 
 import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.node.ArrayNode;
-import tools.jackson.databind.node.JsonNodeFactory;
-import tools.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.node.*;
 import org.assimbly.xmltojsonlegacy.XmlToJsonConfiguration;
 import org.assimbly.xmltojsonlegacy.model.AttributeEntry;
 import org.assimbly.xmltojsonlegacy.model.ElementMetadata;
 import org.assimbly.xmltojsonlegacy.model.Namespace;
 import org.assimbly.xmltojsonlegacy.service.MetadataAnalyzer;
-import tools.jackson.databind.node.StringNode;
 
 import javax.xml.XMLConstants;
 import java.util.Map;
@@ -93,8 +90,21 @@ public class ExtractUtils {
     }
 
     private static void extractChildAsOtherSize1Object(ElementMetadata metadata, JsonNode childNode, String propertyName) {
-        JsonNode nodeToSet = childNode.get(propertyName) != null ? childNode.get(propertyName) : childNode;
-        metadata.getObjectNode().set(propertyName, !metadata.isElementMustBeNull() ? nodeToSet : null);
+        JsonNode valueNode = childNode.get(propertyName);
+        JsonNode existingNode = metadata.getObjectNode().get(propertyName);
+        if (valueNode != null && !valueNode.isMissingNode()) {
+            if (existingNode != null && !existingNode.isMissingNode()) {
+                // merge into array
+                ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode();
+                arrayNode.add(existingNode);
+                arrayNode.add(valueNode);
+                metadata.getObjectNode().set(propertyName, arrayNode);
+            } else {
+                metadata.getObjectNode().set(propertyName, metadata.isElementMustBeNull() ? NullNode.instance : valueNode);
+            }
+        } else {
+            metadata.getObjectNode().set(propertyName, childNode);
+        }
     }
 
     private static void extractChildAsOtherSizeN(ElementMetadata metadata, XmlToJsonConfiguration config, JsonNode childNode, String propertyName) {
