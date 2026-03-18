@@ -188,8 +188,8 @@ public class ExtractUtils {
         String fieldName = ElementMetadataUtils.getElementName(childMetadata, config.isRemoveNamespacePrefixes());
         String fieldValue = ElementMetadataUtils.getNodeValue(childMetadata, config.isTrimSpaces());
 
-        if (fieldValue == null || fieldValue.isEmpty()) {
-            metadata.getObjectNode().putNull(fieldName);
+        if (fieldValue.isEmpty()) {
+            metadata.getObjectNode().set(fieldName, JsonNodeFactory.instance.arrayNode());
             return;
         }
 
