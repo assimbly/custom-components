@@ -6,9 +6,9 @@ import tools.jackson.databind.node.ObjectNode;
 import org.assimbly.xmltojsonlegacy.utils.Constants;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class ElementMetadata {
 
@@ -18,16 +18,16 @@ public class ElementMetadata {
     private int childrenCount;
     private int deepestDepth;
 
-    private final Map<String, Integer> childNameCounts = new ConcurrentHashMap<>();
-    private final List<String> childPaths = new ArrayList<>();
+    private Map<String, Integer> childNameCounts = new HashMap<>();
+    private List<String> childPaths = new ArrayList<>();
 
-    private Map<String, AttributeEntry> attributes = new ConcurrentHashMap<>();
+    private Map<String, AttributeEntry> attributes = new HashMap<>();
     private boolean hasAttributes;
 
     private String namespacePrefix;
     private Map<String, Namespace> namespaces;
     private Map<String, Namespace> definedNamespaces;
-    private boolean definesNamespaces;
+    private boolean definesNamespaces = false;
 
     private boolean hasEmptyTextContent = true;
     private boolean elementMustBeNull;
@@ -44,7 +44,7 @@ public class ElementMetadata {
     private ArrayNode arrayNode;
     private JsonNode valueAsJson;
 
-    private int index;
+    private int index = 0;
 
     public ElementMetadata() {
         // default constructor
@@ -102,9 +102,7 @@ public class ElementMetadata {
 
     public boolean containsClassAttributeValue(String value) {
         AttributeEntry attribute = attributes.get(Constants.JSON_XML_ATTR_CLASS);
-        // Remove the null fallback entirely — if there's no class attribute,
-        // no value matches, including empty string
-        return attribute != null && attribute.value().equals(value);
+        return attribute != null && attribute.value().equals(value) || attribute == null && value.isEmpty();
     }
 
     public void setAttributes(Map<String, AttributeEntry> attributes) {
@@ -168,7 +166,7 @@ public class ElementMetadata {
     }
 
     public boolean isHasAttributes() {
-        return !hasAttributes;
+        return hasAttributes;
     }
 
     public void setHasAttributes(boolean hasAttributes) {

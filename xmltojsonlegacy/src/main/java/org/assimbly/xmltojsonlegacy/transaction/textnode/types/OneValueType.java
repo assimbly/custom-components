@@ -21,8 +21,7 @@ public class OneValueType implements TextNodeTransaction {
         } else {
             resp = processWithoutTypeHints(metadata, config);
         }
-        return resp;
-
+        return metadata.getLevel() == 1 ? resp : null;
     }
 
     private static JsonNode processWithTypeHints(ElementMetadata metadata, XmlToJsonConfiguration config) {

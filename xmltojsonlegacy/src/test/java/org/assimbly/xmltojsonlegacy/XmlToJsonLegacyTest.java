@@ -16,8 +16,6 @@ import java.nio.charset.StandardCharsets;
 
 class XmlToJsonLegacyTest extends CamelTestSupport {
 
-    private final ClassLoader classLoader = getClass().getClassLoader();
-
     @EndpointInject("mock:result")
     protected MockEndpoint resultEndpoint;
 
@@ -9164,25 +9162,25 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
 
     private void compareInputXmlFileWithOutputJsonFile(String routeName, String inputXmlFile, String outputJsonFile) throws IOException, InterruptedException {
 
-        String defaultXml = loadFile(inputXmlFile);
-        String defaultJson = loadFile(outputJsonFile);
+        String input = loadFile(inputXmlFile);
+        String expected = loadFile(outputJsonFile);
 
         resultEndpoint.expectedMessageCount(1);
-        template.sendBody("direct:" + routeName, defaultXml);
-        String exchangeBody = getLastExchange(resultEndpoint).getIn().getBody(String.class);
+        template.sendBody("direct:" + routeName, input);
+        String actual = getLastExchange(resultEndpoint).getIn().getBody(String.class);
 
-        IO.println("default Json >>> " + defaultJson);
+        IO.println("Expected >>> \n\n" + expected);
 
-        IO.println("exchangeBody >>> " + exchangeBody);
+        IO.println("Actual >>> \n\n" + actual);
 
-        if(defaultJson.equals(exchangeBody)){
-            IO.println("true");
+        if(expected.equals(actual)){
+            IO.println("Expected and actual are the same");
         }else{
-            IO.println("false");
+            IO.println("Expected and actual are different");
         }
 
         JSONAssert.assertEquals(
-                "Expected the exchange body to equal the given json", defaultJson, exchangeBody, true
+                "Expected the exchange body to equal the given json", expected, actual, true
         );
 
         resultEndpoint.assertIsSatisfied();

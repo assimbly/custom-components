@@ -21,15 +21,12 @@ public class ElementMetadataUtils {
 
     // get parent metadata
     public static ElementMetadata getParentMetadata(Map<String, ElementMetadata> metadataMap, ElementMetadata metadata) {
-        if (metadata == null || metadata.getPath() == null) {  // ← add null check
-            return new ElementMetadata();
-        }
-        String parentPath = getParentPath(metadata.getPath());
+        String parentPath = ElementMetadataUtils.getParentPath(metadata.getPath());
         if (parentPath == null) {
             return new ElementMetadata();
         }
-        ElementMetadata parentMetadata = metadataMap.get(parentPath);
-        return parentMetadata != null ? parentMetadata : new ElementMetadata();
+        ElementMetadata parentMetadata = metadataMap.get(ElementMetadataUtils.getParentPath(metadata.getPath()));
+        return parentMetadata != null ? metadataMap.get(ElementMetadataUtils.getParentPath(metadata.getPath())) : new ElementMetadata();
     }
 
     // get grandparent metadata

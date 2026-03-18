@@ -2,16 +2,16 @@ package org.assimbly.xmltojsonlegacy.model;
 
 public class Namespace {
 
-    private final String xmlNamespace;
-    private final int level;
+    private String namespace;
+    private int level;
 
-    public Namespace(String xmlNamespace, int level) {
-        this.xmlNamespace = xmlNamespace;
+    public Namespace(String namespace, int level) {
+        this.namespace = namespace;
         this.level = level;
     }
 
     public String getNamespace() {
-        return xmlNamespace;
+        return namespace;
     }
 
     public int getLevel() {

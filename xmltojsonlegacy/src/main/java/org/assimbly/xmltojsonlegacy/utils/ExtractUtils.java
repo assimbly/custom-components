@@ -99,7 +99,7 @@ public class ExtractUtils {
 
     private static void extractChildAsOtherSizeN(ElementMetadata metadata, XmlToJsonConfiguration config, JsonNode childNode, String propertyName) {
         if (metadata.isElementMustBeNull()) {
-            metadata.getObjectNode().set(propertyName, null);
+            metadata.getObjectNode().putNull(propertyName);
             return;
         }
         if (JsonUtils.isJsonNodeInOneLevelAndWithNamespace(childNode))
@@ -148,8 +148,8 @@ public class ExtractUtils {
         String fieldValue = ElementMetadataUtils.getNodeValue(childMetadata, config.isTrimSpaces());
         if (metadata.getObjectNode().has(fieldName)) {
             addObjectToExistingFieldOnRootObjectNode(metadata, fieldName, fieldValue);
-        } else if (fieldValue.equalsIgnoreCase("")) {
-            metadata.getObjectNode().set(fieldName, JsonNodeFactory.instance.arrayNode());
+        } else if (fieldValue == null || fieldValue.isEmpty()) {
+            metadata.getObjectNode().putNull(fieldName);
         } else {
             metadata.getObjectNode().put(fieldName, !metadata.isElementMustBeNull() ? fieldValue : null);
         }
@@ -178,7 +178,10 @@ public class ExtractUtils {
         String fieldName = ElementMetadataUtils.getElementName(childMetadata, config.isRemoveNamespacePrefixes());
         String fieldValue = ElementMetadataUtils.getNodeValue(childMetadata, config.isTrimSpaces());
 
-        if (fieldValue.isEmpty()) return;  // ← add this guard
+        if (fieldValue == null || fieldValue.isEmpty()) {
+            metadata.getObjectNode().putNull(fieldName);
+            return;
+        }
 
         if (metadata.getObjectNode().has(fieldName))
             mergeFieldIntoArray(metadata, childMetadata, config, fieldName, fieldValue);
@@ -191,28 +194,41 @@ public class ExtractUtils {
         if (nodeValues.isArray()) {
             ObjectNode attrNode = JsonNodeFactory.instance.objectNode();
             boolean nsAdded = addNamespaceAttributeInObjectNode(metadata, childMetadata, config, attrNode, metadata.getNamespacePrefix());
-            if (nsAdded) { attrNode.put(Constants.JSON_XML_TEXT_FIELD, fieldValue); ((ArrayNode) nodeValues).add(!metadata.isElementMustBeNull() ? attrNode : null); }
-            else          { ((ArrayNode) nodeValues).add(!metadata.isElementMustBeNull() ? fieldValue : null); }
+            if (nsAdded) {
+                if(fieldValue == null || fieldValue.isEmpty()) attrNode.putNull(Constants.JSON_XML_TEXT_FIELD);
+                else attrNode.put(Constants.JSON_XML_TEXT_FIELD, fieldValue);
+                ((ArrayNode) nodeValues).add(!metadata.isElementMustBeNull() ? attrNode : null);
+            }
+            else {
+                if(fieldValue == null || fieldValue.isEmpty()) ((ArrayNode) nodeValues).addNull();
+                else ((ArrayNode) nodeValues).add(!metadata.isElementMustBeNull() ? fieldValue : null);
+            }
         } else {
             ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode();
             arrayNode.add(nodeValues);
-            arrayNode.add(!metadata.isElementMustBeNull() ? fieldValue : null);
+            if(fieldValue == null || fieldValue.isEmpty()) arrayNode.addNull();
+            else arrayNode.add(!metadata.isElementMustBeNull() ? fieldValue : null);
             nodeValues = arrayNode;
         }
         metadata.getObjectNode().set(fieldName, nodeValues);
     }
 
     private static void putNewField(ElementMetadata metadata, ElementMetadata childMetadata, XmlToJsonConfiguration config, String fieldName, String fieldValue) {
-        if (metadata.getObjectNode().has(fieldName)) return;  // ← add this guard
-        if (fieldValue.equalsIgnoreCase("")) {
-            metadata.getObjectNode().set(fieldName, JsonNodeFactory.instance.arrayNode());
+        if (metadata.getObjectNode().has(fieldName)) return;
+        if (fieldValue == null || fieldValue.isEmpty()) {
+            metadata.getObjectNode().putNull(fieldName);
         } else if (metadata.isElementMustBeNull()) {
             metadata.getObjectNode().putNull(fieldName);
         } else {
             ObjectNode attrNode = JsonNodeFactory.instance.objectNode();
             boolean nsAdded = addNamespaceAttributeInObjectNode(metadata, childMetadata, config, attrNode, metadata.getNamespacePrefix());
-            if (nsAdded) { attrNode.put(Constants.JSON_XML_TEXT_FIELD, fieldValue); metadata.getObjectNode().set(fieldName, attrNode); }
-            else         { metadata.getObjectNode().put(fieldName, fieldValue); }
+            if (nsAdded) {
+                attrNode.put(Constants.JSON_XML_TEXT_FIELD, fieldValue);
+                metadata.getObjectNode().set(fieldName, attrNode);
+            }
+            else {
+                metadata.getObjectNode().put(fieldName, fieldValue);
+            }
         }
     }
 
@@ -250,6 +266,7 @@ public class ExtractUtils {
     // setValueUsingAttributeType / put+add value helpers
     // -------------------------------------------------------------------------
 
+    // Logic to determine how to set the value based on type hints and presence of attributes
     public static void setValueUsingAttributeType(ElementMetadata metadata, XmlToJsonConfiguration config, ObjectNode rootObjectNode, JsonNode subElement, String label, String value, String childTypeAttr) {
         if (rootObjectNode.has(label)) {
             JsonNode nodeValues = rootObjectNode.get(label);
@@ -268,7 +285,7 @@ public class ExtractUtils {
     }
 
     public static void putValueOnObjectNode(ElementMetadata metadata, XmlToJsonConfiguration config, ObjectNode objectNode, String type, String label, String value, JsonNode subElement) {
-
+        if(type == null) type = "";
         switch (type.toLowerCase()) {
             case Constants.JSON_XML_ATTR_TYPE_NUMBER  -> putNumberOnObjectNode(metadata, objectNode, label, value, subElement);
             case Constants.JSON_XML_ATTR_TYPE_BOOLEAN -> {
@@ -278,19 +295,17 @@ public class ExtractUtils {
             case Constants.JSON_XML_ATTR_TYPE_ARRAY, Constants.JSON_XML_ATTR_TYPE_OBJECT -> { /* do nothing */ }
             default -> {
                 String resolved = !metadata.isElementMustBeNull() ? resolveStringValue(config, subElement, value) : null;
-                System.out.println("DEBUG default resolved=" + resolved + " isElementMustBeNull=" + metadata.isElementMustBeNull());
                 if (resolved == null) {
-                    System.out.println("DEBUG calling putNull for label=" + label);
                     objectNode.putNull(label);
                 } else {
                     objectNode.put(label, resolved);
                 }
             }
         }
-
     }
 
     public static void addValueIntoArrayNode(ElementMetadata metadata, XmlToJsonConfiguration config, ArrayNode arrayNode, String type, String value, JsonNode subElement) {
+        if(type == null) type = "";
         switch (type.toLowerCase()) {
             case Constants.JSON_XML_ATTR_TYPE_NUMBER  -> addNumberIntoArrayNode(metadata, arrayNode, value, subElement);
             case Constants.JSON_XML_ATTR_TYPE_BOOLEAN -> {
@@ -309,6 +324,7 @@ public class ExtractUtils {
     private static void putNumberOnObjectNode(ElementMetadata metadata, ObjectNode objectNode, String label, String value, JsonNode subElement) {
         if (metadata.isElementMustBeNull()) { objectNode.putNull(label); return; }
         String raw = subElement != null ? subElement.asString() : value;
+        if (raw == null || raw.isEmpty()) { objectNode.putNull(label); return; }
         if      (isInteger(raw)) objectNode.put(label, subElement != null ? subElement.asInt()    : Integer.parseInt(raw));
         else if (isDouble(raw))  objectNode.put(label, subElement != null ? subElement.asDouble() : Double.parseDouble(raw));
         else                     objectNode.putNull(label);
@@ -317,6 +333,7 @@ public class ExtractUtils {
     private static void addNumberIntoArrayNode(ElementMetadata metadata, ArrayNode arrayNode, String value, JsonNode subElement) {
         if (metadata.isElementMustBeNull()) { arrayNode.addNull(); return; }
         String raw = subElement != null ? subElement.asString() : value;
+        if (raw == null || raw.isEmpty()) { arrayNode.addNull(); return; }
         if      (isInteger(raw)) arrayNode.add(subElement != null ? subElement.asInt()    : Integer.parseInt(raw));
         else if (isDouble(raw))  arrayNode.add(subElement != null ? subElement.asDouble() : Double.parseDouble(raw));
         else                     arrayNode.addNull();
@@ -328,9 +345,13 @@ public class ExtractUtils {
 
     private static String resolveStringValue(XmlToJsonConfiguration config, JsonNode subElement, String value) {
         String raw = subElement != null ? subElement.asString() : value;
-        System.out.println("DEBUG resolveStringValue raw=[" + raw + "] trimSpaces=" + config.isTrimSpaces() + " isNull=" + raw.equalsIgnoreCase(Constants.NULL_VALUE) + " NULL_VALUE=[" + Constants.NULL_VALUE + "]");
-        if (config.isTrimSpaces())
-            return raw.trim().equalsIgnoreCase(Constants.NULL_VALUE) ? null : raw.trim();
+        if (raw == null || raw.isEmpty()) return null;
+
+        if (config.isTrimSpaces()) {
+            String trimmed = raw.trim();
+            if (trimmed.isEmpty() || trimmed.equalsIgnoreCase(Constants.NULL_VALUE)) return null;
+            return trimmed;
+        }
         return raw.equalsIgnoreCase(Constants.NULL_VALUE) ? null : raw;
     }
 
@@ -387,7 +408,9 @@ public class ExtractUtils {
             if (valueAsJson.isArray()) { metadata.setArrayNode((ArrayNode) valueAsJson); metadata.setRootArray(true); }
             else                      { metadata.setObjectNode((ObjectNode) valueAsJson); metadata.setRootArray(false); }
         } else {
-            metadata.getArrayNode().add(ElementMetadataUtils.getNodeValue(metadata, config.isTrimSpaces()));
+            String val = ElementMetadataUtils.getNodeValue(metadata, config.isTrimSpaces());
+            if(val == null || val.isEmpty()) metadata.getArrayNode().addNull();
+            else metadata.getArrayNode().add(val);
         }
     }
 
@@ -395,8 +418,11 @@ public class ExtractUtils {
         JsonNode valueAsJson = JsonUtils.getValidJson(metadata.getTextContent());
         if (valueAsJson != null)
             metadata.getObjectNode().set(Constants.JSON_XML_TEXT_FIELD, valueAsJson);
-        else
-            metadata.getObjectNode().put(Constants.JSON_XML_TEXT_FIELD, ElementMetadataUtils.getNodeValue(metadata, config.isTrimSpaces()));
+        else {
+            String val = ElementMetadataUtils.getNodeValue(metadata, config.isTrimSpaces());
+            if (val == null || val.isEmpty()) metadata.getObjectNode().putNull(Constants.JSON_XML_TEXT_FIELD);
+            else metadata.getObjectNode().put(Constants.JSON_XML_TEXT_FIELD, val);
+        }
     }
 
     // -------------------------------------------------------------------------
@@ -427,11 +453,16 @@ public class ExtractUtils {
     }
 
     private static void addObjectToExistingFieldOnRootObjectNode(ElementMetadata metadata, String field, Object value) {
-        JsonNode newValue = switch (value) {
-            case JsonNode jsonNode -> jsonNode;
-            case String string -> new StringNode(string);
-            default -> throw new IllegalArgumentException("Unsupported value type: " + value.getClass());
-        };
+        JsonNode newValue;
+        if(value instanceof JsonNode jn) {
+            newValue = jn;
+        } else if (value instanceof String s) {
+            if(s.isEmpty()) newValue = JsonNodeFactory.instance.nullNode();
+            else newValue = new StringNode(s);
+        } else {
+            throw new IllegalArgumentException("Unsupported value type: " + value.getClass());
+        }
+
         JsonNode nodeValues = metadata.getObjectNode().get(field);
         if (!nodeValues.isArray()) nodeValues = wrapInArray(nodeValues);
         ((ArrayNode) nodeValues).add(!metadata.isElementMustBeNull() ? newValue : null);
@@ -442,7 +473,12 @@ public class ExtractUtils {
         ObjectNode attrInfoObjectNode = JsonNodeFactory.instance.objectNode();
         for (Map.Entry<String, AttributeEntry> entry : metadata.getAttributes().entrySet())
             attrInfoObjectNode.put(Constants.JSON_XML_ATTR_PREFIX + entry.getKey(), entry.getValue().value());
-        attrInfoObjectNode.put(Constants.JSON_XML_TEXT_FIELD, value.equalsIgnoreCase(Constants.NULL_VALUE) ? null : value);
+
+        if (value == null || value.isEmpty() || value.equalsIgnoreCase(Constants.NULL_VALUE)) {
+            attrInfoObjectNode.putNull(Constants.JSON_XML_TEXT_FIELD);
+        } else {
+            attrInfoObjectNode.put(Constants.JSON_XML_TEXT_FIELD, value);
+        }
         return attrInfoObjectNode;
     }
 
@@ -452,11 +488,11 @@ public class ExtractUtils {
 
     private static boolean isInteger(String str) {
         if (str == null || str.isEmpty()) return false;
-        try { Integer.parseInt(str); return true; } catch (NumberFormatException _) { return false; }
+        try { Integer.parseInt(str); return true; } catch (NumberFormatException e) { return false; }
     }
 
     private static boolean isDouble(String str) {
         if (str == null || str.isEmpty()) return false;
-        try { Double.parseDouble(str); return true; } catch (NumberFormatException _) { return false; }
+        try { Double.parseDouble(str); return true; } catch (NumberFormatException e) { return false; }
     }
 }

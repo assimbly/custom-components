@@ -26,8 +26,8 @@
         <module>flv</module>
         <module>formtoxml</module>
         <module>googledrive</module>
-       <!-- <module>jsontoxmllegacy</module>-->
-        <!--<module>mail</module>-->
+        <module>jsontoxmllegacy</module>
+        <module>mail</module>
         <module>multipart</module>
         <module>oauth2token</module>
         <module>pdf</module>

@@ -1,7 +1,5 @@
 package org.assimbly.xmltojsonlegacy.service;
 
-import java.util.*;
-
 import org.assimbly.xmltojsonlegacy.XmlToJsonConfiguration;
 import org.assimbly.xmltojsonlegacy.model.AttributeEntry;
 import org.assimbly.xmltojsonlegacy.model.ElementMetadata;
@@ -20,6 +18,7 @@ import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.InputStream;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class XmlMetadataExtractor {
@@ -29,17 +28,14 @@ public class XmlMetadataExtractor {
     // extracts metadata from the xml
     public static Map<String, ElementMetadata> extractMetadata(InputStream xmlInputStream, XmlToJsonConfiguration config) throws XMLStreamException {
         XMLInputFactory factory = XMLInputFactory.newInstance();
-        factory.setProperty(XMLInputFactory.IS_COALESCING, true);           // merge split text nodes
-        factory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, true);
-
         XMLEventReader reader = factory.createXMLEventReader(xmlInputStream);
         Map<String, ElementMetadata> metadataMap = new LinkedHashMap<>();
 
         Deque<String> pathStack = new ArrayDeque<>();
-        Map<String, Integer> elementCounter = new ConcurrentHashMap<>();
-        Map<String, Integer> childrenCountMap = new ConcurrentHashMap<>();
+        Map<String, Integer> elementCounter = new HashMap<>();
+        Map<String, Integer> childrenCountMap = new HashMap<>();
         Deque<String> textStack = new ArrayDeque<>();
-        Map<String, Integer> siblingIndexMap = new ConcurrentHashMap<>();
+        Map<String, Integer> siblingIndexMap = new HashMap<>();
 
         while (reader.hasNext()) {
             XMLEvent event = reader.nextEvent();
@@ -107,9 +103,9 @@ public class XmlMetadataExtractor {
     // set attributes
     private static void setAttributes(StartElement startElement, ElementMetadata metadata) {
         Iterator<Attribute> attrIterator = startElement.getAttributes();
-        Map<String, AttributeEntry> attributes = new ConcurrentHashMap<>();
+        Map<String, AttributeEntry> attributes = new HashMap<>();
         while (attrIterator.hasNext()) {
-            Attribute attr = attrIterator.next();
+            Attribute attr = (Attribute) attrIterator.next();
             QName qname = attr.getName();
             String attrName = qname.getPrefix().isEmpty()
                     ? qname.getLocalPart()
@@ -153,13 +149,13 @@ public class XmlMetadataExtractor {
 
     // check if text content is considered empty
     private static boolean isTextConsideredEmpty(String text) {
-        return text == null || text.replace("\n","").replace("\r","").replace("\t","").isEmpty();
+        return text == null || text.replace("\n", "").replace("\r", "").replace("\t", "").isEmpty();
     }
 
     // set text content
     private static void setTextContent(String text, ElementMetadata metadata, boolean isSkipWhitespace) {
         metadata.setTextContent(text);
-        String normalizedTextContent = text.replace("\r\n", "").replace("\n", "");
+        String normalizedTextContent = text.replace("\r\n","").replace("\n", "");
         metadata.setNormalizedTextContent(normalizedTextContent);
         metadata.setNormalizedTrimmedTextContent(normalizedTextContent.trim());
         metadata.setValueAsJson(JsonUtils.getValidJson(text));
@@ -182,7 +178,7 @@ public class XmlMetadataExtractor {
         parentMetadata.setChildrenCount(childrenCountMap.get(parentPath));
 
         // add child name
-        String childName = path.substring(path.lastIndexOf('/') +1, path.lastIndexOf('['));
+        String childName = path.substring(path.lastIndexOf("/") +1, path.lastIndexOf("["));
         parentMetadata.addChildName(childName);
 
         // add child complete path
@@ -202,7 +198,7 @@ public class XmlMetadataExtractor {
         int index = counter.getOrDefault(fullPath, 0) + 1;
         counter.put(fullPath, index);
 
-        return basePath.isEmpty() ? "%s[%d]".formatted(name, index) : "%s/%s[%d]".formatted(basePath, name, index);
+        return basePath.isEmpty() ? String.format("%s[%d]", name, index) : String.format("%s/%s[%d]", basePath, name, index);
     }
 
     // get path index
@@ -222,7 +218,7 @@ public class XmlMetadataExtractor {
             ElementMetadata metadata,
             String parentPath
     ) {
-        Map<String, Namespace> definedNamespacesMap = new ConcurrentHashMap<>();
+        Map<String, Namespace> definedNamespacesMap = new HashMap<>();
         Map<String, Namespace> parentNamespaces = Optional.ofNullable(metadataMap.get(parentPath))
                 .map(ElementMetadata::getNamespaces)
                 .map(HashMap::new) // create a copy to avoid mutating parent
@@ -259,23 +255,29 @@ public class XmlMetadataExtractor {
     private static void propagateDeepestDepth(Map<String, ElementMetadata> metadataMap, String path) {
         String childPath = path;
         int currentDepth = 0;
-        String parentPath = ElementMetadataUtils.getParentPath(childPath);
 
-        while (!parentPath.isEmpty()) {
+        while (true) {
+            String parentPath = ElementMetadataUtils.getParentPath(childPath);
+            if (parentPath.isEmpty()) {
+                break;
+            }
+
             ElementMetadata parentMeta = metadataMap.computeIfAbsent(parentPath, p -> {
                 ElementMetadata m = new ElementMetadata();
                 m.setPath(p);
                 return m;
             });
 
-            if (parentMeta.getDeepestDepth() >= currentDepth + 1) {
+            int parentDepth = parentMeta.getDeepestDepth();
+            if (parentDepth < currentDepth + 1) {
+                parentMeta.setDeepestDepth(currentDepth + 1);
+            } else {
+                // stop propagating if no deeper depth is added
                 break;
             }
 
-            parentMeta.setDeepestDepth(currentDepth + 1);
             childPath = parentPath;
             currentDepth++;
-            parentPath = ElementMetadataUtils.getParentPath(childPath);
         }
     }
 
