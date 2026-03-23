@@ -147,6 +147,8 @@ public final class SmbProcessStrategyFactory {
                         readLockStrategy.setReadLockLoggingLevel(logLevel);
                     }
                     return readLockStrategy;
+                }case "none" -> {
+					//ignore no readlock needed
                 }
                 default -> throw new IllegalStateException("Unexpected value: " + readLock);
             }
