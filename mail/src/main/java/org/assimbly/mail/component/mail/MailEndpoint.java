@@ -16,14 +16,24 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.util.Map;
+
 import jakarta.mail.Message;
 import jakarta.mail.search.SearchTerm;
-import org.apache.camel.*;
-import org.apache.camel.spi.*;
+
+import org.apache.camel.Category;
+import org.apache.camel.Consumer;
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
+import org.apache.camel.Producer;
+import org.apache.camel.spi.EndpointServiceLocation;
+import org.apache.camel.spi.HeaderFilterStrategy;
+import org.apache.camel.spi.HeaderFilterStrategyAware;
+import org.apache.camel.spi.IdempotentRepository;
+import org.apache.camel.spi.UriEndpoint;
+import org.apache.camel.spi.UriParam;
 import org.apache.camel.support.ScheduledPollEndpoint;
 import org.eclipse.angus.mail.imap.SortTerm;
-
-import java.util.Map;
 
 import static org.assimbly.mail.component.mail.MailConstants.MAIL_GENERATE_MISSING_ATTACHMENT_NAMES_NEVER;
 import static org.assimbly.mail.component.mail.MailConstants.MAIL_HANDLE_DUPLICATE_ATTACHMENT_NAMES_NEVER;
@@ -123,6 +133,7 @@ public class MailEndpoint extends ScheduledPollEndpoint implements HeaderFilterS
 
     @Override
     public Consumer createConsumer(Processor processor) throws Exception {
+        // PATCH
         configuration.setConsumerMode(true);
         if (configuration.getProtocol().startsWith("smtp")) {
             throw new IllegalArgumentException(
@@ -198,7 +209,7 @@ public class MailEndpoint extends ScheduledPollEndpoint implements HeaderFilterS
     }
 
     /**
-     * To use a custom {@link HeaderFilterStrategy} to filter headers.
+     * To use a custom {@link org.apache.camel.spi.HeaderFilterStrategy} to filter headers.
      */
     @Override
     public void setHeaderFilterStrategy(HeaderFilterStrategy headerFilterStrategy) {
@@ -234,7 +245,7 @@ public class MailEndpoint extends ScheduledPollEndpoint implements HeaderFilterS
     }
 
     /**
-     * Refers to a {@link SearchTerm} which allows to filter mails based on search criteria such as
+     * Refers to a {@link jakarta.mail.search.SearchTerm} which allows to filter mails based on search criteria such as
      * subject, body, from, sent after a certain date etc.
      */
     public void setSearchTerm(SearchTerm searchTerm) {

@@ -17,6 +17,7 @@
 package org.assimbly.mail.component.mail;
 
 import jakarta.mail.internet.InternetAddress;
+
 import org.apache.camel.builder.RouteBuilder;
 import org.assimbly.mail.component.mail.Mailbox.MailboxUser;
 import org.assimbly.mail.component.mail.Mailbox.Protocol;

@@ -16,15 +16,16 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.util.Properties;
+
 import jakarta.mail.Session;
 import jakarta.mail.internet.MimeMessage;
+
 import org.apache.camel.BindToRegistry;
 import org.assimbly.mail.component.mail.Mailbox.MailboxUser;
 import org.assimbly.mail.component.mail.Mailbox.Protocol;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.junit.jupiter.api.Test;
-
-import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

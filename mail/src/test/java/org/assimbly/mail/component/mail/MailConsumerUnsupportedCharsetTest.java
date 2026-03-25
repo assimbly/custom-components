@@ -16,18 +16,19 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.io.UnsupportedEncodingException;
+
 import jakarta.mail.Folder;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.Store;
 import jakarta.mail.internet.MimeMessage;
+
 import org.assimbly.mail.component.mail.Mailbox.MailboxUser;
 import org.assimbly.mail.component.mail.Mailbox.Protocol;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.io.UnsupportedEncodingException;
 
 public class MailConsumerUnsupportedCharsetTest extends CamelTestSupport {
     private static final MailboxUser jones = Mailbox.getOrCreateUser("jones", "secret");

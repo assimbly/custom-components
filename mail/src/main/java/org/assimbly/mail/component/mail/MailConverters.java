@@ -16,20 +16,6 @@
  */
 package org.assimbly.mail.component.mail;
 
-import jakarta.mail.BodyPart;
-import jakarta.mail.Message;
-import jakarta.mail.MessagingException;
-import jakarta.mail.Multipart;
-import jakarta.mail.internet.MimeMultipart;
-import jakarta.mail.search.SearchTerm;
-import org.apache.camel.Converter;
-import org.apache.camel.Exchange;
-import org.apache.camel.TypeConverter;
-import org.apache.camel.spi.TypeConverterRegistry;
-import org.apache.camel.support.ExchangeHelper;
-import org.apache.camel.util.TimeUtils;
-import org.eclipse.angus.mail.imap.SortTerm;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,6 +25,21 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import jakarta.mail.BodyPart;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.Multipart;
+import jakarta.mail.internet.MimeMultipart;
+import jakarta.mail.search.SearchTerm;
+
+import org.apache.camel.Converter;
+import org.apache.camel.Exchange;
+import org.apache.camel.TypeConverter;
+import org.apache.camel.spi.TypeConverterRegistry;
+import org.apache.camel.support.ExchangeHelper;
+import org.apache.camel.util.TimeUtils;
+import org.eclipse.angus.mail.imap.SortTerm;
 
 /**
  * JavaMail specific converters.

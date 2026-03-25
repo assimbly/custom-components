@@ -16,7 +16,10 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.io.ByteArrayOutputStream;
+
 import jakarta.mail.internet.MimeMultipart;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.builder.RouteBuilder;
@@ -27,8 +30,6 @@ import org.apache.camel.test.junit5.CamelTestSupport;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.ByteArrayOutputStream;
 
 import static org.assimbly.mail.component.mail.MailConstants.MAIL_ALTERNATIVE_BODY;
 import static org.junit.jupiter.api.Assertions.assertEquals;

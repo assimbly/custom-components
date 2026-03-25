@@ -16,8 +16,13 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
 import jakarta.mail.Message;
 import jakarta.mail.Session;
+
 import org.apache.camel.BindToRegistry;
 import org.apache.camel.RoutesBuilder;
 import org.apache.camel.builder.RouteBuilder;
@@ -26,10 +31,6 @@ import org.assimbly.mail.component.mail.Mailbox.Protocol;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.junit.jupiter.api.Test;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;

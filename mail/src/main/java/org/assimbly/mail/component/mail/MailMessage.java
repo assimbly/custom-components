@@ -16,16 +16,17 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.io.IOException;
+import java.util.Map;
+
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.RuntimeCamelException;
 import org.apache.camel.support.DefaultMessage;
 import org.apache.camel.support.ExchangeHelper;
 import org.apache.camel.util.ObjectHelper;
-
-import java.io.IOException;
-import java.util.Map;
 
 /**
  * Represents a {@link org.apache.camel.Message} for working with Mail
@@ -92,6 +93,11 @@ public class MailMessage extends DefaultMessage {
             return binding != null ? binding.extractBodyFromMail(getExchange(), this) : null;
         }
         return null;
+    }
+
+    @Override
+    protected boolean isPopulateHeadersSupported() {
+        return true;
     }
 
     @Override

@@ -16,6 +16,10 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
 import jakarta.activation.DataHandler;
 import jakarta.mail.Message;
 import jakarta.mail.Multipart;
@@ -25,13 +29,10 @@ import jakarta.mail.internet.MimeBodyPart;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMultipart;
 import jakarta.mail.internet.MimeUtility;
+
 import org.apache.camel.attachment.Attachment;
 import org.apache.camel.support.DefaultHeaderFilterStrategy;
 import org.junit.jupiter.api.Test;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

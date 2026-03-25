@@ -16,20 +16,21 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.util.Iterator;
+import java.util.Properties;
+
 import jakarta.mail.Address;
 import jakarta.mail.Message;
 import jakarta.mail.Session;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+
 import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.support.ObjectHelper;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.apache.camel.util.CastUtils;
 import org.junit.jupiter.api.Test;
-
-import java.util.Iterator;
-import java.util.Properties;
 
 import static org.apache.camel.test.junit5.TestSupport.assertIsInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertEquals;

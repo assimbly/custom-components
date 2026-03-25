@@ -16,15 +16,18 @@
  */
 package org.assimbly.mail.component.mail;
 
-import org.apache.camel.test.junit5.CamelTestSupport;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Properties;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.apache.camel.test.junit5.CamelTestSupport;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MailEndpointTlsTest extends CamelTestSupport {
 

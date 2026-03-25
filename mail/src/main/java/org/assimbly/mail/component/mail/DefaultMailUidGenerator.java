@@ -16,15 +16,16 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.util.Enumeration;
+import java.util.UUID;
+
 import jakarta.mail.Header;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
+
 import org.apache.camel.util.ObjectHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Enumeration;
-import java.util.UUID;
 
 public class DefaultMailUidGenerator implements MailUidGenerator {
 

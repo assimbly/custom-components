@@ -16,9 +16,13 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.util.Properties;
+import java.util.stream.Stream;
+
 import jakarta.mail.MessagingException;
 import jakarta.mail.PasswordAuthentication;
 import jakarta.mail.Session;
+
 import org.apache.camel.CamelContext;
 import org.apache.camel.ExtendedCamelContext;
 import org.apache.camel.Processor;
@@ -28,9 +32,6 @@ import org.apache.camel.spi.ExchangeFactory;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import java.util.Properties;
-import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;

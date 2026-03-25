@@ -16,7 +16,13 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.net.URI;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import jakarta.mail.search.SearchTerm;
+
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
 import org.apache.camel.SSLContextParametersAware;
@@ -28,11 +34,6 @@ import org.apache.camel.support.HealthCheckComponent;
 import org.apache.camel.util.PropertiesHelper;
 import org.apache.camel.util.StringHelper;
 import org.eclipse.angus.mail.imap.SortTerm;
-
-import java.net.URI;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Component for JavaMail.
@@ -190,7 +191,7 @@ public class MailComponent extends HealthCheckComponent implements HeaderFilterS
     }
 
     /**
-     * To use a custom {@link HeaderFilterStrategy} to filter header to and from Camel message.
+     * To use a custom {@link org.apache.camel.spi.HeaderFilterStrategy} to filter header to and from Camel message.
      */
     @Override
     public void setHeaderFilterStrategy(HeaderFilterStrategy strategy) {
