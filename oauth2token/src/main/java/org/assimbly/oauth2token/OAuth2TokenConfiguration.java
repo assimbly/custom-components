@@ -5,7 +5,7 @@ import org.apache.camel.spi.UriParams;
 import org.apache.camel.spi.UriPath;
 
 @UriParams
-public class OAuth2TokenConfiguration implements Cloneable {
+public class OAuth2TokenConfiguration {
 
     @UriPath
     private String id;
@@ -19,8 +19,16 @@ public class OAuth2TokenConfiguration implements Cloneable {
     @UriParam
     private String tokenName;
 
+    public OAuth2TokenConfiguration() {
+        // Used for serialization or reflection
+    }
 
-    public OAuth2TokenConfiguration() { }
+    public OAuth2TokenConfiguration(OAuth2TokenConfiguration source) {
+        this.id           = source.id;
+        this.tenantDbName = source.tenantDbName;
+        this.expiryDelay  = source.expiryDelay;
+        this.tokenName    = source.tokenName;
+    }
 
     public String getId() {
         return id;
@@ -53,4 +61,5 @@ public class OAuth2TokenConfiguration implements Cloneable {
     public void setTokenName(String tokenName) {
         this.tokenName = tokenName;
     }
+
 }

@@ -6,24 +6,22 @@ import org.assimbly.sql.domain.JDBCConnection;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class OracleAdapter implements DatabaseAdapter {
 
-    private static volatile boolean registered;
+    private static final AtomicBoolean registered = new AtomicBoolean(false);
 
     @Override
     public Connection connect(JDBCConnection connection) throws SQLException {
         OracleDriver driver = new OracleDriver();
 
-        String url = String.format("jdbc:oracle:thin:@%s:%s/%s",
+        String url = "jdbc:oracle:thin:@%s:%s/%s".formatted(
                 connection.getHost(), connection.getPort(), connection.getDatabase());
 
-        //TODO: Figure out how SSL is configured in Oracle JDBC Connection String
-
         DriverManager.setLoginTimeout(5);
-        if(!registered) {
+        if(registered.compareAndSet(false, true)) {
             DriverManager.registerDriver(driver);
-            registered = true;
         }
 
         return DriverManager.getConnection(url, connection.getUsername(), connection.getPassword());

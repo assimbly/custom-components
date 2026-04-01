@@ -86,8 +86,8 @@ public class MFTextNode implements IMFNode
 		for (IEnumerator v = select(IMFNode.MFQueryKind_AllChildren, null).enumerator(); v.moveNext();)
 		{
 			Object o = v.current();
-			if (o instanceof IMFNode)
-				s += ((IMFNode) o ).value();
+			if (o instanceof IMFNode node)
+				s += node.value();
 			else
 				s += o.toString();
 		}

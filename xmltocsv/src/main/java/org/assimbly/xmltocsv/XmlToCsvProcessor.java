@@ -106,9 +106,14 @@ public class XmlToCsvProcessor implements Processor {
             }
 
             addLine(headers, element, config, builder);
+
+            // ONLY add the line separator if it's NOT the last node
+            if (i < nodes.getLength() - 1) {
+                builder.append(config.getLineSeparator());
+            }
         }
 
-        builder.setLength(builder.length() - 1);
+        // builder.setLength(builder.length() - 1); // REMOVE THIS - handled inside addLine/loop now
         return builder.toString();
     }
 
@@ -141,7 +146,7 @@ public class XmlToCsvProcessor implements Processor {
         }
 
         builder.setLength(builder.length() - 1);
-        builder.append(config.getLineSeparator());
+
     }
 
     private void addHeaderLine(Set<String> headers, XmlToCsvConfiguration config, StringBuilder builder) {
@@ -174,21 +179,11 @@ public class XmlToCsvProcessor implements Processor {
     }
 
     private String applyQuotationOption(String content, QuoteFields quoteFields) {
-        String result;
-        switch(quoteFields) {
-            case ALL_FIELDS:
-                result = '"' + content + '"';
-                break;
-            case NON_INTEGER_FIELDS:
-                result = (content.matches("-?\\d+")) ? content : '"' + content + '"';
-                break;
-            case NO_FIELDS:
-                result = content;
-                break;
-            default:
-                result = '"' + content + '"';
-        }
-        return result;
+        return switch(quoteFields) {
+            case NON_INTEGER_FIELDS -> (content.matches("-?\\d+")) ? content : '"' + content + '"';
+            case NO_FIELDS -> content;
+            default -> '"' + content + '"';
+        };
     }
 
     private Document parseXmlToDocument(String xml) throws Exception {

@@ -7,16 +7,14 @@ import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit5.CamelTestSupport;
-import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 class XmlToJsonLegacyTest extends CamelTestSupport {
-
-    private final ClassLoader classLoader = getClass().getClassLoader();
 
     @EndpointInject("mock:result")
     protected MockEndpoint resultEndpoint;
@@ -9162,22 +9160,40 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
         );
     }
 
-    private void compareInputXmlFileWithOutputJsonFile(String routeName, String inputXmlFile, String outputJsonFile)
-            throws IOException, InterruptedException {
-        String defaultXml = IOUtils.toString(classLoader.getResourceAsStream(inputXmlFile), StandardCharsets.UTF_8);
-        String defaultJson = IOUtils.toString(classLoader.getResourceAsStream(outputJsonFile), StandardCharsets.UTF_8);
+    private void compareInputXmlFileWithOutputJsonFile(String routeName, String inputXmlFile, String outputJsonFile) throws IOException, InterruptedException {
+
+        String input = loadFile(inputXmlFile);
+        String expected = loadFile(outputJsonFile);
 
         resultEndpoint.expectedMessageCount(1);
-        template.sendBody("direct:"+routeName, defaultXml);
-        String exchangeBody = getLastExchange(resultEndpoint).getIn().getBody(String.class);
+        template.sendBody("direct:" + routeName, input);
+        String actual = getLastExchange(resultEndpoint).getIn().getBody(String.class);
 
-        System.out.println("exchangeBody >>> "+exchangeBody);
+        IO.println("Expected >>> \n\n" + expected);
+
+        IO.println("Actual >>> \n\n" + actual);
+
+        if(expected.equals(actual)){
+            IO.println("Expected and actual are the same");
+        }else{
+            IO.println("Expected and actual are different");
+        }
 
         JSONAssert.assertEquals(
-                "Expected the exchange body to equal the given json", defaultJson, exchangeBody, true
+                "Expected the exchange body to equal the given json", expected, actual, true
         );
 
         resultEndpoint.assertIsSatisfied();
+    }
+
+    public String loadFile(String fileName) throws IOException {
+        ClassLoader classLoader = getClass().getClassLoader();
+        try (InputStream is = classLoader.getResourceAsStream(fileName)) {
+            if (is == null) {
+                throw new IllegalArgumentException("File not found: " + fileName);
+            }
+            return new String(is.readAllBytes(), StandardCharsets.UTF_8);
+        }
     }
 
     private Exchange getLastExchange(MockEndpoint endpoint) {

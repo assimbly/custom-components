@@ -5,6 +5,8 @@ import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.support.ProcessorEndpoint;
 
+import java.util.Objects;
+
 @UriEndpoint(
         firstVersion = "3.0.1",
         scheme = "formtoxml",
@@ -14,7 +16,7 @@ import org.apache.camel.support.ProcessorEndpoint;
 public class FormToXmlEndpoint extends ProcessorEndpoint {
     @UriParam
     private FormToXmlConfiguration configuration;
-    private FormToXmlComponent component;
+    private final FormToXmlComponent component;
 
     public FormToXmlEndpoint(String uri, FormToXmlComponent component, FormToXmlConfiguration configuration) {
         super(uri, component);
@@ -36,4 +38,18 @@ public class FormToXmlEndpoint extends ProcessorEndpoint {
     public FormToXmlComponent getComponent(){
         return component;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof FormToXmlEndpoint that)) return false;
+        if (!super.equals(o)) return false;
+        return Objects.equals(component, that.component);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), component);
+    }
+
 }

@@ -18,14 +18,14 @@ public class MFNode
 {
 	static Object unboxTypedValue(Object o) throws Exception
 	{
-		if (o instanceof IMFNode) return ((IMFNode)o).typedValue();
+		if (o instanceof IMFNode node) return node.typedValue();
 		return o;
 	}
 
 	static void add(ArrayList<Object> a, Object o)
 	{
-		if (o instanceof Object[])
-			for (Object i : (Object[])o)
+		if (o instanceof Object[] objects)
+			for (Object i : objects)
 				add(a, i);
 		else
 			a.add(o);

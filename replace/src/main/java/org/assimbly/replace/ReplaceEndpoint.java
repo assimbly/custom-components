@@ -5,6 +5,8 @@ import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.support.ProcessorEndpoint;
 
+import java.util.Objects;
+
 @UriEndpoint(
         firstVersion = "3.0.3",
         scheme = "replace",
@@ -15,7 +17,7 @@ public class ReplaceEndpoint extends ProcessorEndpoint {
 
     @UriParam
     private ReplaceConfiguration configuration;
-    private ReplaceComponent component;
+    private final ReplaceComponent component;
 
     public ReplaceEndpoint(String uri, ReplaceComponent component, ReplaceConfiguration configuration) {
         super(uri, component);
@@ -25,7 +27,7 @@ public class ReplaceEndpoint extends ProcessorEndpoint {
     }
 
     @Override
-    protected Processor createProcessor() throws Exception {
+    protected Processor createProcessor() {
         return new ReplaceProcessor(this);
     }
 
@@ -37,4 +39,18 @@ public class ReplaceEndpoint extends ProcessorEndpoint {
     public ReplaceComponent getComponent() {
         return component;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ReplaceEndpoint that)) return false;
+        if (!super.equals(o)) return false;
+        return Objects.equals(component, that.component);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), component);
+    }
+
 }

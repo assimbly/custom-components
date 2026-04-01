@@ -21,7 +21,4 @@ public enum ConfigHelper {
         return (String) config.getProperties().get(name);
     }
 
-    public void setConfigAdmin(ConfigurationAdmin configurationAdmin) {
-        configAdmin = configurationAdmin;
-    }
 }

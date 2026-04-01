@@ -353,16 +353,17 @@ public enum EdifactType {
 
     public abstract UNEdifactInterchangeFactory interchangeFactory() throws IOException, SAXException;
 
+    @Override
     public String toString() {
         return name().toLowerCase();
     }
 
     public String urn() {
-        return String.format("urn:org.milyn.edi.unedifact:%s-mapping:*", toString());
+        return "urn:org.milyn.edi.unedifact:%s-mapping:*".formatted(toString());
     }
 
     public String bindingConfigUri() {
-        return String.format("/org/milyn/edi/unedifact/%s/interchange-bindingconfig.xml", toString());
+        return "/org/milyn/edi/unedifact/%s/interchange-bindingconfig.xml".formatted(toString());
     }
 
     public static EdifactType byName(String name) {

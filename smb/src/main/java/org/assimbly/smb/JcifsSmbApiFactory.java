@@ -40,7 +40,7 @@ public class JcifsSmbApiFactory implements SmbApiFactory {
     }
 
     @Override
-    public SmbFile createSmbFile(String url) throws IOException {
+    public SmbFile createSmbFile(String url) {
         return null;
     }
 

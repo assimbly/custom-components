@@ -9,8 +9,8 @@ import org.apache.camel.Producer;
 import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.support.ProcessorEndpoint;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.util.Objects;
 
 import static org.assimbly.googledrive.domain.GSuiteFilesTypeHelper.getConversionMimeType;
 import static org.assimbly.googledrive.domain.GSuiteFilesTypeHelper.getGSuiteFileName;
@@ -21,7 +21,6 @@ import static org.assimbly.googledrive.domain.GSuiteFilesTypeHelper.isGSuiteFile
         scheme = "google-drive",
         title = "Google Drive Component",
         syntax = "google-drive:")
-@SuppressWarnings("PackageAccessibility")
 public class GoogleDriveEndpoint extends ProcessorEndpoint {
 
     private static final String APPLICATION_NAME = "Assimbly";
@@ -31,7 +30,7 @@ public class GoogleDriveEndpoint extends ProcessorEndpoint {
     private GoogleDriveClientFactory clientFactory;
     private Drive client;
 
-    private GoogleDriveComponent component;
+    private final GoogleDriveComponent component;
 
     @UriParam
     private GoogleDriveConfiguration configuration;
@@ -50,7 +49,7 @@ public class GoogleDriveEndpoint extends ProcessorEndpoint {
     }
 
     @Override
-    public Producer createProducer() throws Exception {
+    public Producer createProducer() {
         return new GoogleDriveProducer(this);
     }
 
@@ -113,4 +112,18 @@ public class GoogleDriveEndpoint extends ProcessorEndpoint {
     public void setConfiguration(GoogleDriveConfiguration configuration) {
         this.configuration = configuration;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof GoogleDriveEndpoint that)) return false;
+        if (!super.equals(o)) return false;
+        return Objects.equals(component, that.component);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), component);
+    }
+
 }

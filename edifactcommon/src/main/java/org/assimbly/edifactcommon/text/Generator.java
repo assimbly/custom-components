@@ -120,12 +120,11 @@ public class Generator implements ITextNode
 	}
 
 	public void saveAsSimpleXML(String filename) {
-		try {
-			Writer writer = new FileWriter(filename);
-			TextNodeXMLSerializer xmlSerializer = new TextNodeXMLSerializer(
-					writer);
+		try(Writer writer = new FileWriter(filename)) {
+
+			TextNodeXMLSerializer xmlSerializer = new TextNodeXMLSerializer(writer);
 			xmlSerializer.serialize(m_Current.getRoot());
-			writer.close();
+
 		} catch (Exception e) {
 			throw new AltovaException(e.getMessage());
 		}

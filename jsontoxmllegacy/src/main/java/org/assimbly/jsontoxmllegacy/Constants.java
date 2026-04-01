@@ -18,7 +18,7 @@ public class Constants {
     public static final String JSON_XML_ATTR_TYPE_ARRAY = "array";
     public static final String JSON_XML_ATTR_TYPE_OBJECT = "object";
 
-    public static final List<String> SPECIAL_JSON_XML_ATTR_TYPES = Arrays.asList(
+    protected static final List<String> SPECIAL_JSON_XML_ATTR_TYPES = Arrays.asList(
             Constants.JSON_XML_ATTR_CLASS,
             Constants.JSON_XML_ATTR_CONTEXT,
             Constants.JSON_XML_ATTR_TYPE

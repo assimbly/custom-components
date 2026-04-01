@@ -48,7 +48,7 @@ public class Xlsx
 		dt.setTimezoneOffset(0);
 		
 		Duration diff = Lang.datetimeDiff(dt, new DateTime(1900, 1, 1));
-		double result = (double) diff.getDayTimeValue() / 86400000.0;
+		double result = diff.getDayTimeValue() / 86400000.0;
 		
 		if (result >= 60)
 			result++;
@@ -62,7 +62,7 @@ public class Xlsx
 		dt.setTimezoneOffset(0);
 
 		Duration diff = Lang.datetimeDiff(dt, new DateTime(1, 1, 1));
-		return (double) diff.getDayTimeValue() / 86400000.0;
+		return diff.getDayTimeValue() / 86400000.0;
 	}
 
 	public static double dateToXLSX(DateTime o)

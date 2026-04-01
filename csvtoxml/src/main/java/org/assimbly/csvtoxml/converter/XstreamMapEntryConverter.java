@@ -7,12 +7,12 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 import java.util.AbstractMap;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class XstreamMapEntryConverter implements Converter {
 
-    @SuppressWarnings("rawtypes") // required via com.thoughtworks.xstream.converters.ConverterMatcher.canConvert()
+    // required via com.thoughtworks.xstream.converters.ConverterMatcher.canConvert()
     public boolean canConvert(Class clazz) {
         return AbstractMap.class.isAssignableFrom(clazz);
     }
@@ -21,11 +21,7 @@ public class XstreamMapEntryConverter implements Converter {
     public void marshal(Object value, HierarchicalStreamWriter writer, MarshallingContext context) {
         AbstractMap<String, String> map = (AbstractMap<String, String>) value;
         for (Map.Entry<String, String> entry : map.entrySet()) {
-            String xmlNode = entry.getKey().replaceAll("[^A-z0-9_.\\-]|^(xml|[\\-0-9\\.])+", "");
-
-            System.out.println("----------------------");
-            System.out.println("xmlNode=" + xmlNode);
-            System.out.println("value=" + entry.getValue());
+            String xmlNode = entry.getKey().replaceAll("[^A-Za-z0-9_.\\-]|^(xml|[-0-9.])++" , "");
 
             writer.startNode(xmlNode);
             writer.setValue(entry.getValue());
@@ -34,7 +30,7 @@ public class XstreamMapEntryConverter implements Converter {
     }
 
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-        Map<String, String> map = new HashMap<>();
+        Map<String, String> map = new ConcurrentHashMap<>();
 
         while (reader.hasMoreChildren()) {
             reader.moveDown();

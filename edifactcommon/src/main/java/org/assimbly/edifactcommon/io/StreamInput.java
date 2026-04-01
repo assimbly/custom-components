@@ -7,22 +7,26 @@ import java.io.InputStream;
 
 public class StreamInput extends Input
 {
-	private InputStream stream;
+	private final InputStream stream;
 	
 	public StreamInput (InputStream stream)
 	{
 		super(Input.IO_STREAM);
 		this.stream = stream;
 	}
-	
+
+	@Override
 	public InputStream getStream() {return stream;}
+
+	@Override
 	public void close() throws Exception {stream.close();}
-	
-	static public StreamInput createInput(String u) throws Exception
+
+	public static StreamInput createInput(String u) throws Exception
 	{
 		if (u.trim().indexOf(':') > 1)
 		{
-			java.net.URL url = new java.net.URL(u);
+			java.net.URI uri = java.net.URI.create(u);
+			java.net.URL url = uri.toURL();
 			
 			if ("file".equals(url.getProtocol()))
 				return new FileInput(url.getPath());

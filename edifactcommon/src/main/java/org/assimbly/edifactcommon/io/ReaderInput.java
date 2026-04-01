@@ -14,7 +14,8 @@ public class ReaderInput extends Input
 		super(Input.IO_READER);
 		this.reader = reader;
 	}
-	
+
+	@Override
 	public Reader getReader() {return reader;}
 }
 

@@ -53,25 +53,17 @@ public class DOMNodeAsMFNodeAdapter implements IMFNode
 
 	public int getNodeKind() 
 	{
-		switch (node.getNodeType())
+		return switch (node.getNodeType())
 		{
-			case Node.ATTRIBUTE_NODE:
-				return MFNodeKind_Attribute; // also field?
-			case Node.CDATA_SECTION_NODE:
-				return MFNodeKind_Text | MFNodeKind_CData;
-			case Node.COMMENT_NODE:
-				return MFNodeKind_Comment;
-			case Node.DOCUMENT_NODE:
-				return MFNodeKind_Document;
-			case Node.ELEMENT_NODE:
-				return MFNodeKind_Element;
-			case Node.TEXT_NODE:
-				return MFNodeKind_Text;
-			case Node.PROCESSING_INSTRUCTION_NODE:
-				return MFNodeKind_ProcessingInstruction;
-			default:
-				return 0;
-		}
+			case Node.ATTRIBUTE_NODE -> MFNodeKind_Attribute; // also field?
+			case Node.CDATA_SECTION_NODE -> MFNodeKind_Text | MFNodeKind_CData;
+			case Node.COMMENT_NODE -> MFNodeKind_Comment;
+			case Node.DOCUMENT_NODE -> MFNodeKind_Document;
+			case Node.ELEMENT_NODE -> MFNodeKind_Element;
+			case Node.TEXT_NODE -> MFNodeKind_Text;
+			case Node.PROCESSING_INSTRUCTION_NODE -> MFNodeKind_ProcessingInstruction;
+			default -> 0;
+		};
 	}
 
 	public QName getQName() 

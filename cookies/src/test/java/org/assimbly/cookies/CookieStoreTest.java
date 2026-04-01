@@ -34,7 +34,7 @@ public class CookieStoreTest extends CamelTestSupport {
 
         assertEquals(1, flowCookieStore.getCookies().size());
 
-        Cookie actual = flowCookieStore.getCookies().get(0);
+        Cookie actual = flowCookieStore.getCookies().getFirst();
 
         assertEquals("Cookie 1", actual.getName());
         assertEquals("Value 1", actual.getValue());
@@ -63,7 +63,7 @@ public class CookieStoreTest extends CamelTestSupport {
 
         assertEquals(1, flowCookieStore.getCookies().size());
 
-        Cookie actual = flowCookieStore.getCookies().get(0);
+        Cookie actual = flowCookieStore.getCookies().getFirst();
 
         assertEquals("Value 2", actual.getValue());
     }
@@ -154,7 +154,7 @@ public class CookieStoreTest extends CamelTestSupport {
 
         assertEquals(1, flowCookieStore.getCookies().size());
 
-        Cookie actual = flowCookieStore.getCookies().get(0);
+        Cookie actual = flowCookieStore.getCookies().getFirst();
 
         assertEquals("Cookie 1", actual.getName());
         assertEquals("Value 1", actual.getValue());

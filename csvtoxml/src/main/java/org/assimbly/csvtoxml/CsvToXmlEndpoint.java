@@ -6,6 +6,8 @@ import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.support.ProcessorEndpoint;
 
+import java.util.Objects;
+
 @UriEndpoint(
         firstVersion = "3.0.1",
         scheme = "csvtoxml",
@@ -16,10 +18,10 @@ public class CsvToXmlEndpoint extends ProcessorEndpoint {
 
     @UriParam
     private CsvToXmlConfiguration configuration;
-    private CsvToXmlComponent component;
+    private final CsvToXmlComponent component;
 
     public CsvToXmlEndpoint(String uri, CsvToXmlComponent component, CsvToXmlConfiguration configuration) {
-        super(uri, (Component) component);
+        super(uri, component);
 
         this.component = component;
         this.configuration = configuration;
@@ -36,6 +38,21 @@ public class CsvToXmlEndpoint extends ProcessorEndpoint {
 
     @Override
     public Component getComponent(){
-        return (Component) component;
+        return component;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CsvToXmlEndpoint that)) return false;
+        if (!super.equals(o)) return false;
+        return Objects.equals(configuration, that.configuration)
+                && Objects.equals(component, that.component);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), configuration, component);
+    }
+
 }

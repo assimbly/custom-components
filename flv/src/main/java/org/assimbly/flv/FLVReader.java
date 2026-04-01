@@ -1,10 +1,11 @@
 package org.assimbly.flv;
 
+
+import java.util.*;
+
 import org.milyn.cdr.SmooksResourceConfiguration;
 import org.xml.sax.InputSource;
 import org.assimbly.smooksnoxml.BaseXmlReader;
-
-import java.util.*;
 
 public class FLVReader extends BaseXmlReader {
 
@@ -12,8 +13,8 @@ public class FLVReader extends BaseXmlReader {
 
     private List<LineReader> lineReaders;
 
-    // 0-arg constructor needs to be available for reflective instantiation
     public FLVReader() {
+        // 0-arg constructor needs to be available for reflective instantiation
     }
 
     // setter needs to be here for instance configuration through reflection
@@ -24,7 +25,7 @@ public class FLVReader extends BaseXmlReader {
         lineReaders.addAll((List<LineReader>) config.getParameter(FLVConfigurator.PARAM_LINE_READERS).getObjValue());
 
         // sort line readers based on the header length
-        Collections.sort(lineReaders, new HeaderLengthComparator());
+        lineReaders.sort(new HeaderLengthComparator());
         // make sure line readers are traversed from most specific (longer header) to least
         Collections.reverse(lineReaders);
     }

@@ -138,8 +138,8 @@ public class FileIO {
 				fistream.skip( bom_size );
 
 			// read
-			if (m_inStream instanceof FileInputStream)
-				bufferSize = (int) ((FileInputStream) m_inStream).getChannel().size();
+			if (m_inStream instanceof FileInputStream stream)
+				bufferSize = (int) stream.getChannel().size();
 			
 			result = new StringBuffer(bufferSize);
 			

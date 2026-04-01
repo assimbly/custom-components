@@ -16,6 +16,8 @@ package org.assimbly.edifactcommon.text.edi;
 
 import org.assimbly.edifactcommon.text.ITextNode;
 
+import java.math.RoundingMode;
+
 public class  DataTypeValidatorTime extends DataTypeValidator {
 
 	public DataTypeValidatorTime (int minLength, int maxLength) {
@@ -79,7 +81,7 @@ public class  DataTypeValidatorTime extends DataTypeValidator {
 			if (getMaxLength() > 6 && s.charAt(getMaxLength()) >= '5')
 			{
 				java.math.BigDecimal d = new java.math.BigDecimal("0." + s.substring(6));
-				d = d.setScale(getMaxLength() - 6, java.math.BigDecimal.ROUND_HALF_UP);
+				d = d.setScale(getMaxLength() - 6, RoundingMode.HALF_UP);
 				s.setLength(6);
 				String frac = d.toString();
 				s.append(frac.substring(2));

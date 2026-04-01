@@ -2,8 +2,6 @@ package org.assimbly.soap.util.helpers;
 
 import org.w3c.dom.Node;
 
-import javax.wsdl.extensions.schema.Schema;
-
 public final class NodeHelper {
 
     public static boolean isReference(Node node){

@@ -5,6 +5,8 @@ import org.apache.camel.support.ProcessorEndpoint;
 import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
 
+import java.util.Objects;
+
 
 @UriEndpoint(
         firstVersion = "3.0.1",
@@ -38,4 +40,18 @@ public class XmlToCsvEndpoint extends ProcessorEndpoint {
     public XmlToCsvComponent getComponent(){
         return component;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof XmlToCsvEndpoint that)) return false;
+        if (!super.equals(o)) return false;
+        return Objects.equals(component, that.component);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), component);
+    }
+
 }

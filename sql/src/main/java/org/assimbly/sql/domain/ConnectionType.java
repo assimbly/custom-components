@@ -9,15 +9,17 @@ public enum ConnectionType {
     MYSQL8("Mysql8Adapter"),
     SQL_SERVER("SqlServerAdapter"),
     ORACLE("OracleAdapter"),
-    POSTGRES("PostgresAdapter");
+    POSTGRES("PostgresAdapter"),
+    H2("H2Adapter");
 
-    String adapterName;
+    private final String adapterName;
 
     ConnectionType(String adapterName) {
         this.adapterName = adapterName;
     }
 
-    public DatabaseAdapter getAdapter() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        return (DatabaseAdapter) Class.forName("org.assimbly.sql.adapter." + adapterName).newInstance();
+    public DatabaseAdapter getAdapter() throws ReflectiveOperationException {
+        Class<?> adapterClass = Class.forName("org.assimbly.sql.adapter." + adapterName);
+        return (DatabaseAdapter) adapterClass.getDeclaredConstructor().newInstance();
     }
 }

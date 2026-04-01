@@ -2,8 +2,8 @@ package org.assimbly.edifactcommon;
 
 public class UserException extends RuntimeException 
 {
-	protected String	message;
-	protected org.w3c.dom.Node node;
+	protected final String message;
+	protected final org.w3c.dom.Node node;
 
 	public UserException(String text) 
 	{
@@ -23,6 +23,7 @@ public class UserException extends RuntimeException
 		node = n;
 	}
 
+	@Override
 	public String getMessage() {
 		return message;
 	}

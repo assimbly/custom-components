@@ -9,7 +9,7 @@ import org.assimbly.util.helper.XmlHelper;
 
 public class XmlEnrichStrategy implements AggregationStrategy {
 
-    private final static Logger logger = Logger.getLogger(XmlEnrichStrategy.class);
+    private static final Logger logger = Logger.getLogger(XmlEnrichStrategy.class);
 
     @Override
     public Exchange aggregate(Exchange original, Exchange resource) {
@@ -21,20 +21,20 @@ public class XmlEnrichStrategy implements AggregationStrategy {
                 throw new Exception("Something went wrong fetching the input data.");
             }
 
-            Document originalXml = getXml(original, "left"),
-                     resourceXml = getXml(resource, "bottom");
+            Document originalXml = getXml(original, "left");
+            Document resourceXml = getXml(resource, "bottom");
 
             if(originalXml == null && resourceXml == null)
                 throw new Exception("Something went wrong parsing the XML inputs.");
 
-            if (originalXml == null) {
-                enriched = XmlHelper.mergeIn(enriched, resourceXml);
+            if (originalXml == null && resource != null) {
+                XmlHelper.mergeIn(enriched, resourceXml);
                 resource.getIn().setBody(XmlHelper.prettyPrint(enriched));
                 return resource;
             }
 
             if (resourceXml == null) {
-                enriched = XmlHelper.mergeIn(enriched, originalXml);
+                XmlHelper.mergeIn(enriched, originalXml);
                 original.getIn().setBody(XmlHelper.prettyPrint(enriched));
                 return original;
             }
@@ -49,13 +49,13 @@ public class XmlEnrichStrategy implements AggregationStrategy {
                     </Enriched>
                 </Enriched>
              */
+            assert originalXml != null;
             if(originalXml.getDocumentElement().getTagName().equals("Enriched")){
                 enriched = originalXml;
-                enriched = XmlHelper.mergeIn(enriched, resourceXml);
             }else{
-                enriched = XmlHelper.mergeIn(enriched, originalXml);
-                enriched = XmlHelper.mergeIn(enriched, resourceXml);
+                XmlHelper.mergeIn(enriched, originalXml);
             }
+            XmlHelper.mergeIn(enriched, resourceXml);
 
             original.getIn().setBody(XmlHelper.prettyPrint(enriched));
         } catch (Exception e) {
@@ -75,7 +75,7 @@ public class XmlEnrichStrategy implements AggregationStrategy {
 
             return document;
 
-        } catch (Exception e) {
+        } catch (Exception _) {
             logger.warn("Unable to get data from the " + route + " route to the Enrich component.");
         }
 

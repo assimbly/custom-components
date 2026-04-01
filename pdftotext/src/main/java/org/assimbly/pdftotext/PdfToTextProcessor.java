@@ -3,12 +3,9 @@ package org.assimbly.pdftotext;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.pdfbox.Loader;
-import org.apache.pdfbox.io.RandomAccessRead;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.http.MediaType;
-
-import java.io.InputStream;
 
 public class PdfToTextProcessor implements Processor {
 

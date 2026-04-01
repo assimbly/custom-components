@@ -11,7 +11,7 @@ import java.io.OutputStream;
 public class SimpleReplaceDataFormat implements DataFormat {
 
     @Override
-    public void marshal(Exchange exchange, Object graph, OutputStream stream) throws Exception {
+    public void marshal(Exchange exchange, Object graph, OutputStream stream) {
         //Only unmarshall is needed
     }
 
@@ -37,11 +37,12 @@ public class SimpleReplaceDataFormat implements DataFormat {
 
     @Override
     public void start() {
-
+        //Default implementation
     }
 
     @Override
     public void stop() {
-
+        //Default implementation
     }
+
 }

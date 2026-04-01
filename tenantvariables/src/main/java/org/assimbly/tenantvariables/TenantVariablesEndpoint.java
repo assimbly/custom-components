@@ -5,6 +5,8 @@ import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.support.ProcessorEndpoint;
 
+import java.util.Objects;
+
 @UriEndpoint(
         firstVersion = "2.7.1",
         scheme = "tenantvariables",
@@ -14,7 +16,7 @@ public class TenantVariablesEndpoint extends ProcessorEndpoint {
 
     @UriParam
     private TenantVariablesConfiguration configuration;
-    private TenantVariablesComponent component;
+    private final TenantVariablesComponent component;
 
     public TenantVariablesEndpoint(String uri, TenantVariablesComponent component, TenantVariablesConfiguration configuration) {
         super(uri, component);
@@ -24,7 +26,7 @@ public class TenantVariablesEndpoint extends ProcessorEndpoint {
     }
 
     @Override
-    protected Processor createProcessor() throws Exception {
+    protected Processor createProcessor() {
         return new TenantVariablesProcessor(this);
     }
 
@@ -36,4 +38,18 @@ public class TenantVariablesEndpoint extends ProcessorEndpoint {
     public TenantVariablesComponent getComponent() {
         return component;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TenantVariablesEndpoint that)) return false;
+        if (!super.equals(o)) return false;
+        return Objects.equals(component, that.component);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), component);
+    }
+
 }

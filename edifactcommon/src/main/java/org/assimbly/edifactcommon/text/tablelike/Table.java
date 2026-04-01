@@ -17,6 +17,7 @@ package org.assimbly.edifactcommon.text.tablelike;
 import org.assimbly.edifactcommon.AltovaException;
 import org.assimbly.edifactcommon.io.Input;
 import org.assimbly.edifactcommon.io.Output;
+import org.assimbly.edifactcommon.text.tablelike.Record;
 import org.assimbly.edifactcommon.typeinfo.TypeInfo;
 
 import java.util.ArrayList;

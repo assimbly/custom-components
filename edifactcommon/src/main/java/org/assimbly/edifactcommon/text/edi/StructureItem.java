@@ -149,7 +149,6 @@ public abstract class StructureItem
 			{
 				if (particlesEquivalent(it, repeatingStart))
 				{
-					;
 				}
 				else
 				{

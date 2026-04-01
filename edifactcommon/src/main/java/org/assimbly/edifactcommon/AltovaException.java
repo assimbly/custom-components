@@ -2,8 +2,8 @@ package org.assimbly.edifactcommon;
 
 
 public class AltovaException extends RuntimeException {
-	protected Exception	innerException;
-	protected String	message;
+	protected final Exception innerException;
+	protected final String message;
 
 	public AltovaException(String text) {
 		innerException = null;
@@ -15,6 +15,7 @@ public class AltovaException extends RuntimeException {
 		message = other.getMessage();
 	}
 
+	@Override
 	public String getMessage() {
 		return message;
 	}

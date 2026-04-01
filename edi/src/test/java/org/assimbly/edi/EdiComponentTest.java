@@ -9,7 +9,7 @@ import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.junit.jupiter.api.Test;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.xmlunit.assertj3.XmlAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class EdiComponentTest extends CamelTestSupport {
@@ -24,7 +24,7 @@ public class EdiComponentTest extends CamelTestSupport {
     public void convertsEdiToXmlWithinCamelRoute() throws Exception {
         resultEndpoint.expectedMessageCount(1);
 
-        String expectedXml = "<edi-message>" +
+        String expected = "<edi-message>" +
             "<delimiters segment=\"LB\" field=\"~\" component=\"^\" sub-component=\"!\" />" +
             "<A />" +
             "<B />" +
@@ -32,8 +32,9 @@ public class EdiComponentTest extends CamelTestSupport {
 
         template.sendBody("direct:dataformatMarshal", "A\nB");
 
-        String exchangeBody = getLastExchange(resultEndpoint).getIn().getBody(String.class);
-        assertXMLEqual(expectedXml, exchangeBody);
+        String actual = getLastExchange(resultEndpoint).getIn().getBody(String.class);
+
+        assertThat(actual).and(expected).areIdentical();
 
         resultEndpoint.assertIsSatisfied();
     }

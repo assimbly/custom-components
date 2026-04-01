@@ -27,7 +27,7 @@ public class FLVConfigurator implements ReaderConfigurator {
         Parameter lineReadersParam = new Parameter(PARAM_LINE_READERS, lineReaders);
 
         // re-use smooks default configuration, hence the magic 0
-        Map<String, Object> defaultParams = configurations.get(0).getParameters();
+        Map<String, Object> defaultParams = configurations.getFirst().getParameters();
 
         // drop our custom param together with the default params
         defaultParams.put(PARAM_LINE_READERS, lineReadersParam);

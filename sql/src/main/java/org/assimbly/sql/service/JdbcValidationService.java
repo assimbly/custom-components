@@ -1,7 +1,7 @@
 package org.assimbly.sql.service;
 
-import org.assimbly.util.error.ValidationErrorMessage;
 import org.assimbly.sql.adapter.*;
+import org.assimbly.util.error.ValidationErrorMessage;
 import org.assimbly.sql.domain.ConnectionType;
 import org.assimbly.sql.domain.JDBCConnection;
 
@@ -9,8 +9,8 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -50,7 +50,7 @@ public class JdbcValidationService {
             DatabaseAdapter adapter = connectionType.getAdapter();
 
             connection = jdbcConnection.connect(adapter);
-        } catch (SQLException | UnsupportedEncodingException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+        } catch (Exception e) {
             return new ValidationErrorMessage(e.getMessage());
         } finally {
             close(connection);
@@ -59,8 +59,8 @@ public class JdbcValidationService {
         return null;
     }
 
-    private String decodeParam(String param) throws UnsupportedEncodingException{
-        return URLDecoder.decode(param, "UTF-8");
+    private String decodeParam(String param) {
+        return URLDecoder.decode(param, StandardCharsets.UTF_8);
     }
 
     private void close(Connection connection) {

@@ -3,6 +3,8 @@ package org.assimbly.auth.domain;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import java.util.Objects;
+
 public class Tenant {
 
     public static final String ID_FIELD = "_id";
@@ -72,9 +74,9 @@ public class Tenant {
         Tenant tenant = (Tenant) o;
 
         if (disabled != tenant.disabled) return false;
-        if (id != null ? !id.equals(tenant.id) : tenant.id != null) return false;
-        if (name != null ? !name.equals(tenant.name) : tenant.name != null) return false;
-        return dbName != null ? dbName.equals(tenant.dbName) : tenant.dbName == null;
+        if (!Objects.equals(id, tenant.id)) return false;
+        if (!Objects.equals(name, tenant.name)) return false;
+        return Objects.equals(dbName, tenant.dbName);
     }
 
     @Override

@@ -50,7 +50,7 @@ public class ExcelToXmlProcessor implements Processor {
 
     private Element buildRuleXml(List<List<SheetCell>> list, ExcelRule rule, Document doc) {
         Element rangeData = doc.createElement(rule.getName());
-        String xmlEntryName = rule.getTranspose() ? "excelCol" : "excelRow";
+        String xmlEntryName = Boolean.TRUE.equals(rule.getTranspose()) ? "excelCol" : "excelRow";
 
         for (List<SheetCell> cells : list) {
 

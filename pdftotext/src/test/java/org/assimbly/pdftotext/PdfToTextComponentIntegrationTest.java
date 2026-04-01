@@ -4,11 +4,14 @@ import org.apache.camel.EndpointInject;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit5.CamelTestSupport;
+import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PdfToTextComponentIntegrationTest extends CamelTestSupport {
+
+    private final ClassLoader classLoader = getClass().getClassLoader();
 
     @EndpointInject("mock:out")
     private MockEndpoint resultEndpoint;
@@ -29,11 +32,15 @@ public class PdfToTextComponentIntegrationTest extends CamelTestSupport {
     public void loadFile() throws Exception {
         resultEndpoint.expectedMessageCount(1);
 
-        template.sendBody("direct:in", getClass().getResource("/test.pdf"));
+        byte[] pdfContent = IOUtils.toByteArray(
+                classLoader.getResourceAsStream("test.pdf")
+        );
+
+        template.sendBody("direct:in", pdfContent);
         resultEndpoint.assertIsSatisfied();
 
         String expected = "Test";
-        String actual = resultEndpoint.getExchanges().get(0).getIn().getBody(String.class);
+        String actual = resultEndpoint.getExchanges().getFirst().getIn().getBody(String.class);
         actual = actual.replace("\n", "").replace("\r", "");
         assertEquals(expected, actual);
     }

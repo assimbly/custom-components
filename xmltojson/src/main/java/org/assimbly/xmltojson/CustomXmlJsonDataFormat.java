@@ -17,6 +17,7 @@ import org.assimbly.xmltojson.processor.XmlToJsonXmlProcessor;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 
 public class CustomXmlJsonDataFormat implements DataFormat {
@@ -24,19 +25,25 @@ public class CustomXmlJsonDataFormat implements DataFormat {
     private static final String DEFAULT_ROOT_TAG = "root";
 
     // XML to JSON options
-    private boolean hasTypes, keepStrings, removeNamespaces, removeRoot;
+    private boolean hasTypes;
+    private boolean keepStrings;
+    private boolean removeNamespaces;
+    private boolean removeRoot;
     private TypeValueMismatch typeValueMismatch;
-    private final String contentKey = "jsonContent";
+    private static final String CONTENT_KEY = "jsonContent";
 
-    private final String xmlAttrPrefix = "ASSIMBLY_ATTR_PREFIX";
-    private final String jsonXmlAttrPrefix = "@";
+    private static final String XML_ATTR_PREFIX = "ASSIMBLY_ATTR_PREFIX";
+    private static final String JSON_XML_ATTR_PEFIX = "@";
 
-    private final String xmlTypeNodePrefix = "ASSIMBLY_TYPE_PREFIX";
+    private static final String XML_TYPE_NODE_PREFIX = "ASSIMBLY_TYPE_PREFIX";
 
     // JSON to XML options
-    private boolean addRoot, checkJsonKeys, changeArrayElements;
-    private String rootTag, arrayElementName;
-    private final String validXmlRegex = "[^A-z0-9_.\\-]|^(xml|[\\-0-9\\.])+";
+    private boolean addRoot;
+    private boolean checkJsonKeys;
+    private boolean changeArrayElements;
+    private String rootTag;
+    private String arrayElementName;
+    private static final String VALID_XML_REGEX = "[^A-Za-z0-9_.\\\\-]|^(xml|[-0-9.])++";
 
     // XML to JSON
     @Override
@@ -44,13 +51,13 @@ public class CustomXmlJsonDataFormat implements DataFormat {
         XmlToJsonXmlProcessor xmlToJsonXmlProcessor = new XmlToJsonXmlProcessor(exchange, this, graph);
         XMLParserConfiguration xmlParserConfig = new XMLParserConfiguration()
                 .withKeepStrings(keepStrings)
-                .withcDataTagName(contentKey);
+                .withcDataTagName(CONTENT_KEY);
         JSONObject xmlJSONObj;
 
         xmlToJsonXmlProcessor.processXml();
 
         ByteArrayOutputStream xmlOutputStream = xmlToJsonXmlProcessor.getOutputStreamFromXmlDoc();
-        xmlJSONObj = XML.toJSONObject(IOUtils.toString(xmlOutputStream.toByteArray(), "UTF-8"), xmlParserConfig);
+        xmlJSONObj = XML.toJSONObject(IOUtils.toString(xmlOutputStream.toByteArray(), String.valueOf(StandardCharsets.UTF_8)), xmlParserConfig);
 
         XmlToJsonJsonProcessor xmlToJsonJsonProcessor = new XmlToJsonJsonProcessor(this, xmlJSONObj);
         String processedJsonString = xmlToJsonJsonProcessor.processJson();
@@ -78,11 +85,7 @@ public class CustomXmlJsonDataFormat implements DataFormat {
     }
 
     private void setContentTypeHeader(Exchange exchange, String contentType) {
-        if (exchange.hasOut()) {
-            exchange.getOut().setHeader(Exchange.CONTENT_TYPE, contentType);
-        } else {
-            exchange.getIn().setHeader(Exchange.CONTENT_TYPE, contentType);
-        }
+       exchange.getMessage().setHeader(Exchange.CONTENT_TYPE, contentType);
     }
 
     public String getRootTag(Exchange exchange) {
@@ -94,7 +97,7 @@ public class CustomXmlJsonDataFormat implements DataFormat {
 
         String interpolatedRootTag = ExchangeHelper.interpolate(rootTag, exchange);
 
-        if (interpolatedRootTag == null || "".equals(interpolatedRootTag.trim()))
+        if (interpolatedRootTag == null || interpolatedRootTag.trim().isEmpty())
             throw new XmlRootException("The header in the root tag has an empty value. A XML root tag can't be empty.");
 
         if (hasInvalidXMLCharacters(interpolatedRootTag))
@@ -104,7 +107,7 @@ public class CustomXmlJsonDataFormat implements DataFormat {
     }
 
     private Boolean hasInvalidXMLCharacters(String value) {
-        return Pattern.compile(validXmlRegex).matcher(value).find();
+        return Pattern.compile(VALID_XML_REGEX).matcher(value).find();
     }
 
     public String getArrayElementName(Exchange exchange) {
@@ -116,7 +119,7 @@ public class CustomXmlJsonDataFormat implements DataFormat {
 
         String interpolatedArrayElementName = ExchangeHelper.interpolate(this.arrayElementName, exchange);
 
-        if (interpolatedArrayElementName == null || "".equals(interpolatedArrayElementName.trim()))
+        if (interpolatedArrayElementName == null || interpolatedArrayElementName.trim().isEmpty())
             throw new XmlRootException("The header in the array element name has an empty value. A XML tag can't be empty.");
 
         if (hasInvalidXMLCharacters(interpolatedArrayElementName))
@@ -182,16 +185,14 @@ public class CustomXmlJsonDataFormat implements DataFormat {
     }
 
     public String getXmlAttrPrefix() {
-        return this.xmlAttrPrefix;
+        return CustomXmlJsonDataFormat.XML_ATTR_PREFIX;
     }
 
     public String getJsonXmlAttrPrefix() {
-        return this.jsonXmlAttrPrefix;
+        return CustomXmlJsonDataFormat.JSON_XML_ATTR_PEFIX;
     }
 
-    public String getContentKey() {
-        return this.contentKey;
-    }
+    public String getContentKey() { return CONTENT_KEY;}
 
     public TypeValueMismatch getTypeValueMismatch() {
         return this.typeValueMismatch;
@@ -210,7 +211,7 @@ public class CustomXmlJsonDataFormat implements DataFormat {
     }
 
     public String getXmlTypeNodePrefix() {
-        return xmlTypeNodePrefix;
+        return XML_TYPE_NODE_PREFIX;
     }
 
     public boolean isRemoveRoot() {
@@ -223,11 +224,11 @@ public class CustomXmlJsonDataFormat implements DataFormat {
 
     @Override
     public void start() {
-
+        // startup is not used
     }
 
     @Override
     public void stop() {
-
+         // shutdown is not used
     }
 }

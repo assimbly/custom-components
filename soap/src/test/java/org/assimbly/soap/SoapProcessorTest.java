@@ -1,5 +1,7 @@
 package org.assimbly.soap;
 
+import jakarta.xml.soap.*;
+
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultCamelContext;
@@ -21,11 +23,11 @@ import javax.wsdl.xml.WSDLReader;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import jakarta.xml.soap.*;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SoapProcessorTest {
+class SoapProcessorTest {
 
     private static SoapProcessor processor;
     private static Definition definition;
@@ -35,7 +37,7 @@ public class SoapProcessorTest {
     private DocumentBuilder builder;
 
     @BeforeEach
-    public void setup() throws WSDLException, ParserConfigurationException, SOAPException {
+    void setup() throws WSDLException, ParserConfigurationException, SOAPException {
         WSDLFactory wsdlFactory = WSDLFactory.newInstance();
         WSDLReader reader = wsdlFactory.newWSDLReader();
 
@@ -56,14 +58,14 @@ public class SoapProcessorTest {
     }
 
     @AfterEach
-    public void reset() {
+    void reset() {
         processor = new SoapProcessor(
                 new SoapEndpoint(null,null, new SoapConfiguration())
         );
     }
 
     @Test
-    public void testOverrideHeader() throws Exception {
+    void testOverrideHeader() {
         CamelContext context = new DefaultCamelContext();
         Exchange exchange = new DefaultExchange(context);
 
@@ -80,7 +82,7 @@ public class SoapProcessorTest {
     }
 
     @Test
-    public void testTransformPartStandardType() throws Exception {
+    void testTransformPartStandardType() throws Exception {
         Document input = builder.parse(classLoader.getResourceAsStream("input-mocks/input-from-part-with-standard-type.xml"));
 
         Document actual = processor.transform(definition, "OperationWithStandardType", envelope, input);
@@ -90,7 +92,7 @@ public class SoapProcessorTest {
     }
 
     @Test
-    public void testTransformPartType() throws Exception {
+    void testTransformPartType() throws Exception {
         Document input = builder.parse(classLoader.getResourceAsStream("input-mocks/input-from-part-with-type.xml"));
 
         Document actual = processor.transform(definition, "OperationWithTypePart", envelope, input);
@@ -100,7 +102,7 @@ public class SoapProcessorTest {
     }
 
     @Test
-    public void testTransformReferenceNode() throws Exception {
+    void testTransformReferenceNode() throws Exception {
         Document input = builder.parse(classLoader.getResourceAsStream("input-mocks/input-with-reference.xml"));
 
         Document actual = processor.transform(definition, "OperationWithReference", envelope, input);
@@ -110,7 +112,7 @@ public class SoapProcessorTest {
     }
 
     @Test
-    public void testTransformTypeNode() throws Exception {
+    void testTransformTypeNode() throws Exception {
         Document input = builder.parse(classLoader.getResourceAsStream("input-mocks/input-with-type.xml"));
 
         Document actual = processor.transform(definition, "OperationWithType", envelope, input);
@@ -120,7 +122,7 @@ public class SoapProcessorTest {
     }
 
     @Test
-    public void testTransformLocalTypeNode() throws Exception {
+    void testTransformLocalTypeNode() throws Exception {
         Document input = builder.parse(classLoader.getResourceAsStream("input-mocks/input-with-local-type.xml"));
 
         Document actual = processor.transform(definition, "OperationWithLocalType", envelope, input);
@@ -130,7 +132,7 @@ public class SoapProcessorTest {
     }
 
     @Test
-    public void testTransformExtensionNode() throws Exception {
+    void testTransformExtensionNode() throws Exception {
         Document input = builder.parse(classLoader.getResourceAsStream("input-mocks/input-with-extension.xml"));
 
         Document actual = processor.transform(definition, "OperationWithExtension", envelope, input);
@@ -140,7 +142,7 @@ public class SoapProcessorTest {
     }
 
     @Test
-    public void testTransformSequenceNode() throws Exception {
+    void testTransformSequenceNode() throws Exception {
         Document input = builder.parse(classLoader.getResourceAsStream("input-mocks/input-with-sequence.xml"));
 
         Document actual = processor.transform(definition, "OperationWithSequence", envelope, input);
@@ -150,7 +152,7 @@ public class SoapProcessorTest {
     }
 
     @Test
-    public void testTransformFromExternalWsdlNode() throws Exception {
+    void testTransformFromExternalWsdlNode() throws Exception {
         Document input = builder.parse(classLoader.getResourceAsStream("input-mocks/input-from-external-wsdl.xml"));
 
         Document actual = processor.transform(definition, "OperationFromExternalWsdl", envelope, input);
@@ -160,7 +162,7 @@ public class SoapProcessorTest {
     }
 
     @Test
-    public void testTransformFromExternalBindingNode() throws Exception {
+    void testTransformFromExternalBindingNode() throws Exception {
         Document input = builder.parse(classLoader.getResourceAsStream("input-mocks/input-from-external-binding.xml"));
 
         Document actual = processor.transform(definition, "OperationFromExternalBinding", envelope, input);
@@ -170,7 +172,7 @@ public class SoapProcessorTest {
     }
 
     @Test
-    public void testTransformWithUnqualifiedNode() throws Exception {
+    void testTransformWithUnqualifiedNode() throws Exception {
         Document input = builder.parse(classLoader.getResourceAsStream("input-mocks/input-with-unqualified.xml"));
 
         Document actual = processor.transform(definition, "OperationWithUnqualified", envelope, input);
@@ -180,7 +182,7 @@ public class SoapProcessorTest {
     }
 
     @Test
-    public void testTransformWithSchemaReferenceNode() throws Exception {
+    void testTransformWithSchemaReferenceNode() throws Exception {
         Document input = builder.parse(classLoader.getResourceAsStream("input-mocks/input-with-schema-reference.xml"));
 
         Document actual = processor.transform(definition, "OperationWithSchemaReference", envelope, input);
@@ -190,7 +192,7 @@ public class SoapProcessorTest {
     }
 
     @Test
-    public void testTransformWithImportNode() throws Exception {
+    void testTransformWithImportNode() throws Exception {
         Document input = builder.parse(classLoader.getResourceAsStream("input-mocks/input-with-import.xml"));
 
         Document actual = processor.transform(definition, "OperationWithImport", envelope, input);
@@ -200,7 +202,7 @@ public class SoapProcessorTest {
     }
 
     @Test
-    public void testAddSoapHeaderWithPartName() throws Exception {
+    void testAddSoapHeaderWithPartName() throws Exception {
         SoapHeader header = new SoapHeader("authHeader");
         header.getAttrs().add(new SoapAttribute("username", "admin"));
         header.getAttrs().add(new SoapAttribute("password", "admin"));
@@ -213,7 +215,7 @@ public class SoapProcessorTest {
     }
 
     @Test
-    public void testAddMultipleSoapHeadersWithPartName() throws Exception {
+    void testAddMultipleSoapHeadersWithPartName() throws Exception {
         SoapHeader authHeader = new SoapHeader("authHeader");
         authHeader.getAttrs().add(new SoapAttribute("username", "admin"));
         authHeader.getAttrs().add(new SoapAttribute("password", "admin"));
@@ -230,7 +232,7 @@ public class SoapProcessorTest {
     }
 
     @Test
-    public void testNoDefaultElementFormDefinitionWithQualifiedElementOverride() throws Exception {
+    void testNoDefaultElementFormDefinitionWithQualifiedElementOverride() throws Exception {
         WSDLFactory wsdlFactory = WSDLFactory.newInstance();
         WSDLReader reader = wsdlFactory.newWSDLReader();
         definition = reader.readWSDL(classLoader.getResource("mock-2.wsdl").getFile());

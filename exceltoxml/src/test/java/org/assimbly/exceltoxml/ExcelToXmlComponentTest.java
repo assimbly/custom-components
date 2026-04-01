@@ -1,26 +1,22 @@
 package org.assimbly.exceltoxml;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.*;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.util.concurrent.ConcurrentHashMap;
+
+import tools.jackson.databind.ObjectMapper;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.apache.camel.test.junit5.CamelTestSupport;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.JacksonException;
 import org.assimbly.exceltoxml.domain.ExcelRule;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.*;
+import static org.xmlunit.assertj3.XmlAssert.assertThat;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
-
-public class ExcelToXmlComponentTest extends CamelTestSupport {
+class ExcelToXmlComponentTest extends CamelTestSupport {
 
     private static final ExcelRule simpleData = new ExcelRule("Simple", "A1:D13", false, false, false, "simple data");
     private static final ExcelRule useHeaderRow = new ExcelRule("Smaller", "A1:B3", false, true, false, "simple data");
@@ -34,7 +30,7 @@ public class ExcelToXmlComponentTest extends CamelTestSupport {
     private static final ExcelRule emptySheet = new ExcelRule("EmptySheet", "A1:E13", false, false, false, "empty sheet");
     private static final ExcelRule invalidChars = new ExcelRule("InvalidChars", "A1:E13", false, false, true, "invalid chars");
 
-    private final Map<String, List<ExcelRule>> allRoutes = new HashMap<String, List<ExcelRule>>() {{
+    private final Map<String, List<ExcelRule>> allRoutes = new ConcurrentHashMap<>() {{
             put("simpleData", Collections.singletonList(simpleData));
             put("useHeaderRow", Collections.singletonList(useHeaderRow));
             put("transposesData", Collections.singletonList(transposesData));
@@ -47,13 +43,6 @@ public class ExcelToXmlComponentTest extends CamelTestSupport {
             put("invalidChars", Collections.singletonList(invalidChars));
         }};
 
-    private InputStream input;
-
-    @BeforeEach
-    public void before() throws Exception {
-        input = new FileInputStream("src/test/resources/spreadsheet.xlsx");
-    }
-
     @Override
     protected RouteBuilder[] createRouteBuilders() {
         List<RouteBuilder> routeBuilders = new ArrayList<>();
@@ -61,7 +50,7 @@ public class ExcelToXmlComponentTest extends CamelTestSupport {
         for (String route : allRoutes.keySet()) {
             routeBuilders.add(
                 new RouteBuilder() {
-                    public void configure() throws JsonProcessingException {
+                    public void configure() throws JacksonException {
                         from("direct:" + route)
                             .to(createUri(allRoutes.get(route)))
                             .to("mock:result");
@@ -74,70 +63,73 @@ public class ExcelToXmlComponentTest extends CamelTestSupport {
     }
 
     @Test
-    public void supports_converting_simple_well_formatted_data() throws Exception {
+    void supports_converting_simple_well_formatted_data() throws Exception {
         runTest("simpleData");
     }
 
     @Test
-    public void optionally_use_first_row_of_data_to_name_xml_elements() throws Exception {
+    void optionally_use_first_row_of_data_to_name_xml_elements() throws Exception {
         runTest("useHeaderRow");
     }
 
     @Test
-    public void supports_transposing_data_from_a_range() throws Exception {
+    void supports_transposing_data_from_a_range() throws Exception {
         runTest("transposesData");
     }
 
     @Test
-    public void supports_transposing_data_while_using_header_row_from_a_range() throws Exception {
+    void supports_transposing_data_while_using_header_row_from_a_range() throws Exception {
         runTest("useHeaderRowAndTransposesData");
     }
 
     @Test
-    public void supports_evaluating_formulas() throws Exception {
+    void supports_evaluating_formulas() throws Exception {
         runTest("withFormulas");
     }
 
     @Test
-    public void ignores_empty_cells_in_the_specified_range() throws Exception {
+    void ignores_empty_cells_in_the_specified_range() throws Exception {
         runTest("withEmptyCells");
     }
 
     @Test
-    public void supports_converting_multiple_ranges_within_the_same_workbook() throws Exception {
+    void supports_converting_multiple_ranges_within_the_same_workbook() throws Exception {
         runTest("multipleRanges");
     }
 
     @Test
-    public void will_continue_gracefully_if_the_sheet_is_empty() throws Exception {
+    void will_continue_gracefully_if_the_sheet_is_empty() throws Exception {
         runTest("emptySheet");
     }
 
     @Test
-    public void escapes_invalid_xml() throws Exception {
+    void escapes_invalid_xml() throws Exception {
         runTest("invalidChars");
     }
 
     @Test
-    public void fixes_invalid_xml_in_header_names() throws Exception {
+    void fixes_invalid_xml_in_header_names() throws Exception {
         runTest("invalidHeaderNames");
     }
 
     private void runTest(String rule) throws Exception {
-        template.sendBody("direct:" + rule, input);
-        Exchange result = getMockEndpoint("mock:result").getExchanges().get(0);
-        String actual = result.getIn().getBody(String.class);
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("spreadsheet.xlsx")) {
+            if (input == null) throw new IllegalStateException("spreadsheet.xlsx not found in test resources");
 
-        String expected = readFile("src/test/resources/" + rule + ".xml", Charset.defaultCharset());
+            template.sendBody("direct:" + rule, input);
+            Exchange result = getMockEndpoint("mock:result").getExchanges().getFirst();
+            String actual = result.getIn().getBody(String.class);
 
-        XMLUnit.setIgnoreWhitespace(true);
-        assertXMLEqual(expected,actual);
+            String expected = new String(
+                    Objects.requireNonNull(
+                            getClass().getClassLoader().getResourceAsStream(rule + ".xml")
+                    ).readAllBytes(),
+                    Charset.defaultCharset()
+            );
 
-    }
-
-    private String readFile(String path, Charset encoding) throws IOException {
-        byte[] encoded = Files.readAllBytes(Paths.get(path));
-        return new String(encoded, encoding);
+            XMLUnit.setIgnoreWhitespace(true);
+            assertThat(actual).and(expected).ignoreWhitespace().areIdentical();
+        }
     }
 
     private String createUri(List<ExcelRule> rules) {
@@ -151,7 +143,7 @@ public class ExcelToXmlComponentTest extends CamelTestSupport {
         try {
             String jsonArrayString = objectMapper.writeValueAsString(rules);
             return Base64.getEncoder().encodeToString(jsonArrayString.getBytes());
-        } catch (com.fasterxml.jackson.core.JsonProcessingException e) {
+        } catch (JacksonException e) {
             throw new RuntimeException("Error serializing rules to JSON", e);
         }
 

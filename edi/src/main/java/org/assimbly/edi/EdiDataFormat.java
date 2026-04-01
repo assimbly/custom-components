@@ -12,7 +12,10 @@ import java.io.OutputStream;
 
 public class EdiDataFormat implements DataFormat {
 
-    private String segment, field, component, subComponent;
+    private String segment;
+    private String field;
+    private String component;
+    private String subComponent;
 
     @Override
     public void marshal(Exchange exchange, Object graph, OutputStream stream) throws Exception {
@@ -28,7 +31,7 @@ public class EdiDataFormat implements DataFormat {
     }
 
     @Override
-    public Object unmarshal(Exchange exchange, InputStream stream) throws Exception {
+    public Object unmarshal(Exchange exchange, InputStream stream) {
         return new XmlToEdiConverter().convert(stream);
     }
 
@@ -50,11 +53,11 @@ public class EdiDataFormat implements DataFormat {
 
     @Override
     public void start() {
-
+        // No startup logic required for this data format
     }
 
     @Override
     public void stop() {
-
+        // No shutdown logic required for this data format
     }
 }

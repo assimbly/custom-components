@@ -171,25 +171,14 @@ public abstract class TextDocument extends Parser {
 		ITextNodeList rootnodes = mGenerator.getRootNodes();
 
 		if (getSettings().getAutoCompleteData()) {
-			DataCompletion datacompletion = null;
-
-			switch (getEDIKind()) {
-			case EDIFACT:
-				datacompletion = new EDIFactDataCompletion(this, (EDIFactSettings) getSettings(), mStructureName);
-				break;
-			case EDIX12:
-				datacompletion = new EDIX12DataCompletion(this, (EDIX12Settings) getSettings(), mStructureName);
-				break;
-            case EDIHL7:
-                datacompletion = new EDIHL7DataCompletion(this, (EDIHL7Settings) getSettings(), mStructureName);
-                break;
-			case EDIFixed:
-			    datacompletion = new EDIFixedDataCompletion(this, (EDIFixedSettings) getSettings(), mStructureName);
-                break;
-			case EDITRADACOMS:
-			    datacompletion = new EDITradacomsDataCompletion(this, (EDITradacomsSettings) getSettings(), mStructureName);
-                break;
-			}
+			DataCompletion datacompletion = switch (getEDIKind()) {
+			case EDIFACT -> new EDIFactDataCompletion(this, (EDIFactSettings) getSettings(), mStructureName);
+			case EDIX12 -> new EDIX12DataCompletion(this, (EDIX12Settings) getSettings(), mStructureName);
+            case EDIHL7 -> new EDIHL7DataCompletion(this, (EDIHL7Settings) getSettings(), mStructureName);
+			case EDIFixed -> new EDIFixedDataCompletion(this, (EDIFixedSettings) getSettings(), mStructureName);
+			case EDITRADACOMS -> new EDITradacomsDataCompletion(this, (EDITradacomsSettings) getSettings(), mStructureName);
+                default -> null;
+			};
 			if( datacompletion != null)
 			{
                 for(int i = 0; i < rootnodes.size(); ++i)

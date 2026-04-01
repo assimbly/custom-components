@@ -4,10 +4,12 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import org.slf4j.LoggerFactory;
 import org.assimbly.auth.util.helper.ConfigHelper;
 
-import java.io.UnsupportedEncodingException;
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 
 public final class JwtValidator {
 
@@ -36,7 +38,7 @@ public final class JwtValidator {
         try {
             decode(jwt);
             valid = true;
-        } catch (JwtException | UnsupportedEncodingException e) {
+        } catch (JwtException e) {
             LOG.warn(e.getMessage());
             valid = false;
         }
@@ -50,18 +52,19 @@ public final class JwtValidator {
      *
      * @param jwt to decode.
      * @return the body of the decoded token.
-     * @throws JwtException                 when something is wrong with the token.
-     * @throws UnsupportedEncodingException when the encoding used to sign the token is not supported.
+     * @throws JwtException when something is wrong with the token.
      */
-    public static Claims decode(String jwt) throws JwtException, UnsupportedEncodingException {
-        String key = ConfigHelper.get("secretKey");
+    public static Claims decode(String jwt) throws JwtException {
+        String keyString = ConfigHelper.get("secretKey");
+        SecretKey key = Keys.hmacShaKeyFor(keyString.getBytes(StandardCharsets.UTF_8));
+
         JwtParser parser = Jwts.parser()
-                .setSigningKey(key.getBytes("UTF-8"))
+                .verifyWith(key)
                 .build();
 
         return parser
-                .parseClaimsJws(jwt)
-                .getBody();
+                .parseSignedClaims(jwt)
+                .getPayload();
     }
 
 }

@@ -1,12 +1,12 @@
 package org.assimbly.replace;
 
+import java.util.*;
+
 import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
-import org.assimbly.util.helper.Base64Helper;
 
-import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 @UriParams
@@ -26,7 +26,9 @@ public class ReplaceConfiguration {
     @UriParam
     private String flags;
 
-    public ReplaceConfiguration() {}
+    public ReplaceConfiguration() {
+        // Used for serialization or reflection
+    }
 
     /**
      * Regex pattern to match what you want to be replaced.
@@ -38,7 +40,7 @@ public class ReplaceConfiguration {
     /**
      * Text you want the match(es) to be replaced with.
      */
-    public void setReplaceWith(String replaceWith) {
+    public void setReplaceWith(String replaceWith){
         this.replaceWith = replaceWith;
     }
 
@@ -97,11 +99,14 @@ public class ReplaceConfiguration {
 
     private static Map<String, Integer> getFlagBits() {
 
-        return new HashMap<String, Integer>() {{
-            put("i", Pattern.CASE_INSENSITIVE);
-            put("m", Pattern.MULTILINE);
-            put("s", Pattern.DOTALL);
-        }};
+        Map<String, Integer> flags = new ConcurrentHashMap<>();
+
+        flags.put("i", Pattern.CASE_INSENSITIVE);
+        flags.put("m", Pattern.MULTILINE);
+        flags.put("s", Pattern.DOTALL);
+
+        return flags;
+
     }
 
 }

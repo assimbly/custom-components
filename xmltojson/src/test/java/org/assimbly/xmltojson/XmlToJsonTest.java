@@ -9,18 +9,21 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.junit.jupiter.api.Test;
-import org.apache.commons.io.IOUtils;
 import org.assimbly.util.exception.JsonTypeException;
 import org.skyscreamer.jsonassert.JSONAssert;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.apache.camel.test.junit5.TestSupport.assertIsInstanceOf;
 
-public class XmlToJsonTest extends CamelTestSupport {
-
-    private final ClassLoader classLoader = getClass().getClassLoader();
+class XmlToJsonTest extends CamelTestSupport {
 
     @EndpointInject("mock:result")
     protected MockEndpoint resultEndpoint;
@@ -29,9 +32,9 @@ public class XmlToJsonTest extends CamelTestSupport {
     protected ProducerTemplate template;
 
     @Test
-    public void testXmlJson() throws Exception {
-        String defaultXml = IOUtils.toString(classLoader.getResourceAsStream("xml-to-json/default-xml.xml"), StandardCharsets.UTF_8);
-        String defaultJson = IOUtils.toString(classLoader.getResourceAsStream("xml-to-json/default-json.json"), StandardCharsets.UTF_8);
+    void testXmlJson() throws Exception {
+        String defaultXml = readResource("xml-to-json/default-xml.xml");
+        String defaultJson = readResource("xml-to-json/default-json.json");
 
         resultEndpoint.expectedMessageCount(1);
 
@@ -44,8 +47,8 @@ public class XmlToJsonTest extends CamelTestSupport {
     }
 
     @Test
-    public void testExchangeHeaders() throws Exception {
-        String defaultXml = IOUtils.toString(classLoader.getResourceAsStream("xml-to-json/default-xml.xml"), StandardCharsets.UTF_8);
+    void testExchangeHeaders() throws Exception {
+        String defaultXml = readResource("xml-to-json/default-xml.xml");
 
         resultEndpoint.expectedMessageCount(1);
 
@@ -60,9 +63,9 @@ public class XmlToJsonTest extends CamelTestSupport {
     }
 
     @Test
-    public void testTypedXmlToJson() throws Exception {
-        String typedXml = IOUtils.toString(classLoader.getResourceAsStream("xml-to-json/typed-xml.xml"), StandardCharsets.UTF_8);
-        String typedJson = IOUtils.toString(classLoader.getResourceAsStream("xml-to-json/typed-json.json"), StandardCharsets.UTF_8);
+    void testTypedXmlToJson() throws Exception {
+        String typedXml = readResource("xml-to-json/typed-xml.xml");
+        String typedJson = readResource("xml-to-json/typed-json.json");
 
         resultEndpoint.expectedMessageCount(1);
 
@@ -75,9 +78,9 @@ public class XmlToJsonTest extends CamelTestSupport {
     }
 
     @Test
-    public void testTypedXmlToJsonWithSimpleXml() throws Exception {
-        String xml = IOUtils.toString(classLoader.getResourceAsStream("xml-to-json/typed-xml-simple.xml"), StandardCharsets.UTF_8);
-        String json = IOUtils.toString(classLoader.getResourceAsStream("xml-to-json/typed-json-simple.json"), StandardCharsets.UTF_8);
+    void testTypedXmlToJsonWithSimpleXml() throws Exception {
+        String xml = readResource("xml-to-json/typed-xml-simple.xml");
+        String json = readResource("xml-to-json/typed-json-simple.json");
 
         resultEndpoint.expectedMessageCount(1);
 
@@ -90,24 +93,25 @@ public class XmlToJsonTest extends CamelTestSupport {
     }
 
     @Test
-    public void testTypedXmlToJsonWithTypeArray() throws Exception {
-        String xml = IOUtils.toString(classLoader.getResourceAsStream("xml-to-json/typed-xml-arrays.xml"), StandardCharsets.UTF_8);
-        String json = IOUtils.toString(classLoader.getResourceAsStream("xml-to-json/typed-json-arrays.json"), StandardCharsets.UTF_8);
+    void testTypedXmlToJsonWithTypeArray() throws Exception {
+        String xml = readResource("xml-to-json/typed-xml-arrays.xml");
+        String expected = readResource("xml-to-json/typed-json-arrays.json");
 
         resultEndpoint.expectedMessageCount(1);
 
         template.sendBody("direct:marshalWithTypeArray", xml);
 
-        String exchangeBody = getLastExchange(resultEndpoint).getIn().getBody(String.class);
-        JSONAssert.assertEquals(json, exchangeBody, true);
+        String actual = getLastExchange(resultEndpoint).getIn().getBody(String.class);
+
+        JSONAssert.assertEquals(expected, actual, true);
 
         resultEndpoint.assertIsSatisfied();
     }
 
     @Test
-    public void testKeepStringsXmlToJson() throws Exception {
-        String keepStringsXml = IOUtils.toString(classLoader.getResourceAsStream("xml-to-json/keep-strings-xml.xml"), StandardCharsets.UTF_8);
-        String keepStringsJson = IOUtils.toString(classLoader.getResourceAsStream("xml-to-json/keep-strings-json.json"), StandardCharsets.UTF_8);
+    void testKeepStringsXmlToJson() throws Exception {
+        String keepStringsXml = readResource("xml-to-json/keep-strings-xml.xml");
+        String keepStringsJson = readResource("xml-to-json/keep-strings-json.json");
 
         resultEndpoint.expectedMessageCount(1);
 
@@ -120,9 +124,9 @@ public class XmlToJsonTest extends CamelTestSupport {
     }
 
     @Test
-    public void testTypeValueMismatchOriginal() throws Exception {
-        String xml = IOUtils.toString(classLoader.getResourceAsStream("xml-to-json/type-value-mismatch-xml.xml"), StandardCharsets.UTF_8);
-        String json = IOUtils.toString(classLoader.getResourceAsStream("xml-to-json/type-value-mismatch-original-json.json"), StandardCharsets.UTF_8);
+    void testTypeValueMismatchOriginal() throws Exception {
+        String xml = readResource("xml-to-json/type-value-mismatch-xml.xml");
+        String json = readResource("xml-to-json/type-value-mismatch-original-json.json");
 
         resultEndpoint.expectedMessageCount(1);
 
@@ -135,9 +139,9 @@ public class XmlToJsonTest extends CamelTestSupport {
     }
 
     @Test
-    public void testTypeValueMismatchNull() throws Exception {
-        String xml = IOUtils.toString(classLoader.getResourceAsStream("xml-to-json/type-value-mismatch-xml.xml"), StandardCharsets.UTF_8);
-        String json = IOUtils.toString(classLoader.getResourceAsStream("xml-to-json/type-value-mismatch-null-json.json"), StandardCharsets.UTF_8);
+    void testTypeValueMismatchNull() throws Exception {
+        String xml = readResource("xml-to-json/type-value-mismatch-xml.xml");
+        String json = readResource("xml-to-json/type-value-mismatch-null-json.json");
 
         resultEndpoint.expectedMessageCount(1);
 
@@ -150,15 +154,15 @@ public class XmlToJsonTest extends CamelTestSupport {
     }
 
     @Test
-    public void testTypeValueMismatchError() throws Exception {
-        String xml = IOUtils.toString(classLoader.getResourceAsStream("xml-to-json/type-value-mismatch-xml.xml"), StandardCharsets.UTF_8);
+    void testTypeValueMismatchError() throws Exception {
+        String xml = readResource("xml-to-json/type-value-mismatch-xml.xml");
 
         try {
             template.sendBody("direct:marshalWithTypeValueMismatchError", xml);
         } catch (CamelExecutionException ex) {
             assertEquals(
-                "There was a mismatch between a specified type and the value. Type is 'number' and the value is 'test'.",
-                ex.getCause().getMessage()
+                    "There was a mismatch between a specified type and the value. Type is 'number' and the value is 'test'.",
+                    ex.getCause().getMessage()
             );
 
             assertIsInstanceOf(JsonTypeException.class, ex.getCause());
@@ -166,9 +170,9 @@ public class XmlToJsonTest extends CamelTestSupport {
     }
 
     @Test
-    public void testRemoveNamespaces() throws Exception {
-        String xml = IOUtils.toString(classLoader.getResourceAsStream("xml-to-json/namespace-xml.xml"), StandardCharsets.UTF_8);
-        String json = IOUtils.toString(classLoader.getResourceAsStream("xml-to-json/namespace-json.json"), StandardCharsets.UTF_8);
+    void testRemoveNamespaces() throws Exception {
+        String xml = readResource("xml-to-json/namespace-xml.xml");
+        String json = readResource("xml-to-json/namespace-json.json");
 
         resultEndpoint.expectedMessageCount(1);
 
@@ -181,9 +185,9 @@ public class XmlToJsonTest extends CamelTestSupport {
     }
 
     @Test
-    public void testRemoveRoot() throws Exception {
-        String xml = IOUtils.toString(classLoader.getResourceAsStream("xml-to-json/remove-root-xml.xml"), StandardCharsets.UTF_8);
-        String json = IOUtils.toString(classLoader.getResourceAsStream("xml-to-json/remove-root-json.json"), StandardCharsets.UTF_8);
+    void testRemoveRoot() throws Exception {
+        String xml = readResource("xml-to-json/remove-root-xml.xml");
+        String json = readResource("xml-to-json/remove-root-json.json");
 
         resultEndpoint.expectedMessageCount(1);
 
@@ -195,9 +199,19 @@ public class XmlToJsonTest extends CamelTestSupport {
         resultEndpoint.assertIsSatisfied();
     }
 
+    // -- Helpers --
+
+    private String readResource(String resourcePath) throws IOException, URISyntaxException {
+        URL url = Objects.requireNonNull(
+                getClass().getClassLoader().getResource(resourcePath),
+                "Test resource not found: " + resourcePath
+        );
+        return Files.readString(Paths.get(url.toURI()), StandardCharsets.UTF_8);
+    }
+
     private Exchange getLastExchange(MockEndpoint endpoint) {
         int size = endpoint.getReceivedExchanges().size();
-        return endpoint.getReceivedExchanges().get(size -1);
+        return endpoint.getReceivedExchanges().get(size - 1);
     }
 
     @Override
@@ -205,8 +219,6 @@ public class XmlToJsonTest extends CamelTestSupport {
         return new RouteBuilder[] {
                 new RouteBuilder() {
                     public void configure() {
-                        
-
                         from("direct:marshal")
                                 .to("dataformat:custom-xmljson:marshal")
                                 .to("mock:result");
@@ -226,7 +238,6 @@ public class XmlToJsonTest extends CamelTestSupport {
                                 .to("mock:result");
                     }
                 },
-
                 new RouteBuilder() {
                     public void configure() {
                         from("direct:marshalWithKeepStrings")

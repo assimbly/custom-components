@@ -11,7 +11,7 @@ public class ArrayType implements NodeTransaction {
     @Override
     public Element process(JsonToXmlConfiguration config) {
         // extract child as an array
-        config.getJsonNode().elements().forEachRemaining(elementJsonNode -> {
+        config.getJsonNode().values().iterator().forEachRemaining(elementJsonNode -> {
             if(config.isTypeHints() && config.getLevel()!=0) {
                 config.getElement().setAttribute(Constants.JSON_XML_ATTR_CLASS, Constants.JSON_XML_ATTR_TYPE_ARRAY);
             }

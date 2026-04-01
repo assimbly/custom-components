@@ -1,11 +1,11 @@
 package org.assimbly.sql;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.language.simple.SimpleLanguage;
 import org.apache.camel.model.language.SimpleExpression;
 import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
+import org.apache.camel.support.LanguageSupport;
 import org.apache.commons.lang3.StringUtils;
 import org.assimbly.sql.domain.ConnectionType;
 
@@ -57,7 +57,9 @@ public class SqlConfiguration {
     @Metadata(required = false,defaultValue = "false")
     private boolean escapeChars;
 
-    public SqlConfiguration() { }
+    public SqlConfiguration() {
+        // used for serialization or reflection
+    }
 
     public void configure(String uri) throws URISyntaxException {
         URI connection = new URI(uri);
@@ -209,7 +211,7 @@ public class SqlConfiguration {
             return fieldValue;
         }
 
-        if(SimpleLanguage.hasSimpleFunction(fieldValue)) {
+        if(LanguageSupport.hasSimpleFunction(fieldValue)) {
             SimpleExpression simpleExpression = new SimpleExpression(fieldValue);
             fieldValue = simpleExpression.evaluate(exchange, String.class);
         }

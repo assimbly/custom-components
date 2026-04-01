@@ -1,9 +1,17 @@
 package org.assimbly.xmltojsonlegacy;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.util.*;
+import java.io.InputStream;
+import java.util.concurrent.ConcurrentHashMap;
+
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.SerializationFeature;
+import tools.jackson.databind.cfg.CoercionAction;
+import tools.jackson.databind.cfg.CoercionInputShape;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.JsonNodeFactory;
+import tools.jackson.databind.node.ObjectNode;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.assimbly.xmltojsonlegacy.model.ElementMetadata;
@@ -17,9 +25,6 @@ import org.assimbly.xmltojsonlegacy.utils.ElementMetadataUtils;
 import org.assimbly.xmltojsonlegacy.utils.ExtractUtils;
 import org.springframework.http.MediaType;
 
-import java.io.InputStream;
-import java.util.*;
-
 public class XmlToJsonProcessor implements Processor {
     private final XmlToJsonEndpoint endpoint;
 
@@ -29,11 +34,18 @@ public class XmlToJsonProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
+
         XmlToJsonConfiguration config = endpoint.getConfiguration();
 
+        // Initialize the Mapper once with Coercion and Pretty Printing
+        ObjectMapper objectMapper = JsonMapper.builder()
+                .withCoercionConfigDefaults(c -> {
+                    c.setCoercion(CoercionInputShape.EmptyString, CoercionAction.AsNull);
+                })
+                .configure(SerializationFeature.INDENT_OUTPUT, true) // Enable Pretty Print
+                .build();
+
         if(config.isToDiscard(config)) {
-            // no transformation available
-            ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNodeResp = objectMapper.createObjectNode().put("noTransformation", "Available");
             setBodyOnExchange(exchange, objectMapper.writeValueAsString(jsonNodeResp));
             return;
@@ -41,7 +53,7 @@ public class XmlToJsonProcessor implements Processor {
 
         InputStream inputStream = exchange.getIn().getBody(InputStream.class);
 
-        // first pass - generate metadataMap
+        // generate metadataMap
         Map<String, ElementMetadata> metadataMap = XmlMetadataExtractor.extractMetadata(inputStream, config);
 
         // convert metadata to json nodes
@@ -50,9 +62,8 @@ public class XmlToJsonProcessor implements Processor {
         // extract root json
         Map.Entry<String, ElementMetadata> rootEntry = metadataMap.entrySet().iterator().next();
         JsonNode finalJson = rootEntry.getValue().getValueAsJson();
-        ObjectMapper objectMapper = new ObjectMapper();
 
-        // set json on the exchange
+        // set json on the exchange (now pretty-printed)
         setBodyOnExchange(exchange, objectMapper.writeValueAsString(finalJson));
     }
 
@@ -96,22 +107,20 @@ public class XmlToJsonProcessor implements Processor {
         // add attributes in the object node
         ExtractUtils.addAttributesInObjectNode(metadata, config);
 
-        String parentNamespacePrefix = parentMetadata != null ? parentMetadata.getNamespacePrefix() : null;
+        String parentNamespacePrefix = parentMetadata.getNamespacePrefix();
         // add namespace attribute
         ExtractUtils.addNamespaceAttributeInObjectNode(metadata, null, config, metadata.getObjectNode(), parentNamespacePrefix);
 
+        JsonNode processTextResp;
         if(metadata.getChildrenCount() == 0) {
             // process node as leaf
-            JsonNode processTextResp = processNodeAsLeaf(metadataMap, metadata, config);
-            if (processTextResp != null) {
-                return processTextResp;
-            }
+            processTextResp = processNodeAsLeaf(metadataMap, metadata, config);
         } else {
             // process node with children
-            JsonNode processTextResp = processNodeWithChildren(metadataMap, metadata, config);
-            if (processTextResp != null) {
-                return processTextResp;
-            }
+            processTextResp = processNodeWithChildren(metadataMap, metadata, config);
+        }
+        if (processTextResp != null) {
+            return processTextResp;
         }
 
         // return json
@@ -121,34 +130,28 @@ public class XmlToJsonProcessor implements Processor {
     // process node with children
     private static JsonNode processNodeWithChildren(Map<String, ElementMetadata> metadataMap, ElementMetadata metadata, XmlToJsonConfiguration config) {
 
-        // iterate over children
         for (String childPath : metadata.getChildPaths()) {
 
-            // get child  metadata
             ElementMetadata childMetadata = metadataMap.get(childPath);
 
-            if (childMetadata == null) {
-                continue;
-            }
+            if (childMetadata != null) {
 
-            // process element text
-            JsonNode processTextResp = processTextNode(metadataMap, metadata, childMetadata, config);
-            if (processTextResp != null) return processTextResp;
+                JsonNode processTextResp = processTextNode(metadataMap, metadata, childMetadata, config);
+                if (processTextResp != null) return processTextResp;
 
-            // get json child already processed
-            JsonNode childNode = childMetadata.getValueAsJson();
-            if (childNode == null) {
-                continue;
-            }
+                JsonNode childNode = childMetadata.getValueAsJson();
 
-            // process element node
-            JsonNode processNodeResp = processElementNode(metadataMap, metadata, childMetadata, childNode, config);
-            if (processNodeResp != null) {
-                return processNodeResp;
+                if (childNode != null) {
+                    JsonNode processNodeResp = processElementNode(metadataMap, metadata, childMetadata, childNode, config);
+                    if (processNodeResp != null) {
+                        return processNodeResp;
+                    }
+                }
             }
         }
 
         return null;
+
     }
 
     // process node as leaf (no children found)
@@ -161,10 +164,10 @@ public class XmlToJsonProcessor implements Processor {
 
     // group all paths by depth
     private static Map<Integer, List<String>> groupAllPathsByDepth(Map<String, ElementMetadata> metadataMap) {
-        Map<Integer, List<String>> depthMap = new HashMap<>();
+        Map<Integer, List<String>> depthMap = new ConcurrentHashMap<>();
         for (Map.Entry<String, ElementMetadata> entry : metadataMap.entrySet()) {
             int depth = entry.getValue().getLevel();
-            depthMap.computeIfAbsent(depth, k -> new ArrayList<>()).add(entry.getKey());
+            depthMap.computeIfAbsent(depth, _ -> new ArrayList<>()).add(entry.getKey());
         }
         return depthMap;
     }
@@ -215,6 +218,33 @@ public class XmlToJsonProcessor implements Processor {
     }
 
     // get json from metadata
+    // Ensure the parent doesn't wrap it in an empty ObjectNode
+    private static JsonNode getJsonFromMetadata(ElementMetadata metadata, XmlToJsonConfiguration config) {
+        JsonNode nodeToReturn;
+
+        if (metadata.isRootArray()) {
+            nodeToReturn = metadata.getArrayNode();
+        } else {
+            boolean hasText = metadata.getTextContent() != null && !metadata.getTextContent().isEmpty();
+            boolean hasClassAttribute = metadata.getClassAttributeValue() != null;
+
+            if (metadata.getObjectNode().isEmpty() && !hasText && !hasClassAttribute) {
+                nodeToReturn = JsonNodeFactory.instance.nullNode();
+            } else {
+                nodeToReturn = metadata.getObjectNode();
+            }
+        }
+
+        if (metadata.isRootNode() && config.isForceTopLevelObject()) {
+            ObjectNode parentNode = JsonNodeFactory.instance.objectNode();
+            parentNode.set(ElementMetadataUtils.getElementName(metadata, config.isRemoveNamespacePrefixes()), nodeToReturn);
+            return parentNode;
+        }
+
+        return nodeToReturn;
+    }
+
+    /*
     private static JsonNode getJsonFromMetadata(ElementMetadata metadata, XmlToJsonConfiguration config) {
         if(metadata.isRootNode() && config.isForceTopLevelObject()) {
             ObjectNode parentNode = JsonNodeFactory.instance.objectNode();
@@ -223,7 +253,7 @@ public class XmlToJsonProcessor implements Processor {
         } else {
             return metadata.isRootArray() ? metadata.getArrayNode() : metadata.getObjectNode();
         }
-    }
+    }*/
 
     // set body on exchange
     private void setBodyOnExchange(Exchange exchange, String body) {
@@ -235,4 +265,5 @@ public class XmlToJsonProcessor implements Processor {
     private void setContentTypeHeader(Exchange exchange) {
         exchange.getMessage().setHeader(Exchange.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
     }
+
 }

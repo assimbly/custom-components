@@ -226,7 +226,7 @@
 			</iftmin:Segment_group_18>
 		</iftmin:IFTMIN>
 		<env:UNT>
-			<env:segmentCount>98126</env:segmentCount>
+			<env:segmentCount>24</env:segmentCount>
 			<env:messageRefNum>24546</env:messageRefNum>
 		</env:UNT>
 	</env:interchangeMessage>

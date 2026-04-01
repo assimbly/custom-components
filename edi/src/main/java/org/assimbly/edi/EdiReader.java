@@ -3,10 +3,8 @@ package org.assimbly.edi;
 import org.assimbly.smooksnoxml.BaseXmlReader;
 import org.milyn.cdr.annotation.ConfigParam;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 public class EdiReader extends BaseXmlReader {
@@ -23,7 +21,7 @@ public class EdiReader extends BaseXmlReader {
     @ConfigParam
     private String subComponent;
 
-    public void parse(InputSource inputSource) throws IOException, SAXException {
+    public void parse(InputSource inputSource) {
         Scanner scanner = createScanner(inputSource);
 
         // Send the start of message events to the handler
@@ -33,17 +31,15 @@ public class EdiReader extends BaseXmlReader {
         sendDelimitersElement();
 
         while(scanner.hasNext()) {
-            String record = scanner.next();
-            String[] fields = record.split(quote(field));
+            String ediRecord = scanner.next();
+            String[] fields = ediRecord.split(quote(field));
 
             // Send the header event
             String header = fields[0];
             documentHandler.startElement(header);
 
-            if(fields.length > 0) {
-                for(int i = 1; i < fields.length; i++)
-                    sendFieldNode("field." + i, fields[i]);
-            }
+            for (int i = 1; i < fields.length; i++)
+                sendFieldNode("field." + i, fields[i]);
 
             // send header event closure
             documentHandler.endElement(header);
@@ -54,7 +50,7 @@ public class EdiReader extends BaseXmlReader {
         documentHandler.endDocument();
     }
 
-    private void sendFieldNode(String fieldName, String fieldValue) throws SAXException {
+    private void sendFieldNode(String fieldName, String fieldValue) {
         documentHandler.startElement(fieldName);
 
         if(fieldValue.contains(component)) {
@@ -68,7 +64,7 @@ public class EdiReader extends BaseXmlReader {
         documentHandler.endElement(fieldName);
     }
 
-    private void sendComponentNode(String fieldName, String fieldValue) throws SAXException {
+    private void sendComponentNode(String fieldName, String fieldValue) {
         documentHandler.startElement(fieldName);
 
         if(fieldValue.contains(subComponent)) {
@@ -82,13 +78,13 @@ public class EdiReader extends BaseXmlReader {
         documentHandler.endElement(fieldName);
     }
 
-    private void sendSubComponentNode(String fieldName, String fieldValue) throws SAXException {
+    private void sendSubComponentNode(String fieldName, String fieldValue) {
         documentHandler.startElement(fieldName);
         documentHandler.sendCharacters(fieldValue);
         documentHandler.endElement(fieldName);
     }
 
-    private void sendDelimitersElement() throws SAXException {
+    private void sendDelimitersElement() {
         AttributesImpl attributes = new AttributesImpl();
 
         attributes.addAttribute("", "segment", "", "", segment);

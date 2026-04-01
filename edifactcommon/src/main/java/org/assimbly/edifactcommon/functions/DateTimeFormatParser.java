@@ -301,7 +301,7 @@ public class DateTimeFormatParser {
 				short nSecs = (short)(dtData.getPartSecond());
 				double nMilSecs = dtData.getPartSecond();
 				nMilSecs -= nSecs;
-				sValue.append( String.format("%5.3f", nMilSecs).substring(2) );
+				sValue.append( "%5.3f".formatted(nMilSecs).substring(2) );
 			}
 			break;
 			case 'z': if( dtData.hasTimezone() != DateTime.TZ_MISSING) sValue.append( "GMT" );
@@ -503,7 +503,7 @@ public class DateTimeFormatParser {
 		try {
 			number = Integer.parseInt( sbNumber.toString());
 		}
-		catch (NumberFormatException e) {
+		catch (NumberFormatException _) {
 			number = 0;
 		}
 
@@ -533,7 +533,7 @@ public class DateTimeFormatParser {
 		try {
 			sn.number = Integer.parseInt( sbNumber.toString());
 		}
-		catch (NumberFormatException e) {
+		catch (NumberFormatException _) {
 			sn.number = 0;
 		}
 
@@ -758,7 +758,7 @@ public class DateTimeFormatParser {
 				try {
 					mMinWidth = Integer.parseInt( mWidth );
 				}
-				catch (NumberFormatException e) {
+				catch (NumberFormatException _) {
 					mMinWidth = 0;
 				}
 			}
@@ -767,13 +767,13 @@ public class DateTimeFormatParser {
 				try {
 					mMinWidth = Integer.parseInt( mWidth.substring(0, minusPos) );
 				}
-				catch (NumberFormatException e) {
+				catch (NumberFormatException _) {
 					mMinWidth = 0;
 				}
 				try {
 					mMaxWidth = Integer.parseInt( mWidth.substring( minusPos + 1 ) );
 				}
-				catch (NumberFormatException e) {
+				catch (NumberFormatException _) {
 					mMaxWidth = 0;
 				}
 			}
@@ -805,7 +805,7 @@ public class DateTimeFormatParser {
 		int TimeZone;
 
 		int DayOfYear; //this value is stored for later processing
-	};
+	}
 
 	private String mPattern;
 	private char mFieldOpen;

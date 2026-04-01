@@ -232,7 +232,7 @@ public class XLSXFileWriter
 		while(itResultWorksheet.hasNext())
 		{
 			resultWorksheet = itResultWorksheet.next();
-			resultWorksheet.filename = ("worksheets/Sheet" + String.valueOf(workSheet++) + ".xml");
+			resultWorksheet.filename = ("worksheets/Sheet" + workSheet++ + ".xml");
 			Document resultSheetDocument = XmlTreeOperations.createDocument();
 			String ns = "http://schemas.openxmlformats.org/spreadsheetml/2006/main";
 			
@@ -242,7 +242,7 @@ public class XLSXFileWriter
 			for (int i = 0; i < resultWorksheet.matrix.size(); i++)
 			{
 				java.util.List<Element> cells = resultWorksheet.matrix.get(i);
-				if (cells == null || cells.size() == 0)
+				if (cells == null || cells.isEmpty())
 					continue;
 				
 				Element row = XmlTreeOperations.appendElement(sheetData, ns, "row");
@@ -257,7 +257,7 @@ public class XLSXFileWriter
 					String value = XmlTreeOperations.getTextValue(cell);
 					Element c = XmlTreeOperations.appendElement(row, ns, "c");
 					String colName = XLSXFileReader.index2ColumnName(j);
-					c.setAttribute("r", colName + String.valueOf(i));
+					c.setAttribute("r", colName + i);
 					String t = cell.getAttribute("t");
 					if (t.equals("s"))
 					{
@@ -314,7 +314,7 @@ public class XLSXFileWriter
 		while (itR.hasNext())
 		{
 			Element relationship = XmlTreeOperations.appendElement(relationships, ns, "Relationship");
-			relationship.setAttribute("Id", "r" + String.valueOf(n));
+			relationship.setAttribute("Id", "r" + n);
 			relationship.setAttribute("Target", itR.next().filename);
 			relationship.setAttribute("Type", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet");
 			n++;
@@ -340,7 +340,7 @@ public class XLSXFileWriter
 			Element sheet = XmlTreeOperations.appendElement(sheets, ns, "sheet");
 			sheet.setAttribute("name", it.next().sheetName);
 			sheet.setAttribute("sheetId", String.valueOf(iSheet));
-			sheet.setAttribute("r:id", "r" + String.valueOf(iSheet));
+			sheet.setAttribute("r:id", "r" + iSheet);
 			iSheet++;
 		}
 	}

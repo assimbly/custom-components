@@ -23,11 +23,10 @@ package org.assimbly.smb;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.Date;
 
 import org.apache.camel.Exchange;
@@ -49,7 +48,7 @@ public class SmbOperations<SmbFile> implements GenericFileOperations<SmbFile> {
     private static final org.codelibs.jcifs.smb.impl.SmbFile[] EMPTY = {};
 
     private GenericFileEndpoint<SmbFile> endpoint;
-    private SmbClient client;
+    private final SmbClient client;
 
     public SmbOperations(final SmbClient smbClient) {
         this.client = smbClient;
@@ -147,8 +146,8 @@ public class SmbOperations<SmbFile> implements GenericFileOperations<SmbFile> {
         // store content as a file in the local work directory in the temp
         // handle
         try {
-            os = new FileOutputStream(temp);
-        } catch (FileNotFoundException e1) {
+            os = Files.newOutputStream(temp.toPath());
+        } catch (IOException e1) {
             throw new GenericFileOperationFailedException("File not found: " + temp, e1);
         }
 
@@ -162,11 +161,9 @@ public class SmbOperations<SmbFile> implements GenericFileOperations<SmbFile> {
             file.setBody(local);
             login();
             result = client.retrieveFile(getPath(name), os);
-        } catch (IOException e) {
-            throw new GenericFileOperationFailedException("Cannot retrieve file: " + name, e);
         } catch (Exception e) {
             throw new GenericFileOperationFailedException("Cannot retrieve file: " + name, e);
-        } finally {
+        }  finally {
             IOHelper.close(os, "retrieve: " + name);
         }
 
@@ -185,10 +182,10 @@ public class SmbOperations<SmbFile> implements GenericFileOperations<SmbFile> {
 
     @SuppressWarnings("unchecked")
     private boolean retrieveFileToStreamInBody(final String name, final Exchange exchange) {
-        OutputStream os = null;
+
         boolean result;
-        try {
-            os = new ByteArrayOutputStream();
+
+        try(OutputStream os = new ByteArrayOutputStream()){
             GenericFile<SmbFile> target = (GenericFile<SmbFile>) exchange
                     .getProperty(FileComponent.FILE_EXCHANGE_FILE);
             ObjectHelper.notNull(target,
@@ -199,12 +196,8 @@ public class SmbOperations<SmbFile> implements GenericFileOperations<SmbFile> {
             login();
             result = client.retrieveFile(getPath(name), os);
 
-        } catch (IOException e) {
-            throw new GenericFileOperationFailedException("Cannot retrieve file: " + name, e);
         } catch (Exception e) {
             throw new GenericFileOperationFailedException("Cannot retrieve file: " + name, e);
-        } finally {
-            IOHelper.close(os, "retrieve: " + name);
         }
 
         return result;
@@ -270,8 +263,7 @@ public class SmbOperations<SmbFile> implements GenericFileOperations<SmbFile> {
             if (endpoint.getFileExist() == GenericFileExist.Ignore) {
                 // ignore but indicate that the file was written
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug(
-                            "An existing file already exists: " + name + ". Ignore and do not override it.");
+                    LOGGER.debug("An existing file already exists: {}. Ignore and do not override it.", name);
                 }
                 return true;
             } else if (endpoint.getFileExist() == GenericFileExist.Fail) {
@@ -286,7 +278,7 @@ public class SmbOperations<SmbFile> implements GenericFileOperations<SmbFile> {
                 // temp file can be renamed later
                 // with success as the existing target file have been deleted
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Eagerly deleting existing file: " + name);
+                    LOGGER.debug("Eagerly deleting existing file: {}", name);
                 }
                 if (!deleteFile(name)) {
                     throw new GenericFileOperationFailedException("Cannot delete file: " + name);

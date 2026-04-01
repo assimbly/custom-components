@@ -4,7 +4,9 @@
 package org.assimbly.edifactcommon.io;
 
 import java.io.OutputStream;
-import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 public class StreamOutput extends Output
 {
@@ -22,13 +24,16 @@ public class StreamOutput extends Output
 		super(Output.IO_STREAM);
 		this.filename = filename;
 	}
-	
+
+	@Override
 	public OutputStream getStream() throws Exception
 	{
 		if (stream == null)
-			stream = new FileOutputStream(filename, false);
-			
+			stream = Files.newOutputStream(Paths.get(filename), StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
+
 		return stream;
 	}
+
+	@Override
 	public void close() throws Exception {stream.close();}
 }

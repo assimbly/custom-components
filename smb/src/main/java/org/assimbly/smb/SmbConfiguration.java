@@ -76,24 +76,24 @@ public class SmbConfiguration extends GenericFileConfiguration {
     }
 
     public String getSmbPath() {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         buffer.append("smb://");
         buffer.append(getHost());
         if (getPort() > 0) {
-            buffer.append(":").append(getPort());
+            buffer.append(':').append(getPort());
         }
         buffer.append(getPath());
         return buffer.toString();
     }
 
     public String getSmbHostPath() {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         buffer.append("smb://");
         buffer.append(getHost());
         if (getPort() > 0) {
-            buffer.append(":").append(getPort());
+            buffer.append(':').append(getPort());
         }
-        buffer.append("/");
+        buffer.append('/');
         return buffer.toString();
     }
 
@@ -145,7 +145,6 @@ public class SmbConfiguration extends GenericFileConfiguration {
         return path;
     }
 
-    // TODO: give this dirty handling some thinking.
     @Override
     public String getDirectory() {
         String s = super.getDirectory();

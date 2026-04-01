@@ -4,13 +4,13 @@ import java.io.IOException;
 
 public class Base64 {
 
-	private static String    Base64Map =
+	private static String base64Map =
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-	private static byte[]    Base64RevMap = new byte[128];
+	private static byte[] base64RevMap = new byte[128];
 		static {
-			for (int i=0; i<Base64RevMap.length; ++i) Base64RevMap[i] = -1;
-			for (int i=0; i<64; ++i) Base64RevMap[Base64Map.charAt(i)] = (byte)i;
+			for (int i=0; i<base64RevMap.length; ++i) base64RevMap[i] = -1;
+			for (int i=0; i<64; ++i) base64RevMap[base64Map.charAt(i)] = (byte)i;
 		}
 	
 	public static String encode( byte[] bInput) {
@@ -27,11 +27,11 @@ public class Base64 {
 			int out1 = ((in0 & 3) << 4) | (in1 >>> 4);
 			int out2 = ((in1 & 0xf) << 2) | (in2 >>> 6);
 			int out3 = in2 & 0x3f;
-			cOutput[ outP++] = Base64Map.charAt(out0);
-			cOutput[ outP++] = Base64Map.charAt(out1);
-			cOutput[ outP] = outP < outLength ? Base64Map.charAt(out2) : '=';
+			cOutput[ outP++] = base64Map.charAt(out0);
+			cOutput[ outP++] = base64Map.charAt(out1);
+			cOutput[ outP] = outP < outLength ? base64Map.charAt(out2) : '=';
 			outP++;
-			cOutput[ outP] = outP < outLength ? Base64Map.charAt(out3) : '=';
+			cOutput[ outP] = outP < outLength ? base64Map.charAt(out3) : '=';
 			outP++;
 		}
 		return new String(cOutput);
@@ -57,7 +57,7 @@ public class Base64 {
 			isValidChar( in, true);
 			
 			int[] by = new int[4];
-			for( int i = 0; i < by.length; ++i) by[i] = Base64RevMap[in[i]];
+			for( int i = 0; i < by.length; ++i) by[i] = base64RevMap[in[i]];
 			isValidChar( by, false);
 			
 			int[] out = new int[3];
@@ -75,7 +75,7 @@ public class Base64 {
 	public static void isValidChar( int[] chars, boolean checkContent) throws IOException
 	{
 		for( int i = 0; i < chars.length; ++i) {
-			if( chars[i] > 127 || (checkContent && Base64Map.indexOf( chars[i]) == -1))
+			if( chars[i] > 127 || (checkContent && base64Map.indexOf( chars[i]) == -1))
 				throw new IOException( "Illegal character: '" + (char)chars[i] + "'");
 		}
 	}

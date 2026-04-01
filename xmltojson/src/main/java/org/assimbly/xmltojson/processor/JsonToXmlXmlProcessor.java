@@ -19,22 +19,22 @@ import org.assimbly.xmltojson.CustomXmlJsonDataFormat;
                   and wants to be warned when they do have it.
 */
 public class JsonToXmlXmlProcessor {
-    private final Exchange exchange;
-    private final CustomXmlJsonDataFormat xmlJsonDataFormat;
-    private final boolean addRoot, checkJsonKeys, changeArrayElements;
-    private final String rootTag, arrayElementName, defaultArrayElementName;
+    private final boolean addRoot;
+    private final boolean checkJsonKeys;
+    private final boolean changeArrayElements;
+    private final String rootTag;
+    private final String arrayElementName;
+    private final String defaultArrayElementName;
     private final Object json;
 
     public JsonToXmlXmlProcessor(Exchange exchange, CustomXmlJsonDataFormat xmlJsonDataFormat,
         Object json) {
-            this.exchange = exchange;
-            this.xmlJsonDataFormat = xmlJsonDataFormat;
-            this.addRoot = this.xmlJsonDataFormat.getAddRoot();
-            this.checkJsonKeys = this.xmlJsonDataFormat.getCheckJsonKeys();
-            this.changeArrayElements = this.xmlJsonDataFormat.getChangeArrayElements();
-            this.rootTag = this.xmlJsonDataFormat.getRootTag(this.exchange);
-            this.arrayElementName = this.xmlJsonDataFormat.getArrayElementName(this.exchange);
-            this.defaultArrayElementName = this.xmlJsonDataFormat.getDefaultArrayElementName();
+        this.addRoot = xmlJsonDataFormat.getAddRoot();
+            this.checkJsonKeys = xmlJsonDataFormat.getCheckJsonKeys();
+            this.changeArrayElements = xmlJsonDataFormat.getChangeArrayElements();
+            this.rootTag = xmlJsonDataFormat.getRootTag(exchange);
+            this.arrayElementName = xmlJsonDataFormat.getArrayElementName(exchange);
+            this.defaultArrayElementName = xmlJsonDataFormat.getDefaultArrayElementName();
             this.json = json;
     }
 

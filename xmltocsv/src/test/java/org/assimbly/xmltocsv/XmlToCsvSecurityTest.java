@@ -7,18 +7,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class XmlToCsvSecurityTest extends CamelTestSupport {
+class XmlToCsvSecurityTest extends CamelTestSupport {
 
     @Override
     protected RouteBuilder createRouteBuilder() {
         return new RouteBuilder() {
             public void configure() {
                 from("direct:in")
-                        .to("xmltocsv://?includeHeader=true&includeIndexColumn=false&indexColumnName=line&delimiter=(LA==)&lineSeparator=RAW(XG4=)&orderHeaders=UNORDERED&quoteFields=ALL_FIELDS")
+                        .to("xmltocsv://?includeHeader=true&includeIndexColumn=false&indexColumnName=line&delimiter=,&lineSeparator=linefeed&orderHeaders=UNORDERED&quoteFields=ALL_FIELDS")
                         .to("mock:out");
             }
         };
@@ -26,26 +26,26 @@ public class XmlToCsvSecurityTest extends CamelTestSupport {
 
     private void testAttack(String attack) throws Exception {
         String attackPath = "src/test/resources/input/security/" + attack;
-        String input = new String(Files.readAllBytes(Paths.get(attackPath)));
+        String input = new String(Files.readAllBytes(Path.of(attackPath)));
 
         template.sendBody("direct:in", input);
     }
 
     @Test
-    public void testVanillaXXE() throws Exception {
+    void testVanillaXXE() {
         Executable executable = () -> testAttack("vanilla-xxe-attack.xml");
         assertThrows(CamelExecutionException.class,executable);
     }
 
     @Test
-    public void testBillionLaughsAttack() throws Exception {
+    void testBillionLaughsAttack() {
         Executable executable = () -> testAttack("billion-laughs-attack.xml");
         assertThrows(CamelExecutionException.class,executable);
 
     }
 
     @Test
-    public void testQuadraticBlowupAttack() throws Exception {
+    void testQuadraticBlowupAttack() {
 
         Executable executable = () -> testAttack("quadratic-blowup-attack.xml");
         assertThrows(CamelExecutionException.class,executable);

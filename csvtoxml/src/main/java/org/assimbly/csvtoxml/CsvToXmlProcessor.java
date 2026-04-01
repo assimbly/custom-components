@@ -17,7 +17,7 @@ import java.util.List;
 
 public class CsvToXmlProcessor implements Processor {
 
-    private CsvToXmlEndpoint endpoint;
+    private final CsvToXmlEndpoint endpoint;
 
     public CsvToXmlProcessor(CsvToXmlEndpoint endpoint) {
         this.endpoint = endpoint;
@@ -39,7 +39,7 @@ public class CsvToXmlProcessor implements Processor {
         try(ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             Writer writer = new OutputStreamWriter(outputStream, configuration.getEncoding())) {
 
-            if (input.get(0).getClass() == ArrayList.class){
+            if (input.getFirst().getClass() == ArrayList.class){
                 List<ArrayList<String>> csv = (List<ArrayList<String>>) input;
                 items = createAnonymousItems(csv);
             }else{
@@ -47,7 +47,7 @@ public class CsvToXmlProcessor implements Processor {
                 items = createItems(csv);
             }
 
-            String xmlProlog = String.format("<?xml version=\"1.0\" encoding=\"%s\"?>\n", configuration.getEncoding());
+            String xmlProlog = "<?xml version=\"1.0\" encoding=\"%s\"?>\n".formatted(configuration.getEncoding());
             writer.write(xmlProlog);
 
             xStream.aliasSystemAttribute(null, "class");

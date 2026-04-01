@@ -1,19 +1,19 @@
 package org.assimbly.soap.util.helpers;
 
-import org.assimbly.util.Pair;
-
+import java.util.*;
 import javax.wsdl.*;
 import javax.wsdl.extensions.ExtensibilityElement;
 import javax.wsdl.extensions.soap.SOAPAddress;
 import javax.wsdl.extensions.soap12.SOAP12Address;
 import javax.xml.namespace.QName;
-import java.util.*;
+
+import org.assimbly.util.Pair;
 
 public final class DefinitionHelper {
 
     public static Definition getImport(Definition definition, QName toImport){
         // Get First
-        Import imp = (Import) definition.getImports(toImport.getNamespaceURI()).get(0);
+        Import imp = (Import) definition.getImports(toImport.getNamespaceURI()).getFirst();
 
         return imp.getDefinition();
     }
@@ -52,11 +52,11 @@ public final class DefinitionHelper {
             if(port != null){
                 ExtensibilityElement el = PortHelper.address(port);
 
-                if(el instanceof SOAP12Address)
-                    return ((SOAP12Address) el).getLocationURI();
+                if(el instanceof SOAP12Address address)
+                    return address.getLocationURI();
 
-                if(el instanceof SOAPAddress)
-                    return ((SOAPAddress) el).getLocationURI();
+                if(el instanceof SOAPAddress address)
+                    return address.getLocationURI();
             }
         }
 

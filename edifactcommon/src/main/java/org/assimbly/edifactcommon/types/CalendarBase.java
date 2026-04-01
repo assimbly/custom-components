@@ -273,7 +273,7 @@ public abstract class CalendarBase
 			throw new StringParseException("invalid date format", 2);
 		  day = Integer.parseInt(newvalue.substring(nStart+8, newvalue.length()));
 		}
-		catch (NumberFormatException e) {
+		catch (NumberFormatException _) {
 		  throw new StringParseException("invalid date format", 2);
 		}
 	}
@@ -345,7 +345,7 @@ public abstract class CalendarBase
 				  offsetTZ = -offsetTZ;
 		  }
 	  }
-	  catch (NumberFormatException e) { throw new StringParseException("invalid number format", 2); }
+	  catch (NumberFormatException _) { throw new StringParseException("invalid number format", 2); }
   }
 
 
@@ -374,7 +374,7 @@ public abstract class CalendarBase
 		if ((part & DateTimePart_Year) != 0)
 		{
 			int digits = 0;
-			RefInt temp = new RefInt(0);;
+			RefInt temp = new RefInt(0);
 			while (context.readDigitAndAdvance(temp, 1, 9))
 			{
 				year.value = year.value * 10 + temp.value;
@@ -685,7 +685,7 @@ public abstract class CalendarBase
 		{
 			return (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(s));
 		} 
-		catch( java.text.ParseException e ) 
+		catch( java.text.ParseException _ ) 
 		{
 			throw new StringParseException("Could not convert to date.", 0);
 		}

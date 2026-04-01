@@ -9,7 +9,6 @@ import org.assimbly.exceltoxml.exception.Excel2XmlException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class ExcelReader {
@@ -30,14 +29,14 @@ public class ExcelReader {
                 List<SheetCell> rowCells = processRow(row, range);
                 rows.add(rowCells);
             }
-        } catch (Exception e) {
+        } catch (Exception _) {
             throw new Excel2XmlException("Unable to process rule named " + rule.getName() + ". Unreadable range " + rule.getCellRange() + " in sheet " + rule.getWorksheet());
         }
 
-        if (rule.getTranspose())
+        if (Boolean.TRUE.equals(rule.getTranspose()))
             rows = transpose(rows);
 
-        if (rule.getHeaderRow())
+        if (Boolean.TRUE.equals(rule.getHeaderRow()))
             nameXmlElements(rows);
 
         return rows;
@@ -70,15 +69,15 @@ public class ExcelReader {
         return IntStream.rangeClosed(range.getFirstColumn(), range.getLastColumn())
                 .mapToObj(i -> row.getCell(i, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK))
                 .map(SheetCell::new)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private static void nameXmlElements(List<List<SheetCell>> rows) {
         if (rows.isEmpty())
             return;
 
-        List<String> cellNames = rows.get(0).stream().map(SheetCell::getCellValue).collect(Collectors.toList());
-        rows.remove(0);
+        List<String> cellNames = rows.getFirst().stream().map(SheetCell::getCellValue).toList();
+        rows.removeFirst();
         for (List<SheetCell> row : rows) {
             for (int i = 0; i < row.size(); i++) {
                 if (!cellNames.isEmpty() && !cellNames.get(i).isEmpty())

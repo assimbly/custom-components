@@ -138,9 +138,8 @@ public class MFDOMWriter
 	
 	public static String getValue(Object o, Node n) throws Exception
 	{
-		if (o instanceof javax.xml.namespace.QName)
+		if (o instanceof javax.xml.namespace.QName qn)
 		{
-			javax.xml.namespace.QName qn = (javax.xml.namespace.QName) o;
 			if (qn.getNamespaceURI() == null || qn.getNamespaceURI().length() == 0)
 				return qn.getLocalPart();
 			
@@ -161,9 +160,8 @@ public class MFDOMWriter
 			String s = prefix + ":" + qn.getLocalPart().substring(preIndex+1);
 			return s;
 		}
-		else if (o instanceof IMFNode) 
+		else if (o instanceof IMFNode node) 
 		{
-			IMFNode node = (IMFNode)o;
 			
 			String s = "";
 			if ( (node.getNodeKind() & IMFNode.MFNodeKind_Attribute) != 0 )

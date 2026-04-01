@@ -5,11 +5,11 @@ package org.assimbly.edifactcommon.io;
 
 public class Output 
 {
-	public final static byte IO_WRITER = 0;
-	public final static byte IO_STREAM = 1;
-	public final static byte IO_DOM = 2;
+	public static final byte IO_WRITER = 0;
+	public static final byte IO_STREAM = 1;
+	public static final byte IO_DOM = 2;
 	
-	private byte type;
+	private final byte type;
 	
 	public Output(byte type)
 	{
@@ -20,5 +20,5 @@ public class Output
 	public java.io.Writer getWriter() {return null;}
 	public java.io.OutputStream getStream() throws Exception {return null;}
 	public org.w3c.dom.Document getDocument() {return null;}
-	public void close() throws Exception {}
+	public void close() throws Exception { /* Not used */ }
 }

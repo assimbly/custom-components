@@ -1,6 +1,6 @@
 package org.assimbly.edi;
 
-import org.apache.camel.test.junit5.params.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.milyn.Smooks;
 
@@ -9,9 +9,9 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
+import static org.xmlunit.assertj3.XmlAssert.assertThat;
 
-public class EdiReaderTest {
+class EdiReaderTest {
 
     public static final String SEGMENT = "LB";
     public static final String FIELD = "~";
@@ -22,50 +22,58 @@ public class EdiReaderTest {
     private EdiReaderConfigurator config;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         smooks = new Smooks();
         config = new EdiReaderConfigurator(SEGMENT, FIELD, COMPONENT, SUB_COMPONENT);
         smooks.setReaderConfig(config);
     }
 
     @Test
-    public void listsDelimitersUsed() throws Exception {
-        String expectation = "<edi-message>" +
+    void listsDelimitersUsed() {
+        String expected = "<edi-message>" +
                 "<delimiters segment=\"LB\" field=\"~\" component=\"^\" sub-component=\"!\"/>" +
                 "</edi-message>";
 
-        assertXMLEqual(expectation, processEdi(""));
+        String actual = processEdi("");
+        
+        assertThat(actual).and(expected).areIdentical();
     }
 
     @Test
-    public void acceptsNewlineAsSegmentDelimiter() throws Exception {
-        String expectation = "<edi-message>" +
+    void acceptsNewlineAsSegmentDelimiter() {
+        String expected = "<edi-message>" +
                 "<delimiters segment=\"LB\" field=\"~\" component=\"^\" sub-component=\"!\"/>" +
                 "<A/>" +
                 "<B/>" +
                 "</edi-message>";
 
-        assertXMLEqual(expectation, processEdi("A\nB"));
+        String actual = processEdi("A\nB");
+
+        assertThat(actual).and(expected).areIdentical();
     }
 
     @Test
-    public void acceptsOtherCharactersAsSegmentDelimiter() throws Exception {
+    void acceptsOtherCharactersAsSegmentDelimiter() {
         smooks = new Smooks();
         config = new EdiReaderConfigurator("$", FIELD, COMPONENT, SUB_COMPONENT);
         smooks.setReaderConfig(config);
 
-        String expectation = "<edi-message>" +
+        String expected = "<edi-message>" +
                 "<delimiters segment=\"$\" field=\"~\" component=\"^\" sub-component=\"!\"/>" +
                 "<A/>" +
                 "<B/>" +
                 "</edi-message>";
 
-        assertXMLEqual(expectation, processEdi("A$B"));
+
+        String actual = processEdi("A$B");
+
+        assertThat(actual).and(expected).areIdentical();
+        
     }
 
     @Test
-    public void breaksDownSegmentIntoFieldsAndUses1stFieldAsHeader() throws Exception {
-        String expectation = "<edi-message>" +
+    void breaksDownSegmentIntoFieldsAndUses1stFieldAsHeader() {
+        String expected = "<edi-message>" +
                 "<delimiters segment=\"LB\" field=\"~\" component=\"^\" sub-component=\"!\"/>" +
                 "<A>" +
                 "<field.1>B</field.1>" +
@@ -73,12 +81,14 @@ public class EdiReaderTest {
                 "</A>" +
                 "</edi-message>";
 
-        assertXMLEqual(expectation, processEdi("A~B~C"));
+        String actual = processEdi("A~B~C");
+
+        assertThat(actual).and(expected).areIdentical();
     }
 
     @Test
-    public void supportsMultipleLinesWithSameHeader() throws Exception {
-        String expectation = "<edi-message>" +
+    void supportsMultipleLinesWithSameHeader() {
+        String expected = "<edi-message>" +
                 "<delimiters segment=\"LB\" field=\"~\" component=\"^\" sub-component=\"!\"/>" +
                 "<A/>" +
                 "<A>" +
@@ -86,12 +96,15 @@ public class EdiReaderTest {
                 "</A>" +
                 "</edi-message>";
 
-        assertXMLEqual(expectation, processEdi("A\nA~B"));
+        String actual = processEdi("A\nA~B");
+
+        assertThat(actual).and(expected).areIdentical();
+
     }
 
     @Test
-    public void breaksDownFieldsIntoComponents() throws Exception {
-        String expectation = "<edi-message>" +
+    void breaksDownFieldsIntoComponents() {
+        String expected = "<edi-message>" +
                 "<delimiters segment=\"LB\" field=\"~\" component=\"^\" sub-component=\"!\"/>" +
                 "<A>" +
                 "<field.1>" +
@@ -101,14 +114,15 @@ public class EdiReaderTest {
                 "</A>" +
                 "</edi-message>";
 
-        final String test = processEdi("A~A 1^A 2");
-        System.out.println("test = " + test);
-        assertXMLEqual(expectation, test);
+        final String actual = processEdi("A~A 1^A 2");
+
+        assertThat(actual).and(expected).areIdentical();
+
     }
 
     @Test
-    public void breaksDownComponentsIntoSubComponents() throws Exception {
-        String expectation = "<edi-message>" +
+    void breaksDownComponentsIntoSubComponents() {
+        String expected = "<edi-message>" +
                 "<delimiters segment=\"LB\" field=\"~\" component=\"^\" sub-component=\"!\"/>" +
                 "<A>" +
                 "<field.1>" +
@@ -121,7 +135,11 @@ public class EdiReaderTest {
                 "</A>" +
                 "</edi-message>";
 
-        assertXMLEqual(expectation, processEdi("A~A 11!A 12^A 2"));
+        String actual = processEdi("A~A 11!A 12^A 2");
+
+        assertThat(actual).and(expected).areIdentical();
+
+
     }
 
     private String processEdi(String edi) {

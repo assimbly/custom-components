@@ -1,6 +1,6 @@
 package org.assimbly.jsontoxmllegacy.transaction.types;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JsonNode;
 import org.assimbly.jsontoxmllegacy.Constants;
 import org.assimbly.jsontoxmllegacy.JsonToXmlConfiguration;
 import org.assimbly.jsontoxmllegacy.JsonToXmlProcessor;
@@ -14,37 +14,43 @@ public class ObjectType implements NodeTransaction {
 
     @Override
     public Element process(JsonToXmlConfiguration config) {
-        // extract child as an object
-        config.getJsonNode().fields().forEachRemaining(entry -> {
-            String key = entry.getKey();
-            JsonNode value = entry.getValue();
+        config.getJsonNode().properties().iterator().forEachRemaining(entry ->
+                processEntry(config, entry.getKey(), entry.getValue())
+        );
 
-            if(key.indexOf(Constants.JSON_XML_ATTR_PREFIX)==0) {
-                key = key.substring(1);
-                if(key.equals(XMLConstants.XMLNS_ATTRIBUTE) || key.indexOf(XMLConstants.XMLNS_ATTRIBUTE+":")==0) {
-                    // namespace
-                    String namespace = JsonUtils.getAndSetNamespace(config.getXmlnsMap(), key, value.asText());
-                    if(namespace != null) {
-                        config.getElement().setAttribute(key, namespace);
-                    }
-                } else {
-                    switch (key) {
-                        case Constants.JSON_XML_ATTR_CONTEXT:
-                            config.getElement().setAttribute(Constants.JSON_XML_ATTR_CONTEXT, value.toString());
-                            break;
-                        default:
-                            config.getElement().setAttribute(key, value.asText());
-                    }
-                }
-            } else if(key.equals(Constants.JSON_XML_TEXT_FIELD)){
-                config.getElement().setTextContent(value.asText());
-            } else {
-                config.getElement().appendChild(JsonToXmlProcessor.convertJsonToXml(config.createSubLevelConfig(value, key)));
-            }
-        });
-        if(!config.getElement().hasAttribute(Constants.JSON_XML_ATTR_CLASS) && config.isTypeHints() && config.getLevel()!=0) {
-            config.getElement().setAttribute(Constants.JSON_XML_ATTR_CLASS, Constants.JSON_XML_ATTR_TYPE_OBJECT);
-        }
+        applyTypeHintIfNeeded(config);
+
         return config.getElement();
     }
+
+    private void processEntry(JsonToXmlConfiguration config, String key, JsonNode value) {
+        if (key.indexOf(Constants.JSON_XML_ATTR_PREFIX) == 0) {
+            processAttribute(config, key.substring(1), value);
+        } else if (key.equals(Constants.JSON_XML_TEXT_FIELD)) {
+            config.getElement().setTextContent(value.asString());
+        } else {
+            config.getElement().appendChild(JsonToXmlProcessor.convertJsonToXml(config.createSubLevelConfig(value, key)));
+        }
+    }
+
+    private void processAttribute(JsonToXmlConfiguration config, String key, JsonNode value) {
+        if (key.equals(XMLConstants.XMLNS_ATTRIBUTE) || key.indexOf(XMLConstants.XMLNS_ATTRIBUTE + ":") == 0) {
+            String namespace = JsonUtils.getAndSetNamespace(config.getXmlnsMap(), key, value.asString());
+            if (namespace != null) {
+                config.getElement().setAttribute(key, namespace);
+            }
+        } else {
+            String attrValue = key.equals(Constants.JSON_XML_ATTR_CONTEXT) ? value.toString() : value.asString();
+            config.getElement().setAttribute(key, attrValue);
+        }
+    }
+
+    private void applyTypeHintIfNeeded(JsonToXmlConfiguration config) {
+        if (!config.getElement().hasAttribute(Constants.JSON_XML_ATTR_CLASS)
+                && config.isTypeHints()
+                && config.getLevel() != 0) {
+            config.getElement().setAttribute(Constants.JSON_XML_ATTR_CLASS, Constants.JSON_XML_ATTR_TYPE_OBJECT);
+        }
+    }
+
 }

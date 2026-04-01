@@ -1,5 +1,7 @@
 package org.assimbly.xmltoexcel;
 
+import java.util.*;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.w3c.dom.Document;
@@ -12,7 +14,6 @@ import org.assimbly.xmltoexcel.domain.OrderHeaders;
 import org.assimbly.xmltoexcel.domain.CustomWorksheet;
 import org.assimbly.xmltoexcel.exception.XmlToExcelException;
 
-import javax.print.Doc;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
@@ -21,7 +22,6 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
-import java.util.*;
 
 
 public class XmlToExcelProcessor implements Processor {
@@ -49,11 +49,7 @@ public class XmlToExcelProcessor implements Processor {
         String rootName = document.getDocumentElement().getNodeName();
         String fileExtension = config.getExcelFormat().toString().toLowerCase();
 
-        if(rootName!=null || !rootName.isEmpty()){
-            return rootName + "." + fileExtension ;
-        }else{
-            return "Workbook1." + fileExtension;
-        }
+        return rootName + "." + fileExtension;
 
     }
 
@@ -71,10 +67,8 @@ public class XmlToExcelProcessor implements Processor {
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-        try {
+        try (outputStream) {
             excelWriter.write(outputStream);
-        } finally {
-            outputStream.close();
         }
         return outputStream.toByteArray();
     }

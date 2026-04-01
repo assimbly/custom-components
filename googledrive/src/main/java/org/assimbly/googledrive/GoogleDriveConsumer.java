@@ -13,9 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.assimbly.googledrive.exception.GoogleDriveException;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,7 +37,7 @@ public class GoogleDriveConsumer extends ScheduledPollConsumer implements Consum
     private Drive service;
 
     private int connectionAttempts = 1;
-    private final int connectionAttemptsMax = 60;
+    private static final int CONNECTION_ATTEMPS_MAX = 60;
 
     GoogleDriveConsumer(GoogleDriveEndpoint endpoint, Processor processor) {
         super(endpoint, processor);
@@ -55,67 +56,72 @@ public class GoogleDriveConsumer extends ScheduledPollConsumer implements Consum
 
     @Override
     protected int poll() throws Exception {
-
         try {
-            if(configuration.getDirectoryId() == null)
-                configuration.setDirectoryId("root");
+            List<File> filesToProcess = fetchFilesFromDrive();
 
-            findOrCreateMoveToDirectory();
-
-            List<File> filesToProcess = new ArrayList<>();
-            String pageToken = null;
-
-            do {
-                FileList result = service.files().list()
-                        .setQ( "'" + configuration.getDirectoryId() + "' in parents" +
-                                " and mimeType != 'application/vnd.google-apps.folder'" +
-                                " and trashed = false")
-                        .setSpaces("drive")
-                        .setFields("nextPageToken, files(id, name, mimeType)")
-                        .setPageToken(pageToken)
-                        .execute();
-
-                for (File file : result.getFiles()) {
-                    if (isGSuiteFile(file) && configuration.getGSuiteFiles().equals("Ignore"))
-                        continue;
-
-                    if (filterPattern == null || filterPattern.matcher(file.getName()).matches())
-                        filesToProcess.add(file);
-                }
-
-                pageToken = result.getNextPageToken();
-
-            } while (pageToken != null);
-
-            for(File fileModel : filesToProcess) {
-
-                java.io.File file = downloadFile(fileModel);
-
-                Exchange exchange = endpoint.createExchange(file, fileModel);
-
-                this.getProcessor().process(exchange);
-
-                postProcess(fileModel, file);
+            for (File fileModel : filesToProcess) {
+                processSingleFile(fileModel);
             }
+
             connectionAttempts = 1;
-
         } catch (GoogleJsonResponseException e) {
-            if(connectionAttempts <= connectionAttemptsMax) {
-                long seconds = this.getDelay() / 1000L;
-                LOG.warn(String.format(
-                        "Could not connect to Google Drive directory. Try again after %s seconds (attempt %s of %s)",
-                        seconds,
-                        connectionAttempts,
-                        connectionAttemptsMax
-                ));
-                connectionAttempts += 1;
-                service = this.endpoint.getClient(true);
-            } else {
-                LOG.error("GoogleJsonResponseException occurred. Connect to Google Drive directory failed on flowId: "+configuration.getFlowId(), e);
-            }
+            handleConnectionFailure(e);
         }
-
         return 0;
+    }
+
+    private List<File> fetchFilesFromDrive() throws Exception {
+        if (configuration.getDirectoryId() == null) {
+            configuration.setDirectoryId("root");
+        }
+        findOrCreateMoveToDirectory();
+
+        List<File> filesToProcess = new ArrayList<>();
+        String pageToken = null;
+
+        do {
+            FileList result = service.files().list()
+                    .setQ("'%s' in parents and mimeType != 'application/vnd.google-apps.folder' and trashed = false"
+                            .formatted(configuration.getDirectoryId()))
+                    .setSpaces("drive")
+                    .setFields("nextPageToken, files(id, name, mimeType)")
+                    .setPageToken(pageToken)
+                    .execute();
+
+            for (File file : result.getFiles()) {
+                boolean isIgnoredGSuite = isGSuiteFile(file) && "Ignore".equals(configuration.getGSuiteFiles());
+                boolean matchesPattern = filterPattern == null || filterPattern.matcher(file.getName()).matches();
+
+                if (!isIgnoredGSuite && matchesPattern) {
+                    filesToProcess.add(file);
+                }
+            }
+            pageToken = result.getNextPageToken();
+        } while (pageToken != null);
+
+        return filesToProcess;
+    }
+
+    private void processSingleFile(File fileModel) throws Exception {
+        java.io.File file = downloadFile(fileModel);
+        Exchange exchange = endpoint.createExchange(file, fileModel);
+
+        this.getProcessor().process(exchange);
+
+        postProcess(fileModel, file);
+    }
+
+    private void handleConnectionFailure(GoogleJsonResponseException e) {
+        if (connectionAttempts <= CONNECTION_ATTEMPS_MAX) {
+            long seconds = this.getDelay() / 1000L;
+            LOG.warn("Could not connect to Google Drive directory. Try again after {} seconds (attempt {} of {})",
+                    seconds, connectionAttempts, CONNECTION_ATTEMPS_MAX);
+
+            connectionAttempts++;
+            service = this.endpoint.getClient(true);
+        } else {
+            LOG.error("Google Drive connection failed on flowId: {}", configuration.getFlowId(), e);
+        }
     }
 
     private java.io.File downloadFile(File fileModel) {
@@ -124,11 +130,11 @@ public class GoogleDriveConsumer extends ScheduledPollConsumer implements Consum
 
         try {
             file = java.io.File.createTempFile("temp", "");
-        } catch (IOException e) {
+        } catch (IOException _) {
             throw new GoogleDriveException("download", fileModel.getId());
         }
 
-        try (OutputStream outputStream = new FileOutputStream(file)){
+        try (OutputStream outputStream = Files.newOutputStream(file.toPath())){
 
             if ( isGSuiteFile(fileModel) )
                 service.files()
@@ -139,7 +145,7 @@ public class GoogleDriveConsumer extends ScheduledPollConsumer implements Consum
                     .get(fileModel.getId())
                     .executeMediaAndDownloadTo(outputStream);
 
-        } catch (IOException e) {
+        } catch (IOException _) {
             throw new GoogleDriveException("download", fileModel.getId());
         }
 
@@ -148,12 +154,14 @@ public class GoogleDriveConsumer extends ScheduledPollConsumer implements Consum
 
     private void postProcess(File fileModel, java.io.File tempFile) throws IOException {
 
-        tempFile.delete();
+        Path tempPath = tempFile.toPath();
+        Files.deleteIfExists(tempPath);
 
-        if (configuration.getMoveTo() == null)
+        if (configuration.getMoveTo() == null) {
             deleteFile(fileModel.getId());
-        else
+        } else {
             moveFile(fileModel.getId());
+        }
     }
 
     private void deleteFile(String fileId) throws IOException {
@@ -190,8 +198,8 @@ public class GoogleDriveConsumer extends ScheduledPollConsumer implements Consum
                         " and name = '"+ configuration.getMoveTo() + "'")
                 .execute();
 
-        if (result.getFiles().size() > 0)
-            return result.getFiles().get(0).getId();
+        if (!result.getFiles().isEmpty())
+            return result.getFiles().getFirst().getId();
 
         return null;
     }

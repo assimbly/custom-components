@@ -1,17 +1,16 @@
 package org.assimbly.jsontoxmllegacy;
 
+import org.w3c.dom.*;
+
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Exchange;
 import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.camel.spi.Metadata;
-import org.apache.camel.spi.UriParam;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
-import org.w3c.dom.*;
 import org.xml.sax.InputSource;
 import org.xmlunit.builder.DiffBuilder;
 import org.xmlunit.diff.Diff;
@@ -26,8 +25,8 @@ import java.util.Comparator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
-
-public class JsonToXmlLegacyTest extends CamelTestSupport {
+ 
+class JsonToXmlLegacyTest extends CamelTestSupport {
 
     private final ClassLoader classLoader = getClass().getClassLoader();
 
@@ -42,7 +41,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     *****************************************/
 
     @Test
-    public void testJsonXml_1_EARFF() throws Exception {
+    void testJsonXml_1_EARFF() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root",
                 "json-to-xml/example_1.json",
@@ -51,7 +50,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_1_EARTF() throws Exception {
+    void testJsonXml_1_EARTF() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root_NamespaceLenient",
                 "json-to-xml/example_1.json",
@@ -60,7 +59,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_1_EARFT() throws Exception {
+    void testJsonXml_1_EARFT() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root_TypeHints",
                 "json-to-xml/example_1.json",
@@ -69,7 +68,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_1_EARTT() throws Exception {
+    void testJsonXml_1_EARTT() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root_NamespaceLenient_TypeHints",
                 "json-to-xml/example_1.json",
@@ -78,7 +77,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_1_EATT() throws Exception {
+    void testJsonXml_1_EATT() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_NamespaceLenient_TypeHints",
                 "json-to-xml/example_1.json",
@@ -91,7 +90,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testJsonXml_2_EARFF() throws Exception {
+    void testJsonXml_2_EARFF() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root",
                 "json-to-xml/example_2.json",
@@ -100,7 +99,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_2_EARTF() throws Exception {
+    void testJsonXml_2_EARTF() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root_NamespaceLenient",
                 "json-to-xml/example_2.json",
@@ -109,7 +108,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_2_EARFT() throws Exception {
+    void testJsonXml_2_EARFT() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root_TypeHints",
                 "json-to-xml/example_2.json",
@@ -118,7 +117,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_2_EARTT() throws Exception {
+    void testJsonXml_2_EARTT() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root_NamespaceLenient_TypeHints",
                 "json-to-xml/example_2.json",
@@ -127,7 +126,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_2_EATT() throws Exception {
+    void testJsonXml_2_EATT() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_NamespaceLenient_TypeHints",
                 "json-to-xml/example_2.json",
@@ -140,7 +139,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testJsonXml_3_EARFF() throws Exception {
+    void testJsonXml_3_EARFF() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root",
                 "json-to-xml/example_3.json",
@@ -149,7 +148,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_3_EARTF() throws Exception {
+    void testJsonXml_3_EARTF() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root_NamespaceLenient",
                 "json-to-xml/example_3.json",
@@ -158,7 +157,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_3_EARFT() throws Exception {
+    void testJsonXml_3_EARFT() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root_TypeHints",
                 "json-to-xml/example_3.json",
@@ -167,7 +166,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_3_EARTT() throws Exception {
+    void testJsonXml_3_EARTT() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root_NamespaceLenient_TypeHints",
                 "json-to-xml/example_3.json",
@@ -176,7 +175,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_3_EATT() throws Exception {
+    void testJsonXml_3_EATT() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_NamespaceLenient_TypeHints",
                 "json-to-xml/example_3.json",
@@ -189,7 +188,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testJsonXml_4_EARFF() throws Exception {
+    void testJsonXml_4_EARFF() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root",
                 "json-to-xml/example_4.json",
@@ -198,7 +197,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_4_EARTF() throws Exception {
+    void testJsonXml_4_EARTF() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root_NamespaceLenient",
                 "json-to-xml/example_4.json",
@@ -207,7 +206,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_4_EARFT() throws Exception {
+    void testJsonXml_4_EARFT() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root_TypeHints",
                 "json-to-xml/example_4.json",
@@ -216,7 +215,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_4_EARTT() throws Exception {
+    void testJsonXml_4_EARTT() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root_NamespaceLenient_TypeHints",
                 "json-to-xml/example_4.json",
@@ -225,7 +224,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_4_EATT() throws Exception {
+    void testJsonXml_4_EATT() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_NamespaceLenient_TypeHints",
                 "json-to-xml/example_4.json",
@@ -238,7 +237,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testJsonXml_5_EARFF() throws Exception {
+    void testJsonXml_5_EARFF() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root",
                 "json-to-xml/example_5.json",
@@ -247,7 +246,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_5_EARTF() throws Exception {
+    void testJsonXml_5_EARTF() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root_NamespaceLenient",
                 "json-to-xml/example_5.json",
@@ -256,7 +255,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_5_EARFT() throws Exception {
+    void testJsonXml_5_EARFT() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root_TypeHints",
                 "json-to-xml/example_5.json",
@@ -265,7 +264,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_5_EARTT() throws Exception {
+    void testJsonXml_5_EARTT() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root_NamespaceLenient_TypeHints",
                 "json-to-xml/example_5.json",
@@ -274,7 +273,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_5_EATT() throws Exception {
+    void testJsonXml_5_EATT() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_NamespaceLenient_TypeHints",
                 "json-to-xml/example_5.json",
@@ -287,7 +286,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testJsonXml_6_EARFF() throws Exception {
+    void testJsonXml_6_EARFF() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root",
                 "json-to-xml/example_6.json",
@@ -296,7 +295,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_6_EARTF() throws Exception {
+    void testJsonXml_6_EARTF() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root_NamespaceLenient",
                 "json-to-xml/example_6.json",
@@ -305,7 +304,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_6_EARFT() throws Exception {
+    void testJsonXml_6_EARFT() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root_TypeHints",
                 "json-to-xml/example_6.json",
@@ -314,7 +313,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_6_EARTT() throws Exception {
+    void testJsonXml_6_EARTT() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root_NamespaceLenient_TypeHints",
                 "json-to-xml/example_6.json",
@@ -323,7 +322,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_6_EATT() throws Exception {
+    void testJsonXml_6_EATT() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_NamespaceLenient_TypeHints",
                 "json-to-xml/example_6.json",
@@ -336,7 +335,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testJsonXml_7_EARFF() throws Exception {
+    void testJsonXml_7_EARFF() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root",
                 "json-to-xml/example_7.json",
@@ -345,7 +344,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_7_EARTF() throws Exception {
+    void testJsonXml_7_EARTF() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root_NamespaceLenient",
                 "json-to-xml/example_7.json",
@@ -354,7 +353,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_7_EARFT() throws Exception {
+    void testJsonXml_7_EARFT() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root_TypeHints",
                 "json-to-xml/example_7.json",
@@ -363,7 +362,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_7_EARTT() throws Exception {
+    void testJsonXml_7_EARTT() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root_NamespaceLenient_TypeHints",
                 "json-to-xml/example_7.json",
@@ -372,7 +371,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_7_EATT() throws Exception {
+    void testJsonXml_7_EATT() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_NamespaceLenient_TypeHints",
                 "json-to-xml/example_7.json",
@@ -385,7 +384,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testJsonXml_8_EARFF() throws Exception {
+    void testJsonXml_8_EARFF() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root",
                 "json-to-xml/example_8.json",
@@ -394,7 +393,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_8_EARTF() throws Exception {
+    void testJsonXml_8_EARTF() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root_NamespaceLenient",
                 "json-to-xml/example_8.json",
@@ -403,7 +402,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_8_EARFT() throws Exception {
+    void testJsonXml_8_EARFT() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root_TypeHints",
                 "json-to-xml/example_8.json",
@@ -412,7 +411,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_8_EARTT() throws Exception {
+    void testJsonXml_8_EARTT() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root_NamespaceLenient_TypeHints",
                 "json-to-xml/example_8.json",
@@ -421,7 +420,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_8_EATT() throws Exception {
+    void testJsonXml_8_EATT() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_NamespaceLenient_TypeHints",
                 "json-to-xml/example_8.json",
@@ -434,7 +433,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
      *****************************************/
 
     @Test
-    public void testJsonXml_9_EARFF() throws Exception {
+    void testJsonXml_9_EARFF() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root",
                 "json-to-xml/example_9.json",
@@ -443,7 +442,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_9_EARTF() throws Exception {
+    void testJsonXml_9_EARTF() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root_NamespaceLenient",
                 "json-to-xml/example_9.json",
@@ -452,7 +451,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_9_EARFT() throws Exception {
+    void testJsonXml_9_EARFT() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root_TypeHints",
                 "json-to-xml/example_9.json",
@@ -461,7 +460,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_9_EARTT() throws Exception {
+    void testJsonXml_9_EARTT() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_Root_NamespaceLenient_TypeHints",
                 "json-to-xml/example_9.json",
@@ -470,7 +469,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
     }
 
     @Test
-    public void testJsonXml_9_EATT() throws Exception {
+    void testJsonXml_9_EATT() throws Exception {
         compareInputJsonFileWithOutputXmlFile(
                 "jsontoxmllegacy_Element_Array_NamespaceLenient_TypeHints",
                 "json-to-xml/example_9.json",
@@ -507,7 +506,7 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
 
             assertFalse(xmlDiff.hasDifferences());
 
-        } catch (Exception e) {
+        } catch (Exception _) {
             assertFalse(true);
         }
 
@@ -571,35 +570,35 @@ public class JsonToXmlLegacyTest extends CamelTestSupport {
                 new RouteBuilder() {
                     public void configure() {
                         from("direct:jsontoxmllegacy_Element_Array_Root")
-                                .to("jsontoxmllegacy://?elementName=element&arrayName=array&rootName=root&namespaceLenient=false&typeHints=false")
+                                .to("jsontoxml://?elementName=element&arrayName=array&rootName=root&namespaceLenient=false&typeHints=false")
                                 .to("mock:result");
                     }
                 },
                 new RouteBuilder() {
                     public void configure() {
                         from("direct:jsontoxmllegacy_Element_Array_Root_NamespaceLenient")
-                                .to("jsontoxmllegacy://?elementName=element&arrayName=array&rootName=root&namespaceLenient=true&typeHints=false")
+                                .to("jsontoxml://?elementName=element&arrayName=array&rootName=root&namespaceLenient=true&typeHints=false")
                                 .to("mock:result");
                     }
                 },
                 new RouteBuilder() {
                     public void configure() {
                         from("direct:jsontoxmllegacy_Element_Array_Root_TypeHints")
-                                .to("jsontoxmllegacy://?elementName=element&arrayName=array&rootName=root&namespaceLenient=false&typeHints=true")
+                                .to("jsontoxml://?elementName=element&arrayName=array&rootName=root&namespaceLenient=false&typeHints=true")
                                 .to("mock:result");
                     }
                 },
                 new RouteBuilder() {
                     public void configure() {
                         from("direct:jsontoxmllegacy_Element_Array_Root_NamespaceLenient_TypeHints")
-                                .to("jsontoxmllegacy://?elementName=element&arrayName=array&rootName=root&namespaceLenient=true&typeHints=true")
+                                .to("jsontoxml://?elementName=element&arrayName=array&rootName=root&namespaceLenient=true&typeHints=true")
                                 .to("mock:result");
                     }
                 },
                 new RouteBuilder() {
                     public void configure() {
                         from("direct:jsontoxmllegacy_Element_Array_NamespaceLenient_TypeHints")
-                                .to("jsontoxmllegacy://?elementName=element&arrayName=array&namespaceLenient=true&typeHints=true")
+                                .to("jsontoxml://?elementName=element&arrayName=array&namespaceLenient=true&typeHints=true")
                                 .to("mock:result");
                     }
                 },

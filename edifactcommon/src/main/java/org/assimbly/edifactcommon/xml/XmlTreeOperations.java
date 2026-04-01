@@ -16,6 +16,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import java.io.File;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class XmlTreeOperations
 {
@@ -31,9 +34,9 @@ public class XmlTreeOperations
 	
     public static Document loadDocument(Input input) throws Exception
     {
-        if (input instanceof FileInput)
+        if (input instanceof FileInput fileInput)
         {
-            return loadDocument(((FileInput)input).getFilename());
+            return loadDocument(fileInput.getFilename());
         }
         switch (input.getType())
         {
@@ -183,7 +186,7 @@ public class XmlTreeOperations
     
     public static void saveDocument( Document doc, String filename, String encoding, boolean bBigEndian, boolean bBOM, boolean prettyPrint, boolean omitXmlDecl ) throws Exception
     {
-        java.io.FileOutputStream outStream = new java.io.FileOutputStream( filename, false );
+        OutputStream outStream = Files.newOutputStream(Paths.get(filename));
         saveDocument(doc, outStream, encoding, bBigEndian, bBOM, prettyPrint, omitXmlDecl);
         outStream.close();
     }
@@ -512,7 +515,7 @@ public class XmlTreeOperations
         int n = 1;
         while (true)
         {
-            String s = pp + String.valueOf(n);
+            String s = pp + n;
             if (lookupNamespaceURI(node, s) == null)
                 return s;
             ++n;
@@ -602,8 +605,8 @@ public class XmlTreeOperations
     
     public static Element appendElement(Node parent, String nsURI, String localName)
     {
-        if (parent instanceof Document)
-            return (Element) parent.appendChild(((Document) parent).createElementNS(nsURI, localName));
+        if (parent instanceof Document document)
+            return (Element) parent.appendChild(document.createElementNS(nsURI, localName));
         return (Element) parent.appendChild(parent.getOwnerDocument().createElementNS(nsURI, localName));
     }
 

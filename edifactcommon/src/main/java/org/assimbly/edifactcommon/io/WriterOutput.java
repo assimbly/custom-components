@@ -7,13 +7,14 @@ import java.io.Writer;
 
 public class WriterOutput extends Output
 {
-	private Writer writer;
+	private final Writer writer;
 	
 	public WriterOutput(Writer writer)
 	{
 		super(Output.IO_WRITER);
 		this.writer = writer;
 	}
-	
+
+	@Override
 	public Writer getWriter() {return writer;}
 }

@@ -1,18 +1,14 @@
 package org.assimbly.exceltoxml;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.UriParam;
-import org.assimbly.util.helper.Base64Helper;
+import tools.jackson.core.JacksonException;
 import org.assimbly.exceltoxml.domain.ExcelRule;
-import org.assimbly.exceltoxml.exception.Excel2XmlException;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 public class ExcelToXmlConfiguration {
@@ -25,7 +21,9 @@ public class ExcelToXmlConfiguration {
     @Metadata(required = true)
     private String rules;
 
-    public ExcelToXmlConfiguration() {}
+    public ExcelToXmlConfiguration() {
+        //Used for serialization
+    }
 
     /**
      * Charset to use when converting Excel contents to XML
@@ -54,44 +52,25 @@ public class ExcelToXmlConfiguration {
     /**
      * Deserialized rules
      */
-    public List<ExcelRule> getReadRules() throws JsonProcessingException {
-
-        ObjectMapper mapper = new ObjectMapper();
-        TypeReference<List<ExcelRule>> typeRef = new TypeReference<List<ExcelRule>>() {};
-
-
-        System.out.println("rules: " + rules);
-        List<ExcelRule> excelRules = mapper.readValue(rules, typeRef);
-
-        // Now you have the list of objects directly, no need for the inner loop and second deserialization
-        for (ExcelRule rule : excelRules) {
-            System.out.println("Rule Name: " + rule.getName()); // Example of accessing a property
-        }
-
-        return excelRules;
-
-    }
-
     /*
-    public List<ExcelRule> getReadRules() {
-        byte[] json = Base64Helper.unmarshal(rules);
-
-        System.out.println("getReadRules");
-        String jsonString = new String(json, StandardCharsets.UTF_8);
-        System.out.println(jsonString);
-
-        return deserializeRules(json);
-    }
-
-    @JsonCreator
-    public List<ExcelRule> deserializeRules(byte[] json) {
+    public List<ExcelRule> getReadRules() throws JacksonException {
 
         ObjectMapper mapper = new ObjectMapper();
-        List<ExcelRule> rules = new ArrayList<>();
+        TypeReference<List<ExcelRule>> typeRef = new TypeReference<>() {};
 
+        return mapper.readValue(rules, typeRef);
 
+    }*/
+
+    public List<ExcelRule> getReadRules() throws JacksonException {
+        ObjectMapper mapper = new ObjectMapper();
+        TypeReference<List<ExcelRule>> typeRef = new TypeReference<>() {};
+
+        // Decode Base64 back to raw JSON before deserializing
+        byte[] decodedBytes = Base64.getDecoder().decode(rules);
+        String json = new String(decodedBytes, StandardCharsets.UTF_8);
+
+        return mapper.readValue(json, typeRef);
     }
-
-     */
 
 }

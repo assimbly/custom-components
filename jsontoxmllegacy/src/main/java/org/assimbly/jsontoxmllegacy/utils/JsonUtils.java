@@ -1,6 +1,6 @@
 package org.assimbly.jsontoxmllegacy.utils;
 
-import com.fasterxml.jackson.databind.node.JsonNodeType;
+import tools.jackson.databind.node.JsonNodeType;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;

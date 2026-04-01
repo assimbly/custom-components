@@ -1,11 +1,13 @@
 package org.assimbly.soap;
 
+import javax.wsdl.*;
+import java.util.*;
+import org.assimbly.soap.util.helpers.*;
+
 import com.ibm.wsdl.extensions.soap.SOAPHeaderImpl;
 import com.ibm.wsdl.extensions.soap12.SOAP12HeaderImpl;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.assimbly.auth.endpoint.annotation.Secured;
@@ -13,25 +15,19 @@ import org.assimbly.soap.domain.SoapAction;
 import org.assimbly.soap.domain.SoapAttribute;
 import org.assimbly.soap.domain.SoapHeader;
 import org.assimbly.soap.domain.SoapHttpHeader;
-import org.assimbly.soap.util.helpers.*;
 
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.core.MediaType;
-import javax.wsdl.*;
 import javax.wsdl.extensions.schema.Schema;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.*;
+
 
 @Secured
 @Consumes(MediaType.APPLICATION_JSON)
 public class SoapActionsService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SoapActionsService.class);
+    public String getSoapActions(String url) throws WSDLException, IOException {
 
-    public String getSoapActions(String url) throws WSDLException, IOException, URISyntaxException {
-
-        System.out.println("x");
         List<SoapAction> list = getSoapActionsList(url);
         // add elements to the list
 
@@ -43,7 +39,7 @@ public class SoapActionsService {
 
         return jsonArray.toString(4);
     }
-    public List<SoapAction> getSoapActionsList(String wsdl) throws WSDLException, IOException, URISyntaxException {
+    public List<SoapAction> getSoapActionsList(String wsdl) throws WSDLException, IOException {
         List<SoapAction> results = new ArrayList<>();
         List<String> added = new ArrayList<>();
         List<SoapHttpHeader> httpHeaders = new ArrayList<>();

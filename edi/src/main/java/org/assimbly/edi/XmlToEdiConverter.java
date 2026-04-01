@@ -1,7 +1,6 @@
 package org.assimbly.edi;
 
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.parsers.SAXParser;
@@ -10,6 +9,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class XmlToEdiConverter extends DefaultHandler {
 
@@ -47,13 +47,13 @@ public class XmlToEdiConverter extends DefaultHandler {
     }
 
     @Override
-    public void startDocument () throws SAXException {
+    public void startDocument () {
         parsedSegments = new ArrayList<>();
     }
 
     @Override
     public void startElement(String uri, String localName,
-                             String qName, Attributes attributes) throws SAXException {
+                             String qName, Attributes attributes) {
         if (localName.equals(ELEMENT_TYPE_ROOT)) {
             return;
         }
@@ -97,19 +97,18 @@ public class XmlToEdiConverter extends DefaultHandler {
     }
 
     @Override
-    @SuppressWarnings("StringEquality")
-    public void characters(char ch[], int start, int length) throws SAXException {
-        if (currentElement == ELEMENT_TYPE_FIELD && currentField.data == null) {
+    public void characters(char[] ch, int start, int length) {
+        if (Objects.equals(currentElement, ELEMENT_TYPE_FIELD) && currentField.data == null) {
             currentField.data = Arrays.copyOfRange(ch, start, start + length);
             return;
         }
 
-        if (currentElement == ELEMENT_TYPE_COMPONENT && currentComponent.data == null) {
+        if (Objects.equals(currentElement, ELEMENT_TYPE_COMPONENT) && currentComponent.data == null) {
             currentComponent.data = Arrays.copyOfRange(ch, start, start + length);
             return;
         }
 
-        if (currentElement == ELEMENT_TYPE_SUBCOMPONENT && currentSubcomponent.data == null) {
+        if (Objects.equals(currentElement, ELEMENT_TYPE_SUBCOMPONENT) && currentSubcomponent.data == null) {
             currentSubcomponent.data = Arrays.copyOfRange(ch, start, start + length);
         }
     }
@@ -120,7 +119,7 @@ public class XmlToEdiConverter extends DefaultHandler {
     private class EdiWriter {
 
         private static final String LINE_BREAK = "LB";
-        private List<Segment> segments;
+        private final List<Segment> segments;
 
         EdiWriter(List<Segment> segments) {
             this.segments = segments;
@@ -188,26 +187,26 @@ public class XmlToEdiConverter extends DefaultHandler {
 
     // Data structure of EDI represented in XML
 
-    private class Segment {
-        private String name;
-        private List<Field> fields = new ArrayList<>();
+    private static class Segment {
+        private final String name;
+        private final List<Field> fields = new ArrayList<>();
 
         Segment(String name) {
             this.name = name;
         }
     }
 
-    private class Field {
+    private static class Field {
         private char[] data;
-        private List<Component> components = new ArrayList<>();
+        private final List<Component> components = new ArrayList<>();
     }
 
-    private class Component {
+    private static class Component {
         private char[] data;
-        private List<Subcomponent> subcomponents = new ArrayList<>();
+        private final List<Subcomponent> subcomponents = new ArrayList<>();
     }
 
-    private class Subcomponent {
+    private static class Subcomponent {
         private char[] data;
     }
 }

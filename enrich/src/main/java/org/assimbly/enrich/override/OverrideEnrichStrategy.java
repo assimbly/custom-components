@@ -2,18 +2,15 @@ package org.assimbly.enrich.override;
 
 import org.apache.camel.AggregationStrategy;
 import org.apache.camel.Exchange;
-import org.apache.log4j.Logger;
 import org.assimbly.util.exception.EnrichException;
 
 import java.util.Map;
 
 public class OverrideEnrichStrategy implements AggregationStrategy {
 
-    final static Logger logger = Logger.getLogger(OverrideEnrichStrategy.class);
-
     @Override
     public Exchange aggregate(Exchange original, Exchange resource) {
-        Exchange result = null;
+        Exchange result;
 
         if (original == null) {
             result = resource;

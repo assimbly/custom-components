@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.regex.Pattern;
@@ -77,7 +78,7 @@ public class Core
 		public SequenceCache(IEnumerable source) 
 		{
 			sourceSequence = source;
-			elements = new ArrayList<Object>();
+			elements = new ArrayList<>();
 		}
 
 		public IEnumerator enumerator() throws Exception 
@@ -116,7 +117,7 @@ public class Core
 				public Enumerator(IEnumerator x)
 				{
 					this.x = x; 
-					v = new HashSet<Object>();
+					v = new HashSet<>();
 				}
 				
 				public boolean moveNext() throws Exception
@@ -315,7 +316,7 @@ public class Core
 							return false;
 						
 						Object result = y.invoke(x.current());
-						if (result instanceof Boolean && ((Boolean) result).booleanValue())
+						if (result instanceof Boolean boolean1 && boolean1.booleanValue())
 						{
 							++pos;
 							return true;
@@ -1094,7 +1095,7 @@ public class Core
 	public static long divide(long a, long b) { return a / b; }
 	public static double divide(double a, double b) { return a / b; }
 	public static BigInteger divide(BigInteger a, BigInteger b) { return a.divide(b); }
-	public static BigDecimal divide(BigDecimal a, BigDecimal b) { return a.divide(b, 60 + a.scale() + b.scale(), BigDecimal.ROUND_HALF_UP); }
+	public static BigDecimal divide(BigDecimal a, BigDecimal b) { return a.divide(b, 60 + a.scale() + b.scale(), RoundingMode.HALF_UP); }
 
 	public static int ceiling(int x) { return x; }
 	public static long ceiling(long x) { return x; }
@@ -1105,12 +1106,12 @@ public class Core
 
 	public static double ceiling(double d) { return Math.ceil(d); }
 	public static double floor(double d) { return Math.floor(d); }
-	public static double round(double d) { return round(new BigDecimal(d)).doubleValue(); }
+	public static double round(double d) { return round(BigDecimal.valueOf(d)).doubleValue(); }
 
 	public static BigInteger ceiling(BigInteger n) { return n; }
-	public static BigDecimal ceiling(BigDecimal n) { return n.setScale(0, BigDecimal.ROUND_CEILING); }
+	public static BigDecimal ceiling(BigDecimal n) { return n.setScale(0, RoundingMode.CEILING); }
 	public static BigInteger floor(BigInteger n) { return n; }
-	public static BigDecimal floor(BigDecimal n) { return n.setScale(0, BigDecimal.ROUND_FLOOR); }
+	public static BigDecimal floor(BigDecimal n) { return n.setScale(0, RoundingMode.FLOOR); }
 	public static BigInteger round(BigInteger n) { return n; }
 	public static BigDecimal round(BigDecimal n) { return n.setScale(0, n.signum() == -1 ? BigDecimal.ROUND_HALF_DOWN : BigDecimal.ROUND_HALF_UP); }
 
@@ -1238,28 +1239,28 @@ public class Core
 
 	public static String toString(Object o) throws Exception
 	{
-		if (o instanceof Boolean)
-			return CoreTypes.castToString((Boolean) o);
-		if (o instanceof Integer)
-			return CoreTypes.castToString((Integer) o);
-		if (o instanceof Long)
-			return CoreTypes.castToString((Long) o);
-		if (o instanceof Double)
-			return CoreTypes.castToString((Double) o);
-		if (o instanceof BigInteger)
-			return CoreTypes.castToString((BigInteger) o);
-		if (o instanceof BigDecimal)
-			return CoreTypes.castToString((BigDecimal) o);
-		if (o instanceof String)
-			return CoreTypes.castToString((String) o);
-		if (o instanceof DateTime)
-			return CoreTypes.castToString((DateTime) o);
-		if (o instanceof Duration)
-			return CoreTypes.castToString((Duration) o);
-		if (o instanceof javax.xml.namespace.QName)
-			return CoreTypes.castToString((javax.xml.namespace.QName) o);
-		if (o instanceof IMFNode)
-			return CoreTypes.castToString((IMFNode) o);
+		if (o instanceof Boolean boolean1)
+			return CoreTypes.castToString(boolean1);
+		if (o instanceof Integer integer)
+			return CoreTypes.castToString(integer);
+		if (o instanceof Long long1)
+			return CoreTypes.castToString(long1);
+		if (o instanceof Double double1)
+			return CoreTypes.castToString(double1);
+		if (o instanceof BigInteger integer)
+			return CoreTypes.castToString(integer);
+		if (o instanceof BigDecimal decimal)
+			return CoreTypes.castToString(decimal);
+		if (o instanceof String string)
+			return CoreTypes.castToString(string);
+		if (o instanceof DateTime time)
+			return CoreTypes.castToString(time);
+		if (o instanceof Duration duration)
+			return CoreTypes.castToString(duration);
+		if (o instanceof javax.xml.namespace.QName name)
+			return CoreTypes.castToString(name);
+		if (o instanceof IMFNode node)
+			return CoreTypes.castToString(node);
 			
 		return null;
 	}
@@ -1270,8 +1271,8 @@ public class Core
 		if (exists(ns))
 		{
 			Object n = first(ns);
-			if (n instanceof IMFDocumentNode)
-				return box(((IMFDocumentNode) n).getDocumentUri());
+			if (n instanceof IMFDocumentNode node)
+				return box(node.getDocumentUri());
 		}
 		
 		return new MFEmptySequence();
@@ -1332,11 +1333,11 @@ public class Core
 	
 	public static IEnumerable tokenize(String input, String delimiter)
 	{
-		ArrayList<String> tokens = new ArrayList<String>();
+		ArrayList<String> tokens = new ArrayList<>();
 		int i=0;
 		int j=0;
 		int dl = delimiter.length();
-		//int il = input.length();
+
 		while(true)
 		{
 			i = input.indexOf(delimiter, j);
@@ -1354,7 +1355,7 @@ public class Core
 	
 	public static IEnumerable tokenizeByLength(String input, double length)
 	{
-		ArrayList<String> tokens = new ArrayList<String>();
+		ArrayList<String> tokens = new ArrayList<>();
 		
 		int l = input.length();
 		int step = (int) length;
@@ -1383,7 +1384,7 @@ public class Core
 	{
 		if (val.length() == 0)
 			return BigInteger.valueOf(0);
-		return BigInteger.valueOf((long) val.charAt(0));
+		return BigInteger.valueOf(val.charAt(0));
 	}
 
 	public static String FormatNumber(BigDecimal bd, String sPattern)
@@ -1410,7 +1411,7 @@ public class Core
 
 	public static DateTime ParseDateTime(String sInput, String sPattern)
 	{
-		if( sPattern.length() == 0 )
+		if( sPattern.isEmpty() )
 			throw new IllegalArgumentException( "Empty pattern.");
 
 		DateTimeFormatParser dtfp = new DateTimeFormatParser( sPattern);
@@ -1530,7 +1531,7 @@ public class Core
 
 	public static IMFNode createNamespace(String prefix, String content)
 	{
-		if (prefix.length() == 0)
+		if (prefix.isEmpty())
 			return new MFAttribute("xmlns", "http://www.w3.org/2000/xmlns/", "", box(content));
 		else
 			return new MFAttribute(prefix, "http://www.w3.org/2000/xmlns/", "xmlns", box(content));
@@ -1710,15 +1711,17 @@ public class Core
 	private static class FilterSequenceByPositionRange implements IEnumerable
 	{
 		private IEnumerable sequence;
-		private BigInteger from, till;		// 1-based, both inclusive
+		private final BigInteger from;
+        private final BigInteger till;		// 1-based, both inclusive
 
 		class Enumerator implements IEnumerator
 		{
 			private int pos = 0;
 			private IEnumerator enumerator;
-			private BigInteger skip, take;
+			private BigInteger skip;
+			private BigInteger take;
 
-			public Enumerator( IEnumerator enumerator, BigInteger skip, BigInteger take ) throws Exception 
+			public Enumerator( IEnumerator enumerator, BigInteger skip, BigInteger take )
 			{
 				this.enumerator = enumerator;
 				this.skip = skip;

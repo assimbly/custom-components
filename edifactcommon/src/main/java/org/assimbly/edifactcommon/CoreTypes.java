@@ -9,6 +9,7 @@ import org.assimbly.edifactcommon.types.Duration;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
@@ -65,7 +66,7 @@ public class CoreTypes
 				mantissa = "0" + mantissa;
 			if (mantissa.endsWith("."))
 				mantissa = mantissa + "0";
-			if (mantissa.length() == 0)
+			if (mantissa.isEmpty())
 				mantissa = "0";
 			if (exponent.endsWith("+") || exponent.endsWith("-"))
 				exponent = exponent + "0";
@@ -73,7 +74,7 @@ public class CoreTypes
 
 		public String toString()
 		{
-			if (exponent.length() > 0)
+			if (!exponent.isEmpty())
 				return sign + mantissa + "E" + exponent;
 			else
 				return sign + mantissa;
@@ -187,28 +188,18 @@ public class CoreTypes
 			state = PNfollow[state][cls];
 		}
 
-		switch (state)
-		{
-		case 0:
-		case 1:
-		case 3:
-		case 6:
-		case 7:
-			return 0;		
+        return switch (state) {
+            case 2 -> 1;    // integer
+            case 4 -> 2;
+            case 5 -> {
+                buffer.append('0');
+                yield 2;
+            }
+            case 8 -> 3;    // float
+            default -> 0;
+        };
 
-		case 2:
-			return 1;	// integer
-		case 4:
-			return 2;
-		case 5:
-			buffer.append('0');
-			return 2;
-		case 8:
-			return 3;	// float
-		}
-
-		return 0;
-	}
+    }
 
 
 
@@ -234,8 +225,8 @@ public class CoreTypes
 	
 	public static IMFNode castToIMFNode(Object o)
 	{
-		if (o instanceof IMFNode)
-			return (IMFNode) o;
+		if (o instanceof IMFNode node)
+			return node;
 		
 		final class ANode implements IMFNode
 		{
@@ -894,7 +885,7 @@ public class CoreTypes
 			scale = 14 - nStartDigit;
 			if( scale < 0 ) scale = 0;
 		}
-		return new BigDecimal( d ).setScale(scale, BigDecimal.ROUND_HALF_UP);
+		return BigDecimal.valueOf( d ).setScale(scale, RoundingMode.HALF_UP);
 	}
 	
 	public static BigDecimal castToBigDecimal(Double d)
@@ -1048,7 +1039,7 @@ public class CoreTypes
 		// 1.234E567 => 1.234E+567
 		int e = s.indexOf("E");
 		if (e > 0 && s.charAt(e+1) != '-' )
-		s = s.substring(0, e) + "E+" + s.substring(e+1);
+			s = s.substring(0, e) + "E+" + s.substring(e+1);
 		return s;
 	}
 	
@@ -1341,8 +1332,8 @@ public class CoreTypes
 	{
 		if (!exists(v))
 			throw new NullPointerException();
-		if (v instanceof Integer)
-			return ((Integer)v).intValue();
+		if (v instanceof Integer integer)
+			return integer.intValue();
 		return castToInt(v.toString());
 	}
 
@@ -1350,8 +1341,8 @@ public class CoreTypes
 	{
 		if (!exists(v))
 			throw new NullPointerException();
-		if (v instanceof Long)
-			return ((Long)v).longValue();
+		if (v instanceof Long long1)
+			return long1.longValue();
 		return castToLong(v.toString());
 	}
 
@@ -1359,8 +1350,8 @@ public class CoreTypes
 	{
 		if (!exists(v))
 			throw new NullPointerException();
-		if (v instanceof BigInteger)
-			return (BigInteger)v;
+		if (v instanceof BigInteger integer)
+			return integer;
 		return castToBigInteger(v.toString());
 	}
 
@@ -1368,8 +1359,8 @@ public class CoreTypes
 	{
 		if (!exists(v))
 			throw new NullPointerException();
-		if (v instanceof BigDecimal)
-			return (BigDecimal)v;
+		if (v instanceof BigDecimal decimal)
+			return decimal;
 		return castToBigDecimal(v.toString());
 	}
 
@@ -1377,8 +1368,8 @@ public class CoreTypes
 	{
 		if (!exists(v))
 			throw new NullPointerException();
-		if (v instanceof Double)
-			return ((Double)v).doubleValue();
+		if (v instanceof Double double1)
+			return double1.doubleValue();
 		return castToDouble(v.toString());
 	}
 
@@ -1386,23 +1377,23 @@ public class CoreTypes
 	{
 		if (!exists(v))
 			throw new NullPointerException();
-		if (v instanceof String)
-			return (String)v;
-		if (v instanceof BigDecimal)
-			return castToString((BigDecimal)v);
-		if (v instanceof Double)
-			return castToString(((Double)v).doubleValue());
-		if (v instanceof Float)
-			return castToString((double) (((Float)v).floatValue()));
-		if (v instanceof javax.xml.namespace.QName)
-			return castToString((javax.xml.namespace.QName)v);
-		if (v instanceof Boolean)
-			return castToString(((Boolean)v).booleanValue());
-		if (v instanceof byte[])
-			return castToString((byte[])v);
+		if (v instanceof String string)
+			return string;
+		if (v instanceof BigDecimal decimal)
+			return castToString(decimal);
+		if (v instanceof Double double1)
+			return castToString(double1.doubleValue());
+		if (v instanceof Float float1)
+			return castToString((float1.floatValue()));
+		if (v instanceof javax.xml.namespace.QName name)
+			return castToString(name);
+		if (v instanceof Boolean boolean1)
+			return castToString(boolean1.booleanValue());
+		if (v instanceof byte[] bytes)
+			return castToString(bytes);
 
-		if (v instanceof IMFNode)
-			return ((IMFNode) v).value();
+		if (v instanceof IMFNode node)
+			return node.value();
 
 		return v.toString();
 	}
@@ -1425,8 +1416,8 @@ public class CoreTypes
 	{
 		if (!exists(v))
 			throw new NullPointerException();
-		if (v instanceof Boolean)
-			return ((Boolean)v).booleanValue();
+		if (v instanceof Boolean boolean1)
+			return boolean1.booleanValue();
 		return castToBool(v.toString());
 	}
 	
@@ -1515,13 +1506,13 @@ public class CoreTypes
 		return result;
 	}
 
-	public static Boolean box( boolean    v ) { return new Boolean(v); }
-	public static Byte    box( byte       v ) { return new Byte   (v); }
-	public static Short   box( short      v ) { return new Short  (v); }
-	public static Integer box( int        v ) { return new Integer(v); }
-	public static Long    box( long       v ) { return new Long   (v); }
-	public static Float   box( float      v ) { return new Float  (v); }
-	public static Double  box( double     v ) { return new Double (v); }
+	public static Boolean box( boolean    v ) { return Boolean.valueOf(v); }
+	public static Byte    box( byte       v ) { return Byte.valueOf(v); }
+	public static Short   box( short      v ) { return Short.valueOf(v); }
+	public static Integer box( int        v ) { return Integer.valueOf(v); }
+	public static Long    box( long       v ) { return Long.valueOf(v); }
+	public static Float   box( float      v ) { return Float.valueOf(v); }
+	public static Double  box( double     v ) { return Double.valueOf(v); }
 	public static Object            box( Object     v ) { return v; }
 	public static String            box( String     v ) { return v; }
 	public static byte[]          box( byte[]   v ) { return v; }

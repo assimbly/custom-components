@@ -10,18 +10,19 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+
 
 public class FormToXmlProcessor implements Processor {
 
-    private FormToXmlEndpoint endpoint;
+    private final FormToXmlEndpoint endpoint;
 
     public FormToXmlProcessor(FormToXmlEndpoint endpoint) {
         this.endpoint = endpoint;
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void process(Exchange exchange) throws Exception {
         FormToXmlConfiguration configuration = endpoint.getConfiguration();
 
@@ -29,7 +30,7 @@ public class FormToXmlProcessor implements Processor {
         String result = java.net.URLDecoder.decode(input, configuration.getEncoding());
         String[] pairs = result.split("&");
 
-        Map<String, String> items = new HashMap<>();
+        Map<String, String> items = new LinkedHashMap<>();
 
         for (String pair : pairs) {
             String[] keyValue = pair.split("=");
@@ -39,18 +40,18 @@ public class FormToXmlProcessor implements Processor {
         }
 
         XStream xStream = new XStream();
-        xStream.alias("items", java.util.Map.class);
+        xStream.alias("items", java.util.LinkedHashMap.class);
         xStream.registerConverter(new XstreamMapEntryConverter());
 
         try(ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             Writer writer = new OutputStreamWriter(outputStream, configuration.getEncoding())) {
 
-            String xmlProlog = String.format("<?xml version=\"1.0\" encoding=\"%s\"?>\n", configuration.getEncoding());
+            String xmlProlog = "<?xml version=\"1.0\" encoding=\"%s\"?>\n".formatted(configuration.getEncoding());
             writer.write(xmlProlog);
             xStream.toXML(items, writer);
 
             String xml = outputStream.toString(configuration.getEncoding());
-            
+
             exchange.getIn().setHeader(Exchange.CONTENT_TYPE, MediaType.APPLICATION_XML_VALUE);
             exchange.getIn().setBody(xml);
         }

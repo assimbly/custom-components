@@ -7,13 +7,13 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 
 import java.io.Serializable;
-import java.util.Arrays;
+import java.util.List;
 
 public class MongoClientProvider implements Serializable {
 
     private static final MongoClientProvider INSTANCE = new MongoClientProvider();
 
-    private MongoClient client;
+    private transient MongoClient client;
 
     public static MongoClientProvider getInstance() {
         return INSTANCE;
@@ -37,7 +37,7 @@ public class MongoClientProvider implements Serializable {
     private void init() {
         client = MongoClients.create(MongoClientSettings.builder()
                 .applyToClusterSettings(builder ->
-                        builder.hosts(Arrays.asList(new ServerAddress("flux-mongo", 27017))))
+                        builder.hosts(List.of(new ServerAddress("flux-mongo", 27017))))
                 .build());
     }
 }

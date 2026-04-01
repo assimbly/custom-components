@@ -69,7 +69,7 @@ public class XmlFormatter implements ValueFormatter
 		try {
 			return Base64.decode( newvalue);
 		}
-		catch ( java.io.IOException e ) {
+		catch ( java.io.IOException _ ) {
 			return null;
 		}
 	}

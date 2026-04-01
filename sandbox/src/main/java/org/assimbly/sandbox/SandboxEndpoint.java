@@ -31,8 +31,9 @@ public class SandboxEndpoint extends LanguageEndpoint {
      */
     @Override
     public Producer createProducer() throws Exception {
-        LanguageProducer lP = (LanguageProducer) super.createProducer();
-        return new SandboxProducer(lP.getEndpoint());
+        try(LanguageProducer lP = (LanguageProducer) super.createProducer()) {
+            return new SandboxProducer(lP.getEndpoint());
+        }
     }
 
 }

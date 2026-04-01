@@ -12,17 +12,14 @@ import org.assimbly.oauth2token.service.TokenService;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class OAuth2TokenProcessor implements Processor {
 
     private static final Logger logger = LoggerFactory.getLogger(OAuth2TokenProcessor.class);
 
-    private OAuth2TokenEndpoint endpoint;
+    private final OAuth2TokenEndpoint endpoint;
 
-    public static int EXPIRY_DELAY_DEFAULT = -25;
-
-    public OAuth2TokenProcessor() {}
+    public static final int EXPIRY_DELAY_DEFAULT = -25;
 
     public OAuth2TokenProcessor(OAuth2TokenEndpoint endpoint) {
         this.endpoint = endpoint;
@@ -58,15 +55,12 @@ public class OAuth2TokenProcessor implements Processor {
         try {
             // expire date vars
             long expireDateLong = Long.parseLong(expireDate);
+            int expiryDelayInt = getExpiryDelayAsInt(expiryDelay);
+
             expireCal.setTimeInMillis(expireDateLong);
             expireDelayCal = (Calendar) expireCal.clone();
-            int expiryDelayInt = EXPIRY_DELAY_DEFAULT;
-            try {
-                expiryDelayInt = - Integer.parseInt(expiryDelay);
-            } catch (Exception e) {
-                logger.warn("Failed to parse expiryDelay value. Default value is "+expiryDelayInt);
-            }
             expireDelayCal.add(Calendar.SECOND, expiryDelayInt);
+
         } catch (Exception e) {
             logger.error("ERROR to calculate/set expire date vars", e);
         }
@@ -79,6 +73,15 @@ public class OAuth2TokenProcessor implements Processor {
         }
 
         setHeaderWithToken(exchange, tokenNames, accessToken);
+    }
+
+    private int getExpiryDelayAsInt(String expiryDelay){
+        try {
+            return Integer.parseInt(expiryDelay);
+        } catch (Exception _) {
+            logger.warn("Failed to parse expiryDelay value. Default value is {}", expiryDelay);
+            return EXPIRY_DELAY_DEFAULT;
+        }
     }
 
     private static String getAccessTokenFromService(
@@ -99,7 +102,7 @@ public class OAuth2TokenProcessor implements Processor {
     private static void setHeaderWithToken(Exchange exchange, List<String> tokenNames, String accessToken) {
         for (String name : tokenNames) {
             if (!TenantVariableManager.isStaticTenantVariable(name)) {
-                exchange.getOut().setHeader(name, accessToken);
+                exchange.getMessage().setHeader(name, accessToken);
             }
         }
     }
@@ -108,7 +111,7 @@ public class OAuth2TokenProcessor implements Processor {
         return Arrays.stream(tokenName.split(","))
                 .map(String::trim)
                 .filter(StringUtils::isNotEmpty)
-                .collect(Collectors.toList());
+                .toList();
     }
 
 }

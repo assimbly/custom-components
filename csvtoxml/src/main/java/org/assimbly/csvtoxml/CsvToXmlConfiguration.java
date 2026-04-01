@@ -11,7 +11,9 @@ public class CsvToXmlConfiguration {
     @Metadata(required = true)
     private String encoding;
 
-    public CsvToXmlConfiguration() {}
+    public CsvToXmlConfiguration() {
+        // used for serialization
+    }
 
     /**
      * Charset to use when converting CSV to XML.

@@ -7,7 +7,7 @@ import java.io.StringReader;
 
 public class StringInput extends ReaderInput 
 {
-	private String content;
+	private final String content;
 	
 	public StringInput(String content)
 	{

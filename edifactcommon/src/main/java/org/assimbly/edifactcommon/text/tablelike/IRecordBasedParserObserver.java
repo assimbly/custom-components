@@ -14,6 +14,8 @@
 
 package org.assimbly.edifactcommon.text.tablelike;
 
+import org.assimbly.edifactcommon.text.tablelike.Record;
+
 public interface IRecordBasedParserObserver {
     void notifyAboutRecordFound(Record record);
 }

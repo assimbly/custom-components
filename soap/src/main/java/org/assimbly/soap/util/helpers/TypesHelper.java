@@ -13,15 +13,14 @@ public class TypesHelper {
     public static Schema schema(Types types, String namespace){
         for(Object o : types.getExtensibilityElements()) {
 
-            if (o instanceof Schema) {
-                Schema sc = (Schema) o;
+            if (o instanceof Schema sc) {
 
                 if(sc.getElement().getAttribute("targetNamespace").equals(namespace)) {
                     return sc;
                 }
 
                 // When the schema has imports, search in the imports as well
-                if(sc.getImports().size() > 0){
+                if(!sc.getImports().isEmpty()){
                     SchemaImport imp = SchemaHelper.findImport(sc, namespace);
 
                     if(imp != null && imp.getReferencedSchema() != null)

@@ -11,5 +11,7 @@ public class FileOutput extends StreamOutput
 	}
 	
 	public String getFilename() {return filename;}
+
+	@Override
 	public void close() throws Exception {getStream().close();}
 }

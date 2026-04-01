@@ -1,5 +1,8 @@
 package org.assimbly.auth.endpoint;
 
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Response;
+
 import com.mongodb.client.MongoDatabase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,18 +15,15 @@ import org.assimbly.auth.domain.User;
 import org.assimbly.auth.mongo.MongoDao;
 import org.assimbly.util.helper.Base64Helper;
 
-import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.Response;
-import java.io.UnsupportedEncodingException;
-
 import static java.nio.charset.StandardCharsets.UTF_8;
+
 
 @Path("/token")
 public class TokenService {
 
     private static final Logger LOG = LoggerFactory.getLogger(TokenService.class);
 
-    private MongoDao mongoDao;
+    private final MongoDao mongoDao;
 
     public TokenService(MongoDatabase database){
         mongoDao = new MongoDao(database);
@@ -67,13 +67,8 @@ public class TokenService {
             return Response.status(Response.Status.UNAUTHORIZED)
                     .entity(Errors.INVALID_TENANT)
                     .build();
-        } catch (UnsupportedEncodingException e) {
-            LOG.warn(e.getMessage());
-
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(Errors.MAX_REQUESTS)
-                    .build();
         }
+
     }
 
     /**
@@ -134,9 +129,8 @@ public class TokenService {
      *
      * @param user to create the token for.
      * @return a valid Signed JWT.
-     * @throws UnsupportedEncodingException when the encoding used to sign the token is not supported.
      */
-    private String buildToken(User user) throws UnsupportedEncodingException {
+    private String buildToken(User user) {
         return JwtBuilder.build(user.getEmail(), "role");
     }
 

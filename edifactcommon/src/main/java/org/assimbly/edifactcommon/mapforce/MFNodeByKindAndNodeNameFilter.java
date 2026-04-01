@@ -32,9 +32,8 @@ public class MFNodeByKindAndNodeNameFilter implements IEnumerable
 			while (baseEnum.moveNext())
 			{
 				Object o = baseEnum.current();
-				if (o instanceof IMFNode)
+				if (o instanceof IMFNode node)
 				{
-					IMFNode node = (IMFNode) o;
 					if ((node.getNodeKind() & nodeKind) != 0 && node.getNodeName().equals(name))
 					{	
 						pos++;

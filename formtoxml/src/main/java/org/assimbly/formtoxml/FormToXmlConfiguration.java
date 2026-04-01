@@ -9,7 +9,9 @@ public class FormToXmlConfiguration {
     @Metadata(required = true)
     private String encoding;
 
-    public FormToXmlConfiguration() {}
+    public FormToXmlConfiguration() {
+        //used for serialization or reflection
+    }
 
     /**
      * Charset to use when converting Form Data to XML.

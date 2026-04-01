@@ -1,5 +1,9 @@
 package org.assimbly.tenantvariables.mongo;
 
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
@@ -12,16 +16,13 @@ import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 public class MongoDao {
 
     private static final Logger LOG = LoggerFactory.getLogger(MongoDao.class);
 
     private static final String TENANT_VARIABLES_COLLECTION_NAME = "tenant_variables";
-    private static final String NAME_FIELD = "name";
 
     private static final String CREATED_BY_SYSTEM = "System";
     private static final String UPDATED_BY_SYSTEM = "System";
@@ -29,7 +30,7 @@ public class MongoDao {
     private static final String TENANT_VARIABLE_EXPRESSION = "@\\{(.*?)}";
 
     public static TenantVariable findTenantVariableByName(String variableName, String tenant) {
-        return findTenantVariableByName(variableName, tenant, TenantVariable.TenantVarType.TenantVariable);
+        return findTenantVariableByName(variableName, tenant, TenantVariable.TenantVarType.TENANT_VARIABLE);
     }
 
     public static TenantVariable findTenantVariableByName(String variableName, String tenant, TenantVariable.TenantVarType tenantVarType) {
@@ -62,19 +63,19 @@ public class MongoDao {
         return tenantVariables;
     }
 
-    static public String getTenantVariableValue(String tenantVarName, String tenant, String environment) {
-        return getTenantVariableValue(tenantVarName, tenant, environment, TenantVariable.TenantVarType.TenantVariable);
+    public static String getTenantVariableValue(String tenantVarName, String tenant, String environment) {
+        return getTenantVariableValue(tenantVarName, tenant, environment, TenantVariable.TenantVarType.TENANT_VARIABLE);
     }
 
     public static String getTenantVariableValue(String tenantVarName, String tenant, String environment, TenantVariable.TenantVarType tenantVarType) {
 
         TenantVariable tenantVar = MongoDao.findTenantVariableByName(tenantVarName, tenant, tenantVarType);
         if(tenantVar==null) {
-            LOG.info(String.format("tenantVar %s of type %s is NULL", tenantVarType.name(), tenantVarName));
+            LOG.info("tenantVar {} of type {} is NULL", tenantVarType.name(), tenantVarName);
             return null;
         }
 
-        StringBuffer output = new StringBuffer();
+        StringBuilder output = new StringBuilder();
         String tenantVariableValue = tenantVar.find(environment)
                 .orElseThrow(() -> new EnvironmentValueNotFoundException("Tenant variable (" + tenantVarName + ") value not found for environment: " + environment))
                 .getValue();
@@ -107,25 +108,25 @@ public class MongoDao {
     }
 
     public static String interpolatePossibleTenantVariable(String value, String tenant) {
-        return interpolatePossibleTenantVariable(value, tenant, TenantVariable.TenantVarType.TenantVariable);
+        return interpolatePossibleTenantVariable(value, tenant, TenantVariable.TenantVarType.TENANT_VARIABLE);
     }
 
     public static String interpolatePossibleTenantVariable(String value, String tenant, TenantVariable.TenantVarType tenantVarType) {
-        StringBuffer valueBuf = new StringBuffer();
+
+        StringBuilder valueBuf = new StringBuilder();
         String environment = TenantVariablesProcessor.getEnvironment();
         Pattern pattern = Pattern.compile(TENANT_VARIABLE_EXPRESSION);
         Matcher matcher = pattern.matcher(value);
 
-        while(matcher.find()){
-            String varName = matcher.group(1);
-            TenantVariablesProcessor tenantVarProcessor = new TenantVariablesProcessor();
-            String environmentVarValue = "";
+        TenantVariablesProcessor tenantVarProcessor = new TenantVariablesProcessor();
 
-            TenantVariable tenantVar = MongoDao.findTenantVariableByName(varName, tenant, tenantVarType);
-            Optional<EnvironmentValue> environmentVar = tenantVar.find(environment);
-            if(environmentVar.isPresent()) {
-                environmentVarValue = tenantVarProcessor.getValueByEnvironmentValue(environmentVar.get());
-            }
+        while (matcher.find()) {
+            String varName = matcher.group(1);
+
+            String environmentVarValue = Optional.ofNullable(MongoDao.findTenantVariableByName(varName, tenant, tenantVarType))
+                    .flatMap(tv -> tv.find(environment))
+                    .map(tenantVarProcessor::getValueByEnvironmentValue)
+                    .orElse("");
 
             matcher.appendReplacement(valueBuf, Matcher.quoteReplacement(environmentVarValue));
         }
@@ -140,10 +141,10 @@ public class MongoDao {
         return matcher.find();
     }
 
-    static public void saveTenantVariable(
+    public static void saveTenantVariable(
             String tenantVarName, String tenantVarValue, String tenant, String environment
     ) {
-        saveTenantVariable(tenantVarName, tenantVarValue, tenant, environment, TenantVariable.TenantVarType.TenantVariable);
+        saveTenantVariable(tenantVarName, tenantVarValue, tenant, environment, TenantVariable.TenantVarType.TENANT_VARIABLE);
     }
 
     public static void saveTenantVariable(
@@ -154,7 +155,9 @@ public class MongoDao {
 
         tenantVariable = initTenantVariable(tenantVariable, tenantVarType, tenantVarName, environment, tenantVariableExist);
 
-        EnvironmentValue variable = tenantVariable.find(environment).get();
+        EnvironmentValue variable = tenantVariable.find(environment)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Environment " + environment + " not found for variable " + tenantVarName));
 
         variable.setEncrypted(false);
         variable.setValue(tenantVarValue);
@@ -167,7 +170,7 @@ public class MongoDao {
     private static TenantVariable initTenantVariable(TenantVariable tenantVariable, TenantVariable.TenantVarType tenantVarType, String tenantVarName, String environment, boolean tenantVariableExist) {
         if(!tenantVariableExist) {
             tenantVariable = new TenantVariable(tenantVarName);
-            tenantVariable.set_type(tenantVarType.name());
+            tenantVariable.setType(tenantVarType.name());
         }
         if(StringUtils.isEmpty(tenantVariable.getCreatedBy())) {
             tenantVariable.setCreatedBy(CREATED_BY_SYSTEM);
@@ -175,7 +178,7 @@ public class MongoDao {
         if(tenantVariable.getCreatedAt() == 0) {
             tenantVariable.setCreatedAt(new Date().getTime());
         }
-        if(!tenantVariable.find(environment).isPresent()) {
+        if(tenantVariable.find(environment).isEmpty()) {
             tenantVariable.put(new EnvironmentValue(environment));
         }
 
@@ -186,7 +189,7 @@ public class MongoDao {
         MongoDatabase database = MongoClientProvider.getInstance().getDatabase(tenant);
         MongoCollection<Document> collection = database.getCollection(TENANT_VARIABLES_COLLECTION_NAME);
         if(tenantVariableExist) {
-            collection.replaceOne(new Document(TenantVariable.ID_FIELD, tenantVariable.get_id()), tenantVariable.toDocument());
+            collection.replaceOne(new Document(TenantVariable.ID_FIELD, tenantVariable.getId()), tenantVariable.toDocument());
         } else {
             collection.insertOne(tenantVariable.toDocument());
         }
@@ -195,7 +198,7 @@ public class MongoDao {
     public static void deleteTenantVariable(TenantVariable tenantVariable, String tenant) {
         MongoDatabase database = MongoClientProvider.getInstance().getDatabase(tenant);
         MongoCollection<Document> collection = database.getCollection(TENANT_VARIABLES_COLLECTION_NAME);
-        collection.deleteOne(new Document(TenantVariable.ID_FIELD, tenantVariable.get_id()));
+        collection.deleteOne(new Document(TenantVariable.ID_FIELD, tenantVariable.getId()));
     }
 
     public static void deleteTenantVariablesByName(String tenantVarName, String tenant) {

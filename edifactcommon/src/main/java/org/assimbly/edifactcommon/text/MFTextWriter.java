@@ -82,6 +82,6 @@ public class MFTextWriter
 	
 	public static String getValue(Object o) throws Exception
 	{
-		return (o instanceof IMFNode) ? ((IMFNode)o).value() : o.toString();
+		return (o instanceof IMFNode imfn) ? imfn.value() : o.toString();
 	}
 }

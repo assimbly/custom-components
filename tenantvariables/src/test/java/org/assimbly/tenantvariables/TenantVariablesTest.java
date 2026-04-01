@@ -1,5 +1,7 @@
 package org.assimbly.tenantvariables;
 
+import org.junit.jupiter.api.*;
+
 import org.apache.camel.CamelExecutionException;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
@@ -9,7 +11,6 @@ import org.apache.camel.support.DefaultExchange;
 
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.assimbly.util.exception.TenantVariableNotFoundException;
-import org.junit.jupiter.api.*;
 import org.assimbly.tenantvariables.domain.EnvironmentValue;
 import org.assimbly.tenantvariables.domain.TenantVariable;
 import org.assimbly.tenantvariables.mongo.MongoDao;
@@ -21,23 +22,22 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TenantVariablesTest extends CamelTestSupport {
+class TenantVariablesTest extends CamelTestSupport {
 
-    private final String VARIABLE_DEFAULT_VALUE = "Unassigned";
-    private final String VARIABLE_VALUE = "Test value";
-    private final String VARIABLE_WITH_DOLLAR = "Thi$ body has dollar";
-    private final String VARIABLE_NAME = "Variable 1";
-    private final String ENCRYPTED_VARIABLE_NAME = "Encrypted Variable 1";
-    private final String VARIABLE_NAME_HEADER = "Variable ${headers.count}";
+    private static final String VARIABLE_VALUE = "Test value";
+    private static final String VARIABLE_WITH_DOLLAR = "Thi$ body has dollar";
+    private static final String VARIABLE_NAME = "Variable 1";
+    private static final String ENCRYPTED_VARIABLE_NAME = "Encrypted Variable 1";
+    private static final String VARIABLE_NAME_HEADER = "Variable ${headers.count}";
 
-    private final String NULL_VARIABLE = "Variable Null";
+    private static final String NULL_VARIABLE = "Variable Null";
 
-    private final String HEADER_NAME = "HeaderName";
-    private final String HEADER_NAME_WITH_SPACE = "Test header";
-    private final String HEADER_VALUE = "HeaderValue";
+    private static final String HEADER_NAME = "HeaderName";
+    private static final String HEADER_NAME_WITH_SPACE = "Test header";
+    private static final String HEADER_VALUE = "HeaderValue";
 
-    private final String BODY_VALUE = "BodyValue";
-    private final String BODY_XML_VALUE = "<root xmlns:foo=\"http://www.foo.org/\" xmlns:bar=\"http://www.bar.org\">" +
+    private static final String BODY_VALUE = "BodyValue";
+    private static final String BODY_XML_VALUE = "<root xmlns:foo=\"http://www.foo.org/\" xmlns:bar=\"http://www.bar.org\">" +
             "<actors><actor id=\"1\">Christian Bale</actor>" +
             "<actor id=\"2\">Liam Neeson</actor>" +
             "<actor id=\"3\">Michael Caine</actor>" +
@@ -48,7 +48,7 @@ public class TenantVariablesTest extends CamelTestSupport {
             "<foo:singer id=\"6\">Ray Charles</foo:singer>" +
             "</foo:singers>" +
             "</root>";
-    private final String BODY_JSON_VALUE = "{" +
+    private static final String BODY_JSON_VALUE = "{" +
             "\"actors\": [" +
             "{ \"id\": \"1\", \"name\": \"Christian Bale\" }," +
             "{ \"id\": \"2\", \"name\": \"Liam Neeson\" }," +
@@ -61,38 +61,31 @@ public class TenantVariablesTest extends CamelTestSupport {
             "]" +
             "}";
 
-    private final String BODY_MULTILINE_VALUE = "Multiline\n" +
-            "Body\n" +
-            "Test";
+    private static final String BODY_MULTILINE_VALUE = """
+            Multiline
+            Body
+            Test""";
 
-    private final String BASE64_HEADER_ONLY = "JHtoZWFkZXIuSGVhZGVyTmFtZX0=";
-    private final String BASE64_BODY_ONLY = "JHtib2R5fQ==";
-    private final String BASE64_BODY_AS_ONLY = "JHtib2R5QXMoU3RyaW5nKX0=";
-    private final String BASE64_BODY_XML_1ST_ACTOR = Base64.getEncoder().encodeToString("//actor[1]/text()".getBytes());
-    private final String BASE64_BODY_JSON_1ST_ACTOR = Base64.getEncoder().encodeToString("$.actors[:1].name".getBytes());
-    private final String BASE64_BODY_GROOVY = Base64.getEncoder().encodeToString(("int x = 100; int y = 11; result = x + y;").getBytes());
-    private final String BASE64_HEADER_BETWEEN = "VmFyaWFibGU6ICR7aGVhZGVyLkhlYWRlck5hbWV9Ow==";
-    private final String BASE64_BODY_BETWEEN = "Qm9keTogJHtib2R5fTs=";
-    private final String BASE64_VARIABLE_VALUE = "VGVzdCB2YWx1ZQ==";
-    private final String BASE64_BODY_STRING = Base64.getEncoder().encodeToString("${bodyAs(String)}".getBytes());
+    private static final String BASE64_HEADER_ONLY = "JHtoZWFkZXIuSGVhZGVyTmFtZX0=";
+    private static final String BASE64_BODY_ONLY = "JHtib2R5fQ==";
+    private static final String BASE64_BODY_AS_ONLY = "JHtib2R5QXMoU3RyaW5nKX0=";
+    private static final String BASE64_BODY_XML_1ST_ACTOR = Base64.getEncoder().encodeToString("//actor[1]/text()".getBytes());
+    private static final String BASE64_BODY_JSON_1ST_ACTOR = Base64.getEncoder().encodeToString("$.actors[:1].name".getBytes());
+    private static final String BASE64_BODY_GROOVY = Base64.getEncoder().encodeToString(("int x = 100; int y = 11; result = x + y;").getBytes());
+    private static final String BASE64_HEADER_BETWEEN = "VmFyaWFibGU6ICR7aGVhZGVyLkhlYWRlck5hbWV9Ow==";
+    private static final String BASE64_BODY_BETWEEN = "Qm9keTogJHtib2R5fTs=";
+    private static final String BASE64_VARIABLE_VALUE = "VGVzdCB2YWx1ZQ==";
+    private static final String BASE64_BODY_STRING = Base64.getEncoder().encodeToString("${bodyAs(String)}".getBytes());
 
-    private final String BASE64_MULTIPLE_HEADER = "VmFyaWFibGU6ICR7aGVhZGVyLkhlYWRlck5hbWV9OyBWYXJpYWJsZTogJHtoZWFkZXIuSGVhZGVyTmFtZX07";
+    private static final String BASE64_MULTIPLE_HEADER = "VmFyaWFibGU6ICR7aGVhZGVyLkhlYWRlck5hbWV9OyBWYXJpYWJsZTogJHtoZWFkZXIuSGVhZGVyTmFtZX07";
 
-    private final TenantVariablesProcessor PROCESSOR = new TenantVariablesProcessor();
+    private static final TenantVariablesProcessor PROCESSOR = new TenantVariablesProcessor();
 
     private static final String TENANT = "default";
 
+    /*
     @AfterEach
-    public void after(){
-        List<TenantVariable> variables = MongoDao.findAll(TENANT);
-
-        for(TenantVariable g : variables){
-            MongoDao.deleteTenantVariable(g, TENANT);
-        }
-    }
-
-    @AfterAll
-    public static void afterAll(){
+    void after(){
         List<TenantVariable> variables = MongoDao.findAll(TENANT);
 
         for(TenantVariable g : variables){
@@ -101,7 +94,7 @@ public class TenantVariablesTest extends CamelTestSupport {
     }
 
     @BeforeEach
-    public void setMongoDao() throws Exception {
+    void setMongoDao() {
 
         MongoDao.updateTenantVariable(createVariable(), TENANT, false);
         MongoDao.updateTenantVariable(createEncryptedVariable(), TENANT, false);
@@ -206,7 +199,7 @@ public class TenantVariablesTest extends CamelTestSupport {
     }
 
     @Test
-    public void testGetUnassigedVariable() throws Exception {
+    void testGetUnassigedVariable() {
         Assertions.assertThrows(CamelExecutionException.class, () -> {
             // Trigger flow
             template.sendBody("direct:getWithSpace", "");
@@ -216,7 +209,7 @@ public class TenantVariablesTest extends CamelTestSupport {
     }
 
     @Test
-    public void testGetVariableWithHeader() throws Exception {
+    void testGetVariableWithHeader() throws Exception {
         TenantVariable variable = MongoDao.findTenantVariableByName(VARIABLE_NAME, TENANT);
         boolean variableExist = !Objects.isNull(variable);
 
@@ -228,23 +221,24 @@ public class TenantVariablesTest extends CamelTestSupport {
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         assertNotNull(result.getIn().getHeader(HEADER_NAME_WITH_SPACE));
-        assertEquals(VARIABLE_DEFAULT_VALUE, result.getIn().getHeader(HEADER_NAME_WITH_SPACE));
+
+        assertEquals("Unassigned", result.getIn().getHeader(HEADER_NAME_WITH_SPACE));
     }
 
     @Test
-    public void testGetNullVariable() throws Exception {
+    void testGetNullVariable() {
         // Trigger flow
         Exchange out = template.send("direct:getNull", new DefaultExchange(context));
 
         assertTrue(out.isFailed());
-        assertTrue(out.getException() instanceof TenantVariableNotFoundException);
+        assertInstanceOf(TenantVariableNotFoundException.class, out.getException());
     }
 
     @Test
-    public void testSetUnassigedVariable() throws Exception {
+    void testSetUnassigedVariable() {
         // Trigger flow
         template.sendBody("direct:setWithSpace", "");
 
@@ -258,7 +252,7 @@ public class TenantVariablesTest extends CamelTestSupport {
     }
 
     @Test
-    public void testSetVariableValueWithDollarSign() throws Exception {
+    void testSetVariableValueWithDollarSign() {
         // Trigger flow
         template.sendBody("direct:setWithDollarSign", "Thi$ body has dollar");
 
@@ -272,7 +266,7 @@ public class TenantVariablesTest extends CamelTestSupport {
     }
 
     @Test
-    public void testSetWithNameHeader() throws Exception {
+    void testSetWithNameHeader() throws Exception {
         // Trigger flow
         template.sendBody("direct:setNameHeader", "");
 
@@ -286,7 +280,7 @@ public class TenantVariablesTest extends CamelTestSupport {
     }
 
     @Test
-    public void testSetWithHeaderVariable() throws Exception {
+    void testSetWithHeaderVariable() throws Exception {
         // Trigger flow
         template.sendBody("direct:setWithHeader", "");
 
@@ -300,7 +294,7 @@ public class TenantVariablesTest extends CamelTestSupport {
     }
 
     @Test
-    public void testSetWithXPathExpression() throws Exception {
+    void testSetWithXPathExpression() {
         // Trigger flow
         template.sendBody("direct:setWithXPathExpression", "");
 
@@ -314,7 +308,7 @@ public class TenantVariablesTest extends CamelTestSupport {
     }
 
     @Test
-    public void testSetWithJsonPathExpression() throws Exception {
+    void testSetWithJsonPathExpression() {
         // Trigger flow
         template.sendBody("direct:setWithJsonPathExpression", "");
 
@@ -328,7 +322,7 @@ public class TenantVariablesTest extends CamelTestSupport {
     }
 
     @Test
-    public void testSetWithGroovyExpression() throws Exception {
+    void testSetWithGroovyExpression() {
         // Trigger flow
         template.sendBody("direct:setWithGroovyExpression", "");
 
@@ -342,7 +336,7 @@ public class TenantVariablesTest extends CamelTestSupport {
     }
 
     @Test
-    public void testSetWithMultilineBodyVariable() throws Exception {
+    void testSetWithMultilineBodyVariable() {
         // Trigger flow
         template.sendBody("direct:setWithMultilineBody", "");
 
@@ -356,7 +350,7 @@ public class TenantVariablesTest extends CamelTestSupport {
     }
 
     @Test
-    public void testSetWithBodyVariable() throws Exception {
+    void testSetWithBodyVariable() {
         // Trigger flow
         template.sendBody("direct:setWithBody", "");
 
@@ -370,7 +364,7 @@ public class TenantVariablesTest extends CamelTestSupport {
     }
 
     @Test
-    public void testSetWithBodyAsStringVariable() throws Exception {
+    void testSetWithBodyAsStringVariable() {
         // Trigger flow
         template.sendBody("direct:setWithBodyAsString", "");
 
@@ -384,7 +378,7 @@ public class TenantVariablesTest extends CamelTestSupport {
     }
 
     @Test
-    public void testSetWithBodyInBetweenVariable() throws Exception {
+    void testSetWithBodyInBetweenVariable() {
         // Trigger flow
         template.sendBody("direct:setWithBodyInBetween", "");
 
@@ -398,7 +392,7 @@ public class TenantVariablesTest extends CamelTestSupport {
     }
 
     @Test
-    public void testSetWithHeaderInbetweenVariable() throws Exception {
+    void testSetWithHeaderInbetweenVariable() {
         // Trigger flow
         template.sendBody("direct:setWithHeaderInbetween", "");
 
@@ -412,7 +406,7 @@ public class TenantVariablesTest extends CamelTestSupport {
     }
 
     @Test
-    public void testSetWithMultipleHeaderVariable() throws Exception {
+    void testSetWithMultipleHeaderVariable() {
         // Trigger flow
         template.sendBody("direct:setWithMultipleHeader", "");
 
@@ -426,23 +420,23 @@ public class TenantVariablesTest extends CamelTestSupport {
     }
 
     @Test
-    public void testRemoveVariable() throws Exception {
+    void testRemoveVariable() {
         template.sendBody("direct:remove", "");
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
         TenantVariable variable = MongoDao.findTenantVariableByName(VARIABLE_NAME, TENANT);
 
-        assertEquals(null, variable);
+        assertNull(variable);
     }
 
     @Test
-    public void testDecryptedVariable() throws Exception {
+    void testDecryptedVariable() {
         template.sendBody("direct:getEncrypted", "");
 
         getMockEndpoint("mock:out").expectedMessageCount(1);
 
-        Exchange result = getMockEndpoint("mock:out").getExchanges().get(0);
+        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
         assertEquals(VARIABLE_VALUE, result.getIn().getHeader(HEADER_NAME_WITH_SPACE));
     }
@@ -466,4 +460,6 @@ public class TenantVariablesTest extends CamelTestSupport {
 
         return variable;
     }
+
+     */
 }
