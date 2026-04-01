@@ -16,6 +16,12 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
@@ -25,12 +31,7 @@ import org.apache.camel.attachment.AttachmentMessage;
 import org.apache.camel.support.DefaultMessage;
 import org.apache.camel.support.ExpressionAdapter;
 import org.apache.camel.util.IOHelper;
-
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * A {@link org.apache.camel.Expression} which can be used to split a {@link MailMessage} per attachment. For example if
@@ -71,8 +72,20 @@ public class SplitAttachmentsExpression extends ExpressionAdapter {
                 }
             }
 
-            // clear attachments on original message after we have split them
-            inMessage.clearAttachments();
+            // BEGIN: PATCH
+            for(Message m : answer){
+                for(String hKey : exchange.getIn().getHeaders().keySet()) {
+                    Object header = exchange.getIn().getHeader(hKey);
+                    if(m.getHeader(hKey) == null)
+                        m.setHeader(hKey, header);
+                }
+
+                if(m.getHeader("From") != null) {
+                    String email = m.getHeader("From").toString();
+                    m.setHeader("Source-Email", StringUtils.substringBetween(email, "<", ">"));
+                }
+            }
+            // END: PATCH
 
             return answer;
         } catch (Exception e) {
@@ -85,8 +98,8 @@ public class SplitAttachmentsExpression extends ExpressionAdapter {
         final Message outMessage = new DefaultMessage(camelContext);
         outMessage.setHeader(HEADER_NAME, attachmentName);
         Object obj = attachment.getDataHandler().getContent();
-        if (obj instanceof InputStream stream) {
-            outMessage.setBody(readMimePart(stream));
+        if (obj instanceof InputStream) {
+            outMessage.setBody(readMimePart((InputStream) obj));
             return outMessage;
         } else if (obj instanceof String || obj instanceof byte[]) {
             outMessage.setBody(obj);
@@ -104,8 +117,9 @@ public class SplitAttachmentsExpression extends ExpressionAdapter {
         return bos.toByteArray();
     }
 
+    // BEGIN: PATCH
     public boolean hasAttachments(Exchange exchange) {
         return exchange.getIn(AttachmentMessage.class).hasAttachments();
     }
-
+    // END: PATCH
 }

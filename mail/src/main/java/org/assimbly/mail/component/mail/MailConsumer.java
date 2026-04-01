@@ -16,8 +16,23 @@
  */
 package org.assimbly.mail.component.mail;
 
-import jakarta.mail.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+
+import jakarta.mail.Flags;
+import jakarta.mail.Folder;
+import jakarta.mail.FolderNotFoundException;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.PasswordAuthentication;
+import jakarta.mail.Store;
 import jakarta.mail.search.SearchTerm;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePropertyKey;
 import org.apache.camel.Processor;
@@ -36,9 +51,6 @@ import org.eclipse.angus.mail.imap.IMAPStore;
 import org.eclipse.angus.mail.imap.SortTerm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.util.*;
 
 /**
  * A {@link org.apache.camel.Consumer Consumer} which consumes messages from JavaMail using a
@@ -591,6 +603,7 @@ public class MailConsumer extends ScheduledBatchPollingConsumer {
             }
             store = sender.getSession().getStore(config.getProtocol());
             PasswordAuthentication passwordAuth = config.getPasswordAuthentication();
+            // PATCH
             store.connect(config.getHost(), config.getPort(), passwordAuth.getUserName(), config.isBasicAuthentication() ? passwordAuth.getPassword() : config.getAccessToken());
 
             serverCanSort = hasSortCapability(store);
@@ -615,7 +628,8 @@ public class MailConsumer extends ScheduledBatchPollingConsumer {
      * @throws MessagingException In case capability check fails
      */
     private static boolean hasSortCapability(Store store) throws MessagingException {
-        if (store instanceof IMAPStore imapStore) {
+        if (store instanceof IMAPStore) {
+            IMAPStore imapStore = (IMAPStore) store;
             if (imapStore.hasCapability("SORT*")) {
                 return true;
             }

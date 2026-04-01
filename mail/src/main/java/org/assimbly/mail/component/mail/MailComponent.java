@@ -16,7 +16,13 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.net.URI;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import jakarta.mail.search.SearchTerm;
+
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
 import org.apache.camel.SSLContextParametersAware;
@@ -28,11 +34,6 @@ import org.apache.camel.support.HealthCheckComponent;
 import org.apache.camel.util.PropertiesHelper;
 import org.apache.camel.util.StringHelper;
 import org.eclipse.angus.mail.imap.SortTerm;
-
-import java.net.URI;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Component for JavaMail.
@@ -78,9 +79,9 @@ public class MailComponent extends HealthCheckComponent implements HeaderFilterS
         Object searchTerm = getAndRemoveOrResolveReferenceParameter(parameters, "searchTerm", Object.class);
         if (searchTerm != null) {
             SearchTerm st;
-            if (searchTerm instanceof SimpleSearchTerm term) {
+            if (searchTerm instanceof SimpleSearchTerm) {
                 // okay its a SimpleSearchTerm then lets convert that to SearchTerm
-                st = MailConverters.toSearchTerm(term);
+                st = MailConverters.toSearchTerm((SimpleSearchTerm) searchTerm);
             } else {
                 st = getCamelContext().getTypeConverter().mandatoryConvertTo(SearchTerm.class, searchTerm);
             }
@@ -91,11 +92,11 @@ public class MailComponent extends HealthCheckComponent implements HeaderFilterS
         Object sortTerm = getAndRemoveOrResolveReferenceParameter(parameters, "sortTerm", Object.class);
         if (sortTerm != null) {
             SortTerm[] st;
-            if (sortTerm instanceof String string) {
+            if (sortTerm instanceof String) {
                 // okay its a String then lets convert that to SortTerm
-                st = MailConverters.toSortTerm(string);
-            } else if (sortTerm instanceof SortTerm[] terms) {
-                st = terms;
+                st = MailConverters.toSortTerm((String) sortTerm);
+            } else if (sortTerm instanceof SortTerm[]) {
+                st = (SortTerm[]) sortTerm;
             } else {
                 throw new IllegalArgumentException("SortTerm must either be SortTerm[] or a String value");
             }
@@ -190,7 +191,7 @@ public class MailComponent extends HealthCheckComponent implements HeaderFilterS
     }
 
     /**
-     * To use a custom {@link HeaderFilterStrategy} to filter header to and from Camel message.
+     * To use a custom {@link org.apache.camel.spi.HeaderFilterStrategy} to filter header to and from Camel message.
      */
     @Override
     public void setHeaderFilterStrategy(HeaderFilterStrategy strategy) {
@@ -202,8 +203,8 @@ public class MailComponent extends HealthCheckComponent implements HeaderFilterS
      * {@link HeaderFilterStrategyAware} type.
      */
     public void setEndpointHeaderFilterStrategy(Endpoint endpoint) {
-        if (headerFilterStrategy != null && endpoint instanceof HeaderFilterStrategyAware aware) {
-            aware.setHeaderFilterStrategy(headerFilterStrategy);
+        if (headerFilterStrategy != null && endpoint instanceof HeaderFilterStrategyAware) {
+            ((HeaderFilterStrategyAware) endpoint).setHeaderFilterStrategy(headerFilterStrategy);
         }
     }
 

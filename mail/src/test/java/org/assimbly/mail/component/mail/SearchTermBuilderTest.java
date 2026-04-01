@@ -16,16 +16,20 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.util.Date;
+
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.search.SearchTerm;
-import org.junit.jupiter.api.Test;
 
-import java.util.Date;
+import org.junit.jupiter.api.Test;
 
 import static org.assimbly.mail.component.mail.SearchTermBuilder.Comparison;
 import static org.assimbly.mail.component.mail.SearchTermBuilder.Op.or;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *

@@ -16,6 +16,9 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.util.HashMap;
+import java.util.Properties;
+
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.Multipart;
@@ -23,10 +26,8 @@ import jakarta.mail.Session;
 import jakarta.mail.internet.MimeBodyPart;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMultipart;
-import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-import java.util.Properties;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;

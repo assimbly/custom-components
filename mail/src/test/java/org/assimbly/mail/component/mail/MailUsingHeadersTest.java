@@ -16,15 +16,16 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import jakarta.mail.Message;
+
 import org.apache.camel.builder.RouteBuilder;
 import org.assimbly.mail.component.mail.Mailbox.MailboxUser;
 import org.assimbly.mail.component.mail.Mailbox.Protocol;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.junit.jupiter.api.Test;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -45,7 +46,7 @@ public class MailUsingHeadersTest extends CamelTestSupport {
         map.put("From", "jstrachan@apache.org");
         map.put("Subject", "Camel rocks");
         map.put("CamelFileName", "fileOne");
-        map.put("org.apache.camel.test", "value");
+        map.put("CamelTest", "value");
 
         String body = "Hello Claus.\nYes it does.\n\nRegards James.";
         template.sendBodyAndHeaders(davsclaus.uriPrefix(Protocol.smtp), body, map);
@@ -58,7 +59,7 @@ public class MailUsingHeadersTest extends CamelTestSupport {
         assertEquals("Camel rocks", msg.getSubject());
 
         assertNull(msg.getHeader("CamelFileName"), "We should not get the message header here");
-        assertNull(msg.getHeader("org.apache.camel.test"), "We should not get the message header here");
+        assertNull(msg.getHeader("CAMELTest"), "We should not get the message header here");
     }
 
     @Test

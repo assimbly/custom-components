@@ -16,14 +16,15 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 import jakarta.mail.Address;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
+
 import org.apache.camel.util.ObjectHelper;
 import org.apache.camel.util.StringHelper;
-
-import java.text.DateFormat;
-import java.util.Date;
 
 /**
  * Mail utility class.
@@ -132,7 +133,7 @@ public final class MailUtils {
             }
 
             return sb.toString();
-        } catch (MessagingException _) {
+        } catch (MessagingException e) {
             // ignore the error and just return tostring
             return message.toString();
         }

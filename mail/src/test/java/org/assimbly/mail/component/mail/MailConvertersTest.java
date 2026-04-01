@@ -16,8 +16,11 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.io.InputStream;
+
 import jakarta.mail.Message;
 import jakarta.mail.Multipart;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
@@ -26,8 +29,6 @@ import org.assimbly.mail.component.mail.Mailbox.Protocol;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.junit.jupiter.api.Test;
-
-import java.io.InputStream;
 
 import static org.apache.camel.test.junit5.TestSupport.assertIsInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -52,7 +53,7 @@ public class MailConvertersTest extends CamelTestSupport {
 
         MockEndpoint.assertIsSatisfied(context);
 
-        Message mailMessage = mock.getReceivedExchanges().getFirst().getIn().getBody(MailMessage.class).getMessage();
+        Message mailMessage = mock.getReceivedExchanges().get(0).getIn().getBody(MailMessage.class).getMessage();
         assertNotNull(mailMessage);
 
         String s = MailConverters.toString(mailMessage);
@@ -68,7 +69,7 @@ public class MailConvertersTest extends CamelTestSupport {
 
         MockEndpoint.assertIsSatisfied(context);
 
-        Message mailMessage = mock.getReceivedExchanges().getFirst().getIn().getBody(MailMessage.class).getMessage();
+        Message mailMessage = mock.getReceivedExchanges().get(0).getIn().getBody(MailMessage.class).getMessage();
         assertNotNull(mailMessage);
 
         InputStream is = MailConverters.toInputStream(mailMessage);
@@ -90,13 +91,13 @@ public class MailConvertersTest extends CamelTestSupport {
 
         MockEndpoint.assertIsSatisfied(context);
 
-        Message mailMessage = mock.getReceivedExchanges().getFirst().getIn().getBody(MailMessage.class).getMessage();
+        Message mailMessage = mock.getReceivedExchanges().get(0).getIn().getBody(MailMessage.class).getMessage();
         assertNotNull(mailMessage);
 
         Object content = mailMessage.getContent();
         assertIsInstanceOf(Multipart.class, content);
 
-        InputStream is = mock.getReceivedExchanges().getFirst().getIn().getBody(InputStream.class);
+        InputStream is = mock.getReceivedExchanges().get(0).getIn().getBody(InputStream.class);
         assertNotNull(is);
         assertEquals("Alternative World", context.getTypeConverter().convertTo(String.class, is));
     }
@@ -115,13 +116,13 @@ public class MailConvertersTest extends CamelTestSupport {
 
         MockEndpoint.assertIsSatisfied(context);
 
-        Message mailMessage = mock.getReceivedExchanges().getFirst().getIn().getBody(MailMessage.class).getMessage();
+        Message mailMessage = mock.getReceivedExchanges().get(0).getIn().getBody(MailMessage.class).getMessage();
         assertNotNull(mailMessage);
 
         Object content = mailMessage.getContent();
         assertIsInstanceOf(Multipart.class, content);
 
-        byte[] is = mock.getReceivedExchanges().getFirst().getIn().getBody(byte[].class);
+        byte[] is = mock.getReceivedExchanges().get(0).getIn().getBody(byte[].class);
         assertNotNull(is);
         assertEquals("Alternative World", context.getTypeConverter().convertTo(String.class, is));
     }
@@ -140,7 +141,7 @@ public class MailConvertersTest extends CamelTestSupport {
 
         MockEndpoint.assertIsSatisfied(context);
 
-        Message mailMessage = mock.getReceivedExchanges().getFirst().getIn().getBody(MailMessage.class).getMessage();
+        Message mailMessage = mock.getReceivedExchanges().get(0).getIn().getBody(MailMessage.class).getMessage();
         assertNotNull(mailMessage);
 
         Object content = mailMessage.getContent();

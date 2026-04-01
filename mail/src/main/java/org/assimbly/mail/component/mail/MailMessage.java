@@ -16,16 +16,17 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.io.IOException;
+import java.util.Map;
+
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.RuntimeCamelException;
 import org.apache.camel.support.DefaultMessage;
 import org.apache.camel.support.ExchangeHelper;
 import org.apache.camel.util.ObjectHelper;
-
-import java.io.IOException;
-import java.util.Map;
 
 /**
  * Represents a {@link org.apache.camel.Message} for working with Mail
@@ -95,6 +96,11 @@ public class MailMessage extends DefaultMessage {
     }
 
     @Override
+    protected boolean isPopulateHeadersSupported() {
+        return true;
+    }
+
+    @Override
     protected void populateInitialHeaders(Map<String, Object> map) {
         if (mailMessage != null) {
             try {
@@ -118,7 +124,8 @@ public class MailMessage extends DefaultMessage {
             // no deep copy needed, but copy message id
             setMessageId(that.getMessageId());
         }
-        if (that instanceof MailMessage tmpMailMessage) {
+        if (that instanceof MailMessage) {
+            MailMessage tmpMailMessage = (MailMessage) that;
             this.originalMailMessage = tmpMailMessage.originalMailMessage;
             this.mailMessage = tmpMailMessage.mailMessage;
             this.mapMailMessage = tmpMailMessage.mapMailMessage;

@@ -466,7 +466,7 @@ contains the five messages with the single attachment.
 
 The code is provided out of the box in Camel 2.10 onwards in the
 `camel-mail` component. The code is in the class:
-`org.apache.camel.component.mail.SplitAttachmentsExpression`, which you
+`org.assimbly.mail.component.mail.SplitAttachmentsExpression`, which you
 can find the source code
 https://github.com/apache/camel/blob/main/components/camel-mail/src/main/java/org/apache/camel/component/mail/SplitAttachmentsExpression.java[here]
 
@@ -479,7 +479,7 @@ the Splitter as shown below
 [source,xml]
 ---------------------------------------------------------------------------------
 <split>
-  <method beanType="org.apache.camel.component.mail.SplitAttachmentsExpression"/>
+  <method beanType="org.assimbly.mail.component.mail.SplitAttachmentsExpression"/>
   <to uri="mock:split"/>
 </split>
 ---------------------------------------------------------------------------------
@@ -514,7 +514,7 @@ you can do as follows:
 Notice we use the `"searchTerm.subjectOrBody"` as a parameter key to
 indicate that we want to search on mail subject or body, to contain the
 word "Camel". +
- The class `org.apache.camel.component.mail.SimpleSearchTerm` has a
+ The class `org.assimbly.mail.component.mail.SimpleSearchTerm` has a
 number of options you can configure:
 
 Or to get the new unseen emails going 24 hours back in time, you can do.
@@ -565,7 +565,7 @@ shown:
 -------------------------------------------------------------------------------------------
 
 In Java there is a builder class to build compound
-`SearchTerms` using the `org.apache.camel.component.mail.SearchTermBuilder`
+`SearchTerms` using the `org.assimbly.mail.component.mail.SearchTermBuilder`
 class. This allows you to build complex terms such as:
 
 [source,java]

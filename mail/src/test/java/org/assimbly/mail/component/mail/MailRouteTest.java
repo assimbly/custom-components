@@ -16,10 +16,15 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import jakarta.mail.Address;
 import jakarta.mail.Message;
 import jakarta.mail.Message.RecipientType;
 import jakarta.mail.MessagingException;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.attachment.AttachmentMessage;
@@ -30,11 +35,10 @@ import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MailRouteTest extends CamelTestSupport {
     private static final MailboxUser james = Mailbox.getOrCreateUser("james", "secret");
@@ -59,7 +63,7 @@ public class MailRouteTest extends CamelTestSupport {
         resultEndpoint.assertIsSatisfied();
 
         // Validate that the headers were preserved.
-        Exchange exchange = resultEndpoint.getReceivedExchanges().getFirst();
+        Exchange exchange = resultEndpoint.getReceivedExchanges().get(0);
         String replyTo = (String) exchange.getIn().getHeader(MailConstants.MAIL_REPLY_TO);
         assertEquals("route-test-reply@localhost", replyTo);
 
@@ -91,7 +95,7 @@ public class MailRouteTest extends CamelTestSupport {
 
         mock.assertIsSatisfied();
 
-        assertFalse(mock.getExchanges().getFirst().getIn(AttachmentMessage.class).hasAttachments(), "Should not have attachements");
+        assertFalse(mock.getExchanges().get(0).getIn(AttachmentMessage.class).hasAttachments(), "Should not have attachements");
 
     }
 

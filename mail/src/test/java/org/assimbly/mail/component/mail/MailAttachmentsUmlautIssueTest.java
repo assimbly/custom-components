@@ -16,8 +16,14 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
 import jakarta.activation.DataHandler;
 import jakarta.activation.FileDataSource;
+
 import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.Producer;
@@ -31,12 +37,9 @@ import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Unit test for Camel attachments and Mail attachments.

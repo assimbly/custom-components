@@ -16,12 +16,11 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.util.Date;
+
 import jakarta.mail.Message;
 import jakarta.mail.search.ComparisonTerm;
 import jakarta.mail.search.DateTerm;
-
-import java.io.Serial;
-import java.util.Date;
 
 /**
  * A {@link jakarta.mail.search.SearchTerm} that is based on {@link DateTerm} that compares with current date (eg now).
@@ -30,7 +29,6 @@ import java.util.Date;
  */
 public class NowSearchTerm extends ComparisonTerm {
 
-    @Serial
     private static final long serialVersionUID = 1L;
     private final int comparison;
     private final boolean sentDate;
@@ -66,7 +64,7 @@ public class NowSearchTerm extends ComparisonTerm {
             } else {
                 d = msg.getReceivedDate();
             }
-        } catch (Exception _) {
+        } catch (Exception e) {
             return false;
         }
 
@@ -78,15 +76,22 @@ public class NowSearchTerm extends ComparisonTerm {
     }
 
     private static boolean match(Date d1, Date d2, int comparison) {
-        return switch (comparison) {
-            case LE -> d1.before(d2) || d1.equals(d2);
-            case LT -> d1.before(d2);
-            case EQ -> d1.equals(d2);
-            case NE -> !d1.equals(d2);
-            case GT -> d1.after(d2);
-            case GE -> d1.after(d2) || d1.equals(d2);
-            default -> false;
-        };
+        switch (comparison) {
+            case LE:
+                return d1.before(d2) || d1.equals(d2);
+            case LT:
+                return d1.before(d2);
+            case EQ:
+                return d1.equals(d2);
+            case NE:
+                return !d1.equals(d2);
+            case GT:
+                return d1.after(d2);
+            case GE:
+                return d1.after(d2) || d1.equals(d2);
+            default:
+                return false;
+        }
     }
 
     @Override

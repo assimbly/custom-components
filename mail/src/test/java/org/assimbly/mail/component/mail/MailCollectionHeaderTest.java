@@ -16,14 +16,14 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.util.List;
+
 import org.apache.camel.builder.RouteBuilder;
 import org.assimbly.mail.component.mail.Mailbox.MailboxUser;
 import org.assimbly.mail.component.mail.Mailbox.Protocol;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.apache.camel.test.junit5.TestSupport.assertIsInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,10 +46,10 @@ public class MailCollectionHeaderTest extends CamelTestSupport {
 
         mock.assertIsSatisfied();
 
-        Object beers = mock.getReceivedExchanges().getFirst().getIn().getHeader("beers");
+        Object beers = mock.getReceivedExchanges().get(0).getIn().getHeader("beers");
         assertNotNull(beers);
         List<?> list = assertIsInstanceOf(List.class, beers);
-        assertEquals("Carlsberg", list.getFirst());
+        assertEquals("Carlsberg", list.get(0));
         assertEquals("Heineken", list.get(1));
     }
 

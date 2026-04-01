@@ -16,16 +16,17 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.util.Date;
+
 import jakarta.mail.Address;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
+
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.eclipse.angus.mail.imap.SortTerm;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.mockito.Mockito.when;
@@ -109,7 +110,7 @@ public class MailSorterTest extends CamelTestSupport {
             for (SortTerm term2 : POSSIBLE_TERMS) {
                 Message[] actual = MESSAGES.clone();
                 MailSorter.sortMessages(actual, new SortTerm[] { term1, SortTerm.REVERSE, term2 });
-                assertArrayEquals(actual, expected, "Terms: %s, %s".formatted(term1.toString(), term2.toString()));
+                assertArrayEquals(actual, expected, String.format("Terms: %s, %s", term1.toString(), term2.toString()));
             }
 
         }

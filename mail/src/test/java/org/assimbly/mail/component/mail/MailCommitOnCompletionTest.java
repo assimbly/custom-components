@@ -16,18 +16,19 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.util.concurrent.TimeUnit;
+
 import jakarta.mail.Folder;
 import jakarta.mail.Message;
 import jakarta.mail.Store;
 import jakarta.mail.internet.MimeMessage;
+
 import org.apache.camel.builder.RouteBuilder;
 import org.assimbly.mail.component.mail.Mailbox.MailboxUser;
 import org.assimbly.mail.component.mail.Mailbox.Protocol;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.junit.jupiter.api.Test;
-
-import java.util.concurrent.TimeUnit;
 
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;

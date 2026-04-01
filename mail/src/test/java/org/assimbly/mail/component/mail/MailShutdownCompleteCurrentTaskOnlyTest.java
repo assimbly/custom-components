@@ -20,6 +20,7 @@ import jakarta.mail.Folder;
 import jakarta.mail.Message;
 import jakarta.mail.Store;
 import jakarta.mail.internet.MimeMessage;
+
 import org.apache.camel.ShutdownRunningTask;
 import org.apache.camel.builder.RouteBuilder;
 import org.assimbly.mail.component.mail.Mailbox.MailboxUser;

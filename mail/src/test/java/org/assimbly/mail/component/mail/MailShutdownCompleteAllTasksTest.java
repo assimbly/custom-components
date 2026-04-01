@@ -20,6 +20,7 @@ import jakarta.mail.Folder;
 import jakarta.mail.Message;
 import jakarta.mail.Store;
 import jakarta.mail.internet.MimeMessage;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.ShutdownRunningTask;
 import org.apache.camel.builder.RouteBuilder;
@@ -67,7 +68,7 @@ public class MailShutdownCompleteAllTasksTest extends CamelTestSupport {
 
         MockEndpoint.assertIsSatisfied(context);
 
-        int batch = bar.getReceivedExchanges().getFirst().getProperty(Exchange.BATCH_SIZE, int.class);
+        int batch = bar.getReceivedExchanges().get(0).getProperty(Exchange.BATCH_SIZE, int.class);
 
         // shutdown during processing
         context.stop();

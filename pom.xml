@@ -93,6 +93,7 @@
         <skyscreamer.version>1.5.3</skyscreamer.version>
         <smooks.version>1.7.1</smooks.version>
         <smooks-fragments.version>1.7.1.0</smooks-fragments.version>
+        <spring.version>7.0.6</spring.version>
         <slf4j.version>2.0.17</slf4j.version>
         <wsdl4j.version>1.6.3</wsdl4j.version>
 

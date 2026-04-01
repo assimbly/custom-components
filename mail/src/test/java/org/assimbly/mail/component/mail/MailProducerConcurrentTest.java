@@ -16,6 +16,14 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 import org.apache.camel.builder.NotifyBuilder;
 import org.apache.camel.builder.RouteBuilder;
 import org.assimbly.mail.component.mail.Mailbox.MailboxUser;
@@ -23,10 +31,6 @@ import org.assimbly.mail.component.mail.Mailbox.Protocol;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.junit.jupiter.api.Test;
-
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.*;
 
 import static org.apache.camel.test.junit5.TestSupport.body;
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -17,6 +17,7 @@
 package org.assimbly.mail.component.mail;
 
 import jakarta.mail.Message;
+
 import org.apache.camel.CamelContext;
 import org.assimbly.mail.component.mail.Mailbox.MailboxUser;
 import org.assimbly.mail.component.mail.Mailbox.Protocol;

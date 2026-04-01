@@ -16,6 +16,9 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
 import org.apache.camel.builder.RouteBuilder;
 import org.assimbly.mail.component.mail.Mailbox.MailboxUser;
 import org.assimbly.mail.component.mail.Mailbox.Protocol;
@@ -25,9 +28,6 @@ import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Unit test for batch consumer.
@@ -75,7 +75,7 @@ public class MailDisconnectTest extends CamelTestSupport {
             public void configure() {
                 from(jones.uriPrefix(Protocol.imap) + "&disconnect=true&initialDelay=100&delay=500")
                         .routeId("mail-disconnect")
-                        .process(_ -> latch.countDown())
+                        .process(e -> latch.countDown())
                         .to("mock:result");
             }
         };

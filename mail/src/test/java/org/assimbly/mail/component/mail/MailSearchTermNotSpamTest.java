@@ -17,6 +17,7 @@
 package org.assimbly.mail.component.mail;
 
 import jakarta.mail.search.SearchTerm;
+
 import org.apache.camel.component.mock.MockEndpoint;
 import org.junit.jupiter.api.Test;
 

@@ -21,6 +21,7 @@ import jakarta.mail.Message.RecipientType;
 import jakarta.mail.Session;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.assimbly.mail.component.mail.Mailbox.MailboxUser;
@@ -45,7 +46,7 @@ public class MailProducerTest extends CamelTestSupport {
         template.sendBodyAndHeader("direct:start", "Message ", "To", "someone@localhost");
         MockEndpoint.assertIsSatisfied(context);
         // need to check the message header
-        Exchange exchange = getMockEndpoint("mock:result").getExchanges().getFirst();
+        Exchange exchange = getMockEndpoint("mock:result").getExchanges().get(0);
         assertNotNull(exchange.getIn().getHeader(MailConstants.MAIL_MESSAGE_ID), "The message id should not be null");
 
         Mailbox box = someone.getInbox();
@@ -69,7 +70,7 @@ public class MailProducerTest extends CamelTestSupport {
         template.sendBodyAndHeader("direct:start", mimeMessage, "To", "someone@localhost");
         MockEndpoint.assertIsSatisfied(context);
         // need to check the message header
-        Exchange exchange = getMockEndpoint("mock:result").getExchanges().getFirst();
+        Exchange exchange = getMockEndpoint("mock:result").getExchanges().get(0);
         assertNotNull(exchange.getIn().getHeader(MailConstants.MAIL_MESSAGE_ID), "The message id should not be null");
 
         Mailbox box = someone.getInbox();

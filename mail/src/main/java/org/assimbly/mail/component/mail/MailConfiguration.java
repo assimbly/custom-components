@@ -16,9 +16,17 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
 import jakarta.mail.Message;
 import jakarta.mail.PasswordAuthentication;
 import jakarta.mail.Session;
+
+import javax.net.ssl.SSLContext;
+
 import org.apache.camel.CamelContext;
 import org.apache.camel.RuntimeCamelException;
 import org.apache.camel.spi.Metadata;
@@ -29,12 +37,6 @@ import org.apache.camel.support.jsse.SSLContextParameters;
 import org.apache.camel.util.ObjectHelper;
 import org.assimbly.tenantvariables.domain.TenantVariable;
 import org.assimbly.tenantvariables.mongo.MongoDao;
-
-import javax.net.ssl.SSLContext;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 
 import static org.assimbly.mail.component.mail.MailConstants.MAIL_GENERATE_MISSING_ATTACHMENT_NAMES_NEVER;
 import static org.assimbly.mail.component.mail.MailConstants.MAIL_HANDLE_DUPLICATE_ATTACHMENT_NAMES_NEVER;
@@ -48,29 +50,35 @@ public class MailConfiguration implements Cloneable {
     private transient ClassLoader applicationClassLoader;
     private transient Map<Message.RecipientType, String> recipients = new HashMap<>();
 
+    // PATCH
     private String TENANT_VARIABLE_EXP = "\\@\\{(.*?)\\}";
     // protocol is implied by component name, so it should not be in UriPath
     private transient String protocol;
 
-    private boolean consumerMode;
+    // PATCH
+    private boolean consumerMode = false;
 
     @UriPath
     @Metadata(required = true)
     private String host;
     @UriPath
     private int port = -1;
+    // BEGIN: PATCH
     @UriParam(label = "producer")
     private String authenticationType;
+    // END: PATCH
     @UriParam(label = "security", secret = true)
     private String username;
     @UriParam(label = "security", secret = true)
     private String password;
+    // BEGIN: PATCH
     @UriParam(label = "security", secret = true)
     private String accessToken;
     @UriParam(label = "producer")
-    private String tenant;
+    private String tenantDbName;
     @UriParam(label = "producer")
     private String environment;
+    // END: PATCH
     @UriParam
     @Metadata(label = "producer")
     private String subject;
@@ -238,11 +246,13 @@ public class MailConfiguration implements Cloneable {
         if (username != null) {
             answer.setUsername(username);
         }
+        // BEGIN: PATCH
         if (isBasicAuthentication()) {
             answer.setPassword(password);
         } else {
             answer.setPassword(getAccessToken());
         }
+        // END: PATCH
         if (authenticator != null) {
             answer.setAuthenticator(authenticator);
         }
@@ -252,10 +262,16 @@ public class MailConfiguration implements Cloneable {
         if (session != null) {
             answer.setSession(session);
             String hostPropertyValue = session.getProperty("mail.smtp.host");
+            if (hostPropertyValue == null || hostPropertyValue.isEmpty()) {
+                hostPropertyValue = session.getProperty("mail.smtps.host");
+            }
             if (hostPropertyValue != null && !hostPropertyValue.isEmpty()) {
                 answer.setHost(hostPropertyValue);
             }
             String portPropertyValue = session.getProperty("mail.smtp.port");
+            if (portPropertyValue == null || portPropertyValue.isEmpty()) {
+                portPropertyValue = session.getProperty("mail.smtps.port");
+            }
             if (portPropertyValue != null && !portPropertyValue.isEmpty()) {
                 answer.setPort(Integer.parseInt(portPropertyValue));
             }
@@ -267,6 +283,7 @@ public class MailConfiguration implements Cloneable {
                 }
                 // use our authenticator that does not live user interaction but returns the already configured username and password
                 Session sessionInstance = Session.getInstance(answer.getJavaMailProperties(),
+                        // PATCH
                         authenticator == null ? new DefaultAuthenticator(getUsername(), (isBasicAuthentication() ? getPassword() : null)) : authenticator);
                 // sets the debug mode of the underlying mail framework
                 sessionInstance.setDebug(debugMode);
@@ -294,14 +311,14 @@ public class MailConfiguration implements Cloneable {
         } else {
             properties.put("mail." + protocol + ".auth", "false");
         }
-
+        // BEGIN: PATCH
         if(!isBasicAuthentication()) {
             properties.put("mail." + protocol + ".auth.mechanisms", "XOAUTH2");
             properties.put("mail." + protocol + ".auth", "true");
             properties.put("mail." + protocol + ".sasl.enable", "true");
             properties.put("mail." + protocol + ".sasl.mechanisms", "XOAUTH2");
         }
-
+        // END: PATCH
         properties.put("mail.transport.protocol", protocol);
         properties.put("mail.store.protocol", protocol);
         properties.put("mail.host", host);
@@ -443,7 +460,7 @@ public class MailConfiguration implements Cloneable {
     public void setAuthenticator(MailAuthenticator authenticator) {
         this.authenticator = authenticator;
     }
-
+    // BEGIN: PATCH
     /**
      * The authenticationType for login
      */
@@ -458,16 +475,16 @@ public class MailConfiguration implements Cloneable {
      */
     public String getAccessToken() {
         TenantVariable.TenantVarType tenantVarType = consumerMode ? TenantVariable.TenantVarType.TENANT_VARIABLE : TenantVariable.TenantVarType.STATIC_TENANT_VARIABLE;
-        return MongoDao.interpolatePossibleTenantVariable(accessToken, getTenant(), tenantVarType);
+        return MongoDao.interpolatePossibleTenantVariable(accessToken, getTenantDbName(), tenantVarType);
     }
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
     }
-    public String getTenant() {
-        return tenant;
+    public String getTenantDbName() {
+        return tenantDbName;
     }
-    public void setTenant(String tenant) {
-        this.tenant = tenant;
+    public void setTenantDbName(String tenantDbName) {
+        this.tenantDbName = tenantDbName;
     }
     public String getEnvironment() {
         return environment;
@@ -475,7 +492,7 @@ public class MailConfiguration implements Cloneable {
     public void setEnvironment(String environment) {
         this.environment = environment;
     }
-
+    // END: PATCH
     public String getSubject() {
         return subject;
     }
@@ -531,7 +548,7 @@ public class MailConfiguration implements Cloneable {
      */
     public void setUsername(String username) {
         this.username = username;
-        if (getRecipients().isEmpty()) {
+        if (getRecipients().size() == 0) {
             // set default destination to username@host for backwards compatibility
             // can be overridden by URI parameters
             String address = username;
@@ -880,9 +897,11 @@ public class MailConfiguration implements Cloneable {
         return mimeDecodeHeaders;
     }
 
+    // BEGIN: PATCH
     public boolean isBasicAuthentication() {
         return (authenticationType == null || authenticationType.equals("basic"));
     }
+    // END: PATCH
 
     public boolean isDecodeFilename() {
         return decodeFilename;
@@ -939,10 +958,12 @@ public class MailConfiguration implements Cloneable {
         this.handleDuplicateAttachmentNames = handleDuplicateAttachmentNames;
     }
 
+    // BEGIN: PATCH
     public boolean isConsumerMode() {
         return consumerMode;
     }
     public void setConsumerMode(boolean consumerMode) {
         this.consumerMode = consumerMode;
     }
+    // END: PATCH
 }

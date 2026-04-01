@@ -16,10 +16,16 @@
  */
 package org.assimbly.mail.component.mail;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+
 import jakarta.mail.Folder;
 import jakarta.mail.Message;
 import jakarta.mail.Store;
 import jakarta.mail.internet.MimeMessage;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.assimbly.mail.component.mail.Mailbox.MailboxUser;
@@ -28,12 +34,10 @@ import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Unit test for Mail using camel headers to set recipient subject.
@@ -72,7 +76,7 @@ public class RawMailMessageTest extends CamelTestSupport {
                 map);
         MockEndpoint.assertIsSatisfied(context);
 
-        Exchange exchange = getMockEndpoint("mock:mail").getReceivedExchanges().getFirst();
+        Exchange exchange = getMockEndpoint("mock:mail").getReceivedExchanges().get(0);
 
         // START SNIPPET: e1
         // get access to the raw jakarta.mail.Message as shown below
@@ -103,11 +107,11 @@ public class RawMailMessageTest extends CamelTestSupport {
 
         MockEndpoint.assertIsSatisfied(context);
 
-        Message mailMessage = mock.getExchanges().getFirst().getIn().getBody(Message.class);
+        Message mailMessage = mock.getExchanges().get(0).getIn().getBody(Message.class);
         assertNotNull("mail subject should not be null", mailMessage.getSubject());
         assertEquals("hurz", mailMessage.getSubject(), "mail subject should be hurz");
 
-        Map<String, Object> headers = mock.getExchanges().getFirst().getIn().getHeaders();
+        Map<String, Object> headers = mock.getExchanges().get(0).getIn().getHeaders();
         assertNotNull(headers, "headers should not be null");
         assertFalse(headers.isEmpty(), "headers should not be empty");
     }
@@ -132,12 +136,12 @@ public class RawMailMessageTest extends CamelTestSupport {
 
         MockEndpoint.assertIsSatisfied(context);
 
-        String body = mock.getExchanges().getFirst().getIn().getBody(String.class);
+        String body = mock.getExchanges().get(0).getIn().getBody(String.class);
         MimeMessage mm = new MimeMessage(null, new ByteArrayInputStream(body.getBytes()));
         String subject = mm.getSubject();
         assertNull(subject, "mail subject should not be available");
 
-        Map<String, Object> headers = mock.getExchanges().getFirst().getIn().getHeaders();
+        Map<String, Object> headers = mock.getExchanges().get(0).getIn().getHeaders();
         assertNotNull(headers, "headers should not be null");
         assertFalse(headers.isEmpty(), "headers should not be empty");
     }
