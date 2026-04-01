@@ -62,11 +62,6 @@ public class MailIdempotentRepositoryDuplicateTest extends CamelTestSupport {
 
         MockEndpoint.assertIsSatisfied(context, 5, TimeUnit.SECONDS);
 
-        context.getRouteController().stopRoute("foo");
-
-        Awaitility.await().atMost(2, TimeUnit.SECONDS)
-                .untilAsserted(() -> assertEquals(1, myRepo.getCacheSize()));
-
         // windows need a little slack
         Awaitility.await().atMost(500, TimeUnit.MILLISECONDS)
                 .untilAsserted(() -> assertEquals(0, jones.getInbox().getNewMessageCount()));

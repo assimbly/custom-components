@@ -474,7 +474,7 @@ public class MailConfiguration implements Cloneable {
      * The accessToken for login
      */
     public String getAccessToken() {
-        TenantVariable.TenantVarType tenantVarType = consumerMode ? TenantVariable.TenantVarType.TENANT_VARIABLE : TenantVariable.TenantVarType.STATIC_TENANT_VARIABLE;
+        TenantVariable.TenantVarType tenantVarType = consumerMode ? TenantVariable.TenantVarType.TenantVariable : TenantVariable.TenantVarType.StaticTenantVariable;
         return MongoDao.interpolatePossibleTenantVariable(accessToken, getTenantDbName(), tenantVarType);
     }
     public void setAccessToken(String accessToken) {
