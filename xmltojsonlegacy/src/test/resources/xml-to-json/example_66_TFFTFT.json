@@ -1,0 +1,15 @@
+{
+    "rmessage": [
+        {
+            "company": "wiltec",
+            "identification": "item-1072707",
+            "quantity": "4"
+        },
+        {
+            "company": "wiltec",
+            "identification": "item-1072707",
+            "next_date": "2026-04-14",
+            "next_quantity": "4.0"
+        }
+    ]
+}
