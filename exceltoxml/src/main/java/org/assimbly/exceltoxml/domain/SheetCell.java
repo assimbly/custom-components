@@ -8,8 +8,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.assimbly.exceltoxml.exception.Excel2XmlException;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import static org.apache.poi.ss.usermodel.CellType.FORMULA;
-import static org.assimbly.util.helper.XmlHelper.fixInvalidXml;
 
 public class SheetCell {
 
@@ -19,6 +21,9 @@ public class SheetCell {
     private String cellValue;
     private String rowIndex;
     private String colIndex;
+
+    private static final String INVALID_CHAR_REGEX = "[^A-Za-z0-9_.-]";
+    private static final String INVALID_START_REGEX = "^([0-9.-]|(?i)xml).*";
 
     public SheetCell(Cell cell) {
         this.cellName = DEFAULT_CELL_NAME;
@@ -85,4 +90,27 @@ public class SheetCell {
                     + colIndex + rowIndex + ": " + e.getMessage());
         }
     }
+
+    public static String fixInvalidXml(String input) {
+        String result = input;
+
+        result = result.replaceAll(INVALID_CHAR_REGEX, "");
+
+        Pattern startPattern = Pattern.compile(INVALID_START_REGEX);
+        Matcher startMatcher = startPattern.matcher(result);
+
+        if (startMatcher.matches() || result.isEmpty()) {
+            String stripped = result.replaceAll("^([0-9.-]+|(?i)xml)", "");
+
+            if (stripped.isEmpty()) {
+                result = "element-" + result; // nothing usable remains, e.g. "789" → "element-789"
+            } else {
+                result = stripped; // valid remainder, e.g. "xmlCreateOrderAW" → "CreateOrderAW"
+            }
+        }
+
+        return result;
+    }
+
+
 }

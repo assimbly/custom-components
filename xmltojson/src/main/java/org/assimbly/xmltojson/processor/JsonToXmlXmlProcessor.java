@@ -1,11 +1,11 @@
 package org.assimbly.xmltojson.processor;
 
 import org.apache.camel.Exchange;
+import org.assimbly.xmltojson.helper.XmlHelper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.XML;
 
-import org.assimbly.util.helper.XmlHelper;
 import org.assimbly.xmltojson.CustomXmlJsonDataFormat;
 
 /*

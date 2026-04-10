@@ -23,9 +23,11 @@ import org.assimbly.xmltojsonlegacy.transaction.textnode.TextNodeTransaction;
 import org.assimbly.xmltojsonlegacy.transaction.textnode.TextNodeTransactionFactory;
 import org.assimbly.xmltojsonlegacy.utils.ElementMetadataUtils;
 import org.assimbly.xmltojsonlegacy.utils.ExtractUtils;
-import org.springframework.http.MediaType;
 
 public class XmlToJsonProcessor implements Processor {
+
+    public static final String APPLICATION_JSON_VALUE = "application/json";
+
     private final XmlToJsonEndpoint endpoint;
 
     public XmlToJsonProcessor(XmlToJsonEndpoint endpoint) {
@@ -244,17 +246,6 @@ public class XmlToJsonProcessor implements Processor {
         return nodeToReturn;
     }
 
-    /*
-    private static JsonNode getJsonFromMetadata(ElementMetadata metadata, XmlToJsonConfiguration config) {
-        if(metadata.isRootNode() && config.isForceTopLevelObject()) {
-            ObjectNode parentNode = JsonNodeFactory.instance.objectNode();
-            parentNode.set(ElementMetadataUtils.getElementName(metadata, config.isRemoveNamespacePrefixes()), metadata.isRootArray() ? metadata.getArrayNode() : metadata.getObjectNode());
-            return parentNode;
-        } else {
-            return metadata.isRootArray() ? metadata.getArrayNode() : metadata.getObjectNode();
-        }
-    }*/
-
     // set body on exchange
     private void setBodyOnExchange(Exchange exchange, String body) {
         setContentTypeHeader(exchange);
@@ -263,7 +254,7 @@ public class XmlToJsonProcessor implements Processor {
 
     // set content type header
     private void setContentTypeHeader(Exchange exchange) {
-        exchange.getMessage().setHeader(Exchange.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        exchange.getMessage().setHeader(Exchange.CONTENT_TYPE, APPLICATION_JSON_VALUE);
     }
 
 }

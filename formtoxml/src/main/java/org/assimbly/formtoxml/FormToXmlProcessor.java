@@ -4,12 +4,10 @@ import com.thoughtworks.xstream.XStream;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.assimbly.formtoxml.converter.XstreamMapEntryConverter;
-import org.springframework.http.MediaType;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -17,6 +15,8 @@ import java.util.Map;
 public class FormToXmlProcessor implements Processor {
 
     private final FormToXmlEndpoint endpoint;
+
+    public static final String APPLICATION_XML_VALUE = "application/xml";
 
     public FormToXmlProcessor(FormToXmlEndpoint endpoint) {
         this.endpoint = endpoint;
@@ -52,7 +52,7 @@ public class FormToXmlProcessor implements Processor {
 
             String xml = outputStream.toString(configuration.getEncoding());
 
-            exchange.getIn().setHeader(Exchange.CONTENT_TYPE, MediaType.APPLICATION_XML_VALUE);
+            exchange.getIn().setHeader(Exchange.CONTENT_TYPE, APPLICATION_XML_VALUE);
             exchange.getIn().setBody(xml);
         }
     }

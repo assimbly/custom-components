@@ -23,6 +23,22 @@
   </distributionManagement>
 
   <dependencies>
+	  <dependency>
+		  <groupId>tools.jackson.core</groupId>
+		  <artifactId>jackson-core</artifactId>
+	  </dependency>
+	  <dependency>
+		  <groupId>tools.jackson.core</groupId>
+		  <artifactId>jackson-databind</artifactId>
+	  </dependency>
+
+	  <dependency>
+		  <groupId>org.skyscreamer</groupId>
+		  <artifactId>jsonassert</artifactId>
+		  <version>${jsonassert.version}</version>
+		  <scope>test</scope>
+	  </dependency>
+
   </dependencies>
 
 	<build>

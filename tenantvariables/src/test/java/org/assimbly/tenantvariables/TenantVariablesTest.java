@@ -10,7 +10,7 @@ import org.apache.camel.model.language.ConstantExpression;
 import org.apache.camel.support.DefaultExchange;
 
 import org.apache.camel.test.junit5.CamelTestSupport;
-import org.assimbly.util.exception.TenantVariableNotFoundException;
+import org.assimbly.tenantvariables.exception.TenantVariableNotFoundException;
 import org.assimbly.tenantvariables.domain.EnvironmentValue;
 import org.assimbly.tenantvariables.domain.TenantVariable;
 import org.assimbly.tenantvariables.mongo.MongoDao;

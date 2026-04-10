@@ -8,8 +8,8 @@ import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.assimbly.oauth2token.exception.OAuth2TokenException;
 import org.assimbly.oauth2token.tenant.TenantVariableManager;
-import org.assimbly.util.exception.OAuth2TokenException;
 import org.json.JSONObject;
 import org.assimbly.auth.endpoint.annotation.Secured;
 import org.assimbly.tenantvariables.TenantVariablesProcessor;

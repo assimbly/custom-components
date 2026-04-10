@@ -3,10 +3,10 @@ package org.assimbly.sandbox;
 import org.apache.camel.component.language.LanguageComponent;
 import org.apache.camel.component.language.LanguageEndpoint;
 import org.apache.camel.support.ResourceHelper;
-import org.assimbly.util.helper.Base64Helper;
 import org.apache.camel.Endpoint;
 import org.apache.camel.spi.Language;
 import org.apache.camel.util.ObjectHelper;
+import org.apache.commons.codec.binary.Base64;
 
 import java.util.Map;
 
@@ -28,9 +28,10 @@ public class SandboxComponent extends LanguageComponent {
      */
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-        String script = Base64Helper.unmarshal(
-                (String) parameters.get("script"), UTF_8
-        );
+
+        String base64EncodedScript = (String) parameters.get("script");
+        byte[] decoded = Base64.decodeBase64(base64EncodedScript);
+        String script =  new String(decoded, UTF_8);
 
         parameters.remove("script");
 
@@ -51,11 +52,7 @@ public class SandboxComponent extends LanguageComponent {
             resourceUri = resource;
             // then the script should be null
             script = null;
-        } else {
-            // then the resource should be null
-            resourceUri = null;
         }
-
 
         LanguageEndpoint endpoint = new LanguageEndpoint(uri, this, language, null, resourceUri);
         endpoint.setScript(script);

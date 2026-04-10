@@ -7,7 +7,6 @@ import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import org.assimbly.auth.mongo.MongoClientProvider;
 import org.assimbly.auth.mongo.MongoDao;
-import org.assimbly.util.helper.Base64Helper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.assimbly.auth.MongoTestHelper;
@@ -103,7 +102,8 @@ public class TokenServiceTest {
 
     private String header(String email, String password) throws IOException {
         String header = email + ":" + password;
-        return Base64Helper.marshal(header);
+        byte[] encoded = Base64.encodeBase64(header.getBytes(StandardCharsets.UTF_8));
+        return new String(encoded, StandardCharsets.UTF_8);
     }
 
      */

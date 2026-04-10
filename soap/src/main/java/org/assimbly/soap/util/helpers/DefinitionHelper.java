@@ -7,8 +7,6 @@ import javax.wsdl.extensions.soap.SOAPAddress;
 import javax.wsdl.extensions.soap12.SOAP12Address;
 import javax.xml.namespace.QName;
 
-import org.assimbly.util.Pair;
-
 public final class DefinitionHelper {
 
     public static Definition getImport(Definition definition, QName toImport){

@@ -25,10 +25,36 @@
 
   <dependencies>
 	  <dependency>
+		  <groupId>commons-codec</groupId>
+		  <artifactId>commons-codec</artifactId>
+		  <version>${commons-codec.version}</version>
+	  </dependency>
+	  <dependency>
 		  <groupId>org.craftercms</groupId>
 		  <artifactId>groovy-sandbox</artifactId>
 		  <version>${groovy-sandbox.version}</version>
 	  </dependency>
+	  <dependency>
+		  <groupId>org.apache.groovy</groupId>
+		  <artifactId>groovy</artifactId>
+		  <version>${groovy-script.version}</version>
+	  </dependency>
+	  <dependency>
+		  <groupId>org.apache.groovy</groupId>
+		  <artifactId>groovy-dateutil</artifactId>
+		  <version>${groovy-script.version}</version>
+	  </dependency>
+	  <dependency>
+		  <groupId>org.apache.groovy</groupId>
+		  <artifactId>groovy-json</artifactId>
+		  <version>${groovy-script.version}</version>
+	  </dependency>
+	  <dependency>
+		  <groupId>org.apache.groovy</groupId>
+		  <artifactId>groovy-xml</artifactId>
+		  <version>${groovy-script.version}</version>
+	  </dependency>
+
   </dependencies>
 
 	<build>

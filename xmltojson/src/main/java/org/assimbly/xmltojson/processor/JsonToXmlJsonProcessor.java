@@ -13,8 +13,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import static org.assimbly.util.helper.XmlHelper.fixInvalidXml;
-import static org.assimbly.util.helper.XmlHelper.hasInvalidXml;
+import static org.assimbly.xmltojson.helper.XmlHelper.fixInvalidXml;
+import static org.assimbly.xmltojson.helper.XmlHelper.hasInvalidXml;
 
 /*
     Process the incoming JSON before converting it to XML. The JSON is processed

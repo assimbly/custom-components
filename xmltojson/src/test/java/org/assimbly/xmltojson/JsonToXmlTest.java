@@ -4,7 +4,7 @@ import org.apache.camel.*;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 
-import org.assimbly.util.exception.XmlRootException;
+import org.assimbly.xmltojson.exception.XmlRootException;
 import org.json.JSONException;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.junit.jupiter.api.Test;

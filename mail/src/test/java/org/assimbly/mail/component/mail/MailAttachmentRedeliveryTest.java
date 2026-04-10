@@ -23,6 +23,7 @@ import java.util.Map;
 import jakarta.activation.DataHandler;
 import jakarta.activation.FileDataSource;
 
+import jakarta.mail.internet.MimeMultipart;
 import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -73,8 +74,14 @@ public class MailAttachmentRedeliveryTest extends CamelTestSupport {
         mock.assertIsSatisfied();
         Exchange out = mock.assertExchangeReceived(0);
 
-        // plain text
-        assertEquals("Hello World", out.getIn().getBody(String.class));
+        Object body = out.getIn().getBody();
+        if (body instanceof MimeMultipart multipart) {
+            String text = multipart.getBodyPart(0).getContent().toString();
+            assertEquals("Hello World", text);
+        }else{
+            // plain text
+            assertEquals("Hello World", out.getIn().getBody(String.class));
+        }
 
         // attachment
         Map<String, DataHandler> attachments = out.getIn(AttachmentMessage.class).getAttachments();

@@ -6,7 +6,6 @@ import org.apache.camel.Processor;
 import org.assimbly.jsontoxmllegacy.transaction.NodeTransaction;
 import org.assimbly.jsontoxmllegacy.transaction.NodeTransactionFactory;
 import org.assimbly.jsontoxmllegacy.utils.JsonUtils;
-import org.springframework.http.MediaType;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -21,6 +20,9 @@ import java.io.StringWriter;
 
 
 public class JsonToXmlProcessor implements Processor {
+
+    public static final String APPLICATION_XML_VALUE = "application/xml";
+
     private final JsonToXmlEndpoint endpoint;
 
     public JsonToXmlProcessor(JsonToXmlEndpoint endpoint) {
@@ -111,7 +113,7 @@ public class JsonToXmlProcessor implements Processor {
     }
 
     private void setContentTypeHeader(Exchange exchange) {
-        exchange.getIn().setHeader(Exchange.CONTENT_TYPE, MediaType.APPLICATION_XML_VALUE);
+        exchange.getIn().setHeader(Exchange.CONTENT_TYPE, APPLICATION_XML_VALUE);
     }
 
 }

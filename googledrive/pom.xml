@@ -43,6 +43,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-bundle</artifactId>
+			<version>${tika.version}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>tenantvariables</artifactId>
 			<version>${project.version}</version>

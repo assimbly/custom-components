@@ -24,6 +24,11 @@
   </distributionManagement>
 
   <dependencies>
+	  <dependency>
+		  <groupId>org.apache.httpcomponents.client5</groupId>
+		  <artifactId>httpclient5</artifactId>
+		  <version>${httpClient5.version}</version>
+	  </dependency>
   </dependencies>
 
 	<build>

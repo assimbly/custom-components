@@ -7,11 +7,12 @@ import org.apache.camel.language.groovy.GroovyExpression;
 import org.apache.camel.language.xpath.XPathBuilder;
 import org.apache.camel.model.language.SimpleExpression;
 import org.apache.camel.support.LanguageSupport;
-import org.assimbly.util.EncryptionUtil;
-import org.assimbly.util.exception.EnvironmentException;
-import org.assimbly.util.exception.TenantVariableNotFoundException;
-import org.assimbly.util.helper.Base64Helper;
-import org.assimbly.util.helper.ExchangeHelper;
+import org.apache.commons.codec.binary.Base64;
+
+import org.assimbly.tenantvariables.exception.EnvironmentException;
+import org.assimbly.tenantvariables.exception.TenantVariableNotFoundException;
+import org.assimbly.tenantvariables.helper.EncryptionUtil;
+import org.assimbly.tenantvariables.helper.ExchangeHelper;
 import org.assimbly.tenantvariables.domain.EnvironmentValue;
 import org.assimbly.tenantvariables.domain.TenantVariable;
 import org.assimbly.tenantvariables.mongo.MongoDao;
@@ -110,7 +111,9 @@ public class TenantVariablesProcessor implements Processor {
 
         name = interpolateVar(name, exchange);
 
-        value = interpolateVar(Base64Helper.unmarshal(value, UTF_8), exchange, expressionType);
+        byte[] decoded = Base64.decodeBase64(value);
+
+        String decodedValue = interpolateVar(new String(decoded, UTF_8), exchange, expressionType);
 
         String modifier = groupName.equalsIgnoreCase("groupless") ? flowName : groupName + "/" + flowName;
 
@@ -139,13 +142,13 @@ public class TenantVariablesProcessor implements Processor {
         boolean encrypt = endpoint.getConfiguration().isEncrypt();
 
         if(encrypt) {
-            value = encrypt(value);
+            decodedValue = encrypt(decodedValue);
         } else {
             variable.setNonce(null);
         }
 
         variable.setEncrypted(encrypt);
-        variable.setValue(value);
+        variable.setValue(decodedValue);
         variable.setLastUpdate(modifyDate);
         variable.setUpdatedBy(modifier);
 

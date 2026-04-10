@@ -4,19 +4,27 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.assimbly.util.helper.XmlHelper;
 import org.assimbly.exceltoxml.domain.ExcelReader;
 import org.assimbly.exceltoxml.domain.ExcelRule;
 import org.assimbly.exceltoxml.domain.SheetCell;
 import org.assimbly.exceltoxml.exception.Excel2XmlException;
+import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSSerializer;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.InputStream;
 import java.util.List;
 
 public class ExcelToXmlProcessor implements Processor {
+
+    private static final Logger log = LoggerFactory.getLogger(ExcelToXmlProcessor.class);
+
     private final ExcelToXmlEndpoint endpoint;
 
     public ExcelToXmlProcessor(ExcelToXmlEndpoint endpoint) {
@@ -32,7 +40,7 @@ public class ExcelToXmlProcessor implements Processor {
 
         Workbook workbook = WorkbookFactory.create(inputStream);
 
-        Document xmlDocument = XmlHelper.newDocument();
+        Document xmlDocument = newDocument();
 
         if(xmlDocument == null)
             throw new ParserConfigurationException();
@@ -45,7 +53,9 @@ public class ExcelToXmlProcessor implements Processor {
             rootElement.appendChild( buildRuleXml(ruleData, rule, xmlDocument) );
         }
 
-        exchange.getIn().setBody(XmlHelper.prettyPrint(xmlDocument));
+
+        exchange.getIn().setBody(prettyPrint(xmlDocument));
+
     }
 
     private Element buildRuleXml(List<List<SheetCell>> list, ExcelRule rule, Document doc) {
@@ -77,4 +87,31 @@ public class ExcelToXmlProcessor implements Processor {
     private boolean allBlank(List<SheetCell> cells) {
         return cells.stream().allMatch(cell -> cell.getCellValue().isEmpty());
     }
+
+    public static Document newDocument(){
+        DocumentBuilderFactory icFactory;
+        DocumentBuilder icBuilder;
+
+        try {
+            icFactory = DocumentBuilderFactory.newInstance();
+            icBuilder = icFactory.newDocumentBuilder();
+
+            return icBuilder.newDocument();
+        } catch (ParserConfigurationException e) {
+            log.error(e.getMessage(), e);
+        }
+
+        return null;
+    }
+
+    public String prettyPrint(Document doc) {
+        DOMImplementationLS domImplementation = (DOMImplementationLS) doc.getImplementation();
+        LSSerializer lsSerializer = domImplementation.createLSSerializer();
+
+        // Set the pretty print hint
+        lsSerializer.getDomConfig().setParameter("format-pretty-print", Boolean.TRUE);
+
+        return lsSerializer.writeToString(doc);
+    }
+
 }

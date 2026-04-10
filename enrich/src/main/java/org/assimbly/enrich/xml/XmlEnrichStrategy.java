@@ -2,14 +2,14 @@ package org.assimbly.enrich.xml;
 
 import org.apache.camel.AggregationStrategy;
 import org.apache.camel.Exchange;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
-import org.assimbly.util.helper.XmlHelper;
 
 
 public class XmlEnrichStrategy implements AggregationStrategy {
 
-    private static final Logger logger = Logger.getLogger(XmlEnrichStrategy.class);
+    private static final Logger logger = LoggerFactory.getLogger(XmlEnrichStrategy.class);
 
     @Override
     public Exchange aggregate(Exchange original, Exchange resource) {
@@ -71,12 +71,12 @@ public class XmlEnrichStrategy implements AggregationStrategy {
             Document document = XmlHelper.newDocument(exchange.getIn().getBody(String.class));
 
             if (document == null)
-                logger.warn("No valid XML returned by the " + route + " route to the Enrich component.");
+                logger.warn("No valid XML returned by the {} route to the Enrich component.", route);
 
             return document;
 
         } catch (Exception _) {
-            logger.warn("Unable to get data from the " + route + " route to the Enrich component.");
+            logger.warn("Unable to get data from the {} route to the Enrich component.", route);
         }
 
         return null;

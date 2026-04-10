@@ -3,7 +3,8 @@ package org.assimbly.enrich.zipfile;
 import org.apache.camel.AggregationStrategy;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -18,7 +19,7 @@ import java.util.zip.ZipOutputStream;
 
 public class ZipFileEnrichStrategy implements AggregationStrategy {
 
-    private static final Logger logger = Logger.getLogger(ZipFileEnrichStrategy.class);
+    private static final Logger logger = LoggerFactory.getLogger(ZipFileEnrichStrategy.class);
 
     private List<String> elementNames;
 

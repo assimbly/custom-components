@@ -25,6 +25,12 @@
 
 	<dependencies>
 
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>${json.version}</version>
+		</dependency>
+
 		<!-- provided by container -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>

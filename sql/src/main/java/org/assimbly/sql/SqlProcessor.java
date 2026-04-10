@@ -4,18 +4,25 @@ import java.sql.*;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.commons.text.StringEscapeUtils;
+import org.assimbly.sql.helper.ExchangeHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.assimbly.util.helper.ExchangeHelper;
-import org.assimbly.util.helper.XmlHelper;
 import org.assimbly.sql.adapter.DatabaseAdapter;
 import org.assimbly.sql.domain.JDBCConnection;
 import org.assimbly.sql.exception.SQLException;
+import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSSerializer;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 public class SqlProcessor implements Processor {
+
+    private static final Logger log = LoggerFactory.getLogger(SqlProcessor.class);
 
     private final SqlEndpoint endpoint;
 
@@ -32,7 +39,7 @@ public class SqlProcessor implements Processor {
             throw new SQLException("Could not connect to the database, check your settings.");
 
         Document result = executeQuery(exchange, connection, config.getQuery().trim());
-        exchange.getIn().setBody(XmlHelper.prettyPrint(result));
+        exchange.getIn().setBody(prettyPrint(result));
     }
 
     private Connection openConnection(SqlConfiguration config, Exchange exchange) throws Exception {
@@ -53,7 +60,7 @@ public class SqlProcessor implements Processor {
     }
 
     private Document executeQuery(Exchange exchange, Connection connection, String sqlQuery) throws ParserConfigurationException {
-        Document doc = XmlHelper.newDocument();
+        Document doc = newDocument();
         if (doc == null) throw new ParserConfigurationException();
 
         Element rootElement = doc.createElement("ResultSet");
@@ -183,5 +190,32 @@ public class SqlProcessor implements Processor {
 
         return connection.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
     }
+
+    public static Document newDocument(){
+        DocumentBuilderFactory icFactory;
+        DocumentBuilder icBuilder;
+
+        try {
+            icFactory = DocumentBuilderFactory.newInstance();
+            icBuilder = icFactory.newDocumentBuilder();
+
+            return icBuilder.newDocument();
+        } catch (ParserConfigurationException e) {
+            log.error(e.getMessage(), e);
+        }
+
+        return null;
+    }
+
+    public String prettyPrint(Document doc) {
+        DOMImplementationLS domImplementation = (DOMImplementationLS) doc.getImplementation();
+        LSSerializer lsSerializer = domImplementation.createLSSerializer();
+
+        // Set the pretty print hint
+        lsSerializer.getDomConfig().setParameter("format-pretty-print", Boolean.TRUE);
+
+        return lsSerializer.writeToString(doc);
+    }
+
 
 }

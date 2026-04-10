@@ -9160,7 +9160,7 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
         );
     }
 
-    private void compareInputXmlFileWithOutputJsonFile(String routeName, String inputXmlFile, String outputJsonFile) throws IOException, InterruptedException {
+    private void compareInputXmlFileWithOutputJsonFile(String routeName, String inputXmlFile, String outputJsonFile) throws Exception {
 
         String input = loadFile(inputXmlFile);
         String expected = loadFile(outputJsonFile);

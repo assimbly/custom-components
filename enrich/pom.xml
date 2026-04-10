@@ -25,9 +25,8 @@
 
   <dependencies>
 	  <dependency>
-		  <groupId>org.assimbly</groupId>
-		  <artifactId>activemq-base</artifactId>
-		  <version>${assimbly.version}</version>
+		  <groupId>org.apache.camel</groupId>
+		  <artifactId>camel-attachments</artifactId>
 	  </dependency>
 	  <dependency>
 		  <groupId>org.assimbly</groupId>
@@ -38,6 +37,11 @@
 		  <groupId>jakarta.activation</groupId>
 		  <artifactId>jakarta.activation-api</artifactId>
 		  <version>${jakarta.activation.version}</version>
+	  </dependency>
+	  <dependency>
+		  <groupId>org.apache.tika</groupId>
+		  <artifactId>tika-bundle</artifactId>
+		  <version>${tika.version}</version>
 	  </dependency>
 
   </dependencies>

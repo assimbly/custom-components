@@ -1,11 +1,11 @@
 package org.assimbly.enrich.attachment;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.camel.AggregationStrategy;
 import org.apache.camel.attachment.AttachmentMessage;
-import org.assimbly.util.helper.MimeTypeHelper;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
-import org.apache.log4j.Logger;
 import org.apache.tika.io.IOUtils;
 
 import jakarta.activation.DataHandler;
@@ -14,7 +14,7 @@ import java.io.InputStream;
 
 public class AttachmentEnrichStrategy implements AggregationStrategy {
 
-    private static final Logger logger = Logger.getLogger(AttachmentEnrichStrategy.class);
+    private static final Logger logger = LoggerFactory.getLogger(AttachmentEnrichStrategy.class);
 
     @Override
     public Exchange aggregate(Exchange original, Exchange resource) {

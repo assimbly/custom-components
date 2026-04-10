@@ -3,7 +3,6 @@ package org.assimbly.encoder;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.commons.io.IOUtils;
-import org.assimbly.util.OSUtil;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.junit.jupiter.api.Test;
 
@@ -41,7 +40,7 @@ public class EncoderComponentTest extends CamelTestSupport {
         actual = actual.replace("\n", "").replace("\r", "");
 
         //skip test when on Windows
-        if(!OSUtil.getOS().equals(OSUtil.OS.WINDOWS)){
+        if(!System.getProperty("os.name").equalsIgnoreCase("windows")){
             assertEquals(expected, actual);
         }
 

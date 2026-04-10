@@ -1,6 +1,6 @@
 package org.assimbly.xmltoexcel;
 
-import org.assimbly.util.helper.Base64Helper;
+import org.apache.commons.codec.binary.Base64;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.ObjectMapper;
@@ -14,7 +14,7 @@ import org.assimbly.xmltoexcel.exception.XmlToExcelException;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.json.JsonMapper;
 
-import java.util.ArrayList;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 
@@ -115,7 +115,9 @@ public class XmlToExcelConfiguration {
     }
 
     public void setWorksheets(String worksheets) {
-        String json = new String(Base64Helper.unmarshal(worksheets));
+        byte[] decoded = Base64.decodeBase64(worksheets);
+        String json = new String(decoded, StandardCharsets.UTF_8);
+
         this.worksheets = jsonToWorksheets(json);
     }
 
@@ -139,23 +141,5 @@ public class XmlToExcelConfiguration {
             throw new XmlToExcelException("Deserialization failed: " + e.getMessage());
         }
     }
-
-    /*
-    public List<CustomWorksheet> jsonToWorksheets(String json) {
-
-        ObjectMapper mapper = new ObjectMapper();
-        List<CustomWorksheet> worksheetsList;
-
-        try {
-            worksheetsList = mapper.readValue(
-                    json,
-                    new TypeReference<List<CustomWorksheet>>() {}
-            );
-        } catch (JacksonException e) {
-            throw new XmlToExcelException("Unable to deserialize worksheets: " + e.getMessage());
-        }
-
-        return worksheetsList;
-    }*/
 
 }

@@ -4,7 +4,6 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.attachment.AttachmentMessage;
 import org.apache.commons.io.IOUtils;
-import org.assimbly.util.helper.MimeTypeHelper;
 
 import jakarta.activation.DataHandler;
 import org.slf4j.Logger;
@@ -32,10 +31,10 @@ public class AttachmentAttacher implements Processor {
         if (mimeType == null)
             mimeType = MimeTypeHelper.detectMimeType(is).toString();
 
-        if (fileName == null)
-            in.setHeader(Exchange.FILE_NAME,
-                    fileName = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS")
-                            .format(new Date()) + MimeTypeHelper.findFileExtension(mimeType));
+        if (fileName == null) {
+            fileName = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS").format(new Date()) + MimeTypeHelper.findFileExtension(mimeType);
+            in.setHeader(Exchange.FILE_NAME, fileName);
+        }
 
         String emailBody = in.getHeader("EmailBody", String.class);
 

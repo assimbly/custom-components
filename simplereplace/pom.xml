@@ -23,6 +23,11 @@
   </distributionManagement>
 
   <dependencies>
+	  <dependency>
+		  <groupId>org.apache.james</groupId>
+		  <artifactId>apache-mime4j-core</artifactId>
+		  <version>${mime4j.version}</version>
+	  </dependency>
   </dependencies>
 
 	<build>

@@ -4,12 +4,12 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.component.ResourceEndpoint;
 import org.apache.camel.spi.UriEndpoint;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
-import org.assimbly.util.helper.Base64Helper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -37,7 +37,7 @@ public class PdfEndpoint extends ResourceEndpoint {
 
         if(resourceUri.startsWith("ref")){
             String base64String = convertStreamToString(data);
-            return Base64Helper.unmarshal(base64String);
+            return Base64.decodeBase64(base64String);
         }
 
         return IOUtils.toByteArray(data);

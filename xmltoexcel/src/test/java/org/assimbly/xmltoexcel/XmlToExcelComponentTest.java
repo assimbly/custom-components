@@ -1,7 +1,9 @@
 package org.assimbly.xmltoexcel;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+import org.apache.commons.codec.binary.Base64;
 import tools.jackson.databind.ObjectMapper;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Exchange;
@@ -10,7 +12,6 @@ import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.assimbly.util.helper.Base64Helper;
 import org.junit.jupiter.api.BeforeAll;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.junit.jupiter.api.Test;
@@ -193,9 +194,8 @@ class XmlToExcelComponentTest extends CamelTestSupport {
 
         try {
             String jsonArrayString = objectMapper.writeValueAsString(worksheets);
-
-            return Base64Helper.marshal(jsonArrayString);
-
+            byte[] encoded = Base64.encodeBase64(jsonArrayString.getBytes(StandardCharsets.UTF_8));
+            return new String(encoded, StandardCharsets.UTF_8);
         } catch (JacksonException e) {
                throw new RuntimeException("Failed to serialize worksheets to JSON.", e);
         }

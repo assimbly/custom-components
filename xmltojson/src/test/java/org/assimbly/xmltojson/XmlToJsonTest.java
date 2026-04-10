@@ -8,8 +8,8 @@ import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit5.CamelTestSupport;
+import org.assimbly.xmltojson.exception.JsonTypeException;
 import org.junit.jupiter.api.Test;
-import org.assimbly.util.exception.JsonTypeException;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import java.io.IOException;

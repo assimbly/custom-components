@@ -28,28 +28,48 @@
 		  <artifactId>auth</artifactId>
 		  <version>${project.parent.version}</version>
 	  </dependency>
-
+	  <dependency>
+		  <groupId>commons-io</groupId>
+		  <artifactId>commons-io</artifactId>
+		  <version>${commons-io.version}</version>
+	  </dependency>
 	  <dependency>
 		  <groupId>org.apache.cxf</groupId>
 		  <artifactId>cxf-rt-frontend-jaxrs</artifactId>
 		  <version>${cxf.version}</version>
 	  </dependency>
 	  <dependency>
-		  <groupId>wsdl4j</groupId>
-		  <artifactId>wsdl4j</artifactId>
-		  <version>${wsdl4j.version}</version>
-	  </dependency>
-	 
-	  <dependency>
 		  <groupId>org.apache.felix</groupId>
 		  <artifactId>org.apache.felix.configadmin</artifactId>
 		  <version>${config-admin.version}</version>
 	  </dependency>
-
+	  <dependency>
+		  <groupId>tools.jackson.core</groupId>
+		  <artifactId>jackson-core</artifactId>
+	  </dependency>
+	  <dependency>
+		  <groupId>tools.jackson.core</groupId>
+		  <artifactId>jackson-databind</artifactId>
+	  </dependency>
+	  <dependency>
+		  <groupId>org.apache.httpcomponents.client5</groupId>
+		  <artifactId>httpclient5</artifactId>
+		  <version>${httpClient5.version}</version>
+	  </dependency>
+	  <dependency>
+		  <groupId>org.json</groupId>
+		  <artifactId>json</artifactId>
+		  <version>${json.version}</version>
+	  </dependency>
 	  <dependency>
 		  <groupId>com.sun.xml.messaging.saaj</groupId>
 		  <artifactId>saaj-impl</artifactId>
 		  <version>${saaj-impl.version}</version>
+	  </dependency>
+	  <dependency>
+		  <groupId>wsdl4j</groupId>
+		  <artifactId>wsdl4j</artifactId>
+		  <version>${wsdl4j.version}</version>
 	  </dependency>
 
   </dependencies>

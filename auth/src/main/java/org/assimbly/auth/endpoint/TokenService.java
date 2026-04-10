@@ -4,6 +4,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 
 import com.mongodb.client.MongoDatabase;
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.assimbly.auth.InvalidTenantException;
@@ -13,7 +14,8 @@ import org.assimbly.auth.domain.Status;
 import org.assimbly.auth.domain.Tenant;
 import org.assimbly.auth.domain.User;
 import org.assimbly.auth.mongo.MongoDao;
-import org.assimbly.util.helper.Base64Helper;
+
+import java.nio.charset.StandardCharsets;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -84,7 +86,8 @@ public class TokenService {
         String[] values;
 
         try {
-            String header = Base64Helper.unmarshal(base64, UTF_8);
+            byte[] decoded = Base64.decodeBase64(base64);
+            String header = new String(decoded, UTF_8);
             values = header.split(":");
         } catch (Exception e) {
             throw new BadRequestException(e);

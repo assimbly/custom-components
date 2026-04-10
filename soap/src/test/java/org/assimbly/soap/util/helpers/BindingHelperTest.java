@@ -1,6 +1,5 @@
 package org.assimbly.soap.util.helpers;
 
-import org.assimbly.util.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,12 +13,12 @@ import javax.wsdl.xml.WSDLReader;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class BindingHelperTest {
+class BindingHelperTest {
 
     private static Definition definition;
 
     @BeforeEach
-    public void setup() throws WSDLException {
+    void setup() throws WSDLException {
         WSDLFactory factory = WSDLFactory.newInstance();
         WSDLReader reader = factory.newWSDLReader();
 
@@ -28,7 +27,7 @@ public class BindingHelperTest {
     }
 
     @Test
-    public void testGettingSoapHeaders() {
+    void testGettingSoapHeaders() {
         Pair<Definition, Binding> lookup = DefinitionHelper.binding(definition,"OperationWithHeaders");
 
         assertNotNull(lookup);

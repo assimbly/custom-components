@@ -1,7 +1,6 @@
 package org.assimbly.sql.service;
 
 import org.assimbly.sql.adapter.*;
-import org.assimbly.util.error.ValidationErrorMessage;
 import org.assimbly.sql.domain.ConnectionType;
 import org.assimbly.sql.domain.JDBCConnection;
 
@@ -9,6 +8,8 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
+import org.assimbly.sql.error.ValidationErrorMessage;
+
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;

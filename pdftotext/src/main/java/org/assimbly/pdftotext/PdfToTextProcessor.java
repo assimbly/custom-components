@@ -5,9 +5,10 @@ import org.apache.camel.Processor;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.springframework.http.MediaType;
 
 public class PdfToTextProcessor implements Processor {
+
+    public static final String TEXT_PLAIN = "text/plain";
 
     @Override
     public void process(Exchange exchange) throws Exception {
@@ -26,7 +27,7 @@ public class PdfToTextProcessor implements Processor {
         String output = stripper.getText(document);
         document.close();
 
-        exchange.getIn().setHeader(Exchange.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE);
+        exchange.getIn().setHeader(Exchange.CONTENT_TYPE, TEXT_PLAIN);
         exchange.getIn().setBody(output);
     }
 }

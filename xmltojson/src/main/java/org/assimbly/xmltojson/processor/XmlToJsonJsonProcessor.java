@@ -1,8 +1,8 @@
 package org.assimbly.xmltojson.processor;
 
+import org.assimbly.xmltojson.exception.JsonTypeException;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.assimbly.util.exception.JsonTypeException;
 import org.assimbly.xmltojson.domain.JsonType;
 import org.assimbly.xmltojson.CustomXmlJsonDataFormat;
 

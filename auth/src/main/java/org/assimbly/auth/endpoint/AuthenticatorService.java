@@ -2,7 +2,7 @@ package org.assimbly.auth.endpoint;
 
 import jakarta.ws.rs.*;
 
-import com.google.common.base.CaseFormat;
+//import com.google.common.base.CaseFormat;
 import com.mongodb.client.MongoClient;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
@@ -44,9 +44,9 @@ public class AuthenticatorService {
             GoogleAuthenticatorKey key = authenticator.createCredentials(user.getEmail());
 
             String domainName = ui.getQueryParameters().getFirst("domain_name");
+            String domainNameUpperCase = domainName.substring(0, 1).toUpperCase() + domainName.substring(1);
 
-            String issuer = "Assimbly - %s".formatted(
-                    CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, domainName));
+            String issuer = "Assimbly - %s".formatted(domainNameUpperCase);
 
             String qrLocation = GoogleAuthenticatorQRGenerator.getOtpAuthURL(issuer, user.getEmail(), key);
 
@@ -83,4 +83,6 @@ public class AuthenticatorService {
     public Boolean validate(TwoFactorRequest request){
         return authenticator.authorizeUser(request.getEmail(), request.getToken());
     }
+
+
 }

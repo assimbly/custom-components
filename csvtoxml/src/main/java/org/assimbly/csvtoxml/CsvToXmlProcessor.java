@@ -6,7 +6,6 @@ import org.apache.camel.Processor;
 import org.assimbly.csvtoxml.converter.XstreamMapEntryConverter;
 import org.assimbly.csvtoxml.domain.AnonymousObject;
 import org.assimbly.csvtoxml.domain.Items;
-import org.springframework.http.MediaType;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
@@ -16,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class CsvToXmlProcessor implements Processor {
+
+    public static final String APPLICATION_XML_VALUE = "application/xml";
 
     private final CsvToXmlEndpoint endpoint;
 
@@ -55,7 +56,7 @@ public class CsvToXmlProcessor implements Processor {
 
             String xml = outputStream.toString(configuration.getEncoding());
 
-            exchange.getIn().setHeader(Exchange.CONTENT_TYPE, MediaType.APPLICATION_XML_VALUE);
+            exchange.getIn().setHeader(Exchange.CONTENT_TYPE, APPLICATION_XML_VALUE);
             exchange.getIn().setBody(xml);
         }
 

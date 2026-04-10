@@ -1,5 +1,7 @@
 package org.assimbly.soap;
 
+import org.assimbly.soap.util.helpers.Pair;
+import org.assimbly.soap.util.helpers.XmlHelper;
 import org.assimbly.soap.util.helpers.*;
 import jakarta.xml.soap.*;
 import javax.wsdl.*;
@@ -16,9 +18,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
-import org.assimbly.util.Pair;
-import org.assimbly.util.helper.ExchangeHelper;
-import org.assimbly.util.helper.XmlHelper;
 import org.assimbly.soap.domain.SoapAttribute;
 import org.assimbly.soap.domain.SoapHeader;
 
@@ -33,9 +32,12 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SoapProcessor implements Processor {
 
@@ -43,6 +45,9 @@ public class SoapProcessor implements Processor {
 
     private SoapEndpoint endpoint;
     private Definition definition;
+
+    private static final String HEADER_VARIABLE_REGEX = "\\$\\{headers?\\.(.+?)}";
+    private static final String BODY_VARIABLE_REGEX = "\\$\\{body(As\\(String\\))?}";
 
     public SoapProcessor() {}
 
@@ -392,7 +397,7 @@ public class SoapProcessor implements Processor {
                     : new QName(attribute.getValue());
 
             el.addChildElement(qName)
-                    .addTextNode(ExchangeHelper.interpolate(attribute.getValue(), exchange));
+                    .addTextNode(interpolate(attribute.getValue(), exchange));
         }
     }
 
@@ -625,4 +630,50 @@ public class SoapProcessor implements Processor {
     public void setDefinition(Definition definition) {
         this.definition = definition;
     }
+
+    static String interpolate(String text, Exchange exchange){
+        if(text == null)
+            return null;
+
+        for(String regex : Arrays.asList(HEADER_VARIABLE_REGEX, BODY_VARIABLE_REGEX)){
+            text = replaceVariables(text, exchange, regex);
+        }
+
+        return text;
+    }
+
+    static String replaceVariables(String text, Exchange exchange, String regex) {
+        StringBuilder stringBuilder = new StringBuilder();
+        Matcher m = Pattern.compile(regex).matcher(text);
+        while(m.find()) {
+            String value;
+            switch (regex) {
+                case HEADER_VARIABLE_REGEX:
+                    value = exchange.getIn().getHeader(m.group(1), String.class);
+                    break;
+                case BODY_VARIABLE_REGEX:
+                    value = exchange.getIn().getBody(String.class);
+                    break;
+                default:
+                    return stringBuilder.toString();
+            }
+            if(value != null) {
+                value = escapeDollarSign(value);
+                m.appendReplacement(stringBuilder, unescapeExceptionalCharacters(value));
+            }
+        }
+        m.appendTail(stringBuilder);
+        return stringBuilder.toString();
+    }
+
+    public static String unescapeExceptionalCharacters(String str) {
+        return str.replace("\\n", "\n")
+                .replace("\\t", "\t")
+                .replace("\\r", "\r");
+    }
+
+    static String escapeDollarSign(String str) {
+        return str.replace("$", "\\$");
+    }
+
 }

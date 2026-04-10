@@ -6,8 +6,8 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.support.DefaultExchange;
-import org.assimbly.util.helper.XmlHelper;
 
+import org.assimbly.soap.util.helpers.XmlHelper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,13 @@ import javax.wsdl.xml.WSDLReader;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
+
+import java.io.StringWriter;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -212,6 +218,7 @@ class SoapProcessorTest {
         Document expected = builder.parse(classLoader.getResourceAsStream("output-mocks/output-header-with-part-name.xml"));
 
         assertEquals(XmlHelper.prettyPrint(expected), XmlHelper.prettyPrint(envelope.getHeader().getOwnerDocument()));
+
     }
 
     @Test

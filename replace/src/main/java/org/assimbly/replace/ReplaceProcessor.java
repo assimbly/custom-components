@@ -3,7 +3,6 @@ package org.assimbly.replace;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.commons.lang3.StringUtils;
-import org.assimbly.util.helper.ExchangeHelper;
 
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -43,7 +42,7 @@ public class ReplaceProcessor implements Processor {
             }
         }
 
-        replaceWith = ExchangeHelper.unescapeExceptionalCharacters(replaceWith);
+        replaceWith = unescapeExceptionalCharacters(replaceWith);
         replaceWith = Matcher.quoteReplacement(replaceWith);
         String result;
 
@@ -77,6 +76,12 @@ public class ReplaceProcessor implements Processor {
         m.appendTail(result);
 
         return result.toString();
+    }
+
+    static String unescapeExceptionalCharacters(String str) {
+        return str.replace("\\n", "\n")
+                .replace("\\t", "\t")
+                .replace("\\r", "\r");
     }
 
 }
