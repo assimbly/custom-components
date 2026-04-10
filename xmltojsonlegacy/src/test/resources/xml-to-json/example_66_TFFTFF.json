@@ -1,0 +1,27 @@
+{
+  "rmessage": {
+    "@RESTgroupId": "10000",
+    "@action": "POST",
+    "@additionalInfo": "27.7074307|DOOS|item-1072707",
+    "@applicationId": "CLOUDSUITE",
+    "@class": "array",
+    "@comment": "Aanmaken voorraadpositie product",
+    "@id": "stock",
+    "@message": "origin/wiltec/product/item-1072707/stock/wiltec",
+    "@messageId": "1000001010",
+    "@step": "01",
+    "e": [
+      {
+        "company": "wiltec",
+        "identification": "item-1072707",
+        "quantity": "4"
+      },
+      {
+        "company": "wiltec",
+        "identification": "item-1072707",
+        "next_date": "2026-04-14",
+        "next_quantity": "4.0"
+      }
+    ]
+  }
+}

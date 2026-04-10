@@ -508,7 +508,8 @@ public class ExtractUtils {
             }
         }
 
-        if(metadata.getAttributes().isEmpty()){
+        if(metadata.getAttributes().isEmpty() ||
+                config.isTypeHints() && metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY)){
             return;
         }
 
