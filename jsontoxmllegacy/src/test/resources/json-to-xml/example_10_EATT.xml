@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<o>
+    <alt_text class="object" null="true"/>
+    <create_date type="string">2024-08-26T04:55:38.041361</create_date>
+    <ident type="string">495423p3.jpg</ident>
+    <ident_org type="string">jpg</ident_org>
+    <key type="string">495423p3_item-Q495423</key>
+    <language class="object" null="true"/>
+    <modified_date type="string">2026-01-12T20:33:34.311919</modified_date>
+    <name type="string">495423p3_495423p3</name>
+    <product class="object">
+        <key type="string">item-Q495423</key>
+        <origin type="string">wiltec</origin>
+    </product>
+    <sequence type="number">10002</sequence>
+    <shop class="object" null="true"/>
+    <trees class="array"/>
+    <type type="string">additional_product_image</type>
+    <video_embed type="boolean">false</video_embed>
+    <video_provider class="object" null="true"/>
+</o>
