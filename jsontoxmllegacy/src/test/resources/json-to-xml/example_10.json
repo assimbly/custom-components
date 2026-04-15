@@ -1,0 +1,20 @@
+{
+    "key": "495423p3_item-Q495423",
+    "name": "495423p3_495423p3",
+    "ident": "495423p3.jpg",
+    "ident_org": "jpg",
+    "sequence": 10002,
+    "video_provider": null,
+    "video_embed": false,
+    "type": "additional_product_image",
+    "language": null,
+    "product": {
+        "key": "item-Q495423",
+        "origin": "wiltec"
+    },
+    "trees": [],
+    "shop": null,
+    "alt_text": null,
+    "create_date": "2024-08-26T04:55:38.041361",
+    "modified_date": "2026-01-12T20:33:34.311919"
+}
