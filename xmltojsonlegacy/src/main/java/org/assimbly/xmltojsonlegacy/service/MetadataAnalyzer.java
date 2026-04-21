@@ -34,6 +34,7 @@ public class MetadataAnalyzer {
         ElementMetadata greatGrandParentElementMetadata = metadataMap.getOrDefault(ElementMetadataUtils.getParentPath(grandParentElementMetadata.getPath()), new ElementMetadata());
 
         if (metadata.getLevel() == 0 && (
+                (!metadata.isDefinesNamespaces() && metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY)) ||
                 (metadata.getChildrenCount() == 1 && !metadata.isDefinesNamespaces() && (metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY) || !metadata.isHasAttributes())) ||
                         (metadata.getChildrenCount() == 0 && !metadata.isHasEmptyTextContent())
         )) {

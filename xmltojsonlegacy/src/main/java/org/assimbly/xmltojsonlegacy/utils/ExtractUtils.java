@@ -373,8 +373,11 @@ public class ExtractUtils {
         if (metadata.getAttributes().isEmpty() && !metadata.isDefinesNamespaces()) return;
         if (!config.isSkipNamespaces() && metadata.isDefinesNamespaces())
             addNamespacesToObjectNode(metadata);
-        if (!metadata.getAttributes().isEmpty())
+        if (!metadata.getAttributes().isEmpty() &&
+                (!config.isTypeHints() || !metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY))
+        ) {
             addAttributeEntriesToObjectNode(metadata, config);
+        }
     }
 
     private static void addNamespacesToObjectNode(ElementMetadata metadata) {
