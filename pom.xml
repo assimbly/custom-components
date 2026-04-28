@@ -68,10 +68,10 @@
         <bouncycastle.version>1.84</bouncycastle.version>
         <config-admin.version>1.9.26</config-admin.version>
         <cxf.version>4.2.0</cxf.version>
-        <camel.version>4.18.1</camel.version>
-        <commons-codec.version>1.21.0</commons-codec.version>
+        <camel.version>4.20.0</camel.version>
+        <commons-codec.version>1.22.0</commons-codec.version>
         <commons-lang3.version>3.20.0</commons-lang3.version>
-        <commons-io.version>2.21.0</commons-io.version>
+        <commons-io.version>2.22.0</commons-io.version>
         <commons-text.version>1.15.0</commons-text.version>
         <docconverter.version>2.0.0</docconverter.version>
         <google.api.version>v3-rev20260405-2.0.0</google.api.version>
@@ -80,12 +80,12 @@
         <greenmail.version>2.1.8</greenmail.version>
         <groovy-sandbox.version>4.3.2</groovy-sandbox.version>
         <groovy-script.version>5.0.5</groovy-script.version>
-        <hibernate-core.version>7.3.1.Final</hibernate-core.version>
-        <httpClient5.version>5.6</httpClient5.version>
+        <hibernate-core.version>7.3.2.Final</hibernate-core.version>
+        <httpClient5.version>5.5.2</httpClient5.version>
         <httpcomponents.version>4.5.14</httpcomponents.version>
         <jackson.version>3.1.2</jackson.version>
         <jakarta.activation.version>2.1.4</jakarta.activation.version>
-        <jaxen.version>2.0.0</jaxen.version>
+        <jaxen.version>2.0.1</jaxen.version>
         <jasypt.version>1.9.3</jasypt.version>
         <jcifs.version>3.0.2</jcifs.version>
         <json.version>20251224</json.version>
@@ -104,7 +104,7 @@
         <skyscreamer.version>1.5.3</skyscreamer.version>
         <smooks.version>1.7.1</smooks.version>
         <smooks-fragments.version>1.7.1.0</smooks-fragments.version>
-        <spring.version>7.0.6</spring.version>
+        <spring.version>7.0.7</spring.version>
         <slf4j.version>2.0.17</slf4j.version>
         <tika.version>1.28.5</tika.version>
         <wsdl4j.version>1.6.3</wsdl4j.version>
@@ -114,7 +114,7 @@
         <db2-jdbc.version>db2jcc4</db2-jdbc.version>
         <informix-jdbc.version>15.0.1.1</informix-jdbc.version>
         <mssql-jdbc.version>13.4.0.jre11</mssql-jdbc.version>
-        <mysql-connector-java.version>9.6.0</mysql-connector-java.version>
+        <mysql-connector-java.version>9.7.0</mysql-connector-java.version>
         <oracle.version>23.26.1.0.0</oracle.version>
         <postgresql.version>42.7.10</postgresql.version>
 
