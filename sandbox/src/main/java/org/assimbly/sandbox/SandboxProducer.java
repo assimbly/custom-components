@@ -18,26 +18,10 @@ public class SandboxProducer extends LanguageProducer {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        String language = getEndpoint().getLanguage().toString();
-
-        if (language.toLowerCase().contains("groovy")) {
-            String script = getEndpoint().getScript();
-            if (script == null) {
-                script = exchange.getIn().getBody(String.class);
-            }
-            GroovySandboxExecutor.execute(script, exchange);
-        } else {
-            executeWithSecurity(exchange);
+        String script = getEndpoint().getScript();
+        if (script == null) {
+            script = exchange.getIn().getBody(String.class);
         }
-    }
-
-    private void executeWithSecurity(Exchange exchange) throws Exception {
-        UUID uuid = UUID.randomUUID();
-        SandboxSecurityManager.getInstance().secure(uuid);
-        try {
-            super.process(exchange);
-        } finally {
-            SandboxSecurityManager.getInstance().unsecure(uuid);
-        }
+        GroovySandboxExecutor.execute(script, exchange);
     }
 }
