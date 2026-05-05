@@ -19,6 +19,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  */
 public class SandboxComponent extends LanguageComponent {
 
+    public static final String REF = "ref:";
+
     public SandboxComponent() {
         super();
     }
@@ -29,9 +31,7 @@ public class SandboxComponent extends LanguageComponent {
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
 
-        String base64EncodedScript = (String) parameters.get("script");
-        byte[] decoded = Base64.decodeBase64(base64EncodedScript);
-        String script =  new String(decoded, UTF_8);
+        String script = (String) parameters.get("script");
 
         parameters.remove("script");
 
@@ -41,20 +41,14 @@ public class SandboxComponent extends LanguageComponent {
 
         Language language = getCamelContext().resolveLanguage(remaining);
 
-        String resourceUri = null;
-        String resource = script;
-
-        if (resource.startsWith(RESOURCE)) {
-            resource = resource.substring(RESOURCE.length());
-        }
-        if (ResourceHelper.hasScheme(resource)) {
-            // the script is a uri for a resource
-            resourceUri = resource;
-            // then the script should be null
-            script = null;
+        if (script.startsWith(REF)) {
+            String ref = script.substring(4);
+            script = getCamelContext()
+                    .getRegistry()
+                    .lookupByNameAndType(ref, String.class);
         }
 
-        LanguageEndpoint endpoint = new LanguageEndpoint(uri, this, language, null, resourceUri);
+        LanguageEndpoint endpoint = new LanguageEndpoint(uri, this, language, null, null);
         endpoint.setScript(script);
 
         SandboxEndpoint sE = copy(endpoint);
