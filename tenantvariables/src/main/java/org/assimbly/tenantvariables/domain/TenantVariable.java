@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public class TenantVariable {
 
-    public static final String ID_FIELD = "id";
-    public static final String TYPE_FIELD = "type";
+    public static final String ID_FIELD = "_id";
+    public static final String TYPE_FIELD = "_type";
     public static final String NAME_FIELD = "name";
     public static final String STATIC_TENANT_VARIABLE_GROUPID_FIELD = "static_tenant_variable_groupid";
     public static final String CREATED_AT_FIELD = "createdAt";
@@ -19,8 +19,18 @@ public class TenantVariable {
     public static final String TAGIDS_FIELD = "tagids";
 
     public enum TenantVarType {
-        TENANT_VARIABLE,
-        STATIC_TENANT_VARIABLE
+        TENANT_VARIABLE("TenantVariable"),
+        STATIC_TENANT_VARIABLE("StaticTenantVariable");
+
+        private final String type;
+
+        TenantVarType(String type) {
+            this.type = type;
+        }
+
+        public String getType() {
+            return type;
+        }
     }
 
     private ObjectId id;
@@ -53,7 +63,7 @@ public class TenantVariable {
 
     public TenantVariable(String name, TenantVarType tenantVarType){
         this.id = new ObjectId();
-        this.type = tenantVarType.name();
+        this.type = tenantVarType.getType();
         this.name = name;
         this.statictenantVariableGroupId = new ObjectId();
         this.values = new ArrayList<>();
