@@ -39,7 +39,7 @@ public class MongoDao {
 
         Document query = new Document()
                 .append(TenantVariable.NAME_FIELD, variableName)
-                .append(TenantVariable.TYPE_FIELD, tenantVarType.name());
+                .append(TenantVariable.TYPE_FIELD, tenantVarType.getType());
 
         Document document = collection.find(query).first();
         if (document != null) {
@@ -71,7 +71,7 @@ public class MongoDao {
 
         TenantVariable tenantVar = MongoDao.findTenantVariableByName(tenantVarName, tenant, tenantVarType);
         if(tenantVar==null) {
-            LOG.info("tenantVar {} of type {} is NULL", tenantVarType.name(), tenantVarName);
+            LOG.info("tenantVar {} of type {} is NULL", tenantVarType.getType(), tenantVarName);
             return null;
         }
 
@@ -170,7 +170,7 @@ public class MongoDao {
     private static TenantVariable initTenantVariable(TenantVariable tenantVariable, TenantVariable.TenantVarType tenantVarType, String tenantVarName, String environment, boolean tenantVariableExist) {
         if(!tenantVariableExist) {
             tenantVariable = new TenantVariable(tenantVarName);
-            tenantVariable.setType(tenantVarType.name());
+            tenantVariable.setType(tenantVarType.getType());
         }
         if(StringUtils.isEmpty(tenantVariable.getCreatedBy())) {
             tenantVariable.setCreatedBy(CREATED_BY_SYSTEM);
