@@ -8,11 +8,13 @@ import java.nio.file.Path;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
+import jakarta.xml.soap.*;
 import org.apache.camel.Exchange;
 import org.apache.commons.io.FileUtils;
 import org.apache.hc.client5.http.config.RequestConfig;
@@ -21,6 +23,7 @@ import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.Header;
 import org.apache.hc.core5.http.io.entity.ByteArrayEntity;
 import org.apache.hc.core5.util.Timeout;
 import org.slf4j.Logger;
@@ -32,9 +35,6 @@ import javax.wsdl.Definition;
 import javax.wsdl.WSDLException;
 import javax.wsdl.factory.WSDLFactory;
 import javax.wsdl.xml.WSDLReader;
-import jakarta.xml.soap.MessageFactory;
-import jakarta.xml.soap.SOAPException;
-import jakarta.xml.soap.SOAPMessage;
 
 
 public final class WSDLHelper {
@@ -108,7 +108,9 @@ public final class WSDLHelper {
             HttpGet request = new HttpGet(new URI(location));
 
             if (httpHeaders != null) {
-                httpHeaders.forEach(httpHeader -> request.setHeader(httpHeader.getName(), httpHeader.getValue()));
+                httpHeaders.forEach(httpHeader -> {
+                    request.setHeader(httpHeader.getName(), httpHeader.getValue());
+                });
             }
 
             client.execute(request, response -> {
@@ -130,13 +132,6 @@ public final class WSDLHelper {
 
         exchange.getIn().setHeader("Generated-Request", requestMessage);
 
-        // Resolve the SOAPAction header (may be blank but must be present for SOAP 1.1).
-        String soapAction = "";
-        String[] soapActionHeader = request.getMimeHeaders().getHeader("SOAPAction");
-        if (soapActionHeader != null && soapActionHeader.length > 0) {
-            soapAction = soapActionHeader[0];
-        }
-
         RequestConfig config = RequestConfig.custom()
                 .setConnectionRequestTimeout(Timeout.ofMilliseconds(10000))
                 .setResponseTimeout(Timeout.ofMilliseconds(30000))
@@ -147,8 +142,28 @@ public final class WSDLHelper {
                 .build()) {
 
             HttpPost httpPost = new HttpPost(new URI(destination));
-            httpPost.setHeader("Content-Type", "text/xml; charset=UTF-8");
-            httpPost.setHeader("SOAPAction", soapAction);
+
+            MimeHeaders mimeHeaders = request.getMimeHeaders();
+            Iterator<?> iterator = mimeHeaders.getAllHeaders();
+
+            while (iterator.hasNext()) {
+                MimeHeader header = (MimeHeader) iterator.next();
+                String name = header.getName();
+
+                // Skip headers managed by HttpClient
+                if ("Content-Length".equalsIgnoreCase(name)
+                        || "Transfer-Encoding".equalsIgnoreCase(name)
+                        || "Host".equalsIgnoreCase(name)) {
+                    continue;
+                }
+
+                httpPost.setHeader(header.getName(), header.getValue());
+            }
+
+            if (!httpPost.containsHeader("Content-Type")) {
+                httpPost.setHeader("Content-Type", "text/xml; charset=UTF-8");
+            }
+
             httpPost.setEntity(new ByteArrayEntity(requestBytes, ContentType.TEXT_XML));
 
             byte[] responseBytes = client.execute(httpPost, response -> {

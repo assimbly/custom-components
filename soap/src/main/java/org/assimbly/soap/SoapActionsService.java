@@ -52,6 +52,17 @@ public class SoapActionsService {
             );
         }
 
+        if(jsonWsdl.has("username") && jsonWsdl.has("password")) {
+            System.out.println("   - username / password");
+            String username = jsonWsdl.getString("username");
+            String password = jsonWsdl.getString("password");
+            String authString = username + ":" + password;
+            String encodedAuthString = Base64.getEncoder().encodeToString(authString.getBytes());
+            httpHeaders.add(
+                    new SoapHttpHeader("Authorization", "Basic " + encodedAuthString)
+            );
+        }
+
         Definition definition = WSDLHelper.retrieve("", jsonWsdl.getString("url"), httpHeaders);
 
         findActionsByDefinition(definition, results, added);
