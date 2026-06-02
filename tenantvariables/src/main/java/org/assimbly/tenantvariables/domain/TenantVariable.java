@@ -12,7 +12,7 @@ public class TenantVariable {
     public static final String ID_FIELD = "_id";
     public static final String TYPE_FIELD = "_type";
     public static final String NAME_FIELD = "name";
-    public static final String PROTECTED_VALUE_FIELD = "protectedValued";
+    public static final String PROTECTED_VALUE_FIELD = "protectedValue";
     public static final String STATIC_TENANT_VARIABLE_GROUP_ID_FIELD = "static_tenant_variable_group_id";
     public static final String CREATED_AT_FIELD = "createdAt";
     public static final String CREATED_BY_FIELD = "createdBy";
@@ -84,7 +84,9 @@ public class TenantVariable {
         if(document.getString(TYPE_FIELD) != null) {
             tenantVariable.set_type(document.getString(TYPE_FIELD));
         }
-        tenantVariable.setProtectedValue(document.getBoolean(PROTECTED_VALUE_FIELD));
+        if(document.get(PROTECTED_VALUE_FIELD) != null) {
+            tenantVariable.setProtectedValue(document.getBoolean(PROTECTED_VALUE_FIELD));
+        }
         tenantVariable.setName(document.getString(NAME_FIELD));
         tenantVariable.setStaticTenantVariableGroupId(document.getObjectId(STATIC_TENANT_VARIABLE_GROUP_ID_FIELD));
 
