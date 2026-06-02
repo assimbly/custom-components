@@ -108,6 +108,7 @@ public class TenantVariablesProcessor implements Processor {
         String expressionType = endpoint.getConfiguration().getExpressionType();
         String value = endpoint.getConfiguration().getValue();
         String name = endpoint.getConfiguration().getName();
+        boolean protectedValue = endpoint.getConfiguration().isProtectedValue();
         String modifier = endpoint.getConfiguration().getModifier();
         String tenant = (endpoint.getConfiguration().getTenant()!=null ? endpoint.getConfiguration().getTenant() : DEFAULT_TENANT_NAME);
         String environment = (endpoint.getConfiguration().getEnvironment()!=null ? endpoint.getConfiguration().getEnvironment() : getEnvironment());
@@ -125,6 +126,8 @@ public class TenantVariablesProcessor implements Processor {
             gVariable.setCreatedAt(modifyDate);
             gVariable.setCreatedBy(modifier);
         }
+
+        gVariable.setProtectedValue(protectedValue);
 
         if(environment != null && !gVariable.find(environment).isPresent()){
             gVariable.put(new EnvironmentValue(environment));
