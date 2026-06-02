@@ -39,6 +39,9 @@ public class TenantVariablesConfiguration implements Cloneable {
     private boolean encrypt;
 
     @UriParam
+    private boolean protectedValue;
+
+    @UriParam
     private String modifier;
 
     public TenantVariablesConfiguration() { }
@@ -131,5 +134,13 @@ public class TenantVariablesConfiguration implements Cloneable {
 
     public void setExpressionType(String expressionType) {
         this.expressionType = expressionType;
+    }
+
+    public boolean isProtectedValue() {
+        return protectedValue;
+    }
+
+    public void setProtectedValue(boolean protectedValue) {
+        this.protectedValue = protectedValue;
     }
 }
