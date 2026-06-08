@@ -85,7 +85,7 @@
         <httpcomponents.version>4.5.14</httpcomponents.version>
         <jackson.version>3.1.4</jackson.version>
         <jakarta.activation.version>2.1.4</jakarta.activation.version>
-        <jaxen.version>2.0.4</jaxen.version>
+        <jaxen.version>2.0.6</jaxen.version>
         <jasypt.version>1.9.3</jasypt.version>
         <jcifs.version>3.0.2</jcifs.version>
         <json.version>20260522</json.version>
@@ -100,7 +100,7 @@
         <mvel.version>2.5.2.Final</mvel.version>
         <pdfbox.version>3.0.7</pdfbox.version>
         <poi.version>5.5.1</poi.version>
-        <saaj-impl.version>3.0.5</saaj-impl.version>
+        <saaj-impl.version>3.0.6</saaj-impl.version>
         <skyscreamer.version>1.5.3</skyscreamer.version>
         <smooks.version>1.7.1</smooks.version>
         <smooks-fragments.version>1.7.1.0</smooks-fragments.version>
