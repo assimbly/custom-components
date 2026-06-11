@@ -78,11 +78,7 @@ public class CustomXmlJsonDataFormat implements DataFormat {
     }
 
     private void setContentTypeHeader(Exchange exchange, String contentType) {
-        if (exchange.hasOut()) {
-            exchange.getOut().setHeader(Exchange.CONTENT_TYPE, contentType);
-        } else {
-            exchange.getIn().setHeader(Exchange.CONTENT_TYPE, contentType);
-        }
+        exchange.getMessage().setHeader(Exchange.CONTENT_TYPE, contentType);
     }
 
     public String getRootTag(Exchange exchange) {

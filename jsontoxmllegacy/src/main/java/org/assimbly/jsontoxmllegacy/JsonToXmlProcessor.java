@@ -108,10 +108,6 @@ public class JsonToXmlProcessor implements Processor {
     }
 
     private void setContentTypeHeader(Exchange exchange) {
-        if (exchange.hasOut()) {
-            exchange.getOut().setHeader(Exchange.CONTENT_TYPE, MediaType.APPLICATION_XML_VALUE);
-        } else {
-            exchange.getIn().setHeader(Exchange.CONTENT_TYPE, MediaType.APPLICATION_XML_VALUE);
-        }
+        exchange.getMessage().setHeader(Exchange.CONTENT_TYPE, MediaType.APPLICATION_XML_VALUE);
     }
 }
