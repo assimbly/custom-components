@@ -67,7 +67,7 @@
         <awaitility.version>4.3.0</awaitility.version>
         <bouncycastle.version>1.84</bouncycastle.version>
         <config-admin.version>1.9.26</config-admin.version>
-        <cxf.version>4.2.1</cxf.version>
+        <cxf.version>4.2.2</cxf.version>
         <camel.version>4.20.0</camel.version>
         <commons-codec.version>1.22.0</commons-codec.version>
         <commons-lang3.version>3.20.0</commons-lang3.version>
@@ -77,13 +77,13 @@
         <google.api.version>v3-rev20260428-2.0.0</google.api.version>
         <google.auth.version>1.5.0</google.auth.version>
         <google.oauth.version>1.39.0</google.oauth.version>
-        <greenmail.version>2.1.8</greenmail.version>
+        <greenmail.version>2.1.9</greenmail.version>
         <groovy-sandbox.version>4.3.2</groovy-sandbox.version>
         <groovy-script.version>5.0.6</groovy-script.version>
-        <hibernate-core.version>7.4.0.Final</hibernate-core.version>
+        <hibernate-core.version>7.4.1.Final</hibernate-core.version>
         <httpClient5.version>5.6.1</httpClient5.version>
         <httpcomponents.version>4.5.14</httpcomponents.version>
-        <jackson.version>3.1.4</jackson.version>
+        <jackson.version>3.2.0</jackson.version>
         <jakarta.activation.version>2.1.4</jakarta.activation.version>
         <jaxen.version>2.0.6</jaxen.version>
         <jasypt.version>1.9.3</jasypt.version>
@@ -104,7 +104,7 @@
         <skyscreamer.version>1.5.3</skyscreamer.version>
         <smooks.version>1.7.1</smooks.version>
         <smooks-fragments.version>1.7.1.0</smooks-fragments.version>
-        <spring.version>7.0.7</spring.version>
+        <spring.version>7.0.8</spring.version>
         <slf4j.version>2.0.18</slf4j.version>
         <tika.version>1.28.5</tika.version>
         <wsdl4j.version>1.6.3</wsdl4j.version>
