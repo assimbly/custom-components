@@ -459,7 +459,6 @@ public class TenantVariablesTest extends CamelTestSupport {
         EnvironmentValue environmentValue = new EnvironmentValue("test");
 
         environmentValue.setValue(encryptedVariableValue);
-        environmentValue.setNonce(null);
         environmentValue.setEncrypted(true);
 
         variable.put(environmentValue);

@@ -97,7 +97,7 @@ public class OAuth2TokenProcessor implements Processor {
     private static void setHeaderWithToken(Exchange exchange, List<String> tokenNames, String accessToken) {
         for (String name : tokenNames) {
             if (!TenantVariableManager.isStaticTenantVariable(name)) {
-                exchange.getOut().setHeader(name, accessToken);
+                exchange.getMessage().setHeader(name, accessToken);
             }
         }
     }

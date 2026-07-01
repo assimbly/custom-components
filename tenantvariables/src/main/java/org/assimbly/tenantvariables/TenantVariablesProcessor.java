@@ -64,13 +64,19 @@ public class TenantVariablesProcessor implements Processor {
     }
 
     public String decrypt(String encryptedValue) {
-        String value = encryptionUtil.decrypt(encryptedValue);
-        return value;
+        if(!encryptedValue.isEmpty()) {
+            return encryptionUtil.decrypt(encryptedValue);
+        } else {
+            return "";
+        }
     }
 
     public String encrypt(String value) {
-        String encryptedValue = encryptionUtil.encrypt(value);
-        return encryptedValue;
+        if(!value.isEmpty()) {
+            return encryptionUtil.encrypt(value);
+        } else {
+            return "";
+        }
     }
 
     public String getValueByEnvironmentValue(EnvironmentValue environmentVar) {
@@ -108,6 +114,7 @@ public class TenantVariablesProcessor implements Processor {
         String expressionType = endpoint.getConfiguration().getExpressionType();
         String value = endpoint.getConfiguration().getValue();
         String name = endpoint.getConfiguration().getName();
+        boolean protectedValue = endpoint.getConfiguration().isProtectedValue();
         String modifier = endpoint.getConfiguration().getModifier();
         String tenant = (endpoint.getConfiguration().getTenant()!=null ? endpoint.getConfiguration().getTenant() : DEFAULT_TENANT_NAME);
         String environment = (endpoint.getConfiguration().getEnvironment()!=null ? endpoint.getConfiguration().getEnvironment() : getEnvironment());
@@ -126,6 +133,8 @@ public class TenantVariablesProcessor implements Processor {
             gVariable.setCreatedBy(modifier);
         }
 
+        gVariable.setProtectedValue(protectedValue);
+
         if(environment != null && !gVariable.find(environment).isPresent()){
             gVariable.put(new EnvironmentValue(environment));
         }else if(environment==null){
@@ -140,8 +149,6 @@ public class TenantVariablesProcessor implements Processor {
 
         if(encrypt) {
             value = encrypt(value);
-        } else {
-            variable.setNonce(null);
         }
 
         variable.setEncrypted(encrypt);
