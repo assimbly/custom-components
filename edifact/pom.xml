@@ -38,6 +38,12 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate-core.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>xalan</groupId>
+					<artifactId>xalan</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.milyn</groupId>
@@ -51,6 +57,10 @@
 				<exclusion>
 					<groupId>org.codehaus.groovy</groupId>
 					<artifactId>groovy-all</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>xalan</groupId>
+					<artifactId>xalan</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
