@@ -46,7 +46,7 @@ public class MongoClientProvider implements Serializable {
     private static void init() {
         client = MongoClients.create(MongoClientSettings.builder()
                 .applyToClusterSettings(builder ->
-                        builder.hosts(List.of(new ServerAddress("flux-mongo", 27017))))
+                        builder.hosts(List.of(new ServerAddress("mongo", 27017))))
                 .build());
     }
 }
