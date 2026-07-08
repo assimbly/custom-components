@@ -5,6 +5,7 @@ import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
+import org.assimbly.tenantvariables.helper.EnvironmentHelper;
 
 import java.io.Serializable;
 import java.util.List;
@@ -35,9 +36,12 @@ public class MongoClientProvider implements Serializable {
      * Initialize the MongoClient.
      */
     private void init() {
+        String host = EnvironmentHelper.get("MONGO_HOST", "mongo");
+        int port = EnvironmentHelper.getInt("MONGO_PORT", 27017);
+
         client = MongoClients.create(MongoClientSettings.builder()
                 .applyToClusterSettings(builder ->
-                        builder.hosts(List.of(new ServerAddress("mongo", 27017))))
+                        builder.hosts(List.of(new ServerAddress(host, port))))
                 .build());
     }
 }
