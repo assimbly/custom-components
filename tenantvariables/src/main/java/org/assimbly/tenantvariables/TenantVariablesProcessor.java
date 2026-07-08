@@ -64,19 +64,17 @@ public class TenantVariablesProcessor implements Processor {
     }
 
     public String decrypt(String encryptedValue) {
-        if(!encryptedValue.isEmpty()) {
-            return encryptionUtil.decrypt(encryptedValue);
-        } else {
+        if(encryptedValue == null || encryptedValue.isEmpty()) {
             return "";
         }
+        return encryptionUtil.decrypt(encryptedValue);
     }
 
     public String encrypt(String value) {
-        if(!value.isEmpty()) {
-            return encryptionUtil.encrypt(value);
-        } else {
+        if(value == null || value.isEmpty()) {
             return "";
         }
+        return encryptionUtil.encrypt(value);
     }
 
     public String getValueByEnvironmentValue(EnvironmentValue environmentVar) {
