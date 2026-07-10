@@ -1,5 +1,6 @@
 package org.assimbly.jsontoxmllegacy;
 
+import org.w3c.dom.Node;
 import tools.jackson.databind.ObjectMapper;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -47,10 +48,10 @@ public class JsonToXmlProcessor implements Processor {
         Element element = convertJsonToXml(config);
 
         if (element != null) {
-            // Ensure the element is owned by 'document' before appending.
-            // This prevents WRONG_DOCUMENT_ERR if 'element' was created by a different Document instance.
-            document.adoptNode(element);
-            document.appendChild(element);
+            // importNode (deep=true) copies the element AND all its descendants
+            // into 'document', whereas adoptNode moves only the node itself.
+            Node importedElement = document.importNode(element, true);
+            document.appendChild(importedElement);
         }
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance(
@@ -100,9 +101,13 @@ public class JsonToXmlProcessor implements Processor {
         } else {
             nameSpace = XMLConstants.XMLNS_ATTRIBUTE;
         }
-        nameSpaceURI = (config.getXmlnsMap().get(nameSpace)!=null ? config.getXmlnsMap().get(nameSpace) : "");
+        nameSpaceURI = config.getXmlnsMap().get(nameSpace);
 
-        element = config.getDocument().createElementNS(nameSpaceURI, name);
+        if (nameSpaceURI != null && !nameSpaceURI.isEmpty()) {
+            element = config.getDocument().createElementNS(nameSpaceURI, name);
+        } else {
+            element = config.getDocument().createElement(name);
+        }
 
         return element;
     }

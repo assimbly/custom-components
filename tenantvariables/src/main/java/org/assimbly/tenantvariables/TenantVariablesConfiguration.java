@@ -39,6 +39,9 @@ public class TenantVariablesConfiguration {
     private boolean encrypt;
 
     @UriParam
+    private boolean protectedValue;
+
+    @UriParam
     private String groupName;
 
     @UriParam
@@ -156,6 +159,14 @@ public class TenantVariablesConfiguration {
 
     public void setFlowName(String flowName) {
         this.flowName = flowName;
+    }
+
+    public boolean isProtectedValue() {
+        return protectedValue;
+    }
+
+    public void setProtectedValue(boolean protectedValue) {
+        this.protectedValue = protectedValue;
     }
 
 }

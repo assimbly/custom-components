@@ -58,10 +58,16 @@ public class TenantVariablesProcessor implements Processor {
     }
 
     public String decrypt(String encryptedValue) {
+        if(encryptedValue == null || encryptedValue.isEmpty()) {
+            return "";
+        }
         return encryptionUtil.decrypt(encryptedValue);
     }
 
     public String encrypt(String value) {
+        if(value == null || value.isEmpty()) {
+            return "";
+        }
         return encryptionUtil.encrypt(value);
     }
 
@@ -103,6 +109,7 @@ public class TenantVariablesProcessor implements Processor {
         String expressionType = endpoint.getConfiguration().getLanguage();
         String value = endpoint.getConfiguration().getValue();
         String name = endpoint.getConfiguration().getName();
+        boolean protectedValue = endpoint.getConfiguration().isProtectedValue();
         String groupName = endpoint.getConfiguration().getGroupName();
         String flowName = endpoint.getConfiguration().getFlowName();
         String tenantDbName = (endpoint.getConfiguration().getTenantDbName()!=null ? endpoint.getConfiguration().getTenantDbName() : DEFAULT_TENANT_NAME);
@@ -126,6 +133,8 @@ public class TenantVariablesProcessor implements Processor {
             gVariable.setCreatedBy(modifier);
         }
 
+        gVariable.setProtectedValue(protectedValue);
+
         Optional<EnvironmentValue> gVariableOptional = gVariable.find(environment);
 
         if(environment != null && gVariableOptional.isEmpty()){
@@ -143,8 +152,6 @@ public class TenantVariablesProcessor implements Processor {
 
         if(encrypt) {
             decodedValue = encrypt(decodedValue);
-        } else {
-            variable.setNonce(null);
         }
 
         variable.setEncrypted(encrypt);

@@ -12,6 +12,7 @@ public class TenantVariable {
     public static final String ID_FIELD = "_id";
     public static final String TYPE_FIELD = "_type";
     public static final String NAME_FIELD = "name";
+    public static final String PROTECTED_VALUE_FIELD = "protectedValue";
     public static final String STATIC_TENANT_VARIABLE_GROUPID_FIELD = "static_tenant_variable_groupid";
     public static final String CREATED_AT_FIELD = "createdAt";
     public static final String CREATED_BY_FIELD = "createdBy";
@@ -35,6 +36,7 @@ public class TenantVariable {
 
     private ObjectId id;
     private String type;
+    private boolean protectedValue;
     private String name;
     private ObjectId statictenantVariableGroupId;
     private long createdAt;
@@ -47,6 +49,7 @@ public class TenantVariable {
     public TenantVariable(){
         this.id = new ObjectId();
         this.type = TenantVarType.TENANT_VARIABLE.name();
+        this.protectedValue = false;
         this.statictenantVariableGroupId = new ObjectId();
         this.values = new ArrayList<>();
         this.tagIds = new ArrayList<>();
@@ -55,6 +58,7 @@ public class TenantVariable {
     public TenantVariable(String name){
         this.id = new ObjectId();
         this.type = TenantVarType.TENANT_VARIABLE.name();
+        this.protectedValue = false;
         this.name = name;
         this.statictenantVariableGroupId = new ObjectId();
         this.values = new ArrayList<>();
@@ -64,6 +68,7 @@ public class TenantVariable {
     public TenantVariable(String name, TenantVarType tenantVarType){
         this.id = new ObjectId();
         this.type = tenantVarType.getType();
+        this.protectedValue = false;
         this.name = name;
         this.statictenantVariableGroupId = new ObjectId();
         this.values = new ArrayList<>();
@@ -91,6 +96,9 @@ public class TenantVariable {
         if(document.getString(TYPE_FIELD) != null) {
             tenantVariable.setType(document.getString(TYPE_FIELD));
         }
+        if(document.get(PROTECTED_VALUE_FIELD) != null) {
+            tenantVariable.setProtectedValue(document.getBoolean(PROTECTED_VALUE_FIELD));
+        }
         tenantVariable.setName(document.getString(NAME_FIELD));
         tenantVariable.setstatictenantVariableGroupId(document.getObjectId(STATIC_TENANT_VARIABLE_GROUPID_FIELD));
 
@@ -113,7 +121,6 @@ public class TenantVariable {
             environmentValue.setEnvironment(valueDoc.getString(EnvironmentValue.ENVIRONMENT_FIELD));
             environmentValue.setValue(valueDoc.getString(EnvironmentValue.VALUE_FIELD));
             environmentValue.setEncrypted(valueDoc.getBoolean(EnvironmentValue.ENCRYPTED_FIELD));
-            environmentValue.setNonce(valueDoc.getString(EnvironmentValue.NONCE_FIELD));
             Object lastUpdateObj = valueDoc.get(EnvironmentValue.LAST_UPDATE_FIELD);
             if (lastUpdateObj != null) {
                 environmentValue.setLastUpdate(((Number) lastUpdateObj).longValue());
@@ -131,6 +138,7 @@ public class TenantVariable {
         Document document = new Document();
         document.append(ID_FIELD, this.getId());
         document.append(TYPE_FIELD, this.getType());
+        document.append(PROTECTED_VALUE_FIELD, this.isProtectedValue());
         document.append(NAME_FIELD, this.getName());
         document.append(STATIC_TENANT_VARIABLE_GROUPID_FIELD, this.getstatictenantVariableGroupId());
         document.append(CREATED_AT_FIELD, this.getCreatedAt());
@@ -143,7 +151,6 @@ public class TenantVariable {
             valueDoc.append(EnvironmentValue.ENVIRONMENT_FIELD, environmentValue.getEnvironment());
             valueDoc.append(EnvironmentValue.VALUE_FIELD, environmentValue.getValue());
             valueDoc.append(EnvironmentValue.ENCRYPTED_FIELD, environmentValue.isEncrypted());
-            valueDoc.append(EnvironmentValue.NONCE_FIELD, environmentValue.getNonce());
             valueDoc.append(EnvironmentValue.LAST_UPDATE_FIELD, environmentValue.getLastUpdate());
             valueDoc.append(EnvironmentValue.UPDATED_BY_FIELD, environmentValue.getUpdatedBy());
             valuesList.add(valueDoc);
@@ -205,5 +212,13 @@ public class TenantVariable {
 
     public void setTagIds(List<ObjectId> tagIds) {
         this.tagIds = tagIds;
+    }
+
+    public boolean isProtectedValue() {
+        return protectedValue;
+    }
+
+    public void setProtectedValue(boolean protectedValue) {
+        this.protectedValue = protectedValue;
     }
 }
