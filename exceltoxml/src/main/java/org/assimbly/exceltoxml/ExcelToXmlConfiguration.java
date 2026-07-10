@@ -52,7 +52,6 @@ public class ExcelToXmlConfiguration {
     /**
      * Deserialized rules
      */
-    /*
     public List<ExcelRule> getReadRules() throws JacksonException {
 
         ObjectMapper mapper = new ObjectMapper();
@@ -60,17 +59,6 @@ public class ExcelToXmlConfiguration {
 
         return mapper.readValue(rules, typeRef);
 
-    }*/
-
-    public List<ExcelRule> getReadRules() throws JacksonException {
-        ObjectMapper mapper = new ObjectMapper();
-        TypeReference<List<ExcelRule>> typeRef = new TypeReference<>() {};
-
-        // Decode Base64 back to raw JSON before deserializing
-        byte[] decodedBytes = Base64.getDecoder().decode(rules);
-        String json = new String(decodedBytes, StandardCharsets.UTF_8);
-
-        return mapper.readValue(json, typeRef);
     }
 
 }
