@@ -137,16 +137,13 @@ class ExcelToXmlComponentTest extends CamelTestSupport {
     }
 
     private String rulesToJson(List<ExcelRule> rules) {
-
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
-            String jsonArrayString = objectMapper.writeValueAsString(rules);
-            return Base64.getEncoder().encodeToString(jsonArrayString.getBytes());
+            return objectMapper.writeValueAsString(rules);
         } catch (JacksonException e) {
             throw new RuntimeException("Error serializing rules to JSON", e);
         }
-
     }
 
 }
