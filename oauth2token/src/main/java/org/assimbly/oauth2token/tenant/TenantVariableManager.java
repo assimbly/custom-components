@@ -9,7 +9,7 @@ import java.util.Date;
 
 public class TenantVariableManager {
 
-    private static final String STATIC_TENANT_VARIABLE_SUFFIX = "_" + TenantVariable.TenantVarType.STATIC_TENANT_VARIABLE.name();
+    private static final String STATIC_TENANT_VARIABLE_SUFFIX = "_" + TenantVariable.TenantVarType.STATIC_TENANT_VARIABLE.getType();
     private static final TenantVariablesProcessor PROCESSOR = new TenantVariablesProcessor();
 
     public static String getTenantVariableValue(String tokenName, String tenant, String environment) {
@@ -60,7 +60,7 @@ public class TenantVariableManager {
 
         if (!tenantVariableExists) {
             tenantVariable = new TenantVariable(tokenName);
-            tenantVariable.setType(tenantVarType.name());
+            tenantVariable.setType(tenantVarType.getType());
         }
 
         if (!tenantVariable.find(environment).isPresent()) {

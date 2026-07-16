@@ -65,15 +65,6 @@ public class TenantVariable {
         this.tagIds = new ArrayList<>();
     }
 
-    public TenantVariable(String name, TenantVarType tenantVarType){
-        this.id = new ObjectId();
-        this.type = tenantVarType.getType();
-        this.protectedValue = false;
-        this.name = name;
-        this.statictenantVariableGroupId = new ObjectId();
-        this.values = new ArrayList<>();
-    }
-
     public List<EnvironmentValue> getValues() {
         return values;
     }

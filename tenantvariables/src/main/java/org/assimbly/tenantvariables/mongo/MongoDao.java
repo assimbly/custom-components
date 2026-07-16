@@ -71,7 +71,7 @@ public class MongoDao {
 
         TenantVariable tenantVar = MongoDao.findTenantVariableByName(tenantVarName, tenant, tenantVarType);
         if(tenantVar==null) {
-            LOG.info("tenantVar {} of type {} is NULL", tenantVarType.getType(), tenantVarName);
+            LOG.info("tenantVar {} of type {} is NULL", tenantVarName, tenantVarType.getType());
             return null;
         }
 
