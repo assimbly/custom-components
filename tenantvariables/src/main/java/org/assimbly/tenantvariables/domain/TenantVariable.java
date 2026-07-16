@@ -48,7 +48,7 @@ public class TenantVariable {
 
     public TenantVariable(){
         this.id = new ObjectId();
-        this.type = TenantVarType.TENANT_VARIABLE.name();
+        this.type = TenantVarType.TENANT_VARIABLE.getType();
         this.protectedValue = false;
         this.statictenantVariableGroupId = new ObjectId();
         this.values = new ArrayList<>();
@@ -57,7 +57,7 @@ public class TenantVariable {
 
     public TenantVariable(String name){
         this.id = new ObjectId();
-        this.type = TenantVarType.TENANT_VARIABLE.name();
+        this.type = TenantVarType.TENANT_VARIABLE.getType();
         this.protectedValue = false;
         this.name = name;
         this.statictenantVariableGroupId = new ObjectId();
