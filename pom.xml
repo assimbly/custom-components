@@ -74,21 +74,21 @@
         <commons-io.version>2.22.0</commons-io.version>
         <commons-text.version>1.15.0</commons-text.version>
         <docconverter.version>2.0.1</docconverter.version>
-        <google.api.version>v3-rev20260624-2.0.0</google.api.version>
+        <google.api.version>v3-rev20260712-2.0.0</google.api.version>
         <google.auth.version>1.5.0</google.auth.version>
         <google.oauth.version>1.39.0</google.oauth.version>
-        <greenmail.version>2.1.9</greenmail.version>
+        <greenmail.version>2.1.11</greenmail.version>
         <groovy-sandbox.version>4.3.2</groovy-sandbox.version>
         <groovy-script.version>5.0.6</groovy-script.version>
-        <hibernate-core.version>7.4.3.Final</hibernate-core.version>
+        <hibernate-core.version>7.4.5.Final</hibernate-core.version>
         <httpClient5.version>5.6.2</httpClient5.version>
         <httpcomponents.version>4.5.14</httpcomponents.version>
-        <jackson.version>3.2.0</jackson.version>
+        <jackson.version>3.2.1</jackson.version>
         <jakarta.activation.version>2.1.4</jakarta.activation.version>
         <jaxen.version>2.0.6</jaxen.version>
         <jasypt.version>1.9.3</jasypt.version>
         <jcifs.version>3.0.2</jcifs.version>
-        <json.version>20260522</json.version>
+        <json.version>20260719</json.version>
         <json-path.version>3.0.0</json-path.version>
         <jwt.version>0.13.0</jwt.version>
         <libsodium-jna.version>1.0.6</libsodium-jna.version>
@@ -121,7 +121,7 @@
         <!-- test dependencies -->
         <assertj.version>3.27.7</assertj.version>
         <jsonassert.version>1.5.3</jsonassert.version>
-        <junit.version>6.1.1</junit.version>
+        <junit.version>6.1.2</junit.version>
         <mockito.version>5.23.0</mockito.version>
         <mockserver.version>5.15.0</mockserver.version>
         <saxon-he.version>12.9</saxon-he.version>
