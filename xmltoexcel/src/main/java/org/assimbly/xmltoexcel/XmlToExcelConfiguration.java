@@ -137,8 +137,17 @@ public class XmlToExcelConfiguration {
                     new TypeReference<List<CustomWorksheet>>() {}
             );
         } catch (JacksonException e) {
-            // JacksonException is the standard base for 3.x
-            throw new XmlToExcelException("Deserialization failed: " + e.getMessage());
+            // Fallback: handle a double-encoded array (each element is itself a JSON string)
+            try {
+                List<String> rawStrings = MAPPER.readValue(json, new TypeReference<List<String>>() {});
+                java.util.List<CustomWorksheet> result = new java.util.ArrayList<>();
+                for (String s : rawStrings) {
+                    result.add(MAPPER.readValue(s, CustomWorksheet.class));
+                }
+                return result;
+            } catch (JacksonException e2) {
+                throw new XmlToExcelException("Deserialization failed: " + e2.getMessage());
+            }
         }
     }
 
