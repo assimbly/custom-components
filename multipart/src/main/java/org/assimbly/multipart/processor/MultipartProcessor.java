@@ -2,9 +2,11 @@ package org.assimbly.multipart.processor;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.apache.hc.client5.http.entity.mime.ByteArrayBody;
+import org.apache.hc.client5.http.entity.mime.FormBodyPart;
+import org.apache.hc.client5.http.entity.mime.FormBodyPartBuilder;
 import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
 import org.apache.hc.core5.http.ContentType;
-import org.apache.hc.client5.http.entity.mime.ByteArrayBody;
 import org.apache.hc.core5.http.HttpEntity;
 
 import java.io.ByteArrayOutputStream;
@@ -13,12 +15,10 @@ public class MultipartProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-
         byte[] file = exchange.getIn().getBody(byte[].class);
         String fileName = exchange.getIn().getHeader(Exchange.FILE_NAME, String.class);
         String ftype = exchange.getIn().getHeader(Exchange.CONTENT_TYPE, String.class);
         String field = exchange.getIn().getHeader("MultipartFieldName", String.class);
-
         exchange.getIn().removeHeader("MultipartFieldName");
 
         if (file == null)
@@ -27,18 +27,27 @@ public class MultipartProcessor implements Processor {
             throw new NullPointerException("There was no Content-Type header found to define the binary file in the Multipart body.");
         if (field == null)
             throw new NullPointerException("There was no field name set.");
-
         if (fileName == null) {
             fileName = "UndefinedFileName";
             System.out.println("Multipart Processor Error: No file name found for binary body we gave it a static file name.");
         }
 
+        ByteArrayBody bodyPartContent = new ByteArrayBody(file, ContentType.create(ftype), fileName);
+
+        // Build first so Content-Disposition and Content-Type are already populated,
+        // then append Content-Transfer-Encoding so it lands last in the header order.
+        // "binary" is correct regardless of ftype/content: it describes the encoding
+        // applied to the octets (none — used as-is), not the kind of data they represent.
+        // It would only need to change if this processor started base64/quoted-printable
+        // encoding the payload before adding it.
+        FormBodyPart part = FormBodyPartBuilder.create(field, bodyPartContent).build();
+        part.addField("Content-Transfer-Encoding", "binary");
+
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-        builder.addPart(field, new ByteArrayBody(file, ContentType.create(ftype), fileName));
+        builder.addPart(part);
         builder.setBoundary("--------------------------Assimbly");
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-
         try (HttpEntity entity = builder.build()) {
             entity.writeTo(out);
         }
@@ -46,5 +55,4 @@ public class MultipartProcessor implements Processor {
         exchange.getIn().setHeader("Content-Type", "multipart/form-data; boundary=--------------------------Assimbly");
         exchange.getIn().setBody(out.toByteArray());
     }
-
 }
