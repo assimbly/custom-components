@@ -248,14 +248,16 @@ public class ExtractUtils {
             XmlToJsonConfiguration config, ObjectNode rootObjectNode, JsonNode subElement,
             String label, String value, String childTypeAttr
     ) {
-        if(rootObjectNode.has(label)) {
+        if(rootObjectNode.has(label) || metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY)) {
             JsonNode nodeValues = rootObjectNode.get(label);
-            if(nodeValues.isArray()) {
+            if(nodeValues != null && nodeValues.isArray()) {
                 // ADD
                 addValueIntoArrayNode(metadata, config, (ArrayNode)nodeValues, childTypeAttr, value, subElement);
             } else {
                 ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode();
-                arrayNode.add(nodeValues);
+                if(nodeValues != null) {
+                    arrayNode.add(nodeValues);
+                }
                 // ADD
                 addValueIntoArrayNode(metadata, config, arrayNode, childTypeAttr, value, subElement);
                 nodeValues = arrayNode;
@@ -309,10 +311,11 @@ public class ExtractUtils {
                 break;
             default:
                 value = (subElement!=null ? subElement.asText() : value);
+                boolean isNullAttr = metadata.isNullAttr();
                 if(config.isTrimSpaces()){
-                    value = (value.trim().equalsIgnoreCase(Constants.NULL_VALUE) ? null : value.trim());
+                    value = (value.trim().equalsIgnoreCase(Constants.NULL_VALUE) || isNullAttr ? null : value.trim());
                 } else {
-                    value = (value.equalsIgnoreCase(Constants.NULL_VALUE) ? null : value);
+                    value = (value.equalsIgnoreCase(Constants.NULL_VALUE) || isNullAttr ? null : value);
                 }
                 objectNode.put(
                         label,
@@ -493,7 +496,10 @@ public class ExtractUtils {
     public static void addAttributesInObjectNode(ElementMetadata metadata, ElementMetadata parentMetadata, XmlToJsonConfiguration config) {
 
         if(metadata.getAttributes().isEmpty() && !metadata.isDefinesNamespaces() ||
-                config.isTypeHints() && parentMetadata.isHasAttributes() && metadata.isOneValue() && metadata.isHasTypeNumberOrBoolean()
+                config.isTypeHints() && (
+                        parentMetadata.isHasAttributes() && metadata.isOneValue() && metadata.isHasTypeNumberOrBoolean() ||
+                                metadata.isNullAttr()
+                )
         ){
             return;
         }

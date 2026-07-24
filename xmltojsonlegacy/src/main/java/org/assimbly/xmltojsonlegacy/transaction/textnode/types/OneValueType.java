@@ -33,7 +33,9 @@ public class OneValueType implements TextNodeTransaction {
         } else {
             String value = ElementMetadataUtils.getNodeValue(metadata, config.isTrimSpaces());
             String trimmedValue = ElementMetadataUtils.getNodeValue(metadata, true);
-            if(parentMetadata.isHasAttributes() && metadata.isHasTypeNumberOrBoolean() && value != null && !trimmedValue.isEmpty()) {
+            if(parentMetadata.isHasAttributes() && metadata.isHasTypeNumberOrBoolean() && value != null && !trimmedValue.isEmpty() ||
+                metadata.isHasEmptyTextContent() && metadata.isNullAttr()
+            ) {
                 ExtractUtils.setValueUsingAttributeType(metadata, config, metadata.getObjectNode(), null,
                         ElementMetadataUtils.getElementName(metadata, config.isRemoveNamespacePrefixes()),
                         value,
