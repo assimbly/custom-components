@@ -10656,6 +10656,339 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
         );
     }
 
+    /*****************************************
+     ** Example 69
+     *****************************************/
+
+    @Test
+    void testXmlJson_69_FFFFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy",
+                "xml-to-json/example_69.xml",
+                "xml-to-json/example_69_FFFFFF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_69_FFFFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_TypeHints",
+                "xml-to-json/example_69.xml",
+                "xml-to-json/example_69_FFFFFT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_69_FFFFTF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_RemoveNamespacePrefixes",
+                "xml-to-json/example_69.xml",
+                "xml-to-json/example_69_FFFFTF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_69_FFFFTT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
+                "xml-to-json/example_69.xml",
+                "xml-to-json/example_69_FFFFTT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_69_FFFTFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_SkipNamespaces",
+                "xml-to-json/example_69.xml",
+                "xml-to-json/example_69_FFFTFF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_69_FFFTFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_SkipNamespaces_TypeHints",
+                "xml-to-json/example_69.xml",
+                "xml-to-json/example_69_FFFTFT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_69_FFFTTF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
+                "xml-to-json/example_69.xml",
+                "xml-to-json/example_69_FFFTTF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_69_FFFTTT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
+                "xml-to-json/example_69.xml",
+                "xml-to-json/example_69_FFFTTT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_69_FFTFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_TrimSpaces",
+                "xml-to-json/example_69.xml",
+                "xml-to-json/example_69_FFTFFF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_69_FFTFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_TrimSpaces_TypeHints",
+                "xml-to-json/example_69.xml",
+                "xml-to-json/example_69_FFTFFT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_69_TFFFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop",
+                "xml-to-json/example_69.xml",
+                "xml-to-json/example_69_TFFFFF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_69_TFFFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_TypeHints",
+                "xml-to-json/example_69.xml",
+                "xml-to-json/example_69_TFFFFT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_69_TFFFTF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes",
+                "xml-to-json/example_69.xml",
+                "xml-to-json/example_69_TFFFTF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_69_TFFFTT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes_TypeHints",
+                "xml-to-json/example_69.xml",
+                "xml-to-json/example_69_TFFFTT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_69_TFFTFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_SkipNamespaces",
+                "xml-to-json/example_69.xml",
+                "xml-to-json/example_69_TFFTFF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_69_TFFTFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_SkipNamespaces_TypeHints",
+                "xml-to-json/example_69.xml",
+                "xml-to-json/example_69_TFFTFT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_69_TFFTTF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes",
+                "xml-to-json/example_69.xml",
+                "xml-to-json/example_69_TFFTTF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_69_TFFTTT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
+                "xml-to-json/example_69.xml",
+                "xml-to-json/example_69_TFFTTT.json"
+        );
+    }
+
+    /*****************************************
+     ** Example 70
+     *****************************************/
+
+    @Test
+    void testXmlJson_70_FFFFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy",
+                "xml-to-json/example_70.xml",
+                "xml-to-json/example_70_FFFFFF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_70_FFFFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_TypeHints",
+                "xml-to-json/example_70.xml",
+                "xml-to-json/example_70_FFFFFT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_70_FFFFTF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_RemoveNamespacePrefixes",
+                "xml-to-json/example_70.xml",
+                "xml-to-json/example_70_FFFFTF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_70_FFFFTT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
+                "xml-to-json/example_70.xml",
+                "xml-to-json/example_70_FFFFTT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_70_FFFTFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_SkipNamespaces",
+                "xml-to-json/example_70.xml",
+                "xml-to-json/example_70_FFFTFF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_70_FFFTFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_SkipNamespaces_TypeHints",
+                "xml-to-json/example_70.xml",
+                "xml-to-json/example_70_FFFTFT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_70_FFFTTF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
+                "xml-to-json/example_70.xml",
+                "xml-to-json/example_70_FFFTTF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_70_FFFTTT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
+                "xml-to-json/example_70.xml",
+                "xml-to-json/example_70_FFFTTT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_70_FFTFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_TrimSpaces",
+                "xml-to-json/example_70.xml",
+                "xml-to-json/example_70_FFTFFF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_70_FFTFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_TrimSpaces_TypeHints",
+                "xml-to-json/example_70.xml",
+                "xml-to-json/example_70_FFTFFT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_70_TFFFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop",
+                "xml-to-json/example_70.xml",
+                "xml-to-json/example_70_TFFFFF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_70_TFFFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_TypeHints",
+                "xml-to-json/example_70.xml",
+                "xml-to-json/example_70_TFFFFT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_70_TFFFTF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes",
+                "xml-to-json/example_70.xml",
+                "xml-to-json/example_70_TFFFTF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_70_TFFFTT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes_TypeHints",
+                "xml-to-json/example_70.xml",
+                "xml-to-json/example_70_TFFFTT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_70_TFFTFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_SkipNamespaces",
+                "xml-to-json/example_70.xml",
+                "xml-to-json/example_70_TFFTFF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_70_TFFTFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_SkipNamespaces_TypeHints",
+                "xml-to-json/example_70.xml",
+                "xml-to-json/example_70_TFFTFT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_70_TFFTTF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes",
+                "xml-to-json/example_70.xml",
+                "xml-to-json/example_70_TFFTTF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_70_TFFTTT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
+                "xml-to-json/example_70.xml",
+                "xml-to-json/example_70_TFFTTT.json"
+        );
+    }
+
+
     private void compareInputXmlFileWithOutputJsonFile(String routeName, String inputXmlFile, String outputJsonFile)
             throws IOException, InterruptedException {
         String defaultXml = IOUtils.toString(classLoader.getResourceAsStream(inputXmlFile), StandardCharsets.UTF_8);
