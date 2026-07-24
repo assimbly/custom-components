@@ -153,7 +153,7 @@ public class XmlToJsonProcessor implements Processor {
 
     // process node as leaf (no children found)
     private static JsonNode processNodeAsLeaf(Map<String, ElementMetadata> metadataMap, ElementMetadata metadata, XmlToJsonConfiguration config) {
-        if(metadata.getTextContent() != null && !metadata.getTextContent().isEmpty()) {
+        if(metadata.getTextContent() != null && !metadata.getTextContent().isEmpty() || metadata.isNullAttr() && config.isTypeHints()) {
             return processTextNode(metadataMap, metadata, null, config);
         }
         return null;

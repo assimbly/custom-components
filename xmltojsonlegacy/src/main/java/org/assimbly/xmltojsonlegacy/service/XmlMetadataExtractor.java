@@ -116,6 +116,9 @@ public class XmlMetadataExtractor {
             if(qname.getLocalPart().equals(Constants.JSON_XML_ATTR_TYPE) && isNumberOrBoolean(attr.getValue())) {
                 metadata.setHasTypeNumberOrBoolean(true);
             }
+            if(qname.getLocalPart().equals(Constants.JSON_XML_ATTR_NULL)) {
+                metadata.setNullAttr(Boolean.parseBoolean(attr.getValue()));
+            }
         }
         metadata.setAttributes(attributes);
     }
