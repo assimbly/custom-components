@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<product>
+    <seo_product_page_robots>
+        <data>index_follow</data>
+        <locale null="true"/>
+        <scope null="true"/>
+    </seo_product_page_robots>
+</product>
