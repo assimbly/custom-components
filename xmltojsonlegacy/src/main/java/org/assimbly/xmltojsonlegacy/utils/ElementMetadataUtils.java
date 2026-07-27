@@ -77,4 +77,20 @@ public class ElementMetadataUtils {
         return namespace != null;
     }
 
+    // check if element has at least one child with attributes
+    public static boolean hasChildrenWithAttributes(Map<String, ElementMetadata> metadataMap, ElementMetadata metadata) {
+        if (metadata.getChildPaths() == null || metadata.getChildPaths().isEmpty()) {
+            return false;
+        }
+
+        for (String childPath : metadata.getChildPaths()) {
+            ElementMetadata childMetadata = metadataMap.get(childPath);
+            if (childMetadata != null && childMetadata.isHasAttributes()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }
