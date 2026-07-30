@@ -188,6 +188,7 @@ public class MetadataAnalyzer {
         if (config.isTypeHints() && attribute != null) {
             String attrValue = attribute.getValue();
             if (attrValue.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_NUMBER) ||
+                    attrValue.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_INTEGER) ||
                     attrValue.equalsIgnoreCase(Constants.JSON_XML_ATTR_TYPE_BOOLEAN)) {
                 return false;
             }
