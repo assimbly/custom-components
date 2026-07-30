@@ -274,7 +274,7 @@ public class ExtractUtils {
             ElementMetadata metadata, XmlToJsonConfiguration config, ObjectNode objectNode, String type, String label, String value, JsonNode subElement
     ){
         switch (type.toLowerCase()) {
-            case Constants.JSON_XML_ATTR_TYPE_NUMBER:
+            case Constants.JSON_XML_ATTR_TYPE_NUMBER, Constants.JSON_XML_ATTR_TYPE_INTEGER:
                 if (metadata.isElementMustBeNull()) {
                     objectNode.putNull(label);
                     break;
@@ -330,7 +330,7 @@ public class ExtractUtils {
             ElementMetadata metadata, XmlToJsonConfiguration config, ArrayNode arrayNode, String type, String value, JsonNode subElement
     ){
         switch (type.toLowerCase()) {
-            case Constants.JSON_XML_ATTR_TYPE_NUMBER:
+            case Constants.JSON_XML_ATTR_TYPE_NUMBER, Constants.JSON_XML_ATTR_TYPE_INTEGER:
                 if (metadata.isElementMustBeNull()) {
                     arrayNode.addNull();
                     break;
