@@ -499,13 +499,10 @@ public class ExtractUtils {
     }
 
     // add attributes in the object node
-    public static void addAttributesInObjectNode(ElementMetadata metadata, ElementMetadata parentMetadata, XmlToJsonConfiguration config) {
+    public static void addAttributesInObjectNode(ElementMetadata metadata, XmlToJsonConfiguration config) {
 
         if(metadata.getAttributes().isEmpty() && !metadata.isDefinesNamespaces() ||
-                config.isTypeHints() && (
-                        parentMetadata.isHasAttributes() && metadata.isOneValue() && metadata.isHasTypeNumberOrBoolean() ||
-                                metadata.isNullAttr()
-                )
+                config.isTypeHints() && (metadata.isHasTypeNumberOrBoolean() || metadata.isNullAttr())
         ){
             return;
         }
