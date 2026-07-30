@@ -274,7 +274,7 @@ public class ExtractUtils {
             ElementMetadata metadata, XmlToJsonConfiguration config, ObjectNode objectNode, String type, String label, String value, JsonNode subElement
     ){
         switch (type.toLowerCase()) {
-            case Constants.JSON_XML_ATTR_TYPE_NUMBER:
+            case Constants.JSON_XML_ATTR_TYPE_NUMBER, Constants.JSON_XML_ATTR_TYPE_INTEGER:
                 if (metadata.isElementMustBeNull()) {
                     objectNode.putNull(label);
                     break;
@@ -330,7 +330,7 @@ public class ExtractUtils {
             ElementMetadata metadata, XmlToJsonConfiguration config, ArrayNode arrayNode, String type, String value, JsonNode subElement
     ){
         switch (type.toLowerCase()) {
-            case Constants.JSON_XML_ATTR_TYPE_NUMBER:
+            case Constants.JSON_XML_ATTR_TYPE_NUMBER, Constants.JSON_XML_ATTR_TYPE_INTEGER:
                 if (metadata.isElementMustBeNull()) {
                     arrayNode.addNull();
                     break;
@@ -499,13 +499,10 @@ public class ExtractUtils {
     }
 
     // add attributes in the object node
-    public static void addAttributesInObjectNode(ElementMetadata metadata, ElementMetadata parentMetadata, XmlToJsonConfiguration config) {
+    public static void addAttributesInObjectNode(ElementMetadata metadata, XmlToJsonConfiguration config) {
 
         if(metadata.getAttributes().isEmpty() && !metadata.isDefinesNamespaces() ||
-                config.isTypeHints() && (
-                        parentMetadata.isHasAttributes() && metadata.isOneValue() && metadata.isHasTypeNumberOrBoolean() ||
-                                metadata.isNullAttr()
-                )
+                config.isTypeHints() && (metadata.isHasTypeNumberOrBoolean() || metadata.isNullAttr())
         ){
             return;
         }

@@ -155,7 +155,7 @@ public class XmlMetadataExtractor {
     }
 
     public static boolean isNumberOrBoolean(String type) {
-        return type != null && (type.equals(Constants.JSON_XML_ATTR_TYPE_NUMBER) || type.equals(Constants.JSON_XML_ATTR_TYPE_BOOLEAN));
+        return type != null && (type.equals(Constants.JSON_XML_ATTR_TYPE_NUMBER) || type.equals(Constants.JSON_XML_ATTR_TYPE_INTEGER) || type.equals(Constants.JSON_XML_ATTR_TYPE_BOOLEAN));
     }
 
     // check if text content is considered empty
