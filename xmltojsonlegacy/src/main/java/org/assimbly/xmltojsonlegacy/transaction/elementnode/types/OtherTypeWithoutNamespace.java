@@ -27,7 +27,7 @@ public class OtherTypeWithoutNamespace implements ElementNodeTransaction {
                             children == 0 ||
                             children >= 1 && (!classAttrOnChildElementIsNUll || !childMetadata.getAttributes().isEmpty())
                     )) ||
-                    !metadata.areChildrenNamesEqual() ||
+                    !metadata.areChildrenNamesEqual() && !metadata.hasMultipleChildrenNamed(childMetadata.getName()) ||
                     ElementMetadataUtils.isElementOnNamespace(metadata)
             ) {
                 ExtractUtils.extractChildAsOtherInObjectNode(metadata, childMetadata, config, childNode);
@@ -36,8 +36,13 @@ public class OtherTypeWithoutNamespace implements ElementNodeTransaction {
                 metadata.getObjectNode().set(ElementMetadataUtils.getElementName(childMetadata, config.isRemoveNamespacePrefixes()), metadata.getArrayNode());
             }
         } else {
-            // extract child as other type and add into the object node
-            ExtractUtils.extractChildAsOtherInObjectNode(metadata, childMetadata, config, childNode);
+            if(metadata.hasMultipleChildrenNamed(childMetadata.getName()) && childMetadata.isObject()) {
+                ExtractUtils.extractChildAsOtherInArrayNode(metadata, childNode);
+                metadata.getObjectNode().set(ElementMetadataUtils.getElementName(childMetadata, config.isRemoveNamespacePrefixes()), metadata.getArrayNode());
+            } else {
+                // extract child as other type and add into the object node
+                ExtractUtils.extractChildAsOtherInObjectNode(metadata, childMetadata, config, childNode);
+            }
         }
         return null;
     }
