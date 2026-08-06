@@ -187,6 +187,10 @@ public class ElementMetadata {
         return isNullAttr;
     }
 
+    public boolean hasNullAttr() {
+        return attributes != null && attributes.containsKey(Constants.JSON_XML_ATTR_NULL);
+    }
+
     public void setNullAttr(boolean nullAttr) {
         isNullAttr = nullAttr;
     }
