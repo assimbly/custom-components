@@ -12491,6 +12491,181 @@ class XmlToJsonLegacyTest extends CamelTestSupport {
         );
     }
 
+    /*****************************************
+     ** Example 76
+     *****************************************/
+
+    @Test
+    void testXmlJson_76_FFFFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy",
+                "xml-to-json/example_76.xml",
+                "xml-to-json/example_76_FFFFFF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_76_FFFFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_TypeHints",
+                "xml-to-json/example_76.xml",
+                "xml-to-json/example_76_FFFFFT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_76_FFFFTF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_RemoveNamespacePrefixes",
+                "xml-to-json/example_76.xml",
+                "xml-to-json/example_76_FFFFTF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_76_FFFFTT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_RemoveNamespacePrefixes_TypeHints",
+                "xml-to-json/example_76.xml",
+                "xml-to-json/example_76_FFFFTT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_76_FFFTFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_SkipNamespaces",
+                "xml-to-json/example_76.xml",
+                "xml-to-json/example_76_FFFTFF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_76_FFFTFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_SkipNamespaces_TypeHints",
+                "xml-to-json/example_76.xml",
+                "xml-to-json/example_76_FFFTFT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_76_FFFTTF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes",
+                "xml-to-json/example_76.xml",
+                "xml-to-json/example_76_FFFTTF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_76_FFFTTT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
+                "xml-to-json/example_76.xml",
+                "xml-to-json/example_76_FFFTTT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_76_FFTFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_TrimSpaces",
+                "xml-to-json/example_76.xml",
+                "xml-to-json/example_76_FFTFFF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_76_FFTFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_TrimSpaces_TypeHints",
+                "xml-to-json/example_76.xml",
+                "xml-to-json/example_76_FFTFFT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_76_FFTTTT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_TrimSpaces_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
+                "xml-to-json/example_76.xml",
+                "xml-to-json/example_76_FFTTTT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_76_TFFFFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop",
+                "xml-to-json/example_76.xml",
+                "xml-to-json/example_76_TFFFFF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_76_TFFFFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_TypeHints",
+                "xml-to-json/example_76.xml",
+                "xml-to-json/example_76_TFFFFT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_76_TFFFTF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes",
+                "xml-to-json/example_76.xml",
+                "xml-to-json/example_76_TFFFTF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_76_TFFFTT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_RemoveNamespacePrefixes_TypeHints",
+                "xml-to-json/example_76.xml",
+                "xml-to-json/example_76_TFFFTT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_76_TFFTFF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_SkipNamespaces",
+                "xml-to-json/example_76.xml",
+                "xml-to-json/example_76_TFFTFF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_76_TFFTFT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_SkipNamespaces_TypeHints",
+                "xml-to-json/example_76.xml",
+                "xml-to-json/example_76_TFFTFT.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_76_TFFTTF() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes",
+                "xml-to-json/example_76.xml",
+                "xml-to-json/example_76_TFFTTF.json"
+        );
+    }
+
+    @Test
+    void testXmlJson_76_TFFTTT() throws Exception {
+        compareInputXmlFileWithOutputJsonFile(
+                "xmltojsonlegacy_ForceTop_SkipNamespaces_RemoveNamespacePrefixes_TypeHints",
+                "xml-to-json/example_76.xml",
+                "xml-to-json/example_76_TFFTTT.json"
+        );
+    }
+
     private void compareInputXmlFileWithOutputJsonFile(String routeName, String inputXmlFile, String outputJsonFile)
             throws IOException, InterruptedException {
         String defaultXml = IOUtils.toString(classLoader.getResourceAsStream(inputXmlFile), StandardCharsets.UTF_8);
