@@ -65,29 +65,30 @@
         <assertj-core.version>3.27.7</assertj-core.version>
         <assimbly.version>6.0.0</assimbly.version>
         <awaitility.version>4.3.0</awaitility.version>
-        <bouncycastle.version>1.84</bouncycastle.version>
-        <config-admin.version>1.9.26</config-admin.version>
-        <cxf.version>4.2.2</cxf.version>
+        <bouncycastle.version>1.85.2</bouncycastle.version>
         <camel.version>4.21.0</camel.version>
-        <commons-codec.version>1.22.0</commons-codec.version>
+        <config-admin.version>1.9.26</config-admin.version>
+        <cxf.version>4.2.3</cxf.version>
+        <commons-codec.version>1.22.1</commons-codec.version>
         <commons-lang3.version>3.20.0</commons-lang3.version>
         <commons-io.version>2.22.0</commons-io.version>
         <commons-text.version>1.15.0</commons-text.version>
-        <docconverter.version>2.0.1</docconverter.version>
-        <google.api.version>v3-rev20260712-2.0.0</google.api.version>
+        <docconverter.version>2.0.2</docconverter.version>
+        <google.api.version>v3-rev20260720-2.0.0</google.api.version>
         <google.auth.version>1.5.0</google.auth.version>
         <google.oauth.version>1.39.0</google.oauth.version>
-        <greenmail.version>2.1.11</greenmail.version>
+        <greenmail.version>2.1.12</greenmail.version>
         <groovy-sandbox.version>4.3.2</groovy-sandbox.version>
-        <groovy-script.version>5.0.6</groovy-script.version>
+        <groovy-script.version>5.0.8</groovy-script.version>
         <hibernate-core.version>7.4.5.Final</hibernate-core.version>
-        <httpClient5.version>5.6.2</httpClient5.version>
+        <httpClient5.version>5.6.4</httpClient5.version>
         <httpcomponents.version>4.5.14</httpcomponents.version>
         <jackson.version>3.2.1</jackson.version>
         <jakarta.activation.version>2.1.4</jakarta.activation.version>
-        <jaxen.version>2.0.6</jaxen.version>
         <jasypt.version>1.9.3</jasypt.version>
+        <jaxen.version>2.0.6</jaxen.version>
         <jcifs.version>3.0.2</jcifs.version>
+        <jspecify.version>1.0.1</jspecify.version>
         <json.version>20260719</json.version>
         <json-path.version>3.0.0</json-path.version>
         <jwt.version>0.13.0</jwt.version>
@@ -98,34 +99,34 @@
         <mockito-inline.version>5.2.0</mockito-inline.version>
         <mongo.version>4.7.2</mongo.version>
         <mvel.version>2.5.2.Final</mvel.version>
-        <pdfbox.version>3.0.7</pdfbox.version>
+        <pdfbox.version>3.0.8</pdfbox.version>
         <poi.version>5.5.1</poi.version>
         <saaj-impl.version>3.0.6</saaj-impl.version>
         <skyscreamer.version>1.5.3</skyscreamer.version>
+        <slf4j.version>2.0.18</slf4j.version>
         <smooks.version>1.7.1</smooks.version>
         <smooks-fragments.version>1.7.1.0</smooks-fragments.version>
         <spring.version>7.0.8</spring.version>
-        <slf4j.version>2.0.18</slf4j.version>
         <tika.version>1.28.5</tika.version>
         <wsdl4j.version>1.6.3</wsdl4j.version>
         <xstream.version>1.4.21</xstream.version>
 
         <!-- database driver -->
         <db2-jdbc.version>db2jcc4</db2-jdbc.version>
-        <informix-jdbc.version>15.0.1.2</informix-jdbc.version>
+        <informix-jdbc.version>15.0.1.4</informix-jdbc.version>
         <mssql-jdbc.version>13.4.0.jre11</mssql-jdbc.version>
-        <mysql-connector-java.version>9.7.0</mysql-connector-java.version>
-        <oracle.version>23.26.2.0.0</oracle.version>
-        <postgresql.version>42.7.12</postgresql.version>
+        <mysql-connector-java.version>26.7.0</mysql-connector-java.version>
+        <oracle.version>23.26.3.0.0</oracle.version>
+        <postgresql.version>42.7.13</postgresql.version>
 
         <!-- test dependencies -->
         <assertj.version>3.27.7</assertj.version>
         <jsonassert.version>1.5.3</jsonassert.version>
-        <junit.version>6.1.2</junit.version>
+        <junit.version>6.1.3</junit.version>
         <mockito.version>5.23.0</mockito.version>
         <mockserver.version>5.15.0</mockserver.version>
         <saxon-he.version>12.9</saxon-he.version>
-        <xmlunit.version>2.12.0</xmlunit.version>
+        <xmlunit.version>2.13.0</xmlunit.version>
 
     </properties>
 
@@ -301,7 +302,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.5.0</version>
+                    <version>3.5.1</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-install-plugin</artifactId>
@@ -325,7 +326,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-toolchains-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>3.3.0</version>
                     <executions>
                         <execution>
                             <goals>
@@ -334,7 +335,7 @@
                             <configuration>
                                 <toolchains>
                                     <jdk>
-                                        <version>21</version>
+                                        <version>25</version>
                                     </jdk>
                                 </toolchains>
                             </configuration>
