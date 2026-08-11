@@ -195,14 +195,7 @@ public class SqlConfiguration {
     }
 
     public int escapesNeeded() {
-
-        if (!escapeChars)
-            return 0;
-
-        if (connectionType.toLowerCase().contains("mysql"))
-            return 2;
-
-        return 1;
+        return escapeChars ? 1 : 0;
     }
 
     private String interpolateVar(String fieldValue, Exchange exchange) {

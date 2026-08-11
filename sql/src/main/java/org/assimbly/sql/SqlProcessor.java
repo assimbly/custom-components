@@ -1,5 +1,7 @@
 package org.assimbly.sql;
 
+import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -14,6 +16,7 @@ import org.assimbly.sql.adapter.DatabaseAdapter;
 import org.assimbly.sql.domain.JDBCConnection;
 import org.assimbly.sql.exception.SQLException;
 import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSOutput;
 import org.w3c.dom.ls.LSSerializer;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -210,11 +213,17 @@ public class SqlProcessor implements Processor {
     public String prettyPrint(Document doc) {
         DOMImplementationLS domImplementation = (DOMImplementationLS) doc.getImplementation();
         LSSerializer lsSerializer = domImplementation.createLSSerializer();
-
-        // Set the pretty print hint
         lsSerializer.getDomConfig().setParameter("format-pretty-print", Boolean.TRUE);
 
-        return lsSerializer.writeToString(doc);
+        LSOutput lsOutput = domImplementation.createLSOutput();
+        lsOutput.setEncoding("UTF-8");
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        lsOutput.setByteStream(outputStream);
+
+        lsSerializer.write(doc, lsOutput);
+
+        return outputStream.toString(StandardCharsets.UTF_8);
     }
 
 
