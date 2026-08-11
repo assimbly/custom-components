@@ -66,7 +66,7 @@
         <assimbly.version>6.0.0</assimbly.version>
         <awaitility.version>4.3.0</awaitility.version>
         <bouncycastle.version>1.85.2</bouncycastle.version>
-        <camel.version>4.21.0</camel.version>
+        <camel.version>4.22.0</camel.version>
         <config-admin.version>1.9.26</config-admin.version>
         <cxf.version>4.2.3</cxf.version>
         <commons-codec.version>1.22.1</commons-codec.version>
