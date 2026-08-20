@@ -30,12 +30,15 @@ public class JsonToXmlProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
+
         ObjectMapper jsonMapper = new ObjectMapper();
 
-        JsonToXmlConfiguration config = endpoint.getConfiguration();
+        // Work on a private copy per exchange — never mutate the shared,
+        // endpoint-scoped configuration instance directly.
+        JsonToXmlConfiguration config = endpoint.getConfiguration().clone();
         config.init();
 
-        String json = exchange.getIn().getBody(String.class);
+        String json = exchange.getMessage().getBody(String.class);
         config.setJsonNode(jsonMapper.readTree(json));
 
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -64,7 +67,9 @@ public class JsonToXmlProcessor implements Processor {
         // post-processing to convert self-closing tags to <tag></tag>
         xmlContent = xmlContent.replaceAll("<([a-zA-Z_][\\w\\-.:]*)([^<>]*)/>", "<$1$2></$1>");
 
-        setContent(exchange, xmlContent);
+        exchange.getMessage().setHeader(Exchange.CONTENT_TYPE, MediaType.APPLICATION_XML_VALUE);
+        exchange.getMessage().setBody(xmlContent);
+
     }
 
     public static Element convertJsonToXml(JsonToXmlConfiguration config) {
@@ -108,12 +113,4 @@ public class JsonToXmlProcessor implements Processor {
         return element;
     }
 
-    private void setContent(Exchange exchange, String body) {
-        setContentTypeHeader(exchange);
-        exchange.getIn().setBody(body);
-    }
-
-    private void setContentTypeHeader(Exchange exchange) {
-        exchange.getMessage().setHeader(Exchange.CONTENT_TYPE, MediaType.APPLICATION_XML_VALUE);
-    }
 }
