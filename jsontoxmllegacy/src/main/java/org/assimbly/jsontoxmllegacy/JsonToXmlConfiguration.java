@@ -142,17 +142,21 @@ public class JsonToXmlConfiguration implements Cloneable{
 
     // create sub level configuration
     public JsonToXmlConfiguration createSubLevelConfig(JsonNode jsonNode, String name) {
+        JsonToXmlConfiguration subLevelConfig = this.clone();
+
+        subLevelConfig.setLevel(this.getLevel() +1);
+        subLevelConfig.setName(name);
+        subLevelConfig.setJsonNode(jsonNode);
+
+        return subLevelConfig;
+    }
+
+    @Override
+    public JsonToXmlConfiguration clone() {
         try {
-            JsonToXmlConfiguration subLevelConfig = (JsonToXmlConfiguration)this.clone();
-
-            subLevelConfig.setLevel(this.getLevel() +1);
-            subLevelConfig.setName(name);
-            subLevelConfig.setJsonNode(jsonNode);
-
-            return subLevelConfig;
-        } catch (java.lang.CloneNotSupportedException e) {
-            log.error("Could not create config for sub level", e);
-            return null;
+            return (JsonToXmlConfiguration) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
         }
     }
 
