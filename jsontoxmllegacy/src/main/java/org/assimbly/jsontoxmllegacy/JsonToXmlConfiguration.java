@@ -153,12 +153,16 @@ public class JsonToXmlConfiguration {
     }
 
     // create sub level configuration
+    // create sub level configuration
     public JsonToXmlConfiguration createSubLevelConfig(JsonNode jsonNode, String name) {
         JsonToXmlConfiguration subLevelConfig = new JsonToXmlConfiguration(this);
-        subLevelConfig.setLevel(this.level + 1);
+
+        subLevelConfig.setLevel(this.getLevel() + 1);
         subLevelConfig.setName(name);
         subLevelConfig.setJsonNode(jsonNode);
+
         return subLevelConfig;
     }
+
 
 }

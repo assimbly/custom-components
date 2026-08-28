@@ -22,7 +22,14 @@ import java.io.StringWriter;
 
 public class JsonToXmlProcessor implements Processor {
 
+    // ObjectMapper is thread-safe for concurrent use once built.
+    private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
+
     public static final String APPLICATION_XML_VALUE = "application/xml";
+
+    private static final DocumentBuilderFactory DOC_BUILDER_FACTORY = DocumentBuilderFactory.newInstance();
+    private static final TransformerFactory TRANSFORMER_FACTORY =
+            TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", null);
 
     private final JsonToXmlEndpoint endpoint;
 
@@ -32,41 +39,32 @@ public class JsonToXmlProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        ObjectMapper jsonMapper = new ObjectMapper();
-
-        JsonToXmlConfiguration config = endpoint.getConfiguration();
+        JsonToXmlConfiguration config = new JsonToXmlConfiguration(endpoint.getConfiguration());
         config.init();
 
-        String json = exchange.getIn().getBody(String.class);
-        config.setJsonNode(jsonMapper.readTree(json));
+        String json = exchange.getMessage().getBody(String.class);
+        config.setJsonNode(JSON_MAPPER.readTree(json));
 
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        DocumentBuilder documentBuilder = DOC_BUILDER_FACTORY.newDocumentBuilder(); // cheap, not thread-safe itself
         Document document = documentBuilder.newDocument();
         config.setDocument(document);
 
         Element element = convertJsonToXml(config);
-
         if (element != null) {
-            // importNode (deep=true) copies the element AND all its descendants
-            // into 'document', whereas adoptNode moves only the node itself.
             Node importedElement = document.importNode(element, true);
             document.appendChild(importedElement);
         }
 
-        TransformerFactory transformerFactory = TransformerFactory.newInstance(
-                "net.sf.saxon.TransformerFactoryImpl",
-                null
-        );
-        Transformer transformer = transformerFactory.newTransformer();
+        Transformer transformer = TRANSFORMER_FACTORY.newTransformer(); // also cheap relative to factory creation
         StringWriter writer = new StringWriter();
         transformer.transform(new DOMSource(document), new StreamResult(writer));
         String xmlContent = writer.toString();
 
-        // post-processing to convert self-closing tags to <tag></tag>
-        xmlContent = xmlContent.replaceAll("<([a-zA-Z_][\\w\\-.:]*)([^<>]*)/>", "<$1$2></$1>");
+        xmlContent = xmlContent.replaceAll("<([a-zA-Z_][\\w\\-.:]*+)([^<>]*)/>", "<$1$2></$1>");
 
-        setContent(exchange, xmlContent);
+        exchange.getIn().setHeader(Exchange.CONTENT_TYPE, APPLICATION_XML_VALUE);
+        exchange.getIn().setBody(xmlContent);
+
     }
 
     public static Element convertJsonToXml(JsonToXmlConfiguration config) {
@@ -110,15 +108,6 @@ public class JsonToXmlProcessor implements Processor {
         }
 
         return element;
-    }
-
-    private void setContent(Exchange exchange, String body) {
-        setContentTypeHeader(exchange);
-        exchange.getIn().setBody(body);
-    }
-
-    private void setContentTypeHeader(Exchange exchange) {
-        exchange.getIn().setHeader(Exchange.CONTENT_TYPE, APPLICATION_XML_VALUE);
     }
 
 }
