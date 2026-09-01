@@ -11,6 +11,9 @@ public class CsvToXmlConfiguration {
     @Metadata(required = true)
     private String encoding;
 
+    @UriParam(defaultValue = "false")
+    private boolean useHeaders;
+
     public CsvToXmlConfiguration() {
         // used for serialization
     }
@@ -25,4 +28,19 @@ public class CsvToXmlConfiguration {
     public String getEncoding() {
         return encoding;
     }
+
+    /**
+     * Whether the CSV input has a header line. When true and the body has no
+     * data rows, the processor still emits a single &lt;item&gt; element with
+     * empty child elements named after the header columns (if the header is
+     * known), or a self-closing &lt;items/&gt; if not.
+     */
+    public void setUseHeaders(boolean useHeaders) {
+        this.useHeaders = useHeaders;
+    }
+
+    public boolean isUseHeaders() {
+        return useHeaders;
+    }
+
 }
