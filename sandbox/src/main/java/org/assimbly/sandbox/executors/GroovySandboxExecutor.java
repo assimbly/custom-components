@@ -37,22 +37,31 @@ public class GroovySandboxExecutor {
     private static final GroovyInterceptor INTERCEPTOR = new GroovyInterceptor() {
 
         @Override
-        public Object onStaticCall(Invoker invoker, Class receiver, String method, Object[] args) throws Throwable {
-            if (receiver == System.class && method.equals("exit")) {
-                throw new SecurityException("Sandbox Denial: System.exit() is not allowed.");
+        public Object onMethodCall(Invoker invoker, Object receiver, String method, Object[] args) throws Throwable {
+            if (receiver == null) {
+                throw new SecurityException("Sandbox Denial: null receiver.");
             }
-            if (receiver == java.util.TimeZone.class && method.equals("setDefault")) {
-                throw new SecurityException("Sandbox Denial: Cannot change global TimeZone.");
+            Class<?> receiverClass = receiver.getClass();
+            if (!ConfigurableWhitelist.isMethodAllowed(receiverClass, method)) {
+                throw new SecurityException("Sandbox Denial: " + receiverClass.getName() + "#" + method + " not whitelisted.");
             }
             return invoker.call(receiver, method, args);
         }
 
         @Override
-        public Object onMethodCall(Invoker invoker, Object receiver, String method, Object[] args) throws Throwable {
-            if (method.equals("getClass") || method.equals("class")) {
-                throw new SecurityException("Sandbox Denial: Reflection is forbidden.");
+        public Object onStaticCall(Invoker invoker, Class receiver, String method, Object[] args) throws Throwable {
+            if (!ConfigurableWhitelist.isMethodAllowed(receiver, method)) {
+                throw new SecurityException("Sandbox Denial: static " + receiver.getName() + "#" + method + " not whitelisted.");
             }
             return invoker.call(receiver, method, args);
+        }
+
+        @Override
+        public Object onNewInstance(Invoker invoker, Class receiver, Object[] args) throws Throwable {
+            if (!ConfigurableWhitelist.isClassAllowed(receiver)) {
+                throw new SecurityException("Sandbox Denial: cannot construct " + receiver.getName());
+            }
+            return invoker.call(receiver, null, args);
         }
     };
 
