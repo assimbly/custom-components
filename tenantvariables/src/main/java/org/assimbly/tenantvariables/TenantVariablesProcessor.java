@@ -192,7 +192,10 @@ public class TenantVariablesProcessor implements Processor {
 
     private String interpolateVar(String varValue, Exchange exchange, String expressionType) {
 
-        String bodyContent = exchange.getIn().getBody(String.class);
+        String bodyContent = exchange.getMessage().getBody(String.class);
+        // Overwrite the exchange body with the pre-read String so downstream
+        // processors don't try to consume an already-drained stream
+        exchange.getMessage().setBody(bodyContent);
 
         try {
             switch (expressionType){
