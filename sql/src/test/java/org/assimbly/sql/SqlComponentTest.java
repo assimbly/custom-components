@@ -34,7 +34,6 @@ class SqlComponentTest extends CamelTestSupport {
 
     // Use "h2" so the sql-custom component selects the H2 driver/dialect.
     private final String connectionType = "h2";
-    private final String escapeChars    = "true";
 
     private String query  = "";
     private String query2 = "";
@@ -110,7 +109,6 @@ class SqlComponentTest extends CamelTestSupport {
                                 + "?password=" + password
                                 + "&database=" + database
                                 + "&connectionType=" + connectionType
-                                + "&escapeChars=" + escapeChars
                                 + "&query=RAW(" + query + ")")
                         .to("direct:executeAfterInsert");
 
@@ -214,29 +212,6 @@ class SqlComponentTest extends CamelTestSupport {
 
         assertEquals("1", resultSize.getTextContent());
         assertEquals(1,   results.getLength());
-    }
-
-    @Test
-    void testExistingEscapedChars() throws Exception {
-
-        query  = "insert into products (name, description, price) values ('Product Name 4', '${header.product_desc_json}', 49.99)";
-        query2 = "select description from products where id = 4;";
-
-        refreshRoutes();
-        template.sendBody("direct:executeWithJsonHeader", "");
-
-        getMockEndpoint("mock:out").expectedMessageCount(1);
-        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
-
-        Document resultSet  = parse(result);
-        Node     resultSize = resultSet.getElementsByTagName("ResultSize").item(0);
-        NodeList results    = resultSet.getElementsByTagName("Result");
-
-        assertEquals("1", resultSize.getTextContent());
-        assertEquals(1,   results.getLength());
-
-        Node descriptionNode = results.item(0).getChildNodes().item(1);
-        assertTrue(descriptionNode.getTextContent().contains("\\\""));
     }
 
     @Test

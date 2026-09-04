@@ -53,10 +53,6 @@ public class SqlConfiguration {
     @Metadata(required = false)
     private String tlsVersion;
 
-    @UriParam
-    @Metadata(required = false,defaultValue = "false")
-    private boolean escapeChars;
-
     public SqlConfiguration() {
         // used for serialization or reflection
     }
@@ -132,13 +128,6 @@ public class SqlConfiguration {
     }
 
     /**
-     * Target Connection Type of the JDBC Connection.
-     */
-    public void setEscapeChars(boolean escapeChars) {
-        this.escapeChars = escapeChars;
-    }
-
-    /**
      * Whether or not the target JDBC Connection uses SSL
      */
     public void setUseSSL(boolean useSSL){
@@ -188,14 +177,6 @@ public class SqlConfiguration {
 
     public String getTlsVersion() {
         return tlsVersion;
-    }
-
-    public boolean getEscapeChars() {
-        return escapeChars;
-    }
-
-    public int escapesNeeded() {
-        return escapeChars ? 1 : 0;
     }
 
     private String interpolateVar(String fieldValue, Exchange exchange) {

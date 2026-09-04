@@ -5,7 +5,6 @@ import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.apache.commons.text.StringEscapeUtils;
 import org.assimbly.sql.helper.ExchangeHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +54,6 @@ public class SqlProcessor implements Processor {
                 .setPort(Integer.parseInt(config.getPort(exchange)))
                 .setSecure(config.getUseSSL())
                 .setEnabledTLSProtocols(config.getTlsVersion())
-                .setEscapeChars(config.getEscapeChars())
                 .build();
 
         DatabaseAdapter adapter = config.getConnectionType().getAdapter();
@@ -187,11 +185,8 @@ public class SqlProcessor implements Processor {
         if (ExchangeHelper.hasVariables(sqlQuery))
             sqlQuery = ExchangeHelper.interpolate(sqlQuery, exchange);
 
-        if (endpoint.getConfiguration().getEscapeChars())
-            for (int i = 0; i < endpoint.getConfiguration().escapesNeeded(); i++)
-                sqlQuery = StringEscapeUtils.escapeJson(sqlQuery);
-
         return connection.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
+
     }
 
     public static Document newDocument(){
