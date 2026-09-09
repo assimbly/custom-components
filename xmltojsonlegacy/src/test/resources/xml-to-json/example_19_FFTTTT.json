@@ -1,0 +1,25 @@
+{
+    "@processingCodes": "",
+    "adminCode": "10",
+    "customerCode": "5076",
+    "orderTypeCode": "WEB",
+    "reference": "FAKRO23007529 KOPPEJAN 23-013",
+    "Messages": [
+        [
+            {
+                "@report": "NO",
+                "@blockHTTPcall": "NO",
+                "@data": "XML",
+                "@datatype": "SourceOrder",
+                "#text": "\\n;;;;INFO;Oorsprong van order: Onbekend"
+            }
+        ],
+        [
+            {
+                "@report": "NO",
+                "@blockHTTPcall": "NO",
+                "#text": "\\n;;;;INFO;Geen zoeksleutel voor contactpersoon opgegeven."
+            }
+        ]
+    ]
+}

@@ -1,0 +1,91 @@
+{
+    "productIdentifiers": [
+        {
+            "productIdentifier": {
+                "productCode": "30977"
+            },
+            "unitCode": "ST"
+        },
+        {
+            "productIdentifier": {
+                "productCode": "72068"
+            },
+            "unitCode": "ST"
+        },
+        {
+            "productIdentifier": {
+                "productCode": "72162"
+            },
+            "unitCode": "ST"
+        },
+        {
+            "productIdentifier": {
+                "productCode": "73042"
+            },
+            "unitCode": "ST"
+        },
+        {
+            "productIdentifier": {
+                "productCode": "73071"
+            },
+            "unitCode": "ST"
+        },
+        {
+            "productIdentifier": {
+                "productCode": "73078"
+            },
+            "unitCode": "ST"
+        },
+        {
+            "productIdentifier": {
+                "productCode": "74391"
+            },
+            "unitCode": "ST"
+        },
+        {
+            "productIdentifier": {
+                "productCode": "74394"
+            },
+            "unitCode": "ST"
+        },
+        {
+            "productIdentifier": {
+                "productCode": "74408"
+            },
+            "unitCode": "ST"
+        },
+        {
+            "productIdentifier": {
+                "productCode": "74534"
+            },
+            "unitCode": "ST"
+        },
+        {
+            "productIdentifier": {
+                "productCode": "44554"
+            },
+            "unitCode": "ST"
+        },
+        {
+            "productIdentifier": {
+                "productCode": "44555"
+            },
+            "unitCode": "ST"
+        },
+        {
+            "productIdentifier": {
+                "productCode": "83865"
+            },
+            "unitCode": "ST"
+        },
+        {
+            "productIdentifier": {
+                "productCode": "84552"
+            },
+            "unitCode": "ST"
+        }
+    ],
+    "useFieldCodes": true,
+    "limit": 25000,
+    "warehouseGroup": "BOLAND"
+}
