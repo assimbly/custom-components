@@ -25,11 +25,11 @@ public class OtherType implements TextNodeTransaction {
     }
 
     private static void processWithTypeHints(Map<String, ElementMetadata> metadataMap, ElementMetadata metadata, XmlToJsonConfiguration config) {
-        ElementMetadata parentMetada = ElementMetadataUtils.getParentMetadata(metadataMap, metadata);
-        ElementMetadata grandParentMetada = ElementMetadataUtils.getGrandParentMetadata(metadataMap, metadata);
-        if(!parentMetada.areChildrenNamesEqual() ||
-                ((!grandParentMetada.containsClassAttribute() || !grandParentMetada.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY)) &&
-                        (!parentMetada.containsClassAttribute() || !parentMetada.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY)))
+        ElementMetadata parentMetadata = ElementMetadataUtils.getParentMetadata(metadataMap, metadata);
+        ElementMetadata grandParentMetadata = ElementMetadataUtils.getGrandParentMetadata(metadataMap, metadata);
+        if(!parentMetadata.areChildrenNamesEqual() ||
+                ((!grandParentMetadata.containsClassAttribute() || !grandParentMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY)) &&
+                        (!parentMetadata.containsClassAttribute() || !parentMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY)))
         ) {
             String value = ElementMetadataUtils.getNodeValue(metadata, config.isTrimSpaces());
             String trimmedValue = ElementMetadataUtils.getNodeValue(metadata, true);
