@@ -369,9 +369,9 @@ public class ExtractUtils {
     // Attribute / namespace helpers
     // -------------------------------------------------------------------------
 
-    public static void addAttributesInObjectNode(ElementMetadata metadata, XmlToJsonConfiguration config) {
+    public static void addAttributesInObjectNode(ElementMetadata metadata, ElementMetadata parentMetadata, XmlToJsonConfiguration config) {
         if(metadata.getAttributes().isEmpty() && !metadata.isDefinesNamespaces() ||
-                config.isTypeHints() && metadata.isOneValue() && metadata.isHasTypeNumberOrBoolean()
+                config.isTypeHints() && parentMetadata.isHasAttributes() && metadata.isOneValue() && metadata.isHasTypeNumberOrBoolean()
         ) {
             return;
         }

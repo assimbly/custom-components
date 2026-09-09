@@ -17,22 +17,23 @@ public class OneValueType implements TextNodeTransaction {
     public JsonNode process(Map<String, ElementMetadata> metadataMap, ElementMetadata metadata, XmlToJsonConfiguration config) {
         //process text node identified as one value
         JsonNode resp;
+        ElementMetadata parentMetadata = ElementMetadataUtils.getParentMetadata(metadataMap, metadata);
         if(config.isTypeHints()) {
-            resp = processWithTypeHints(metadata, config);
+            resp = processWithTypeHints(metadata, parentMetadata, config);
         } else {
             resp = processWithoutTypeHints(metadata, config);
         }
-        return metadata.getLevel() == 1 ? resp : null;
+        return parentMetadata.isHasAttributes() ? resp : null;
     }
 
-    private static JsonNode processWithTypeHints(ElementMetadata metadata, XmlToJsonConfiguration config) {
+    private static JsonNode processWithTypeHints(ElementMetadata metadata, ElementMetadata parentMetadata, XmlToJsonConfiguration config) {
         if(!metadata.isHasTypeNumberOrBoolean() && ExtractUtils.rootObjectNodeContainsAttributes(metadata.getObjectNode())) {
             metadata.getObjectNode().put(Constants.JSON_XML_TEXT_FIELD, ElementMetadataUtils.getNodeValue(metadata, config.isTrimSpaces()));
             return metadata.getObjectNode();
         } else {
             String value = ElementMetadataUtils.getNodeValue(metadata, config.isTrimSpaces());
             String trimmedValue = ElementMetadataUtils.getNodeValue(metadata, true);
-            if(metadata.isHasTypeNumberOrBoolean() && value != null && !trimmedValue.isEmpty()) {
+            if(parentMetadata.isHasAttributes() && metadata.isHasTypeNumberOrBoolean() && value != null && !trimmedValue.isEmpty()) {
                 ExtractUtils.setValueUsingAttributeType(metadata, config, metadata.getObjectNode(), null,
                         ElementMetadataUtils.getElementName(metadata, config.isRemoveNamespacePrefixes()),
                         value,
