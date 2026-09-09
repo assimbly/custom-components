@@ -266,6 +266,6 @@ public class ElementMetadata {
     }
 
     public boolean isRootNode() {
-        return !path.contains("/");
+        return path == null || !path.contains("/");
     }
 }

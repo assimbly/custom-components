@@ -67,7 +67,8 @@ public class MetadataAnalyzer {
                 (parentElementMetadata.getChildrenCount() == 1 || parentElementMetadata.getChildrenCount() > 1 && parentElementMetadata.areChildrenNamesEqual()) &&
                 (!parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT) ||
                         parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
-                                grandParentElementMetadata.areChildrenNamesEqual()) &&
+                                grandParentElementMetadata.areChildrenNamesEqual() &&
+                                !grandParentElementMetadata.isRootNode()) &&
                 (!grandParentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT) ||
                         grandParentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
                                 greatGrandParentElementMetadata.areChildrenNamesEqual())
@@ -121,7 +122,7 @@ public class MetadataAnalyzer {
                 (metadata.getChildrenCount() > 1  && (metadata.getLevel() == 0 || metadata.getLevel() > 0 && !metadata.areChildrenNamesEqual()) ||
                         metadata.getChildrenCount() == 1 && metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
                                 (!config.isTypeHints() ||
-                                        parentElementMetadata.getChildrenCount() > 1 && config.isTypeHints() &&
+                                        parentElementMetadata.getChildrenCount() > 0 && config.isTypeHints() &&
                                                 !parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY) ||
                                         config.isTypeHints() &&
                                                 metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
@@ -150,7 +151,8 @@ public class MetadataAnalyzer {
                 (!config.isTypeHints() || (
                         !parentElementMetadata.containsClassAttribute() ||
                                 !parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT) ||
-                                (greatGrandParentElementMetadata.areChildrenNamesEqual() && grandParentElementMetadata.areChildrenNamesEqual())
+                                (greatGrandParentElementMetadata.areChildrenNamesEqual() && greatGrandParentElementMetadata.getPath() != null &&
+                                        grandParentElementMetadata.areChildrenNamesEqual())
                 ))
         );
     }
