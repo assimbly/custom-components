@@ -1,0 +1,7 @@
+{
+    "city": "Roosendaal",
+    "street": {
+        "@class": "array",
+        "#text": "Rucphensebaan 29"
+    }
+}
