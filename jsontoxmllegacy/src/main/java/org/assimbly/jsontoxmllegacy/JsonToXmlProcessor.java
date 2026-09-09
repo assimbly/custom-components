@@ -39,7 +39,9 @@ public class JsonToXmlProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        JsonToXmlConfiguration config = new JsonToXmlConfiguration(endpoint.getConfiguration());
+        // Work on a private copy per exchange — never mutate the shared,
+        // endpoint-scoped configuration instance directly.
+        JsonToXmlConfiguration config = endpoint.getConfiguration().clone();
         config.init();
 
         String json = exchange.getMessage().getBody(String.class);
@@ -62,8 +64,8 @@ public class JsonToXmlProcessor implements Processor {
 
         xmlContent = xmlContent.replaceAll("<([a-zA-Z_][\\w\\-.:]*+)([^<>]*)/>", "<$1$2></$1>");
 
-        exchange.getIn().setHeader(Exchange.CONTENT_TYPE, APPLICATION_XML_VALUE);
-        exchange.getIn().setBody(xmlContent);
+        exchange.getMessage().setHeader(Exchange.CONTENT_TYPE, APPLICATION_XML_VALUE);
+        exchange.getMessage().setBody(xmlContent);
 
     }
 

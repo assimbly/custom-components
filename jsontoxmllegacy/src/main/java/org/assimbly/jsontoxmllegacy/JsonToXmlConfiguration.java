@@ -153,16 +153,23 @@ public class JsonToXmlConfiguration {
     }
 
     // create sub level configuration
-    // create sub level configuration
     public JsonToXmlConfiguration createSubLevelConfig(JsonNode jsonNode, String name) {
-        JsonToXmlConfiguration subLevelConfig = new JsonToXmlConfiguration(this);
+        JsonToXmlConfiguration subLevelConfig = this.clone();
 
-        subLevelConfig.setLevel(this.getLevel() + 1);
+        subLevelConfig.setLevel(this.getLevel() +1);
         subLevelConfig.setName(name);
         subLevelConfig.setJsonNode(jsonNode);
 
         return subLevelConfig;
     }
 
+    @Override
+    public JsonToXmlConfiguration clone() {
+        try {
+            return (JsonToXmlConfiguration) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 
 }
