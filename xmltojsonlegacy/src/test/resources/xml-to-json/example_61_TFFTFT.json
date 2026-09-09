@@ -1,0 +1,12 @@
+{
+    "rmessage": {
+        "code": "36A",
+        "dummy": {
+            "@test": "abc",
+            "dummyB": [
+                123,
+                456
+            ]
+        }
+    }
+}

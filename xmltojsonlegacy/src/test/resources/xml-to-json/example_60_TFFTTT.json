@@ -1,0 +1,9 @@
+{
+    "rmessage": {
+        "quantity": 36,
+        "dummy": {
+            "@test": "abc",
+            "dummyB": false
+        }
+    }
+}

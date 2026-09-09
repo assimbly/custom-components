@@ -1,0 +1,16 @@
+{
+    "code": "36A",
+    "dummy": {
+        "@test": "abc",
+        "dummyB": [
+            {
+                "@type": "number",
+                "#text": "123"
+            },
+            {
+                "@type": "number",
+                "#text": "456"
+            }
+        ]
+    }
+}
