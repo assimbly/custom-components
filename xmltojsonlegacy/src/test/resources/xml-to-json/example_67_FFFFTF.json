@@ -1,0 +1,20 @@
+{
+    "@RESTgroupId": "10000",
+    "@action": "PUT",
+    "@applicationId": "MAGSTOCK",
+    "@comment": "PUT voorraadstand",
+    "@id": "01010",
+    "@ignoreHTTPcodes": "404",
+    "@message": "products",
+    "@messageId": "1000001010",
+    "@parameters": "/IT-MINI12603%2FR/stockItems/0",
+    "@step": "01",
+    "stockItem": {
+        "@class": "object",
+        "@type": "object",
+        "qty": {
+            "@type": "number",
+            "#text": "346.0"
+        }
+    }
+}
