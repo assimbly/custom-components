@@ -1,0 +1,9 @@
+{
+  "AssemblyRecord": {
+    "organisation_id": "123",
+    "company": {
+      "@null": "false",
+      "#text": "company name"
+    }
+  }
+}
