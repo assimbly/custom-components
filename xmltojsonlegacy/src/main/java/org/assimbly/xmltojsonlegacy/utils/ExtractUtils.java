@@ -299,7 +299,9 @@ public class ExtractUtils {
     public static void putValueOnObjectNode(ElementMetadata metadata, XmlToJsonConfiguration config, ObjectNode objectNode, String type, String label, String value, JsonNode subElement) {
         if(type == null) type = "";
         switch (type.toLowerCase()) {
-            case Constants.JSON_XML_ATTR_TYPE_NUMBER  -> putNumberOnObjectNode(metadata, objectNode, label, value, subElement);
+            case Constants.JSON_XML_ATTR_TYPE_NUMBER,
+                 Constants.JSON_XML_ATTR_TYPE_INTEGER ->
+                    putNumberOnObjectNode(metadata, objectNode, label, value, subElement);
             case Constants.JSON_XML_ATTR_TYPE_BOOLEAN -> {
                 if (metadata.isElementMustBeNull()) objectNode.putNull(label);
                 else objectNode.put(label, resolveBoolean(subElement, value));
@@ -319,7 +321,9 @@ public class ExtractUtils {
     public static void addValueIntoArrayNode(ElementMetadata metadata, XmlToJsonConfiguration config, ArrayNode arrayNode, String type, String value, JsonNode subElement) {
         if(type == null) type = "";
         switch (type.toLowerCase()) {
-            case Constants.JSON_XML_ATTR_TYPE_NUMBER  -> addNumberIntoArrayNode(metadata, arrayNode, value, subElement);
+            case Constants.JSON_XML_ATTR_TYPE_NUMBER,
+                 Constants.JSON_XML_ATTR_TYPE_INTEGER ->
+                    addNumberIntoArrayNode(metadata, arrayNode, value, subElement);
             case Constants.JSON_XML_ATTR_TYPE_BOOLEAN -> {
                 if (metadata.isElementMustBeNull()) arrayNode.addNull();
                 else arrayNode.add(resolveBoolean(subElement, value));

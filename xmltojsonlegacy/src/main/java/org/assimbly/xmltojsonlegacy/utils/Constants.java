@@ -16,6 +16,7 @@ public class Constants {
     public static final String JSON_XML_ATTR_NULL = "null";
 
     public static final String JSON_XML_ATTR_TYPE_NUMBER = "number";
+    public static final String JSON_XML_ATTR_TYPE_INTEGER = "integer";
     public static final String JSON_XML_ATTR_TYPE_BOOLEAN = "boolean";
     public static final String JSON_XML_ATTR_TYPE_STRING = "string";
     public static final String JSON_XML_ATTR_TYPE_ARRAY = "array";
