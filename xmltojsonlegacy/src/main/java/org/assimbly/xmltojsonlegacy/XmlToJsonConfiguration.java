@@ -88,7 +88,7 @@ public class XmlToJsonConfiguration {
 
     public boolean isToDiscard(XmlToJsonConfiguration config) {
         Set<String> discardXmlToJsonOptionsSet = Set.of(
-                "FFTFTF", "FFTFTT", "FFTTFF", "FFTTFT", "FFTTTF", "FFTTTT", "FTTFFF", "FTTFFT", "FTTFTF", "FTTFTT", "FTTTFF",
+                "FFTFTF", "FFTFTT", "FFTTFF", "FFTTFT", "FFTTTF", "FTTFFF", "FTTFFT", "FTTFTF", "FTTFTT", "FTTTFF",
                 "FTTTFT", "FTTTTT", "TFTFFF", "TFTFFT", "TFTFTF", "TFTFTT", "TFTTFF", "TFTTFT", "TFTTTF", "TFTTTT", "TTFTTT",
                 "TTTFFF", "TTTFTF", "TTTFTT", "TTTTFF", "TTTTFT", "TTTTTF"
         );
