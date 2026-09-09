@@ -1,0 +1,7 @@
+{
+    "CustomerPartRef": "Seagate ST4000VX016",
+    "Quantity": {
+        "@type": "integer",
+        "#text": "123"
+    }
+}
