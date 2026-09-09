@@ -1,0 +1,9 @@
+{
+    "rmessage": {
+        "@test": "abc",
+        "active": {
+            "@type": "boolean",
+            "#text": "false"
+        }
+    }
+}
