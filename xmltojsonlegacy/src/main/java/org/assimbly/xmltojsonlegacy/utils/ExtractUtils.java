@@ -41,7 +41,7 @@ public class ExtractUtils {
     }
 
     public static void extractChildAsArray(ElementMetadata metadata, ElementMetadata childMetadata, JsonNode childNode) {
-        if (childNode.isArray() && MetadataAnalyzer.isLastElement(childMetadata)) {
+        if (childNode.isArray() && MetadataAnalyzer.isLastElement(childMetadata) && !childMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY)) {
             for (JsonNode subElement : childNode)
                 metadata.getArrayNode().add(!metadata.isElementMustBeNull() ? subElement.asString() : null);
         } else {
