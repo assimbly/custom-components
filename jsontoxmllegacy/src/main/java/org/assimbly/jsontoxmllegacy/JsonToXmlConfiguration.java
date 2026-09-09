@@ -10,7 +10,7 @@ import org.w3c.dom.Element;
 import java.util.HashMap;
 
 @UriParams
-public class JsonToXmlConfiguration {
+public class JsonToXmlConfiguration implements Cloneable{
 
     @UriParam
     @Metadata(required = true)
