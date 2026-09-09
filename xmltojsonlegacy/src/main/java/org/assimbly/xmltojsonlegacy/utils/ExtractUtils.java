@@ -499,16 +499,22 @@ public class ExtractUtils {
 
     private static JsonNode addNodeWithAttributeInfo(ElementMetadata metadata, String value) {
         ObjectNode attrInfoObjectNode = JsonNodeFactory.instance.objectNode();
-        for (Map.Entry<String, AttributeEntry> entry : metadata.getAttributes().entrySet())
-            attrInfoObjectNode.put(Constants.JSON_XML_ATTR_PREFIX + entry.getKey(), entry.getValue().value());
 
-        if (value == null || value.isEmpty() || value.equalsIgnoreCase(Constants.NULL_VALUE)) {
-            attrInfoObjectNode.putNull(Constants.JSON_XML_TEXT_FIELD);
-        } else {
-            if(!metadata.isNullAttr() && !metadata.getTextContent().isEmpty()) {
-                attrInfoObjectNode.put(Constants.JSON_XML_TEXT_FIELD, value.equalsIgnoreCase(Constants.NULL_VALUE) ? null : value);
+        for (Map.Entry<String, AttributeEntry> entry : metadata.getAttributes().entrySet()) {
+            attrInfoObjectNode.put(
+                    Constants.JSON_XML_ATTR_PREFIX + entry.getKey(),
+                    entry.getValue().value()
+            );
+        }
+
+        if (!metadata.isNullAttr() && !metadata.getTextContent().isEmpty()) {
+            if (value == null || value.equalsIgnoreCase(Constants.NULL_VALUE)) {
+                attrInfoObjectNode.putNull(Constants.JSON_XML_TEXT_FIELD);
+            } else {
+                attrInfoObjectNode.put(Constants.JSON_XML_TEXT_FIELD, value);
             }
         }
+
         return attrInfoObjectNode;
     }
 
