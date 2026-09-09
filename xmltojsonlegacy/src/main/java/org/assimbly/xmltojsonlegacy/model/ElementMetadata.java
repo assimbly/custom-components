@@ -31,6 +31,7 @@ public class ElementMetadata {
 
     private boolean hasEmptyTextContent = true;
     private boolean hasTypeNumberOrBoolean = false;
+    private boolean isNullAttr = false;
     private boolean elementMustBeNull;
 
     private boolean isRootArray;
@@ -180,6 +181,14 @@ public class ElementMetadata {
 
     public void setHasAttributes(boolean hasAttributes) {
         this.hasAttributes = hasAttributes;
+    }
+
+    public boolean isNullAttr() {
+        return isNullAttr;
+    }
+
+    public void setNullAttr(boolean nullAttr) {
+        isNullAttr = nullAttr;
     }
 
     public boolean isRootArray() {

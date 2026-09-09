@@ -49,7 +49,7 @@ public class MetadataAnalyzer {
         ) {
             return true;
         }
-        if (metadata.getDeepestDepth() == 1 && !ElementMetadataUtils.isElementOnNamespace(metadata) && // && parentElementMetadata.containsClassAttribute()
+        if (metadata.getDeepestDepth() == 1 && metadata.getLevel() != 0 && !ElementMetadataUtils.isElementOnNamespace(metadata) &&
                 (parentElementMetadata.containsClassAttributeValue("") || parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY) ||
                         parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT)) &&
                 !metadata.isHasAttributes()
@@ -117,9 +117,13 @@ public class MetadataAnalyzer {
 
         ElementMetadata parentElementMetadata = metadataMap.getOrDefault(ElementMetadataUtils.getParentPath(metadata.getPath()), new ElementMetadata());
         ElementMetadata grandParentElementMetadata = metadataMap.getOrDefault(ElementMetadataUtils.getParentPath(parentElementMetadata.getPath()), new ElementMetadata());
+        boolean hasChildrenWithAttributes = ElementMetadataUtils.hasChildrenWithAttributes(metadataMap, metadata);
 
         return (metadata.getDeepestDepth() == 1 &&
-                (metadata.getChildrenCount() > 1  && (metadata.getLevel() == 0 || metadata.getLevel() > 0 && !metadata.areChildrenNamesEqual()) ||
+                (metadata.getChildrenCount() > 1  && (
+                        metadata.getLevel() == 0 && !hasChildrenWithAttributes && (!config.isTypeHints() || metadata.isDefinesNamespaces()) ||
+                                metadata.getLevel() > 0 && !metadata.areChildrenNamesEqual()
+                ) ||
                         metadata.getChildrenCount() == 1 && metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
                                 (!config.isTypeHints() ||
                                         parentElementMetadata.getChildrenCount() > 0 && config.isTypeHints() &&
@@ -134,6 +138,11 @@ public class MetadataAnalyzer {
 
     // check if it's one value
     public static boolean isOneValue(Map<String, ElementMetadata> metadataMap, ElementMetadata metadata, XmlToJsonConfiguration config) {
+
+        if(metadata.isNullAttr() && config.isTypeHints()) {
+            return true;
+        }
+
         JsonNode valueAsJson = null;
 
         ElementMetadata parentElementMetadata = metadataMap.getOrDefault(ElementMetadataUtils.getParentPath(metadata.getPath()), new ElementMetadata());
@@ -169,6 +178,10 @@ public class MetadataAnalyzer {
 
         if(childMetadata == null) {
             return false;
+        }
+
+        if (config.isTypeHints() && metadata.isHasEmptyTextContent() && metadata.isNullAttr()) {
+            return true;
         }
 
         AttributeEntry attribute = childMetadata.getAttributes().get(Constants.JSON_XML_ATTR_TYPE);

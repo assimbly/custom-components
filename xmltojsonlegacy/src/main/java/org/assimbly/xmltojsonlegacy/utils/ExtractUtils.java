@@ -278,9 +278,9 @@ public class ExtractUtils {
 
     // Logic to determine how to set the value based on type hints and presence of attributes
     public static void setValueUsingAttributeType(ElementMetadata metadata, XmlToJsonConfiguration config, ObjectNode rootObjectNode, JsonNode subElement, String label, String value, String childTypeAttr) {
-        if (rootObjectNode.has(label)) {
+        if(rootObjectNode.has(label) || metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY)) {
             JsonNode nodeValues = rootObjectNode.get(label);
-            ArrayNode arrayNode = nodeValues.isArray() ? (ArrayNode) nodeValues : wrapInArray(nodeValues);
+            ArrayNode arrayNode = nodeValues != null && nodeValues.isArray() ? (ArrayNode) nodeValues : wrapInArray(nodeValues);
             addValueIntoArrayNode(metadata, config, arrayNode, childTypeAttr, value, subElement);
             rootObjectNode.set(label, arrayNode);
         } else {
@@ -290,7 +290,9 @@ public class ExtractUtils {
 
     private static ArrayNode wrapInArray(JsonNode node) {
         ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode();
-        arrayNode.add(node);
+        if(node != null) {
+            arrayNode.add(node);
+        }
         return arrayNode;
     }
 
@@ -304,7 +306,7 @@ public class ExtractUtils {
             }
             case Constants.JSON_XML_ATTR_TYPE_ARRAY, Constants.JSON_XML_ATTR_TYPE_OBJECT -> { /* do nothing */ }
             default -> {
-                String resolved = !metadata.isElementMustBeNull() ? resolveStringValue(config, subElement, value) : null;
+                String resolved = !metadata.isElementMustBeNull() ? resolveStringValue(config, metadata, subElement, value) : null;
                 if (resolved == null) {
                     objectNode.putNull(label);
                 } else {
@@ -324,7 +326,7 @@ public class ExtractUtils {
             }
             case Constants.JSON_XML_ATTR_TYPE_ARRAY, Constants.JSON_XML_ATTR_TYPE_OBJECT -> { /* do nothing */ }
             default -> {
-                String resolved = !metadata.isElementMustBeNull() ? resolveStringValue(config, subElement, value) : null;
+                String resolved = !metadata.isElementMustBeNull() ? resolveStringValue(config, metadata, subElement, value) : null;
                 if (resolved == null) arrayNode.addNull();
                 else arrayNode.add(resolved);
             }
@@ -353,13 +355,14 @@ public class ExtractUtils {
         return subElement != null ? subElement.asBoolean() : Boolean.parseBoolean(value);
     }
 
-    private static String resolveStringValue(XmlToJsonConfiguration config, JsonNode subElement, String value) {
+    private static String resolveStringValue(XmlToJsonConfiguration config, ElementMetadata metadata, JsonNode subElement, String value) {
         String raw = subElement != null ? subElement.asString() : value;
+        boolean isNullAttr = metadata.isNullAttr();
         if (raw == null || raw.isEmpty()) return null;
 
         if (config.isTrimSpaces()) {
             String trimmed = raw.trim();
-            if (trimmed.isEmpty() || trimmed.equalsIgnoreCase(Constants.NULL_VALUE)) return null;
+            if (trimmed.isEmpty() || trimmed.equalsIgnoreCase(Constants.NULL_VALUE) || isNullAttr) return null;
             return trimmed;
         }
         return raw.equalsIgnoreCase(Constants.NULL_VALUE) ? null : raw;
@@ -371,7 +374,10 @@ public class ExtractUtils {
 
     public static void addAttributesInObjectNode(ElementMetadata metadata, ElementMetadata parentMetadata, XmlToJsonConfiguration config) {
         if(metadata.getAttributes().isEmpty() && !metadata.isDefinesNamespaces() ||
-                config.isTypeHints() && parentMetadata.isHasAttributes() && metadata.isOneValue() && metadata.isHasTypeNumberOrBoolean()
+                config.isTypeHints() && (
+                        parentMetadata.isHasAttributes() && metadata.isOneValue() && metadata.isHasTypeNumberOrBoolean() ||
+                                metadata.isNullAttr()
+                )
         ) {
             return;
         }
