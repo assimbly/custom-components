@@ -378,7 +378,7 @@ public class ExtractUtils {
 
     public static void addAttributesInObjectNode(ElementMetadata metadata, XmlToJsonConfiguration config) {
         if(metadata.getAttributes().isEmpty() && !metadata.isDefinesNamespaces() ||
-                config.isTypeHints() && (metadata.isHasTypeNumberOrBoolean() || metadata.isNullAttr())
+                config.isTypeHints() && (metadata.isHasTypeNumberOrBoolean() || metadata.hasNullAttr())
         ) {
             return;
         }
