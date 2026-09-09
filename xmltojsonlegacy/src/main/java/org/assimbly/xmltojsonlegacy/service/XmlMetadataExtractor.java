@@ -112,6 +112,10 @@ public class XmlMetadataExtractor {
                     : qname.getPrefix() + ":" + qname.getLocalPart();
 
             attributes.put(attrName, new AttributeEntry(qname, attr.getValue()));
+
+            if(qname.getLocalPart().equals(Constants.JSON_XML_ATTR_TYPE) && isNumberOrBoolean(attr.getValue())) {
+                metadata.setHasTypeNumberOrBoolean(true);
+            }
         }
         metadata.setAttributes(attributes);
     }
@@ -145,6 +149,10 @@ public class XmlMetadataExtractor {
             }
         }
         return false;
+    }
+
+    public static boolean isNumberOrBoolean(String type) {
+        return type != null && (type.equals(Constants.JSON_XML_ATTR_TYPE_NUMBER) || type.equals(Constants.JSON_XML_ATTR_TYPE_BOOLEAN));
     }
 
     // check if text content is considered empty
