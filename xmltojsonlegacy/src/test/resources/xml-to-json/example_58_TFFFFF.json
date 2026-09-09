@@ -1,0 +1,10 @@
+{
+    "rmessage": {
+        "@test": "abc",
+        "quantity": {
+            "@type": "number",
+            "@blabla": "123",
+            "#text": "12"
+        }
+    }
+}

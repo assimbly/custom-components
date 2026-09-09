@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rmessage test="abc">
+    <quantity type="number" blabla="123">12</quantity>
+</rmessage>
