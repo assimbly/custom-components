@@ -1,0 +1,15 @@
+{
+    "testing": {
+        "dummy-node": "dummy node",
+        "tests": [
+            {
+                "dummy-node": "dummy 1",
+                "waarde": "123"
+            },
+            {
+                "dummy-node": "dummy 2",
+                "waarde": "456"
+            }
+        ]
+    }
+}

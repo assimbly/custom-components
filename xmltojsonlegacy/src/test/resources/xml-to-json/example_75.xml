@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testing>
+    <dummy-node>dummy node</dummy-node>
+    <tests>
+        <dummy-node>dummy 1</dummy-node>
+        <waarde>123</waarde>
+    </tests>
+    <tests>
+        <dummy-node>dummy 2</dummy-node>
+        <waarde>456</waarde>
+    </tests>
+</testing>
