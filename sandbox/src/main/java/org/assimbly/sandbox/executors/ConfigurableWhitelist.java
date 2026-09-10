@@ -16,9 +16,11 @@ public class ConfigurableWhitelist {
     private static final String ASSIMBLY_PATH = "/.assimbly";
     private static final String GROOVY_PATH = "/groovy/";
 
-    // class name -> method rule (allow-all-except / allow-only)
-    // NOTE: a class is constructible via `new` iff it has an entry here (see isClassAllowed).
+    private static final Map<String, PackageRule> PACKAGE_RULES = new ConcurrentHashMap<>();
     private static final Map<String, MethodRule> METHOD_RULES = new ConcurrentHashMap<>();
+    private static final Map<String, MethodRule> LOOKUP_CACHE = new ConcurrentHashMap<>();
+
+    private static final MethodRule DENIED_RULE = MethodRule.allowOnly(Set.of());
 
     private static final Set<String> HARD_DENIED_METHODS = Set.of(
             "execute", "exec", "start", "exit", "halt",
@@ -73,6 +75,7 @@ public class ConfigurableWhitelist {
         }
         try {
             Map<String, MethodRule> newRules = new ConcurrentHashMap<>();
+            Map<String, PackageRule> newPackageRules = new ConcurrentHashMap<>();
 
             for (String raw : Files.readAllLines(CONFIG_PATH)) {
                 String line = raw.trim();
@@ -86,7 +89,7 @@ public class ConfigurableWhitelist {
                 if (hashIdx > 0) {
                     String className = line.substring(0, hashIdx);
                     String rulePart = line.substring(hashIdx + 1);
-                    parseMethodRule(className, rulePart, newRules, raw);
+                    parseMethodRule(className, rulePart, newRules, newPackageRules, raw);
                 } else {
                     LOG.warning("Ignoring whitelist line with no '#Class#method' rule: " + raw);
                 }
@@ -94,8 +97,13 @@ public class ConfigurableWhitelist {
 
             METHOD_RULES.clear();
             METHOD_RULES.putAll(newRules);
+            PACKAGE_RULES.clear();
+            PACKAGE_RULES.putAll(newPackageRules);
+            LOOKUP_CACHE.clear();
 
-            LOG.info("Whitelist reloaded: " + METHOD_RULES.size() + " classes with method rules.");
+            LOG.info("Whitelist reloaded: "
+                    + METHOD_RULES.size() + " class rules, "
+                    + PACKAGE_RULES.size() + " package rules.");
         } catch (IOException e) {
             LOG.severe("Failed to reload whitelist file, keeping previous config: " + e.getMessage());
         }
@@ -108,8 +116,19 @@ public class ConfigurableWhitelist {
      *   ClassName#*,-foo,-bar        -> allow all methods except foo, bar
      *   ClassName#foo,bar            -> allow only foo, bar
      */
-    private static void parseMethodRule(String className, String rulePart,
-                                        Map<String, MethodRule> newRules, String originalLine) {
+    private static void parseMethodRule(
+            String className,
+            String rulePart,
+            Map<String, MethodRule> newRules,
+            Map<String, PackageRule> newPackageRules,
+            String originalLine
+    ) {
+
+        if (className.endsWith("*")) {
+            parsePackageRule(className, rulePart, newPackageRules, originalLine);
+            return;
+        }
+
         String[] tokens = rulePart.split(",");
         if (tokens.length == 0) {
             LOG.warning("Ignoring malformed whitelist line (no methods specified): " + originalLine);
@@ -156,6 +175,53 @@ public class ConfigurableWhitelist {
         }
     }
 
+    private static void parsePackageRule(
+            String packagePattern,
+            String rulePart,
+            Map<String, PackageRule> packageRules,
+            String originalLine
+    ) {
+
+        String packageName = packagePattern.substring(0, packagePattern.length() - 1);
+        if (!packageName.endsWith(".")) {
+            packageName += ".";
+        }
+
+        String[] tokens = rulePart.split(",");
+        boolean wildcard = tokens[0].trim().equals("*");
+        MethodRule rule;
+
+        if (wildcard) {
+            Set<String> exceptions = new HashSet<>();
+            for (int i = 1; i < tokens.length; i++) {
+                String t = tokens[i].trim();
+                if (t.startsWith("-")) {
+                    exceptions.add(t.substring(1));
+                }
+            }
+            rule = MethodRule.allowAllExcept(exceptions);
+        } else {
+            Set<String> allowed = new HashSet<>();
+            for (String token : tokens) {
+                token = token.trim();
+                if (!token.isEmpty()) {
+                    allowed.add(token);
+                }
+            }
+            rule = MethodRule.allowOnly(allowed);
+        }
+
+        PackageRule existing = packageRules.get(packageName);
+        if (existing != null) {
+            LOG.warning("Duplicate package rule for '" + packageName
+                    + "', replacing previous rule: " + originalLine);
+        }
+
+        packageRules.put(packageName, new PackageRule(packageName, rule));
+
+        LOG.info("Registered package whitelist: " + packageName);
+    }
+
     private static void startWatcher() {
         Path dir = CONFIG_PATH.getParent();
         if (dir == null || !Files.exists(dir)) {
@@ -187,12 +253,13 @@ public class ConfigurableWhitelist {
     }
 
     /**
-     * A class is constructible via `new` iff it has a method rule entry at all
-     * (any of: allow-all, allow-all-except, or allow-only). There is no separate
-     * "classes only" list anymore — presence in METHOD_RULES is what grants `new`.
+     * A class is constructible via `new` iff it matches either:
+     * - an explicit class rule
+     * - a package wildcard rule
      */
     public static boolean isClassAllowed(Class<?> clazz) {
-        return METHOD_RULES.containsKey(clazz.getName());
+        MethodRule rule = findRule(clazz);
+        return rule != null && rule != DENIED_RULE;
     }
 
     public static boolean isMethodAllowed(Class<?> clazz, String method) {
@@ -200,7 +267,7 @@ public class ConfigurableWhitelist {
 
         Class<?> current = clazz;
         while (current != null) {
-            MethodRule rule = METHOD_RULES.get(current.getName());
+            MethodRule rule = findRule(current);
             if (rule != null && rule.permits(method)) {
                 return true;
             }
@@ -208,4 +275,33 @@ public class ConfigurableWhitelist {
         }
         return false;
     }
+
+    private static MethodRule findRule(Class<?> clazz) {
+        String className = clazz.getName();
+        return LOOKUP_CACHE.computeIfAbsent(className, name -> {
+            MethodRule rule = METHOD_RULES.get(name);
+            if (rule == null) {
+                rule = PACKAGE_RULES.values()
+                        .stream()
+                        .filter(e -> name.startsWith(e.packageName))
+                        .max(java.util.Comparator.comparingInt(e -> e.depth))
+                        .map(e -> e.rule)
+                        .orElse(DENIED_RULE);
+            }
+            return rule;
+        });
+    }
+
+    private static final class PackageRule {
+        final String packageName;
+        final MethodRule rule;
+        final int depth;
+
+        PackageRule(String packageName, MethodRule rule) {
+            this.packageName = packageName;
+            this.rule = rule;
+            this.depth = packageName.split("\\.").length;
+        }
+    }
+
 }
