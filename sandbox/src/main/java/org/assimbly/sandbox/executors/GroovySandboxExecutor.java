@@ -21,16 +21,16 @@ public class GroovySandboxExecutor {
         // utility class
     }
 
-    private static final CompilerConfiguration CONFIG;
-    private static final GroovyShell           SHELL;
-
     // cache: script source - compiled Class (parse once, run many times)
     private static final ConcurrentHashMap<String, Class<Script>> SCRIPT_CACHE = new ConcurrentHashMap<>();
+
+    private static final CompilerConfiguration CONFIG;
+    private static final ThreadLocal<GroovyShell> SHELL;
 
     static {
         CONFIG = new CompilerConfiguration();
         CONFIG.addCompilationCustomizers(new SandboxTransformer());
-        SHELL = new GroovyShell(CONFIG);
+        SHELL = ThreadLocal.withInitial(() -> new GroovyShell(CONFIG));
     }
 
     // interceptor
@@ -95,8 +95,13 @@ public class GroovySandboxExecutor {
             if (result != null) {
                 exchange.getIn().setBody(result);
             }
+        } catch (SecurityException e) {
+            throw new RuntimeCamelException(
+                    "Groovy Sandbox violation: " + e.getMessage(), e);
+
         } catch (Throwable e) {
-            throw new RuntimeCamelException("Groovy Sandbox violation: " + e.getMessage(), e);
+            throw new RuntimeCamelException(
+                    "Groovy execution failed: " + e.getMessage(), e);
         } finally {
             INTERCEPTOR.unregister();        // always clean up thread-local registration
         }
@@ -105,15 +110,17 @@ public class GroovySandboxExecutor {
     @SuppressWarnings("unchecked")
     private static Class<Script> getOrCompile(String source) {
 
-        // 1. Generate a unique hash for the script source
         String scriptKey = hashScript(source);
 
-        // 2. Use the hash as the cache key
         return SCRIPT_CACHE.computeIfAbsent(scriptKey, key -> {
             try {
-                return (Class<Script>) SHELL.getClassLoader().parseClass(source);
+                return (Class<Script>) SHELL.get()
+                        .getClassLoader()
+                        .parseClass(source);
+
             } catch (Exception e) {
-                throw new RuntimeCamelException("Failed to compile Groovy script", e);
+                throw new RuntimeCamelException(
+                        "Failed to compile Groovy script", e);
             }
         });
     }
