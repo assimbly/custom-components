@@ -22,16 +22,42 @@ public class ConfigurableWhitelist {
 
     private static final MethodRule DENIED_RULE = MethodRule.allowOnly(Set.of());
 
-    private static final Set<String> HARD_DENIED_METHODS = Set.of(
-            "execute", "exec", "start", "exit", "halt",
-            "forName", "newInstance", "invokeMethod", "invokeStaticMethod",
-            "getMetaClass", "setMetaClass", "getClassLoader",
-            "getDeclaredMethods", "getDeclaredFields", "setAccessible",
-            "addShutdownHook"
-    );
-
     // path can itself be overridden by env var at startup, that part's fine to be static
     private static final Path CONFIG_PATH = Paths.get(BASE_PATH + ASSIMBLY_PATH + GROOVY_PATH + "whitelist.conf");
+
+    private static final Set<String> REFLECTION_METHODS = Set.of(
+            "setAccessible",
+            "getDeclaredMethods",
+            "getDeclaredFields",
+            "getClassLoader",
+            "getClass",
+            "getProtectionDomain"
+    );
+    private static final Set<String> JVM_METHODS = Set.of(
+            "exit",
+            "halt",
+            "addShutdownHook"
+    );
+    private static final Set<String> GROOVY_META_METHODS = Set.of(
+            "invokeMethod",
+            "invokeStaticMethod",
+            "getMetaClass",
+            "setMetaClass",
+            "getProperty",
+            "setProperty"
+    );
+    private static final Set<String> EXECUTION_METHODS = Set.of(
+            "execute",
+            "executeAsync"
+    );
+    private static final Set<String> CLASS_LOADING_METHODS = Set.of(
+            "forName",
+            "newInstance"
+    );
+    private static final Set<Class<?>> DENIED_CLASSES = Set.of(
+            Runtime.class,
+            ProcessBuilder.class
+    );
 
     static {
         loadFromFile();
@@ -56,11 +82,11 @@ public class ConfigurableWhitelist {
         }
 
         static MethodRule allowAllExcept(Set<String> exceptions) {
-            return new MethodRule(true, exceptions, Set.of());
+            return new MethodRule(true, Set.copyOf(exceptions), Set.of());
         }
 
         static MethodRule allowOnly(Set<String> allowed) {
-            return new MethodRule(false, Set.of(), allowed);
+            return new MethodRule(false, Set.of(), Set.copyOf(allowed));
         }
 
         boolean permits(String method) {
@@ -156,7 +182,9 @@ public class ConfigurableWhitelist {
             if (existing != null && existing.allowAll) {
                 exceptions.addAll(existing.exceptions);
             }
-            newRules.put(className, MethodRule.allowAllExcept(exceptions));
+            MethodRule rule = MethodRule.allowAllExcept(exceptions);
+            newRules.put(className, rule);
+            LOG.info("Registered class whitelist: " + className + " -> * except " + exceptions);
         } else {
             if (existing != null && existing.allowAll) {
                 LOG.warning("Class '" + className + "' has conflicting rules (both a wildcard '*' rule and an "
@@ -171,7 +199,9 @@ public class ConfigurableWhitelist {
             if (existing != null) {
                 allowed.addAll(existing.allowed);
             }
-            newRules.put(className, MethodRule.allowOnly(allowed));
+            MethodRule rule = MethodRule.allowOnly(allowed);
+            newRules.put(className, rule);
+            LOG.info("Registered class whitelist: " + className + " -> " + allowed);
         }
     }
 
@@ -263,7 +293,9 @@ public class ConfigurableWhitelist {
     }
 
     public static boolean isMethodAllowed(Class<?> clazz, String method) {
-        if (HARD_DENIED_METHODS.contains(method)) return false;
+        if (isHardDenied(clazz, method)) {
+            return false;
+        }
 
         Class<?> current = clazz;
         while (current != null) {
@@ -302,6 +334,15 @@ public class ConfigurableWhitelist {
             this.rule = rule;
             this.depth = packageName.split("\\.").length;
         }
+    }
+
+    private static boolean isHardDenied(Class<?> clazz, String method) {
+        return REFLECTION_METHODS.contains(method)
+                || JVM_METHODS.contains(method)
+                || GROOVY_META_METHODS.contains(method)
+                || EXECUTION_METHODS.contains(method)
+                || (clazz == Class.class && CLASS_LOADING_METHODS.contains(method))
+                || DENIED_CLASSES.contains(clazz);
     }
 
 }

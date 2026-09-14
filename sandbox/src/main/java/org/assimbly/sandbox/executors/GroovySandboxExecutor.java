@@ -24,6 +24,8 @@ public class GroovySandboxExecutor {
     // cache: script source - compiled Class (parse once, run many times)
     private static final ConcurrentHashMap<String, Class<Script>> SCRIPT_CACHE = new ConcurrentHashMap<>();
 
+    private static final ThreadLocal<ClassLoader> SCRIPT_CLASS_LOADER = new ThreadLocal<>();
+
     private static final CompilerConfiguration CONFIG;
     private static final ThreadLocal<GroovyShell> SHELL;
 
@@ -41,6 +43,11 @@ public class GroovySandboxExecutor {
             if (receiver == null) {
                 throw new SecurityException("Sandbox Denial: null receiver.");
             }
+            ClassLoader scriptLoader = SCRIPT_CLASS_LOADER.get();
+            // Allow methods defined inside the current Groovy script
+            if (scriptLoader != null && receiver.getClass().getClassLoader() == scriptLoader) {
+                return invoker.call(receiver, method, args);
+            }
             Class<?> receiverClass = receiver.getClass();
             if (!ConfigurableWhitelist.isMethodAllowed(receiverClass, method)) {
                 throw new SecurityException("Sandbox Denial: " + receiverClass.getName() + "#" + method + " not whitelisted.");
@@ -50,6 +57,11 @@ public class GroovySandboxExecutor {
 
         @Override
         public Object onStaticCall(Invoker invoker, Class receiver, String method, Object[] args) throws Throwable {
+            ClassLoader scriptLoader = SCRIPT_CLASS_LOADER.get();
+            // Allow static methods defined inside this Groovy script
+            if (scriptLoader != null && receiver.getClassLoader() == scriptLoader) {
+                return invoker.call(receiver, method, args);
+            }
             if (!ConfigurableWhitelist.isMethodAllowed(receiver, method)) {
                 throw new SecurityException("Sandbox Denial: static " + receiver.getName() + "#" + method + " not whitelisted.");
             }
@@ -58,6 +70,11 @@ public class GroovySandboxExecutor {
 
         @Override
         public Object onNewInstance(Invoker invoker, Class receiver, Object[] args) throws Throwable {
+            ClassLoader scriptLoader = SCRIPT_CLASS_LOADER.get();
+            // Allow classes declared inside this Groovy script
+            if (scriptLoader != null && receiver.getClassLoader() == scriptLoader) {
+                return invoker.call(receiver, null, args);
+            }
             if (!ConfigurableWhitelist.isClassAllowed(receiver)) {
                 throw new SecurityException("Sandbox Denial: cannot construct " + receiver.getName());
             }
@@ -88,9 +105,12 @@ public class GroovySandboxExecutor {
         binding.setVariable("message",  exchange.getIn());
         script.setBinding(binding);
 
-        // run with sandbox interceptor active for this thread
-        INTERCEPTOR.register();
+        SCRIPT_CLASS_LOADER.set(scriptClass.getClassLoader());
+
         try {
+            // run with sandbox interceptor active for this thread
+            INTERCEPTOR.register();
+
             Object result = script.run();
             if (result != null) {
                 exchange.getIn().setBody(result);
@@ -103,6 +123,7 @@ public class GroovySandboxExecutor {
             throw new RuntimeCamelException(
                     "Groovy execution failed: " + e.getMessage(), e);
         } finally {
+            SCRIPT_CLASS_LOADER.remove();
             INTERCEPTOR.unregister();        // always clean up thread-local registration
         }
     }
