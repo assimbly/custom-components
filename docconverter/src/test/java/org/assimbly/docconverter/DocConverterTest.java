@@ -3,30 +3,17 @@ package org.assimbly.docconverter;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.test.junit5.CamelTestSupport;
+import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
-import org.xml.sax.SAXException;
-
-import java.io.IOException;
-
 
 class DocConverterTest extends CamelTestSupport {
 
-    private final String xml = """
-            <persons>
-            			  <person>
-            				<name>John Doe</name>
-            			  </person>
-            			  <person>
-            				<name>Jane Doe</name>
-            			  </person>
-            			</persons>""";
-
     @Override
-    protected RouteBuilder createRouteBuilder() throws Exception {
+    protected RouteBuilder createRouteBuilder() {
         return new RouteBuilder() {
             @Override
-            public void configure() throws Exception {
+            public void configure() {
                 from("direct:in")
                         .to("docconverter:xml2json")
                         .to("mock:out");
@@ -37,7 +24,16 @@ class DocConverterTest extends CamelTestSupport {
 
 
     @Test
-    void testCsvWithHeaders() throws SAXException {
+    void testCsvWithHeaders() throws JSONException {
+        String xml = """
+                <persons>
+                			  <person>
+                				<name>John Doe</name>
+                			  </person>
+                			  <person>
+                				<name>Jane Doe</name>
+                			  </person>
+                			</persons>""";
         template.sendBody("direct:in", xml);
 
         Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();

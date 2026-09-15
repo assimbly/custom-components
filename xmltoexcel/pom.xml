@@ -25,9 +25,19 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>io.github.assimbly</groupId>
-			<artifactId>docconverter</artifactId>
-			<version>${docconverter.version}</version>
+			<groupId>tools.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>tools.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>tools.jackson.jr</groupId>
+			<artifactId>jackson-jr-annotation-support</artifactId>
+			<version>${jackson.version}</version>
 		</dependency>
 
 		<dependency>

@@ -65,7 +65,7 @@
         <assertj-core.version>3.27.7</assertj-core.version>
         <assimbly.version>6.0.0</assimbly.version>
         <awaitility.version>4.3.0</awaitility.version>
-        <bouncycastle.version>1.85.2</bouncycastle.version>
+        <bouncycastle.version>1.86</bouncycastle.version>
         <camel.version>4.22.0</camel.version>
         <config-admin.version>1.9.26</config-admin.version>
         <cxf.version>4.2.3</cxf.version>
@@ -73,14 +73,14 @@
         <commons-lang3.version>3.20.0</commons-lang3.version>
         <commons-io.version>2.22.0</commons-io.version>
         <commons-text.version>1.15.0</commons-text.version>
-        <docconverter.version>2.0.2</docconverter.version>
+        <docconverter.version>3.0.1</docconverter.version>
         <google.api.version>v3-rev20260901-2.0.0</google.api.version>
         <google.auth.version>1.5.0</google.auth.version>
         <google.oauth.version>1.39.0</google.oauth.version>
         <greenmail.version>2.1.13</greenmail.version>
         <groovy-sandbox.version>4.3.2</groovy-sandbox.version>
         <groovy-script.version>5.1.2</groovy-script.version>
-        <hibernate-core.version>7.4.7.Final</hibernate-core.version>
+        <hibernate-core.version>7.4.8.Final</hibernate-core.version>
         <httpClient5.version>5.6.4</httpClient5.version>
         <httpcomponents.version>4.5.14</httpcomponents.version>
         <jackson.version>3.2.2</jackson.version>
@@ -93,7 +93,7 @@
         <json-path.version>3.0.0</json-path.version>
         <jwt.version>0.13.0</jwt.version>
         <libsodium-jna.version>1.0.6</libsodium-jna.version>
-        <mime4j.version>0.8.14</mime4j.version>
+        <mime4j.version>0.8.15</mime4j.version>
         <mock-javamail_1.7.version>3.22.4</mock-javamail_1.7.version>
         <mockito-core.version>5.23.0</mockito-core.version>
         <mockito-inline.version>5.2.0</mockito-inline.version>
