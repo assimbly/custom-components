@@ -1,5 +1,6 @@
 package org.assimbly.tenantvariables.mongo;
 
+import java.time.Instant;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -161,7 +162,7 @@ public class MongoDao {
 
         variable.setEncrypted(false);
         variable.setValue(tenantVarValue);
-        variable.setLastUpdate(new Date().getTime());
+        variable.setLastUpdate(Instant.now().toEpochMilli());
         variable.setUpdatedBy(UPDATED_BY_SYSTEM);
 
         updateTenantVariable(tenantVariable, tenant, tenantVariableExist);
@@ -176,7 +177,7 @@ public class MongoDao {
             tenantVariable.setCreatedBy(CREATED_BY_SYSTEM);
         }
         if(tenantVariable.getCreatedAt() == 0) {
-            tenantVariable.setCreatedAt(new Date().getTime());
+            tenantVariable.setCreatedAt(Instant.now().toEpochMilli());
         }
         if(tenantVariable.find(environment).isEmpty()) {
             tenantVariable.put(new EnvironmentValue(environment));

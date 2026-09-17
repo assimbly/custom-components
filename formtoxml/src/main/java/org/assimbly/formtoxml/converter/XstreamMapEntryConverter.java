@@ -9,23 +9,30 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
-
+import java.util.regex.Pattern;
 
 public class XstreamMapEntryConverter implements Converter {
+
+    private static final Pattern INVALID_KEY_PATTERN =
+            Pattern.compile("[^A-Za-z0-9_.\\-]|^(xml|[-0-9.])++");
 
     public boolean canConvert(Class clazz) {
         return AbstractMap.class.isAssignableFrom(clazz);
     }
 
-    @SuppressWarnings({"unchecked"})
-    public void marshal(Object value, HierarchicalStreamWriter writer, MarshallingContext context) {
+    @SuppressWarnings("unchecked")
+    public void marshal(Object value, HierarchicalStreamWriter writer,
+                        MarshallingContext context) {
 
         AbstractMap<String, String> map = (AbstractMap<String, String>) value;
+
         for (Map.Entry<String, String> entry : map.entrySet()) {
 
-            String key = entry.getKey().replaceAll("[^A-Za-z0-9_.\\-]|^(xml|[-0-9.])++" , "");
+            String key = INVALID_KEY_PATTERN
+                    .matcher(entry.getKey())
+                    .replaceAll("");
 
-            if(key.isEmpty()) {
+            if (key.isEmpty()) {
                 continue;
             }
 
@@ -35,11 +42,12 @@ public class XstreamMapEntryConverter implements Converter {
         }
     }
 
-    public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
+    public Object unmarshal(HierarchicalStreamReader reader,
+                            UnmarshallingContext context) {
 
         Map<String, String> map = new HashMap<>();
 
-        while(reader.hasMoreChildren()) {
+        while (reader.hasMoreChildren()) {
             reader.moveDown();
 
             String key = reader.getNodeName();

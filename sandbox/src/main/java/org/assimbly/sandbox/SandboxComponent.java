@@ -2,15 +2,11 @@ package org.assimbly.sandbox;
 
 import org.apache.camel.component.language.LanguageComponent;
 import org.apache.camel.component.language.LanguageEndpoint;
-import org.apache.camel.support.ResourceHelper;
 import org.apache.camel.Endpoint;
 import org.apache.camel.spi.Language;
 import org.apache.camel.util.ObjectHelper;
-import org.apache.commons.codec.binary.Base64;
 
 import java.util.Map;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * Adds security options to the Apache Camel LanguageComponent which it extends.

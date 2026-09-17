@@ -23,7 +23,6 @@ import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.ContentType;
-import org.apache.hc.core5.http.Header;
 import org.apache.hc.core5.http.io.entity.ByteArrayEntity;
 import org.apache.hc.core5.util.Timeout;
 import org.slf4j.Logger;
@@ -55,7 +54,7 @@ public final class WSDLHelper {
             file = WSDLCache.INSTANCE.getPath(url);
 
             if (file.exists()) {
-                LocalDateTime threshold = LocalDateTime.now().minusHours(Long.parseLong(prop.getProperty(CACHE_EXPIRATION_PROPERTY, "24")));
+                LocalDateTime threshold = LocalDateTime.now(ZoneId.systemDefault()).minusHours(Long.parseLong(prop.getProperty(CACHE_EXPIRATION_PROPERTY, "24")));
 
                 LocalDateTime lastModified = LocalDateTime.ofInstant(
                         Instant.ofEpochMilli(file.lastModified()), ZoneId.systemDefault());
@@ -108,9 +107,7 @@ public final class WSDLHelper {
             HttpGet request = new HttpGet(new URI(location));
 
             if (httpHeaders != null) {
-                httpHeaders.forEach(httpHeader -> {
-                    request.setHeader(httpHeader.getName(), httpHeader.getValue());
-                });
+                httpHeaders.forEach(httpHeader -> request.setHeader(httpHeader.getName(), httpHeader.getValue()));
             }
 
             client.execute(request, response -> {

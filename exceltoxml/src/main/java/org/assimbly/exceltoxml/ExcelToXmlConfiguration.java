@@ -6,9 +6,6 @@ import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.UriParam;
 import tools.jackson.core.JacksonException;
 import org.assimbly.exceltoxml.domain.ExcelRule;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.List;
 
 public class ExcelToXmlConfiguration {

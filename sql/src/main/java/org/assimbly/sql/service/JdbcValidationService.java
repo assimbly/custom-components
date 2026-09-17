@@ -9,6 +9,8 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import org.assimbly.sql.error.ValidationErrorMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -17,6 +19,8 @@ import java.sql.SQLException;
 
 @Path("/")
 public class JdbcValidationService {
+
+    protected Logger log = LoggerFactory.getLogger(getClass());
 
     @GET
     @Produces("application/json")
@@ -70,7 +74,7 @@ public class JdbcValidationService {
         try {
             connection.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.warn("Failed to close database connection", e);
         }
     }
 }

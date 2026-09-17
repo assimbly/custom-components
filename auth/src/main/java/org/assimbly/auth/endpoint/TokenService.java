@@ -15,8 +15,6 @@ import org.assimbly.auth.domain.Tenant;
 import org.assimbly.auth.domain.User;
 import org.assimbly.auth.mongo.MongoDao;
 
-import java.nio.charset.StandardCharsets;
-
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 

@@ -5,8 +5,6 @@ import org.apache.camel.component.language.LanguageEndpoint;
 import org.apache.camel.component.language.LanguageProducer;
 import org.assimbly.sandbox.executors.GroovySandboxExecutor;
 
-import java.util.UUID;
-
 /**
  * Extends the LanguageProducer to enable the stricter SecurityManager.
  */

@@ -5,7 +5,8 @@ import org.assimbly.tenantvariables.domain.EnvironmentValue;
 import org.assimbly.tenantvariables.domain.TenantVariable;
 import org.assimbly.tenantvariables.mongo.MongoDao;
 
-import java.util.Date;
+import java.time.Instant;
+import java.util.Optional;
 
 public class TenantVariableManager {
 
@@ -28,7 +29,7 @@ public class TenantVariableManager {
     }
 
     public static void saveTenantVariable(String tokenName, String accessToken, String tenant, String environment) {
-        saveValue(tokenName, accessToken, tenant, environment, TenantVariable.TenantVarType.TENANT_VARIABLE, true);
+        saveValue(tokenName, accessToken, tenant, environment, TenantVariable.TenantVarType.TENANT_VARIABLE);
     }
 
     public static void discoverAndSaveTenantVariable(String tokenName, String accessToken, String tenant, String environment) {
@@ -39,7 +40,7 @@ public class TenantVariableManager {
             tenantVarType = TenantVariable.TenantVarType.STATIC_TENANT_VARIABLE;
         }
 
-        saveValue(tokenName, accessToken, tenant, environment, tenantVarType, true);
+        saveValue(tokenName, accessToken, tenant, environment, tenantVarType);
     }
 
     private static String getDecryptedValue(String tokenName, String tenant, String environment, TenantVariable.TenantVarType tenantVarType) {
@@ -54,7 +55,7 @@ public class TenantVariableManager {
     }
 
     private static void saveValue(String tokenName, String value, String tenant, String environment,
-                                  TenantVariable.TenantVarType tenantVarType, boolean encrypt) {
+                                  TenantVariable.TenantVarType tenantVarType) {
         TenantVariable tenantVariable = MongoDao.findTenantVariableByName(tokenName, tenant, tenantVarType);
         boolean tenantVariableExists = tenantVariable != null;
 
@@ -63,19 +64,23 @@ public class TenantVariableManager {
             tenantVariable.setType(tenantVarType.getType());
         }
 
-        if (!tenantVariable.find(environment).isPresent()) {
+        if (tenantVariable.find(environment).isEmpty()) {
             tenantVariable.put(new EnvironmentValue(environment));
         }
 
-        EnvironmentValue envValue = tenantVariable.find(environment).get();
+        Optional<EnvironmentValue> environmentOptional = tenantVariable.find(environment);
 
-        if (encrypt) {
-            value = PROCESSOR.encrypt(value);
+        if(environmentOptional.isPresent()){
+            EnvironmentValue envValue = environmentOptional.get();
+
+            if (true) {
+                value = PROCESSOR.encrypt(value);
+            }
+
+            envValue.setEncrypted(true);
+            envValue.setValue(value);
+            envValue.setLastUpdate(Instant.now().toEpochMilli());
         }
-
-        envValue.setEncrypted(encrypt);
-        envValue.setValue(value);
-        envValue.setLastUpdate(new Date().getTime());
 
         MongoDao.updateTenantVariable(tenantVariable, tenant, tenantVariableExists);
     }

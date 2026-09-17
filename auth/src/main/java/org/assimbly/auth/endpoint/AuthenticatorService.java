@@ -2,7 +2,6 @@ package org.assimbly.auth.endpoint;
 
 import jakarta.ws.rs.*;
 
-//import com.google.common.base.CaseFormat;
 import com.mongodb.client.MongoClient;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 import com.warrenstrange.googleauth.GoogleAuthenticatorKey;

@@ -3,23 +3,23 @@ package org.assimbly.oauth2token;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.commons.lang3.StringUtils;
+import org.assimbly.oauth2token.service.TokenService;
 import org.assimbly.oauth2token.tenant.TenantVariableManager;
+import org.assimbly.tenantvariables.TenantVariablesProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.assimbly.tenantvariables.TenantVariablesProcessor;
-import org.assimbly.oauth2token.service.TokenService;
 
+import java.time.Instant;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 
 public class OAuth2TokenProcessor implements Processor {
 
     private static final Logger logger = LoggerFactory.getLogger(OAuth2TokenProcessor.class);
 
-    private final OAuth2TokenEndpoint endpoint;
-
     public static final int EXPIRY_DELAY_DEFAULT = -25;
+
+    private final OAuth2TokenEndpoint endpoint;
 
     public OAuth2TokenProcessor(OAuth2TokenEndpoint endpoint) {
         this.endpoint = endpoint;
@@ -38,44 +38,49 @@ public class OAuth2TokenProcessor implements Processor {
         String accessTokenVarName = TokenService.OAUTH2_PREFIX + id + TokenService.OAUTH2_ACCESS_TOKEN_SUFFIX;
         String refreshFlagVarName = TokenService.OAUTH2_PREFIX + id + TokenService.OAUTH2_REFRESH_FLAG_SUFFIX;
 
-        // check if there's a tenant variable inside tenantVar, and return real value
-        String expireDate = TenantVariableManager.getTenantVariableValue(expireDateVarName, tenant, environment);
-        String accessToken = TenantVariableManager.getTenantVariableValue(accessTokenVarName, tenant, environment);
-        String refreshFlag = TenantVariableManager.getTenantVariableValue(refreshFlagVarName, tenant, environment);
+        // Check if there's a tenant variable inside tenantVar, and return real value
+        String expireDate = TenantVariableManager.getTenantVariableValue(
+                expireDateVarName, tenant, environment);
+        String accessToken = TenantVariableManager.getTenantVariableValue(
+                accessTokenVarName, tenant, environment);
+        String refreshFlag = TenantVariableManager.getTenantVariableValue(
+                refreshFlagVarName, tenant, environment);
 
         List<String> tokenNames = parseTokenNames(tokenName);
         boolean anyTokenMissing = tokenNames.stream()
-                .map(name -> TenantVariableManager.discoverAndGetTenantVariableValue(name, tenant, environment))
+                .map(name -> TenantVariableManager.discoverAndGetTenantVariableValue(
+                        name, tenant, environment))
                 .anyMatch(StringUtils::isEmpty);
 
-        Calendar expireCal = Calendar.getInstance();
-        Calendar expireDelayCal = Calendar.getInstance();
-        Calendar nowCal = Calendar.getInstance();
+        Instant expireTime = Instant.MAX;
+        Instant expireDelayTime = Instant.MAX;
+        Instant now = Instant.now();
 
         try {
-            // expire date vars
             long expireDateLong = Long.parseLong(expireDate);
             int expiryDelayInt = getExpiryDelayAsInt(expiryDelay);
 
-            expireCal.setTimeInMillis(expireDateLong);
-            expireDelayCal = (Calendar) expireCal.clone();
-            expireDelayCal.add(Calendar.SECOND, expiryDelayInt);
+            expireTime = Instant.ofEpochMilli(expireDateLong);
+            expireDelayTime = expireTime.plusSeconds(expiryDelayInt);
 
         } catch (Exception e) {
-            logger.error("ERROR to calculate/set expire date vars", e);
+            logger.error("Error calculating expire date variables", e);
         }
 
-        if(anyTokenMissing ||
-                nowCal.after(expireCal) || (
-                nowCal.before(expireCal) && nowCal.after(expireDelayCal) && "0".equals(refreshFlag))
-        ) {
-            accessToken = getAccessTokenFromService(accessToken, id, environment, tenant, anyTokenMissing, tokenNames);
+        if (anyTokenMissing
+                || now.isAfter(expireTime)
+                || (now.isBefore(expireTime)
+                && now.isAfter(expireDelayTime)
+                && "0".equals(refreshFlag))) {
+
+            accessToken = getAccessTokenFromService(
+                    accessToken, id, environment, tenant, anyTokenMissing, tokenNames);
         }
 
         setHeaderWithToken(exchange, tokenNames, accessToken);
     }
 
-    private int getExpiryDelayAsInt(String expiryDelay){
+    private int getExpiryDelayAsInt(String expiryDelay) {
         try {
             return Integer.parseInt(expiryDelay);
         } catch (Exception _) {
@@ -85,21 +90,31 @@ public class OAuth2TokenProcessor implements Processor {
     }
 
     private static String getAccessTokenFromService(
-            String accessToken, String id, String environment, String tenant, boolean anyTokenMissing, List<String> tokenNames
-    ) {
-        // get new access token from service
+            String accessToken,
+            String id,
+            String environment,
+            String tenant,
+            boolean anyTokenMissing,
+            List<String> tokenNames) {
+
+        // Get new access token from service
         String accessTokenOld = accessToken;
         accessToken = TokenService.refreshTokenInfo(id, environment, tenant);
-        if(accessToken !=null && (!accessToken.equals(accessTokenOld) || anyTokenMissing)) {
+
+        if (accessToken != null && (!accessToken.equals(accessTokenOld) || anyTokenMissing)) {
             for (String name : tokenNames) {
-                // add token to tenant variable
-                TenantVariableManager.discoverAndSaveTenantVariable(name, accessToken, tenant, environment);
+                // Add token to tenant variable
+                TenantVariableManager.discoverAndSaveTenantVariable(
+                        name, accessToken, tenant, environment);
             }
         }
+
         return accessToken;
     }
 
-    private static void setHeaderWithToken(Exchange exchange, List<String> tokenNames, String accessToken) {
+    private static void setHeaderWithToken(
+            Exchange exchange, List<String> tokenNames, String accessToken) {
+
         for (String name : tokenNames) {
             if (!TenantVariableManager.isStaticTenantVariable(name)) {
                 exchange.getMessage().setHeader(name, accessToken);
@@ -113,5 +128,4 @@ public class OAuth2TokenProcessor implements Processor {
                 .filter(StringUtils::isNotEmpty)
                 .toList();
     }
-
 }

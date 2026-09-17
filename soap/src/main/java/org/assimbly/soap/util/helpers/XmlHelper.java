@@ -6,23 +6,23 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.ls.DOMImplementationLS;
-import org.w3c.dom.ls.LSSerializer;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
+import javax.xml.xpath.XPathFactoryConfigurationException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -38,12 +38,51 @@ public final class XmlHelper {
 
     private static final String INVALID_START_REGEX = "^([0-9.-]|(?i)xml).*";
 
+    /**
+     * Creates a DocumentBuilderFactory hardened against XXE: DOCTYPE declarations,
+     * external general/parameter entities and XInclude are all disabled.
+     */
+    private static DocumentBuilderFactory newSecureDocumentBuilderFactory() throws ParserConfigurationException {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+        factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+        factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        factory.setXIncludeAware(false);
+        factory.setExpandEntityReferences(false);
+
+        return factory;
+    }
+
+    /**
+     * Creates a TransformerFactory hardened against XXE / external entity access.
+     */
+    private static TransformerFactory newSecureTransformerFactory() throws TransformerConfigurationException {
+        TransformerFactory factory = TransformerFactory.newInstance();
+
+        factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+        factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+
+        return factory;
+    }
+
+    /**
+     * Creates an XPathFactory hardened against XXE for use in XPath evaluation over
+     * externally-sourced documents.
+     */
+    private static XPathFactory newSecureXPathFactory() throws XPathFactoryConfigurationException {
+        XPathFactory factory = XPathFactory.newInstance();
+        factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        return factory;
+    }
+
     public static Document newDocument(){
-        DocumentBuilderFactory icFactory;
         DocumentBuilder icBuilder;
 
         try {
-            icFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilderFactory icFactory = newSecureDocumentBuilderFactory();
             icFactory.setNamespaceAware(true);
             icFactory.setIgnoringElementContentWhitespace(true);
             icBuilder = icFactory.newDocumentBuilder();
@@ -61,12 +100,10 @@ public final class XmlHelper {
             return null;
         }
 
-        DocumentBuilderFactory icFactory;
         DocumentBuilder icBuilder;
 
         try {
-            icFactory = DocumentBuilderFactory.newInstance();
-            icBuilder = icFactory.newDocumentBuilder();
+            icBuilder = newSecureDocumentBuilderFactory().newDocumentBuilder();
 
             return icBuilder.parse(
                     new InputSource(new StringReader(xml))
@@ -103,7 +140,7 @@ public final class XmlHelper {
     public static String prettyPrint(Node doc) {
         try {
             // 1. Create XPath to find all whitespace-only text nodes
-            XPath xPath = XPathFactory.newInstance().newXPath();
+            XPath xPath = newSecureXPathFactory().newXPath();
             NodeList nodeList = (NodeList) xPath.evaluate(
                     "//text()[normalize-space()='']",
                     doc,
@@ -117,7 +154,7 @@ public final class XmlHelper {
             }
 
             // 3. Transform
-            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            Transformer transformer = newSecureTransformerFactory().newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 
@@ -133,7 +170,7 @@ public final class XmlHelper {
         Document doc = null;
 
         try {
-            DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            DocumentBuilder db = newSecureDocumentBuilderFactory().newDocumentBuilder();
             doc = db.parse(new InputSource(new StringReader(xml)));
         } catch (ParserConfigurationException | SAXException | IOException e) {
             log.error(e.getMessage(), e);
@@ -144,7 +181,7 @@ public final class XmlHelper {
 
     public static String prettyPrintWithPossibleException(String xml) throws Exception {
         Document doc;
-        DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        DocumentBuilder db = newSecureDocumentBuilderFactory().newDocumentBuilder();
         doc = db.parse(new InputSource(new StringReader(xml)));
 
         return prettyPrint(doc);

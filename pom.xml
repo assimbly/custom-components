@@ -27,7 +27,6 @@
         <module>formtoxml</module>
         <module>googledrive</module>
         <module>jsontoxmllegacy</module>
-        <module>mail</module>
         <module>multipart</module>
         <module>oauth2token</module>
         <module>pdf</module>
@@ -66,7 +65,7 @@
         <assimbly.version>6.0.0</assimbly.version>
         <awaitility.version>4.3.0</awaitility.version>
         <bouncycastle.version>1.86</bouncycastle.version>
-        <camel.version>4.22.0</camel.version>
+        <camel.version>4.22.1</camel.version>
         <config-admin.version>1.9.26</config-admin.version>
         <cxf.version>4.2.3</cxf.version>
         <commons-codec.version>1.22.1</commons-codec.version>

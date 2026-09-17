@@ -91,6 +91,7 @@ public class GroovySandboxExecutor {
         } finally {
             INTERCEPTOR.unregister();        // always clean up thread-local registration
         }
+
     }
 
     @SuppressWarnings("unchecked")

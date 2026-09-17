@@ -6,15 +6,14 @@ import org.assimbly.auth.util.helper.ConfigHelper;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Date;
-import java.util.Random;
+
 
 public final class JwtBuilder {
 
-    static Random random = new Random();
+    static SecureRandom random = new SecureRandom();
 
     private JwtBuilder() {
         //Static class cannot be instantiated.
@@ -43,17 +42,14 @@ public final class JwtBuilder {
     }
 
     /**
-     * Create a date used as an expiration date. Date is currentDate + given seconds.
+     * Create a date used as an expiration date. Date is currentInstant + given seconds.
      *
-     * @param seconds the time to add to the current date in seconds.
+     * @param seconds the time to add to the current instant in seconds.
      * @return a date represented as a Date object.
      */
     private static Date createExpiration(int seconds) {
-        LocalDateTime date = LocalDateTime.now();
-        date = date.plusSeconds(seconds);
-
-        Instant instant = date.atZone(ZoneId.systemDefault()).toInstant();
-        return Date.from(instant);
+        Instant expirationInstant = Instant.now().plusSeconds(seconds);
+        return Date.from(expirationInstant);
     }
 
     /**

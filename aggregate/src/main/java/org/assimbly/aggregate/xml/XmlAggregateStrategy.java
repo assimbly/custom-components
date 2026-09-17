@@ -11,13 +11,11 @@ import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.IOException;
@@ -99,13 +97,41 @@ public class XmlAggregateStrategy implements AggregationStrategy {
         return null;
     }
 
+    /**
+     * Creates a DocumentBuilderFactory hardened against XXE: DOCTYPE declarations,
+     * external general/parameter entities and XInclude are all disabled.
+     */
+    private static DocumentBuilderFactory newSecureDocumentBuilderFactory() throws ParserConfigurationException {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+        factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+        factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        factory.setXIncludeAware(false);
+        factory.setExpandEntityReferences(false);
+
+        return factory;
+    }
+
+    /**
+     * Creates a TransformerFactory hardened against XXE / external entity access.
+     */
+    private static TransformerFactory newSecureTransformerFactory() throws TransformerConfigurationException {
+        TransformerFactory factory = TransformerFactory.newInstance();
+
+        factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+        factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+
+        return factory;
+    }
+
     public static Document newDocument(){
-        DocumentBuilderFactory icFactory;
         DocumentBuilder icBuilder;
 
         try {
-            icFactory = DocumentBuilderFactory.newInstance();
-            icBuilder = icFactory.newDocumentBuilder();
+            icBuilder = newSecureDocumentBuilderFactory().newDocumentBuilder();
 
             return icBuilder.newDocument();
         } catch (ParserConfigurationException e) {
@@ -120,12 +146,10 @@ public class XmlAggregateStrategy implements AggregationStrategy {
             return null;
         }
 
-        DocumentBuilderFactory icFactory;
         DocumentBuilder icBuilder;
 
         try {
-            icFactory = DocumentBuilderFactory.newInstance();
-            icBuilder = icFactory.newDocumentBuilder();
+            icBuilder = newSecureDocumentBuilderFactory().newDocumentBuilder();
 
             return icBuilder.parse(
                     new InputSource(new StringReader(xml))
@@ -164,7 +188,7 @@ public class XmlAggregateStrategy implements AggregationStrategy {
         StreamResult result = new StreamResult(new StringWriter());
 
         try {
-            transformer = TransformerFactory.newInstance().newTransformer();
+            transformer = newSecureTransformerFactory().newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty(OutputKeys.METHOD, "xml");
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
@@ -181,7 +205,7 @@ public class XmlAggregateStrategy implements AggregationStrategy {
         Document doc = null;
 
         try {
-            DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            DocumentBuilder db = newSecureDocumentBuilderFactory().newDocumentBuilder();
             doc = db.parse(new InputSource(new StringReader(xml)));
         } catch (ParserConfigurationException | SAXException | IOException e) {
             log.error(e.getMessage(), e);
