@@ -182,8 +182,12 @@ public class TokenService {
                 TenantVariableManager.saveTenantVariable(refreshTokenVarName, refreshTokenResp, tenant, environment);
             }
 
+        } catch (OAuth2TokenException e) {
+            log.error("Error refresh token (oauth2)", e);
+            throw e;
         } catch (Exception e) {
-            log.error("Error refresh token (oauth2)",e);
+            log.error("Error refresh token (oauth2)", e);
+            throw new OAuth2TokenException("Error refresh token (oauth2)", e);
         } finally {
             // set refresh flag to inactive
             TenantVariableManager.saveTenantVariable(refreshFlagVarName, "0", tenant, environment);
@@ -247,6 +251,7 @@ public class TokenService {
             }
         } catch (IOException e) {
             log.error("Error calling the service, with the following parameters: " + urlParameters, e);
+            throw new OAuth2TokenException("OAuth2 token endpoint cannot be reached: " + e.getMessage(), e);
         }
 
     }
