@@ -33,12 +33,21 @@ for this component:
 none
 --------------------------------------------
 
+== Headers
+
+[width="100%",cols="2,5",options="header"]
+|===
+| Header | Description
+| MultipartFieldName | Form field name for the binary body part (required).
+| MultipartFormFields | Optional JSON object of additional text form fields. Example: `{"options":{"to_formats":["md"],"force_ocr":true}}`. Nested objects/arrays are serialized as JSON strings. Values may also be plain strings.
+|===
+
 == Route example
 
     <setHeader headerName="MultipartFieldName">
-      <simple>SecondPart</simple>
+      <simple>files</simple>
+    </setHeader>
+    <setHeader headerName="MultipartFormFields">
+      <constant>{"options":{"to_formats":["md"],"force_ocr":true}}</constant>
     </setHeader>
     <process ref="multipartProcessor"/>
-
-
-
