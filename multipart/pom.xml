@@ -29,6 +29,11 @@
 		  <artifactId>httpclient5</artifactId>
 		  <version>${httpClient5.version}</version>
 	  </dependency>
+	  <dependency>
+		  <groupId>org.json</groupId>
+		  <artifactId>json</artifactId>
+		  <version>${json.version}</version>
+	  </dependency>
   </dependencies>
 
 	<build>
