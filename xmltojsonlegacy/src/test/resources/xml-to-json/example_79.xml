@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<values>
+    <dummy>dummy</dummy>
+    <att_internal_company class="object">
+        <values class="array">
+            <e>
+                <value>Arvas</value>
+                <dummy>dummy</dummy>
+            </e>
+        </values>
+    </att_internal_company>
+</values>

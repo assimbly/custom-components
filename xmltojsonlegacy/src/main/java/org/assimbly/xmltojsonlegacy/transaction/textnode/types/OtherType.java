@@ -27,7 +27,13 @@ public class OtherType implements TextNodeTransaction {
     private static void processWithTypeHints(Map<String, ElementMetadata> metadataMap, ElementMetadata metadata, XmlToJsonConfiguration config) {
         ElementMetadata parentMetadata = ElementMetadataUtils.getParentMetadata(metadataMap, metadata);
         ElementMetadata grandParentMetadata = ElementMetadataUtils.getGrandParentMetadata(metadataMap, metadata);
+        // Leaf under class="object": always materialize as a named property on this node
+        // (needed when parent has a single child so areChildrenNamesEqual() is true)
+        boolean leafUnderObjectParent = parentMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
+                MetadataAnalyzer.isLastElement(metadata);
+
         if(!parentMetadata.areChildrenNamesEqual() ||
+                leafUnderObjectParent ||
                 ((!grandParentMetadata.containsClassAttribute() || !grandParentMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY)) &&
                         (!parentMetadata.containsClassAttribute() || !parentMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY)))
         ) {

@@ -119,6 +119,22 @@ public class MetadataAnalyzer {
         ElementMetadata grandParentElementMetadata = metadataMap.getOrDefault(ElementMetadataUtils.getParentPath(parentElementMetadata.getPath()), new ElementMetadata());
         boolean hasChildrenWithAttributes = ElementMetadataUtils.hasChildrenWithAttributes(metadataMap, metadata);
 
+        // class="object" with a single typed child (array/object) deeper than one level
+        if (config.isTypeHints() &&
+                metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
+                metadata.getChildrenCount() == 1 &&
+                metadata.getDeepestDepth() != 1) {
+            for (String childPath : metadata.getChildPaths()) {
+                ElementMetadata childMetadata = metadataMap.get(childPath);
+                if (childMetadata != null && (
+                        childMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY) ||
+                        childMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT)
+                )) {
+                    return true;
+                }
+            }
+        }
+
         return (metadata.getDeepestDepth() == 1 &&
                 (metadata.getChildrenCount() > 1  && (
                         metadata.getLevel() == 0 && !hasChildrenWithAttributes && (!config.isTypeHints() || metadata.isDefinesNamespaces()) ||
@@ -159,9 +175,11 @@ public class MetadataAnalyzer {
                 metadata.areChildrenNamesEqual() &&
                 (!config.isTypeHints() || (
                         !parentElementMetadata.containsClassAttribute() ||
-                                !parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT) ||
-                                (greatGrandParentElementMetadata.areChildrenNamesEqual() && greatGrandParentElementMetadata.getPath() != null &&
-                                        grandParentElementMetadata.areChildrenNamesEqual())
+                        !parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT) ||
+                        // nested class="object" wrappers must stay objects, not collapse to one value
+                        (!grandParentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
+                                greatGrandParentElementMetadata.areChildrenNamesEqual() && greatGrandParentElementMetadata.getPath() != null &&
+                                grandParentElementMetadata.areChildrenNamesEqual())
                 ))
         );
     }

@@ -117,6 +117,25 @@ public class ExtractUtils {
         } else {
             if(JsonUtils.isJsonNodeInOneLevelAndWithNamespace(childNode)) {
                 transformJsonNodeWithNamespace(metadata, config, childNode, true);
+            } else if (childNode.isArray() && metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT)) {
+                // Keep named array property under class="object" (json-lib type hint)
+                String fieldName = ElementMetadataUtils.getElementName(childMetadata, config.isRemoveNamespacePrefixes());
+                if(metadata.getObjectNode().has(fieldName)) {
+                    addObjectToExistingFieldOnRootObjectNode(metadata, fieldName, childNode, JsonNode.class);
+                } else {
+                    metadata.getObjectNode().set(fieldName, !metadata.isElementMustBeNull() ? childNode : null);
+                }
+            } else if (childNode.isObject()
+                    && metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT)
+                    && metadata.getChildrenCount() == 1
+                    && childMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT)) {
+                // Keep single child that is itself class="object" as a nested named object
+                String fieldName = ElementMetadataUtils.getElementName(childMetadata, config.isRemoveNamespacePrefixes());
+                if(metadata.getObjectNode().has(fieldName)) {
+                    addObjectToExistingFieldOnRootObjectNode(metadata, fieldName, childNode, JsonNode.class);
+                } else {
+                    metadata.getObjectNode().set(fieldName, !metadata.isElementMustBeNull() ? childNode : null);
+                }
             } else {
                 for (JsonNode subElement : childNode) {
                     if(childNode.fields().hasNext()) {
