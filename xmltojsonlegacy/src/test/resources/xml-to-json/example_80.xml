@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<JSONtoXML>
+    <noteTypeCode type="string">N</noteTypeCode>
+    <productIdentifier class="object">
+        <productCode type="string">AH MOEDER</productCode>
+    </productIdentifier>
+    <text type="string"><![CDATA[Regel LNG #1
+Regel LNG #2
+Regel LNG #3
+Regel LNG #4]]></text>
+</JSONtoXML>
