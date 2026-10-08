@@ -1,13 +1,16 @@
 package org.assimbly.multipart.processor;
 
 import org.apache.camel.Exchange;
+import org.apache.camel.Expression;
 import org.apache.camel.Processor;
+import org.apache.camel.spi.Language;
 import org.apache.hc.client5.http.entity.mime.ByteArrayBody;
 import org.apache.hc.client5.http.entity.mime.FormBodyPart;
 import org.apache.hc.client5.http.entity.mime.FormBodyPartBuilder;
 import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
 import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.HttpEntity;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -51,7 +54,7 @@ public class MultipartProcessor implements Processor {
 
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         builder.addPart(part);
-        addTextFormFields(builder, formFieldsJson);
+        addTextFormFields(builder, exchange, formFieldsJson);
         builder.setBoundary("--------------------------Assimbly");
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -63,29 +66,83 @@ public class MultipartProcessor implements Processor {
         exchange.getIn().setBody(out.toByteArray());
     }
 
-    private void addTextFormFields(MultipartEntityBuilder builder, String formFieldsJson) {
+    private void addTextFormFields(MultipartEntityBuilder builder, Exchange exchange, String formFieldsJson) {
         if (formFieldsJson == null || formFieldsJson.isBlank()) {
             return;
         }
 
-        JSONObject fields = new JSONObject(formFieldsJson.trim());
+        String resolved = resolveFormFieldsJson(exchange, formFieldsJson.trim());
+        if (resolved == null || resolved.isBlank()) {
+            return;
+        }
+
+        JSONObject fields = new JSONObject(resolved);
         for (String key : fields.keySet()) {
             if (key == null || key.isBlank()) {
                 continue;
             }
             Object raw = fields.get(key);
-            String value = toFormFieldValue(raw);
+            String value = toFormFieldValue(exchange, raw);
             builder.addTextBody(key, value, ContentType.TEXT_PLAIN);
         }
     }
 
-    private static String toFormFieldValue(Object raw) {
+    /**
+     * When the whole Form Fields setting is a Simple expression (e.g. {@code ${header.options}}),
+     * evaluate it first so the result can be parsed as JSON. Otherwise keep the JSON template
+     * and resolve Simple expressions on individual string values.
+     */
+    private static String resolveFormFieldsJson(Exchange exchange, String formFieldsJson) {
+        if (formFieldsJson.startsWith("${")) {
+            return evaluateSimple(exchange, formFieldsJson);
+        }
+        return formFieldsJson;
+    }
+
+    private static String toFormFieldValue(Exchange exchange, Object raw) {
         if (raw == null || JSONObject.NULL.equals(raw)) {
             return "";
         }
         if (raw instanceof String stringValue) {
-            return stringValue;
+            return evaluateSimple(exchange, stringValue);
         }
-        return JSONObject.valueToString(raw);
+        return JSONObject.valueToString(evaluateJsonNode(exchange, raw));
+    }
+
+    private static Object evaluateJsonNode(Exchange exchange, Object raw) {
+        if (raw == null || JSONObject.NULL.equals(raw)) {
+            return "";
+        }
+        if (raw instanceof String stringValue) {
+            return evaluateSimple(exchange, stringValue);
+        }
+        if (raw instanceof JSONObject object) {
+            JSONObject evaluated = new JSONObject();
+            for (String key : object.keySet()) {
+                evaluated.put(key, evaluateJsonNode(exchange, object.get(key)));
+            }
+            return evaluated;
+        }
+        if (raw instanceof JSONArray array) {
+            JSONArray evaluated = new JSONArray();
+            for (int i = 0; i < array.length(); i++) {
+                evaluated.put(evaluateJsonNode(exchange, array.get(i)));
+            }
+            return evaluated;
+        }
+        return raw;
+    }
+
+    private static String evaluateSimple(Exchange exchange, String expression) {
+        if (expression == null) {
+            return "";
+        }
+        if (!expression.contains("${")) {
+            return expression;
+        }
+        Language language = exchange.getContext().resolveLanguage("simple");
+        Expression simple = language.createExpression(expression);
+        String result = simple.evaluate(exchange, String.class);
+        return result != null ? result : "";
     }
 }

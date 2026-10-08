@@ -39,7 +39,7 @@ none
 |===
 | Header | Description
 | MultipartFieldName | Form field name for the binary body part (required).
-| MultipartFormFields | Optional JSON object of additional text form fields. Example: `{"options":{"to_formats":["md"],"force_ocr":true}}`. Nested objects/arrays are serialized as JSON strings. Values may also be plain strings.
+| MultipartFormFields | Optional JSON object of additional text form fields. Example: `{"options":{"to_formats":["md"],"force_ocr":true}}`. Nested objects/arrays are serialized as JSON strings. Values may also be plain strings. Camel Simple expressions are supported on the whole value (e.g. `${header.formFields}`) and on string values inside the JSON (e.g. `{"ocr_engine":"${header.ocrEngine}","note":"${body}"}`).
 |===
 
 == Route example
@@ -48,6 +48,6 @@ none
       <simple>files</simple>
     </setHeader>
     <setHeader headerName="MultipartFormFields">
-      <constant>{"options":{"to_formats":["md"],"force_ocr":true}}</constant>
+      <constant>{"options":{"to_formats":["md"],"force_ocr":true},"ocr_engine":"${header.ocrEngine}"}</constant>
     </setHeader>
     <process ref="multipartProcessor"/>
