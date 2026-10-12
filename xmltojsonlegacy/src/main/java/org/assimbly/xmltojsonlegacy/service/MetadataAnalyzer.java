@@ -33,14 +33,21 @@ public class MetadataAnalyzer {
         ElementMetadata grandParentElementMetadata = metadataMap.getOrDefault(ElementMetadataUtils.getParentPath(parentElementMetadata.getPath()), new ElementMetadata());
         ElementMetadata greatGrandParentElementMetadata = metadataMap.getOrDefault(ElementMetadataUtils.getParentPath(grandParentElementMetadata.getPath()), new ElementMetadata());
 
+        // Root with a sole class="object" child keeps a named property (runtime #786)
+        boolean soleObjectChildAtRoot = metadata.getLevel() == 0
+                && hasSingleChildWithClass(metadataMap, metadata, Constants.JSON_XML_ATTR_TYPE_OBJECT);
+
         if (metadata.getLevel() == 0 && (
                 (!metadata.isDefinesNamespaces() && metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY)) ||
-                (metadata.getChildrenCount() == 1 && !metadata.isDefinesNamespaces() && (metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY) || !metadata.isHasAttributes())) ||
+                (metadata.getChildrenCount() == 1 && !metadata.isDefinesNamespaces()
+                        && (metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY) || !metadata.isHasAttributes())
+                        && !soleObjectChildAtRoot) ||
                 (metadata.getChildrenCount() == 0 && !metadata.isHasEmptyTextContent())
         )) {
             return true;
         }
-        if (metadata.getDeepestDepth() > 2 && !metadata.isDefinesNamespaces() && metadata.areChildrenNamesEqual() && !metadata.isHasAttributes()) {
+        if (metadata.getDeepestDepth() > 2 && !metadata.isDefinesNamespaces() && metadata.areChildrenNamesEqual()
+                && !metadata.isHasAttributes() && !soleObjectChildAtRoot) {
             return true;
         }
         if (metadata.getDeepestDepth() == 2 && !metadata.isDefinesNamespaces() && metadata.areChildrenNamesEqual() &&
@@ -49,10 +56,15 @@ public class MetadataAnalyzer {
         ) {
             return true;
         }
+        // Array items under class="object" > class="array" stay objects, not value-arrays (runtime #785)
+        boolean arrayItemUnderObjectWrapper = parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY)
+                && grandParentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT);
+
         if (metadata.getDeepestDepth() == 1 && metadata.getLevel() != 0 && !ElementMetadataUtils.isElementOnNamespace(metadata) &&
                 (parentElementMetadata.containsClassAttributeValue("") || parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY) ||
                         parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT)) &&
                 !metadata.isHasAttributes()
+                && !arrayItemUnderObjectWrapper
         ) {
             return true;
         }
@@ -61,6 +73,11 @@ public class MetadataAnalyzer {
                         metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT)
         )) {
             return true;
+        }
+
+        // Leaf under object>array item must keep a named property, not collapse to a value-array
+        if (isLeafUnderObjectWrappedArrayItem(parentElementMetadata, grandParentElementMetadata, greatGrandParentElementMetadata, metadata)) {
+            return false;
         }
 
         return (metadata.getDeepestDepth() == 0 && !parentElementMetadata.isHasEmptyTextContent() && !metadata.isHasAttributes() &&
@@ -135,6 +152,14 @@ public class MetadataAnalyzer {
             }
         }
 
+        // Array item under class="object" > class="array" is an object even with a single field (runtime #785)
+        if (config.isTypeHints() &&
+                parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY) &&
+                grandParentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
+                metadata.getDeepestDepth() == 1) {
+            return true;
+        }
+
         return (metadata.getDeepestDepth() == 1 &&
                 (metadata.getChildrenCount() > 1  && (
                         metadata.getLevel() == 0 && !hasChildrenWithAttributes && (!config.isTypeHints() || metadata.isDefinesNamespaces()) ||
@@ -169,6 +194,12 @@ public class MetadataAnalyzer {
             valueAsJson = metadata.getValueAsJson();
         }
 
+        // Leaf under object>array item must stay a named property (runtime #785)
+        if (config.isTypeHints() && isLeafUnderObjectWrappedArrayItem(
+                parentElementMetadata, grandParentElementMetadata, greatGrandParentElementMetadata, metadata)) {
+            return false;
+        }
+
         return (metadata.getDeepestDepth() == 0 &&
                 (!parentElementMetadata.isHasEmptyTextContent() || !metadata.isHasEmptyTextContent() && valueAsJson!=null) &&
                 parentElementMetadata.areChildrenNamesEqual() &&
@@ -182,6 +213,35 @@ public class MetadataAnalyzer {
                                 grandParentElementMetadata.areChildrenNamesEqual())
                 ))
         );
+    }
+
+    // true when metadata is a leaf under class="object" > class="array" > item > leaf
+    private static boolean isLeafUnderObjectWrappedArrayItem(
+            ElementMetadata parentElementMetadata,
+            ElementMetadata grandParentElementMetadata,
+            ElementMetadata greatGrandParentElementMetadata,
+            ElementMetadata metadata
+    ) {
+        return metadata.getDeepestDepth() == 0 &&
+                parentElementMetadata.getDeepestDepth() == 1 &&
+                grandParentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY) &&
+                greatGrandParentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT);
+    }
+
+    // true when metadata has exactly one child with the given class attribute value
+    private static boolean hasSingleChildWithClass(
+            Map<String, ElementMetadata> metadataMap, ElementMetadata metadata, String classValue
+    ) {
+        if (metadata.getChildrenCount() != 1) {
+            return false;
+        }
+        for (String childPath : metadata.getChildPaths()) {
+            ElementMetadata childMetadata = metadataMap.get(childPath);
+            if (childMetadata != null && childMetadata.containsClassAttributeValue(classValue)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // check if element should be null
