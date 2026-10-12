@@ -27,13 +27,20 @@ public class OtherType implements TextNodeTransaction {
     private static void processWithTypeHints(Map<String, ElementMetadata> metadataMap, ElementMetadata metadata, XmlToJsonConfiguration config) {
         ElementMetadata parentMetadata = ElementMetadataUtils.getParentMetadata(metadataMap, metadata);
         ElementMetadata grandParentMetadata = ElementMetadataUtils.getGrandParentMetadata(metadataMap, metadata);
+        ElementMetadata greatGrandParentMetadata = ElementMetadataUtils.getParentMetadata(metadataMap, grandParentMetadata);
         // Leaf under class="object": always materialize as a named property on this node
         // (needed when parent has a single child so areChildrenNamesEqual() is true)
         boolean leafUnderObjectParent = parentMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
                 MetadataAnalyzer.isLastElement(metadata);
+        // Leaf under class="object" > class="array" > item (runtime #785)
+        boolean leafUnderObjectWrappedArrayItem = MetadataAnalyzer.isLastElement(metadata) &&
+                parentMetadata.getDeepestDepth() == 1 &&
+                grandParentMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY) &&
+                greatGrandParentMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT);
 
         if(!parentMetadata.areChildrenNamesEqual() ||
                 leafUnderObjectParent ||
+                leafUnderObjectWrappedArrayItem ||
                 ((!grandParentMetadata.containsClassAttribute() || !grandParentMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY)) &&
                         (!parentMetadata.containsClassAttribute() || !parentMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY)))
         ) {
