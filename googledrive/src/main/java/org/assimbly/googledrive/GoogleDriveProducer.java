@@ -6,6 +6,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.component.file.GenericFile;
 import org.apache.camel.support.DefaultProducer;
 import org.assimbly.tenantvariables.mongo.MongoDao;
+import org.assimbly.util.helper.ExchangeHelper;
 
 import org.assimbly.googledrive.exception.GoogleDriveException;
 
@@ -42,7 +43,7 @@ public class GoogleDriveProducer extends DefaultProducer {
 
         prepareGoogleDriveClient();
 
-        String googleDriveFileId = uploadToGoogleDrive(genericFile);
+        String googleDriveFileId = uploadToGoogleDrive(genericFile, exchange);
 
         exchange.getIn().setHeader("GoogleDriveFileId", googleDriveFileId);
 
@@ -80,10 +81,12 @@ public class GoogleDriveProducer extends DefaultProducer {
         return genericFile;
     }
 
-    private String uploadToGoogleDrive(GenericFile<File> genericFile) throws IOException {
+    private String uploadToGoogleDrive(GenericFile<File> genericFile, Exchange exchange) throws IOException {
+
+        String directoryId = ExchangeHelper.interpolate(configuration.getDirectoryId(), exchange);
 
         com.google.api.services.drive.model.File fileMetadata = new com.google.api.services.drive.model.File();
-        fileMetadata.setParents(Collections.singletonList(configuration.getDirectoryId()));
+        fileMetadata.setParents(Collections.singletonList(directoryId));
         fileMetadata.setName(genericFile.getFileName());
 
         String mimeType = URLConnection.guessContentTypeFromName(genericFile.getFileName());
