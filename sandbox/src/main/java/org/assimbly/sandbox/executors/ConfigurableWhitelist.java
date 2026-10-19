@@ -309,19 +309,51 @@ public class ConfigurableWhitelist {
     }
 
     private static MethodRule findRule(Class<?> clazz) {
-        String className = clazz.getName();
-        return LOOKUP_CACHE.computeIfAbsent(className, name -> {
-            MethodRule rule = METHOD_RULES.get(name);
-            if (rule == null) {
-                rule = PACKAGE_RULES.values()
-                        .stream()
-                        .filter(e -> name.startsWith(e.packageName))
-                        .max(java.util.Comparator.comparingInt(e -> e.depth))
-                        .map(e -> e.rule)
-                        .orElse(DENIED_RULE);
-            }
+        String name = ruleName(clazz);
+        MethodRule cached = LOOKUP_CACHE.get(name);
+        if (cached != null) {
+            return cached;
+        }
+        // not computeIfAbsent: array lookups recurse into findRule for the component type,
+        // and a recursive update inside computeIfAbsent is not allowed on ConcurrentHashMap
+        MethodRule rule = resolveRule(clazz, name);
+        MethodRule previous = LOOKUP_CACHE.putIfAbsent(name, rule);
+        return previous != null ? previous : rule;
+    }
+
+    private static MethodRule resolveRule(Class<?> clazz, String name) {
+        MethodRule rule = METHOD_RULES.get(name);
+        if (rule != null) {
             return rule;
-        });
+        }
+        if (clazz.isArray()) {
+            // e.g. "a,b".split(',') returns String[]; GDK methods such as toList(), each(), join()
+            // are called with the array as receiver. Without an explicit rule like
+            // "java.lang.String[]#..." an array inherits the rule of its component type.
+            // Primitive arrays (byte[], int[], ...) have no class rule to inherit and need an explicit one.
+            Class<?> component = clazz.getComponentType();
+            return component.isPrimitive() ? DENIED_RULE : findRule(component);
+        }
+        return PACKAGE_RULES.values()
+                .stream()
+                .filter(e -> name.startsWith(e.packageName))
+                .max(java.util.Comparator.comparingInt(e -> e.depth))
+                .map(e -> e.rule)
+                .orElse(DENIED_RULE);
+    }
+
+    /**
+     * Name used to match whitelist rules: the binary name for classes (java.lang.String)
+     * and the source-style name for arrays (java.lang.String[], byte[]) instead of [Ljava.lang.String; / [B.
+     */
+    private static String ruleName(Class<?> clazz) {
+        if (clazz.isArray()) {
+            String canonical = clazz.getCanonicalName();
+            if (canonical != null) {
+                return canonical;
+            }
+        }
+        return clazz.getName();
     }
 
     private static final class PackageRule {
