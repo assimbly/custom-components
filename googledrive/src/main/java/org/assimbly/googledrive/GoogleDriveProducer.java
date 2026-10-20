@@ -6,7 +6,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.component.file.GenericFile;
 import org.apache.camel.support.DefaultProducer;
 import org.assimbly.tenantvariables.mongo.MongoDao;
-import org.assimbly.util.helper.ExchangeHelper;
+import org.assimbly.tenantvariables.helper.ExchangeHelper;
 
 import org.assimbly.googledrive.exception.GoogleDriveException;
 
