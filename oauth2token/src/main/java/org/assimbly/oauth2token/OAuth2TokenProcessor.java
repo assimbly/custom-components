@@ -64,7 +64,9 @@ public class OAuth2TokenProcessor implements Processor {
             expireDelayTime = expireTime.plusSeconds(expiryDelayInt);
 
         } catch (Exception e) {
-            logger.error("Error calculating expire date variables", e);
+            logger.error("Error calculating expire date variables for id={}, routeId={}, tenant={}, environment={}, "
+                            + "expireDateVarName={}, expireDate={}, expiryDelay={}",
+                    id, exchange.getFromRouteId(), tenant, environment, expireDateVarName, expireDate, expiryDelay, e);
         }
 
         if (anyTokenMissing
