@@ -1,8 +1,16 @@
 package org.assimbly.sandbox.executors;
 
+import groovy.lang.MetaMethod;
+import org.codehaus.groovy.runtime.InvokerHelper;
+
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.nio.file.*;
+import java.util.ArrayDeque;
+import java.util.Comparator;
+import java.util.Deque;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -54,10 +62,34 @@ public class ConfigurableWhitelist {
             "forName",
             "newInstance"
     );
+    // these hand closures to the ForkJoin common pool, whose threads were not started by the script
+    // and therefore don't inherit the sandbox interceptor: the closure would run unchecked
+    private static final Set<String> PARALLEL_METHODS = Set.of(
+            "parallel",
+            "parallelStream",
+            "parallelSetAll",
+            "parallelPrefix",
+            "parallelSort"
+    );
     private static final Set<Class<?>> DENIED_CLASSES = Set.of(
             Runtime.class,
             ProcessBuilder.class
     );
+
+    // public method names of a type, including GDK methods (each, collect, ...)
+    private static final ClassValue<Set<String>> METHOD_NAMES = new ClassValue<>() {
+        @Override
+        protected Set<String> computeValue(Class<?> type) {
+            Set<String> names = new HashSet<>();
+            for (Method m : type.getMethods()) {
+                names.add(m.getName());
+            }
+            for (MetaMethod m : InvokerHelper.getMetaClass(type).getMetaMethods()) {
+                names.add(m.getName());
+            }
+            return names;
+        }
+    };
 
     static {
         loadFromFile();
@@ -212,10 +244,13 @@ public class ConfigurableWhitelist {
             String originalLine
     ) {
 
-        String packageName = packagePattern.substring(0, packagePattern.length() - 1);
+        // "a.b.*" covers classes in a.b only, "a.b.**" also covers its sub-packages
+        boolean includeSubPackages = packagePattern.endsWith(".**");
+        String packageName = packagePattern.substring(0, packagePattern.length() - (includeSubPackages ? 2 : 1));
         if (!packageName.endsWith(".")) {
             packageName += ".";
         }
+        String key = packageName + (includeSubPackages ? "**" : "*");
 
         String[] tokens = rulePart.split(",");
         boolean wildcard = tokens[0].trim().equals("*");
@@ -241,15 +276,15 @@ public class ConfigurableWhitelist {
             rule = MethodRule.allowOnly(allowed);
         }
 
-        PackageRule existing = packageRules.get(packageName);
+        PackageRule existing = packageRules.get(key);
         if (existing != null) {
-            LOG.warning("Duplicate package rule for '" + packageName
+            LOG.warning("Duplicate package rule for '" + key
                     + "', replacing previous rule: " + originalLine);
         }
 
-        packageRules.put(packageName, new PackageRule(packageName, rule));
+        packageRules.put(key, new PackageRule(packageName, includeSubPackages, rule));
 
-        LOG.info("Registered package whitelist: " + packageName);
+        LOG.info("Registered package whitelist: " + key);
     }
 
     private static void startWatcher() {
@@ -297,15 +332,53 @@ public class ConfigurableWhitelist {
             return false;
         }
 
-        Class<?> current = clazz;
-        while (current != null) {
-            MethodRule rule = findRule(current);
-            if (rule != null && rule.permits(method)) {
+        // the class's own rule decides when it denies, ancestors can't overrule it
+        MethodRule own = findRule(clazz);
+        if (own != DENIED_RULE && !own.permits(method)) {
+            return false;
+        }
+        Set<Class<?>> ancestors = ancestors(clazz);
+        // an explicit class rule denying a method also applies to subclasses and implementations,
+        // e.g. java.lang.Throwable#*,-initCause denies initCause on every exception
+        for (Class<?> ancestor : ancestors) {
+            MethodRule rule = METHOD_RULES.get(ruleName(ancestor));
+            if (rule != null && !rule.permits(method) && METHOD_NAMES.get(ancestor).contains(method)) {
+                return false;
+            }
+        }
+        if (own.permits(method)) {
+            return true;
+        }
+        // a rule on a superclass or interface only covers the methods that type has itself,
+        // otherwise e.g. java.lang.Comparable#* would allow every method of every Comparable class
+        for (Class<?> ancestor : ancestors) {
+            MethodRule rule = findRule(ancestor);
+            if (rule != DENIED_RULE && rule.permits(method) && METHOD_NAMES.get(ancestor).contains(method)) {
                 return true;
             }
-            current = current.getSuperclass();
         }
         return false;
+    }
+
+    /**
+     * All superclasses and interfaces of clazz, nearest first.
+     */
+    private static Set<Class<?>> ancestors(Class<?> clazz) {
+        Set<Class<?>> result = new LinkedHashSet<>();
+        Deque<Class<?>> queue = new ArrayDeque<>();
+        queue.add(clazz);
+        while (!queue.isEmpty()) {
+            Class<?> current = queue.poll();
+            if (current.getSuperclass() != null && result.add(current.getSuperclass())) {
+                queue.add(current.getSuperclass());
+            }
+            for (Class<?> iface : current.getInterfaces()) {
+                if (result.add(iface)) {
+                    queue.add(iface);
+                }
+            }
+        }
+        return result;
     }
 
     private static MethodRule findRule(Class<?> clazz) {
@@ -336,8 +409,9 @@ public class ConfigurableWhitelist {
         }
         return PACKAGE_RULES.values()
                 .stream()
-                .filter(e -> name.startsWith(e.packageName))
-                .max(java.util.Comparator.comparingInt(e -> e.depth))
+                .filter(e -> e.matches(name))
+                // most specific package wins; on equal depth "a.b.*" wins over "a.b.**"
+                .max(Comparator.<PackageRule>comparingInt(e -> e.depth).thenComparing(e -> !e.includeSubPackages))
                 .map(e -> e.rule)
                 .orElse(DENIED_RULE);
     }
@@ -358,13 +432,20 @@ public class ConfigurableWhitelist {
 
     private static final class PackageRule {
         final String packageName;
+        final boolean includeSubPackages;
         final MethodRule rule;
         final int depth;
 
-        PackageRule(String packageName, MethodRule rule) {
+        PackageRule(String packageName, boolean includeSubPackages, MethodRule rule) {
             this.packageName = packageName;
+            this.includeSubPackages = includeSubPackages;
             this.rule = rule;
             this.depth = packageName.split("\\.").length;
+        }
+
+        boolean matches(String className) {
+            return className.startsWith(packageName)
+                    && (includeSubPackages || className.indexOf('.', packageName.length()) < 0);
         }
     }
 
@@ -373,6 +454,7 @@ public class ConfigurableWhitelist {
                 || JVM_METHODS.contains(method)
                 || GROOVY_META_METHODS.contains(method)
                 || EXECUTION_METHODS.contains(method)
+                || PARALLEL_METHODS.contains(method)
                 || (clazz == Class.class && CLASS_LOADING_METHODS.contains(method))
                 || DENIED_CLASSES.contains(clazz);
     }
