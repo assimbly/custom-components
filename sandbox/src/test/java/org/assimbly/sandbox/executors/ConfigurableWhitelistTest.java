@@ -73,6 +73,14 @@ public class ConfigurableWhitelistTest {
     }
 
     @Test
+    public void explicitDenialOnAncestorAppliesToSubclasses() {
+        // java.lang.Throwable#*,-initCause, while Exception#* and RuntimeException#* allow everything
+        assertFalse(ConfigurableWhitelist.isMethodAllowed(RuntimeException.class, "initCause"));
+        assertFalse(ConfigurableWhitelist.isMethodAllowed(NumberFormatException.class, "initCause"));
+        assertTrue(ConfigurableWhitelist.isMethodAllowed(NumberFormatException.class, "getMessage"));
+    }
+
+    @Test
     public void allowOnlyRule() {
         assertTrue(ConfigurableWhitelist.isMethodAllowed(MessageDigest.class, "getInstance"));
         assertFalse(ConfigurableWhitelist.isMethodAllowed(MessageDigest.class, "getProvider"));

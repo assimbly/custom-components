@@ -332,12 +332,26 @@ public class ConfigurableWhitelist {
             return false;
         }
 
-        if (findRule(clazz).permits(method)) {
+        // the class's own rule decides when it denies, ancestors can't overrule it
+        MethodRule own = findRule(clazz);
+        if (own != DENIED_RULE && !own.permits(method)) {
+            return false;
+        }
+        Set<Class<?>> ancestors = ancestors(clazz);
+        // an explicit class rule denying a method also applies to subclasses and implementations,
+        // e.g. java.lang.Throwable#*,-initCause denies initCause on every exception
+        for (Class<?> ancestor : ancestors) {
+            MethodRule rule = METHOD_RULES.get(ruleName(ancestor));
+            if (rule != null && !rule.permits(method) && METHOD_NAMES.get(ancestor).contains(method)) {
+                return false;
+            }
+        }
+        if (own.permits(method)) {
             return true;
         }
         // a rule on a superclass or interface only covers the methods that type has itself,
         // otherwise e.g. java.lang.Comparable#* would allow every method of every Comparable class
-        for (Class<?> ancestor : ancestors(clazz)) {
+        for (Class<?> ancestor : ancestors) {
             MethodRule rule = findRule(ancestor);
             if (rule != DENIED_RULE && rule.permits(method) && METHOD_NAMES.get(ancestor).contains(method)) {
                 return true;
