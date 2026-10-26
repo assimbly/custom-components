@@ -13,6 +13,11 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>21</maven.compiler.release>
     <maven.versions.rules>file:///${project.basedir}/../rules.xml</maven.versions.rules>
+    <!-- groovy-sandbox 4.3.2 does not work on Groovy 6: it references
+         org.codehaus.groovy.runtime.callsite.CallSite, which Groovy 6 removed, so every
+         sandboxed call fails. Keep this on the Groovy version camel-groovy brings in,
+         which is what the runtime resolves. -->
+    <sandbox-groovy.version>5.0.8</sandbox-groovy.version>
   </properties>
 
   <distributionManagement> 
@@ -37,22 +42,22 @@
 	  <dependency>
 		  <groupId>org.apache.groovy</groupId>
 		  <artifactId>groovy</artifactId>
-		  <version>${groovy-script.version}</version>
+		  <version>${sandbox-groovy.version}</version>
 	  </dependency>
 	  <dependency>
 		  <groupId>org.apache.groovy</groupId>
 		  <artifactId>groovy-dateutil</artifactId>
-		  <version>${groovy-script.version}</version>
+		  <version>${sandbox-groovy.version}</version>
 	  </dependency>
 	  <dependency>
 		  <groupId>org.apache.groovy</groupId>
 		  <artifactId>groovy-json</artifactId>
-		  <version>${groovy-script.version}</version>
+		  <version>${sandbox-groovy.version}</version>
 	  </dependency>
 	  <dependency>
 		  <groupId>org.apache.groovy</groupId>
 		  <artifactId>groovy-xml</artifactId>
-		  <version>${groovy-script.version}</version>
+		  <version>${sandbox-groovy.version}</version>
 	  </dependency>
 
   </dependencies>
@@ -76,6 +81,15 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<systemPropertyVariables>
+						<!-- ConfigurableWhitelist reads ${user.home}/.assimbly/groovy/whitelist.conf -->
+						<user.home>${project.build.testOutputDirectory}/home</user.home>
+					</systemPropertyVariables>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
