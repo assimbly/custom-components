@@ -51,6 +51,13 @@ public class GroovySandboxExecutorTest extends CamelTestSupport {
                 Arguments.of("subscript", "TimeZone['default'] = TimeZone.getTimeZone('CET')"),
                 Arguments.of("explicit putAt", "def tz = TimeZone.getTimeZone('CET'); tz.putAt('default', tz)"),
                 Arguments.of("static putAt", "TimeZone.putAt('default', TimeZone.getTimeZone('CET'))"),
+                // a GString index is coerced to String by Groovy, so it's a property access too
+                Arguments.of("GString subscript", "def tz = TimeZone.getTimeZone('CET'); tz[\"${'default'}\"] = tz"),
+                Arguments.of("GString static putAt", "TimeZone.putAt(\"${'default'}\", TimeZone.getTimeZone('CET'))"),
+                Arguments.of("GString class", "'x'[\"${'class'}\"]"),
+                Arguments.of("GString metaClass", "'x'[\"${'metaClass'}\"]"),
+                // an explicit denial on a superclass applies to subclasses: java.lang.Throwable#*,-initCause
+                Arguments.of("initCause on subclass", "new RuntimeException('a').initCause(new RuntimeException('b'))"),
                 // reading things that are not whitelisted
                 Arguments.of("System.properties", "System.properties"),
                 Arguments.of("System['properties']", "System['properties']"),
@@ -82,6 +89,28 @@ public class GroovySandboxExecutorTest extends CamelTestSupport {
         Thread.sleep(100);
         assertEquals("UTC", TimeZone.getDefault().getID());
         assertEquals(Locale.US, Locale.getDefault());
+    }
+
+    static Stream<Arguments> backgroundScripts() {
+        return Stream.of(
+                Arguments.of("Thread", "new Thread({ Thread.sleep(50); TimeZone.setDefault(TimeZone.getTimeZone('CET')) }).start()"),
+                Arguments.of("Timer", "new Timer(true).schedule({ TimeZone.setDefault(TimeZone.getTimeZone('CET')) } as TimerTask, 50L)")
+        );
+    }
+
+    // work a script leaves running on another thread must still be checked after the script has returned
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("backgroundScripts")
+    public void backgroundThreadStaysSandboxed(String name, String script) throws Exception {
+        try {
+            run(script);
+        } catch (RuntimeCamelException e) {
+            // denying the thread itself is fine as well
+            assertTrue(e.getMessage().contains("Sandbox Denial"), e.getMessage());
+        }
+
+        Thread.sleep(300);
+        assertEquals("UTC", TimeZone.getDefault().getID());
     }
 
     static Stream<Arguments> allowedScripts() {

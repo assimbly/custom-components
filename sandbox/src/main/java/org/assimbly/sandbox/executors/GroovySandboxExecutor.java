@@ -145,14 +145,15 @@ public class GroovySandboxExecutor {
 
     /**
      * obj[i] / obj[i] = v. On anything but a Map, a String index is a property access
-     * (TimeZone['default'] = tz is TimeZone.setDefault(tz)).
+     * (TimeZone['default'] = tz is TimeZone.setDefault(tz)). Checked for any CharSequence,
+     * because Groovy coerces a GString index ("${'default'}") to String as well.
      */
     private static void checkSubscript(Object receiver, Object index, boolean write) {
         if (receiver == null) {
             throw new SecurityException("Sandbox Denial: null receiver.");
         }
-        if (index instanceof String property && !(receiver instanceof Map)) {
-            checkPropertyAccess(receiver, property, write);
+        if (index instanceof CharSequence property && !(receiver instanceof Map)) {
+            checkPropertyAccess(receiver, property.toString(), write);
         } else if (!receiver.getClass().isArray() && !isScriptClass(receiver.getClass())) {
             checkMethod(receiver.getClass(), write ? "putAt" : "getAt");
         }
@@ -163,8 +164,8 @@ public class GroovySandboxExecutor {
      */
     private static void checkPropertySubscriptCall(Object receiver, String method, Object[] args) {
         if (("getAt".equals(method) || "putAt".equals(method))
-                && args.length > 0 && args[0] instanceof String property && !(receiver instanceof Map)) {
-            checkPropertyAccess(receiver, property, "putAt".equals(method));
+                && args.length > 0 && args[0] instanceof CharSequence property && !(receiver instanceof Map)) {
+            checkPropertyAccess(receiver, property.toString(), "putAt".equals(method));
         }
     }
 
