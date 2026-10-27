@@ -81,14 +81,6 @@ public class GroovySandboxExecutorTest extends CamelTestSupport {
                 Arguments.of("Eval.me", "groovy.util.Eval.me(\"TimeZone.setDefault(TimeZone.getTimeZone('CET'))\")"),
                 Arguments.of("ConfigSlurper", "new groovy.util.ConfigSlurper().parse(\"TimeZone.setDefault(TimeZone.getTimeZone('CET'))\")"),
                 Arguments.of("GroovyScriptEngine", "new groovy.util.GroovyScriptEngine('.')"),
-                // reflection helpers reach any method/constructor by name, bypassing per-method checks
-                Arguments.of("MethodUtils static", "org.apache.commons.lang3.reflect.MethodUtils.invokeExactStaticMethod("
-                        + "TimeZone, 'setDefault', [TimeZone.getTimeZone('CET')] as Object[], [TimeZone] as Class[])"),
-                Arguments.of("ConstructorUtils", "org.apache.commons.lang3.reflect.ConstructorUtils.invokeConstructor("
-                        + "ProcessBuilder, [['x'] as String[]] as Object[])"),
-                Arguments.of("FieldUtils", "org.apache.commons.lang3.reflect.FieldUtils.readStaticField("
-                        + "org.assimbly.sandbox.executors.ConfigurableWhitelist, 'METHOD_RULES', true)"),
-                Arguments.of("SerializationUtils.deserialize", "org.apache.commons.lang3.SerializationUtils.deserialize(new byte[0])"),
                 // sub-packages are not covered by java.util.*
                 Arguments.of("java.util.concurrent", "java.util.concurrent.Executors.newSingleThreadExecutor()"),
                 Arguments.of("java.util.logging", "java.util.logging.LogManager.getLogManager().reset()"),
@@ -112,6 +104,32 @@ public class GroovySandboxExecutorTest extends CamelTestSupport {
         Thread.sleep(100);
         assertEquals("UTC", TimeZone.getDefault().getID());
         assertEquals(Locale.US, Locale.getDefault());
+    }
+
+    // commons-lang3 is on the classpath on develop but not on next; where it is, its reflection helpers
+    // must be denied even though the whitelist allows the lang3 package
+    @Test
+    public void reflectionHelpersStayDenied() {
+        try {
+            Class.forName("org.apache.commons.lang3.reflect.MethodUtils");
+        } catch (ClassNotFoundException e) {
+            org.junit.jupiter.api.Assumptions.abort("commons-lang3 not on classpath");
+        }
+        String[] scripts = {
+                // reflection helpers reach any method/constructor by name, bypassing per-method checks
+                "org.apache.commons.lang3.reflect.MethodUtils.invokeExactStaticMethod("
+                        + "TimeZone, 'setDefault', [TimeZone.getTimeZone('CET')] as Object[], [TimeZone] as Class[])",
+                "org.apache.commons.lang3.reflect.ConstructorUtils.invokeConstructor("
+                        + "ProcessBuilder, [['x'] as String[]] as Object[])",
+                "org.apache.commons.lang3.reflect.FieldUtils.readStaticField("
+                        + "org.assimbly.sandbox.executors.ConfigurableWhitelist, 'METHOD_RULES', true)",
+                "org.apache.commons.lang3.SerializationUtils.deserialize(new byte[0])"
+        };
+        for (String script : scripts) {
+            RuntimeCamelException e = assertThrows(RuntimeCamelException.class, () -> run(script), script);
+            assertTrue(e.getMessage().contains("Sandbox Denial"), script + " -> " + e.getMessage());
+        }
+        assertEquals("UTC", TimeZone.getDefault().getID());
     }
 
     static Stream<Arguments> backgroundScripts() {
