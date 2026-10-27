@@ -71,6 +71,14 @@ public class ConfigurableWhitelist {
             "parallelPrefix",
             "parallelSort"
     );
+    // classes that compile and run Groovy code without the sandbox transformer
+    private static final Set<Class<?>> UNSANDBOXED_COMPILERS = Set.of(
+            groovy.lang.GroovyShell.class,
+            groovy.lang.GroovyClassLoader.class,
+            groovy.util.Eval.class,
+            groovy.util.ConfigSlurper.class,
+            groovy.util.GroovyScriptEngine.class
+    );
     private static final Set<Class<?>> DENIED_CLASSES = Set.of(
             Runtime.class,
             ProcessBuilder.class
@@ -323,6 +331,9 @@ public class ConfigurableWhitelist {
      * - a package wildcard rule
      */
     public static boolean isClassAllowed(Class<?> clazz) {
+        if (isUnsandboxedCompiler(clazz)) {
+            return false;
+        }
         MethodRule rule = findRule(clazz);
         return rule != null && rule != DENIED_RULE;
     }
@@ -449,14 +460,24 @@ public class ConfigurableWhitelist {
         }
     }
 
-    private static boolean isHardDenied(Class<?> clazz, String method) {
+    private static boolean isUnsandboxedCompiler(Class<?> clazz) {
+        for (Class<?> denied : UNSANDBOXED_COMPILERS) {
+            if (denied.isAssignableFrom(clazz)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static boolean isHardDenied(Class<?> clazz, String method) {
         return REFLECTION_METHODS.contains(method)
                 || JVM_METHODS.contains(method)
                 || GROOVY_META_METHODS.contains(method)
                 || EXECUTION_METHODS.contains(method)
                 || PARALLEL_METHODS.contains(method)
                 || (clazz == Class.class && CLASS_LOADING_METHODS.contains(method))
-                || DENIED_CLASSES.contains(clazz);
+                || DENIED_CLASSES.contains(clazz)
+                || isUnsandboxedCompiler(clazz);
     }
 
 }

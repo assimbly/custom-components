@@ -97,6 +97,15 @@ public class ConfigurableWhitelistTest {
     }
 
     @Test
+    public void unsandboxedCompilersAreDenied() {
+        // groovy.util.*#* is whitelisted, but these compile and run code without the sandbox
+        assertFalse(ConfigurableWhitelist.isMethodAllowed(groovy.util.Eval.class, "me"));
+        assertFalse(ConfigurableWhitelist.isClassAllowed(groovy.util.ConfigSlurper.class));
+        assertFalse(ConfigurableWhitelist.isClassAllowed(groovy.util.GroovyScriptEngine.class));
+        assertTrue(ConfigurableWhitelist.isClassAllowed(groovy.util.Node.class));
+    }
+
+    @Test
     public void unlistedClassIsDenied() {
         assertFalse(ConfigurableWhitelist.isClassAllowed(File.class));
         assertFalse(ConfigurableWhitelist.isMethodAllowed(System.class, "getProperties"));
