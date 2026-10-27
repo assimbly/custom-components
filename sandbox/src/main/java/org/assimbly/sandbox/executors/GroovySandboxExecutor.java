@@ -219,8 +219,8 @@ public class GroovySandboxExecutor {
             // XmlSlurper's node.@attr
             return;
         }
-        if (!write && clazz == Node.class && ConfigurableWhitelist.isClassAllowed(clazz)) {
-            // XmlParser's node.@attr: Node's metaclass reads it from the attribute map, not from a field
+        if (clazz == Node.class && ConfigurableWhitelist.isClassAllowed(clazz)) {
+            // XmlParser's node.@attr: Node maps .@ to its XML attribute map, never a Java field, read or write
             return;
         }
         throw new SecurityException("Sandbox Denial: direct field access .@" + attribute + " not allowed.");
