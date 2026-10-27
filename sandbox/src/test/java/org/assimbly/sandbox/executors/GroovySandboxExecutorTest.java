@@ -67,8 +67,7 @@ public class GroovySandboxExecutorTest extends CamelTestSupport {
                 Arguments.of("Class.classLoader", "TimeZone.classLoader"),
                 Arguments.of("metaClass", "'x'.metaClass"),
                 Arguments.of("field access", "def tz = TimeZone.getTimeZone('CET'); tz.@ID"),
-                Arguments.of("xml attribute write", "def x = new groovy.xml.XmlSlurper().parseText(\"<r a='1'/>\"); x.@a = 2"),
-                Arguments.of("xml parser attribute write", "def n = new groovy.xml.XmlParser().parseText(\"<r a='1'/>\"); n.@a = 2"),
+                Arguments.of("xml slurper attribute write", "def x = new groovy.xml.XmlSlurper().parseText(\"<r a='1'/>\"); x.@a = 2"),
                 // evaluate is compiled with the sandbox as well, and every way to reach it is covered
                 Arguments.of("evaluate", "evaluate(\"TimeZone.setDefault(TimeZone.getTimeZone('CET'))\")"),
                 Arguments.of("evaluate in closure", "[1].each { evaluate(\"TimeZone.setDefault(TimeZone.getTimeZone('CET'))\") }"),
@@ -172,6 +171,9 @@ public class GroovySandboxExecutorTest extends CamelTestSupport {
                 Arguments.of("json slurper", "def j = new groovy.json.JsonSlurper().parseText('{\"a\":{\"b\":[1,2]}}'); j.a.b[1]", "2"),
                 Arguments.of("json slurper each", "def j = new groovy.json.JsonSlurper().parseText('{\"a\":1}'); def keys = []; j.each { k, v -> keys << k }; keys", "[a]"),
                 Arguments.of("xml parser attributes", "def n = new groovy.xml.XmlParser().parseText(\"<r a='1' value='v'/>\"); '' + n.@a + n.@value + n.@parent", "1vnull"),
+                // .@attr writes on an XmlParser node go to the XML attribute map, so they're allowed (XmlSlurper writes are not)
+                Arguments.of("xml parser attribute write", "def n = new groovy.xml.XmlParser().parseText(\"<r a='1'/>\"); n.@a = '2'; n.@added = 'x'; n.@a + n.@added", "2x"),
+                Arguments.of("xml parser read modify serialize", "def n = new groovy.xml.XmlParser().parseText(\"<r/>\"); n.@tag = 'done'; groovy.xml.XmlUtil.serialize(n).contains('tag=\"done\"')", "true"),
                 Arguments.of("evaluate", "evaluate('1 == 1') && !evaluate('false')", "true"),
                 Arguments.of("evaluate with binding", "evaluate('body + headers.foo')", "BF"),
                 Arguments.of("xml slurper", "def x = new groovy.xml.XmlSlurper().parseText(\"<r><a id='7'>hi</a></r>\"); x.a.text() + x.a.@id + x.a['@id']", "hi77"),
