@@ -81,6 +81,14 @@ public class GroovySandboxExecutorTest extends CamelTestSupport {
                 Arguments.of("Eval.me", "groovy.util.Eval.me(\"TimeZone.setDefault(TimeZone.getTimeZone('CET'))\")"),
                 Arguments.of("ConfigSlurper", "new groovy.util.ConfigSlurper().parse(\"TimeZone.setDefault(TimeZone.getTimeZone('CET'))\")"),
                 Arguments.of("GroovyScriptEngine", "new groovy.util.GroovyScriptEngine('.')"),
+                // reflection helpers reach any method/constructor by name, bypassing per-method checks
+                Arguments.of("MethodUtils static", "org.apache.commons.lang3.reflect.MethodUtils.invokeExactStaticMethod("
+                        + "TimeZone, 'setDefault', [TimeZone.getTimeZone('CET')] as Object[], [TimeZone] as Class[])"),
+                Arguments.of("ConstructorUtils", "org.apache.commons.lang3.reflect.ConstructorUtils.invokeConstructor("
+                        + "ProcessBuilder, [['x'] as String[]] as Object[])"),
+                Arguments.of("FieldUtils", "org.apache.commons.lang3.reflect.FieldUtils.readStaticField("
+                        + "org.assimbly.sandbox.executors.ConfigurableWhitelist, 'METHOD_RULES', true)"),
+                Arguments.of("SerializationUtils.deserialize", "org.apache.commons.lang3.SerializationUtils.deserialize(new byte[0])"),
                 // sub-packages are not covered by java.util.*
                 Arguments.of("java.util.concurrent", "java.util.concurrent.Executors.newSingleThreadExecutor()"),
                 Arguments.of("java.util.logging", "java.util.logging.LogManager.getLogManager().reset()"),
