@@ -106,6 +106,24 @@ public class ConfigurableWhitelistTest {
     }
 
     @Test
+    public void reflectionHelpersAreDenied() {
+        // org.apache.commons.lang3.*#* is whitelisted, but these call any method/field by reflection
+        assertFalse(ConfigurableWhitelist.isMethodAllowed(org.apache.commons.lang3.reflect.MethodUtils.class, "invokeExactStaticMethod"));
+        assertFalse(ConfigurableWhitelist.isClassAllowed(org.apache.commons.lang3.reflect.ConstructorUtils.class));
+        assertFalse(ConfigurableWhitelist.isMethodAllowed(org.apache.commons.lang3.reflect.FieldUtils.class, "writeStaticField"));
+        assertFalse(ConfigurableWhitelist.isClassAllowed(org.apache.commons.lang3.builder.ReflectionToStringBuilder.class));
+        // non-reflection lang3 classes stay allowed
+        assertTrue(ConfigurableWhitelist.isMethodAllowed(org.apache.commons.lang3.StringUtils.class, "isBlank"));
+    }
+
+    @Test
+    public void unsafeDeserializationIsDenied() {
+        assertFalse(ConfigurableWhitelist.isMethodAllowed(org.apache.commons.lang3.SerializationUtils.class, "deserialize"));
+        assertTrue(ConfigurableWhitelist.isMethodAllowed(org.apache.commons.lang3.SerializationUtils.class, "serialize"));
+        assertTrue(ConfigurableWhitelist.isMethodAllowed(org.apache.commons.lang3.SerializationUtils.class, "clone"));
+    }
+
+    @Test
     public void unlistedClassIsDenied() {
         assertFalse(ConfigurableWhitelist.isClassAllowed(File.class));
         assertFalse(ConfigurableWhitelist.isMethodAllowed(System.class, "getProperties"));
