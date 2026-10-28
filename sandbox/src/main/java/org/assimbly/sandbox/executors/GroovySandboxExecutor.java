@@ -1,13 +1,16 @@
 package org.assimbly.sandbox.executors;
 
 import groovy.lang.Binding;
+import groovy.lang.Closure;
 import groovy.lang.GroovyObject;
 import groovy.lang.GroovyObjectSupport;
 import groovy.lang.GroovyShell;
 import groovy.lang.MetaBeanProperty;
 import groovy.lang.MetaMethod;
 import groovy.lang.MetaProperty;
+import groovy.lang.MissingMethodException;
 import groovy.lang.Script;
+import groovy.util.BuilderSupport;
 import groovy.util.Node;
 import org.apache.camel.Exchange;
 import org.apache.camel.RuntimeCamelException;
@@ -44,7 +47,8 @@ public class GroovySandboxExecutor {
 
     static {
         CONFIG = new CompilerConfiguration();
-        CONFIG.addCompilationCustomizers(new SandboxTransformer());
+        // NodeListProperties.Redirect has to run after SandboxTransformer, it rewrites the calls that one generates
+        CONFIG.addCompilationCustomizers(new SandboxTransformer(), new NodeListProperties.Redirect());
         SHELL = ThreadLocal.withInitial(() -> new GroovyShell(CONFIG));
     }
 
@@ -62,6 +66,9 @@ public class GroovySandboxExecutor {
                 return callScriptMethod(invoker, receiver, method, args);
             }
             Class<?> receiverClass = receiver.getClass();
+            if (isBuilderCall(receiver, method, args)) {
+                return invoker.call(receiver, method, args);
+            }
             if (!ConfigurableWhitelist.isMethodAllowed(receiverClass, method)) {
                 throw new SecurityException("Sandbox Denial: " + receiverClass.getName() + "#" + method + " not whitelisted.");
             }
@@ -151,6 +158,9 @@ public class GroovySandboxExecutor {
      * but Script#evaluate and Script#run(File, String[]) compile code without the sandbox transformer.
      */
     private static Object callScriptMethod(GroovyInterceptor.Invoker invoker, Object receiver, String method, Object[] args) throws Throwable {
+        if ("invokeMethod".equals(method) && args.length == 2 && args[0] instanceof String name) {
+            return invokeScriptMethod(invoker, receiver, name, args[1] instanceof Object[] callArgs ? callArgs : new Object[]{args[1]});
+        }
         if ("evaluate".equals(method) && args.length == 1 && args[0] instanceof CharSequence expression) {
             return evaluate(expression.toString());
         }
@@ -159,6 +169,37 @@ public class GroovySandboxExecutor {
             throw new SecurityException("Sandbox Denial: script method " + method + " not allowed.");
         }
         return invoker.call(receiver, method, args);
+    }
+
+    /**
+     * script.invokeMethod(name, args) is how a closure call that neither the closure nor its owner defines
+     * reaches the closure's delegate, e.g. Header() inside markupBuilder.Report { ... }: the sandbox tries
+     * owner.invokeMethod(name, args) and moves on to the delegate on a MissingMethodException.
+     * Like Script#invokeMethod it calls the script's own method or a closure in the binding, but through the
+     * same checks as calling name directly, so evaluate and the hard-denied methods stay covered.
+     */
+    private static Object invokeScriptMethod(GroovyInterceptor.Invoker invoker, Object receiver, String name, Object[] args) throws Throwable {
+        if (!InvokerHelper.getMetaClass(receiver).respondsTo(receiver, name).isEmpty()) {
+            return callScriptMethod(invoker, receiver, name, args);
+        }
+        if (receiver instanceof Script script && script.getBinding().hasVariable(name)
+                && script.getBinding().getVariable(name) instanceof Closure<?> closure) {
+            return closure.call(args);
+        }
+        throw new MissingMethodException(name, receiver.getClass(), args);
+    }
+
+    /**
+     * builder.invokeMethod(name, args), which is how markupBuilder.Report { Header() } reaches the builder.
+     * BuilderSupport#invokeMethod only creates a node named after the call, it never calls a method by name.
+     * Builders that override it (FactoryBuilderSupport such as ObjectGraphBuilder instantiates classes by name)
+     * stay denied.
+     */
+    private static boolean isBuilderCall(Object receiver, String method, Object[] args) throws NoSuchMethodException {
+        return "invokeMethod".equals(method) && args.length == 2 && args[0] instanceof String
+                && receiver instanceof BuilderSupport
+                && receiver.getClass().getMethod("invokeMethod", String.class, Object.class).getDeclaringClass() == BuilderSupport.class
+                && ConfigurableWhitelist.isClassAllowed(receiver.getClass());
     }
 
     /**

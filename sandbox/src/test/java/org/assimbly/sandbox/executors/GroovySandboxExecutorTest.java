@@ -89,7 +89,12 @@ public class GroovySandboxExecutorTest extends CamelTestSupport {
                 Arguments.of("parallelStream", "[1, 2, 3].parallelStream().count()"),
                 // a rule on an interface (Comparable) does not open up the implementing class
                 Arguments.of("File via Comparable", "new File('/tmp').exists()"),
-                Arguments.of("Runtime", "Runtime.getRuntime().availableProcessors()")
+                Arguments.of("Runtime", "Runtime.getRuntime().availableProcessors()"),
+                // builder closures reach the script through invokeMethod, which keeps the script method checks
+                Arguments.of("evaluate in builder closure", "new groovy.xml.MarkupBuilder(new StringWriter()).root { "
+                        + "a(evaluate(\"TimeZone.setDefault(TimeZone.getTimeZone('CET'))\")) }"),
+                Arguments.of("hard-denied via invokeMethod", "this.invokeMethod('getMetaClass', null)"),
+                Arguments.of("denied call in builder closure", "new groovy.xml.MarkupBuilder(new StringWriter()).root { a(new File('/').list()) }")
         );
     }
 
@@ -184,7 +189,19 @@ public class GroovySandboxExecutorTest extends CamelTestSupport {
                 Arguments.of("exception message", "try { Integer.parseInt('x') } catch (NumberFormatException e) { e.message }", "For input string: \"x\""),
                 Arguments.of("StringBuilder", "new StringBuilder().append('a').append(1).toString()", "a1"),
                 Arguments.of("closures", "[1, 2, 3].collect { it * 2 }.findAll { it > 2 }.sum()", "10"),
-                Arguments.of("sort with closure", "[3, 1, 2].sort { a, b -> a <=> b }", "[1, 2, 3]")
+                Arguments.of("sort with closure", "[3, 1, 2].sort { a, b -> a <=> b }", "[1, 2, 3]"),
+                // GPath on XmlParser nodes keeps the NodeList over several levels, like Groovy itself
+                Arguments.of("xml parser nested gpath", "def x = new groovy.xml.XmlParser().parseText('<r><a><b>t</b><c><d>u</d></c></a><a><b>v</b></a></r>'); "
+                        + "x.a.b.text() + x.a.c.d.text() + x.a.missing.text() + x.a.missing.isEmpty()", "tvutrue"),
+                Arguments.of("xml parser spread gpath", "def x = new groovy.xml.XmlParser().parseText('<r><a><b>t</b></a><a><b>v</b></a></r>'); x.a.b*.text()", "[t, v]"),
+                // builder DSLs: nested elements, loops, attributes and script methods inside the builder closures
+                Arguments.of("markup builder", "def w = new StringWriter(); def up(s) { s.toUpperCase() }; def items = ['p', 'q']; "
+                        + "new groovy.xml.MarkupBuilder(w).Report { Header { Text(up('t')) }; Rows { items.each { i -> Row(id: i, i) } } }; "
+                        + "w.toString().replaceAll(/\\s+/, '')",
+                        "<Report><Header><Text>T</Text></Header><Rows><Rowid='p'>p</Row><Rowid='q'>q</Row></Rows></Report>"),
+                Arguments.of("markup builder mkp", "def w = new StringWriter(); def m = new groovy.xml.MarkupBuilder(w); m.root { m.mkp.yieldUnescaped('<hr/>') }; "
+                        + "w.toString().replaceAll(/\\s+/, '')", "<root><hr/></root>"),
+                Arguments.of("node builder", "new groovy.util.NodeBuilder().root { a('x') }.a.text()", "x")
         );
     }
 
