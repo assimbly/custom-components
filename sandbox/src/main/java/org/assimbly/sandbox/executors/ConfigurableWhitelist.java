@@ -71,9 +71,27 @@ public class ConfigurableWhitelist {
             "parallelPrefix",
             "parallelSort"
     );
+    // classes that compile and run Groovy code without the sandbox transformer
+    private static final Set<Class<?>> UNSANDBOXED_COMPILERS = Set.of(
+            groovy.lang.GroovyShell.class,
+            groovy.lang.GroovyClassLoader.class,
+            groovy.util.Eval.class,
+            groovy.util.ConfigSlurper.class,
+            groovy.util.GroovyScriptEngine.class
+    );
     private static final Set<Class<?>> DENIED_CLASSES = Set.of(
             Runtime.class,
             ProcessBuilder.class
+    );
+    // reflection helpers call any method or read any field by name, so the sandbox only sees the helper
+    // call and not the real target: denied by class name, since they need not be on the compile classpath
+    private static final Set<String> REFLECTION_CLASS_PREFIXES = Set.of(
+            "org.apache.commons.lang3.reflect.",
+            "org.apache.commons.lang3.event.",
+            "org.apache.commons.lang3.builder.Reflection",
+            "org.springframework.util.ReflectionUtils",
+            "org.springframework.beans.BeanUtils",
+            "org.springframework.cglib."
     );
 
     // public method names of a type, including GDK methods (each, collect, ...)
@@ -323,6 +341,9 @@ public class ConfigurableWhitelist {
      * - a package wildcard rule
      */
     public static boolean isClassAllowed(Class<?> clazz) {
+        if (isUnsandboxedCompiler(clazz) || isReflectionClass(clazz)) {
+            return false;
+        }
         MethodRule rule = findRule(clazz);
         return rule != null && rule != DENIED_RULE;
     }
@@ -449,14 +470,41 @@ public class ConfigurableWhitelist {
         }
     }
 
-    private static boolean isHardDenied(Class<?> clazz, String method) {
+    private static boolean isUnsandboxedCompiler(Class<?> clazz) {
+        for (Class<?> denied : UNSANDBOXED_COMPILERS) {
+            if (denied.isAssignableFrom(clazz)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // deserialization gadgets: these turn bytes into arbitrary object graphs
+    private static boolean isUnsafeDeserialization(Class<?> clazz, String method) {
+        return "deserialize".equals(method) && clazz.getName().endsWith("SerializationUtils");
+    }
+
+    private static boolean isReflectionClass(Class<?> clazz) {
+        String name = clazz.getName();
+        for (String prefix : REFLECTION_CLASS_PREFIXES) {
+            if (name.startsWith(prefix)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static boolean isHardDenied(Class<?> clazz, String method) {
         return REFLECTION_METHODS.contains(method)
                 || JVM_METHODS.contains(method)
                 || GROOVY_META_METHODS.contains(method)
                 || EXECUTION_METHODS.contains(method)
                 || PARALLEL_METHODS.contains(method)
                 || (clazz == Class.class && CLASS_LOADING_METHODS.contains(method))
-                || DENIED_CLASSES.contains(clazz);
+                || DENIED_CLASSES.contains(clazz)
+                || isUnsandboxedCompiler(clazz)
+                || isReflectionClass(clazz)
+                || isUnsafeDeserialization(clazz, method);
     }
 
 }

@@ -6,6 +6,7 @@ import org.apache.camel.support.DefaultExchange;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -15,6 +16,7 @@ import java.util.TimeZone;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -65,7 +67,19 @@ public class GroovySandboxExecutorTest extends CamelTestSupport {
                 Arguments.of("Class.classLoader", "TimeZone.classLoader"),
                 Arguments.of("metaClass", "'x'.metaClass"),
                 Arguments.of("field access", "def tz = TimeZone.getTimeZone('CET'); tz.@ID"),
-                Arguments.of("xml attribute write", "def x = new groovy.xml.XmlSlurper().parseText(\"<r a='1'/>\"); x.@a = 2"),
+                Arguments.of("xml slurper attribute write", "def x = new groovy.xml.XmlSlurper().parseText(\"<r a='1'/>\"); x.@a = 2"),
+                // evaluate is compiled with the sandbox as well, and every way to reach it is covered
+                Arguments.of("evaluate", "evaluate(\"TimeZone.setDefault(TimeZone.getTimeZone('CET'))\")"),
+                Arguments.of("evaluate in closure", "[1].each { evaluate(\"TimeZone.setDefault(TimeZone.getTimeZone('CET'))\") }"),
+                Arguments.of("evaluate in method", "def f(s) { evaluate(s) }; f(\"TimeZone.setDefault(TimeZone.getTimeZone('CET'))\")"),
+                Arguments.of("evaluate via invokeMethod", "this.invokeMethod('evaluate', \"TimeZone.setDefault(TimeZone.getTimeZone('CET'))\")"),
+                Arguments.of("evaluate via super", "class S extends Script { def run() { super.evaluate(\"TimeZone.setDefault(TimeZone.getTimeZone('CET'))\") } }; new S().run()"),
+                Arguments.of("evaluate file", "evaluate((File) null)"),
+                Arguments.of("run file", "run((File) null, (String[]) null)"),
+                // groovy.util.*#* must not open up classes that compile code without the sandbox
+                Arguments.of("Eval.me", "groovy.util.Eval.me(\"TimeZone.setDefault(TimeZone.getTimeZone('CET'))\")"),
+                Arguments.of("ConfigSlurper", "new groovy.util.ConfigSlurper().parse(\"TimeZone.setDefault(TimeZone.getTimeZone('CET'))\")"),
+                Arguments.of("GroovyScriptEngine", "new groovy.util.GroovyScriptEngine('.')"),
                 // sub-packages are not covered by java.util.*
                 Arguments.of("java.util.concurrent", "java.util.concurrent.Executors.newSingleThreadExecutor()"),
                 Arguments.of("java.util.logging", "java.util.logging.LogManager.getLogManager().reset()"),
@@ -75,7 +89,12 @@ public class GroovySandboxExecutorTest extends CamelTestSupport {
                 Arguments.of("parallelStream", "[1, 2, 3].parallelStream().count()"),
                 // a rule on an interface (Comparable) does not open up the implementing class
                 Arguments.of("File via Comparable", "new File('/tmp').exists()"),
-                Arguments.of("Runtime", "Runtime.getRuntime().availableProcessors()")
+                Arguments.of("Runtime", "Runtime.getRuntime().availableProcessors()"),
+                // builder closures reach the script through invokeMethod, which keeps the script method checks
+                Arguments.of("evaluate in builder closure", "new groovy.xml.MarkupBuilder(new StringWriter()).root { "
+                        + "a(evaluate(\"TimeZone.setDefault(TimeZone.getTimeZone('CET'))\")) }"),
+                Arguments.of("hard-denied via invokeMethod", "this.invokeMethod('getMetaClass', null)"),
+                Arguments.of("denied call in builder closure", "new groovy.xml.MarkupBuilder(new StringWriter()).root { a(new File('/').list()) }")
         );
     }
 
@@ -89,6 +108,32 @@ public class GroovySandboxExecutorTest extends CamelTestSupport {
         Thread.sleep(100);
         assertEquals("UTC", TimeZone.getDefault().getID());
         assertEquals(Locale.US, Locale.getDefault());
+    }
+
+    // commons-lang3 is on the classpath on develop but not on next; where it is, its reflection helpers
+    // must be denied even though the whitelist allows the lang3 package
+    @Test
+    public void reflectionHelpersStayDenied() {
+        try {
+            Class.forName("org.apache.commons.lang3.reflect.MethodUtils");
+        } catch (ClassNotFoundException e) {
+            org.junit.jupiter.api.Assumptions.abort("commons-lang3 not on classpath");
+        }
+        String[] scripts = {
+                // reflection helpers reach any method/constructor by name, bypassing per-method checks
+                "org.apache.commons.lang3.reflect.MethodUtils.invokeExactStaticMethod("
+                        + "TimeZone, 'setDefault', [TimeZone.getTimeZone('CET')] as Object[], [TimeZone] as Class[])",
+                "org.apache.commons.lang3.reflect.ConstructorUtils.invokeConstructor("
+                        + "ProcessBuilder, [['x'] as String[]] as Object[])",
+                "org.apache.commons.lang3.reflect.FieldUtils.readStaticField("
+                        + "org.assimbly.sandbox.executors.ConfigurableWhitelist, 'METHOD_RULES', true)",
+                "org.apache.commons.lang3.SerializationUtils.deserialize(new byte[0])"
+        };
+        for (String script : scripts) {
+            RuntimeCamelException e = assertThrows(RuntimeCamelException.class, () -> run(script), script);
+            assertTrue(e.getMessage().contains("Sandbox Denial"), script + " -> " + e.getMessage());
+        }
+        assertEquals("UTC", TimeZone.getDefault().getID());
     }
 
     static Stream<Arguments> backgroundScripts() {
@@ -130,6 +175,12 @@ public class GroovySandboxExecutorTest extends CamelTestSupport {
                 Arguments.of("static getter as property", "TimeZone.default.ID", "UTC"),
                 Arguments.of("json slurper", "def j = new groovy.json.JsonSlurper().parseText('{\"a\":{\"b\":[1,2]}}'); j.a.b[1]", "2"),
                 Arguments.of("json slurper each", "def j = new groovy.json.JsonSlurper().parseText('{\"a\":1}'); def keys = []; j.each { k, v -> keys << k }; keys", "[a]"),
+                Arguments.of("xml parser attributes", "def n = new groovy.xml.XmlParser().parseText(\"<r a='1' value='v'/>\"); '' + n.@a + n.@value + n.@parent", "1vnull"),
+                // .@attr writes on an XmlParser node go to the XML attribute map, so they're allowed (XmlSlurper writes are not)
+                Arguments.of("xml parser attribute write", "def n = new groovy.xml.XmlParser().parseText(\"<r a='1'/>\"); n.@a = '2'; n.@added = 'x'; n.@a + n.@added", "2x"),
+                Arguments.of("xml parser read modify serialize", "def n = new groovy.xml.XmlParser().parseText(\"<r/>\"); n.@tag = 'done'; groovy.xml.XmlUtil.serialize(n).contains('tag=\"done\"')", "true"),
+                Arguments.of("evaluate", "evaluate('1 == 1') && !evaluate('false')", "true"),
+                Arguments.of("evaluate with binding", "evaluate('body + headers.foo')", "BF"),
                 Arguments.of("xml slurper", "def x = new groovy.xml.XmlSlurper().parseText(\"<r><a id='7'>hi</a></r>\"); x.a.text() + x.a.@id + x.a['@id']", "hi77"),
                 Arguments.of("list spread property", "[[n: 1], [n: 2]].n", "[1, 2]"),
                 Arguments.of("list and map subscripts", "def l = [5]; def m = [k: 2]; l[0] = 6; m['k'] = 3; l[0] + m['k']", "9"),
@@ -138,7 +189,19 @@ public class GroovySandboxExecutorTest extends CamelTestSupport {
                 Arguments.of("exception message", "try { Integer.parseInt('x') } catch (NumberFormatException e) { e.message }", "For input string: \"x\""),
                 Arguments.of("StringBuilder", "new StringBuilder().append('a').append(1).toString()", "a1"),
                 Arguments.of("closures", "[1, 2, 3].collect { it * 2 }.findAll { it > 2 }.sum()", "10"),
-                Arguments.of("sort with closure", "[3, 1, 2].sort { a, b -> a <=> b }", "[1, 2, 3]")
+                Arguments.of("sort with closure", "[3, 1, 2].sort { a, b -> a <=> b }", "[1, 2, 3]"),
+                // GPath on XmlParser nodes keeps the NodeList over several levels, like Groovy itself
+                Arguments.of("xml parser nested gpath", "def x = new groovy.xml.XmlParser().parseText('<r><a><b>t</b><c><d>u</d></c></a><a><b>v</b></a></r>'); "
+                        + "x.a.b.text() + x.a.c.d.text() + x.a.missing.text() + x.a.missing.isEmpty()", "tvutrue"),
+                Arguments.of("xml parser spread gpath", "def x = new groovy.xml.XmlParser().parseText('<r><a><b>t</b></a><a><b>v</b></a></r>'); x.a.b*.text()", "[t, v]"),
+                // builder DSLs: nested elements, loops, attributes and script methods inside the builder closures
+                Arguments.of("markup builder", "def w = new StringWriter(); def up(s) { s.toUpperCase() }; def items = ['p', 'q']; "
+                        + "new groovy.xml.MarkupBuilder(w).Report { Header { Text(up('t')) }; Rows { items.each { i -> Row(id: i, i) } } }; "
+                        + "w.toString().replaceAll(/\\s+/, '')",
+                        "<Report><Header><Text>T</Text></Header><Rows><Rowid='p'>p</Row><Rowid='q'>q</Row></Rows></Report>"),
+                Arguments.of("markup builder mkp", "def w = new StringWriter(); def m = new groovy.xml.MarkupBuilder(w); m.root { m.mkp.yieldUnescaped('<hr/>') }; "
+                        + "w.toString().replaceAll(/\\s+/, '')", "<root><hr/></root>"),
+                Arguments.of("node builder", "new groovy.util.NodeBuilder().root { a('x') }.a.text()", "x")
         );
     }
 
@@ -148,9 +211,54 @@ public class GroovySandboxExecutorTest extends CamelTestSupport {
         assertEquals(expected, String.valueOf(run(script)));
     }
 
+    // removes the nodes whose exclude attribute evaluates to true
+    private static final String EXCLUDE_SCRIPT = String.join("\n",
+            "import groovy.xml.*",
+            "def currentBody = request.getBody(String.class)",
+            "def bodyInXml = new XmlParser().parseText(currentBody)",
+            "def TargetNodes = bodyInXml.'**'.findAll{ node -> node.@exclude }",
+            "def groovyEvaluate(executeExpr)",
+            "{",
+            "    try { return evaluate(executeExpr)}",
+            "    catch(Exception) {return \"runtime_error\"}",
+            "}",
+            "if (!TargetNodes.isEmpty()) {",
+            "    for (item in TargetNodes) {",
+            "        if (groovyEvaluate(item.@exclude)) {",
+            "            def parent = item.parent()",
+            "            parent.remove(item)",
+            "        }",
+            "    }",
+            "    result  = XmlUtil.serialize(bodyInXml)",
+            "}",
+            "else",
+            "{",
+            "    result = currentBody",
+            "}");
+
+    @Test
+    public void excludeNodesScript() {
+        String body = "<root><a exclude='1 == 1'>a</a><b exclude='false'>b</b><c>c</c>"
+                + "<d exclude=\"TimeZone.setDefault(TimeZone.getTimeZone('CET'))\">d</d></root>";
+        String result = String.valueOf(run(EXCLUDE_SCRIPT, body));
+
+        assertFalse(result.contains("<a"), result);
+        assertTrue(result.contains("<b exclude=\"false\">b</b>"), result);
+        assertTrue(result.contains("<c>c</c>"), result);
+        // the denied expression is caught by the script and counts as true
+        assertFalse(result.contains("<d"), result);
+        assertEquals("UTC", TimeZone.getDefault().getID());
+
+        assertEquals("<root><c>c</c></root>", run(EXCLUDE_SCRIPT, "<root><c>c</c></root>"));
+    }
+
     private Object run(String script) {
+        return run(script, "B");
+    }
+
+    private Object run(String script, String body) {
         Exchange exchange = new DefaultExchange(context);
-        exchange.getIn().setBody("B");
+        exchange.getIn().setBody(body);
         exchange.getIn().setHeader("foo", "F");
         GroovySandboxExecutor.execute(script, exchange);
         return exchange.getIn().getBody();
