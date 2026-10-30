@@ -97,6 +97,45 @@ public class ConfigurableWhitelistTest {
     }
 
     @Test
+    public void unsandboxedCompilersAreDenied() {
+        // groovy.util.*#* is whitelisted, but these compile and run code without the sandbox
+        assertFalse(ConfigurableWhitelist.isMethodAllowed(groovy.util.Eval.class, "me"));
+        assertFalse(ConfigurableWhitelist.isClassAllowed(groovy.util.ConfigSlurper.class));
+        assertFalse(ConfigurableWhitelist.isClassAllowed(groovy.util.GroovyScriptEngine.class));
+        assertTrue(ConfigurableWhitelist.isClassAllowed(groovy.util.Node.class));
+    }
+
+    // loads a class only where it is on the classpath (commons-lang3 is present on develop, not on next)
+    private static Class<?> classOrSkip(String name) {
+        try {
+            return Class.forName(name);
+        } catch (ClassNotFoundException e) {
+            org.junit.jupiter.api.Assumptions.abort("not on classpath: " + name);
+            return null; // unreachable
+        }
+    }
+
+    @Test
+    public void reflectionHelpersAreDenied() {
+        // the whitelist may allow a whole library (e.g. org.apache.commons.lang3.**), but its reflection
+        // helpers call any method, constructor or field by name and must stay denied regardless
+        assertFalse(ConfigurableWhitelist.isMethodAllowed(classOrSkip("org.apache.commons.lang3.reflect.MethodUtils"), "invokeExactStaticMethod"));
+        assertFalse(ConfigurableWhitelist.isClassAllowed(classOrSkip("org.apache.commons.lang3.reflect.ConstructorUtils")));
+        assertFalse(ConfigurableWhitelist.isMethodAllowed(classOrSkip("org.apache.commons.lang3.reflect.FieldUtils"), "writeStaticField"));
+        assertFalse(ConfigurableWhitelist.isClassAllowed(classOrSkip("org.apache.commons.lang3.builder.ReflectionToStringBuilder")));
+        // non-reflection lang3 classes stay allowed
+        assertTrue(ConfigurableWhitelist.isMethodAllowed(classOrSkip("org.apache.commons.lang3.StringUtils"), "isBlank"));
+    }
+
+    @Test
+    public void unsafeDeserializationIsDenied() {
+        Class<?> serializationUtils = classOrSkip("org.apache.commons.lang3.SerializationUtils");
+        assertFalse(ConfigurableWhitelist.isMethodAllowed(serializationUtils, "deserialize"));
+        assertTrue(ConfigurableWhitelist.isMethodAllowed(serializationUtils, "serialize"));
+        assertTrue(ConfigurableWhitelist.isMethodAllowed(serializationUtils, "clone"));
+    }
+
+    @Test
     public void unlistedClassIsDenied() {
         assertFalse(ConfigurableWhitelist.isClassAllowed(File.class));
         assertFalse(ConfigurableWhitelist.isMethodAllowed(System.class, "getProperties"));
