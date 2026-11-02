@@ -13,6 +13,7 @@ import org.assimbly.xmltojsonlegacy.transaction.elementnode.ElementNodeTransacti
 import org.assimbly.xmltojsonlegacy.transaction.elementnode.ElementNodeTransactionFactory;
 import org.assimbly.xmltojsonlegacy.transaction.textnode.TextNodeTransaction;
 import org.assimbly.xmltojsonlegacy.transaction.textnode.TextNodeTransactionFactory;
+import org.assimbly.xmltojsonlegacy.utils.Constants;
 import org.assimbly.xmltojsonlegacy.utils.ElementMetadataUtils;
 import org.assimbly.xmltojsonlegacy.utils.ExtractUtils;
 import org.springframework.http.MediaType;
@@ -195,7 +196,8 @@ public class XmlToJsonProcessor implements Processor {
         metadata.setElementMustBeNull(MetadataAnalyzer.isElementMustBeNull(metadataMap, metadata, childMetadata, config));
 
         if (metadata.isObject() && metadata.isRootArray()) {
-            if (!metadata.getObjectNode().isEmpty() || childMetadata != null && !childMetadata.getObjectNode().isEmpty()) {
+            if (!metadata.getObjectNode().isEmpty() || childMetadata != null && !childMetadata.getObjectNode().isEmpty()
+                    || metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT)) {
                 // force rootArray flag
                 metadata.setRootArray(false);
             }

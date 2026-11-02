@@ -48,4 +48,5 @@ public class XmlToJsonEndpoint extends ProcessorEndpoint {
     public int hashCode() {
         return super.hashCode();
     }
+
 }

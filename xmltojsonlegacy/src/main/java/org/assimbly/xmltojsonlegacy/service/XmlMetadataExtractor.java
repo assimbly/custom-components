@@ -166,7 +166,9 @@ public class XmlMetadataExtractor {
     // set text content
     private static void setTextContent(String text, ElementMetadata metadata, boolean isSkipWhitespace) {
         metadata.setTextContent(text);
-        String normalizedTextContent = text.replace("\r\n","").replace("\n", "");
+        // Preserve meaningful line breaks in element/CDATA text (json-lib behavior).
+        // Only normalize CRLF/CR to LF so JSON can encode them as \n.
+        String normalizedTextContent = text.replace("\r\n", "\n").replace("\r", "\n");
         metadata.setNormalizedTextContent(normalizedTextContent);
         metadata.setNormalizedTrimmedTextContent(normalizedTextContent.trim());
         metadata.setValueAsJson(JsonUtils.getValidJson(text));

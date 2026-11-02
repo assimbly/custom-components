@@ -1,0 +1,19 @@
+{
+    "dummy": "dummy",
+    "att_internal_company": {
+        "@class": "object",
+        "values": {
+            "@class": "array",
+            "e": [
+                {
+                    "value": "Arvas",
+                    "dummy": "dummy"
+                },
+                {
+                    "value": "Wiltec",
+                    "dummy": "dummy"
+                }
+            ]
+        }
+    }
+}

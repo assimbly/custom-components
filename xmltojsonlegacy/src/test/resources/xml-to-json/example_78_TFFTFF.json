@@ -1,0 +1,18 @@
+{
+    "values": {
+        "att_omschr-35": {
+            "@class": "object",
+            "value": {
+                "@class": "object",
+                "value": "Harbers Schilderwerken"
+            }
+        },
+        "att_cdrefjp": {
+            "@class": "object",
+            "value": {
+                "@class": "object",
+                "valueId": "AR2"
+            }
+        }
+    }
+}

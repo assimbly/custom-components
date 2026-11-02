@@ -1,0 +1,19 @@
+{
+    "JSONtoXML": {
+        "noteTypeCode": {
+            "@type": "string",
+            "#text": "N"
+        },
+        "productIdentifier": {
+            "@class": "object",
+            "productCode": {
+                "@type": "string",
+                "#text": "AH MOEDER"
+            }
+        },
+        "text": {
+            "@type": "string",
+            "#text": "Regel LNG #1\nRegel LNG #2\nRegel LNG #3\nRegel LNG #4"
+        }
+    }
+}

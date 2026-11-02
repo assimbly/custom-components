@@ -1,18 +1,32 @@
 package org.assimbly.sandbox.executors;
 
 import groovy.lang.Binding;
+import groovy.lang.Closure;
+import groovy.lang.GroovyObject;
+import groovy.lang.GroovyObjectSupport;
 import groovy.lang.GroovyShell;
+import groovy.lang.MetaBeanProperty;
+import groovy.lang.MetaMethod;
+import groovy.lang.MetaProperty;
+import groovy.lang.MissingMethodException;
 import groovy.lang.Script;
+import groovy.util.BuilderSupport;
+import groovy.util.Node;
 import org.apache.camel.Exchange;
 import org.apache.camel.RuntimeCamelException;
 import org.codehaus.groovy.control.CompilerConfiguration;
+import org.codehaus.groovy.reflection.CachedField;
+import org.codehaus.groovy.runtime.DefaultGroovyMethods;
+import org.codehaus.groovy.runtime.InvokerHelper;
 import org.kohsuke.groovy.sandbox.GroovyInterceptor;
 import org.kohsuke.groovy.sandbox.SandboxTransformer;
 
+import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class GroovySandboxExecutor {
@@ -21,40 +35,316 @@ public class GroovySandboxExecutor {
         // utility class
     }
 
-    private static final CompilerConfiguration CONFIG;
-    private static final GroovyShell           SHELL;
-
     // cache: script source - compiled Class (parse once, run many times)
     private static final ConcurrentHashMap<String, Class<Script>> SCRIPT_CACHE = new ConcurrentHashMap<>();
 
+    private static final ThreadLocal<ClassLoader> SCRIPT_CLASS_LOADER = new ThreadLocal<>();
+
+    private static final ThreadLocal<Script> CURRENT_SCRIPT = new ThreadLocal<>();
+
+    private static final CompilerConfiguration CONFIG;
+    private static final ThreadLocal<GroovyShell> SHELL;
+
     static {
         CONFIG = new CompilerConfiguration();
-        CONFIG.addCompilationCustomizers(new SandboxTransformer());
-        SHELL = new GroovyShell(CONFIG);
+        // NodeListProperties.Redirect has to run after SandboxTransformer, it rewrites the calls that one generates
+        CONFIG.addCompilationCustomizers(new SandboxTransformer(), new NodeListProperties.Redirect());
+        SHELL = ThreadLocal.withInitial(() -> new GroovyShell(CONFIG));
     }
 
     // interceptor
     private static final GroovyInterceptor INTERCEPTOR = new GroovyInterceptor() {
 
         @Override
-        public Object onStaticCall(Invoker invoker, Class receiver, String method, Object[] args) throws Throwable {
-            if (receiver == System.class && method.equals("exit")) {
-                throw new SecurityException("Sandbox Denial: System.exit() is not allowed.");
+        public Object onMethodCall(Invoker invoker, Object receiver, String method, Object[] args) throws Throwable {
+            if (receiver == null) {
+                throw new SecurityException("Sandbox Denial: null receiver.");
             }
-            if (receiver == java.util.TimeZone.class && method.equals("setDefault")) {
-                throw new SecurityException("Sandbox Denial: Cannot change global TimeZone.");
+            ClassLoader scriptLoader = SCRIPT_CLASS_LOADER.get();
+            // Allow methods defined inside the current Groovy script
+            if (scriptLoader != null && receiver.getClass().getClassLoader() == scriptLoader) {
+                return callScriptMethod(invoker, receiver, method, args);
             }
+            Class<?> receiverClass = receiver.getClass();
+            if (isBuilderCall(receiver, method, args)) {
+                return invoker.call(receiver, method, args);
+            }
+            if (!ConfigurableWhitelist.isMethodAllowed(receiverClass, method)) {
+                throw new SecurityException("Sandbox Denial: " + receiverClass.getName() + "#" + method + " not whitelisted.");
+            }
+            checkPropertySubscriptCall(receiver, method, args);
             return invoker.call(receiver, method, args);
         }
 
         @Override
-        public Object onMethodCall(Invoker invoker, Object receiver, String method, Object[] args) throws Throwable {
-            if (method.equals("getClass") || method.equals("class")) {
-                throw new SecurityException("Sandbox Denial: Reflection is forbidden.");
+        public Object onStaticCall(Invoker invoker, Class receiver, String method, Object[] args) throws Throwable {
+            ClassLoader scriptLoader = SCRIPT_CLASS_LOADER.get();
+            // Allow static methods defined inside this Groovy script
+            if (scriptLoader != null && receiver.getClassLoader() == scriptLoader) {
+                return invoker.call(receiver, method, args);
             }
+            if (!ConfigurableWhitelist.isMethodAllowed(receiver, method)) {
+                throw new SecurityException("Sandbox Denial: static " + receiver.getName() + "#" + method + " not whitelisted.");
+            }
+            checkPropertySubscriptCall(receiver, method, args);
             return invoker.call(receiver, method, args);
         }
+
+        // super.method() from a class declared in the script
+        @Override
+        public Object onSuperCall(Invoker invoker, Class senderType, Object receiver, String method, Object[] args) throws Throwable {
+            return callScriptMethod(invoker, receiver, method, args);
+        }
+
+        @Override
+        public Object onNewInstance(Invoker invoker, Class receiver, Object[] args) throws Throwable {
+            ClassLoader scriptLoader = SCRIPT_CLASS_LOADER.get();
+            // Allow classes declared inside this Groovy script
+            if (scriptLoader != null && receiver.getClassLoader() == scriptLoader) {
+                return invoker.call(receiver, null, args);
+            }
+            if (!ConfigurableWhitelist.isClassAllowed(receiver)) {
+                throw new SecurityException("Sandbox Denial: cannot construct " + receiver.getName());
+            }
+            return invoker.call(receiver, null, args);
+        }
+
+        // obj.prop and Clazz.prop end up calling getters/setters, so they need the same checks as method calls
+        @Override
+        public Object onGetProperty(Invoker invoker, Object receiver, String property) throws Throwable {
+            checkPropertyAccess(receiver, property, false);
+            return invoker.call(receiver, property);
+        }
+
+        @Override
+        public Object onSetProperty(Invoker invoker, Object receiver, String property, Object value) throws Throwable {
+            checkPropertyAccess(receiver, property, true);
+            return invoker.call(receiver, property, value);
+        }
+
+        // obj.@field reads/writes fields directly, private ones included
+        @Override
+        public Object onGetAttribute(Invoker invoker, Object receiver, String attribute) throws Throwable {
+            checkAttributeAccess(receiver, attribute, false);
+            return invoker.call(receiver, attribute);
+        }
+
+        @Override
+        public Object onSetAttribute(Invoker invoker, Object receiver, String attribute, Object value) throws Throwable {
+            checkAttributeAccess(receiver, attribute, true);
+            return invoker.call(receiver, attribute, value);
+        }
+
+        @Override
+        public Object onGetArray(Invoker invoker, Object receiver, Object index) throws Throwable {
+            checkSubscript(receiver, index, false);
+            return invoker.call(receiver, null, index);
+        }
+
+        @Override
+        public Object onSetArray(Invoker invoker, Object receiver, Object index, Object value) throws Throwable {
+            checkSubscript(receiver, index, true);
+            return invoker.call(receiver, null, index, value);
+        }
     };
+
+    private static boolean isScriptClass(Class<?> clazz) {
+        ClassLoader scriptLoader = SCRIPT_CLASS_LOADER.get();
+        return scriptLoader != null && clazz.getClassLoader() == scriptLoader;
+    }
+
+    /**
+     * Methods of the script itself and of classes and closures it declares. Their own methods are allowed,
+     * but Script#evaluate and Script#run(File, String[]) compile code without the sandbox transformer.
+     */
+    private static Object callScriptMethod(GroovyInterceptor.Invoker invoker, Object receiver, String method, Object[] args) throws Throwable {
+        if ("invokeMethod".equals(method) && args.length == 2 && args[0] instanceof String name) {
+            return invokeScriptMethod(invoker, receiver, name, args[1] instanceof Object[] callArgs ? callArgs : new Object[]{args[1]});
+        }
+        if ("evaluate".equals(method) && args.length == 1 && args[0] instanceof CharSequence expression) {
+            return evaluate(expression.toString());
+        }
+        if ("evaluate".equals(method) || ("run".equals(method) && args.length > 0)
+                || ConfigurableWhitelist.isHardDenied(receiver.getClass(), method)) {
+            throw new SecurityException("Sandbox Denial: script method " + method + " not allowed.");
+        }
+        return invoker.call(receiver, method, args);
+    }
+
+    /**
+     * script.invokeMethod(name, args) is how a closure call that neither the closure nor its owner defines
+     * reaches the closure's delegate, e.g. Header() inside markupBuilder.Report { ... }: the sandbox tries
+     * owner.invokeMethod(name, args) and moves on to the delegate on a MissingMethodException.
+     * Like Script#invokeMethod it calls the script's own method or a closure in the binding, but through the
+     * same checks as calling name directly, so evaluate and the hard-denied methods stay covered.
+     */
+    private static Object invokeScriptMethod(GroovyInterceptor.Invoker invoker, Object receiver, String name, Object[] args) throws Throwable {
+        if (!InvokerHelper.getMetaClass(receiver).respondsTo(receiver, name).isEmpty()) {
+            return callScriptMethod(invoker, receiver, name, args);
+        }
+        if (receiver instanceof Script script && script.getBinding().hasVariable(name)
+                && script.getBinding().getVariable(name) instanceof Closure<?> closure) {
+            return closure.call(args);
+        }
+        throw new MissingMethodException(name, receiver.getClass(), args);
+    }
+
+    /**
+     * builder.invokeMethod(name, args), which is how markupBuilder.Report { Header() } reaches the builder.
+     * BuilderSupport#invokeMethod only creates a node named after the call, it never calls a method by name.
+     * Builders that override it (FactoryBuilderSupport such as ObjectGraphBuilder instantiates classes by name)
+     * stay denied.
+     */
+    private static boolean isBuilderCall(Object receiver, String method, Object[] args) throws NoSuchMethodException {
+        return "invokeMethod".equals(method) && args.length == 2 && args[0] instanceof String
+                && receiver instanceof BuilderSupport
+                && receiver.getClass().getMethod("invokeMethod", String.class, Object.class).getDeclaringClass() == BuilderSupport.class
+                && ConfigurableWhitelist.isClassAllowed(receiver.getClass());
+    }
+
+    /**
+     * evaluate(String) compiled with the sandbox transformer, sharing the script's binding.
+     */
+    private static Object evaluate(String expression) {
+        Script script = new GroovyShell(SHELL.get().getClassLoader(), CURRENT_SCRIPT.get().getBinding(), CONFIG).parse(expression);
+        ClassLoader scriptLoader = SCRIPT_CLASS_LOADER.get();
+        SCRIPT_CLASS_LOADER.set(script.getClass().getClassLoader());
+        try {
+            return script.run();
+        } finally {
+            SCRIPT_CLASS_LOADER.set(scriptLoader);
+        }
+    }
+
+    private static void checkMethod(Class<?> clazz, String method) {
+        if (!ConfigurableWhitelist.isMethodAllowed(clazz, method)) {
+            throw new SecurityException("Sandbox Denial: " + clazz.getName() + "#" + method + " not whitelisted.");
+        }
+    }
+
+    /**
+     * obj[i] / obj[i] = v. On anything but a Map, a String index is a property access
+     * (TimeZone['default'] = tz is TimeZone.setDefault(tz)). Checked for any CharSequence,
+     * because Groovy coerces a GString index ("${'default'}") to String as well.
+     */
+    private static void checkSubscript(Object receiver, Object index, boolean write) {
+        if (receiver == null) {
+            throw new SecurityException("Sandbox Denial: null receiver.");
+        }
+        if (index instanceof CharSequence property && !(receiver instanceof Map)) {
+            checkPropertyAccess(receiver, property.toString(), write);
+        } else if (!receiver.getClass().isArray() && !isScriptClass(receiver.getClass())) {
+            checkMethod(receiver.getClass(), write ? "putAt" : "getAt");
+        }
+    }
+
+    /**
+     * Explicit obj.getAt('prop') / obj.putAt('prop', v) calls, which are property accesses as well.
+     */
+    private static void checkPropertySubscriptCall(Object receiver, String method, Object[] args) {
+        if (("getAt".equals(method) || "putAt".equals(method))
+                && args.length > 0 && args[0] instanceof CharSequence property && !(receiver instanceof Map)) {
+            checkPropertyAccess(receiver, property.toString(), "putAt".equals(method));
+        }
+    }
+
+    private static void checkAttributeAccess(Object receiver, String attribute, boolean write) {
+        if (receiver == null) {
+            throw new SecurityException("Sandbox Denial: null receiver.");
+        }
+        Class<?> clazz = receiver instanceof Class<?> c ? c : receiver.getClass();
+        if (isScriptClass(clazz)) {
+            return;
+        }
+        if (!write && hasCustomPropertyHandling(clazz, false) && ConfigurableWhitelist.isClassAllowed(clazz)) {
+            // XmlSlurper's node.@attr
+            return;
+        }
+        if (clazz == Node.class && ConfigurableWhitelist.isClassAllowed(clazz)) {
+            // XmlParser's node.@attr: Node maps .@ to its XML attribute map, never a Java field, read or write
+            return;
+        }
+        throw new SecurityException("Sandbox Denial: direct field access .@" + attribute + " not allowed.");
+    }
+
+    /**
+     * Resolves which getter, setter or field Groovy will use for the property and checks that against the whitelist.
+     */
+    private static void checkPropertyAccess(Object receiver, String property, boolean write) {
+        if (receiver == null) {
+            throw new SecurityException("Sandbox Denial: null receiver.");
+        }
+        boolean isStatic = receiver instanceof Class;
+        Class<?> clazz = isStatic ? (Class<?>) receiver : receiver.getClass();
+        if (isScriptClass(clazz)) {
+            return;
+        }
+        if (receiver instanceof Map) {
+            // map.key is map.get(key) / map.put(key, value)
+            checkMethod(clazz, write ? "put" : "get");
+            return;
+        }
+        if (!write && clazz.isArray() && "length".equals(property)) {
+            return;
+        }
+
+        MetaProperty metaProperty = InvokerHelper.getMetaClass(clazz).getMetaProperty(property);
+        if (metaProperty != null && (!isStatic || Modifier.isStatic(metaProperty.getModifiers()))) {
+            checkMetaProperty(clazz, metaProperty, property, write);
+        } else if (isStatic) {
+            // not a static property of the class, so a property of java.lang.Class itself (name, methods, classLoader, ...)
+            checkMethod(Class.class, write ? MetaProperty.getSetterName(property) : MetaProperty.getGetterName(property, Object.class));
+        } else if (hasCustomPropertyHandling(clazz, write)) {
+            // GroovyObjects such as GPathResult resolve properties themselves
+            if (!ConfigurableWhitelist.isClassAllowed(clazz)) {
+                throw new SecurityException("Sandbox Denial: property " + clazz.getName() + "." + property + " not whitelisted.");
+            }
+        } else if (!write && (receiver instanceof Iterable<?> || clazz.isArray())) {
+            // list.prop reads prop of every element
+            Iterable<?> elements = receiver instanceof Iterable<?> it ? it : DefaultGroovyMethods.toList((Object[]) receiver);
+            for (Object element : elements) {
+                if (element != null) {
+                    checkPropertyAccess(element, property, false);
+                }
+            }
+        } else {
+            // falls back to a generic get(String) / set(String, Object) method, e.g. on JsonNode
+            checkMethod(clazz, write ? "set" : "get");
+        }
+    }
+
+    private static void checkMetaProperty(Class<?> clazz, MetaProperty metaProperty, String property, boolean write) {
+        if (metaProperty instanceof MetaBeanProperty beanProperty) {
+            MetaMethod accessor = write ? beanProperty.getSetter() : beanProperty.getGetter();
+            if (accessor != null) {
+                checkMethod(clazz, accessor.getName());
+                return;
+            }
+            metaProperty = beanProperty.getField();
+        }
+        if (metaProperty instanceof CachedField && !write) {
+            // reading a public field, e.g. Locale.JAPAN
+            if (!ConfigurableWhitelist.isClassAllowed(clazz)) {
+                throw new SecurityException("Sandbox Denial: field " + clazz.getName() + "." + property + " not whitelisted.");
+            }
+            return;
+        }
+        checkMethod(clazz, write ? MetaProperty.getSetterName(property) : MetaProperty.getGetterName(property, metaProperty == null ? Object.class : metaProperty.getType()));
+    }
+
+    private static boolean hasCustomPropertyHandling(Class<?> clazz, boolean write) {
+        if (!GroovyObject.class.isAssignableFrom(clazz)) {
+            return false;
+        }
+        try {
+            Class<?> declaringClass = write
+                    ? clazz.getMethod("setProperty", String.class, Object.class).getDeclaringClass()
+                    : clazz.getMethod("getProperty", String.class).getDeclaringClass();
+            return declaringClass != GroovyObject.class && declaringClass != GroovyObjectSupport.class;
+        } catch (NoSuchMethodException e) {
+            return false;
+        }
+    }
 
     public static void execute(String scriptSource, Exchange exchange) {
 
@@ -79,16 +369,27 @@ public class GroovySandboxExecutor {
         binding.setVariable("message",  exchange.getIn());
         script.setBinding(binding);
 
-        // run with sandbox interceptor active for this thread
-        INTERCEPTOR.register();
+        SCRIPT_CLASS_LOADER.set(scriptClass.getClassLoader());
+        CURRENT_SCRIPT.set(script);
+
         try {
+            // run with sandbox interceptor active for this thread
+            INTERCEPTOR.register();
+
             Object result = script.run();
             if (result != null) {
                 exchange.getIn().setBody(result);
             }
+        } catch (SecurityException e) {
+            throw new RuntimeCamelException(
+                    "Groovy Sandbox violation: " + e.getMessage(), e);
+
         } catch (Throwable e) {
-            throw new RuntimeCamelException("Groovy Sandbox violation: " + e.getMessage(), e);
+            throw new RuntimeCamelException(
+                    "Groovy execution failed: " + e.getMessage(), e);
         } finally {
+            SCRIPT_CLASS_LOADER.remove();
+            CURRENT_SCRIPT.remove();
             INTERCEPTOR.unregister();        // always clean up thread-local registration
         }
     }
@@ -96,15 +397,17 @@ public class GroovySandboxExecutor {
     @SuppressWarnings("unchecked")
     private static Class<Script> getOrCompile(String source) {
 
-        // 1. Generate a unique hash for the script source
         String scriptKey = hashScript(source);
 
-        // 2. Use the hash as the cache key
         return SCRIPT_CACHE.computeIfAbsent(scriptKey, key -> {
             try {
-                return (Class<Script>) SHELL.getClassLoader().parseClass(source);
+                return (Class<Script>) SHELL.get()
+                        .getClassLoader()
+                        .parseClass(source);
+
             } catch (Exception e) {
-                throw new RuntimeCamelException("Failed to compile Groovy script", e);
+                throw new RuntimeCamelException(
+                        "Failed to compile Groovy script", e);
             }
         });
     }
