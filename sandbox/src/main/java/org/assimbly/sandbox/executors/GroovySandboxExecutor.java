@@ -43,14 +43,15 @@ public class GroovySandboxExecutor {
     private static final ThreadLocal<Script> CURRENT_SCRIPT = new ThreadLocal<>();
 
     private static final CompilerConfiguration CONFIG;
-    private static final ThreadLocal<GroovyShell> SHELL;
 
     static {
         CONFIG = new CompilerConfiguration();
         // NodeListProperties.Redirect has to run after SandboxTransformer, it rewrites the calls that one generates
         CONFIG.addCompilationCustomizers(new SandboxTransformer(), new NodeListProperties.Redirect());
-        SHELL = ThreadLocal.withInitial(() -> new GroovyShell(CONFIG));
     }
+
+    private static final String INVOKE_METHOD = "invokeMethod";
+    private static final String PUT_AT_METHOD = "putAt";
 
     // interceptor
     private static final GroovyInterceptor INTERCEPTOR = new GroovyInterceptor() {
@@ -158,7 +159,7 @@ public class GroovySandboxExecutor {
      * but Script#evaluate and Script#run(File, String[]) compile code without the sandbox transformer.
      */
     private static Object callScriptMethod(GroovyInterceptor.Invoker invoker, Object receiver, String method, Object[] args) throws Throwable {
-        if ("invokeMethod".equals(method) && args.length == 2 && args[0] instanceof String name) {
+        if (INVOKE_METHOD.equals(method) && args.length == 2 && args[0] instanceof String name) {
             return invokeScriptMethod(invoker, receiver, name, args[1] instanceof Object[] callArgs ? callArgs : new Object[]{args[1]});
         }
         if ("evaluate".equals(method) && args.length == 1 && args[0] instanceof CharSequence expression) {
@@ -196,9 +197,9 @@ public class GroovySandboxExecutor {
      * stay denied.
      */
     private static boolean isBuilderCall(Object receiver, String method, Object[] args) throws NoSuchMethodException {
-        return "invokeMethod".equals(method) && args.length == 2 && args[0] instanceof String
+        return INVOKE_METHOD.equals(method) && args.length == 2 && args[0] instanceof String
                 && receiver instanceof BuilderSupport
-                && receiver.getClass().getMethod("invokeMethod", String.class, Object.class).getDeclaringClass() == BuilderSupport.class
+                && receiver.getClass().getMethod(INVOKE_METHOD, String.class, Object.class).getDeclaringClass() == BuilderSupport.class
                 && ConfigurableWhitelist.isClassAllowed(receiver.getClass());
     }
 
@@ -206,7 +207,7 @@ public class GroovySandboxExecutor {
      * evaluate(String) compiled with the sandbox transformer, sharing the script's binding.
      */
     private static Object evaluate(String expression) {
-        Script script = new GroovyShell(SHELL.get().getClassLoader(), CURRENT_SCRIPT.get().getBinding(), CONFIG).parse(expression);
+        Script script = new GroovyShell(SCRIPT_CLASS_LOADER.get(), CURRENT_SCRIPT.get().getBinding(), CONFIG).parse(expression);
         ClassLoader scriptLoader = SCRIPT_CLASS_LOADER.get();
         SCRIPT_CLASS_LOADER.set(script.getClass().getClassLoader());
         try {
@@ -234,7 +235,7 @@ public class GroovySandboxExecutor {
         if (index instanceof CharSequence property && !(receiver instanceof Map)) {
             checkPropertyAccess(receiver, property.toString(), write);
         } else if (!receiver.getClass().isArray() && !isScriptClass(receiver.getClass())) {
-            checkMethod(receiver.getClass(), write ? "putAt" : "getAt");
+            checkMethod(receiver.getClass(), write ? PUT_AT_METHOD : "getAt");
         }
     }
 
@@ -242,9 +243,9 @@ public class GroovySandboxExecutor {
      * Explicit obj.getAt('prop') / obj.putAt('prop', v) calls, which are property accesses as well.
      */
     private static void checkPropertySubscriptCall(Object receiver, String method, Object[] args) {
-        if (("getAt".equals(method) || "putAt".equals(method))
+        if (("getAt".equals(method) || PUT_AT_METHOD.equals(method))
                 && args.length > 0 && args[0] instanceof CharSequence property && !(receiver instanceof Map)) {
-            checkPropertyAccess(receiver, property.toString(), "putAt".equals(method));
+            checkPropertyAccess(receiver, property.toString(), PUT_AT_METHOD.equals(method));
         }
     }
 
@@ -291,7 +292,16 @@ public class GroovySandboxExecutor {
         MetaProperty metaProperty = InvokerHelper.getMetaClass(clazz).getMetaProperty(property);
         if (metaProperty != null && (!isStatic || Modifier.isStatic(metaProperty.getModifiers()))) {
             checkMetaProperty(clazz, metaProperty, property, write);
-        } else if (isStatic) {
+        } else {
+            checkUnresolvedProperty(receiver, clazz, isStatic, property, write);
+        }
+    }
+
+    /**
+     * The class has no matching meta property, so Groovy resolves the property some other way.
+     */
+    private static void checkUnresolvedProperty(Object receiver, Class<?> clazz, boolean isStatic, String property, boolean write) {
+        if (isStatic) {
             // not a static property of the class, so a property of java.lang.Class itself (name, methods, classLoader, ...)
             checkMethod(Class.class, write ? MetaProperty.getSetterName(property) : MetaProperty.getGetterName(property, Object.class));
         } else if (hasCustomPropertyHandling(clazz, write)) {
@@ -300,16 +310,22 @@ public class GroovySandboxExecutor {
                 throw new SecurityException("Sandbox Denial: property " + clazz.getName() + "." + property + " not whitelisted.");
             }
         } else if (!write && (receiver instanceof Iterable<?> || clazz.isArray())) {
-            // list.prop reads prop of every element
-            Iterable<?> elements = receiver instanceof Iterable<?> it ? it : DefaultGroovyMethods.toList((Object[]) receiver);
-            for (Object element : elements) {
-                if (element != null) {
-                    checkPropertyAccess(element, property, false);
-                }
-            }
+            checkElementProperties(receiver, property);
         } else {
             // falls back to a generic get(String) / set(String, Object) method, e.g. on JsonNode
             checkMethod(clazz, write ? "set" : "get");
+        }
+    }
+
+    /**
+     * list.prop reads prop of every element.
+     */
+    private static void checkElementProperties(Object receiver, String property) {
+        Iterable<?> elements = receiver instanceof Iterable<?> it ? it : DefaultGroovyMethods.toList((Object[]) receiver);
+        for (Object element : elements) {
+            if (element != null) {
+                checkPropertyAccess(element, property, false);
+            }
         }
     }
 
@@ -329,7 +345,12 @@ public class GroovySandboxExecutor {
             }
             return;
         }
-        checkMethod(clazz, write ? MetaProperty.getSetterName(property) : MetaProperty.getGetterName(property, metaProperty == null ? Object.class : metaProperty.getType()));
+        if (write) {
+            checkMethod(clazz, MetaProperty.getSetterName(property));
+        } else {
+            Class<?> type = metaProperty == null ? Object.class : metaProperty.getType();
+            checkMethod(clazz, MetaProperty.getGetterName(property, type));
+        }
     }
 
     private static boolean hasCustomPropertyHandling(Class<?> clazz, boolean write) {
@@ -341,7 +362,7 @@ public class GroovySandboxExecutor {
                     ? clazz.getMethod("setProperty", String.class, Object.class).getDeclaringClass()
                     : clazz.getMethod("getProperty", String.class).getDeclaringClass();
             return declaringClass != GroovyObject.class && declaringClass != GroovyObjectSupport.class;
-        } catch (NoSuchMethodException e) {
+        } catch (NoSuchMethodException _) {
             return false;
         }
     }
@@ -384,7 +405,7 @@ public class GroovySandboxExecutor {
             throw new RuntimeCamelException(
                     "Groovy Sandbox violation: " + e.getMessage(), e);
 
-        } catch (Throwable e) {
+        } catch (Exception e) {
             throw new RuntimeCamelException(
                     "Groovy execution failed: " + e.getMessage(), e);
         } finally {
@@ -402,7 +423,7 @@ public class GroovySandboxExecutor {
 
         return SCRIPT_CACHE.computeIfAbsent(scriptKey, key -> {
             try {
-                return (Class<Script>) SHELL.get()
+                return (Class<Script>) new GroovyShell(CONFIG)
                         .getClassLoader()
                         .parseClass(source);
 
