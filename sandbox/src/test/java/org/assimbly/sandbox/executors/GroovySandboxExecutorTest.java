@@ -23,13 +23,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Runs against src/test/resources/home/.assimbly/groovy/whitelist.conf (user.home is set by surefire).
  */
-public class GroovySandboxExecutorTest extends CamelTestSupport {
+class GroovySandboxExecutorTest extends CamelTestSupport {
 
     private TimeZone originalTimeZone;
     private Locale originalLocale;
 
     @BeforeEach
-    public void setDefaults() {
+    void setDefaults() {
         originalTimeZone = TimeZone.getDefault();
         originalLocale = Locale.getDefault();
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
@@ -37,7 +37,7 @@ public class GroovySandboxExecutorTest extends CamelTestSupport {
     }
 
     @AfterEach
-    public void restoreDefaults() {
+    void restoreDefaults() {
         TimeZone.setDefault(originalTimeZone);
         Locale.setDefault(originalLocale);
     }
@@ -100,7 +100,8 @@ public class GroovySandboxExecutorTest extends CamelTestSupport {
 
     @ParameterizedTest(name = "{0}")
     @MethodSource("deniedScripts")
-    public void deniedScript(String name, String script) throws Exception {
+    @SuppressWarnings("java:S2925") // waits to check that nothing changes later, there is no event to wait for
+    void deniedScript(String name, String script) throws Exception {
         RuntimeCamelException e = assertThrows(RuntimeCamelException.class, () -> run(script));
         assertTrue(e.getMessage().contains("Sandbox Denial"), e.getMessage());
 
@@ -113,10 +114,10 @@ public class GroovySandboxExecutorTest extends CamelTestSupport {
     // commons-lang3 is on the classpath on develop but not on next; where it is, its reflection helpers
     // must be denied even though the whitelist allows the lang3 package
     @Test
-    public void reflectionHelpersStayDenied() {
+    void reflectionHelpersStayDenied() {
         try {
             Class.forName("org.apache.commons.lang3.reflect.MethodUtils");
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException _) {
             org.junit.jupiter.api.Assumptions.abort("commons-lang3 not on classpath");
         }
         String[] scripts = {
@@ -146,7 +147,8 @@ public class GroovySandboxExecutorTest extends CamelTestSupport {
     // work a script leaves running on another thread must still be checked after the script has returned
     @ParameterizedTest(name = "{0}")
     @MethodSource("backgroundScripts")
-    public void backgroundThreadStaysSandboxed(String name, String script) throws Exception {
+    @SuppressWarnings("java:S2925") // waits to check that nothing changes later, there is no event to wait for
+    void backgroundThreadStaysSandboxed(String name, String script) throws Exception {
         try {
             run(script);
         } catch (RuntimeCamelException e) {
@@ -207,7 +209,7 @@ public class GroovySandboxExecutorTest extends CamelTestSupport {
 
     @ParameterizedTest(name = "{0}")
     @MethodSource("allowedScripts")
-    public void allowedScript(String name, String script, String expected) {
+    void allowedScript(String name, String script, String expected) {
         assertEquals(expected, String.valueOf(run(script)));
     }
 
@@ -237,7 +239,7 @@ public class GroovySandboxExecutorTest extends CamelTestSupport {
             "}");
 
     @Test
-    public void excludeNodesScript() {
+    void excludeNodesScript() {
         String body = "<root><a exclude='1 == 1'>a</a><b exclude='false'>b</b><c>c</c>"
                 + "<d exclude=\"TimeZone.setDefault(TimeZone.getTimeZone('CET'))\">d</d></root>";
         String result = String.valueOf(run(EXCLUDE_SCRIPT, body));

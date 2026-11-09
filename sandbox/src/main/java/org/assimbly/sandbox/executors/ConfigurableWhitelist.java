@@ -19,10 +19,11 @@ import java.util.logging.Logger;
 
 public class ConfigurableWhitelist {
 
+    private ConfigurableWhitelist() {
+        // utility class
+    }
+
     private static final Logger LOG = Logger.getLogger(ConfigurableWhitelist.class.getName());
-    private static final String BASE_PATH = System.getProperty("user.home");
-    private static final String ASSIMBLY_PATH = "/.assimbly";
-    private static final String GROOVY_PATH = "/groovy/";
 
     private static final Map<String, PackageRule> PACKAGE_RULES = new ConcurrentHashMap<>();
     private static final Map<String, MethodRule> METHOD_RULES = new ConcurrentHashMap<>();
@@ -31,7 +32,7 @@ public class ConfigurableWhitelist {
     private static final MethodRule DENIED_RULE = MethodRule.allowOnly(Set.of());
 
     // path can itself be overridden by env var at startup, that part's fine to be static
-    private static final Path CONFIG_PATH = Paths.get(BASE_PATH + ASSIMBLY_PATH + GROOVY_PATH + "whitelist.conf");
+    private static final Path CONFIG_PATH = Paths.get(System.getProperty("user.home"), ".assimbly", "groovy", "whitelist.conf");
 
     private static final Set<String> REFLECTION_METHODS = Set.of(
             "setAccessible",
@@ -154,21 +155,7 @@ public class ConfigurableWhitelist {
             Map<String, PackageRule> newPackageRules = new ConcurrentHashMap<>();
 
             for (String raw : Files.readAllLines(CONFIG_PATH)) {
-                String line = raw.trim();
-                if (line.isEmpty() || line.startsWith("#")) continue;
-
-                // strip trailing whitespace-separated comments
-                line = line.split("\\s")[0];
-                if (line.isEmpty()) continue;
-
-                int hashIdx = line.indexOf('#');
-                if (hashIdx > 0) {
-                    String className = line.substring(0, hashIdx);
-                    String rulePart = line.substring(hashIdx + 1);
-                    parseMethodRule(className, rulePart, newRules, newPackageRules, raw);
-                } else {
-                    LOG.warning("Ignoring whitelist line with no '#Class#method' rule: " + raw);
-                }
+                parseLine(raw, newRules, newPackageRules);
             }
 
             METHOD_RULES.clear();
@@ -177,11 +164,30 @@ public class ConfigurableWhitelist {
             PACKAGE_RULES.putAll(newPackageRules);
             LOOKUP_CACHE.clear();
 
-            LOG.info("Whitelist reloaded: "
+            LOG.info(() -> "Whitelist reloaded: "
                     + METHOD_RULES.size() + " class rules, "
                     + PACKAGE_RULES.size() + " package rules.");
         } catch (IOException e) {
             LOG.severe("Failed to reload whitelist file, keeping previous config: " + e.getMessage());
+        }
+    }
+
+    private static void parseLine(String raw, Map<String, MethodRule> newRules, Map<String, PackageRule> newPackageRules) {
+        String line = raw.trim();
+        if (line.isEmpty() || line.startsWith("#")) {
+            return;
+        }
+
+        // strip trailing whitespace-separated comments
+        line = line.split("\\s")[0];
+
+        int hashIdx = line.indexOf('#');
+        if (hashIdx > 0) {
+            String className = line.substring(0, hashIdx);
+            String rulePart = line.substring(hashIdx + 1);
+            parseMethodRule(className, rulePart, newRules, newPackageRules, raw);
+        } else {
+            LOG.warning(() -> "Ignoring whitelist line with no '#Class#method' rule: " + raw);
         }
     }
 
@@ -207,52 +213,72 @@ public class ConfigurableWhitelist {
 
         String[] tokens = rulePart.split(",");
         if (tokens.length == 0) {
-            LOG.warning("Ignoring malformed whitelist line (no methods specified): " + originalLine);
+            LOG.warning(() -> "Ignoring malformed whitelist line (no methods specified): " + originalLine);
             return;
         }
 
-        boolean wildcard = tokens[0].trim().equals("*");
-        MethodRule existing = newRules.get(className);
-
-        if (wildcard) {
-            if (existing != null && !existing.allowAll) {
-                LOG.warning("Class '" + className + "' has conflicting rules (both an explicit allow-list and a "
-                        + "wildcard '*' rule). The wildcard rule takes precedence: " + originalLine);
-            }
-            Set<String> exceptions = new HashSet<>();
-            for (int i = 1; i < tokens.length; i++) {
-                String t = tokens[i].trim();
-                if (t.startsWith("-")) {
-                    exceptions.add(t.substring(1));
-                } else if (!t.isEmpty()) {
-                    LOG.warning("Ignoring malformed exception token '" + t + "' in line: " + originalLine);
-                }
-            }
-            // if an earlier wildcard rule already exists for this class, merge exceptions (union)
-            if (existing != null && existing.allowAll) {
-                exceptions.addAll(existing.exceptions);
-            }
-            MethodRule rule = MethodRule.allowAllExcept(exceptions);
-            newRules.put(className, rule);
-            LOG.info("Registered class whitelist: " + className + " -> * except " + exceptions);
+        if (tokens[0].trim().equals("*")) {
+            addWildcardRule(className, tokens, newRules, originalLine);
         } else {
-            if (existing != null && existing.allowAll) {
-                LOG.warning("Class '" + className + "' has conflicting rules (both a wildcard '*' rule and an "
-                        + "explicit allow-list). The wildcard rule takes precedence, ignoring: " + originalLine);
-                return;
-            }
-            Set<String> allowed = new HashSet<>();
-            for (String t : tokens) {
-                t = t.trim();
-                if (!t.isEmpty()) allowed.add(t);
-            }
-            if (existing != null) {
-                allowed.addAll(existing.allowed);
-            }
-            MethodRule rule = MethodRule.allowOnly(allowed);
-            newRules.put(className, rule);
-            LOG.info("Registered class whitelist: " + className + " -> " + allowed);
+            addAllowOnlyRule(className, tokens, newRules, originalLine);
         }
+    }
+
+    private static void addWildcardRule(String className, String[] tokens, Map<String, MethodRule> newRules, String originalLine) {
+        MethodRule existing = newRules.get(className);
+        if (existing != null && !existing.allowAll) {
+            LOG.warning(() -> "Class '" + className + "' has conflicting rules (both an explicit allow-list and a "
+                    + "wildcard '*' rule). The wildcard rule takes precedence: " + originalLine);
+        }
+        Set<String> exceptions = parseExceptions(tokens, originalLine);
+        // if an earlier wildcard rule already exists for this class, merge exceptions (union)
+        if (existing != null && existing.allowAll) {
+            exceptions.addAll(existing.exceptions);
+        }
+        newRules.put(className, MethodRule.allowAllExcept(exceptions));
+        LOG.info(() -> "Registered class whitelist: " + className + " -> * except " + exceptions);
+    }
+
+    private static void addAllowOnlyRule(String className, String[] tokens, Map<String, MethodRule> newRules, String originalLine) {
+        MethodRule existing = newRules.get(className);
+        if (existing != null && existing.allowAll) {
+            LOG.warning(() -> "Class '" + className + "' has conflicting rules (both a wildcard '*' rule and an "
+                    + "explicit allow-list). The wildcard rule takes precedence, ignoring: " + originalLine);
+            return;
+        }
+        Set<String> allowed = parseAllowed(tokens);
+        if (existing != null) {
+            allowed.addAll(existing.allowed);
+        }
+        newRules.put(className, MethodRule.allowOnly(allowed));
+        LOG.info(() -> "Registered class whitelist: " + className + " -> " + allowed);
+    }
+
+    /**
+     * The "-method" tokens after a leading "*".
+     */
+    private static Set<String> parseExceptions(String[] tokens, String originalLine) {
+        Set<String> exceptions = new HashSet<>();
+        for (int i = 1; i < tokens.length; i++) {
+            String t = tokens[i].trim();
+            if (t.startsWith("-")) {
+                exceptions.add(t.substring(1));
+            } else if (!t.isEmpty()) {
+                LOG.warning(() -> "Ignoring malformed exception token '" + t + "' in line: " + originalLine);
+            }
+        }
+        return exceptions;
+    }
+
+    private static Set<String> parseAllowed(String[] tokens) {
+        Set<String> allowed = new HashSet<>();
+        for (String token : tokens) {
+            String t = token.trim();
+            if (!t.isEmpty()) {
+                allowed.add(t);
+            }
+        }
+        return allowed;
     }
 
     private static void parsePackageRule(
@@ -271,38 +297,18 @@ public class ConfigurableWhitelist {
         String key = packageName + (includeSubPackages ? "**" : "*");
 
         String[] tokens = rulePart.split(",");
-        boolean wildcard = tokens[0].trim().equals("*");
-        MethodRule rule;
+        MethodRule rule = tokens[0].trim().equals("*")
+                ? MethodRule.allowAllExcept(parseExceptions(tokens, originalLine))
+                : MethodRule.allowOnly(parseAllowed(tokens));
 
-        if (wildcard) {
-            Set<String> exceptions = new HashSet<>();
-            for (int i = 1; i < tokens.length; i++) {
-                String t = tokens[i].trim();
-                if (t.startsWith("-")) {
-                    exceptions.add(t.substring(1));
-                }
-            }
-            rule = MethodRule.allowAllExcept(exceptions);
-        } else {
-            Set<String> allowed = new HashSet<>();
-            for (String token : tokens) {
-                token = token.trim();
-                if (!token.isEmpty()) {
-                    allowed.add(token);
-                }
-            }
-            rule = MethodRule.allowOnly(allowed);
-        }
-
-        PackageRule existing = packageRules.get(key);
-        if (existing != null) {
-            LOG.warning("Duplicate package rule for '" + key
+        if (packageRules.containsKey(key)) {
+            LOG.warning(() -> "Duplicate package rule for '" + key
                     + "', replacing previous rule: " + originalLine);
         }
 
         packageRules.put(key, new PackageRule(packageName, includeSubPackages, rule));
 
-        LOG.info("Registered package whitelist: " + key);
+        LOG.info(() -> "Registered package whitelist: " + key);
     }
 
     private static void startWatcher() {
@@ -315,24 +321,28 @@ public class ConfigurableWhitelist {
             Thread t = new Thread(r, "sandbox-whitelist-watcher");
             t.setDaemon(true);
             return t;
-        }).submit(() -> {
-            try (WatchService watcher = FileSystems.getDefault().newWatchService()) {
-                dir.register(watcher, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_CREATE);
-                while (true) {
-                    WatchKey key = watcher.take(); // blocks
-                    for (WatchEvent<?> event : key.pollEvents()) {
-                        Path changed = dir.resolve((Path) event.context());
-                        if (changed.equals(CONFIG_PATH)) {
-                            LOG.info("Detected whitelist file change, reloading...");
-                            loadFromFile();
-                        }
+        }).submit(() -> watchConfigFile(dir));
+    }
+
+    private static void watchConfigFile(Path dir) {
+        try (WatchService watcher = FileSystems.getDefault().newWatchService()) {
+            dir.register(watcher, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_CREATE);
+            WatchKey key;
+            do {
+                key = watcher.take(); // blocks
+                for (WatchEvent<?> event : key.pollEvents()) {
+                    if (dir.resolve((Path) event.context()).equals(CONFIG_PATH)) {
+                        LOG.info("Detected whitelist file change, reloading...");
+                        loadFromFile();
                     }
-                    if (!key.reset()) break;
                 }
-            } catch (IOException | InterruptedException e) {
-                LOG.severe("Whitelist watcher stopped: " + e.getMessage());
-            }
-        });
+            } while (key.reset());
+        } catch (IOException e) {
+            LOG.severe("Whitelist watcher stopped: " + e.getMessage());
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            LOG.severe("Whitelist watcher stopped: " + e.getMessage());
+        }
     }
 
     /**

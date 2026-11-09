@@ -17,10 +17,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Runs against src/test/resources/home/.assimbly/groovy/whitelist.conf (user.home is set by surefire).
  */
-public class ConfigurableWhitelistTest {
+class ConfigurableWhitelistTest {
 
     @Test
-    public void packageRuleDoesNotIncludeSubPackages() throws Exception {
+    void packageRuleDoesNotIncludeSubPackages() {
         assertTrue(ConfigurableWhitelist.isClassAllowed(ArrayList.class));
         assertFalse(ConfigurableWhitelist.isClassAllowed(java.util.concurrent.Executors.class));
         assertFalse(ConfigurableWhitelist.isClassAllowed(java.util.logging.LogManager.class));
@@ -28,13 +28,13 @@ public class ConfigurableWhitelistTest {
     }
 
     @Test
-    public void doubleStarPackageRuleIncludesSubPackages() throws Exception {
+    void doubleStarPackageRuleIncludesSubPackages() throws Exception {
         assertTrue(ConfigurableWhitelist.isClassAllowed(groovy.xml.XmlSlurper.class));
         assertTrue(ConfigurableWhitelist.isClassAllowed(Class.forName("groovy.xml.slurpersupport.NodeChild")));
     }
 
     @Test
-    public void classRuleOverridesPackageRule() {
+    void classRuleOverridesPackageRule() {
         assertFalse(ConfigurableWhitelist.isMethodAllowed(TimeZone.class, "setDefault"));
         assertFalse(ConfigurableWhitelist.isMethodAllowed(SimpleTimeZone.class, "setDefault"));
         assertFalse(ConfigurableWhitelist.isMethodAllowed(Locale.class, "setDefault"));
@@ -45,7 +45,7 @@ public class ConfigurableWhitelistTest {
     }
 
     @Test
-    public void deniedMethodStaysDeniedOnSubclass() {
+    void deniedMethodStaysDeniedOnSubclass() {
         // TimeZone.getTimeZone returns a sun.util.calendar.ZoneInfo, which has no rule of its own
         Class<?> zoneInfo = TimeZone.getTimeZone("CET").getClass();
 
@@ -54,26 +54,26 @@ public class ConfigurableWhitelistTest {
     }
 
     @Test
-    public void interfaceRuleAppliesToImplementation() {
+    void interfaceRuleAppliesToImplementation() {
         assertTrue(ConfigurableWhitelist.isMethodAllowed(DefaultExchange.class, "getMessage"));
         assertTrue(ConfigurableWhitelist.isMethodAllowed(DefaultExchange.class, "getIn"));
     }
 
     @Test
-    public void ancestorRuleOnlyCoversItsOwnMethods() {
+    void ancestorRuleOnlyCoversItsOwnMethods() {
         // java.lang.Comparable#* must not allow every method of every Comparable class
         assertTrue(ConfigurableWhitelist.isMethodAllowed(File.class, "compareTo"));
         assertFalse(ConfigurableWhitelist.isMethodAllowed(File.class, "delete"));
     }
 
     @Test
-    public void ancestorRuleIncludesGdkMethods() {
+    void ancestorRuleIncludesGdkMethods() {
         // GDK methods such as each are available on a subclass through its whitelisted superclass
         assertTrue(ConfigurableWhitelist.isMethodAllowed(org.apache.groovy.json.internal.LazyMap.class, "each"));
     }
 
     @Test
-    public void explicitDenialOnAncestorAppliesToSubclasses() {
+    void explicitDenialOnAncestorAppliesToSubclasses() {
         // java.lang.Throwable#*,-initCause, while Exception#* and RuntimeException#* allow everything
         assertFalse(ConfigurableWhitelist.isMethodAllowed(RuntimeException.class, "initCause"));
         assertFalse(ConfigurableWhitelist.isMethodAllowed(NumberFormatException.class, "initCause"));
@@ -81,13 +81,13 @@ public class ConfigurableWhitelistTest {
     }
 
     @Test
-    public void allowOnlyRule() {
+    void allowOnlyRule() {
         assertTrue(ConfigurableWhitelist.isMethodAllowed(MessageDigest.class, "getInstance"));
         assertFalse(ConfigurableWhitelist.isMethodAllowed(MessageDigest.class, "getProvider"));
     }
 
     @Test
-    public void hardDeniedMethods() {
+    void hardDeniedMethods() {
         assertFalse(ConfigurableWhitelist.isMethodAllowed(String.class, "getClass"));
         assertFalse(ConfigurableWhitelist.isMethodAllowed(String.class, "invokeMethod"));
         assertFalse(ConfigurableWhitelist.isMethodAllowed(Arrays.class, "parallelSetAll"));
@@ -97,7 +97,7 @@ public class ConfigurableWhitelistTest {
     }
 
     @Test
-    public void unsandboxedCompilersAreDenied() {
+    void unsandboxedCompilersAreDenied() {
         // groovy.util.*#* is whitelisted, but these compile and run code without the sandbox
         assertFalse(ConfigurableWhitelist.isMethodAllowed(groovy.util.Eval.class, "me"));
         assertFalse(ConfigurableWhitelist.isClassAllowed(groovy.util.ConfigSlurper.class));
@@ -109,14 +109,14 @@ public class ConfigurableWhitelistTest {
     private static Class<?> classOrSkip(String name) {
         try {
             return Class.forName(name);
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException _) {
             org.junit.jupiter.api.Assumptions.abort("not on classpath: " + name);
             return null; // unreachable
         }
     }
 
     @Test
-    public void reflectionHelpersAreDenied() {
+    void reflectionHelpersAreDenied() {
         // the whitelist may allow a whole library (e.g. org.apache.commons.lang3.**), but its reflection
         // helpers call any method, constructor or field by name and must stay denied regardless
         assertFalse(ConfigurableWhitelist.isMethodAllowed(classOrSkip("org.apache.commons.lang3.reflect.MethodUtils"), "invokeExactStaticMethod"));
@@ -128,7 +128,7 @@ public class ConfigurableWhitelistTest {
     }
 
     @Test
-    public void unsafeDeserializationIsDenied() {
+    void unsafeDeserializationIsDenied() {
         Class<?> serializationUtils = classOrSkip("org.apache.commons.lang3.SerializationUtils");
         assertFalse(ConfigurableWhitelist.isMethodAllowed(serializationUtils, "deserialize"));
         assertTrue(ConfigurableWhitelist.isMethodAllowed(serializationUtils, "serialize"));
@@ -136,7 +136,7 @@ public class ConfigurableWhitelistTest {
     }
 
     @Test
-    public void unlistedClassIsDenied() {
+    void unlistedClassIsDenied() {
         assertFalse(ConfigurableWhitelist.isClassAllowed(File.class));
         assertFalse(ConfigurableWhitelist.isMethodAllowed(System.class, "getProperties"));
         assertFalse(ConfigurableWhitelist.isMethodAllowed(Class.class, "getMethods"));

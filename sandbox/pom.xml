@@ -13,11 +13,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>21</maven.compiler.release>
     <maven.versions.rules>file:///${project.basedir}/../rules.xml</maven.versions.rules>
-    <!-- groovy-sandbox 4.3.2 does not work on Groovy 6: it references
-         org.codehaus.groovy.runtime.callsite.CallSite, which Groovy 6 removed, so every
-         sandboxed call fails. Keep this on the Groovy version camel-groovy brings in,
-         which is what the runtime resolves. -->
-    <sandbox-groovy.version>5.0.8</sandbox-groovy.version>
   </properties>
 
   <distributionManagement> 
@@ -42,22 +37,30 @@
 	  <dependency>
 		  <groupId>org.apache.groovy</groupId>
 		  <artifactId>groovy</artifactId>
-		  <version>${sandbox-groovy.version}</version>
+		  <version>${groovy-script.version}</version>
+	  </dependency>
+	  <!-- groovy-sandbox is compiled against Groovy 4 and links to
+	       org.codehaus.groovy.runtime.callsite.CallSite, which Groovy 6 moved out of core
+	       into this module (GROOVY-12185). -->
+	  <dependency>
+		  <groupId>org.apache.groovy</groupId>
+		  <artifactId>groovy-callsite</artifactId>
+		  <version>${groovy-script.version}</version>
 	  </dependency>
 	  <dependency>
 		  <groupId>org.apache.groovy</groupId>
 		  <artifactId>groovy-dateutil</artifactId>
-		  <version>${sandbox-groovy.version}</version>
+		  <version>${groovy-script.version}</version>
 	  </dependency>
 	  <dependency>
 		  <groupId>org.apache.groovy</groupId>
 		  <artifactId>groovy-json</artifactId>
-		  <version>${sandbox-groovy.version}</version>
+		  <version>${groovy-script.version}</version>
 	  </dependency>
 	  <dependency>
 		  <groupId>org.apache.groovy</groupId>
 		  <artifactId>groovy-xml</artifactId>
-		  <version>${sandbox-groovy.version}</version>
+		  <version>${groovy-script.version}</version>
 	  </dependency>
 
   </dependencies>
