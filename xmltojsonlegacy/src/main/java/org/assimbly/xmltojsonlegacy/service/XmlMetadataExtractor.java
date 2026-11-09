@@ -19,7 +19,6 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.InputStream;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class XmlMetadataExtractor {
 
@@ -105,7 +104,7 @@ public class XmlMetadataExtractor {
         Iterator<Attribute> attrIterator = startElement.getAttributes();
         Map<String, AttributeEntry> attributes = new HashMap<>();
         while (attrIterator.hasNext()) {
-            Attribute attr = (Attribute) attrIterator.next();
+            Attribute attr = attrIterator.next();
             QName qname = attr.getName();
             String attrName = qname.getPrefix().isEmpty()
                     ? qname.getLocalPart()

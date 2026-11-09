@@ -51,10 +51,12 @@ public class ExcelWriter {
     }
 
     private void setCellValue(String value, Cell cell) {
-        String integerRegex = "-?\\d+";
-        if (value.matches(integerRegex)) {
-            cell.setCellValue(Long.parseLong(value));
+        // 1 to 15 digits fits safely inside a double without precision loss
+        if (value != null && value.matches("-?\\d{1,15}")) {
+            cell.setCellValue(Double.parseDouble(value));
+        } else {
+            cell.setCellValue(value);
         }
-        else cell.setCellValue(value);
     }
+
 }

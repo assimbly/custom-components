@@ -18,8 +18,8 @@ public class ElementMetadata {
     private int childrenCount;
     private int deepestDepth;
 
-    private Map<String, Integer> childNameCounts = new HashMap<>();
-    private List<String> childPaths = new ArrayList<>();
+    private final Map<String, Integer> childNameCounts = new HashMap<>();
+    private final List<String> childPaths = new ArrayList<>();
 
     private Map<String, AttributeEntry> attributes = new HashMap<>();
     private boolean hasAttributes;

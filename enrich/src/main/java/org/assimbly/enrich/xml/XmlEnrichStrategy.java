@@ -24,16 +24,13 @@ public class XmlEnrichStrategy implements AggregationStrategy {
             Document originalXml = getXml(original, "left");
             Document resourceXml = getXml(resource, "bottom");
 
-            if(originalXml == null && resourceXml == null)
+            if(originalXml == null && resourceXml == null) {
                 throw new Exception("Something went wrong parsing the XML inputs.");
-
-            if (originalXml == null && resource != null) {
+            }else if (originalXml == null) {
                 XmlHelper.mergeIn(enriched, resourceXml);
                 resource.getIn().setBody(XmlHelper.prettyPrint(enriched));
                 return resource;
-            }
-
-            if (resourceXml == null) {
+            }else if (resourceXml == null) {
                 XmlHelper.mergeIn(enriched, originalXml);
                 original.getIn().setBody(XmlHelper.prettyPrint(enriched));
                 return original;

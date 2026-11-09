@@ -14,12 +14,12 @@ import javax.xml.namespace.QName;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class PortTypeHelperTest {
+class PortTypeHelperTest {
 
     private static Definition definition;
 
     @BeforeEach
-    public void setup() throws WSDLException {
+    void setup() throws WSDLException {
         WSDLFactory factory = WSDLFactory.newInstance();
         WSDLReader reader = factory.newWSDLReader();
 
@@ -28,7 +28,7 @@ public class PortTypeHelperTest {
     }
 
     @Test
-    public void testGettingOperationInput() {
+    void testGettingOperationInput() {
         QName name = new QName("http://www.assimbly.world","TestSoap");
 
         PortType portType = definition.getPortType(name);

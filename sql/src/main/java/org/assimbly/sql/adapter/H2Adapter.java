@@ -58,20 +58,4 @@ public class H2Adapter implements DatabaseAdapter {
 
     }
 
-    /*
-    private String buildUrl(JDBCConnection connection) {
-        // Keep it simple and flexible based on your existing model
-
-        // Default to in-memory if no host is provided
-        if (connection.getHost() == null || connection.getHost().isEmpty()) {
-            return "jdbc:h2:mem:" + connection.getDatabase();
-        }
-
-        // TCP mode
-        return "jdbc:h2:tcp://%s:%s/%s".formatted(
-                connection.getHost(),
-                connection.getPort(),
-                connection.getDatabase()
-        );
-    }*/
 }

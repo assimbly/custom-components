@@ -5,6 +5,7 @@ import org.jasypt.iv.RandomIvGenerator;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -16,8 +17,10 @@ public final class EncryptionUtil {
 
     private final StandardPBEStringEncryptor textEncryptor = new StandardPBEStringEncryptor();
     private static final int SALT_LENGTH = 16; // Length of the salt in bytes
-    private static final int IV_LENGTH = 16; // Length of the IV in bytes
-    private static String password;
+    private static final int IV_LENGTH = 12; // Length of the GCM IV in bytes
+    private static final int GCM_TAG_LENGTH_BITS = 128;
+    private static final String GCM_MARKER = "GCM";
+    private final String password;
 
     private static final SecureRandom secureRandom = new SecureRandom();
 
@@ -59,7 +62,7 @@ public final class EncryptionUtil {
         String encodedEncryptedText = encoder.encodeToString(encryptedBytes);
 
         // Concatenate and return
-        return String.format("ENC(%s|%s|%s)", encodedSalt, encodedIv, encodedEncryptedText);
+        return String.format("ENC(%s|%s|%s|%s)", GCM_MARKER, encodedSalt, encodedIv, encodedEncryptedText);
     }
 
     public String decrypt(String encryptedText) {
@@ -70,20 +73,22 @@ public final class EncryptionUtil {
 
         String contents = encryptedText.substring(4, encryptedText.length() - 1);
         String[] parts = contents.split("\\|");
-        if (parts.length != 3) {
-            throw new IllegalArgumentException("Invalid encrypted text format.");
-        }
 
         Base64.Decoder decoder = Base64.getDecoder();
-        byte[] salt = decoder.decode(parts[0]);
-        byte[] iv = decoder.decode(parts[1]);
-        byte[] encryptedBytes = decoder.decode(parts[2]);
 
-        // Generate key from password and salt
-        SecretKeySpec secretKey = new SecretKeySpec(generateKey(password, salt), "AES");
+        // Current format: ENC(GCM|salt|iv|text)
+        if (parts.length == 4 && GCM_MARKER.equals(parts[0])) {
+            SecretKeySpec secretKey = new SecretKeySpec(generateKey(password, decoder.decode(parts[1])), "AES");
+            return decryptWithIv(secretKey, decoder.decode(parts[2]), decoder.decode(parts[3]));
+        }
 
-        // Decrypt the encrypted text
-        return decryptWithIv(secretKey, iv, encryptedBytes);
+        // Legacy format (AES/CBC): ENC(salt|iv|text)
+        if (parts.length == 3) {
+            SecretKeySpec secretKey = new SecretKeySpec(generateKey(password, decoder.decode(parts[0])), "AES");
+            return decryptLegacyCbc(secretKey, decoder.decode(parts[1]), decoder.decode(parts[2]));
+        }
+
+        throw new IllegalArgumentException("Invalid encrypted text format.");
     }
 
 
@@ -99,9 +104,8 @@ public final class EncryptionUtil {
 
     private byte[] encryptWithIv(SecretKeySpec secretKey, byte[] iv, String plainText) {
         try {
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-            IvParameterSpec ivParams = new IvParameterSpec(iv);
-            cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivParams);
+            Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey, new GCMParameterSpec(GCM_TAG_LENGTH_BITS, iv));
             return cipher.doFinal(plainText.getBytes(StandardCharsets.UTF_8)); // Use UTF-8 encoding
         } catch (Exception e) {
             throw new RuntimeException("Encryption failed.", e);
@@ -110,11 +114,23 @@ public final class EncryptionUtil {
 
     private String decryptWithIv(SecretKeySpec secretKey, byte[] iv, byte[] encryptedBytes) {
         try {
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-            IvParameterSpec ivParams = new IvParameterSpec(iv);
-            cipher.init(Cipher.DECRYPT_MODE, secretKey, ivParams);
+            Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+            cipher.init(Cipher.DECRYPT_MODE, secretKey, new GCMParameterSpec(GCM_TAG_LENGTH_BITS, iv));
             byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
             return new String(decryptedBytes, StandardCharsets.UTF_8); // Use UTF-8 encoding
+        } catch (Exception e) {
+            throw new RuntimeException("Decryption failed.", e);
+        }
+    }
+
+    // Why: values stored before the switch to GCM were encrypted with CBC and must stay decryptable. Never used to encrypt.
+    @SuppressWarnings("java:S5542")
+    private String decryptLegacyCbc(SecretKeySpec secretKey, byte[] iv, byte[] encryptedBytes) {
+        try {
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            cipher.init(Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec(iv));
+            byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
+            return new String(decryptedBytes, StandardCharsets.UTF_8);
         } catch (Exception e) {
             throw new RuntimeException("Decryption failed.", e);
         }

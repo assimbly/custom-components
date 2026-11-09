@@ -3,8 +3,9 @@ package org.assimbly.xmltocsv;
 import org.apache.camel.CamelExecutionException;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.test.junit5.CamelTestSupport;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -31,24 +32,15 @@ class XmlToCsvSecurityTest extends CamelTestSupport {
         template.sendBody("direct:in", input);
     }
 
-    @Test
-    void testVanillaXXE() {
-        Executable executable = () -> testAttack("vanilla-xxe-attack.xml");
-        assertThrows(CamelExecutionException.class,executable);
-    }
-
-    @Test
-    void testBillionLaughsAttack() {
-        Executable executable = () -> testAttack("billion-laughs-attack.xml");
-        assertThrows(CamelExecutionException.class,executable);
-
-    }
-
-    @Test
-    void testQuadraticBlowupAttack() {
-
-        Executable executable = () -> testAttack("quadratic-blowup-attack.xml");
-        assertThrows(CamelExecutionException.class,executable);
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {
+            "vanilla-xxe-attack.xml",
+            "billion-laughs-attack.xml",
+            "quadratic-blowup-attack.xml"
+    })
+    void testAttackIsRejected(String attack) {
+        Executable executable = () -> testAttack(attack);
+        assertThrows(CamelExecutionException.class, executable);
     }
 
 }

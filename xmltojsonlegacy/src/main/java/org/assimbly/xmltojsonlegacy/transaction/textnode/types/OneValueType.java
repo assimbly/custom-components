@@ -3,7 +3,6 @@ package org.assimbly.xmltojsonlegacy.transaction.textnode.types;
 import tools.jackson.databind.JsonNode;
 import org.assimbly.xmltojsonlegacy.XmlToJsonConfiguration;
 import org.assimbly.xmltojsonlegacy.model.ElementMetadata;
-import org.assimbly.xmltojsonlegacy.service.MetadataAnalyzer;
 import org.assimbly.xmltojsonlegacy.transaction.textnode.TextNodeTransaction;
 import org.assimbly.xmltojsonlegacy.utils.Constants;
 import org.assimbly.xmltojsonlegacy.utils.ElementMetadataUtils;

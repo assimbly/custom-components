@@ -2,7 +2,6 @@ package org.assimbly.soap.util.helpers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import javax.wsdl.Definition;
@@ -11,18 +10,17 @@ import javax.wsdl.extensions.schema.Schema;
 import javax.wsdl.extensions.schema.SchemaImport;
 import javax.wsdl.factory.WSDLFactory;
 import javax.wsdl.xml.WSDLReader;
-import javax.xml.namespace.QName;
 
 import java.util.Vector;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class SchemaHelperTest {
+class SchemaHelperTest {
 
     private static Definition definition;
 
     @BeforeEach
-    public void setup() throws WSDLException {
+    void setup() throws WSDLException {
         WSDLFactory factory = WSDLFactory.newInstance();
         WSDLReader reader = factory.newWSDLReader();
 
@@ -31,7 +29,7 @@ public class SchemaHelperTest {
     }
 
     @Test
-    public void testGettingElementByName(){
+    void testGettingElementByName(){
         Schema schema = (Schema) definition.getTypes().getExtensibilityElements().get(1);
 
         Node expected = schema.getElement().getChildNodes().item(3);
@@ -42,7 +40,7 @@ public class SchemaHelperTest {
     }
 
     @Test
-    public void testGettingImport() {
+    void testGettingImport() {
         Schema schema = (Schema) definition.getTypes().getExtensibilityElements().get(1);
 
         @SuppressWarnings("unchecked")

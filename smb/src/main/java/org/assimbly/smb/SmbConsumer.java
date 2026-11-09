@@ -55,18 +55,12 @@ public class SmbConsumer extends GenericFileConsumer<SmbFile> {
         }
 
 
-        boolean currentFileIsDir;
         SmbFile[] smbFiles = operations.listFiles(fileName);
         for (SmbFile smbFile : smbFiles) {
             if (!canPollMoreFiles(fileList)) {
                 return false;
             }
-            try {
-                currentFileIsDir = smbFile.isDirectory();
-            } catch (SmbException e1) {
-                throw RuntimeCamelException.wrapRuntimeCamelException(e1);
-            }
-            if (currentFileIsDir) {
+            if (isDirectory(smbFile)) {
                 if (endpoint.isRecursive()) {
                     currentRelativePath = smbFile.getName().split("/")[0] + "/";
                     int nextDepth = depth++;
@@ -75,27 +69,37 @@ public class SmbConsumer extends GenericFileConsumer<SmbFile> {
                     currentRelativePath = "";
                 }
             } else {
-                GenericFile<SmbFile> genericFile = asGenericFile(fileName, smbFile);
-                SmbFile[] singleFileArray = new SmbFile[] { smbFile };
-
-                boolean valid = isMatched(
-                        exchange,
-                        () -> genericFile,
-                        smbFile.getName(),
-                        smbFile.getCanonicalPath(),
-                        () -> currentRelativePath + smbFile.getName(),
-                        false,
-                        singleFileArray
-                );
-
-                //Exchange,Supplier<GenericFile<SmbFile>>,String,String,Supplier<String>,boolean,SmbFile[]
-
-                if (valid) {
-                    fileList.add(asGenericFile(fileName, smbFile));
-                }
+                addIfMatched(exchange, fileName, smbFile, fileList);
             }
         }
         return true;
+    }
+
+    private boolean isDirectory(final SmbFile smbFile) {
+        try {
+            return smbFile.isDirectory();
+        } catch (SmbException e) {
+            throw RuntimeCamelException.wrapRuntimeCamelException(e);
+        }
+    }
+
+    private void addIfMatched(final Exchange exchange, final String fileName, final SmbFile smbFile, final List<GenericFile<SmbFile>> fileList) {
+        GenericFile<SmbFile> genericFile = asGenericFile(fileName, smbFile);
+        SmbFile[] singleFileArray = new SmbFile[] { smbFile };
+
+        boolean valid = isMatched(
+                exchange,
+                () -> genericFile,
+                smbFile.getName(),
+                smbFile.getCanonicalPath(),
+                () -> currentRelativePath + smbFile.getName(),
+                false,
+                singleFileArray
+        );
+
+        if (valid) {
+            fileList.add(asGenericFile(fileName, smbFile));
+        }
     }
 
     @Override

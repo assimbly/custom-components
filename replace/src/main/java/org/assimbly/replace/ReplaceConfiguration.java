@@ -87,12 +87,11 @@ public class ReplaceConfiguration {
     }
 
     int getFlagsMagicConstant() {
-        List<Integer> usedFlags = new ArrayList<>();
 
-        for (String flag : getFlagBits().keySet()) {
-            if(getFlags().contains(flag))
-                usedFlags.add(getFlagBits().get(flag));
-        }
+        List<Integer> usedFlags = getFlagBits().entrySet().stream()
+                .filter(entry -> getFlags().contains(entry.getKey()))
+                .map(Map.Entry::getValue)
+                .toList(); // Use .collect(Collectors.toList()) on Java 8-15, or if you need a mutable list
 
         return usedFlags.stream().reduce(0, (a, b) -> a | b);
     }

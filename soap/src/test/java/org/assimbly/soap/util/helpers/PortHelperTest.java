@@ -14,12 +14,12 @@ import javax.xml.namespace.QName;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class PortHelperTest {
+class PortHelperTest {
 
     private static Definition definition;
 
     @BeforeEach
-    public void setup() throws WSDLException {
+    void setup() throws WSDLException {
         WSDLFactory factory = WSDLFactory.newInstance();
         WSDLReader reader = factory.newWSDLReader();
 
@@ -28,7 +28,7 @@ public class PortHelperTest {
     }
 
     @Test
-    public void testGettingAddress() {
+    void testGettingAddress() {
         QName name = new QName("http://www.assimbly.world", "TestSoapService");
 
         Service service = definition.getService(name);
@@ -39,4 +39,5 @@ public class PortHelperTest {
 
         assertEquals(expected, actual);
     }
+
 }

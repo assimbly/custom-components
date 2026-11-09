@@ -13,12 +13,12 @@ import javax.xml.namespace.QName;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class InputHelperTest {
+class InputHelperTest {
 
     private static Definition definition;
 
     @BeforeEach
-    public void setup() throws WSDLException {
+    void setup() throws WSDLException {
         WSDLFactory factory = WSDLFactory.newInstance();
         WSDLReader reader = factory.newWSDLReader();
 
@@ -27,7 +27,7 @@ public class InputHelperTest {
     }
 
     @Test
-    public void testGettingMessage() {
+    void testGettingMessage() {
         QName name = new QName("http://www.assimbly.world","TestSoap");
 
         Input input = definition.getPortType(name).getOperation("OperationWithReference", null, null).getInput();

@@ -12,9 +12,10 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-public class EncoderComponentTest extends CamelTestSupport {
+class EncoderComponentTest extends CamelTestSupport {
 
-    protected RouteBuilder createRouteBuilder() throws Exception {
+    @Override
+    protected RouteBuilder createRouteBuilder() {
         return new RouteBuilder() {
             @Override
             public void configure() throws Exception {
@@ -27,7 +28,7 @@ public class EncoderComponentTest extends CamelTestSupport {
     }
 
     @Test
-    public void encoderTransformationTest() throws IOException {
+    void encoderTransformationTest() throws IOException {
 
         template.sendBody("direct:transform", new File("src/test/resources/IFTMIN_D96A_CP850.edi"));
 

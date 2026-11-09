@@ -22,7 +22,6 @@
 package org.assimbly.smb.strategy;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.camel.Exchange;
@@ -55,65 +54,68 @@ public class SmbChangedExclusiveReadLockStrategy implements GenericFileExclusive
 
     @Override
     public boolean acquireExclusiveReadLock(final GenericFileOperations<SmbFile> operations, final GenericFile<SmbFile> file, final Exchange exchange) {
-        boolean exclusive = false;
-
         LOG.trace("Waiting for exclusive read lock to file: {}", file);
 
-        long lastModified = Long.MIN_VALUE;
-        long length = Long.MIN_VALUE;
+        FileState previous = new FileState(Long.MIN_VALUE, Long.MIN_VALUE);
         StopWatch watch = new StopWatch();
-        long startTime = (new Date()).getTime();
+        long startTime = System.currentTimeMillis();
 
-        while (!exclusive) {
-            // timeout check
-            if (timeout > 0) {
-                long delta = watch.taken();
-                if (delta > timeout) {
-                    CamelLogger.log(LOG, readLockLoggingLevel,
-                            "Cannot acquire read lock within " + timeout + " millis. Will skip the file: " + file);
-                    // we could not get the lock within the timeout period, so return false
-                    return false;
-                }
+        while (true) {
+            if (timeout > 0 && watch.taken() > timeout) {
+                CamelLogger.log(LOG, readLockLoggingLevel,
+                        "Cannot acquire read lock within " + timeout + " millis. Will skip the file: " + file);
+                // we could not get the lock within the timeout period, so return false
+                return false;
             }
 
-            long newLastModified = 0;
-            long newLength = 0;
+            FileState current = readFileState(operations, file);
 
-            LOG.trace("Using full directory listing to update file information for {}.", file);
-            // fast option not available (smb listFiles only handles directories), so list the directory and filter the file name
-            List<SmbFile> files = Arrays.asList(operations.listFiles(file.getParent()));
-
-            LOG.trace("List files {} found {} files", file.getAbsoluteFilePath(), files.size());
-            for (SmbFile f : files) {
-                // use same attribute sources as org.apacheextras.camel.component.jcifs.SmbConsumer#asGenericFile()
-                if (f.getName().equals(file.getFileNameOnly())) {
-                    newLastModified = f.getLastModified();
-                    newLength = f.getContentLengthLong();
-                }
-            }
-
-            LOG.trace("Previous last modified: {}, new last modified: {}", lastModified, newLastModified);
-            LOG.trace("Previous length: {}, new length: {}", length, newLength);
+            LOG.trace("Previous last modified: {}, new last modified: {}", previous.lastModified(), current.lastModified());
+            LOG.trace("Previous length: {}, new length: {}", previous.length(), current.length());
             long newOlderThan = startTime + watch.taken() - minAge;
             LOG.trace("New older than threshold: {}", newOlderThan);
 
-            if (newLength >= minLength && ((minAge == 0 && newLastModified == lastModified && newLength == length) || (minAge != 0 && newLastModified < newOlderThan))) {
+            if (isReadLockAcquirable(previous, current, newOlderThan)) {
                 LOG.trace("Read lock acquired.");
-                exclusive = true;
-            } else {
-                // set new base file change information
-                lastModified = newLastModified;
-                length = newLength;
+                return true;
+            }
 
-                boolean interrupted = sleep();
-                if (interrupted) {
-                    // we were interrupted while sleeping, we are likely being shutdown so return false
-                    return false;
-                }
+            // set new base file change information
+            previous = current;
+
+            if (sleep()) {
+                // we were interrupted while sleeping, we are likely being shutdown so return false
+                return false;
             }
         }
+    }
 
-        return true;
+    private FileState readFileState(final GenericFileOperations<SmbFile> operations, final GenericFile<SmbFile> file) {
+        LOG.trace("Using full directory listing to update file information for {}.", file);
+        // fast option not available (smb listFiles only handles directories), so list the directory and filter the file name
+        List<SmbFile> files = Arrays.asList(operations.listFiles(file.getParent()));
+
+        LOG.trace("List files {} found {} files", file.getAbsoluteFilePath(), files.size());
+        long lastModified = 0;
+        long length = 0;
+        for (SmbFile f : files) {
+            // use same attribute sources as org.apacheextras.camel.component.jcifs.SmbConsumer#asGenericFile()
+            if (f.getName().equals(file.getFileNameOnly())) {
+                lastModified = f.getLastModified();
+                length = f.getContentLengthLong();
+            }
+        }
+        return new FileState(lastModified, length);
+    }
+
+    private boolean isReadLockAcquirable(final FileState previous, final FileState current, final long newOlderThan) {
+        if (current.length() < minLength) {
+            return false;
+        }
+        return minAge == 0 ? current.equals(previous) : current.lastModified() < newOlderThan;
+    }
+
+    private record FileState(long lastModified, long length) {
     }
 
     private boolean sleep() {

@@ -8,6 +8,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.assimbly.xmltojson.CustomXmlJsonDataFormat;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -154,6 +155,9 @@ public class XmlToJsonXmlProcessor {
                             .mandatoryConvertTo(byte[].class, xmlData);
         ByteArrayInputStream xml = new ByteArrayInputStream(bytes);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        dbFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        dbFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+        dbFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
         dbFactory.setNamespaceAware(false);
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         return dBuilder.parse(xml);
@@ -161,6 +165,9 @@ public class XmlToJsonXmlProcessor {
 
     public ByteArrayOutputStream getOutputStreamFromXmlDoc() throws Exception {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+        transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
         Transformer transformer = transformerFactory.newTransformer();
         DOMSource source = new DOMSource(xmlDoc);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

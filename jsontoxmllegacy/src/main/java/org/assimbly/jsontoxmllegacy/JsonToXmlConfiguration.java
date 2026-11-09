@@ -167,7 +167,7 @@ public class JsonToXmlConfiguration implements Cloneable{
     public JsonToXmlConfiguration clone() {
         try {
             return (JsonToXmlConfiguration) super.clone();
-        } catch (CloneNotSupportedException e) {
+        } catch (CloneNotSupportedException _) {
             throw new AssertionError();
         }
     }

@@ -14,7 +14,7 @@ public class XmlToEdiConverterTest {
     private XmlToEdiConverter converter = new XmlToEdiConverter();
 
     @Test
-    public void usesDelimitersSpecifiedInXml() throws Exception {
+    void usesDelimitersSpecifiedInXml() {
         String input = "<edi-message>" +
             "<delimiters segment=\"LB\" field=\"~\" component=\"^\" sub-component=\"!\"/>" +
             "<A/>" +
@@ -26,7 +26,7 @@ public class XmlToEdiConverterTest {
     }
 
     @Test
-    public void acceptsOtherCharactersAsSegmentDelimiter() throws Exception {
+    void acceptsOtherCharactersAsSegmentDelimiter() {
         String input = "<edi-message>" +
             "<delimiters segment=\"$\" field=\"~\" component=\"^\" sub-component=\"!\"/>" +
             "<A/>" +
@@ -37,7 +37,7 @@ public class XmlToEdiConverterTest {
     }
 
     @Test
-    public void parsesFields() throws Exception {
+    void parsesFields() {
         String input = "<edi-message>" +
             "<delimiters segment=\"LB\" field=\"~\" component=\"^\" sub-component=\"!\"/>" +
             "<A>" +
@@ -50,20 +50,37 @@ public class XmlToEdiConverterTest {
     }
 
     @Test
-    public void ignoresNonSignificantWhitespaceAndLineBreaks() throws Exception {
-        String input = "<edi-message>" +
-            "<delimiters segment=\"LB\" field=\"~\" component=\"^\" sub-component=\"!\"/>" +
-            "<A>" +
-            "\n\n\n\n\n\n\n       <field.1>B</field.1>" +   // non-relevant whitespace
-            "\n\n\n\n\n\n\n       <field.2>C</field.2>" +   // and linebreaks
-            "</A>" +
-            "</edi-message>";
+    void ignoresNonSignificantWhitespaceAndLineBreaks() {
+        // non-relevant whitespace
+        // and linebreaks
+        String input = """
+                <edi-message>\
+                <delimiters segment="LB" field="~" component="^" sub-component="!"/>\
+                <A>\
+                
+                
+                
+                
+                
+                
+                
+                       <field.1>B</field.1>\
+                
+                
+                
+                
+                
+                
+                
+                       <field.2>C</field.2>\
+                </A>\
+                </edi-message>""";
 
         assertEquals("A~B~C", convert(input));
     }
 
     @Test
-    public void supportsMultipleLinesWithSameHeader() throws Exception {
+    void supportsMultipleLinesWithSameHeader() {
         String input = "<edi-message>" +
             "<delimiters segment=\"LB\" field=\"~\" component=\"^\" sub-component=\"!\"/>" +
             "<A/>" +
@@ -76,7 +93,7 @@ public class XmlToEdiConverterTest {
     }
 
     @Test
-    public void parsesComponents() throws Exception {
+    void parsesComponents() {
         String input = "<edi-message>" +
             "<delimiters segment=\"LB\" field=\"~\" component=\"^\" sub-component=\"!\"/>" +
             "<A>" +
@@ -91,7 +108,7 @@ public class XmlToEdiConverterTest {
     }
 
     @Test
-    public void parsesSubcomponents() throws Exception {
+    void parsesSubcomponents() {
         String input = "<edi-message>" +
             "<delimiters segment=\"LB\" field=\"~\" component=\"^\" sub-component=\"!\"/>" +
             "<A>" +

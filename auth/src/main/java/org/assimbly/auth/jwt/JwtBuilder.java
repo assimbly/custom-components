@@ -1,5 +1,6 @@
 package org.assimbly.auth.jwt;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.assimbly.auth.util.helper.ConfigHelper;
@@ -8,8 +9,6 @@ import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.time.Instant;
-import java.util.Date;
-
 
 public final class JwtBuilder {
 
@@ -34,7 +33,7 @@ public final class JwtBuilder {
 
         return Jwts.builder()
                 .subject(createRandomString())
-                .expiration(createExpiration(expiration))
+                .claim(Claims.EXPIRATION, createExpiration(expiration).getEpochSecond())
                 .claim("name", name)
                 .claim("scope", scope)
                 .signWith(key)
@@ -42,14 +41,13 @@ public final class JwtBuilder {
     }
 
     /**
-     * Create a date used as an expiration date. Date is currentInstant + given seconds.
+     * Create an expiration instant: currentInstant + given seconds.
      *
      * @param seconds the time to add to the current instant in seconds.
-     * @return a date represented as a Date object.
+     * @return the expiration as an Instant.
      */
-    private static Date createExpiration(int seconds) {
-        Instant expirationInstant = Instant.now().plusSeconds(seconds);
-        return Date.from(expirationInstant);
+    private static Instant createExpiration(int seconds) {
+        return Instant.now().plusSeconds(seconds);
     }
 
     /**

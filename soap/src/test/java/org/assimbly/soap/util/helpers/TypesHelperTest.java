@@ -11,12 +11,12 @@ import javax.wsdl.xml.WSDLReader;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class TypesHelperTest {
+class TypesHelperTest {
 
     private static Definition definition;
 
     @BeforeEach
-    public void setup() throws WSDLException {
+    void setup() throws WSDLException {
         WSDLFactory factory = WSDLFactory.newInstance();
         WSDLReader reader = factory.newWSDLReader();
 
@@ -25,7 +25,7 @@ public class TypesHelperTest {
     }
 
     @Test
-    public void testFindSchema() {
+    void testFindSchema() {
         Schema schema = TypesHelper.schema(definition.getTypes(), "http://www.assimbly.world");
         Schema schemaExt = TypesHelper.schema(definition.getTypes(), "http://www.assimbly.world/wsdl/external/");
         Schema schemaUnq = TypesHelper.schema(definition.getTypes(), "http://www.assimbly.world/wsdl/unqualified/");

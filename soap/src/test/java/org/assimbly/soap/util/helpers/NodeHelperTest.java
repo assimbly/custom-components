@@ -15,21 +15,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class NodeHelperTest {
+class NodeHelperTest {
 
     private static Document document;
 
     @BeforeEach
-    public void setup() throws ParserConfigurationException {
+    void setup() throws ParserConfigurationException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
 
         document = db.newDocument();
     }
 
-
     @Test
-    public void testNamedAttributes(){
+    void testNamedAttributes(){
         Element node = document.createElement("tag");
 
         Attr attr = document.createAttribute("type");
@@ -44,7 +43,7 @@ public class NodeHelperTest {
     }
 
     @Test
-    public void testNodeValues(){
+    void testNodeValues(){
         Element node = document.createElement("tag");
 
         Attr attr = document.createAttribute("type");
@@ -66,7 +65,7 @@ public class NodeHelperTest {
     }
 
     @Test
-    public void testNodeNames(){
+    void testNodeNames(){
         Element node = document.createElement("tag");
 
         Attr attr = document.createAttribute("tns:type");
@@ -89,7 +88,7 @@ public class NodeHelperTest {
     }
 
     @Test
-    public void testReference(){
+    void testReference(){
         Element node = document.createElement("tag");
 
         Attr attr = document.createAttribute("ref");

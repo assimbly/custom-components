@@ -27,8 +27,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
-import java.util.Date;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.component.file.FileComponent;
 import org.apache.camel.component.file.GenericFile;
@@ -308,17 +306,11 @@ public class SmbOperations<SmbFile> implements GenericFileOperations<SmbFile> {
     }
 
     private Long lastModifiedDate(final Exchange exchange) {
-        Long last = null;
-        if (endpoint.isKeepLastModified()) {
-            Date date = exchange.getIn().getHeader(Exchange.FILE_LAST_MODIFIED, Date.class);
-            if (date != null) {
-                last = date.getTime();
-            } else {
-                // fallback and try a long
-                last = exchange.getIn().getHeader(Exchange.FILE_LAST_MODIFIED, Long.class);
-            }
+        if (!endpoint.isKeepLastModified()) {
+            return null;
         }
-        return last;
+        // the header is either a Date or a Long; Camel's type converter turns a Date into epoch millis
+        return exchange.getIn().getHeader(Exchange.FILE_LAST_MODIFIED, Long.class);
     }
 
     @Override

@@ -43,7 +43,7 @@ public class ExtractUtils {
     public static void extractChildAsArray(ElementMetadata metadata, ElementMetadata childMetadata, JsonNode childNode) {
         if (childNode.isArray() && MetadataAnalyzer.isLastElement(childMetadata) && !childMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY)) {
             for (JsonNode subElement : childNode)
-                metadata.getArrayNode().add(!metadata.isElementMustBeNull() && !subElement.isNull() ? subElement.asText() : null);
+                metadata.getArrayNode().add(!metadata.isElementMustBeNull() && !subElement.isNull() ? subElement.asString() : null);
         } else {
             metadata.getArrayNode().add(!metadata.isElementMustBeNull() ? childNode : null);
         }
@@ -130,27 +130,34 @@ public class ExtractUtils {
             handleEmptyChildNodeWithTypeHints(metadata, childMetadata);
         } else if (JsonUtils.isJsonNodeInOneLevelAndWithNamespace(childNode)) {
             transformJsonNodeWithNamespace(metadata, config, childNode, true);
-        } else if (childNode.isArray() && metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT)) {
+        } else if (isNamedArrayUnderClassObject(metadata, childNode)) {
             // Keep named array property under class="object" (json-lib type hint)
-            String fieldName = ElementMetadataUtils.getElementName(childMetadata, config.isRemoveNamespacePrefixes());
-            if (metadata.getObjectNode().has(fieldName)) {
-                addObjectToExistingFieldOnRootObjectNode(metadata, fieldName, childNode);
-            } else {
-                metadata.getObjectNode().set(fieldName, !metadata.isElementMustBeNull() ? childNode : null);
-            }
-        } else if (childNode.isObject()
-                && metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT)
-                && metadata.getChildrenCount() == 1
-                && childMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT)) {
+            putNamedChild(metadata, childMetadata, config, childNode);
+        } else if (isSingleClassObjectChild(metadata, childMetadata, childNode)) {
             // Keep single child that is itself class="object" as a nested named object
-            String fieldName = ElementMetadataUtils.getElementName(childMetadata, config.isRemoveNamespacePrefixes());
-            if (metadata.getObjectNode().has(fieldName)) {
-                addObjectToExistingFieldOnRootObjectNode(metadata, fieldName, childNode);
-            } else {
-                metadata.getObjectNode().set(fieldName, !metadata.isElementMustBeNull() ? childNode : null);
-            }
+            putNamedChild(metadata, childMetadata, config, childNode);
         } else {
             iterateChildNodeWithTypeHints(metadata, childMetadata, config, childNode);
+        }
+    }
+
+    private static boolean isNamedArrayUnderClassObject(ElementMetadata metadata, JsonNode childNode) {
+        return childNode.isArray() && metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT);
+    }
+
+    private static boolean isSingleClassObjectChild(ElementMetadata metadata, ElementMetadata childMetadata, JsonNode childNode) {
+        return childNode.isObject()
+                && metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT)
+                && metadata.getChildrenCount() == 1
+                && childMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT);
+    }
+
+    private static void putNamedChild(ElementMetadata metadata, ElementMetadata childMetadata, XmlToJsonConfiguration config, JsonNode childNode) {
+        String fieldName = ElementMetadataUtils.getElementName(childMetadata, config.isRemoveNamespacePrefixes());
+        if (metadata.getObjectNode().has(fieldName)) {
+            addObjectToExistingFieldOnRootObjectNode(metadata, fieldName, childNode);
+        } else {
+            metadata.getObjectNode().set(fieldName, !metadata.isElementMustBeNull() ? childNode : null);
         }
     }
 
@@ -221,25 +228,36 @@ public class ExtractUtils {
     private static void mergeFieldIntoArray(ElementMetadata metadata, ElementMetadata childMetadata, XmlToJsonConfiguration config, String fieldName, String fieldValue) {
         JsonNode nodeValues = metadata.getObjectNode().get(fieldName);
         if (nodeValues.isArray()) {
-            ObjectNode attrNode = JsonNodeFactory.instance.objectNode();
-            boolean nsAdded = addNamespaceAttributeInObjectNode(metadata, childMetadata, config, attrNode, metadata.getNamespacePrefix());
-            if (nsAdded) {
-                if(fieldValue == null || fieldValue.isEmpty()) attrNode.putNull(Constants.JSON_XML_TEXT_FIELD);
-                else attrNode.put(Constants.JSON_XML_TEXT_FIELD, fieldValue);
-                ((ArrayNode) nodeValues).add(!metadata.isElementMustBeNull() ? attrNode : null);
-            }
-            else {
-                if(fieldValue == null || fieldValue.isEmpty()) ((ArrayNode) nodeValues).addNull();
-                else ((ArrayNode) nodeValues).add(!metadata.isElementMustBeNull() ? fieldValue : null);
-            }
+            appendToExistingArray(metadata, childMetadata, config, (ArrayNode) nodeValues, fieldValue);
         } else {
-            ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode();
-            arrayNode.add(nodeValues);
-            if(fieldValue == null || fieldValue.isEmpty()) arrayNode.addNull();
-            else arrayNode.add(!metadata.isElementMustBeNull() ? fieldValue : null);
-            nodeValues = arrayNode;
+            nodeValues = wrapInNewArray(metadata, nodeValues, fieldValue);
         }
         metadata.getObjectNode().set(fieldName, nodeValues);
+    }
+
+    private static void appendToExistingArray(ElementMetadata metadata, ElementMetadata childMetadata, XmlToJsonConfiguration config, ArrayNode arrayNode, String fieldValue) {
+        ObjectNode attrNode = JsonNodeFactory.instance.objectNode();
+        boolean nsAdded = addNamespaceAttributeInObjectNode(metadata, childMetadata, config, attrNode, metadata.getNamespacePrefix());
+        if (nsAdded) {
+            if(fieldValue == null || fieldValue.isEmpty()) attrNode.putNull(Constants.JSON_XML_TEXT_FIELD);
+            else attrNode.put(Constants.JSON_XML_TEXT_FIELD, fieldValue);
+            arrayNode.add(!metadata.isElementMustBeNull() ? attrNode : null);
+        }
+        else {
+            addValueOrNull(metadata, arrayNode, fieldValue);
+        }
+    }
+
+    private static ArrayNode wrapInNewArray(ElementMetadata metadata, JsonNode nodeValues, String fieldValue) {
+        ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode();
+        arrayNode.add(nodeValues);
+        addValueOrNull(metadata, arrayNode, fieldValue);
+        return arrayNode;
+    }
+
+    private static void addValueOrNull(ElementMetadata metadata, ArrayNode arrayNode, String fieldValue) {
+        if(fieldValue == null || fieldValue.isEmpty()) arrayNode.addNull();
+        else arrayNode.add(!metadata.isElementMustBeNull() ? fieldValue : null);
     }
 
     private static void putNewField(ElementMetadata metadata, ElementMetadata childMetadata, XmlToJsonConfiguration config, String fieldName, String fieldValue) {
@@ -500,15 +518,12 @@ public class ExtractUtils {
     }
 
     private static void addObjectToExistingFieldOnRootObjectNode(ElementMetadata metadata, String field, Object value) {
-        JsonNode newValue;
-        if(value instanceof JsonNode jn) {
-            newValue = jn;
-        } else if (value instanceof String s) {
-            if(s.isEmpty()) newValue = JsonNodeFactory.instance.nullNode();
-            else newValue = new StringNode(s);
-        } else {
-            throw new IllegalArgumentException("Unsupported value type: " + value.getClass());
-        }
+        JsonNode newValue = switch (value) {
+            case JsonNode jn -> jn;
+            case String s when s.isEmpty() -> JsonNodeFactory.instance.nullNode();
+            case String s -> new StringNode(s);
+            default -> throw new IllegalArgumentException("Unsupported value type: " + value.getClass());
+        };
 
         JsonNode nodeValues = metadata.getObjectNode().get(field);
         if (!nodeValues.isArray()) nodeValues = wrapInArray(nodeValues);
@@ -543,11 +558,11 @@ public class ExtractUtils {
 
     private static boolean isInteger(String str) {
         if (str == null || str.isEmpty()) return false;
-        try { Integer.parseInt(str); return true; } catch (NumberFormatException e) { return false; }
+        try { Integer.parseInt(str); return true; } catch (NumberFormatException _) { return false; }
     }
 
     private static boolean isDouble(String str) {
         if (str == null || str.isEmpty()) return false;
-        try { Double.parseDouble(str); return true; } catch (NumberFormatException e) { return false; }
+        try { Double.parseDouble(str); return true; } catch (NumberFormatException _) { return false; }
     }
 }

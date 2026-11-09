@@ -50,7 +50,7 @@ class BindingInputHelperTest {
     }
 
     @Test
-    public void testGettingSoapBodies() {
+    void testGettingSoapBodies() {
         Pair<Definition, Binding> lookup = DefinitionHelper.binding(definition,"OperationWithTypePart");
 
         assertNotNull(lookup);

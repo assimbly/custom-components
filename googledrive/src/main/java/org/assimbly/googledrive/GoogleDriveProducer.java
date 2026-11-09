@@ -29,6 +29,10 @@ public class GoogleDriveProducer extends DefaultProducer {
         this.configuration = endpoint.getConfiguration();
     }
 
+    public void process() throws Exception {
+        process((Exchange) null);
+    }
+
     @Override
     public void process(Exchange exchange) throws Exception {
         Object body = exchange.getIn().getBody();
@@ -47,7 +51,10 @@ public class GoogleDriveProducer extends DefaultProducer {
 
         exchange.getIn().setHeader("GoogleDriveFileId", googleDriveFileId);
 
-        postProcess(genericFile.getFile());
+        File file = genericFile.getFile();
+        if (file != null) {
+            postProcess(file);
+        }
     }
 
     private void prepareGoogleDriveClient() {

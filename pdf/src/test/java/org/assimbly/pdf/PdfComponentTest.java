@@ -6,6 +6,9 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.model.language.ConstantExpression;
 import org.apache.commons.io.IOUtils;
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import com.sun.net.httpserver.HttpServer;
 import java.net.InetSocketAddress;
 
@@ -14,7 +17,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.TreeMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -80,8 +87,19 @@ class PdfComponentTest extends CamelTestSupport {
         Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
         byte[] actual = result.getIn().getBody(byte[].class);
 
-        assertArrayEquals(expected, actual);
+        // Not compared byte-for-byte: the compressed xref stream differs between zlib/JDK builds.
+        assertEquals(readFields(expected), readFields(actual));
 
+    }
+
+    private Map<String, List<Object>> readFields(byte[] pdf) throws IOException {
+        try (PDDocument document = Loader.loadPDF(pdf)) {
+            Map<String, List<Object>> fields = new TreeMap<>();
+            for (PDField field : document.getDocumentCatalog().getAcroForm().getFields()) {
+                fields.put(field.getFullyQualifiedName(), List.of(field.getValueAsString(), field.isReadOnly()));
+            }
+            return fields;
+        }
     }
 
 }

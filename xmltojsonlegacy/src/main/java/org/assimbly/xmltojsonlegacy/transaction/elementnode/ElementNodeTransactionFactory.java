@@ -15,7 +15,7 @@ public class ElementNodeTransactionFactory {
         OBJECT,
         ROOT_ARRAY,
         OTHER_WITH_NAMESPACE,
-        OTHER_WITHOUT_NAMESPACE;
+        OTHER_WITHOUT_NAMESPACE
     }
 
     private static final Map<ElementNodeType, ElementNodeTransaction> processElementNodeMap = new EnumMap<>(ElementNodeType.class);
