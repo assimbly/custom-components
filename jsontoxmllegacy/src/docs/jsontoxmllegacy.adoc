@@ -1,0 +1,48 @@
+= JSONToXML Legacy Component
+:doctitle: JSONTOXMLLEGACY
+:shortname: jsontoxml
+:artifactid: jsontoxmllegacy
+:description: Converts JSON to XML in the old format (legacy)
+:since: 4.0.0
+:supportlevel: Stable
+:component-header: Only producer is supported
+//Manually maintained attributes
+
+*Since Camel {since}*
+
+*{component-header}*
+
+The component converts JSON into XML in the old (legacy) format.
+
+Maven users will need to add the following dependency to their `pom.xml`
+for this component:
+
+[source,xml]
+------------------------------------------------------------
+<dependency>
+    <groupId>org.assimbly</groupId>
+    <artifactId>jsontoxmllegacy</artifactId>
+	<version>x.x.x</version>
+    <!-- use the same version as your Assimbly version -->
+</dependency>
+------------------------------------------------------------
+
+== URI format
+
+--------------------------------------------
+jsontoxml://?rootName=root&elementName=e&arrayName=a
+--------------------------------------------
+
+The scheme is `jsontoxml`, taken from the name of the component registration file.
+
+== Options
+
+[width="100%",cols="2,5,^1,2",options="header"]
+|===
+| Name | Description | Default | Type
+| *rootName* | *Required* Name of the root element when the JSON starts with an object. | | String
+| *arrayName* | *Required* Name of the root element when the JSON starts with an array. | | String
+| *elementName* | *Required* Name of an element that has no name in the JSON (for example array items). | | String
+| *namespaceLenient* | *Required* Whether namespace declarations in the JSON are handled leniently. | false | boolean
+| *typeHints* | *Required* Whether elements get a `class` attribute describing the JSON type (object or array). | false | boolean
+|===

@@ -102,8 +102,6 @@ public class H2Database {
      * H2 calls this and wraps the returned ResultSet transparently.
      */
     public static ResultSet getAllProducts(Connection conn) throws SQLException {
-        // H2 keeps the ResultSet open as long as the statement is alive;
-        // do NOT close the statement here.
         PreparedStatement ps = conn.prepareStatement("SELECT * FROM products");
         return ps.executeQuery();
     }

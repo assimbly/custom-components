@@ -69,7 +69,7 @@ public class SoapProcessor implements Processor {
         SOAPMessage soapMessage = buildSoapMessage(exchange, config);
 
         Pair<Definition, Binding> lookup = requireBinding(definition, config.getAction());
-        String destination = resolveDestination(exchange, lookup, config);
+        String destination = resolveDestination(exchange, lookup);
 
         applyMimeHeaders(soapMessage, lookup.getValue(), config);
 
@@ -135,7 +135,7 @@ public class SoapProcessor implements Processor {
         });
     }
 
-    private String resolveDestination(Exchange exchange, Pair<Definition, Binding> lookup, SoapConfiguration config) {
+    private String resolveDestination(Exchange exchange, Pair<Definition, Binding> lookup) {
         String destination = exchange.getIn().getHeader("AssimblySoapDestination", String.class);
 
         return destination != null

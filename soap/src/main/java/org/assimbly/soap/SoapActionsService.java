@@ -1,6 +1,7 @@
 package org.assimbly.soap;
 
 import javax.wsdl.*;
+import javax.xml.namespace.QName;
 import java.util.*;
 import org.assimbly.soap.util.helpers.*;
 
@@ -84,66 +85,50 @@ public class SoapActionsService {
         List<SOAPHeaderImpl> soapHeaders = BindingInputHelper.getSoapHeaders(input);
 
         for (SOAPHeaderImpl soapHeader : soapHeaders) {
-            Message message = (Message) definition.getMessages().get(soapHeader.getMessage());
+            SoapHeader header = createHeader(definition, soapHeader.getMessage(), soapHeader.getPart());
 
-            // message not found in main wsdl, check imports
-            if(message == null){
-                definition = DefinitionHelper.getImport(definition, soapHeader.getMessage());
-                message = (Message) definition.getMessages().get(soapHeader.getMessage());
-            }
-
-            if(message == null)
-                continue;
-
-            Part part = message.getPart(soapHeader.getPart());
-
-            String namespace = part.getElementName().getNamespaceURI();
-            String reference = part.getElementName().getLocalPart();
-
-            SoapHeader header = new SoapHeader(reference);
-
-            Node declaration = getDeclaration(definition, namespace, reference);
-
-            if (declaration == null)
-                continue;
-
-            header.setAttrs(getAttributesFromDeclaration(declaration));
-
-            result.add(header);
+            if (header != null)
+                result.add(header);
         }
 
         List<SOAP12HeaderImpl> soap12Headers = BindingInputHelper.getSoap12Headers(input);
 
         for (SOAP12HeaderImpl soapHeader : soap12Headers) {
-            Message message = (Message) definition.getMessages().get(soapHeader.getMessage());
+            SoapHeader header = createHeader(definition, soapHeader.getMessage(), soapHeader.getPart());
 
-            // message not found in main wsdl, check imports
-            if(message == null){
-                definition = DefinitionHelper.getImport(definition, soapHeader.getMessage());
-                message = (Message) definition.getMessages().get(soapHeader.getMessage());
-            }
-
-            if(message == null)
-                continue;
-
-            Part part = message.getPart(soapHeader.getPart());
-
-            String namespace = part.getElementName().getNamespaceURI();
-            String reference = part.getElementName().getLocalPart();
-
-            SoapHeader header = new SoapHeader(reference);
-
-            Node declaration = getDeclaration(definition, namespace, reference);
-
-            if (declaration == null)
-                continue;
-
-            header.setAttrs(getAttributesFromDeclaration(declaration));
-
-            result.add(header);
+            if (header != null)
+                result.add(header);
         }
 
         return result;
+    }
+
+    private SoapHeader createHeader(Definition definition, QName messageName, String partName) {
+        Message message = (Message) definition.getMessages().get(messageName);
+
+        // message not found in main wsdl, check imports
+        if(message == null){
+            definition = DefinitionHelper.getImport(definition, messageName);
+            message = (Message) definition.getMessages().get(messageName);
+        }
+
+        if(message == null)
+            return null;
+
+        Part part = message.getPart(partName);
+
+        String namespace = part.getElementName().getNamespaceURI();
+        String reference = part.getElementName().getLocalPart();
+
+        Node declaration = getDeclaration(definition, namespace, reference);
+
+        if (declaration == null)
+            return null;
+
+        SoapHeader header = new SoapHeader(reference);
+        header.setAttrs(getAttributesFromDeclaration(declaration));
+
+        return header;
     }
 
     private List<SoapAttribute> getAttributesFromDeclaration(Node declaration) {

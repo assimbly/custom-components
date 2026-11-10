@@ -40,12 +40,12 @@ import org.apache.camel.util.ObjectHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SmbOperations<SmbFile> implements GenericFileOperations<SmbFile> {
+public class SmbOperations<T> implements GenericFileOperations<T> {
     private static final Logger LOGGER = LoggerFactory.getLogger(SmbOperations.class);
 
     private static final org.codelibs.jcifs.smb.impl.SmbFile[] EMPTY = {};
 
-    private GenericFileEndpoint<SmbFile> endpoint;
+    private GenericFileEndpoint<T> endpoint;
     private final SmbClient client;
 
     public SmbOperations(final SmbClient smbClient) {
@@ -53,7 +53,7 @@ public class SmbOperations<SmbFile> implements GenericFileOperations<SmbFile> {
     }
 
     @Override
-    public void setEndpoint(final GenericFileEndpoint<SmbFile> endpoint) {
+    public void setEndpoint(final GenericFileEndpoint<T> endpoint) {
         this.endpoint = endpoint;
     }
 
@@ -116,7 +116,7 @@ public class SmbOperations<SmbFile> implements GenericFileOperations<SmbFile> {
         File local = new File(endpoint.getLocalWorkDirectory());
         local.mkdirs();
         OutputStream os;
-        GenericFile<SmbFile> file = (GenericFile<SmbFile>) exchange
+        GenericFile<T> file = (GenericFile<T>) exchange
                 .getProperty(FileComponent.FILE_EXCHANGE_FILE);
         ObjectHelper.notNull(file, "Exchange should have the " + FileComponent.FILE_EXCHANGE_FILE + " set");
 
@@ -184,7 +184,7 @@ public class SmbOperations<SmbFile> implements GenericFileOperations<SmbFile> {
         boolean result;
 
         try(OutputStream os = new ByteArrayOutputStream()){
-            GenericFile<SmbFile> target = (GenericFile<SmbFile>) exchange
+            GenericFile<T> target = (GenericFile<T>) exchange
                     .getProperty(FileComponent.FILE_EXCHANGE_FILE);
             ObjectHelper.notNull(target,
                     "Exchange should have the " + FileComponent.FILE_EXCHANGE_FILE + " set");
@@ -264,26 +264,9 @@ public class SmbOperations<SmbFile> implements GenericFileOperations<SmbFile> {
                     LOGGER.debug("An existing file already exists: {}. Ignore and do not override it.", name);
                 }
                 return true;
-            } else if (endpoint.getFileExist() == GenericFileExist.Fail) {
-                throw new GenericFileOperationFailedException(
-                        "File already exist: " + name + ". Cannot write new file.");
-            } else if (endpoint.getFileExist() == GenericFileExist.Move) {
-                // move any existing file first
-                doMoveExistingFile(name);
-            } else if (endpoint.isEagerDeleteTargetFile()
-                    && endpoint.getFileExist() == GenericFileExist.Override) {
-                // we override the target so we do this by deleting it so the
-                // temp file can be renamed later
-                // with success as the existing target file have been deleted
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Eagerly deleting existing file: {}", name);
-                }
-                if (!deleteFile(name)) {
-                    throw new GenericFileOperationFailedException("Cannot delete file: " + name);
-                }
-            } else if (endpoint.getFileExist() == GenericFileExist.Append) {
-                append = true;
             }
+            handleExistingFile(name);
+            append = endpoint.getFileExist() == GenericFileExist.Append;
         }
 
         String storeName = getPath(name);
@@ -302,6 +285,27 @@ public class SmbOperations<SmbFile> implements GenericFileOperations<SmbFile> {
             throw new GenericFileOperationFailedException("Cannot store file " + storeName, e);
         } finally {
             IOHelper.close(is, "store: " + storeName);
+        }
+    }
+
+    private void handleExistingFile(final String name) {
+        if (endpoint.getFileExist() == GenericFileExist.Fail) {
+            throw new GenericFileOperationFailedException(
+                    "File already exist: " + name + ". Cannot write new file.");
+        } else if (endpoint.getFileExist() == GenericFileExist.Move) {
+            // move any existing file first
+            doMoveExistingFile(name);
+        } else if (endpoint.isEagerDeleteTargetFile()
+                && endpoint.getFileExist() == GenericFileExist.Override) {
+            // we override the target so we do this by deleting it so the
+            // temp file can be renamed later
+            // with success as the existing target file have been deleted
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Eagerly deleting existing file: {}", name);
+            }
+            if (!deleteFile(name)) {
+                throw new GenericFileOperationFailedException("Cannot delete file: " + name);
+            }
         }
     }
 
@@ -334,17 +338,18 @@ public class SmbOperations<SmbFile> implements GenericFileOperations<SmbFile> {
     }
 
     @Override
-    public SmbFile[] listFiles() {
-        return null;
+    @SuppressWarnings("unchecked")
+    public T[] listFiles() {
+        return (T[]) EMPTY;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public SmbFile[] listFiles(final String path) {
+    public T[] listFiles(final String path) {
         String listPath = getDirPath(path);
         try {
             login();
-            return (SmbFile[]) client.listFiles(listPath).toArray(EMPTY);
+            return (T[]) client.listFiles(listPath).toArray(EMPTY);
         } catch (Exception e) {
             throw new GenericFileOperationFailedException("Could not get files " + e.getMessage(), e);
         }
@@ -377,7 +382,7 @@ public class SmbOperations<SmbFile> implements GenericFileOperations<SmbFile> {
     }
 
     @Override
-    public GenericFile<SmbFile> newGenericFile() {
+    public GenericFile<T> newGenericFile() {
         return new GenericFile<>();
     }
 }

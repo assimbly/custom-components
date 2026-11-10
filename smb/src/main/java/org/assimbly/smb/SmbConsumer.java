@@ -85,7 +85,7 @@ public class SmbConsumer extends GenericFileConsumer<SmbFile> {
 
     private void addIfMatched(final Exchange exchange, final String fileName, final SmbFile smbFile, final List<GenericFile<SmbFile>> fileList) {
         GenericFile<SmbFile> genericFile = asGenericFile(fileName, smbFile);
-        SmbFile[] singleFileArray = new SmbFile[] { smbFile };
+        SmbFile[] singleFileArray = { smbFile };
 
         boolean valid = isMatched(
                 exchange,
@@ -104,7 +104,7 @@ public class SmbConsumer extends GenericFileConsumer<SmbFile> {
 
     @Override
     protected void updateFileHeaders(final GenericFile<SmbFile> genericFile, final Message message) {
-        // TODO
+        // Intentionally empty: the SMB component documents no consumer headers beyond the standard Camel file headers.
     }
 
     @Override
@@ -117,7 +117,6 @@ public class SmbConsumer extends GenericFileConsumer<SmbFile> {
         return false;
     }
 
-    // TODO: this needs some checking!
     private GenericFile<SmbFile> asGenericFile(final String path, final SmbFile file) {
         SmbGenericFile<SmbFile> answer = new SmbGenericFile<>();
         answer.setAbsoluteFilePath(path + answer.getFileSeparator() + file.getName());
@@ -128,7 +127,7 @@ public class SmbConsumer extends GenericFileConsumer<SmbFile> {
         answer.setFile(file);
         answer.setLastModified(file.getLastModified());
         answer.setFileName(currentRelativePath + file.getName());
-        answer.setRelativeFilePath(file.getName());
+        answer.setRelativeFilePath(currentRelativePath + file.getName());
 
         if (LOGGER.isTraceEnabled()) {
             LOGGER.trace("asGenericFile():");
@@ -137,7 +136,7 @@ public class SmbConsumer extends GenericFileConsumer<SmbFile> {
         return answer;
     }
 
-    protected boolean isMatched(final GenericFile<SmbFile> file, final String doneFileName, final SmbFile[] files) {
+    protected boolean isMatched(final String doneFileName, final SmbFile[] files) {
         String onlyName = FileUtil.stripPath(doneFileName);
 
         for (SmbFile f : files) {

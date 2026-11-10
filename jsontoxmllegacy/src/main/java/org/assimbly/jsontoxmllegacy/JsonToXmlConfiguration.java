@@ -10,7 +10,7 @@ import org.w3c.dom.Element;
 import java.util.HashMap;
 
 @UriParams
-public class JsonToXmlConfiguration implements Cloneable{
+public class JsonToXmlConfiguration {
 
     @UriParam
     @Metadata(required = true)
@@ -154,22 +154,15 @@ public class JsonToXmlConfiguration implements Cloneable{
 
     // create sub level configuration
     public JsonToXmlConfiguration createSubLevelConfig(JsonNode jsonNode, String name) {
-        JsonToXmlConfiguration subLevelConfig = this.clone();
+        JsonToXmlConfiguration subLevelConfig = new JsonToXmlConfiguration(this);
 
+        // Namespaces are declared once per conversion: all levels must share the same map.
+        subLevelConfig.setXmlnsMap(this.xmlnsMap);
         subLevelConfig.setLevel(this.getLevel() +1);
         subLevelConfig.setName(name);
         subLevelConfig.setJsonNode(jsonNode);
 
         return subLevelConfig;
-    }
-
-    @Override
-    public JsonToXmlConfiguration clone() {
-        try {
-            return (JsonToXmlConfiguration) super.clone();
-        } catch (CloneNotSupportedException _) {
-            throw new AssertionError();
-        }
     }
 
 }

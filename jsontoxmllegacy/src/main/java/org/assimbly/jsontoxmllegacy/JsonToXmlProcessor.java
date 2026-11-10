@@ -41,7 +41,7 @@ public class JsonToXmlProcessor implements Processor {
     public void process(Exchange exchange) throws Exception {
         // Work on a private copy per exchange — never mutate the shared,
         // endpoint-scoped configuration instance directly.
-        JsonToXmlConfiguration config = endpoint.getConfiguration().clone();
+        JsonToXmlConfiguration config = new JsonToXmlConfiguration(endpoint.getConfiguration());
         config.init();
 
         String json = exchange.getMessage().getBody(String.class);

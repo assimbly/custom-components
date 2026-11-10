@@ -1,0 +1,44 @@
+= PDF Transform Component
+:doctitle: PDF
+:shortname: headerstopdf
+:artifactid: pdf
+:description: Fills the form fields of a PDF template with message headers
+:since: 4.2.0
+:supportlevel: Stable
+:component-header: Only producer is supported
+//Manually maintained attributes
+
+*Since Camel {since}*
+
+*{component-header}*
+
+The component fills the form fields (AcroForm) of a PDF template. Every message header whose name equals the fully qualified name of a form field sets the value of that field. Filled fields are made read-only. The result is set as the message body with content type `application/pdf`.
+
+Maven users will need to add the following dependency to their `pom.xml`
+for this component:
+
+[source,xml]
+------------------------------------------------------------
+<dependency>
+    <groupId>org.assimbly</groupId>
+    <artifactId>pdf</artifactId>
+	<version>x.x.x</version>
+    <!-- use the same version as your Assimbly version -->
+</dependency>
+------------------------------------------------------------
+
+== URI format
+
+--------------------------------------------
+headerstopdf:resourceUri
+--------------------------------------------
+
+The scheme is `headerstopdf`, taken from the name of the component registration file.
+
+== Path option
+
+[width="100%",cols="2,5,^1,2",options="header"]
+|===
+| Name | Description | Default | Type
+| *resourceUri* | *Required* Location of the PDF template, for example `classpath:template.pdf`. A `ref:` resource contains the template as Base64 text. | | String
+|===

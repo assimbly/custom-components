@@ -1,5 +1,7 @@
 package org.assimbly.googledrive;
 
+import com.google.api.client.http.AbstractInputStreamContent;
+import com.google.api.client.http.ByteArrayContent;
 import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
 import org.apache.camel.Exchange;
@@ -8,11 +10,8 @@ import org.apache.camel.support.DefaultProducer;
 import org.assimbly.tenantvariables.mongo.MongoDao;
 import org.assimbly.tenantvariables.helper.ExchangeHelper;
 
-import org.assimbly.googledrive.exception.GoogleDriveException;
-
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,21 +36,27 @@ public class GoogleDriveProducer extends DefaultProducer {
     public void process(Exchange exchange) throws Exception {
         Object body = exchange.getIn().getBody();
 
-        GenericFile<File> genericFile;
+        File file = null;
+        String fileName;
+        AbstractInputStreamContent content;
+
         if (body instanceof GenericFile<?> gf) {
             //noinspection unchecked
-            genericFile = (GenericFile<File>) gf;
+            GenericFile<File> genericFile = (GenericFile<File>) gf;
+            file = genericFile.getFile();
+            fileName = genericFile.getFileName();
+            content = new FileContent(guessMimeType(fileName), file);
         } else {
-            genericFile = prepareCamelFile(exchange);
+            fileName = exchange.getIn().getHeader("CamelFileName", String.class);
+            content = new ByteArrayContent(guessMimeType(fileName), exchange.getIn().getBody(byte[].class));
         }
 
         prepareGoogleDriveClient();
 
-        String googleDriveFileId = uploadToGoogleDrive(genericFile, exchange);
+        String googleDriveFileId = uploadToGoogleDrive(fileName, content, exchange);
 
         exchange.getIn().setHeader("GoogleDriveFileId", googleDriveFileId);
 
-        File file = genericFile.getFile();
         if (file != null) {
             postProcess(file);
         }
@@ -62,42 +67,17 @@ public class GoogleDriveProducer extends DefaultProducer {
         this.service = ((GoogleDriveEndpoint) getEndpoint()).getClient(forceClient);
     }
 
-    private GenericFile<File> prepareCamelFile(Exchange exchange) {
-
-        String existing = exchange.getIn().getHeader("CamelFileName", String.class);
-        GenericFile<File> genericFile = new GenericFile<>();
-        File file;
-
-        try {
-            file = File.createTempFile("temp", "");
-        } catch (IOException _) {
-            throw new GoogleDriveException("upload", existing);
-        }
-
-        try (OutputStream outputStream = Files.newOutputStream(file.toPath())) {
-
-            outputStream.write(exchange.getIn().getBody(byte[].class));
-
-            genericFile.setFileName(existing);
-            genericFile.setFile(file);
-
-        } catch (IOException _) {
-            throw new GoogleDriveException("upload", existing);
-        }
-
-        return genericFile;
+    private String guessMimeType(String fileName) {
+        return URLConnection.guessContentTypeFromName(fileName);
     }
 
-    private String uploadToGoogleDrive(GenericFile<File> genericFile, Exchange exchange) throws IOException {
+    private String uploadToGoogleDrive(String fileName, AbstractInputStreamContent mediaContent, Exchange exchange) throws IOException {
 
         String directoryId = ExchangeHelper.interpolate(configuration.getDirectoryId(), exchange);
 
         com.google.api.services.drive.model.File fileMetadata = new com.google.api.services.drive.model.File();
         fileMetadata.setParents(Collections.singletonList(directoryId));
-        fileMetadata.setName(genericFile.getFileName());
-
-        String mimeType = URLConnection.guessContentTypeFromName(genericFile.getFileName());
-        FileContent mediaContent = new FileContent(mimeType, genericFile.getFile());
+        fileMetadata.setName(fileName);
 
         return service.files().create(fileMetadata, mediaContent)
                 .setFields("id, parents")

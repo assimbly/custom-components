@@ -1,0 +1,24 @@
+= EDIFACT Common Module
+:doctitle: EDIFACTCOMMON
+:shortname: edifactcommon
+:artifactid: edifactcommon
+:description: Shared runtime classes for EDI and EDIFACT mappings
+:supportlevel: Stable
+//Manually maintained attributes
+
+This module is not a Camel component. It is a support library with the runtime classes (types, functions, text and XML readers and writers) that the generated EDI and EDIFACT mappings depend on.
+
+Use the `edi` and `edifact` modules to convert EDI messages in a route.
+
+Maven users will need to add the following dependency to their `pom.xml`
+for this module:
+
+[source,xml]
+------------------------------------------------------------
+<dependency>
+    <groupId>org.assimbly</groupId>
+    <artifactId>edifactcommon</artifactId>
+	<version>x.x.x</version>
+    <!-- use the same version as your Assimbly version -->
+</dependency>
+------------------------------------------------------------

@@ -10,6 +10,8 @@ import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.assimbly.xmltojson.exception.JsonTypeException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import java.io.IOException;
@@ -77,14 +79,21 @@ class XmlToJsonTest extends CamelTestSupport {
         resultEndpoint.assertIsSatisfied();
     }
 
-    @Test
-    void testTypedXmlToJsonWithSimpleXml() throws Exception {
-        String xml = readResource("xml-to-json/typed-xml-simple.xml");
-        String json = readResource("xml-to-json/typed-json-simple.json");
+    @ParameterizedTest(name = "{2}")
+    @CsvSource({
+            "xml-to-json/typed-xml-simple.xml, xml-to-json/typed-json-simple.json, direct:marshalWithTypes",
+            "xml-to-json/type-value-mismatch-xml.xml, xml-to-json/type-value-mismatch-original-json.json, direct:marshalWithTypeValueMismatchOriginal",
+            "xml-to-json/type-value-mismatch-xml.xml, xml-to-json/type-value-mismatch-null-json.json, direct:marshalWithTypeValueMismatchNull",
+            "xml-to-json/namespace-xml.xml, xml-to-json/namespace-json.json, direct:marshalWithRemoveNamespaces",
+            "xml-to-json/remove-root-xml.xml, xml-to-json/remove-root-json.json, direct:marshalWithRemoveRoot"
+    })
+    void testXmlToJsonWithOptions(String xmlPath, String jsonPath, String route) throws Exception {
+        String xml = readResource(xmlPath);
+        String json = readResource(jsonPath);
 
         resultEndpoint.expectedMessageCount(1);
 
-        template.sendBody("direct:marshalWithTypes", xml);
+        template.sendBody(route, xml);
 
         String exchangeBody = getLastExchange(resultEndpoint).getIn().getBody(String.class);
         JSONAssert.assertEquals(json, exchangeBody, true);
@@ -124,36 +133,6 @@ class XmlToJsonTest extends CamelTestSupport {
     }
 
     @Test
-    void testTypeValueMismatchOriginal() throws Exception {
-        String xml = readResource("xml-to-json/type-value-mismatch-xml.xml");
-        String json = readResource("xml-to-json/type-value-mismatch-original-json.json");
-
-        resultEndpoint.expectedMessageCount(1);
-
-        template.sendBody("direct:marshalWithTypeValueMismatchOriginal", xml);
-
-        String exchangeBody = getLastExchange(resultEndpoint).getIn().getBody(String.class);
-        JSONAssert.assertEquals(json, exchangeBody, true);
-
-        resultEndpoint.assertIsSatisfied();
-    }
-
-    @Test
-    void testTypeValueMismatchNull() throws Exception {
-        String xml = readResource("xml-to-json/type-value-mismatch-xml.xml");
-        String json = readResource("xml-to-json/type-value-mismatch-null-json.json");
-
-        resultEndpoint.expectedMessageCount(1);
-
-        template.sendBody("direct:marshalWithTypeValueMismatchNull", xml);
-
-        String exchangeBody = getLastExchange(resultEndpoint).getIn().getBody(String.class);
-        JSONAssert.assertEquals(json, exchangeBody, true);
-
-        resultEndpoint.assertIsSatisfied();
-    }
-
-    @Test
     void testTypeValueMismatchError() throws Exception {
         String xml = readResource("xml-to-json/type-value-mismatch-xml.xml");
 
@@ -167,36 +146,6 @@ class XmlToJsonTest extends CamelTestSupport {
 
             assertIsInstanceOf(JsonTypeException.class, ex.getCause());
         }
-    }
-
-    @Test
-    void testRemoveNamespaces() throws Exception {
-        String xml = readResource("xml-to-json/namespace-xml.xml");
-        String json = readResource("xml-to-json/namespace-json.json");
-
-        resultEndpoint.expectedMessageCount(1);
-
-        template.sendBody("direct:marshalWithRemoveNamespaces", xml);
-
-        String exchangeBody = getLastExchange(resultEndpoint).getIn().getBody(String.class);
-        JSONAssert.assertEquals(json, exchangeBody, true);
-
-        resultEndpoint.assertIsSatisfied();
-    }
-
-    @Test
-    void testRemoveRoot() throws Exception {
-        String xml = readResource("xml-to-json/remove-root-xml.xml");
-        String json = readResource("xml-to-json/remove-root-json.json");
-
-        resultEndpoint.expectedMessageCount(1);
-
-        template.sendBody("direct:marshalWithRemoveRoot", xml);
-
-        String exchangeBody = getLastExchange(resultEndpoint).getIn().getBody(String.class);
-        JSONAssert.assertEquals(json, exchangeBody, true);
-
-        resultEndpoint.assertIsSatisfied();
     }
 
     // -- Helpers --

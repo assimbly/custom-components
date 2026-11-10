@@ -114,6 +114,15 @@
 	<build>
 		<plugins>
 			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<environmentVariables>
+						<!-- TenantVariablesProcessor reads the encryption secret from the environment at class load -->
+						<ASSIMBLY_ENCRYPTION_SECRET>unit-test-secret</ASSIMBLY_ENCRYPTION_SECRET>
+					</environmentVariables>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-toolchains-plugin</artifactId>
 				<executions>

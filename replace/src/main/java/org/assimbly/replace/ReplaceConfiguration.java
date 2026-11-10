@@ -71,7 +71,7 @@ public class ReplaceConfiguration {
     }
 
     public List<String> getFlags() {
-        String[] flagsArray = new String[]{};
+        String[] flagsArray = {};
 
         if(flags != null) {
             if(flags.startsWith("[") && flags.endsWith("]")){

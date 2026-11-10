@@ -1,0 +1,47 @@
+= Sandbox Component
+:doctitle: SANDBOX
+:shortname: sandbox
+:artifactid: sandbox
+:description: Executes a script in a restricted (sandboxed) environment
+:supportlevel: Stable
+:component-header: Only producer is supported
+//Manually maintained attributes
+
+*{component-header}*
+
+The component extends the Camel Language component and executes a Groovy script in a sandbox that blocks most vital JVM actions.
+
+Maven users will need to add the following dependency to their `pom.xml`
+for this component:
+
+[source,xml]
+------------------------------------------------------------
+<dependency>
+    <groupId>org.assimbly</groupId>
+    <artifactId>sandbox</artifactId>
+	<version>x.x.x</version>
+    <!-- use the same version as your Assimbly version -->
+</dependency>
+------------------------------------------------------------
+
+== URI format
+
+--------------------------------------------
+sandbox:languageName?script=[script]
+--------------------------------------------
+
+== Path option
+
+[width="100%",cols="2,5,^1,2",options="header"]
+|===
+| Name | Description | Default | Type
+| *languageName* | *Required* Name of the language of the script. | | String
+|===
+
+== Options
+
+[width="100%",cols="2,5,^1,2",options="header"]
+|===
+| Name | Description | Default | Type
+| *script* | *Required* The script to execute. Use `ref:name` to read the script from a `String` bean in the registry. | | String
+|===

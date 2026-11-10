@@ -70,13 +70,6 @@
         <!-- The smooks-all dependency may give some dependency conflicts because old javax and xerces jars -->
         <!-- if these errors occur probably need to update to a newer smooks version -->
         <!-- for now (10-11-2022) these dependencies are excluded in the gateway (build.gradle) -->
-
-        <!--<dependency>
-            <groupId>org.smooks</groupId>
-            <artifactId>smooks-all</artifactId>
-            <version>2.0.0-M2</version>
-        </dependency>-->
-
         <!--
       <dependency>
         <groupId>org.milyn</groupId>

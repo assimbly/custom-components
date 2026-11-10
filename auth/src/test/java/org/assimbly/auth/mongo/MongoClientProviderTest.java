@@ -5,14 +5,14 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class MongoClientProviderTest {
+class MongoClientProviderTest {
 
     @Test
-    public void getClient() {
+    void getClient() {
         MongoDatabase database = MongoClientProvider.getInstance().getDatabase("test");
 
         assertNotNull(database, "MongoClient is null");
-        //assertNotEquals("", database.getName(), "Connection not set");
+
     }
 
 }

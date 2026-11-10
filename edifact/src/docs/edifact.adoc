@@ -1,0 +1,46 @@
+= EDIFACT Component
+:doctitle: EDIFACT
+:shortname: edifact
+:artifactid: edifact
+:description: Converts UN/EDIFACT to XML or XML to UN/EDIFACT
+:supportlevel: Stable
+:component-header: Marshal and unmarshal are supported
+//Manually maintained attributes
+
+*{component-header}*
+
+The component is a data format for UN/EDIFACT messages. It uses Smooks and supports the UN/EDIFACT directories D93A to D14B.
+
+Maven users will need to add the following dependency to their `pom.xml`
+for this component:
+
+[source,xml]
+------------------------------------------------------------
+<dependency>
+    <groupId>org.assimbly</groupId>
+    <artifactId>edifact</artifactId>
+	<version>x.x.x</version>
+    <!-- use the same version as your Assimbly version -->
+</dependency>
+------------------------------------------------------------
+
+== URI format
+
+--------------------------------------------
+dataformat:edifact:marshal
+
+or
+
+dataformat:edifact:unmarshal
+--------------------------------------------
+
+== Options
+
+[width="100%",cols="2,5,^1,2",options="header"]
+|===
+| Name | Description | Default | Type
+| *edifactType* | *Required* UN/EDIFACT directory (version) to use, for example `D96A`. Case insensitive. | | String
+|===
+
+* `marshal` reads an UN/EDIFACT message and writes it as XML.
+* `unmarshal` reads an XML message and writes it as UN/EDIFACT. A `UNA` service string advice is added and the segment count in `UNT` is calculated.

@@ -29,7 +29,8 @@ public class MySQLDatabase {
                 if(stmt!=null)
                     stmt.close();
             }catch(SQLException _){
-            }// nothing we can do
+                // nothing we can do
+            }
             try{
                 if(conn!=null)
                     conn.close();
@@ -51,7 +52,8 @@ public class MySQLDatabase {
                 if(stmt!=null)
                     stmt.close();
             }catch(SQLException _){
-            }// nothing we can do
+                // nothing we can do
+            }
             try{
                 if(conn!=null)
                     conn.close();
@@ -81,7 +83,8 @@ public class MySQLDatabase {
                 if(stmt!=null)
                     stmt.close();
             }catch(SQLException _){
-            }// nothing we can do
+                // nothing we can do
+            }
             try{
                 if(conn!=null)
                     conn.close();
@@ -113,7 +116,8 @@ public class MySQLDatabase {
                 if(stmt!=null)
                     stmt.close();
             }catch(SQLException _){
-            }// nothing we can do
+                // nothing we can do
+            }
             try{
                 if(conn!=null)
                     conn.close();
@@ -147,7 +151,8 @@ public class MySQLDatabase {
                 if(stmt!=null)
                     stmt.close();
             }catch(SQLException _){
-            }// nothing we can do
+                // nothing we can do
+            }
             try{
                 if(conn!=null)
                     conn.close();
