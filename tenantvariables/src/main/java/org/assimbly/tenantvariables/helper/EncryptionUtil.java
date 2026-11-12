@@ -82,10 +82,15 @@ public final class EncryptionUtil {
             return decryptWithIv(secretKey, decoder.decode(parts[2]), decoder.decode(parts[3]));
         }
 
-        // Legacy format (AES/CBC): ENC(salt|iv|text)
+        // Unmarked format: ENC(salt|iv|text)
         if (parts.length == 3) {
             SecretKeySpec secretKey = new SecretKeySpec(generateKey(password, decoder.decode(parts[0])), "AES");
-            return decryptLegacyCbc(secretKey, decoder.decode(parts[1]), decoder.decode(parts[2]));
+            byte[] iv = decoder.decode(parts[1]);
+            // Why: runtime (and gateway through it) briefly wrote AES/GCM without the marker; its 12-byte IV tells it apart from legacy AES/CBC.
+            if (iv.length == IV_LENGTH) {
+                return decryptWithIv(secretKey, iv, decoder.decode(parts[2]));
+            }
+            return decryptLegacyCbc(secretKey, iv, decoder.decode(parts[2]));
         }
 
         throw new IllegalArgumentException("Invalid encrypted text format.");
