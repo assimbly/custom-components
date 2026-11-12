@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -49,6 +50,11 @@ class EncryptionUtilTest {
     }
 
     @Test
+    void decryptsUnmarkedGcmValue() throws Exception {
+        assertEquals("Unmarked value", encryptionUtil.decrypt(unmarkedGcmEncrypt("Unmarked value")));
+    }
+
+    @Test
     void rejectsTamperedGcmValue() {
         String encrypted = encryptionUtil.encrypt("Value 1");
         String[] parts = encrypted.substring(4, encrypted.length() - 1).split("\\|");
@@ -74,6 +80,21 @@ class EncryptionUtilTest {
 
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key, "AES"), new IvParameterSpec(iv));
+        byte[] encrypted = cipher.doFinal(plainText.getBytes(StandardCharsets.UTF_8));
+
+        Base64.Encoder encoder = Base64.getEncoder();
+        return "ENC(%s|%s|%s)".formatted(encoder.encodeToString(salt), encoder.encodeToString(iv), encoder.encodeToString(encrypted));
+    }
+
+    // Builds a value in the format runtime wrote before it added the marker: AES/GCM as ENC(salt|iv|text)
+    private static String unmarkedGcmEncrypt(String plainText) throws Exception {
+        byte[] salt = new byte[16];
+        byte[] iv = new byte[12];
+        PBEKeySpec spec = new PBEKeySpec(PASSWORD.toCharArray(), salt, 10000, 256);
+        byte[] key = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1").generateSecret(spec).getEncoded();
+
+        Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+        cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key, "AES"), new GCMParameterSpec(128, iv));
         byte[] encrypted = cipher.doFinal(plainText.getBytes(StandardCharsets.UTF_8));
 
         Base64.Encoder encoder = Base64.getEncoder();
