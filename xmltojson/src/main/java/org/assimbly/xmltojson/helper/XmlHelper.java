@@ -35,29 +35,41 @@ public final class XmlHelper {
 
     private static final String INVALID_START_REGEX = "^([0-9.-]|(?i)xml).*";
 
-    private static DocumentBuilderFactory newSecureDocumentBuilderFactory() throws ParserConfigurationException {
+    /**
+     * Creates a DocumentBuilderFactory hardened against XXE: DOCTYPE declarations,
+     * external general/parameter entities and XInclude are all disabled.
+     */
+    public static DocumentBuilderFactory newSecureDocumentBuilderFactory() throws ParserConfigurationException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-        factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
-        factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+
+        factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+        factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        factory.setXIncludeAware(false);
+        factory.setExpandEntityReferences(false);
+
         return factory;
     }
 
-    private static TransformerFactory newSecureTransformerFactory() throws TransformerConfigurationException {
+    /**
+     * Creates a TransformerFactory hardened against XXE / external entity access.
+     */
+    public static TransformerFactory newSecureTransformerFactory() throws TransformerConfigurationException {
         TransformerFactory factory = TransformerFactory.newInstance();
+
         factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
         factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+
         return factory;
     }
 
     public static Document newDocument(){
-        DocumentBuilderFactory icFactory;
         DocumentBuilder icBuilder;
 
         try {
-            icFactory = DocumentBuilderFactory.newInstance();
-            icBuilder = icFactory.newDocumentBuilder();
+            icBuilder = newSecureDocumentBuilderFactory().newDocumentBuilder();
 
             return icBuilder.newDocument();
         } catch (ParserConfigurationException e) {

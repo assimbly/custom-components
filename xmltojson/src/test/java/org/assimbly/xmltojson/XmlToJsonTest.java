@@ -148,6 +148,60 @@ class XmlToJsonTest extends CamelTestSupport {
         }
     }
 
+    @Test
+    void testUserXmlToJson() throws Exception {
+        String userXml = """
+                <user>
+                      <id>551f5a0e-17b8-42fa-9fc9-904b66b55908-3</id>
+                      <firstName>Dino</firstName>
+                      <surName>Botsford</surName>
+                      <email>Hannah60@hotmail.com</email>
+                      <user>Catharine69</user>
+                      <phone>(525) 467-4605 x71289</phone>
+                      <address>221C Prinsengracht</address>
+                      <city>Amsterdam</city>
+                      <postalCode>1000 HX</postalCode>
+                   </user>
+                """;
+        String expectedJson = """
+                {
+                  "user": {
+                    "id": "551f5a0e-17b8-42fa-9fc9-904b66b55908-3",
+                    "firstName": "Dino",
+                    "surName": "Botsford",
+                    "email": "Hannah60@hotmail.com",
+                    "user": "Catharine69",
+                    "phone": "(525) 467-4605 x71289",
+                    "address": "221C Prinsengracht",
+                    "city": "Amsterdam",
+                    "postalCode": "1000 HX"
+                  }
+                }
+                """;
+
+        resultEndpoint.expectedMessageCount(1);
+
+        template.sendBody("direct:marshal", userXml);
+
+        String exchangeBody = getLastExchange(resultEndpoint).getIn().getBody(String.class);
+        JSONAssert.assertEquals(expectedJson, exchangeBody, true);
+
+        resultEndpoint.assertIsSatisfied();
+    }
+
+    @Test
+    void testDoctypeIsRejected() {
+        String xxeXml = """
+                <?xml version="1.0" encoding="UTF-8"?>
+                <!DOCTYPE user [
+                  <!ENTITY xxe SYSTEM "file:///etc/passwd">
+                ]>
+                <user><id>&xxe;</id></user>
+                """;
+
+        assertThrows(CamelExecutionException.class, () -> template.sendBody("direct:marshal", xxeXml));
+    }
+
     // -- Helpers --
 
     private String readResource(String resourcePath) throws IOException, URISyntaxException {
