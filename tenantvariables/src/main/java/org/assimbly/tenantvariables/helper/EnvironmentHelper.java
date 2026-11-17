@@ -22,7 +22,7 @@ public class EnvironmentHelper {
 
         try {
             return Integer.parseInt(value);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             return defaultValue;
         }
     }

@@ -8,6 +8,8 @@ import org.assimbly.xmltojson.exception.XmlRootException;
 import org.json.JSONException;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.xml.sax.SAXException;
 import org.xmlunit.builder.DiffBuilder;
 import org.xmlunit.builder.Input;
@@ -70,14 +72,20 @@ class JsonToXmlTest extends CamelTestSupport {
         resultEndpoint.assertIsSatisfied();
     }
 
-    @Test
-    void testJsonXmlWithAddRoot() throws Exception {
-        String json = readResource("json-to-xml/root-json.json");
-        String xml = readResource("json-to-xml/root-xml.xml");
+    @ParameterizedTest(name = "{2}")
+    @CsvSource({
+            "json-to-xml/root-json.json, json-to-xml/root-xml.xml, direct:unmarshalWithAddRoot",
+            "json-to-xml/array-root-json-default.json, json-to-xml/array-root-default-arrays-xml.xml, direct:unmarshalWithRootArrayAndDefaultArrayElementsAndCheckJsonKeys",
+            "json-to-xml/array-root-json-custom.json, json-to-xml/array-root-custom-arrays-xml.xml, direct:unmarshalWithRootArrayAndCustomArrayElementsAndCheckJsonKeys",
+            "json-to-xml/advanced-custom-arrays-json.json, json-to-xml/advanced-custom-arrays-xml.xml, direct:unmarshalWithRootArrayAndCustomArrayElementsAndCheckJsonKeysAdvanced"
+    })
+    void testJsonXmlWithRootOptions(String jsonPath, String xmlPath, String route) throws Exception {
+        String json = readResource(jsonPath);
+        String xml = readResource(xmlPath);
 
         resultEndpoint.expectedMessageCount(1);
 
-        template.sendBody("direct:unmarshalWithAddRoot", json);
+        template.sendBody(route, json);
 
         String exchangeBody = getLastExchange(resultEndpoint).getIn().getBody(String.class);
 
@@ -118,100 +126,34 @@ class JsonToXmlTest extends CamelTestSupport {
     void testJsonXmlWithCheckThatThrowsError() throws Exception {
         String json = readResource("json-to-xml/check-json.json");
 
-        try {
-            template.sendBody("direct:unmarshalWithCheckJsonKeysFalse", json);
-            fail("The provided JSON should generate an error, because the keys contain invalid XML characters.");
-        } catch (CamelExecutionException ex) {
-            assertEquals(
-                    "The content of elements must consist of well-formed character data or markup.",
-                    ex.getCause().getMessage()
-            );
+        CamelExecutionException ex = assertThrows(
+                CamelExecutionException.class,
+                () -> template.sendBody("direct:unmarshalWithCheckJsonKeysFalse", json),
+                "The provided JSON should generate an error, because the keys contain invalid XML characters."
+        );
 
-            assertIsInstanceOf(SAXException.class, ex.getCause());
-        }
+        assertEquals(
+                "The content of elements must consist of well-formed character data or markup.",
+                ex.getCause().getMessage()
+        );
+        assertIsInstanceOf(SAXException.class, ex.getCause());
     }
 
     @Test
-    void testJsonXmlWithJsonArrayAsRootAndDefaultArrayElementNameAndCheckJsonKeys() throws Exception {
-        String json = readResource("json-to-xml/array-root-json-default.json");
-        String xml = readResource("json-to-xml/array-root-default-arrays-xml.xml");
-
-        resultEndpoint.expectedMessageCount(1);
-
-        template.sendBody("direct:unmarshalWithRootArrayAndDefaultArrayElementsAndCheckJsonKeys", json);
-
-        String exchangeBody = getLastExchange(resultEndpoint).getIn().getBody(String.class);
-
-        Diff xmlDiff = DiffBuilder
-                .compare(Input.fromString(xml))
-                .withTest(Input.fromString(exchangeBody))
-                .ignoreWhitespace()
-                .build();
-
-        assertFalse(xmlDiff.hasDifferences());
-
-        resultEndpoint.assertIsSatisfied();
-    }
-
-    @Test
-    void testJsonXmlWithJsonArrayAsRootAndCustomArrayElementNameAndCheckJsonKeys() throws Exception {
-        String json = readResource("json-to-xml/array-root-json-custom.json");
-        String xml = readResource("json-to-xml/array-root-custom-arrays-xml.xml");
-
-        resultEndpoint.expectedMessageCount(1);
-
-        template.sendBody("direct:unmarshalWithRootArrayAndCustomArrayElementsAndCheckJsonKeys", json);
-
-        String exchangeBody = getLastExchange(resultEndpoint).getIn().getBody(String.class);
-
-        Diff xmlDiff = DiffBuilder
-                .compare(Input.fromString(xml))
-                .withTest(Input.fromString(exchangeBody))
-                .ignoreWhitespace()
-                .build();
-
-        assertFalse(xmlDiff.hasDifferences());
-
-        resultEndpoint.assertIsSatisfied();
-    }
-
-    @Test
-    void testJsonXmlWithJsonArrayAsRootAndCustomArrayElementNameAndCheckJsonKeysAdvanced() throws Exception {
-        String json = readResource("json-to-xml/advanced-custom-arrays-json.json");
-        String xml = readResource("json-to-xml/advanced-custom-arrays-xml.xml");
-
-        resultEndpoint.expectedMessageCount(1);
-
-        template.sendBody("direct:unmarshalWithRootArrayAndCustomArrayElementsAndCheckJsonKeysAdvanced", json);
-
-        String exchangeBody = getLastExchange(resultEndpoint).getIn().getBody(String.class);
-
-        Diff xmlDiff = DiffBuilder
-                .compare(Input.fromString(xml))
-                .withTest(Input.fromString(exchangeBody))
-                .ignoreWhitespace()
-                .build();
-
-        assertFalse(xmlDiff.hasDifferences());
-
-        resultEndpoint.assertIsSatisfied();
-    }
-
-    @Test
-    void testWrongJsonError() throws Exception {
+    void testWrongJsonError() {
         String json = "test";
 
-        try {
-            template.sendBody("direct:unmarshal", json);
-            fail("The provided JSON is wrong and should generate an error when parsed.");
-        } catch (CamelExecutionException ex) {
-            assertEquals(
-                    "The provided JSON could not be parsed to either a JSON object or a JSON array.",
-                    ex.getCause().getMessage()
-            );
+        CamelExecutionException ex = assertThrows(
+                CamelExecutionException.class,
+                () -> template.sendBody("direct:unmarshal", json),
+                "The provided JSON is wrong and should generate an error when parsed."
+        );
 
-            assertIsInstanceOf(JSONException.class, ex.getCause());
-        }
+        assertEquals(
+                "The provided JSON could not be parsed to either a JSON object or a JSON array.",
+                ex.getCause().getMessage()
+        );
+        assertIsInstanceOf(JSONException.class, ex.getCause());
     }
 
     @Test
@@ -240,32 +182,32 @@ class JsonToXmlTest extends CamelTestSupport {
     void testJsonXmlWithAddRootAndSimpleHeaderAsRootErrors() throws Exception {
         String json = readResource("json-to-xml/root-json.json");
 
-        try {
-            template.sendBodyAndHeader("direct:unmarshalWithAddRootAndSimpleHeaderAsRoot", json, "dynamicRoot", "");
-            fail("An empty root tag should not be allowed");
-        } catch (CamelExecutionException ex) {
-            assertEquals(
-                    "The header in the root tag has an empty value. A XML root tag can't be empty.",
-                    ex.getCause().getMessage()
-            );
+        CamelExecutionException emptyRootException = assertThrows(
+                CamelExecutionException.class,
+                () -> template.sendBodyAndHeader("direct:unmarshalWithAddRootAndSimpleHeaderAsRoot", json, "dynamicRoot", ""),
+                "An empty root tag should not be allowed"
+        );
 
-            assertIsInstanceOf(XmlRootException.class, ex.getCause());
-        }
+        assertEquals(
+                "The header in the root tag has an empty value. A XML root tag can't be empty.",
+                emptyRootException.getCause().getMessage()
+        );
+        assertIsInstanceOf(XmlRootException.class, emptyRootException.getCause());
 
-        String[] invalidRootTags = new String[]{"1myRoot", "-myRoot", ".myRoot", "xmlmyRoot", "my;root", "my/root", "my<root", "my>root"};
+        String[] invalidRootTags = {"1myRoot", "-myRoot", ".myRoot", "xmlmyRoot", "my;root", "my/root", "my<root", "my>root"};
 
         for (String invalidRootTag : invalidRootTags) {
-            try {
-                template.sendBodyAndHeader("direct:unmarshalWithAddRootAndSimpleHeaderAsRoot", json, "dynamicRoot", invalidRootTag);
-                fail(invalidRootTag + " should be an invalid root tag.");
-            } catch (CamelExecutionException ex) {
-                assertEquals(
-                        "The value of the header in the root tag has invalid XML characters. It can't be used as an XML root tag.",
-                        ex.getCause().getMessage()
-                );
+            CamelExecutionException ex = assertThrows(
+                    CamelExecutionException.class,
+                    () -> template.sendBodyAndHeader("direct:unmarshalWithAddRootAndSimpleHeaderAsRoot", json, "dynamicRoot", invalidRootTag),
+                    invalidRootTag + " should be an invalid root tag."
+            );
 
-                assertIsInstanceOf(XmlRootException.class, ex.getCause());
-            }
+            assertEquals(
+                    "The value of the header in the root tag has invalid XML characters. It can't be used as an XML root tag.",
+                    ex.getCause().getMessage()
+            );
+            assertIsInstanceOf(XmlRootException.class, ex.getCause());
         }
     }
 

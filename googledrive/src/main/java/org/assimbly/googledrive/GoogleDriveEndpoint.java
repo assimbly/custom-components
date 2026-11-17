@@ -81,10 +81,8 @@ public class GoogleDriveEndpoint extends ProcessorEndpoint {
         return client;
     }
 
-    protected Exchange createExchange(Object body, File fileModel) {
+    protected Exchange createExchange(File fileModel) {
         Exchange exchange = createExchange();
-
-        exchange.getIn().setBody(body);
 
         if (isGSuiteFile(fileModel)) {
             exchange.getIn().setHeader("CamelFileName", getGSuiteFileName(fileModel));

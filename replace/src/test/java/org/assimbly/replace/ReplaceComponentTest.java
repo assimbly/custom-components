@@ -5,12 +5,17 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.language.ConstantExpression;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class ReplaceComponentTest extends CamelTestSupport {
 
@@ -163,53 +168,31 @@ class ReplaceComponentTest extends CamelTestSupport {
         assertEquals(expected, actual);
     }
 
-    @Test
-    void testReplaceWhiteSpaceChar() {
-        template.sendBody("direct:executeWithWhiteSpaceCharacter", "This is a\nmultiline body\tfor testing\fpurposes");
-
-        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
-
-        String actual = result.getIn().getBody(String.class);
-
-        String expected = "This is a multiline body for testing purposes";
-        assertEquals(expected, actual);
+    static Stream<Arguments> literalReplaceCases() {
+        return Stream.of(
+                arguments("direct:executeWithWhiteSpaceCharacter",
+                        "This is a\nmultiline body\tfor testing\fpurposes",
+                        "This is a multiline body for testing purposes"),
+                arguments("direct:executeWithMultiTypeLineEndings",
+                        "Welcome\n This is Kabisa\r\n This is another line\r Yet another line!",
+                        "Welcome\n This is Assimbly\r\n This is another line\r Yet another line!"),
+                arguments("direct:executeWithDotall",
+                        "My name is Pedro\nThank you",
+                        "My name is Pedro * "),
+                arguments("direct:executeWithoutDotall",
+                        "My name is Pedro\\nThank you",
+                        "My name is Pedro * ")
+        );
     }
 
-    @Test
-    void testMultiTypeLineEndings() {
-        template.sendBody("direct:executeWithMultiTypeLineEndings", "Welcome\n This is Kabisa\r\n This is another line\r Yet another line!");
+    @ParameterizedTest
+    @MethodSource("literalReplaceCases")
+    void testReplaceWithLiteralValues(String endpoint, String body, String expected) {
+        template.sendBody(endpoint, body);
 
         Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
 
-        String actual = result.getIn().getBody(String.class);
-
-        String expected = "Welcome\n This is Assimbly\r\n This is another line\r Yet another line!";
-
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void testReplaceWithDotall() {
-        template.sendBody("direct:executeWithDotall", "My name is Pedro\nThank you");
-
-        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
-
-        String actual = result.getIn().getBody(String.class);
-
-        String expected = "My name is Pedro * ";
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void testReplaceWithoutDotall() {
-        template.sendBody("direct:executeWithoutDotall", "My name is Pedro\\nThank you");
-
-        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
-
-        String actual = result.getIn().getBody(String.class);
-
-        String expected = "My name is Pedro * ";
-        assertEquals(expected, actual);
+        assertEquals(expected, result.getIn().getBody(String.class));
     }
 
     @Test

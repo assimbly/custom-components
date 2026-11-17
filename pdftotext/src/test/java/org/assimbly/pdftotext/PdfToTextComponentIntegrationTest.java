@@ -29,7 +29,7 @@ public class PdfToTextComponentIntegrationTest extends CamelTestSupport {
     }
 
     @Test
-    public void loadFile() throws Exception {
+    void loadFile() throws Exception {
         resultEndpoint.expectedMessageCount(1);
 
         byte[] pdfContent = IOUtils.toByteArray(

@@ -7,7 +7,7 @@ import org.assimbly.edifactcommon.typeinfo.MemberInfo;
 
 public class Attribute
 {
-	private MemberInfo memberInfo;
+	private final MemberInfo memberInfo;
 	
 	public Attribute(MemberInfo memberInfo)
 	{

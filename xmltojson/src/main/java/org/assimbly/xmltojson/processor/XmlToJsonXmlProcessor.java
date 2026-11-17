@@ -2,6 +2,7 @@ package org.assimbly.xmltojson.processor;
 
 import org.apache.camel.Exchange;
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.assimbly.xmltojson.helper.XmlHelper;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -153,14 +154,14 @@ public class XmlToJsonXmlProcessor {
                             .getTypeConverter()
                             .mandatoryConvertTo(byte[].class, xmlData);
         ByteArrayInputStream xml = new ByteArrayInputStream(bytes);
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilderFactory dbFactory = XmlHelper.newSecureDocumentBuilderFactory();
         dbFactory.setNamespaceAware(false);
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         return dBuilder.parse(xml);
     }
 
     public ByteArrayOutputStream getOutputStreamFromXmlDoc() throws Exception {
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        TransformerFactory transformerFactory = XmlHelper.newSecureTransformerFactory();
         Transformer transformer = transformerFactory.newTransformer();
         DOMSource source = new DOMSource(xmlDoc);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

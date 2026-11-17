@@ -84,39 +84,16 @@ public class SmbProducer extends GenericFileProducer<SmbFile> {
     }
 
     protected void processExchange(final Exchange exchange) throws Exception {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.trace("Processing {}", exchange);
-        }
+        LOGGER.trace("Processing {}", exchange);
 
         try {
             String target = createFileName(exchange);
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("processExchange() target[{}]", target);
-            }
+            LOGGER.debug("processExchange() target[{}]", target);
 
             preWriteCheck(exchange);
 
-            // should we write to a temporary name and then afterwards rename to
-            // real target
-            boolean writeAsTempAndRename = ObjectHelper.isNotEmpty(endpoint.getTempFileName());
-            String tempTarget = null;
-            if (writeAsTempAndRename) {
-                // compute temporary name with the temp prefix
-                tempTarget = createTempFileName(exchange, target);
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Writing using tempNameFile: {}", tempTarget);
-                }
-
-                // delete any pre existing temp file
-                if (operations.existsFile(tempTarget)) {
-                    if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("Deleting existing temp file: {}", tempTarget);
-                    }
-                    if (!operations.deleteFile(tempTarget)) {
-                        throw new GenericFileOperationFailedException("Cannot delete file: " + tempTarget);
-                    }
-                }
-            }
+            // should we write to a temporary name and then afterwards rename to real target
+            String tempTarget = prepareTempTarget(exchange, target);
 
             // write/upload the file
             writeFile(exchange, tempTarget != null ? tempTarget : target);
@@ -124,48 +101,12 @@ public class SmbProducer extends GenericFileProducer<SmbFile> {
             // if we did write to a temporary name then rename it to the real
             // name after we have written the file
             if (tempTarget != null) {
-
-                // if we should not eager delete the target file then do it now
-                // just before renaming
-                if (!endpoint.isEagerDeleteTargetFile() && operations.existsFile(target) && endpoint.getFileExist() == GenericFileExist.Override) {
-                    // we override the target so we do this by deleting it so
-                    // the temp file can be renamed later
-                    // with success as the existing target file have been
-                    // deleted
-                    if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("Deleting existing file: {}", target);
-                    }
-                    if (!operations.deleteFile(target)) {
-                        throw new GenericFileOperationFailedException("Cannot delete file: " + target);
-                    }
-                }
-
-                // now we are ready to rename the temp file to the target file
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Renaming file: [{}] to: [{}]", tempTarget, target);
-                }
-                boolean renamed = operations.renameFile(tempTarget, target);
-                if (!renamed) {
-                    throw new GenericFileOperationFailedException("Cannot rename file from: " + tempTarget + " to: " + target);
-                }
+                renameTempFile(tempTarget, target);
             }
 
             // any done file to write?
             if (endpoint.getDoneFileName() != null) {
-                String doneFileName = getEndpoint().createDoneFileName(target);
-                StringHelper.notEmpty(doneFileName, "doneFileName", endpoint);
-
-                // create empty exchange with empty body to write as the done
-                // file
-                Exchange empty = new DefaultExchange(exchange);
-                empty.getIn().setBody("");
-
-                LOGGER.trace("Writing done file: [{}]", doneFileName);
-                // delete any existing done file
-                if (operations.existsFile(doneFileName) && !operations.deleteFile(doneFileName)) {
-                    throw new GenericFileOperationFailedException("Cannot delete existing done file: " + doneFileName);
-                }
-                writeFile(empty, doneFileName);
+                writeDoneFileName(exchange, target);
             }
 
             // lets store the name we really used in the header, so end-users
@@ -178,61 +119,75 @@ public class SmbProducer extends GenericFileProducer<SmbFile> {
         postWriteCheck();
     }
 
+    /**
+     * @return the temporary file name to write to, or null when no temp file name is configured
+     */
+    private String prepareTempTarget(final Exchange exchange, final String target) {
+        if (ObjectHelper.isEmpty(endpoint.getTempFileName())) {
+            return null;
+        }
+
+        // compute temporary name with the temp prefix
+        String tempTarget = createTempFileName(exchange, target);
+        LOGGER.debug("Writing using tempNameFile: {}", tempTarget);
+
+        // delete any pre existing temp file
+        if (operations.existsFile(tempTarget)) {
+            LOGGER.debug("Deleting existing temp file: {}", tempTarget);
+            if (!operations.deleteFile(tempTarget)) {
+                throw new GenericFileOperationFailedException("Cannot delete file: " + tempTarget);
+            }
+        }
+        return tempTarget;
+    }
+
+    private void renameTempFile(final String tempTarget, final String target) {
+        // if we should not eager delete the target file then do it now
+        // just before renaming
+        if (!endpoint.isEagerDeleteTargetFile() && operations.existsFile(target) && endpoint.getFileExist() == GenericFileExist.Override) {
+            // we override the target so we do this by deleting it so the temp file can be renamed later
+            // with success as the existing target file have been deleted
+            LOGGER.debug("Deleting existing file: {}", target);
+            if (!operations.deleteFile(target)) {
+                throw new GenericFileOperationFailedException("Cannot delete file: " + target);
+            }
+        }
+
+        // now we are ready to rename the temp file to the target file
+        LOGGER.debug("Renaming file: [{}] to: [{}]", tempTarget, target);
+        if (!operations.renameFile(tempTarget, target)) {
+            throw new GenericFileOperationFailedException("Cannot rename file from: " + tempTarget + " to: " + target);
+        }
+    }
+
+    private void writeDoneFileName(final Exchange exchange, final String target) {
+        String doneFileName = getEndpoint().createDoneFileName(target);
+        StringHelper.notEmpty(doneFileName, "doneFileName", endpoint);
+
+        // create empty exchange with empty body to write as the done file
+        Exchange empty = new DefaultExchange(exchange);
+        empty.getIn().setBody("");
+
+        LOGGER.trace("Writing done file: [{}]", doneFileName);
+        // delete any existing done file
+        if (operations.existsFile(doneFileName) && !operations.deleteFile(doneFileName)) {
+            throw new GenericFileOperationFailedException("Cannot delete existing done file: " + doneFileName);
+        }
+        writeFile(empty, doneFileName);
+    }
+
     @Override
     public String createFileName(final Exchange exchange) {
-        String answer;
+        String name = evaluateFileName(exchange);
 
-        String name = exchange.getIn().getHeader(Exchange.FILE_NAME, String.class);
-
-        // expression support
-        Expression expression = endpoint.getFileName();
-        if (StringHelper.hasStartToken(name, "simple")) {
-            // the header name can be an expression too, that should override
-            // whatever configured on the endpoint
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug(Exchange.FILE_NAME + " contains a Simple expression: {}", name);
-            }
-            Language language = getEndpoint().getCamelContext().resolveLanguage("file");
-            expression = language.createExpression(name);
-        }
-        if (expression != null) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Filename evaluated as expression: {}", expression);
-            }
-            name = expression.evaluate(exchange, String.class);
-        }
-
-        // flatten name
         if (name != null && endpoint.isFlatten()) {
-            int pos = name.lastIndexOf(getFileSeparator());
-            if (pos == -1) {
-                pos = name.lastIndexOf('/');
-            }
-            if (pos != -1) {
-                name = name.substring(pos + 1);
-            }
+            name = flattenFileName(name);
         }
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("createFilename() name[{}]", name);
-        }
-        // compute path by adding endpoint starting directory
-        String aEndpointPath = endpoint.getConfiguration().getDirectory();
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("createFileName() enpointPath [{}]", aEndpointPath);
-        }
-        // Its a directory so we should use it as a base path for the filename
-        // If the path isn't empty, we need to add a trailing / if it isn't
-        // already there
-        String baseDir = "";
-        if (!aEndpointPath.isEmpty()) {
-            baseDir = aEndpointPath + (aEndpointPath.endsWith(getFileSeparator()) ? "" : getFileSeparator());
-        }
-        if (name != null) {
-            answer = baseDir + name;
-        } else {
-            // use a generated filename if no name provided
-            answer = baseDir + endpoint.getGeneratedFileName(exchange.getIn());
-        }
+        LOGGER.debug("createFilename() name[{}]", name);
+
+        String baseDir = createBaseDir();
+        // use a generated filename if no name provided
+        String answer = baseDir + (name != null ? name : endpoint.getGeneratedFileName(exchange.getIn()));
 
         if (endpoint.getConfiguration().needToNormalize()) {
             // must normalize path to cater for Windows and other OS
@@ -240,6 +195,46 @@ public class SmbProducer extends GenericFileProducer<SmbFile> {
         }
 
         return answer;
+    }
+
+    private String evaluateFileName(final Exchange exchange) {
+        String name = exchange.getIn().getHeader(Exchange.FILE_NAME, String.class);
+
+        // expression support
+        Expression expression = endpoint.getFileName();
+        if (StringHelper.hasStartToken(name, "simple")) {
+            // the header name can be an expression too, that should override
+            // whatever configured on the endpoint
+            LOGGER.debug("{} contains a Simple expression: {}", Exchange.FILE_NAME, name);
+            Language language = getEndpoint().getCamelContext().resolveLanguage("file");
+            expression = language.createExpression(name);
+        }
+        if (expression != null) {
+            LOGGER.debug("Filename evaluated as expression: {}", expression);
+            name = expression.evaluate(exchange, String.class);
+        }
+        return name;
+    }
+
+    private String flattenFileName(final String name) {
+        int pos = name.lastIndexOf(getFileSeparator());
+        if (pos == -1) {
+            pos = name.lastIndexOf('/');
+        }
+        return pos == -1 ? name : name.substring(pos + 1);
+    }
+
+    private String createBaseDir() {
+        // compute path by adding endpoint starting directory
+        String aEndpointPath = endpoint.getConfiguration().getDirectory();
+        LOGGER.debug("createFileName() enpointPath [{}]", aEndpointPath);
+        // Its a directory so we should use it as a base path for the filename
+        // If the path isn't empty, we need to add a trailing / if it isn't
+        // already there
+        if (aEndpointPath.isEmpty()) {
+            return "";
+        }
+        return aEndpointPath + (aEndpointPath.endsWith(getFileSeparator()) ? "" : getFileSeparator());
     }
 
     @Override

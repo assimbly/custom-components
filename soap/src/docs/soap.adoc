@@ -1,0 +1,60 @@
+= SOAP Component
+:doctitle: SOAP
+:shortname: soap
+:artifactid: soap
+:description: Calls a SOAP web service based on its WSDL
+:since: 2.4.0
+:supportlevel: Stable
+:component-header: Only producer is supported
+//Manually maintained attributes
+
+*Since Camel {since}*
+
+*{component-header}*
+
+The component calls a SOAP action of a web service. The message body (XML) is sent as the SOAP body and the response is set as the new body.
+
+Maven users will need to add the following dependency to their `pom.xml`
+for this component:
+
+[source,xml]
+------------------------------------------------------------
+<dependency>
+    <groupId>org.assimbly</groupId>
+    <artifactId>soap</artifactId>
+	<version>x.x.x</version>
+    <!-- use the same version as your Assimbly version -->
+</dependency>
+------------------------------------------------------------
+
+== URI format
+
+--------------------------------------------
+soap:wsdl?action=[action]
+--------------------------------------------
+
+== Path option
+
+[width="100%",cols="2,5,^1,2",options="header"]
+|===
+| Name | Description | Default | Type
+| *wsdl* | *Required* Location URL of the WSDL. Query parameters in the URL are used when retrieving the WSDL. | | String
+|===
+
+== Options
+
+[width="100%",cols="2,5,^1,2",options="header"]
+|===
+| Name | Description | Default | Type
+| *action* | *Required* SOAP action to call. | | String
+| *extract* | *Required* Whether the SOAP envelope and body are removed from the response. | false | boolean
+| *smart* | *Required* Whether namespaces are looked up in the WSDL and applied to the input XML. | false | boolean
+| *auth* | Basic authentication credentials. | | String
+| *headers* | SOAP headers to send, as a JSON array. | | String
+| *httpHeaders* | HTTP headers to set on the call, as a JSON array. | | String
+| *parameters* | URL parameters to use when retrieving the WSDL. | | String
+|===
+
+== Message headers
+
+Headers starting with `AssimblySoap` override the option with the same name, for example `AssimblySoapAction`. The header `AssimblySoapDestination` overrides the endpoint address defined in the WSDL.

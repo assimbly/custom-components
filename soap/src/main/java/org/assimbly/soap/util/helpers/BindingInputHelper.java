@@ -10,7 +10,6 @@ import javax.wsdl.Message;
 import javax.wsdl.Part;
 import javax.wsdl.extensions.soap.SOAPHeader;
 import javax.wsdl.extensions.soap12.SOAP12Header;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -65,30 +64,19 @@ public final class BindingInputHelper {
     }
 
     public static List<SOAPHeaderImpl> getSoapHeaders(BindingInput bindingInput){
-        List<SOAPHeaderImpl> result = new ArrayList<>();
 
-        List<?> exElem = bindingInput.getExtensibilityElements();
+        return bindingInput.getExtensibilityElements().stream()
+                .filter(SOAPHeaderImpl.class::isInstance)
+                .map(SOAPHeaderImpl.class::cast)
+                .toList(); // Or .collect(Collectors.toList()) if you need to mutate 'result' later
 
-        for (Object el : exElem) {
-            if (el instanceof SOAPHeaderImpl impl) {
-                result.add(impl);
-            }
-        }
-
-        return result;
     }
 
-    public static List<SOAP12HeaderImpl> getSoap12Headers(BindingInput bindingInput){
-        List<SOAP12HeaderImpl> result = new ArrayList<>();
-
-        List<?> exElem = bindingInput.getExtensibilityElements();
-
-        for (Object el : exElem) {
-            if (el instanceof SOAP12HeaderImpl impl) {
-                result.add(impl);
-            }
-        }
-
-        return result;
+    public static List<SOAP12HeaderImpl> getSoap12Headers(BindingInput bindingInput) {
+        return bindingInput.getExtensibilityElements().stream()
+                .filter(SOAP12HeaderImpl.class::isInstance)
+                .map(SOAP12HeaderImpl.class::cast)
+                .toList();
     }
+
 }

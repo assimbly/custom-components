@@ -7,6 +7,7 @@ import com.google.api.services.drive.model.FileList;
 import org.apache.camel.Consumer;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.apache.camel.converter.stream.CachedOutputStream;
 
 import org.apache.camel.support.ScheduledPollConsumer;
 import org.slf4j.Logger;
@@ -14,9 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.assimbly.googledrive.exception.GoogleDriveException;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -103,12 +102,12 @@ public class GoogleDriveConsumer extends ScheduledPollConsumer implements Consum
     }
 
     private void processSingleFile(File fileModel) throws Exception {
-        java.io.File file = downloadFile(fileModel);
-        Exchange exchange = endpoint.createExchange(file, fileModel);
+        Exchange exchange = endpoint.createExchange(fileModel);
+        exchange.getIn().setBody(downloadFile(fileModel, exchange));
 
         this.getProcessor().process(exchange);
 
-        postProcess(fileModel, file);
+        postProcess(fileModel);
     }
 
     private void handleConnectionFailure(GoogleJsonResponseException e) {
@@ -124,17 +123,9 @@ public class GoogleDriveConsumer extends ScheduledPollConsumer implements Consum
         }
     }
 
-    private java.io.File downloadFile(File fileModel) {
+    private InputStream downloadFile(File fileModel, Exchange exchange) {
 
-        java.io.File file;
-
-        try {
-            file = java.io.File.createTempFile("temp", "");
-        } catch (IOException _) {
-            throw new GoogleDriveException("download", fileModel.getId());
-        }
-
-        try (OutputStream outputStream = Files.newOutputStream(file.toPath())){
+        try (CachedOutputStream outputStream = new CachedOutputStream(exchange)) {
 
             if ( isGSuiteFile(fileModel) )
                 service.files()
@@ -145,18 +136,14 @@ public class GoogleDriveConsumer extends ScheduledPollConsumer implements Consum
                     .get(fileModel.getId())
                     .executeMediaAndDownloadTo(outputStream);
 
+            return outputStream.getInputStream();
+
         } catch (IOException _) {
             throw new GoogleDriveException("download", fileModel.getId());
         }
-
-        return file;
     }
 
-    private void postProcess(File fileModel, java.io.File tempFile) throws IOException {
-
-        Path tempPath = tempFile.toPath();
-        Files.deleteIfExists(tempPath);
-
+    private void postProcess(File fileModel) throws IOException {
         if (configuration.getMoveTo() == null) {
             deleteFile(fileModel.getId());
         } else {

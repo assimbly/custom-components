@@ -37,41 +37,11 @@ public class MetadataAnalyzer {
         boolean soleObjectChildAtRoot = metadata.getLevel() == 0
                 && hasSingleChildWithClass(metadataMap, metadata, Constants.JSON_XML_ATTR_TYPE_OBJECT);
 
-        if (metadata.getLevel() == 0 && (
-                (!metadata.isDefinesNamespaces() && metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY)) ||
-                (metadata.getChildrenCount() == 1 && !metadata.isDefinesNamespaces()
-                        && (metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY) || !metadata.isHasAttributes())
-                        && !soleObjectChildAtRoot) ||
-                (metadata.getChildrenCount() == 0 && !metadata.isHasEmptyTextContent())
-        )) {
-            return true;
-        }
-        if (metadata.getDeepestDepth() > 2 && !metadata.isDefinesNamespaces() && metadata.areChildrenNamesEqual()
-                && !metadata.isHasAttributes() && !soleObjectChildAtRoot) {
-            return true;
-        }
-        if (metadata.getDeepestDepth() == 2 && !metadata.isDefinesNamespaces() && metadata.areChildrenNamesEqual() &&
-                (parentElementMetadata.areChildrenNamesEqual() || !metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT)) &&
-                !metadata.isHasAttributes()
-        ) {
-            return true;
-        }
-        // Array items under class="object" > class="array" stay objects, not value-arrays (runtime #785)
-        boolean arrayItemUnderObjectWrapper = parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY)
-                && grandParentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT);
-
-        if (metadata.getDeepestDepth() == 1 && metadata.getLevel() != 0 && !ElementMetadataUtils.isElementOnNamespace(metadata) &&
-                (parentElementMetadata.containsClassAttributeValue("") || parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY) ||
-                        parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT)) &&
-                !metadata.isHasAttributes()
-                && !arrayItemUnderObjectWrapper
-        ) {
-            return true;
-        }
-        if (metadata.getDeepestDepth() == 1 && metadata.containsClassAttribute() && !ElementMetadataUtils.isElementOnNamespace(metadata) && (
-                (metadata.containsClassAttributeValue("") && metadata.getChildrenCount() > 1) ||
-                        metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT)
-        )) {
+        if (isRootLevelArray(metadata, soleObjectChildAtRoot)
+                || isDeepArrayOfEqualChildren(metadata, soleObjectChildAtRoot)
+                || isDepthTwoArray(metadata, parentElementMetadata)
+                || isDepthOneArrayItem(metadata, parentElementMetadata, grandParentElementMetadata)
+                || isDepthOneClassedArray(metadata)) {
             return true;
         }
 
@@ -80,7 +50,56 @@ public class MetadataAnalyzer {
             return false;
         }
 
-        return (metadata.getDeepestDepth() == 0 && !parentElementMetadata.isHasEmptyTextContent() && !metadata.isHasAttributes() &&
+        return isLeafValueArray(metadata, parentElementMetadata, grandParentElementMetadata, greatGrandParentElementMetadata);
+    }
+
+    private static boolean isRootLevelArray(ElementMetadata metadata, boolean soleObjectChildAtRoot) {
+        return metadata.getLevel() == 0 && (
+                (!metadata.isDefinesNamespaces() && metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY)) ||
+                (metadata.getChildrenCount() == 1 && !metadata.isDefinesNamespaces()
+                        && (metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY) || !metadata.isHasAttributes())
+                        && !soleObjectChildAtRoot) ||
+                (metadata.getChildrenCount() == 0 && !metadata.isHasEmptyTextContent())
+        );
+    }
+
+    private static boolean isDeepArrayOfEqualChildren(ElementMetadata metadata, boolean soleObjectChildAtRoot) {
+        return metadata.getDeepestDepth() > 2 && !metadata.isDefinesNamespaces() && metadata.areChildrenNamesEqual()
+                && !metadata.isHasAttributes() && !soleObjectChildAtRoot;
+    }
+
+    private static boolean isDepthTwoArray(ElementMetadata metadata, ElementMetadata parentElementMetadata) {
+        return metadata.getDeepestDepth() == 2 && !metadata.isDefinesNamespaces() && metadata.areChildrenNamesEqual() &&
+                (parentElementMetadata.areChildrenNamesEqual() || !metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT)) &&
+                !metadata.isHasAttributes();
+    }
+
+    private static boolean isDepthOneArrayItem(ElementMetadata metadata, ElementMetadata parentElementMetadata, ElementMetadata grandParentElementMetadata) {
+        // Array items under class="object" > class="array" stay objects, not value-arrays (runtime #785)
+        boolean arrayItemUnderObjectWrapper = parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY)
+                && grandParentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT);
+
+        return metadata.getDeepestDepth() == 1 && metadata.getLevel() != 0 && !ElementMetadataUtils.isElementOnNamespace(metadata) &&
+                (parentElementMetadata.containsClassAttributeValue("") || parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY) ||
+                        parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT)) &&
+                !metadata.isHasAttributes()
+                && !arrayItemUnderObjectWrapper;
+    }
+
+    private static boolean isDepthOneClassedArray(ElementMetadata metadata) {
+        return metadata.getDeepestDepth() == 1 && metadata.containsClassAttribute() && !ElementMetadataUtils.isElementOnNamespace(metadata) && (
+                (metadata.containsClassAttributeValue("") && metadata.getChildrenCount() > 1) ||
+                        metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT)
+        );
+    }
+
+    private static boolean isLeafValueArray(
+            ElementMetadata metadata,
+            ElementMetadata parentElementMetadata,
+            ElementMetadata grandParentElementMetadata,
+            ElementMetadata greatGrandParentElementMetadata
+    ) {
+        return metadata.getDeepestDepth() == 0 && !parentElementMetadata.isHasEmptyTextContent() && !metadata.isHasAttributes() &&
                 (parentElementMetadata.getChildrenCount() == 1 || parentElementMetadata.getChildrenCount() > 1 && parentElementMetadata.areChildrenNamesEqual()) &&
                 (!parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT) ||
                         parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
@@ -88,8 +107,7 @@ public class MetadataAnalyzer {
                                 !grandParentElementMetadata.isRootNode()) &&
                 (!grandParentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT) ||
                         grandParentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
-                                greatGrandParentElementMetadata.areChildrenNamesEqual())
-        );
+                                greatGrandParentElementMetadata.areChildrenNamesEqual());
     }
 
     // check if it's a root array without type hints enabled
@@ -104,10 +122,7 @@ public class MetadataAnalyzer {
         ) {
             isRootArray = true;
         }
-        if (metadata.getDeepestDepth() > 2 && !metadata.isDefinesNamespaces() && metadata.areChildrenNamesEqual() && !metadata.isHasAttributes()) {
-            isRootArray = true;
-        }
-        if (metadata.getDeepestDepth() == 2 && !metadata.isDefinesNamespaces() && metadata.areChildrenNamesEqual() && !metadata.isHasAttributes()) {
+        if (metadata.getDeepestDepth() >= 2 && !metadata.isDefinesNamespaces() && metadata.areChildrenNamesEqual() && !metadata.isHasAttributes()) {
             isRootArray = true;
         }
         if(metadata.getDeepestDepth() == 1 && !metadata.isDefinesNamespaces() && metadata.areChildrenNamesEqual() && !metadata.isHasAttributes() &&
@@ -120,13 +135,17 @@ public class MetadataAnalyzer {
         ) {
             isRootArray = grandParentElementMetadata.getChildrenCount() > 1;
         }
-        if (metadata.getDeepestDepth() == 0 && !parentElementMetadata.isHasEmptyTextContent() && !metadata.isHasAttributes() && (
-                parentElementMetadata.getChildrenCount() == 1 || parentElementMetadata.getChildrenCount() > 1 && parentElementMetadata.areChildrenNamesEqual()
-        )) {
+        if (isLeafInUniformParent(metadata, parentElementMetadata)) {
             isRootArray = true;
         }
 
         return isRootArray;
+    }
+
+    private static boolean isLeafInUniformParent(ElementMetadata metadata, ElementMetadata parentElementMetadata) {
+        return metadata.getDeepestDepth() == 0 && !parentElementMetadata.isHasEmptyTextContent() && !metadata.isHasAttributes() && (
+                parentElementMetadata.getChildrenCount() == 1 || parentElementMetadata.getChildrenCount() > 1 && parentElementMetadata.areChildrenNamesEqual()
+        );
     }
 
     // check if it's an object
@@ -140,16 +159,9 @@ public class MetadataAnalyzer {
         if (config.isTypeHints() &&
                 metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
                 metadata.getChildrenCount() == 1 &&
-                metadata.getDeepestDepth() != 1) {
-            for (String childPath : metadata.getChildPaths()) {
-                ElementMetadata childMetadata = metadataMap.get(childPath);
-                if (childMetadata != null && (
-                        childMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY) ||
-                        childMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT)
-                )) {
-                    return true;
-                }
-            }
+                metadata.getDeepestDepth() != 1 &&
+                hasTypedChild(metadataMap, metadata)) {
+            return true;
         }
 
         // Array item under class="object" > class="array" is an object even with a single field (runtime #785)
@@ -160,21 +172,46 @@ public class MetadataAnalyzer {
             return true;
         }
 
-        return (metadata.getDeepestDepth() == 1 &&
-                (metadata.getChildrenCount() > 1  && (
-                        metadata.getLevel() == 0 && !hasChildrenWithAttributes && (!config.isTypeHints() || metadata.isDefinesNamespaces()) ||
-                                metadata.getLevel() > 0 && !metadata.areChildrenNamesEqual()
-                ) ||
-                        metadata.getChildrenCount() == 1 && metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
-                                (!config.isTypeHints() ||
-                                        parentElementMetadata.getChildrenCount() > 0 && config.isTypeHints() &&
-                                                !parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY) ||
-                                        config.isTypeHints() &&
-                                                metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
-                                                (!parentElementMetadata.isHasAttributes() && !grandParentElementMetadata.areChildrenNamesEqual())
-                                )
-                )
+        return metadata.getDeepestDepth() == 1 &&
+                (isObjectWithMultipleChildren(metadata, hasChildrenWithAttributes, config) ||
+                        isObjectWithSingleObjectChild(metadata, parentElementMetadata, grandParentElementMetadata, config));
+    }
+
+    // true when metadata has at least one child with class="array" or class="object"
+    private static boolean hasTypedChild(Map<String, ElementMetadata> metadataMap, ElementMetadata metadata) {
+        for (String childPath : metadata.getChildPaths()) {
+            ElementMetadata childMetadata = metadataMap.get(childPath);
+            if (childMetadata != null && (
+                    childMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY) ||
+                    childMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT)
+            )) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isObjectWithMultipleChildren(ElementMetadata metadata, boolean hasChildrenWithAttributes, XmlToJsonConfiguration config) {
+        return metadata.getChildrenCount() > 1 && (
+                metadata.getLevel() == 0 && !hasChildrenWithAttributes && (!config.isTypeHints() || metadata.isDefinesNamespaces()) ||
+                        metadata.getLevel() > 0 && !metadata.areChildrenNamesEqual()
         );
+    }
+
+    private static boolean isObjectWithSingleObjectChild(
+            ElementMetadata metadata,
+            ElementMetadata parentElementMetadata,
+            ElementMetadata grandParentElementMetadata,
+            XmlToJsonConfiguration config
+    ) {
+        return metadata.getChildrenCount() == 1 && metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
+                (!config.isTypeHints() ||
+                        parentElementMetadata.getChildrenCount() > 0 && config.isTypeHints() &&
+                                !parentElementMetadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_ARRAY) ||
+                        config.isTypeHints() &&
+                                metadata.containsClassAttributeValue(Constants.JSON_XML_ATTR_TYPE_OBJECT) &&
+                                (!parentElementMetadata.isHasAttributes() && !grandParentElementMetadata.areChildrenNamesEqual())
+                );
     }
 
     // check if it's one value

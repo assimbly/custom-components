@@ -72,7 +72,7 @@ public class MultipartProcessor implements Processor {
         }
 
         String resolved = resolveFormFieldsJson(exchange, formFieldsJson.trim());
-        if (resolved == null || resolved.isBlank()) {
+        if (resolved.isBlank()) {
             return;
         }
 

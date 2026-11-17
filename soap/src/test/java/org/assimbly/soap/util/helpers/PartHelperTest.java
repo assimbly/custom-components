@@ -19,7 +19,7 @@ public class PartHelperTest {
     private static Definition definition;
 
     @BeforeEach
-    public void setup() throws WSDLException {
+    void setup() throws WSDLException {
         WSDLFactory factory = WSDLFactory.newInstance();
         WSDLReader reader = factory.newWSDLReader();
 
@@ -28,7 +28,7 @@ public class PartHelperTest {
     }
 
     @Test
-    public void testContainingTypesAndElements(){
+    void testContainingTypesAndElements(){
         QName name = new QName("http://www.assimbly.world","TestSoap");
 
         Input input = definition.getPortType(name).getOperation("OperationWithTypePart", null, null).getInput();
@@ -38,7 +38,7 @@ public class PartHelperTest {
     }
 
     @Test
-    public void testGettingElement() {
+    void testGettingElement() {
         QName name = new QName("http://www.assimbly.world","TestSoap");
 
         Input input = definition.getPortType(name).getOperation("OperationWithTypePart", null, null).getInput();
@@ -51,7 +51,7 @@ public class PartHelperTest {
     }
 
     @Test
-    public void testGettingTypes() {
+    void testGettingTypes() {
         QName name = new QName("http://www.assimbly.world","TestSoap");
 
         Input input = definition.getPortType(name).getOperation("OperationWithTypePart", null, null).getInput();

@@ -60,6 +60,7 @@ public class TenantVariablesConfiguration {
         this.value        = source.value;
         this.headerName   = source.headerName;
         this.encrypt      = source.encrypt;
+        this.protectedValue = source.protectedValue;
         this.groupName    = source.groupName;
         this.flowName     = source.flowName;
     }

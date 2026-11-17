@@ -1,0 +1,46 @@
+= DocConverter Component
+:doctitle: DOCCONVERTER
+:shortname: docconverter
+:artifactid: docconverter
+:description: Converts between XML, JSON, YAML and CSV
+:since: 4.12.1
+:supportlevel: Stable
+:component-header: Only producer is supported
+//Manually maintained attributes
+
+*Since Camel {since}*
+
+*{component-header}*
+
+The component converts the message body between the document formats XML, JSON, YAML and CSV.
+
+Maven users will need to add the following dependency to their `pom.xml`
+for this component:
+
+[source,xml]
+------------------------------------------------------------
+<dependency>
+    <groupId>org.assimbly</groupId>
+    <artifactId>docconverter</artifactId>
+	<version>x.x.x</version>
+    <!-- use the same version as your Assimbly version -->
+</dependency>
+------------------------------------------------------------
+
+== URI format
+
+--------------------------------------------
+docconverter:conversion
+--------------------------------------------
+
+The conversion is written as `source2target` or `sourceTotarget`, for example `xml2json` or `xmltojson`.
+
+== Path option
+
+[width="100%",cols="2,5,^1,2",options="header"]
+|===
+| Name | Description | Default | Type
+| *conversion* | *Required* The type of conversion: `source2target`. Source and target are one of `xml`, `json`, `yaml` or `csv`. The source and target must differ. | | String
+|===
+
+When the conversion is not valid, the body is left unchanged and the header `docconverter` is set with an error message.

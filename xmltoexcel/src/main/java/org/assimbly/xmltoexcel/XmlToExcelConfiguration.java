@@ -1,9 +1,5 @@
 package org.assimbly.xmltoexcel;
 
-import org.apache.commons.codec.binary.Base64;
-import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.DeserializationFeature;
-import tools.jackson.databind.ObjectMapper;
 import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
@@ -12,14 +8,23 @@ import org.assimbly.xmltoexcel.domain.ExcelFormat;
 import org.assimbly.xmltoexcel.domain.OrderHeaders;
 import org.assimbly.xmltoexcel.exception.XmlToExcelException;
 import tools.jackson.core.JacksonException;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
+import java.util.Base64;
 import java.util.List;
 
 @UriParams
 public class XmlToExcelConfiguration {
+
+    private static final ObjectMapper MAPPER = JsonMapper.builder().build();
+
+    private static final TypeReference<List<CustomWorksheet>> WORKSHEET_LIST_TYPE =
+            new TypeReference<>() {};
+    private static final TypeReference<List<String>> STRING_LIST_TYPE =
+            new TypeReference<>() {};
 
     @UriParam
     @Metadata(required = true)
@@ -115,36 +120,25 @@ public class XmlToExcelConfiguration {
     }
 
     public void setWorksheets(String worksheets) {
-        byte[] decoded = Base64.decodeBase64(worksheets);
+        byte[] decoded = Base64.getDecoder().decode(worksheets);
         String json = new String(decoded, StandardCharsets.UTF_8);
 
         this.worksheets = jsonToWorksheets(json);
     }
 
-    private static final ObjectMapper MAPPER = JsonMapper.builder()
-            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-            .build();
-
     public List<CustomWorksheet> jsonToWorksheets(String json) {
-        // Basic guard clause
         if (json == null || json.isBlank()) {
-            return Collections.emptyList();
+            return List.of();
         }
 
         try {
-            return MAPPER.readValue(
-                    json,
-                    new TypeReference<List<CustomWorksheet>>() {}
-            );
-        } catch (JacksonException e) {
+            return MAPPER.readValue(json, WORKSHEET_LIST_TYPE);
+        } catch (JacksonException _) {
             // Fallback: handle a double-encoded array (each element is itself a JSON string)
             try {
-                List<String> rawStrings = MAPPER.readValue(json, new TypeReference<List<String>>() {});
-                java.util.List<CustomWorksheet> result = new java.util.ArrayList<>();
-                for (String s : rawStrings) {
-                    result.add(MAPPER.readValue(s, CustomWorksheet.class));
-                }
-                return result;
+                return MAPPER.readValue(json, STRING_LIST_TYPE).stream()
+                        .map(s -> MAPPER.readValue(s, CustomWorksheet.class))
+                        .toList();
             } catch (JacksonException e2) {
                 throw new XmlToExcelException("Deserialization failed: " + e2.getMessage());
             }

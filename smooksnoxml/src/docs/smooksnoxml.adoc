@@ -1,0 +1,22 @@
+= Smooks No XML Module
+:doctitle: SMOOKSNOXML
+:shortname: smooksnoxml
+:artifactid: smooksnoxml
+:description: Smooks XML reader base classes for non-XML formats
+:supportlevel: Stable
+//Manually maintained attributes
+
+This module is not a Camel component. It is a support library that provides the base classes (`BaseXmlReader`, `XmlDocumentHandler`) for Smooks readers that turn non-XML input into XML events.
+
+Maven users will need to add the following dependency to their `pom.xml`
+for this module:
+
+[source,xml]
+------------------------------------------------------------
+<dependency>
+    <groupId>org.assimbly</groupId>
+    <artifactId>smooksnoxml</artifactId>
+	<version>x.x.x</version>
+    <!-- use the same version as your Assimbly version -->
+</dependency>
+------------------------------------------------------------

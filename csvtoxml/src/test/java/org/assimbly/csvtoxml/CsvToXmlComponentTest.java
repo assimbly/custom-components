@@ -7,10 +7,6 @@ import org.custommonkey.xmlunit.XMLUnit;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.junit.jupiter.api.Test;
 
-import org.xml.sax.SAXException;
-
-import java.io.IOException;
-
 import static org.xmlunit.assertj3.XmlAssert.assertThat;
 
 class CsvToXmlComponentTest extends CamelTestSupport {
@@ -36,7 +32,7 @@ class CsvToXmlComponentTest extends CamelTestSupport {
     }
 
     @Test
-    void testCsvWithHeaders() throws SAXException {
+    void testCsvWithHeaders() {
 
         String csvWithHeader = "Voornaam;Achternaam;Leeftijd\nKoen;Castermans;21\nJaap;Aap;30";
         template.sendBody("direct:testWithHeaders", csvWithHeader);

@@ -16,7 +16,7 @@ import org.assimbly.tenantvariables.TenantVariablesProcessor;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Calendar;
+import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -238,12 +238,11 @@ public class TokenService {
                                 ? tokenInfoJson.getString(SERVICE_PARAM_ERROR_DESCRIPTION) : "";
                         throw new OAuth2TokenException(error + " - " + errorDescription);
                     } else {
-                        Calendar nowCal = Calendar.getInstance();
                         int expiresIn = tokenInfoJson.getInt(SERVICE_PARAM_EXPIRES_IN);
-                        nowCal.add(Calendar.SECOND, expiresIn);
+                        Instant expiresAt = Instant.now().plusSeconds(expiresIn);
                         String accessToken = tokenInfoJson.getString(SERVICE_PARAM_ACCESS_TOKEN);
                         String refreshToken = tokenInfoJson.optString(SERVICE_PARAM_REFRESH_TOKEN);
-                        tokenInfoMap.put(SERVICE_PARAM_EXPIRES_IN, String.valueOf(nowCal.getTimeInMillis()));
+                        tokenInfoMap.put(SERVICE_PARAM_EXPIRES_IN, String.valueOf(expiresAt.toEpochMilli()));
                         tokenInfoMap.put(SERVICE_PARAM_ACCESS_TOKEN, accessToken);
                         tokenInfoMap.put(SERVICE_PARAM_REFRESH_TOKEN, refreshToken);
                     }

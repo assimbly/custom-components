@@ -1,0 +1,52 @@
+= SQL Component
+:doctitle: SQL
+:shortname: sql-custom
+:artifactid: sql
+:description: Executes a query on a database using a JDBC connection
+:supportlevel: Stable
+:component-header: Only producer is supported
+//Manually maintained attributes
+
+*{component-header}*
+
+The component executes a query on a database. Supported databases are DB2, Informix, MySQL, SQL Server, Oracle, PostgreSQL and H2.
+
+Maven users will need to add the following dependency to their `pom.xml`
+for this component:
+
+[source,xml]
+------------------------------------------------------------
+<dependency>
+    <groupId>org.assimbly</groupId>
+    <artifactId>sql</artifactId>
+	<version>x.x.x</version>
+    <!-- use the same version as your Assimbly version -->
+</dependency>
+------------------------------------------------------------
+
+== URI format
+
+--------------------------------------------
+sql-custom://username@host:port?password=[password]&database=[database]&connectionType=[type]&query=[query]
+--------------------------------------------
+
+The scheme is `sql-custom`, taken from the name of the component registration file.
+
+== Options
+
+[width="100%",cols="2,5,^1,2",options="header"]
+|===
+| Name | Description | Default | Type
+| *username* | *Required* Username to log in with. Set in the URI user info. | | String
+| *host* | *Required* Host of the database. Set in the URI. | | String
+| *port* | Port of the database. Set in the URI. | 3306 | String
+| *password* | *Required* Password to log in with. | | String
+| *database* | *Required* Database to log on to. | | String
+| *instance* | Instance of the database. | | String
+| *query* | *Required* Query to execute. | | String
+| *connectionType* | *Required* Type of database: `db2`, `informix`, `mysql`, `mysql8`, `sql_server`, `oracle`, `postgres` or `h2`. | | String
+| *useSSL* | Whether the connection uses SSL. | false | boolean
+| *tlsVersion* | TLS version to use when `useSSL` is true. | | String
+|===
+
+The options `username`, `host`, `port`, `instance`, `password` and `database` accept Simple expressions, which are evaluated on the exchange.

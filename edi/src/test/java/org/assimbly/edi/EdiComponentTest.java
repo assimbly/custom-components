@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import static org.xmlunit.assertj3.XmlAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class EdiComponentTest extends CamelTestSupport {
+class EdiComponentTest extends CamelTestSupport {
 
     @EndpointInject("mock:result")
     protected MockEndpoint resultEndpoint;
@@ -21,7 +21,7 @@ public class EdiComponentTest extends CamelTestSupport {
     protected ProducerTemplate template;
 
     @Test
-    public void convertsEdiToXmlWithinCamelRoute() throws Exception {
+    void convertsEdiToXmlWithinCamelRoute() throws Exception {
         resultEndpoint.expectedMessageCount(1);
 
         String expected = "<edi-message>" +
@@ -40,7 +40,7 @@ public class EdiComponentTest extends CamelTestSupport {
     }
 
     @Test
-    public void convertsXmlToEdiWithinCamelRoute() throws Exception {
+    void convertsXmlToEdiWithinCamelRoute() throws Exception {
         resultEndpoint.expectedMessageCount(1);
 
         String expectedEdi = "A~A 11!A 12^A 2";

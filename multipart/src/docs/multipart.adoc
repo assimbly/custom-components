@@ -1,0 +1,35 @@
+= Multipart Module
+:doctitle: MULTIPART
+:shortname: multipart
+:artifactid: multipart
+:description: Builds a multipart/form-data body from a file and form fields
+:supportlevel: Stable
+//Manually maintained attributes
+
+This module is not a Camel component with its own URI scheme. It provides the processor `org.assimbly.multipart.processor.MultipartProcessor`, which turns the message body (a file) into a `multipart/form-data` body, for example to upload a file with the HTTP component.
+
+Maven users will need to add the following dependency to their `pom.xml`
+for this module:
+
+[source,xml]
+------------------------------------------------------------
+<dependency>
+    <groupId>org.assimbly</groupId>
+    <artifactId>multipart</artifactId>
+	<version>x.x.x</version>
+    <!-- use the same version as your Assimbly version -->
+</dependency>
+------------------------------------------------------------
+
+== Message headers
+
+[width="100%",cols="2,5,^1",options="header"]
+|===
+| Name | Description | Required
+| *CamelFileName* | File name of the file part. Falls back to `UndefinedFileName`. | No
+| *Content-Type* | Content type of the file part. | Yes
+| *MultipartFieldName* | Form field name of the file part. Removed after processing. | Yes
+| *MultipartFormFields* | JSON object with extra text form fields. Values can contain Simple expressions, or the whole value can be a Simple expression returning JSON. Removed after processing. | No
+|===
+
+The body is replaced with the multipart body and the header `Content-Type` is set to `multipart/form-data` with the boundary `--------------------------Assimbly`.

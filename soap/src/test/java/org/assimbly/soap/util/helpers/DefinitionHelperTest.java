@@ -17,7 +17,7 @@ public class DefinitionHelperTest {
     private static Definition definition;
 
     @BeforeEach
-    public void setup() throws WSDLException {
+    void setup() throws WSDLException {
         WSDLFactory factory = WSDLFactory.newInstance();
         WSDLReader reader = factory.newWSDLReader();
 
@@ -26,7 +26,7 @@ public class DefinitionHelperTest {
     }
 
     @Test
-    public void testGettingDestinationUrl() {
+    void testGettingDestinationUrl() {
         Binding binding = definition.getBinding(new QName("http://www.assimbly.world", "TestSoap12"));
         Binding bindingExt = definition.getBinding(new QName("http://www.assimbly.world", "TestSoapExt"));
 

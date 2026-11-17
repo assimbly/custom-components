@@ -19,7 +19,6 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.InputStream;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class XmlMetadataExtractor {
 
@@ -105,7 +104,7 @@ public class XmlMetadataExtractor {
         Iterator<Attribute> attrIterator = startElement.getAttributes();
         Map<String, AttributeEntry> attributes = new HashMap<>();
         while (attrIterator.hasNext()) {
-            Attribute attr = (Attribute) attrIterator.next();
+            Attribute attr = attrIterator.next();
             QName qname = attr.getName();
             String attrName = qname.getPrefix().isEmpty()
                     ? qname.getLocalPart()
@@ -269,12 +268,9 @@ public class XmlMetadataExtractor {
         String childPath = path;
         int currentDepth = 0;
 
-        while (true) {
-            String parentPath = ElementMetadataUtils.getParentPath(childPath);
-            if (parentPath.isEmpty()) {
-                break;
-            }
+        String parentPath = ElementMetadataUtils.getParentPath(childPath);
 
+        while (!parentPath.isEmpty()) {
             ElementMetadata parentMeta = metadataMap.computeIfAbsent(parentPath, p -> {
                 ElementMetadata m = new ElementMetadata();
                 m.setPath(p);
@@ -290,6 +286,7 @@ public class XmlMetadataExtractor {
             }
 
             childPath = parentPath;
+            parentPath = ElementMetadataUtils.getParentPath(childPath);
             currentDepth++;
         }
     }

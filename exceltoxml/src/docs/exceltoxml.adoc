@@ -1,0 +1,45 @@
+= ExcelToXML Component
+:doctitle: EXCELTOXML
+:shortname: exceltoxml
+:artifactid: exceltoxml
+:description: Converts Excel to XML
+:since: 3.0.1
+:supportlevel: Stable
+:component-header: Only producer is supported
+//Manually maintained attributes
+
+*Since Camel {since}*
+
+*{component-header}*
+
+The component converts an Excel workbook (the message body) into XML. Which sheets and cell ranges are read is defined by a set of rules.
+
+Maven users will need to add the following dependency to their `pom.xml`
+for this component:
+
+[source,xml]
+------------------------------------------------------------
+<dependency>
+    <groupId>org.assimbly</groupId>
+    <artifactId>exceltoxml</artifactId>
+	<version>x.x.x</version>
+    <!-- use the same version as your Assimbly version -->
+</dependency>
+------------------------------------------------------------
+
+== URI format
+
+--------------------------------------------
+exceltoxml://?encoding=UTF-8&rules=[rules]
+--------------------------------------------
+
+== Options
+
+[width="100%",cols="2,5,^1,2",options="header"]
+|===
+| Name | Description | Default | Type
+| *encoding* | *Required* Charset to use when converting the Excel contents to XML. | | String
+| *rules* | *Required* The rules as a JSON array. Each rule has the fields `name`, `worksheet`, `cellRange`, `transpose`, `headerRow` and `discardEmpty`. | | String
+|===
+
+The output has the root element `Excel`. Each rule results in an element named after the rule, containing an `excelRow` element per row (or `excelCol` per column when `transpose` is true).

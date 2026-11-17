@@ -11,6 +11,8 @@ import org.assimbly.soap.util.helpers.XmlHelper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import org.w3c.dom.Document;
 import org.assimbly.soap.domain.SoapAttribute;
@@ -23,13 +25,6 @@ import javax.wsdl.xml.WSDLReader;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-
-import java.io.StringWriter;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -87,122 +82,26 @@ class SoapProcessorTest {
         assertEquals("wsdl&param=x", configuration.getParameters());
     }
 
-    @Test
-    void testTransformPartStandardType() throws Exception {
-        Document input = builder.parse(classLoader.getResourceAsStream("input-mocks/input-from-part-with-standard-type.xml"));
+    @ParameterizedTest(name = "{0}")
+    @CsvSource({
+            "OperationWithStandardType,input-from-part-with-standard-type.xml,output-from-part-with-standard-type.xml",
+            "OperationWithTypePart,input-from-part-with-type.xml,output-from-part-with-type.xml",
+            "OperationWithReference,input-with-reference.xml,output-with-reference.xml",
+            "OperationWithType,input-with-type.xml,output-with-type.xml",
+            "OperationWithLocalType,input-with-local-type.xml,output-with-local-type.xml",
+            "OperationWithExtension,input-with-extension.xml,output-with-extension.xml",
+            "OperationWithSequence,input-with-sequence.xml,output-with-sequence.xml",
+            "OperationFromExternalWsdl,input-from-external-wsdl.xml,output-from-external-wsdl.xml",
+            "OperationFromExternalBinding,input-from-external-binding.xml,output-from-external-binding.xml",
+            "OperationWithUnqualified,input-with-unqualified.xml,output-with-unqualified.xml",
+            "OperationWithSchemaReference,input-with-schema-reference.xml,output-with-schema-reference.xml",
+            "OperationWithImport,input-with-import.xml,output-with-import.xml"
+    })
+    void testTransform(String operation, String inputFile, String outputFile) throws Exception {
+        Document input = builder.parse(classLoader.getResourceAsStream("input-mocks/" + inputFile));
 
-        Document actual = processor.transform(definition, "OperationWithStandardType", envelope, input);
-        Document expected = builder.parse(classLoader.getResourceAsStream("output-mocks/output-from-part-with-standard-type.xml"));
-
-        assertEquals(XmlHelper.prettyPrint(expected), XmlHelper.prettyPrint(actual));
-    }
-
-    @Test
-    void testTransformPartType() throws Exception {
-        Document input = builder.parse(classLoader.getResourceAsStream("input-mocks/input-from-part-with-type.xml"));
-
-        Document actual = processor.transform(definition, "OperationWithTypePart", envelope, input);
-        Document expected = builder.parse(classLoader.getResourceAsStream("output-mocks/output-from-part-with-type.xml"));
-
-        assertEquals(XmlHelper.prettyPrint(expected), XmlHelper.prettyPrint(actual));
-    }
-
-    @Test
-    void testTransformReferenceNode() throws Exception {
-        Document input = builder.parse(classLoader.getResourceAsStream("input-mocks/input-with-reference.xml"));
-
-        Document actual = processor.transform(definition, "OperationWithReference", envelope, input);
-        Document expected = builder.parse(classLoader.getResourceAsStream("output-mocks/output-with-reference.xml"));
-
-        assertEquals(XmlHelper.prettyPrint(expected), XmlHelper.prettyPrint(actual));
-    }
-
-    @Test
-    void testTransformTypeNode() throws Exception {
-        Document input = builder.parse(classLoader.getResourceAsStream("input-mocks/input-with-type.xml"));
-
-        Document actual = processor.transform(definition, "OperationWithType", envelope, input);
-        Document expected = builder.parse(classLoader.getResourceAsStream("output-mocks/output-with-type.xml"));
-
-        assertEquals(XmlHelper.prettyPrint(expected), XmlHelper.prettyPrint(actual));
-    }
-
-    @Test
-    void testTransformLocalTypeNode() throws Exception {
-        Document input = builder.parse(classLoader.getResourceAsStream("input-mocks/input-with-local-type.xml"));
-
-        Document actual = processor.transform(definition, "OperationWithLocalType", envelope, input);
-        Document expected = builder.parse(classLoader.getResourceAsStream("output-mocks/output-with-local-type.xml"));
-
-        assertEquals(XmlHelper.prettyPrint(expected), XmlHelper.prettyPrint(actual));
-    }
-
-    @Test
-    void testTransformExtensionNode() throws Exception {
-        Document input = builder.parse(classLoader.getResourceAsStream("input-mocks/input-with-extension.xml"));
-
-        Document actual = processor.transform(definition, "OperationWithExtension", envelope, input);
-        Document expected = builder.parse(classLoader.getResourceAsStream("output-mocks/output-with-extension.xml"));
-
-        assertEquals(XmlHelper.prettyPrint(expected), XmlHelper.prettyPrint(actual));
-    }
-
-    @Test
-    void testTransformSequenceNode() throws Exception {
-        Document input = builder.parse(classLoader.getResourceAsStream("input-mocks/input-with-sequence.xml"));
-
-        Document actual = processor.transform(definition, "OperationWithSequence", envelope, input);
-        Document expected = builder.parse(classLoader.getResourceAsStream("output-mocks/output-with-sequence.xml"));
-
-        assertEquals(XmlHelper.prettyPrint(expected), XmlHelper.prettyPrint(actual));
-    }
-
-    @Test
-    void testTransformFromExternalWsdlNode() throws Exception {
-        Document input = builder.parse(classLoader.getResourceAsStream("input-mocks/input-from-external-wsdl.xml"));
-
-        Document actual = processor.transform(definition, "OperationFromExternalWsdl", envelope, input);
-        Document expected = builder.parse(classLoader.getResourceAsStream("output-mocks/output-from-external-wsdl.xml"));
-
-        assertEquals(XmlHelper.prettyPrint(expected), XmlHelper.prettyPrint(actual));
-    }
-
-    @Test
-    void testTransformFromExternalBindingNode() throws Exception {
-        Document input = builder.parse(classLoader.getResourceAsStream("input-mocks/input-from-external-binding.xml"));
-
-        Document actual = processor.transform(definition, "OperationFromExternalBinding", envelope, input);
-        Document expected = builder.parse(classLoader.getResourceAsStream("output-mocks/output-from-external-binding.xml"));
-
-        assertEquals(XmlHelper.prettyPrint(expected), XmlHelper.prettyPrint(actual));
-    }
-
-    @Test
-    void testTransformWithUnqualifiedNode() throws Exception {
-        Document input = builder.parse(classLoader.getResourceAsStream("input-mocks/input-with-unqualified.xml"));
-
-        Document actual = processor.transform(definition, "OperationWithUnqualified", envelope, input);
-        Document expected = builder.parse(classLoader.getResourceAsStream("output-mocks/output-with-unqualified.xml"));
-
-        assertEquals(XmlHelper.prettyPrint(expected), XmlHelper.prettyPrint(actual));
-    }
-
-    @Test
-    void testTransformWithSchemaReferenceNode() throws Exception {
-        Document input = builder.parse(classLoader.getResourceAsStream("input-mocks/input-with-schema-reference.xml"));
-
-        Document actual = processor.transform(definition, "OperationWithSchemaReference", envelope, input);
-        Document expected = builder.parse(classLoader.getResourceAsStream("output-mocks/output-with-schema-reference.xml"));
-
-        assertEquals(XmlHelper.prettyPrint(expected), XmlHelper.prettyPrint(actual));
-    }
-
-    @Test
-    void testTransformWithImportNode() throws Exception {
-        Document input = builder.parse(classLoader.getResourceAsStream("input-mocks/input-with-import.xml"));
-
-        Document actual = processor.transform(definition, "OperationWithImport", envelope, input);
-        Document expected = builder.parse(classLoader.getResourceAsStream("output-mocks/output-with-import.xml"));
+        Document actual = processor.transform(definition, operation, envelope, input);
+        Document expected = builder.parse(classLoader.getResourceAsStream("output-mocks/" + outputFile));
 
         assertEquals(XmlHelper.prettyPrint(expected), XmlHelper.prettyPrint(actual));
     }

@@ -2,19 +2,20 @@ package org.assimbly.xmltojsonlegacy.model;
 
 public class Namespace {
 
-    private String namespace;
-    private int level;
+    private final String uri;
+    private final int level;
 
-    public Namespace(String namespace, int level) {
-        this.namespace = namespace;
+    public Namespace(String uri, int level) {
+        this.uri = uri;
         this.level = level;
     }
 
     public String getNamespace() {
-        return namespace;
+        return uri;
     }
 
     public int getLevel() {
         return level;
     }
+
 }

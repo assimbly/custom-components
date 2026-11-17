@@ -99,7 +99,17 @@ public class TenantVariablesProcessor implements Processor {
 
             String value = (variable.isEncrypted() ? decrypt(variable.getValue()) : variable.getValue());
 
-            String header = interpolateVar(endpoint.getConfiguration().getHeaderName(), exchange);
+            String headerName = endpoint.getConfiguration().getHeaderName();
+
+            if(headerName == null) {
+                throw new IllegalArgumentException("The headerName option is required for the GET operation.");
+            }
+
+            String header = interpolateVar(headerName, exchange);
+
+            if(header == null) {
+                throw new IllegalArgumentException("The headerName \"" + headerName + "\" resolved to null.");
+            }
 
             exchange.getIn().setHeader(header, value);
         }

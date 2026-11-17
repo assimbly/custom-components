@@ -1,0 +1,27 @@
+= Auth Module
+:doctitle: AUTH
+:shortname: auth
+:artifactid: auth
+:description: Authentication and authorization support (JWT, JAX-RS filters, tenants)
+:supportlevel: Stable
+//Manually maintained attributes
+
+This module is not a Camel component. It is a support library used by other Assimbly modules for authentication and authorization. It contains:
+
+* JWT creation and validation (`org.assimbly.auth.jwt`)
+* JAX-RS authentication, authorization and health API filters, and the `@Secured` annotation (`org.assimbly.auth.endpoint`)
+* The domain model for users, roles and tenants (`org.assimbly.auth.domain`)
+* MongoDB access for tenant data (`org.assimbly.auth.mongo`)
+
+Maven users will need to add the following dependency to their `pom.xml`
+for this module:
+
+[source,xml]
+------------------------------------------------------------
+<dependency>
+    <groupId>org.assimbly</groupId>
+    <artifactId>auth</artifactId>
+	<version>x.x.x</version>
+    <!-- use the same version as your Assimbly version -->
+</dependency>
+------------------------------------------------------------

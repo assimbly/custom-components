@@ -1,0 +1,31 @@
+= PDFToText Component
+:doctitle: PDFTOTEXT
+:shortname: pdftotext
+:artifactid: pdftotext
+:description: Extracts the text of a PDF
+:supportlevel: Stable
+:component-header: Only producer is supported
+//Manually maintained attributes
+
+*{component-header}*
+
+The component extracts the text of a PDF (the message body). The text is sorted by position on the page, so the order matches what is visible. The result is set as the message body with content type `text/plain`.
+
+Maven users will need to add the following dependency to their `pom.xml`
+for this component:
+
+[source,xml]
+------------------------------------------------------------
+<dependency>
+    <groupId>org.assimbly</groupId>
+    <artifactId>pdftotext</artifactId>
+	<version>x.x.x</version>
+    <!-- use the same version as your Assimbly version -->
+</dependency>
+------------------------------------------------------------
+
+== URI format
+
+--------------------------------------------
+pdftotext://
+--------------------------------------------

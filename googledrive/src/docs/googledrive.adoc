@@ -1,0 +1,63 @@
+= Google Drive Component
+:doctitle: GOOGLEDRIVE
+:shortname: google-drive
+:artifactid: googledrive
+:description: Uploads files to and downloads files from Google Drive
+:since: 4.8.0
+:supportlevel: Stable
+:component-header: Both producer and consumer are supported
+//Manually maintained attributes
+
+*Since Camel {since}*
+
+*{component-header}*
+
+The component uploads files to a Google Drive directory (producer) and polls a directory for files (consumer).
+
+The Google OAuth client is configured with the environment variables `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`.
+
+Maven users will need to add the following dependency to their `pom.xml`
+for this component:
+
+[source,xml]
+------------------------------------------------------------
+<dependency>
+    <groupId>org.assimbly</groupId>
+    <artifactId>googledrive</artifactId>
+	<version>x.x.x</version>
+    <!-- use the same version as your Assimbly version -->
+</dependency>
+------------------------------------------------------------
+
+== URI format
+
+--------------------------------------------
+google-drive:directoryId?accessToken=[token]&tenant=[tenant]
+--------------------------------------------
+
+== Path option
+
+[width="100%",cols="2,5,^1,2",options="header"]
+|===
+| Name | Description | Default | Type
+| *directoryId* | Id of the Google Drive directory to upload to or poll from. | | String
+|===
+
+== Options
+
+[width="100%",cols="2,5,^1,2",options="header"]
+|===
+| Name | Description | Default | Type
+| *accessToken* | *Required* Access token to log in with. Can be a tenant variable. | | String
+| *tenant* | *Required* Tenant used to resolve tenant variables. | | String
+| *flowId* | Id of the flow, used in log messages. | | String
+| *filterFiles* | Consumer only. Regex that file names must match to be consumed. | | String
+| *moveTo* | Consumer only. Name of a subdirectory to move consumed files to. The directory is created when missing. Without this option consumed files are deleted. | | String
+| *delay* | Consumer only. Delay in milliseconds between polls. | | String
+| *initialDelay* | Consumer only. Delay in milliseconds before the first poll. | | String
+| *gSuiteFiles* | Consumer only. Set to `Ignore` to skip G Suite files (Docs, Sheets and so on). | | String
+|===
+
+== Message headers
+
+After an upload the header `GoogleDriveFileId` contains the id of the created file. The file name is taken from the header `CamelFileName`.

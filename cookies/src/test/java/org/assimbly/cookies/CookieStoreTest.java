@@ -9,20 +9,19 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
 public class CookieStoreTest extends CamelTestSupport {
 
     private CookieStore flowCookieStore;
     private Exchange exchange;
 
     @BeforeEach
-    public void Setup(){
+    void Setup(){
         flowCookieStore = new CookieStore();
         exchange = new DefaultExchange(context);
     }
 
     @Test
-    public void addCookieAsStringTest(){
+    void addCookieAsStringTest(){
         flowCookieStore.addStringAsCookie(
                 exchange,
                 "Cookie 1",
@@ -42,7 +41,7 @@ public class CookieStoreTest extends CamelTestSupport {
     }
 
     @Test
-    public void replaceCookieOnExistingEntryTest(){
+    void replaceCookieOnExistingEntryTest(){
         flowCookieStore.addStringAsCookie(
                 exchange,
                 "Cookie 1",
@@ -69,7 +68,7 @@ public class CookieStoreTest extends CamelTestSupport {
     }
 
     @Test
-    public void addCookieWithSameNameDifferentDomainTest(){
+    void addCookieWithSameNameDifferentDomainTest(){
         flowCookieStore.addStringAsCookie(
                 exchange,
                 "Cookie 1",
@@ -92,7 +91,7 @@ public class CookieStoreTest extends CamelTestSupport {
     }
 
     @Test
-    public void removeCookieAsStringTest(){
+    void removeCookieAsStringTest(){
         flowCookieStore.addStringAsCookie(
                 exchange,
                 "Cookie 1",
@@ -110,7 +109,7 @@ public class CookieStoreTest extends CamelTestSupport {
     }
 
     @Test
-    public void removeCookieWithoutDomainTest(){
+    void removeCookieWithoutDomainTest(){
         flowCookieStore.addStringAsCookie(
                 exchange,
                 "Cookie 1",
@@ -137,7 +136,7 @@ public class CookieStoreTest extends CamelTestSupport {
     }
 
     @Test
-    public void AddCookieWithHeadersTest(){
+    void AddCookieWithHeadersTest(){
         exchange.getIn().setHeader("key", "Cookie 1");
         exchange.getIn().setHeader("value", "Value 1");
         exchange.getIn().setHeader("domain", "org.assimbly");

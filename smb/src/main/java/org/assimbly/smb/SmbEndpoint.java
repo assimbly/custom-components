@@ -141,6 +141,7 @@ public class SmbEndpoint extends GenericFileEndpoint<SmbFile> {
     }
 
     @Override
+    @SuppressWarnings("java:S1185") // widens Camel's protected method to package access for SmbProducer
     protected String createDoneFileName(final String afileName) {
         return super.createDoneFileName(afileName);
     }

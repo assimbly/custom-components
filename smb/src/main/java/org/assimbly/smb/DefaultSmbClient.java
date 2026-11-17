@@ -152,7 +152,7 @@ public class DefaultSmbClient implements SmbClient {
         LOGGER.warn("Ignoring NPE in jcifs.smb.Dfs.resolve: {}",
                 ex.getMessage());
       } else {
-        throw ex;
+        throw ex; // NOSONAR java:S1695 - rethrows the caught NPE unchanged, it is not a null check
       }
     }
     return fileList;

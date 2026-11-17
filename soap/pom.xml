@@ -41,7 +41,7 @@
 	  <dependency>
 		  <groupId>org.apache.felix</groupId>
 		  <artifactId>org.apache.felix.configadmin</artifactId>
-		  <version>${config-admin.version}</version>
+		  <version>${felix-config-admin.version}</version>
 	  </dependency>
 	  <dependency>
 		  <groupId>tools.jackson.core</groupId>
@@ -70,6 +70,12 @@
 		  <groupId>wsdl4j</groupId>
 		  <artifactId>wsdl4j</artifactId>
 		  <version>${wsdl4j.version}</version>
+	  </dependency>
+	  <dependency>
+		  <groupId>org.junit.jupiter</groupId>
+		  <artifactId>junit-jupiter-params</artifactId>
+		  <version>${junit.version}</version>
+		  <scope>test</scope>
 	  </dependency>
 
   </dependencies>

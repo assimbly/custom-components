@@ -1,464 +1,340 @@
 package org.assimbly.tenantvariables;
 
-import org.junit.jupiter.api.*;
-
-import org.apache.camel.CamelExecutionException;
 import org.apache.camel.Exchange;
-import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.impl.engine.ExplicitCamelContextNameStrategy;
-import org.apache.camel.model.language.ConstantExpression;
 import org.apache.camel.support.DefaultExchange;
-
 import org.apache.camel.test.junit5.CamelTestSupport;
-import org.assimbly.tenantvariables.exception.TenantVariableNotFoundException;
 import org.assimbly.tenantvariables.domain.EnvironmentValue;
 import org.assimbly.tenantvariables.domain.TenantVariable;
+import org.assimbly.tenantvariables.exception.TenantVariableNotFoundException;
 import org.assimbly.tenantvariables.mongo.MongoDao;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mockStatic;
 
+/**
+ * Unit tests for the tenantvariables component. MongoDao is replaced by an in-memory store,
+ * so no database is needed. The ASSIMBLY_ENCRYPTION_SECRET variable is provided by the surefire configuration.
+ */
 class TenantVariablesTest extends CamelTestSupport {
 
-    private static final String VARIABLE_VALUE = "Test value";
-    private static final String VARIABLE_WITH_DOLLAR = "Thi$ body has dollar";
-    private static final String VARIABLE_NAME = "Variable 1";
-    private static final String ENCRYPTED_VARIABLE_NAME = "Encrypted Variable 1";
-    private static final String VARIABLE_NAME_HEADER = "Variable ${headers.count}";
+    private static final String ENVIRONMENT = "test";
+    private static final String HEADER = "MyHeader";
+    private static final String OPTIONS = "&environment=" + ENVIRONMENT + "&groupName=groupless&flowName=flow1";
 
-    private static final String NULL_VARIABLE = "Variable Null";
+    private static final String JSON_BODY = "{\"actors\": [{\"id\": \"1\", \"name\": \"Christian Bale\"}, {\"id\": \"2\", \"name\": \"Liam Neeson\"}]}";
 
-    private static final String HEADER_NAME = "HeaderName";
-    private static final String HEADER_NAME_WITH_SPACE = "Test header";
-    private static final String HEADER_VALUE = "HeaderValue";
-
-    private static final String BODY_VALUE = "BodyValue";
-    private static final String BODY_XML_VALUE = "<root xmlns:foo=\"http://www.foo.org/\" xmlns:bar=\"http://www.bar.org\">" +
-            "<actors><actor id=\"1\">Christian Bale</actor>" +
-            "<actor id=\"2\">Liam Neeson</actor>" +
-            "<actor id=\"3\">Michael Caine</actor>" +
-            "</actors>" +
-            "<foo:singers>" +
-            "<foo:singer id=\"4\">Tom Waits</foo:singer>" +
-            "<foo:singer id=\"5\">B.B. King</foo:singer>" +
-            "<foo:singer id=\"6\">Ray Charles</foo:singer>" +
-            "</foo:singers>" +
-            "</root>";
-    private static final String BODY_JSON_VALUE = "{" +
-            "\"actors\": [" +
-            "{ \"id\": \"1\", \"name\": \"Christian Bale\" }," +
-            "{ \"id\": \"2\", \"name\": \"Liam Neeson\" }," +
-            "{ \"id\": \"3\", \"name\": \"Michael Caine\" }" +
-            "]," +
-            "\"singers\": [" +
-            "{ \"id\": \"4\", \"name\": \"Tom Waits\" }," +
-            "{ \"id\": \"5\", \"name\": \"B.B. King\" }," +
-            "{ \"id\": \"6\", \"name\": \"Ray Charles\" }" +
-            "]" +
-            "}";
-
-    private static final String BODY_MULTILINE_VALUE = """
-            Multiline
-            Body
-            Test""";
-
-    private static final String BASE64_HEADER_ONLY = "JHtoZWFkZXIuSGVhZGVyTmFtZX0=";
-    private static final String BASE64_BODY_ONLY = "JHtib2R5fQ==";
-    private static final String BASE64_BODY_AS_ONLY = "JHtib2R5QXMoU3RyaW5nKX0=";
-    private static final String BASE64_BODY_XML_1ST_ACTOR = Base64.getEncoder().encodeToString("//actor[1]/text()".getBytes());
-    private static final String BASE64_BODY_JSON_1ST_ACTOR = Base64.getEncoder().encodeToString("$.actors[:1].name".getBytes());
-    private static final String BASE64_BODY_GROOVY = Base64.getEncoder().encodeToString(("int x = 100; int y = 11; result = x + y;").getBytes());
-    private static final String BASE64_HEADER_BETWEEN = "VmFyaWFibGU6ICR7aGVhZGVyLkhlYWRlck5hbWV9Ow==";
-    private static final String BASE64_BODY_BETWEEN = "Qm9keTogJHtib2R5fTs=";
-    private static final String BASE64_VARIABLE_VALUE = "VGVzdCB2YWx1ZQ==";
-    private static final String BASE64_BODY_STRING = Base64.getEncoder().encodeToString("${bodyAs(String)}".getBytes());
-
-    private static final String BASE64_MULTIPLE_HEADER = "VmFyaWFibGU6ICR7aGVhZGVyLkhlYWRlck5hbWV9OyBWYXJpYWJsZTogJHtoZWFkZXIuSGVhZGVyTmFtZX07";
-
-    private static final TenantVariablesProcessor PROCESSOR = new TenantVariablesProcessor();
-
-    private static final String TENANT = "default";
-
-    /*
-    @AfterEach
-    void after(){
-        List<TenantVariable> variables = MongoDao.findAll(TENANT);
-
-        for(TenantVariable g : variables){
-            MongoDao.deleteTenantVariable(g, TENANT);
-        }
-    }
+    private final Map<String, TenantVariable> store = new HashMap<>();
+    private MockedStatic<MongoDao> mongoDao;
 
     @BeforeEach
-    void setMongoDao() {
-
-        MongoDao.updateTenantVariable(createVariable(), TENANT, false);
-        MongoDao.updateTenantVariable(createEncryptedVariable(), TENANT, false);
-
-        context.setNameStrategy(new ExplicitCamelContextNameStrategy("ID_12345"));
+    void mockMongoDao() {
+        mongoDao = mockStatic(MongoDao.class);
+        mongoDao.when(() -> MongoDao.findTenantVariableByName(anyString(), anyString()))
+                .thenAnswer(invocation -> store.get(invocation.<String>getArgument(0)));
+        mongoDao.when(() -> MongoDao.updateTenantVariable(any(), anyString(), anyBoolean()))
+                .thenAnswer(invocation -> {
+                    TenantVariable variable = invocation.getArgument(0);
+                    store.put(variable.getName(), variable);
+                    return null;
+                });
+        mongoDao.when(() -> MongoDao.deleteTenantVariable(any(), anyString()))
+                .thenAnswer(invocation -> {
+                    TenantVariable variable = invocation.getArgument(0);
+                    store.remove(variable.getName());
+                    return null;
+                });
     }
 
-    @Override
-    protected RouteBuilder createRouteBuilder() throws Exception {
-        return new RouteBuilder() {
-            @Override
-            public void configure() throws Exception {
-                from("direct:getWithSpace")
-                        .to("tenantvariables://"+ VARIABLE_NAME +"?operation=get&header=" + HEADER_NAME_WITH_SPACE + "&environment=test&tenant=default")
-                        .to("mock:out");
+    @AfterEach
+    void closeMongoDao() {
+        mongoDao.close();
+    }
 
-                from("direct:getWithHeader")
-                        .setHeader("count", new ConstantExpression("1"))
-                        .to("tenantvariables://"+ VARIABLE_NAME_HEADER +"?operation=get&header=" + HEADER_NAME_WITH_SPACE + "&environment=test&tenant=default")
-                        .to("mock:out");
+    // ---- set ----
 
-                from("direct:getNull")
-                        .to("tenantvariables://"+ NULL_VARIABLE +"?operation=get&header=" + HEADER_NAME_WITH_SPACE + "&environment=test&tenant=default")
-                        .to("mock:out");
+    @Test
+    void setConstantStoresValueInDefaultTenant() {
+        Exchange result = set("Var1", "constant", "Test value", "", exchange -> {});
 
-                from("direct:setWithSpace")
-                        .to("tenantvariables://"+ VARIABLE_NAME +"?operation=set&expressionType=constant&value=RAW(" + BASE64_VARIABLE_VALUE + ")"  + "&environment=test&tenant=default")
-                        .to("mock:out");
-
-                from("direct:setWithDollarSign")
-                        .to("tenantvariables://"+ VARIABLE_NAME +"?operation=set&expressionType=simple&value=RAW(" + BASE64_BODY_STRING + ")&encrypt=false"  + "&environment=test&tenant=default")
-                        .to("mock:out");
-
-                from("direct:setWithHeader")
-                        .setHeader(HEADER_NAME, new ConstantExpression(HEADER_VALUE))
-                        .to("tenantvariables://"+ VARIABLE_NAME +"?operation=set&expressionType=simple&value=RAW(" + BASE64_HEADER_ONLY +")"  + "&environment=test&tenant=default")
-                        .to("mock:out");
-
-                from("direct:setWithXPathExpression")
-                        .setBody(new ConstantExpression(BODY_XML_VALUE))
-                        .to("tenantvariables://"+ VARIABLE_NAME +"?operation=set&expressionType=xpath&value=RAW("+BASE64_BODY_XML_1ST_ACTOR+")"  + "&environment=test&tenant=default")
-                        .to("mock:out");
-
-                from("direct:setWithJsonPathExpression")
-                        .setBody(new ConstantExpression(BODY_JSON_VALUE))
-                        .to("tenantvariables://"+ VARIABLE_NAME +"?operation=set&expressionType=jsonpath&value=RAW("+BASE64_BODY_JSON_1ST_ACTOR+")"  + "&environment=test&tenant=default")
-                        .to("mock:out");
-
-                from("direct:setWithGroovyExpression")
-                        .to("tenantvariables://"+ VARIABLE_NAME +"?operation=set&expressionType=groovy&value=RAW("+BASE64_BODY_GROOVY+")"  + "&environment=test&tenant=default")
-                        .to("mock:out");
-
-                from("direct:setNameHeader")
-                        .setHeader("count", new ConstantExpression("1"))
-                        .to("tenantvariables://"+ VARIABLE_NAME_HEADER +"?operation=set&expressionType=constant&value=RAW(" + BASE64_VARIABLE_VALUE + ")" + "&environment=test&tenant=default")
-                        .to("mock:out");
-
-                from("direct:setWithHeaderInbetween")
-                        .setHeader(HEADER_NAME, new ConstantExpression(HEADER_VALUE))
-                        .to("tenantvariables://"+ VARIABLE_NAME +"?operation=set&expressionType=simple&value=RAW(" + BASE64_HEADER_BETWEEN + ")"  + "&environment=test&tenant=default")
-                        .to("mock:out");
-
-                from("direct:setWithMultipleHeader")
-                        .setHeader(HEADER_NAME, new ConstantExpression(HEADER_VALUE))
-                        .to("tenantvariables://"+ VARIABLE_NAME +"?operation=set&expressionType=simple&value=RAW(" + BASE64_MULTIPLE_HEADER + ")" + "&environment=test&tenant=default")
-                        .to("mock:out");
-
-                from("direct:setWithBody")
-                        .setBody(new ConstantExpression(BODY_VALUE))
-                        .to("tenantvariables://"+ VARIABLE_NAME +"?operation=set&expressionType=simple&value=RAW(" + BASE64_BODY_ONLY + ")"  + "&environment=test&tenant=default")
-                        .to("mock:out");
-
-                from("direct:setWithBodyAsString")
-                        .setBody(new ConstantExpression(BODY_VALUE))
-                        .to("tenantvariables://"+ VARIABLE_NAME +"?operation=set&expressionType=simple&value=RAW(" + BASE64_BODY_AS_ONLY + ")" + "&environment=test&tenant=default")
-                        .to("mock:out");
-
-                from("direct:setWithMultilineBody")
-                        .setBody(new ConstantExpression(BODY_MULTILINE_VALUE))
-                        .to("tenantvariables://"+ VARIABLE_NAME +"?operation=set&expressionType=simple&value=RAW(" + BASE64_BODY_ONLY + ")" + "&environment=test&tenant=default")
-                        .to("mock:out");
-
-                from("direct:setWithBodyInBetween")
-                        .setBody(new ConstantExpression(BODY_VALUE))
-                        .to("tenantvariables://"+ VARIABLE_NAME +"?operation=set&expressionType=simple&value=RAW(" + BASE64_BODY_BETWEEN + ")"  + "&environment=test&tenant=default")
-                        .to("mock:out");
-
-                from( "direct:remove")
-                        .to("tenantvariables://"+ VARIABLE_NAME +"?operation=set&expressionType=constant&value=RAW(" + BASE64_VARIABLE_VALUE + ")" + "&environment=test&tenant=default")
-                        .to("tenantvariables://"+ VARIABLE_NAME +"?operation=delete")
-                        .to("mock:out");
-
-                from("direct:setEncrypted")
-                        .to("tenantvariables://"+ VARIABLE_NAME +"?operation=set&expressionType=constant&value=RAW(" + BASE64_VARIABLE_VALUE + ")&encrypt=true" + "&environment=test&tenant=default")
-                        .to("mock:out");
-
-                from("direct:getEncrypted")
-                        .to("tenantvariables://"+ ENCRYPTED_VARIABLE_NAME +"?operation=get&header=" + HEADER_NAME_WITH_SPACE + "&environment=test&tenant=default")
-                        .to("mock:out");
-            }
-        };
+        assertFalse(result.isFailed());
+        assertEquals("Test value", storedValue("Var1"));
+        mongoDao.verify(() -> MongoDao.updateTenantVariable(any(TenantVariable.class), eq("default"), eq(false)));
     }
 
     @Test
-    void testGetUnassigedVariable() {
-        Assertions.assertThrows(CamelExecutionException.class, () -> {
-            // Trigger flow
-            template.sendBody("direct:getWithSpace", "");
+    void setUsesTenantDbNameWhenGiven() {
+        set("Var1", "constant", "Test value", "&tenantDbName=customer", exchange -> {});
 
-            getMockEndpoint("mock:out").expectedMessageCount(1);
+        mongoDao.verify(() -> MongoDao.updateTenantVariable(any(TenantVariable.class), eq("customer"), eq(false)));
+    }
+
+    @Test
+    void setUpdatesExistingVariableInsteadOfAddingEnvironmentValue() {
+        TenantVariable existing = variable("Var1", "old value", false);
+        store.put("Var1", existing);
+
+        set("Var1", "constant", "new value", "", exchange -> {});
+
+        assertEquals(1, existing.getValues().size());
+        assertEquals("new value", storedValue("Var1"));
+        mongoDao.verify(() -> MongoDao.updateTenantVariable(eq(existing), eq("default"), eq(true)));
+    }
+
+    @Test
+    void setAddsValueForNewEnvironmentToExistingVariable() {
+        TenantVariable existing = variable("Var1", "prod value", false);
+        existing.find(ENVIRONMENT).orElseThrow().setEnvironment("prod");
+        store.put("Var1", existing);
+
+        set("Var1", "constant", "test value", "", exchange -> {});
+
+        assertEquals(2, existing.getValues().size());
+        assertEquals("prod value", existing.find("prod").orElseThrow().getValue());
+        assertEquals("test value", existing.find(ENVIRONMENT).orElseThrow().getValue());
+    }
+
+    @Test
+    void setRecordsModifierAsFlowNameWhenGroupless() {
+        set("Var1", "constant", "value", "", exchange -> {});
+
+        assertEquals("flow1", store.get("Var1").getCreatedBy());
+        assertEquals("flow1", store.get("Var1").find(ENVIRONMENT).orElseThrow().getUpdatedBy());
+    }
+
+    @Test
+    void setRecordsModifierWithGroupNameWhenInGroup() {
+        Exchange exchange = new DefaultExchange(context);
+        String uri = "tenantvariables:Var1?operation=set&language=constant&value=RAW(" + base64("value") + ")"
+                + "&environment=" + ENVIRONMENT + "&groupName=myGroup&flowName=flow1";
+        template.send(uri, exchange);
+
+        assertEquals("myGroup/flow1", store.get("Var1").getCreatedBy());
+    }
+
+    @Test
+    void setSimpleResolvesHeaderAndBody() {
+        set("Var1", "simple", "Header: ${header.MyHeader}; Body: ${body}", "", exchange -> {
+            exchange.getIn().setHeader(HEADER, "HeaderValue");
+            exchange.getIn().setBody("BodyValue");
         });
+
+        assertEquals("Header: HeaderValue; Body: BodyValue", storedValue("Var1"));
     }
 
     @Test
-    void testGetVariableWithHeader() throws Exception {
-        TenantVariable variable = MongoDao.findTenantVariableByName(VARIABLE_NAME, TENANT);
-        boolean variableExist = !Objects.isNull(variable);
+    void setSimpleKeepsDollarSignFromBody() {
+        set("Var1", "simple", "${bodyAs(String)}", "", exchange -> exchange.getIn().setBody("Thi$ body has dollar"));
 
-        variable.put(new EnvironmentValue("test"));
-
-        MongoDao.updateTenantVariable(variable, TENANT, variableExist);
-
-        template.sendBody("direct:getWithHeader", "");
-
-        getMockEndpoint("mock:out").expectedMessageCount(1);
-
-        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
-
-        assertNotNull(result.getIn().getHeader(HEADER_NAME_WITH_SPACE));
-
-        assertEquals("Unassigned", result.getIn().getHeader(HEADER_NAME_WITH_SPACE));
+        assertEquals("Thi$ body has dollar", storedValue("Var1"));
     }
 
     @Test
-    void testGetNullVariable() {
-        // Trigger flow
-        Exchange out = template.send("direct:getNull", new DefaultExchange(context));
+    void setSimpleKeepsMultilineBody() {
+        String multiline = "Multiline\nBody\nTest";
 
-        assertTrue(out.isFailed());
-        assertInstanceOf(TenantVariableNotFoundException.class, out.getException());
+        set("Var1", "simple", "${body}", "", exchange -> exchange.getIn().setBody(multiline));
+
+        assertEquals(multiline, storedValue("Var1"));
     }
 
     @Test
-    void testSetUnassigedVariable() {
-        // Trigger flow
-        template.sendBody("direct:setWithSpace", "");
+    void setJsonPathReadsFromBody() {
+        set("Var1", "jsonpath", "$.actors[:1].name", "", exchange -> exchange.getIn().setBody(JSON_BODY));
 
-        getMockEndpoint("mock:out").expectedMessageCount(1);
-
-        TenantVariable variable = MongoDao.findTenantVariableByName(VARIABLE_NAME, TENANT);
-        Optional<EnvironmentValue> variableValue = variable.find("test");
-
-        assertTrue(variableValue.isPresent());
-        assertEquals(VARIABLE_VALUE, variableValue.get().getValue());
+        assertEquals("[\"Christian Bale\"]", storedValue("Var1"));
     }
 
     @Test
-    void testSetVariableValueWithDollarSign() {
-        // Trigger flow
-        template.sendBody("direct:setWithDollarSign", "Thi$ body has dollar");
+    void setGroovyEvaluatesScript() {
+        set("Var1", "groovy", "int x = 100; int y = 11; result = x + y;", "", exchange -> {});
 
-        getMockEndpoint("mock:out").expectedMessageCount(1);
-
-        TenantVariable variable = MongoDao.findTenantVariableByName(VARIABLE_NAME, TENANT);
-        Optional<EnvironmentValue> variableValue = variable.find("test");
-
-        assertTrue(variableValue.isPresent());
-        assertEquals(VARIABLE_WITH_DOLLAR, variableValue.get().getValue());
+        assertEquals("111", storedValue("Var1"));
     }
 
     @Test
-    void testSetWithNameHeader() throws Exception {
-        // Trigger flow
-        template.sendBody("direct:setNameHeader", "");
+    void setResolvesHeaderInVariableName() {
+        set("Var${headers.count}", "constant", "value", "", exchange -> exchange.getIn().setHeader("count", "1"));
 
-        getMockEndpoint("mock:out").expectedMessageCount(1);
-
-        TenantVariable variable = MongoDao.findTenantVariableByName(VARIABLE_NAME, TENANT);
-        Optional<EnvironmentValue> variableValue = variable.find("test");
-
-        assertTrue(variableValue.isPresent());
-        assertEquals(VARIABLE_VALUE, variableValue.get().getValue());
+        assertEquals("value", storedValue("Var1"));
     }
 
     @Test
-    void testSetWithHeaderVariable() throws Exception {
-        // Trigger flow
-        template.sendBody("direct:setWithHeader", "");
+    void setWithInvalidExpressionFailsExchange() {
+        Exchange result = set("Var1", "jsonpath", "$.actors", "", exchange -> exchange.getIn().setBody("not json"));
 
-        getMockEndpoint("mock:out").expectedMessageCount(1);
-
-        TenantVariable variable = MongoDao.findTenantVariableByName(VARIABLE_NAME, TENANT);
-        Optional<EnvironmentValue> variableValue = variable.find("test");
-
-        assertTrue(variableValue.isPresent());
-        assertEquals(HEADER_VALUE, variableValue.get().getValue());
+        assertTrue(result.isFailed());
+        assertNull(store.get("Var1"));
     }
 
     @Test
-    void testSetWithXPathExpression() {
-        // Trigger flow
-        template.sendBody("direct:setWithXPathExpression", "");
+    void setEncryptedStoresEncryptedValueAndGetDecryptsIt() {
+        set("Var1", "constant", "secret value", "&encrypt=true", exchange -> {});
 
-        getMockEndpoint("mock:out").expectedMessageCount(1);
+        EnvironmentValue stored = store.get("Var1").find(ENVIRONMENT).orElseThrow();
+        assertTrue(stored.isEncrypted());
+        assertTrue(stored.getValue().startsWith("ENC(GCM|"));
+        assertNotEquals("secret value", stored.getValue());
 
-        TenantVariable variable = MongoDao.findTenantVariableByName(VARIABLE_NAME, TENANT);
-        Optional<EnvironmentValue> variableValue = variable.find("test");
+        Exchange result = get("Var1", exchange -> {});
 
-        assertTrue(variableValue.isPresent());
-        assertEquals("Christian Bale", variableValue.get().getValue());
+        assertEquals("secret value", result.getIn().getHeader(HEADER));
+    }
+
+    // ---- get ----
+
+    @Test
+    void getPutsValueInHeader() {
+        store.put("Var1", variable("Var1", "Test value", false));
+
+        Exchange result = get("Var1", exchange -> {});
+
+        assertFalse(result.isFailed());
+        assertEquals("Test value", result.getIn().getHeader(HEADER));
     }
 
     @Test
-    void testSetWithJsonPathExpression() {
-        // Trigger flow
-        template.sendBody("direct:setWithJsonPathExpression", "");
+    void getResolvesHeaderInVariableName() {
+        store.put("Var1", variable("Var1", "Test value", false));
 
-        getMockEndpoint("mock:out").expectedMessageCount(1);
+        Exchange result = get("Var${headers.count}", exchange -> exchange.getIn().setHeader("count", "1"));
 
-        TenantVariable variable = MongoDao.findTenantVariableByName(VARIABLE_NAME, TENANT);
-        Optional<EnvironmentValue> variableValue = variable.find("test");
-
-        assertTrue(variableValue.isPresent());
-        assertEquals("[\"Christian Bale\"]", variableValue.get().getValue());
+        assertEquals("Test value", result.getIn().getHeader(HEADER));
     }
 
     @Test
-    void testSetWithGroovyExpression() {
-        // Trigger flow
-        template.sendBody("direct:setWithGroovyExpression", "");
+    void getDecryptsEncryptedValue() {
+        store.put("Var1", variable("Var1", new TenantVariablesProcessor().encrypt("Test value"), true));
 
-        getMockEndpoint("mock:out").expectedMessageCount(1);
+        Exchange result = get("Var1", exchange -> {});
 
-        TenantVariable variable = MongoDao.findTenantVariableByName(VARIABLE_NAME, TENANT);
-        Optional<EnvironmentValue> variableValue = variable.find("test");
-
-        assertTrue(variableValue.isPresent());
-        assertEquals("111", variableValue.get().getValue());
+        assertEquals("Test value", result.getIn().getHeader(HEADER));
     }
 
     @Test
-    void testSetWithMultilineBodyVariable() {
-        // Trigger flow
-        template.sendBody("direct:setWithMultilineBody", "");
+    void getUnknownVariableFails() {
+        Exchange result = get("Unknown", exchange -> {});
 
-        getMockEndpoint("mock:out").expectedMessageCount(1);
-
-        TenantVariable variable = MongoDao.findTenantVariableByName(VARIABLE_NAME, TENANT);
-        Optional<EnvironmentValue> variableValue = variable.find("test");
-
-        assertTrue(variableValue.isPresent());
-        assertEquals(BODY_MULTILINE_VALUE, variableValue.get().getValue());
+        assertTrue(result.isFailed());
+        assertInstanceOf(TenantVariableNotFoundException.class, result.getException());
     }
 
     @Test
-    void testSetWithBodyVariable() {
-        // Trigger flow
-        template.sendBody("direct:setWithBody", "");
+    void getVariableWithoutValueForEnvironmentFails() {
+        TenantVariable otherEnvironment = variable("Var1", "value", false);
+        otherEnvironment.find(ENVIRONMENT).orElseThrow().setEnvironment("prod");
+        store.put("Var1", otherEnvironment);
 
-        getMockEndpoint("mock:out").expectedMessageCount(1);
+        Exchange result = get("Var1", exchange -> {});
 
-        TenantVariable variable = MongoDao.findTenantVariableByName(VARIABLE_NAME, TENANT);
-        Optional<EnvironmentValue> variableValue = variable.find("test");
-
-        assertTrue(variableValue.isPresent());
-        assertEquals(BODY_VALUE, variableValue.get().getValue());
+        assertTrue(result.isFailed());
+        assertInstanceOf(TenantVariableNotFoundException.class, result.getException());
     }
 
     @Test
-    void testSetWithBodyAsStringVariable() {
-        // Trigger flow
-        template.sendBody("direct:setWithBodyAsString", "");
+    void getWithoutHeaderNameFails() {
+        store.put("Var1", variable("Var1", "Test value", false));
 
-        getMockEndpoint("mock:out").expectedMessageCount(1);
+        Exchange result = template.send("tenantvariables:Var1?operation=get&environment=" + ENVIRONMENT, new DefaultExchange(context));
 
-        TenantVariable variable = MongoDao.findTenantVariableByName(VARIABLE_NAME, TENANT);
-        Optional<EnvironmentValue> variableValue = variable.find("test");
+        assertTrue(result.isFailed());
+        assertInstanceOf(IllegalArgumentException.class, result.getException());
+    }
 
-        assertTrue(variableValue.isPresent());
-        assertEquals(BODY_VALUE, variableValue.get().getValue());
+    // ---- delete ----
+
+    @Test
+    void deleteRemovesVariable() {
+        store.put("Var1", variable("Var1", "Test value", false));
+
+        Exchange result = template.send("tenantvariables:Var1?operation=delete", new DefaultExchange(context));
+
+        assertFalse(result.isFailed());
+        assertNull(store.get("Var1"));
     }
 
     @Test
-    void testSetWithBodyInBetweenVariable() {
-        // Trigger flow
-        template.sendBody("direct:setWithBodyInBetween", "");
+    void deleteUnknownVariableFails() {
+        Exchange result = template.send("tenantvariables:Unknown?operation=delete", new DefaultExchange(context));
 
-        getMockEndpoint("mock:out").expectedMessageCount(1);
+        assertTrue(result.isFailed());
+        assertInstanceOf(TenantVariableNotFoundException.class, result.getException());
+    }
 
-        TenantVariable variable = MongoDao.findTenantVariableByName(VARIABLE_NAME, TENANT);
-        Optional<EnvironmentValue> variableValue = variable.find("test");
+    // ---- encrypt / decrypt ----
 
-        assertTrue(variableValue.isPresent());
-        assertEquals("Body: " + BODY_VALUE + ";", variableValue.get().getValue());
+    @Test
+    void encryptAndDecryptRoundTrip() {
+        TenantVariablesProcessor processor = new TenantVariablesProcessor();
+
+        String encrypted = processor.encrypt("Value 1");
+
+        assertNotEquals("Value 1", encrypted);
+        assertEquals("Value 1", processor.decrypt(encrypted));
     }
 
     @Test
-    void testSetWithHeaderInbetweenVariable() {
-        // Trigger flow
-        template.sendBody("direct:setWithHeaderInbetween", "");
+    void encryptAndDecryptReturnEmptyStringForEmptyInput() {
+        TenantVariablesProcessor processor = new TenantVariablesProcessor();
 
-        getMockEndpoint("mock:out").expectedMessageCount(1);
-
-        TenantVariable variable = MongoDao.findTenantVariableByName(VARIABLE_NAME, TENANT);
-        Optional<EnvironmentValue> variableValue = variable.find("test");
-
-        assertTrue(variableValue.isPresent());
-        assertEquals("Variable: " + HEADER_VALUE + ";", variableValue.get().getValue());
+        assertEquals("", processor.encrypt(null));
+        assertEquals("", processor.encrypt(""));
+        assertEquals("", processor.decrypt(null));
+        assertEquals("", processor.decrypt(""));
     }
 
-    @Test
-    void testSetWithMultipleHeaderVariable() {
-        // Trigger flow
-        template.sendBody("direct:setWithMultipleHeader", "");
+    // ---- helpers ----
 
-        getMockEndpoint("mock:out").expectedMessageCount(1);
-
-        TenantVariable variable = MongoDao.findTenantVariableByName(VARIABLE_NAME, TENANT);
-        Optional<EnvironmentValue> variableValue = variable.find("test");
-
-        assertTrue(variableValue.isPresent());
-        assertEquals("Variable: " + HEADER_VALUE + "; " + "Variable: " + HEADER_VALUE + ";", variableValue.get().getValue());
+    private Exchange set(String name, String language, String value, String extraOptions, Consumer<Exchange> prepare) {
+        Exchange exchange = new DefaultExchange(context);
+        prepare.accept(exchange);
+        String uri = "tenantvariables:" + name + "?operation=set&language=" + language
+                + "&value=RAW(" + base64(value) + ")" + OPTIONS + extraOptions;
+        return template.send(uri, exchange);
     }
 
-    @Test
-    void testRemoveVariable() {
-        template.sendBody("direct:remove", "");
-
-        getMockEndpoint("mock:out").expectedMessageCount(1);
-
-        TenantVariable variable = MongoDao.findTenantVariableByName(VARIABLE_NAME, TENANT);
-
-        assertNull(variable);
+    private Exchange get(String name, Consumer<Exchange> prepare) {
+        Exchange exchange = new DefaultExchange(context);
+        prepare.accept(exchange);
+        return template.send("tenantvariables:" + name + "?operation=get&headerName=" + HEADER + "&environment=" + ENVIRONMENT, exchange);
     }
 
-    @Test
-    void testDecryptedVariable() {
-        template.sendBody("direct:getEncrypted", "");
-
-        getMockEndpoint("mock:out").expectedMessageCount(1);
-
-        Exchange result = getMockEndpoint("mock:out").getExchanges().getFirst();
-
-        assertEquals(VARIABLE_VALUE, result.getIn().getHeader(HEADER_NAME_WITH_SPACE));
+    private String storedValue(String name) {
+        TenantVariable variable = store.get(name);
+        assertNotNull(variable, "Variable " + name + " was not stored");
+        return variable.find(ENVIRONMENT).orElseThrow().getValue();
     }
 
-    private TenantVariable createVariable() {
-        return new TenantVariable(VARIABLE_NAME);
-    }
+    private static TenantVariable variable(String name, String value, boolean encrypted) {
+        EnvironmentValue environmentValue = new EnvironmentValue(ENVIRONMENT);
+        environmentValue.setValue(value);
+        environmentValue.setEncrypted(encrypted);
 
-    private TenantVariable createEncryptedVariable() {
-        TenantVariable variable = new TenantVariable(ENCRYPTED_VARIABLE_NAME);
-
-        String encryptedVariableValue = PROCESSOR.encrypt(VARIABLE_VALUE);
-
-        EnvironmentValue environmentValue = new EnvironmentValue("test");
-
-        environmentValue.setValue(encryptedVariableValue);
-        environmentValue.setEncrypted(true);
-
+        TenantVariable variable = new TenantVariable(name);
         variable.put(environmentValue);
-
         return variable;
     }
 
-     */
+    private static String base64(String value) {
+        return Base64.getEncoder().encodeToString(value.getBytes(StandardCharsets.UTF_8));
+    }
 }

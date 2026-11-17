@@ -10,6 +10,7 @@ import org.apache.camel.spi.Language;
 /**
  * Extends the LanguageEndpoint to supply a SandboxProducer instead of the default LanguageEndpoint.
  */
+@SuppressWarnings("java:S110") // depth comes from Camel's LanguageEndpoint hierarchy
 public class SandboxEndpoint extends LanguageEndpoint {
 
     public SandboxEndpoint(String endpointUri, Component component, Language language, Expression expression, String resourceUri) {

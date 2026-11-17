@@ -80,7 +80,7 @@ public class LineReader {
 
     private static List<MappedField> parseFieldMappings(String mappings) {
         // match against fieldName[characterCount]
-        Pattern pattern = Pattern.compile("(\\w+)\\[(\\d+)]");
+        Pattern pattern = Pattern.compile("\\b(\\w++)\\[(\\d++)]");
         Matcher matcher = pattern.matcher(mappings);
 
         List<MappedField> mappedFields = new LinkedList<>();
