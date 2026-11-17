@@ -39,6 +39,14 @@
 		  <artifactId>groovy</artifactId>
 		  <version>${groovy-script.version}</version>
 	  </dependency>
+	  <!-- groovy-sandbox is compiled against Groovy 4 and links to
+	       org.codehaus.groovy.runtime.callsite.CallSite, which Groovy 6 moved out of core
+	       into this module (GROOVY-12185). -->
+	  <dependency>
+		  <groupId>org.apache.groovy</groupId>
+		  <artifactId>groovy-callsite</artifactId>
+		  <version>${groovy-script.version}</version>
+	  </dependency>
 	  <dependency>
 		  <groupId>org.apache.groovy</groupId>
 		  <artifactId>groovy-dateutil</artifactId>
@@ -76,6 +84,15 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<systemPropertyVariables>
+						<!-- ConfigurableWhitelist reads ${user.home}/.assimbly/groovy/whitelist.conf -->
+						<user.home>${project.build.testOutputDirectory}/home</user.home>
+					</systemPropertyVariables>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
